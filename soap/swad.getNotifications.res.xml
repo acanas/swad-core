@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:swad="urn:swad">
+ <SOAP-ENV:Body>
+  <swad:getNotificationsOutput>
+   <numNotifications>0</numNotifications>
+   <notificationsArray>
+    <item>
+     <notifCode>0</notifCode>
+     <eventType></eventType>
+     <eventCode>0</eventCode>
+     <eventTime>0</eventTime>
+     <userNickname></userNickname>
+     <userSurname1></userSurname1>
+     <userSurname2></userSurname2>
+     <userFirstname></userFirstname>
+     <userPhoto></userPhoto>
+     <location></location>
+     <status>0</status>
+     <summary></summary>
+     <content></content>
+    </item>
+   </notificationsArray>
+  </swad:getNotificationsOutput>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

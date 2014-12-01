@@ -1,0 +1,72 @@
+// swad_password.h: Users' passwords
+
+#ifndef _SWAD_PWD
+#define _SWAD_PWD
+/*
+    SWAD (Shared Workspace At a Distance in Spanish),
+    is a web platform developed at the University of Granada (Spain),
+    and used to support university teaching.
+
+    This file is part of SWAD core.
+    Copyright (C) 1999-2014 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/************************* Public types and constants ************************/
+/*****************************************************************************/
+
+#define Pwd_MIN_LENGTH_PLAIN_PASSWORD	  8
+#define Pwd_INPUT_LENGTH_PLAIN_PASSWORD	 16
+#define Pwd_MAX_LENGTH_PLAIN_PASSWORD	256
+
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
+
+void Pwd_GetParamUsrPwdLogin (void);
+
+bool Pwd_CheckCurrentPassword (void);
+bool Pwd_CheckPendingPassword (void);
+void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void);
+
+void Pwd_ActChgMyPwd1 (void);
+void Pwd_ActChgMyPwd2 (void);
+void Pwd_ShowFormSendNewPwd (void);
+void Pwd_ChkIdLoginAndSendNewPwd (void);
+int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1]);
+void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1]);
+
+void Pwd_UpdateOtherPwd1 (void);
+void Pwd_UpdateOtherPwd2 (void);
+
+bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
+                                    const char *EncryptedPassword,
+                                    long UsrCod);
+bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
+
+void Pwd_ShowFormChgPwd (void);
+void Pwd_PutFormToGetNewPasswordTwice (void);
+void Pwd_ShowFormOthPwd (void);
+void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat);
+bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod);
+
+void Pwd_AskForConfirmationOnDangerousAction (void);
+bool Pwd_GetConfirmationOnDangerousAction (void);
+
+#endif

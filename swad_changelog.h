@@ -1,0 +1,4562 @@
+// swad_changelog.h: changelog
+
+#ifndef _SWAD_LOG
+#define _SWAD_LOG
+/*
+    SWAD (Shared Workspace At a Distance),
+    is a web platform developed at the University of Granada (Spain),
+    and used to support university teaching.
+
+    This file is part of SWAD core.
+    Copyright (C) 1999-2014 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*****************************************************************************/
+/*********************************** TODO ************************************/
+/*****************************************************************************/
+
+// TODO: When notifications are marked as seen, do it in a priori function
+// TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
+
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+#define Log_PLATFORM_VERSION	"SWAD 14.30.1 (2014/11/30)"
+
+// Number of lines (includes comments but not blank lines) has been got with the following command:
+// nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
+
+/*
+        Version 14.30.1  :Nov 30, 2014	Internal course code is shown in course configuration. (170275 lines)
+        Version 14.30    :Nov 29, 2014	Database password and email password are moved from executable files to configuration files. (170248 lines)
+					1 change necessary in Makefile:
+Add swad_config.o to list of object files
+
+        Version 14.29    :Nov 29, 2014	New structure of source code directories for SWAD core. (170066 lines)
+        Version 14.28.2  :Nov 28, 2014	Fixed bug in web service function sendAttendanceUsers.
+					New MIME type for file uploading, problem reported by Marta Gómez Macías. (170380 lines)
+        Version 14.28.1  :Nov 28, 2014	Fixed bugs in web service function sendAttendanceUsers. (170377 lines)
+        Version 14.28    :Nov 25, 2014	Changes in edition of users' IDs. (170365 lines)
+					5 changes necessary in database:
+UPDATE actions SET Txt='Solicitar la creaci&oacute;n de un anuncio global' WHERE ActCod='1237' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1238','es','N','Crear anuncio global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1239','es','N','Solicitar edici&oacute;n ID otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1240','es','N','Eliminar ID de otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1241','es','N','Crear ID de otro usuario');
+
+        Version 14.27    :Nov 25, 2014	Superusers can edit other users' IDs. (170238 lines)
+        Version 14.26.3  :Nov 24, 2014	Code refactoring. (170145 lines)
+        Version 14.26.2  :Nov 24, 2014	QR available in control of attendance. (170169 lines)
+        Version 14.26.1  :Nov 24, 2014	QR available in record card. (170161 lines)
+        Version 14.26    :Nov 23, 2014	Superusers can create a global announcement.
+					Code refactoring in notices. (170173 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Solicitar la creaci&oacute;n de una cuenta' WHERE ActCod='36' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1237','es','N','Crear anuncio global');
+
+        Version 14.25.1  :Nov 21, 2014	Superusers can remove a global announcement. (169976 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1236','es','N','Eliminar anuncio global');
+
+        Version 14.25    :Nov 20, 2014	Superusers can view all the global announcements. (169948 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1235','es','N','Ver anuncios globales');
+
+        Version 14.24.5  :Nov 19, 2014	Fixed bug in web service functions getAttendanceUsers, reported by Juan Miguel Boyero Corral. (169810 lines)
+        Version 14.24.4  :Nov 19, 2014	Fixed bug in web service functions getAttendanceUsers, reported by Juan Miguel Boyero Corral. (169807 lines)
+        Version 14.24.3  :Nov 19, 2014	Fixed bug in web service functions getTestQuestions, reported by Marta Muñoz López. (169804 lines)
+        Version 14.24.2  :Nov 19, 2014	Fixed bug in web service functions getAttendanceUsers and sendAttendanceUsers, reported by Juan Miguel Boyero Corral. (169804 lines)
+        Version 14.24.1  :Nov 19, 2014	Changes in global announcements. (169803 lines)
+					1 change necessary in database:
+ALTER TABLE announcements ADD COLUMN Subject TEXT NOT NULL AFTER Roles;
+
+        Version 14.24    :Nov 19, 2014	New module swad_announcement for global announcements. (169760 lines)
+					1 change necessary in Makefile:
+Add swad_announcement.o to list of object files
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS announcements (AnnCod INT NOT NULL AUTO_INCREMENT,Roles INT NOT NULL DEFAULT 0,Content TEXT NOT NULL,UNIQUE INDEX(AnnCod));
+CREATE TABLE IF NOT EXISTS ann_seen (AnnCod INT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(AnnCod,UsrCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1234','es','N','Marcar anuncio global como visto');
+
+        Version 14.23.5  :Nov 18, 2014	Fixed bug in web service functions getAttendanceUsers and sendAttendanceUsers, reported by Juan Miguel Boyero Corral. (169485 lines)
+        Version 14.23.4  :Nov 17, 2014	A user can not remove her/his ID if it's confirmed. (169484 lines)
+        Version 14.23.3  :Nov 17, 2014	Refactoring in deletion of a course. (169457 lines)
+        Version 14.23.2  :Nov 17, 2014	For security, assignments and works will not be removed when several users are removed from a course,
+					but they will be removed when one student or all students are removed. (169438 lines)
+        Version 14.23.1  :Nov 16, 2014	Changes related to user's ID. (169424 lines)
+        Version 14.23    :Nov 16, 2014	Refactored (simplified) code related with ending alpha letter in user's ID. (169358 lines)
+        Version 14.22.2  :Nov 16, 2014	Ending alpha letters in users' IDs are not removed.
+					Fixed bug in administration of a user. (169396 lines)
+        Version 14.22.1  :Nov 15, 2014	Fixed bug in web service function getAttendanceEvents, reported by Juan Miguel Boyero Corral. (169392 lines)
+        Version 14.22    :Nov 15, 2014	Link to remove my account in Profile > Account.
+					Fixed bug in web service function getAttendanceEvents, reported by Juan Miguel Boyero Corral. (169375 lines)
+        Version 14.21.1  :Nov 15, 2014	Option for admin one user is available for all logged users. (169368 lines)
+        Version 14.21    :Nov 14, 2014	Include consent and password on dangerous actions.
+					Fixed bug in web service function getAttendanceEvents, reported by Juan Miguel Boyero Corral.
+					New MIME type for file uploading, problem reported by María Luisa Palazón Garrido. (169321 lines)
+        Version 14.20.2  :Nov 13, 2014	All users, except superusers, can eliminate themselves. (169125 lines)
+        Version 14.20.1  :Nov 13, 2014	Changes in web service functions. (? lines)
+        Version 14.20    :Nov 11, 2014	Implemented web service function getMarks. (169089 lines)
+        Version 14.19    :Nov 11, 2014	Refactoring of web service functions. (169031 lines)
+        Version 14.18    :Nov 11, 2014	Nickname and birthday is returned in some web service functions.
+					Removed obsolete fields in web service functions. (169452 lines)
+        Version 14.17.1  :Nov 10, 2014	User's QR is generated only for @nickname. (? lines)
+        Version 14.17    :Nov 09, 2014	Implemented web service function sendAttendanceEvent.
+					Refactoring of web service functions. (169492 lines)
+        Version 14.16    :Nov 09, 2014	Implemented web service function sendAttendanceUsers. (169422 lines)
+        Version 14.15.6  :Nov 08, 2014	Changes in web service function getAttendanceUsers. (169304 lines)
+        Version 14.15.5  :Nov 08, 2014	Changes in web service function getAttendanceUsers. (169304 lines)
+        Version 14.15.4  :Nov 06, 2014	Fixed bug related to filenames with heading spaces, reported by Germán Rodríguez Salido. (169297 lines)
+        Version 14.15.3  :Nov 06, 2014	Fixed bug in date of email in swad_smtp.py, reported by Ana Ferreira Blanco. (169297 lines)
+        Version 14.15.2  :Nov 06, 2014	Changes in web service function getAttendanceUsers. (169296 lines)
+        Version 14.15.1  :Nov 05, 2014	Fixed bug when zipping folders, reported by Javier Fernández Baldomero and others. (169246 lines)
+        Version 14.15    :Nov 04, 2014	Implemented web service function getAttendanceUsers. (169246 lines)
+        Version 14.14    :Nov 03, 2014	Implemented skeletons of 2 new web service functions.
+					Implemented web service function getAttendanceEvents. (168986 lines)
+        Version 14.13    :Nov 02, 2014	Implemented skeletons of 4 new web service functions related with control of attendance. (168797 lines)
+        Version 14.12.1  :Nov 02, 2014	Code refactoring related with parameters. (168622 lines)
+        Version 14.12    :Nov 02, 2014	Code refactoring related with parameters.
+					Fixed bug in tests. (168621 lines)
+        Version 14.11.9  :Nov 02, 2014	Code refactoring related with parameters. (168624 lines)
+        Version 14.11.8  :Nov 01, 2014	Code refactoring related with parameters. (168977 lines)
+        Version 14.11.7  :Nov 01, 2014	Code refactoring related with parameters. (169279 lines)
+        Version 14.11.6  :Oct 30, 2014	Code refactoring in file browsers. (168688 lines)
+        Version 14.11.5  :Oct 29, 2014	Code refactoring in file browsers. (168555 lines)
+        Version 14.11.4  :Oct 29, 2014	Code refactoring in file browsers. (168411 lines)
+        Version 14.11.3  :Oct 29, 2014	Information about type of file is stores in database (table files). (168350 lines)
+					1 change necessary in database:
+ALTER TABLE files ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER PublisherUsrCod;
+
+        Version 14.11.2  :Oct 28, 2014	Lot of code refactoring in file browsers (not finished). (168298 lines)
+					1 change necessary in database:
+ALTER TABLE clipboard ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER WorksUsrCod;
+
+        Version 14.11.1  :Oct 28, 2014	Lot of code refactoring in file browsers (not finished). (168210 lines)
+        Version 14.11    :Oct 27, 2014	Changes in links in file browsers (not finished).
+					Refactored code in file browsers. (168158 lines)
+        Version 14.10    :Oct 26, 2014	Users can send link to URL in file browsers (not finished). (168054 lines)
+					9 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1225','es','N','Crear enlace documentos asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1226','es','N','Crear enlace com&uacute;n asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1227','es','N','Crear enlace com&uacute;n grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1228','es','N','Crear enlace mis trabajos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1229','es','N','Crear enlace trabajos asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1230','es','N','Crear enlace en malet&iacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1231','es','N','Crear enlace documentos grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1232','es','N','Crear enlace mis actividades');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1233','es','N','Crear enlace activid. asg.');
+
+        Version 14.9.2   :Oct 24, 2014	Some code cleaning. (167569 lines)
+        Version 14.9.1   :Oct 22, 2014	Google Analytics without cookies for openswad.org (code from http://stackoverflow.com/a/19995629). (167555 lines)
+        Version 14.9     :Oct 21, 2014  Removed the use of http icons.
+					Fixed bug in scope of users' listing. (167544 lines)
+					2 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='760';
+ALTER TABLE usr_data DROP COLUMN SecureIcons;
+
+        Version 14.8.3   :Oct 20, 2014  Fixed bug in Internet Explorer reported by Francisco A. Ocaña Lara: event onchange does not work on input radio, replaced by onclick. (167631 lines)
+        Version 14.8.2   :Oct 20, 2014  Fixed bug in tests importing. (167630 lines)
+					1 change necessary in database:
+UPDATE tst_questions SET Feedback='' WHERE Feedback='(null)';
+
+        Version 14.8.1   :Oct 19, 2014  Fixed bug in tests importing, reported by Olga Valenzuela. (167627 lines)
+        Version 14.8     :Oct 19, 2014  New module swad_test_import for export and import tests. (167594 lines)
+					1 change necessary in Makefile:
+Add swad_test_import.o to list of object files
+        .
+        Version 14.7     :Oct 16, 2014  Changes in swad_smtp.py.
+				        Now automatic mails are sent in secure way. (167494 lines)
+					1 change necessary:
+Copy the new swad_smtp.py into swad cgi directory
+
+        Version 14.6.2   :Oct 15, 2014  Big icon to upload files.
+					Fixed bug in classic upload of files. (167541 lines)
+        Version 14.6.1   :Oct 15, 2014  Some messages translated.
+					Nickname appears in record card with a bigger font.
+					Changes in some icons. (167508 lines)
+        Version 14.6     :Oct 13, 2014  Changes in translations (polish characters).
+					Button for admin user in other user's common record check.
+					Changes in admin of one user for students. (167497 lines)
+        Version 14.5.2   :Oct 11, 2014  One message translated.
+					Minor code refactoring. (167396 lines)
+        Version 14.5.1   :Oct 08, 2014  Minor changes related to messages in automatic e-mails. (167374 lines)
+        Version 14.5     :Oct 07, 2014  Fixed issues related with charset. (167368 lines)
+        Version 14.4.2   :Oct 07, 2014  Changes in upload of files. (167354 lines)
+        Version 14.4.1   :Oct 07, 2014  Changes in upload of files. (167351 lines)
+        Version 14.4     :Oct 07, 2014  Changes in upload of files. (167360 lines)
+					22 changes necessary in database:
+UPDATE actions SET Txt='Subir archivo doc. asg. (ant.)'         WHERE ActCod='482' AND Language='es';
+UPDATE actions SET Txt='Subir archivo doc. grp. (ant.)'         WHERE ActCod='483' AND Language='es';
+UPDATE actions SET Txt='Subir archivo com&uacute;n asg. (ant.)' WHERE ActCod='326' AND Language='es';
+UPDATE actions SET Txt='Subir archivo com&uacute;n grp. (ant.)' WHERE ActCod='335' AND Language='es';
+UPDATE actions SET Txt='Subir archivo mis activid. (ant.)'      WHERE ActCod='832' AND Language='es';
+UPDATE actions SET Txt='Subir archivo mis trabajos (ant.)'      WHERE ActCod='148' AND Language='es';
+UPDATE actions SET Txt='Subir archivo activid. asg. (ant.)'     WHERE ActCod='846' AND Language='es';
+UPDATE actions SET Txt='Subir archivo trabajos asg. (ant.)'     WHERE ActCod='207' AND Language='es';
+UPDATE actions SET Txt='Subir archivo calif. asg. (ant.)'       WHERE ActCod='516' AND Language='es';
+UPDATE actions SET Txt='Subir archivo calif. grp. (ant.)'       WHERE ActCod='514' AND Language='es';
+UPDATE actions SET Txt='Subir archivo a malet&iacute;n (ant.)'  WHERE ActCod='153' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1214','es','N','Subir archivo doc. asg.'        );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1215','es','N','Subir archivo doc. grp.'        );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1216','es','N','Subir archivo com&uacute;n asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1217','es','N','Subir archivo com&uacute;n grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1218','es','N','Subir archivo mis activid.'     );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1219','es','N','Subir archivo mis trabajos'     );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1220','es','N','Subir archivo activid. asg.'    );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1221','es','N','Subir archivo trabajos asg.'    );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1222','es','N','Subir archivo calif. asg.'      );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1223','es','N','Subir archivo calif. grp.'      );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1224','es','N','Subir archivo a malet&iacute;n' );
+
+        Version 14.3     :Oct 06, 2014  Changes in upload of files.
+					Refactoring of files of marks. (167340 lines)
+        Version 14.2     :Oct 06, 2014  Changes in upload of files.
+					Now both methods are allowed for uploading: Dropzone.js and classic. (167320 lines)
+        Version 14.1.2   :Oct 05, 2014  Changes in upload of files. (167209 lines)
+        Version 14.1.1   :Oct 04, 2014  Changes in upload of files. (167102 lines)
+        Version 14.1     :Oct 02, 2014  Form to drag-and-drop to upload files. (167101 lines)
+        Version 14.0     :Sep 26, 2014  "Invited" users are changed to "guests".
+        				Search of guests users. (167028 lines)
+                                        2 changes necessary in database:
+UPDATE sessions SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;
+
+	Version 13.85.5  :Sep 20, 2014	Fixed bug in registration of several users. (167150 lines)
+	Version 13.85.4  :Sep 16, 2014	The function getUsers in web service is now available for students. (167147 lines)
+	Version 13.85.3  :Sep 16, 2014	In edition of centres, only institutions of the current country are shown.
+					In edition of degrees, only centres of the current institution are shown.
+					In edition of courses, only degrees of the current centre are shown. (167148 lines)
+	Version 13.85.2  :Sep 16, 2014	Minor bugs fixed. (167146 lines)
+	Version 13.85.1  :Sep 16, 2014	Code refactoring. (167142 lines)
+	Version 13.85    :Sep 11, 2014	Banner can be hidden. (166326 lines)
+					4 changes necessary in database:
+ALTER TABLE banners ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER BanCod;
+CREATE INDEX Hidden ON banners (Hidden);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1212','es','N','Mostrar banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1213','es','N','Ocultar banner');
+
+	Version 13.84.2  :Jul 29, 2014	Changes in layout of page foot. (166190 lines)
+	Version 13.84.1  :Jul 29, 2014	Fixed bug in layout of page. (166163 lines)
+	Version 13.84    :Jul 29, 2014	HTML file included at the bottom of page. (166157 lines)
+	Version 13.83    :Jul 28, 2014	Search of students. (166135 lines)
+					2 changes necessary in database:
+UPDATE sessions SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;
+
+	Version 13.82.3  :Jul 23, 2014	When searching from top of page, the scope is set to the platform. (166233 lines)
+	Version 13.82.2  :Jul 23, 2014	Fixed bug in data of a place.
+					Fixed bug in data of an institution.
+					Change in order of results for institutions, centres and degrees. (166231 lines)
+	Version 13.82.1  :Jul 23, 2014	Search in top of page is simplified to global search. (166221 lines)
+	Version 13.82    :Jul 23, 2014	Changes in search. (166205 lines)
+	Version 13.81.2  :Jul 23, 2014	Global search of institutions, centres, degrees, courses, teachers, documents... (166082 lines)
+	Version 13.81.1  :Jul 22, 2014	Search of institutions and centres. (166126 lines)
+	Version 13.81    :Jul 22, 2014	Search of degrees. (166089 lines)
+	Version 13.80    :Jul 22, 2014	Changes in search.
+					New search types: institutions, centres and degrees. (165976 lines)
+					2 changes necessary in database:
+UPDATE sessions SET WhatToSearch=WhatToSearch+3 WHERE WhatToSearch>0;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+3 WHERE WhatToSearch>0;
+
+	Version 13.79    :Jul 18, 2014	New statistics about institutions with centres, degrees, courses and users.
+					New statistics about centres with degrees, courses and users.
+					New statistics about degrees with courses and users.
+					New statistics about courses with users. (165943 lines)
+	Version 13.78    :Jul 17, 2014	New statistics about countries with institutions, centres, degrees, courses and users. (165552 lines)
+	Version 13.77.4  :Jul 15, 2014	Any user can view teachers' records.
+					Changes in layout of timetable and classphoto. (165378 lines)
+	Version 13.77.3  :Jul 15, 2014	Fixed bug in file browser (course works), reported by F. Javier Fern&aacute;ndez Baldomero. (165366 lines)
+	Version 13.77.2  :Jul 15, 2014	Fixed bug in list of institutions. (165364 lines)
+	Version 13.77.1  :Jul 15, 2014	Fixed bug in file browser (shared files). (165363 lines)
+	Version 13.77    :Jul 13, 2014	New statistics: number of countries, institutions and centres. (165360 lines)
+	Version 13.76.8  :Jul 12, 2014	Edition of degree logo is moved to configuration of degree. (165250 lines)
+	Version 13.76.7  :Jul 12, 2014	Edition of centre logo is moved to configuration of centre. (165284 lines)
+	Version 13.76.6  :Jul 12, 2014	Edition of institution logo is moved to configuration of institution. (165288 lines)
+	Version 13.76.5  :Jul 11, 2014	Changes in degree logo. (165304 lines)
+	Version 13.76.4  :Jul 11, 2014	Changes in centre logo. (165271 lines)
+	Version 13.76.3  :Jul 10, 2014	Changes in edition of institutions, centres and degrees. (165238 lines)
+	Version 13.76.2  :Jul 09, 2014	Fixed bugs edition of centres and institutions.
+					Some warning messages have been simplified. (165279 lines)
+	Version 13.76.1  :Jul 08, 2014	Fixed bugs in listing and edition of centres and degrees. (165308 lines)
+	Version 13.76    :Jul 08, 2014	All users can create new institutions. (165295 lines)
+					5 changes necessary in database:
+ALTER TABLE institutions ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER CtyCod;
+ALTER TABLE institutions ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;
+CREATE INDEX Status ON institutions (Status);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1210','es','N','Solicitar instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1211','es','N','Cambiar estado instituci&oacute;n');
+
+	Version 13.75.2  :Jul 08, 2014	List institutions with pending centres. (164806 lines)
+	Version 13.75.1  :Jul 07, 2014	Changes in edition of centres. (164332 lines)
+	Version 13.75    :Jul 06, 2014	All users can create new centres. (164005 lines)
+					5 changes necessary in database:
+ALTER TABLE centres ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER PlcCod;
+ALTER TABLE centres ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;
+CREATE INDEX Status ON centres (Status);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1208','es','N','Solicitar centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1209','es','N','Cambiar estado centro');
+
+	Version 13.74.5  :Jul 06, 2014	Changes in list of centres. (163947 lines)
+	Version 13.74.4  :Jul 06, 2014	Internal changes in swad_text.c. (163934 lines)
+	Version 13.74.3  :Jul 06, 2014	List centres with pending degrees. (163825 lines)
+	Version 13.74.2  :Jul 05, 2014	List centres with pending degrees. (163770 lines)
+					1 change necessary in database:
+UPDATE actions SET Txt='Ver instit., centros, titul. y asig. pendientes' WHERE ActCod='1060';
+
+	Version 13.74.1  :Jul 05, 2014	Changes in edition of degrees. (163670 lines)
+	Version 13.74    :Jul 05, 2014	All users can create new degrees. (163656 lines)
+					5 changes necessary in database:
+ALTER TABLE degrees ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER DegTypCod;
+ALTER TABLE degrees ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;
+CREATE INDEX Status ON degrees (Status);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1206','es','N','Solicitar titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1207','es','N','Cambiar estado titulaci&oacute;n');
+
+	Version 13.73.3  :Jul 04, 2014	Changes in editing institutions. (163272 lines)
+	Version 13.73.2  :Jul 03, 2014	Changes in editing degrees.
+	                                Changes in editing centres. (163266 lines)
+	Version 13.73.1  :Jul 03, 2014	Changes in some table headers.
+					Changes in editing courses. (163289 lines)
+	Version 13.73    :Jul 02, 2014	Refactoring file browser. (163659 lines)
+					15 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1195','es','N','Cambiar a ver documentos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1196','es','N','Cambiar a admin. documentos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1197','es','N','Cambiar a admin. archivos compartidos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1198','es','N','Cambiar a ver archivos calificaciones');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1199','es','N','Cambiar a admin. archivos calificaciones');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1078','es','N','Ver documentos asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1200','es','N','Ver documentos grupo');
+UPDATE actions SET Txt='Administrar documentos asignatura' WHERE ActCod='12';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1201','es','N','Administrar documentos grupo');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1202','es','N','Administrar archivos compartidos asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1203','es','N','Administrar archivos compartidos grupo');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1079','es','N','Ver calificaciones asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1204','es','N','Ver calificaciones grupo');
+UPDATE actions SET Txt='Administrar calificaciones asignatura' WHERE ActCod='284';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1205','es','N','Administrar calificaciones grupo');
+
+	Version 13.72.4  :Jul 01, 2014	Refactoring file browser. (163606 lines)
+	Version 13.72.3  :Jun 30, 2014	Internal changes in color strings.
+					New type of alert: success. (163676 lines)
+	Version 13.72.2  :Jun 30, 2014	Refactoring file browser. (163679 lines)
+	Version 13.72.1  :Jun 30, 2014	Refactoring file browser. (163665 lines)
+	Version 13.72    :Jun 29, 2014	Refactoring file browser. (163851 lines)
+					4 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1191','es','N','Habilitar arch/carp calif. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1192','es','N','Inhabilitar arch/carp calif. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1193','es','N','Habilitar arch/carp calif. asig.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1194','es','N','Inhabilitar arch/carp calif. asig.');
+
+	Version 13.71    :Jun 25, 2014	Refactoring file browser. (163583 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('267','268','463','466','467','475','499','500','525','526');
+
+	Version 13.70    :Jun 24, 2014	Selection of course/group in file browser with radio buttons.
+					Fixed bug in list of intitution forums. (163628 lines)
+	Version 13.69.4  :Jun 23, 2014	Selection of course/group in file browser with radio buttons. (163596 lines)
+	Version 13.69.3  :Jun 08, 2014	SWADroid advertisement on right column. (163574 lines)
+	Version 13.69.2  :Jun 08, 2014	Fixed bug in web service, reported by Juan Miguel Boyero Corral. (163539 lines)
+	Version 13.69.1  :Jun 07, 2014	Now it is not necessary to create places in an institution before creating centres. (163538 lines)
+	Version 13.69    :Jun 07, 2014	Changes in listing of invited users.
+					Code refactoring in list of users. (163587 lines)
+					7 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1078','es','N','Ver documentos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1079','es','N','Ver calificaciones');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1186','es','N','Ver orla o lista de invitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1187','es','N','Ver fichas invitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1188','es','N','Imprimir fichas invitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1189','es','N','Ver lista invitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1190','es','N','Imprimir orla ionvitados');
+
+	Version 13.68    :Jun 07, 2014	Records of invited users. (164189 lines)
+	Version 13.67    :Jun 06, 2014	List of invited users.
+					Institution fullname length changes from 127 to 1024. (163975 lines)
+					1 change necessary in database:
+ALTER TABLE institutions CHANGE COLUMN FullName FullName TEXT NOT NULL;
+
+	Version 13.66.1  :Jun 02, 2014	Fixed errors in search. (163637 lines)
+	Version 13.66    :Jun 02, 2014	Search option in several tabs.
+					Changes in search scopes.
+					Fixed bug in forms. (163737 lines)
+					12 changes necessary in database:
+UPDATE actions SET Txt='Solicitar b&uacute;squeda desde plataforma' WHERE ActCod='627';
+UPDATE actions SET Txt='Buscar desde plataforma' WHERE ActCod='628';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1176','es','N','Solicitar b&uacute;squeda desde pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1177','es','N','Solicitar b&uacute;squeda desde instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1178','es','N','Solicitar b&uacute;squeda desde centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1179','es','N','Solicitar b&uacute;squeda desde titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1180','es','N','Solicitar b&uacute;squeda desde asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1181','es','N','Buscar desde pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1182','es','N','Buscar desde instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1183','es','N','Buscar desde centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1184','es','N','Buscar desde titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1185','es','N','Buscar desde asignatura');
+
+	Version 13.65    :May 31, 2014	Changes related to institution logo. (162951 lines)
+	Version 13.64.9  :May 30, 2014	Changes in edition of institutions. (163002 lines)
+					1 change necessary in database:
+ALTER TABLE institutions CHANGE Logo Logo VARCHAR(32) NOT NULL;
+
+	Version 13.64.8  :May 27, 2014	Changes in institution logos. (162985 lines)
+	Version 13.64.7  :May 26, 2014	Added new social networks. (? lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','delicious','edmodo','facebook','flickr','foursquare','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
+	Version 13.64.6  :May 26, 2014	Fixed bug in new automatic passwords, reported by Carolina Gonz&aacute;lez Madrigal. (162940 lines)
+	Version 13.64.5  :May 22, 2014	Added new social networks. (162908 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','edmodo','facebook','flickr','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
+	Version 13.64.4  :May 15, 2014	Google Analytics for openswad.org. (162892 lines)
+	Version 13.64.3  :May 14, 2014	Changes in layout.
+					Changing swad_smtp.py (not finished). (162884 lines)
+	Version 13.64.2  :May 06, 2014	Fixed minor bug when creating a new notice, reported by Eva Mart&iacute;nez Ortigosa. (162825 lines)
+	Version 13.64.1  :May 06, 2014	Internal changes to actions and tabs.
+					Icons for countries are moved to icons directory. (162825 lines)
+					1 change necessary:
+mv /var/www/html/swad/cty /var/www/html/swad/icon/country
+
+	Version 13.64    :May 05, 2014	Changes in tabs.
+					Search/select is changed to search only.
+					Removed messages when no country/institution/centre/degree selected. (162836 lines)
+	Version 13.63    :May 04, 2014	Tabs are reduced from 11 to 6. (163163 lines)
+	Version 13.62.3  :May 03, 2014	Fixed bug in list of departments, reported by Francisco A. Ocaña Lara. (163116 lines)
+	Version 13.62.2  :May 03, 2014	Fixed bug in swad.sql. (163115 lines)
+	Version 13.62.1  :Apr 26, 2014	Added new social network. (163115 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','edmodo','facebook','flickr','googleplus','googlescholar','instagram','linkedin','pinterest','researchgate','slideshare','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
+	Version 13.62    :Apr 24, 2014	Fixed important bug in forms. (163103 lines)
+	Version 13.61.4  :Apr 23, 2014	Some messages translated. (163102 lines)
+	Version 13.61.3  :Apr 23, 2014	Fixed bug when removing a user.
+					Changed icons for administer one / several users.
+					Link in user's record to user's administration. (163079 lines)
+					1 change necessary in database:
+DELETE FROM usr_webs WHERE UsrCod NOT IN (SELECT UsrCod FROM usr_data);
+
+	Version 13.61.2  :Apr 23, 2014	Fixed bug in file browser when the first level is hidden. (163053 lines)
+	Version 13.61.1  :Apr 22, 2014	Added new social network. (163051 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','edmodo','facebook','flickr','googleplus','instagram','linkedin','pinterest','slideshare','tumblr','twitter','youtube') NOT NULL;
+
+	Version 13.61    :Apr 21, 2014	Fixed bug in links of right menu to users' records.
+					Link to user's record from works file browser. (163045 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1174','es','N','Ver ficha estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1175','es','N','Ver ficha profesor');
+
+	Version 13.60.1  :Apr 21, 2014	Fixed bug in links of right menu.
+					Fixed bug in institution.
+					A user can write a message to another from user's record. (162992 lines)
+	Version 13.60    :Apr 21, 2014	Students can view restricted versions of records of other students.
+					Links to records in connected users. (162954 lines)
+	Version 13.59.6  :Apr 21, 2014	Fixed bug in statistics about webs / social networks. (162993 lines)
+	Version 13.59.5  :Apr 20, 2014	Changes in statistics about webs / social networks. (162992 lines)
+	Version 13.59.4  :Apr 20, 2014	Fixed bug in statistics about webs / social networks. (162968 lines)
+	Version 13.59.3  :Apr 20, 2014	Fixed bug when registering a user. (162967 lines)
+	Version 13.59.2  :Apr 20, 2014	Added new social network. (162963 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','facebook','flickr','googleplus','instagram','linkedin','pinterest','slideshare','tumblr','twitter','youtube') NOT NULL;
+
+	Version 13.59.1  :Apr 17, 2014	Changes in webs / social networks. (162916 lines)
+	Version 13.59    :Apr 16, 2014	WWW, Skype and Twitter are removed from user's data.
+					Links to users' web pages removed. (162914 lines)
+					2 changes necessary in database:
+REPLACE INTO usr_webs SELECT UsrCod,'www',WWW FROM usr_data WHERE WWW LIKE 'http%';
+REPLACE INTO usr_webs SELECT UsrCod,'twitter',CONCAT('https://twitter.com/',Twitter) FROM usr_data WHERE Twitter<>'' AND Twitter NOT LIKE 'http%';
+
+	Version 13.58.10 :Apr 16, 2014	Changes in user's institution, centre and department. (163370 lines)
+	Version 13.58.9  :Apr 16, 2014	Changes in user's common record. (163385 lines)
+	Version 13.58.8  :Apr 15, 2014	Added new social networks. (163375 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','facebook','flickr','googleplus','instagram','linkedin','pinterest','slideshare','twitter','youtube') NOT NULL;
+
+	Version 13.58.7  :Apr 14, 2014	Skype is removed from web / social networks. (163387 lines)
+					2 changes necessary in database:
+DELETE FROM usr_webs WHERE Web='skype';
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','facebook','flickr','googleplus','linkedin','twitter','youtube') NOT NULL;
+
+	Version 13.58.6  :Apr 14, 2014	Webs / social networks are shown in user's record. (163390 lines)
+	Version 13.58.5  :Apr 14, 2014	Editing social networks. (163346 lines)
+	Version 13.58.4  :Apr 13, 2014	Editing social networks. (163337 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS usr_webs (UsrCod INT NOT NULL,Web ENUM('www','facebook','flickr','googleplus','linkedin','skype','twitter','youtube') NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(UsrCod,Web));
+
+	Version 13.58.3  :Apr 11, 2014	New module swad_network for user' web and social networks. (163286 lines)
+					1 change necessary in Makefile:
+Add swad_network.o to list of object files
+
+	Version 13.58.2  :Apr 10, 2014	Editing social networks. (? lines)
+	Version 13.58.1  :Apr 09, 2014	Editing social networks. (163222 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1173','es','N','Cambiar redes sociales');
+
+	Version 13.58    :Apr 08, 2014	New action to edit social networks. (163144 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1172','es','N','Editar redes sociales');
+
+	Version 13.57.6  :Apr 08, 2014	Changes in edition of user's common record. (163011 lines)
+	Version 13.57.5  :Apr 07, 2014	Changes in user's institution, centre and department. (163027 lines)
+					10 changes necessary in database:
+ALTER TABLE usr_data ADD COLUMN InsCtyCod INT NOT NULL DEFAULT -1 AFTER CtyCod;
+ALTER TABLE usr_data ADD INDEX (InsCtyCod);
+UPDATE usr_data,institutions SET usr_data.InsCtyCod=institutions.CtyCod WHERE usr_data.InsCod=institutions.InsCod;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1165','es','N','Editar instituci&oacute;n, centro, departamento');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1166','es','N','Cambiar pa&iacute;s instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1167','es','N','Cambiar instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1168','es','N','Cambiar centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1169','es','N','Cambiar departamento');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1170','es','N','Cambiar despacho');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1171','es','N','Cambiar tel&eacute;fono despacho');
+
+	Version 13.57.4  :Apr 06, 2014	Edition of office and office phone are moved from common card to institution. (162969 lines)
+	Version 13.57.3  :Apr 04, 2014	Changes in user's institution, centre and department. (162916 lines)
+	Version 13.57.2  :Apr 02, 2014	Changes in user's institution, centre and department. (162943 lines)
+	Version 13.57.1  :Apr 01, 2014	Changes in user's institution, centre and department. (162846 lines)
+	Version 13.57    :Apr 01, 2014	User's institution, centre and department are separated from common record. (162679 lines)
+	Version 13.56.2  :Mar 30, 2014	Changes in notices.
+					Fixed bug in syllabus. (162587 lines)
+	Version 13.56.1  :Mar 30, 2014	Changes in notices. (162594 lines)
+	Version 13.56    :Mar 29, 2014	Notices in the left side of the screen are limited to a number of charecters. (162516 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Mostrar aviso completo');
+
+	Version 13.55.8  :Mar 25, 2014	Fixed bugs in web service function getCourseInfo. (162405 lines)
+	Version 13.55.7  :Mar 25, 2014	Fixed bugs in web service function getCourseInfo reported by José Antonio Guerrero Avilés. (162486 lines)
+	Version 13.55.6  :Mar 24, 2014	Changes in course info related to web service function getCourseInfo.
+					Changes in icons for notifications. (162358 lines)
+	Version 13.55.5  :Mar 22, 2014	Changes in course info related to web service function getCourseInfo. (162265 lines)
+	Version 13.55.4  :Mar 22, 2014	Changes in course info related to web service function getCourseInfo. (162235 lines)
+	Version 13.55.3  :Mar 21, 2014	Changes in syllabus related to web service function getCourseInfo. (162160 lines)
+	Version 13.55.2  :Mar 20, 2014	Changes in syllabus related to web service function getCourseInfo. (162145 lines)
+	Version 13.55.1  :Mar 19, 2014	Changes in tests. (162210 lines)
+					1 change necessary in database:
+UPDATE tst_questions SET Feedback='' WHERE (Feedback='(null)' OR Feedback='&#40;null&#41;');
+
+	Version 13.55    :Mar 19, 2014	Fixed bug in tests, reported by Amalia Morales.
+					Database queries with NOT EXISTS replaced by NOT IN. (162149 lines)
+	Version 13.54.1  :Mar 18, 2014	Internal changes in syllabus.
+					Syllabus is written to temporary file to implement web service getCourseInfo. (162013 lines)
+	Version 13.54    :Mar 12, 2014	Partially implemented web service function getCourseInfo. (161958 lines)
+	Version 13.53    :Mar 11, 2014	Implemented web service function getNewPassword. (161861 lines)
+	Version 13.52.1  :Mar 09, 2014	Error 503 returned when server is in maintenance. (161737 lines)
+	Version 13.52    :Mar 04, 2014	New module swad_ID for users' IDs management. (161730 lines)
+					1 change necessary in Makefile:
+Add swad_ID.o to list of object files
+
+	Version 13.51.1  :Mar 04, 2014	Some functions moved to module swad_mail. (161632 lines)
+	Version 13.51    :Mar 04, 2014	New module swad_nickname for nicknames management. (161632 lines)
+					1 change necessary in Makefile:
+Add swad_nickname.o to list of object files
+
+	Version 13.50    :Mar 04, 2014	New module swad_password for passwords management. (161551 lines)
+					1 change necessary in Makefile:
+Add swad_password.o to list of object files
+
+	Version 13.49.7  :Mar 03, 2014	Changes in some messages and buttons. (161466 lines)
+	Version 13.49.6  :Feb 28, 2014	Leading zeros are removed in new users' IDs.
+					Changes in functions that remove leading zeros/arrobas. (161411 lines)
+	Version 13.49.5  :Feb 23, 2014	Fixed bug in list of forum threads. (161374 lines)
+	Version 13.49.4  :Feb 21, 2014	Fixed problem in tabs layout with MSIE 9, reported by María Rosa Moreno-Torres Herrera. (161395 lines)
+	Version 13.49.3  :Feb 18, 2014	By default, users only can view the notifications not seen. (161375 lines)
+	Version 13.49.2  :Feb 16, 2014	"Without courses" is replaced by "guests" in connected and statistics. (161331 lines)
+	Version 13.49.1  :Feb 15, 2014	Users' IDs not confirmed are shown in red.
+					Statistics about visitors and guest users. (161372 lines)
+	Version 13.49    :Feb 15, 2014	Changes in size of some database fields. (161301 lines)
+					1 change necessary at University of Granada:
+Compile and install version 1.1.13 of PRADO (includes changes in role codes for student and teacher)
+					35 changes necessary in database:
+DROP TABLE IF EXISTS usr_data_copy;
+DROP TABLE IF EXISTS file_public;
+DROP TABLE IF EXISTS files_backup;
+
+ALTER TABLE usr_data CHANGE Surname1 Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE usr_data CHANGE Surname2 Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE usr_data CHANGE FirstName FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE usr_data CHANGE Office Office VARCHAR(127) NOT NULL;
+ALTER TABLE usr_data CHANGE LocalAddress LocalAddress VARCHAR(127) NOT NULL;
+ALTER TABLE usr_data CHANGE FamilyAddress FamilyAddress VARCHAR(127) NOT NULL;
+ALTER TABLE usr_data CHANGE OriginPlace OriginPlace VARCHAR(127) NOT NULL;
+
+ALTER TABLE exam_announcements CHANGE CrsFullName CrsFullName VARCHAR(127) NOT NULL;
+ALTER TABLE exam_announcements CHANGE ExamSession ExamSession VARCHAR(127) NOT NULL;
+
+ALTER TABLE mail_domains CHANGE Domain Domain VARCHAR(127) NOT NULL;
+ALTER TABLE mail_domains CHANGE Info Info VARCHAR(127) NOT NULL;
+
+ALTER TABLE usr_emails CHANGE E_mail E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL;
+ALTER TABLE pending_emails CHANGE E_mail E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL;
+
+ALTER TABLE imported_students CHANGE Surname1 Surname1 VARCHAR(32) NOT NULL;
+ALTER TABLE imported_students CHANGE Surname2 Surname2 VARCHAR(32) NOT NULL;
+ALTER TABLE imported_students CHANGE FirstName FirstName VARCHAR(32) NOT NULL;
+ALTER TABLE imported_students CHANGE E_mail E_mail VARCHAR(32) NOT NULL;
+
+ALTER TABLE courses CHANGE FullName FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE degrees CHANGE FullName FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE centres CHANGE FullName FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE institutions CHANGE FullName FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE departments CHANGE FullName FullName VARCHAR(127) NOT NULL;
+ALTER TABLE deg_types CHANGE DegTypName DegTypName VARCHAR(32) NOT NULL;
+ALTER TABLE imported_groups CHANGE DegName DegName VARCHAR(127) NOT NULL;
+ALTER TABLE imported_groups CHANGE CrsName CrsName VARCHAR(127) NOT NULL;
+ALTER TABLE links CHANGE FullName FullName VARCHAR(127) NOT NULL;
+ALTER TABLE places CHANGE FullName FullName VARCHAR(127) NOT NULL;
+ALTER TABLE plugins CHANGE Name Name VARCHAR(127) NOT NULL;
+ALTER TABLE timetable_crs CHANGE Place Place VARCHAR(127) NOT NULL;
+ALTER TABLE timetable_tut CHANGE Place Place VARCHAR(127) NOT NULL;
+ALTER TABLE banners CHANGE FullName FullName VARCHAR(127) NOT NULL;
+ALTER TABLE holidays CHANGE Name Name VARCHAR(127) NOT NULL;
+
+	Version 13.48.3  :Feb 09, 2014	Guest users without courses view documents the same way as unknown users.
+					Guest users without courses can not create folders or files in their briefcases.
+					Guest users without courses can not view their courses. (161259 lines)
+	Version 13.48.2  :Feb 09, 2014	Guest users without courses can not view forums.
+					Guest users without courses can not use chat.
+					Guest users without courses can not send messages. (161239 lines)
+	Version 13.48.1  :Feb 09, 2014	Action permissions adapted to new roles. (161310 lines)
+	Version 13.48    :Feb 09, 2014	Role "invited" is renamed as "visitor", and new role "invited" is created for users without courses.
+					Not finished! Changes in action permissions required! (161240 lines)
+					1 change necessary at University of Granada:
+Compile and install version 1.1.12 of PRADO (includes changes in role codes for student and teacher)
+					15 changes necessary in database:
+UPDATE connected SET RoleInLastCrs='8' WHERE RoleInLastCrs='5';
+UPDATE connected SET RoleInLastCrs=RoleInLastCrs+1 WHERE RoleInLastCrs>='1' AND RoleInLastCrs<='4';
+
+UPDATE crs_usr SET Role='4' WHERE Role='3';
+UPDATE crs_usr SET Role='3' WHERE Role='2';
+
+UPDATE crs_usr_requests SET Role='4' WHERE Role='3';
+UPDATE crs_usr_requests SET Role='3' WHERE Role='2';
+
+UPDATE imported_sessions SET ImportedRole='4' WHERE ImportedRole='3';
+UPDATE imported_sessions SET ImportedRole='3' WHERE ImportedRole='2';
+
+UPDATE sessions SET Role='8' WHERE Role='5';
+UPDATE sessions SET Role=Role+1 WHERE Role>='1' AND Role<='4';
+
+UPDATE surveys SET Roles=Roles*2;
+
+UPDATE log_recent SET Role='8' WHERE Role='5';
+UPDATE log_recent SET Role=Role+1 WHERE Role>='1' AND Role<='4';
+
+UPDATE log SET Role='8' WHERE Role='5';
+UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';
+
+	Version 13.47    :Feb 06, 2014	Changes related to login. (160145 lines)
+	Version 13.46.7  :Feb 06, 2014	User's ID is confirmed when a user is logged in from external service. (160218 lines)
+	Version 13.46.6  :Feb 06, 2014	Refactoring functions related to external login. (160162 lines)
+	Version 13.46.5  :Feb 05, 2014	Refactoring functions related to register users. (160138 lines)
+	Version 13.46.4  :Feb 05, 2014	Refactoring functions related to login. (160132 lines)
+	Version 13.46.3  :Feb 05, 2014	To avoid duplications, a user is not registered when he/she comes from external login and does not exist.
+					Refactoring functions related to login. (160128 lines)
+	Version 13.46.2  :Feb 05, 2014	Changes in register / removing users. (160100 lines)
+	Version 13.46.1  :Feb 04, 2014	If the maximum role of a user is "invited", he/she can not upload documents. (160079 lines)
+	Version 13.46    :Feb 03, 2014	Removed long messages used to help edition. (160077 lines)
+	Version 13.45.4  :Feb 03, 2014	Added some titles in forms. (161706 lines)
+	Version 13.45.3  :Feb 02, 2014	Added some titles in forms. (161742 lines)
+	Version 13.45.2  :Feb 02, 2014	Added some titles in forms. (161738 lines)
+	Version 13.45.1  :Feb 02, 2014	Added some titles in forms. (161647 lines)
+	Version 13.45    :Feb 01, 2014	Added some titles in forms. (161679 lines)
+	Version 13.44.4  :Feb 01, 2014	Fixed bug in holidays.
+					Added some titles in forms. (161477 lines)
+	Version 13.44.3  :Jan 31, 2014	Minor changes related to password. (161462 lines)
+	Version 13.44.2  :Jan 31, 2014	Minor changes related to login / logout. (161453 lines)
+	Version 13.44.1  :Jan 30, 2014	Role option is integrated in session option. (161423 lines)
+	Version 13.44    :Jan 30, 2014	Password is included in form to create a new account.
+					Changes in logout. (161425 lines)
+					2 changes necessary in database:
+DELETE FROM actions WHERE ActCod='1164';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1162';
+
+	Version 13.43    :Jan 29, 2014	A new account must be created with a @nick, an e-mail and an ID. (161513 lines)
+	Version 13.42.3  :Jan 28, 2014	Changes related to user importation. (161385 lines)
+	Version 13.42.2  :Jan 27, 2014	The number of user's IDs for a user is now limited. (161386 lines)
+	Version 13.42.1  :Jan 26, 2014	Some messages translated. (161348 lines)
+	Version 13.42    :Jan 26, 2014	New option to sign in. (161251 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Confirmar creaci&oacute;n de nueva cuenta');
+
+	Version 13.41    :Jan 23, 2014	Starting a new option to sign in. (161147 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1162','es','N','Solicitar la creaci&oacute;n de una cuenta');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1163','es','N','Crear una nueva cuenta');
+
+	Version 13.40.1  :Jan 22, 2014	Changes in enrollment of users. (161007 lines)
+	Version 13.40    :Jan 20, 2014	Changes in listing of countries.
+					Removed options to go to country, institution, centre, etc. (160965 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('842','1027','1026','1050','1012','988','1010');
+
+	Version 13.39.3  :Jan 20, 2014	Fixed several bugs related to user's login. (160944 lines)
+	Version 13.39.2  :Jan 19, 2014	Allow login with ID if there are several users with the same ID, but only one with the password typed by the user.
+					Code refactoring related to users' IDs. (160931 lines)
+	Version 13.39.1  :Jan 18, 2014	Code refactoring in user's authentication. (160906 lines)
+	Version 13.39    :Jan 16, 2014	Change in order from ID-@nick-email to @nick-email-ID.
+					New module swad_photo for photo management. (160876 lines)
+					1 change necessary in Makefile
+Add swad_photo.o to list of object files
+
+	Version 13.38.1  :Jan 15, 2014	Code refactoring in user's authentication. (160780 lines)
+	Version 13.38    :Jan 14, 2014	Get list of users' codes for a given ID. (160712 lines)
+	Version 13.37.2  :Jan 13, 2014	Get list of users' codes for a given ID. Not finished.
+					Fixed bug when redirecting to another language, reported by Monserrat Bosch Olives. (160694 lines)
+	Version 13.37.1  :Jan 13, 2014	Get list of users' codes for a given ID. Not finished. (160611 lines)
+	Version 13.37    :Jan 12, 2014	Code refactoring related to enrollment of users. (160575 lines)
+	Version 13.36    :Jan 11, 2014	When a teacher tries to enroll a user in a course and there are more than one user with the same ID, the teacher can choose what user to enroll. (160605 lines)
+	Version 13.35.2  :Jan 11, 2014	Implemented function to remove one of my user's IDs. (160531 lines)
+	Version 13.35.1  :Jan 11, 2014	Changes in layout and CSS. (160453 lines)
+	Version 13.35    :Jan 11, 2014	Changes in CSS for icons. (160491 lines)
+	Version 13.34.9  :Jan 10, 2014	Navigation bar (tabs) now uses a list and CSS. (160378 lines)
+	Version 13.34.8  :Jan 09, 2014	Lot of minor fixes in XHTML. (160401 lines)
+	Version 13.34.7  :Jan 09, 2014	Change in layout to fix misaligned central div in MSIE. (160406 lines)
+	Version 13.34.6  :Jan 08, 2014	Changes in layout of left and right buttons to expand the central zone. (160396 lines)
+	Version 13.34.5  :Jan 07, 2014	Changes in CSS for tabs.
+					Changes in tab labels. (160389 lines)
+	Version 13.34.4  :Jan 06, 2014	Changes in CSS for mobile layout. (160387 lines)
+	Version 13.34.3  :Jan 04, 2014	Changes in CSS for desktop layout. (160439 lines)
+	Version 13.34.2  :Jan 04, 2014	Changes in CSS for some lists. (160433 lines)
+	Version 13.34.1  :Jan 02, 2014	Code refactoring related to users and groups. (160441 lines)
+	Version 13.34    :Jan 02, 2014	Changes in register/remove one user.
+					Code refactoring related to users and groups. (160399 lines)
+	Version 13.33    :Jan 02, 2014	Changes in edition of record fields.
+					Removed help messages in edition of record fields.
+					A student can change his/her groups in option to register/remove user. (160414 lines)
+	Version 13.32.5  :Jan 01, 2014	Removed help messages in edition of groups.
+					Fixed bug in listing of students. (160698 lines)
+	Version 13.32.4  :Jan 01, 2014	Changes in edition of groups. (161028 lines)
+	Version 13.32.3  :Jan 01, 2014	Changes in class photos. (160981 lines)
+	Version 13.32.2  :Jan 01, 2014	Removed no longer used functions related to records. (160960 lines)
+	Version 13.32.1  :Jan 01, 2014	Changes in selection of teachers to show teachers' records. (161107 lines)
+	Version 13.32    :Jan 01, 2014	Teachers' records are integrated into teachers' list. (161057 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='306';
+
+	Version 13.31    :Dec 31, 2013	Enrollment tab is merged with users tab.
+					Connected option is moved to the end of users tab. (161065 lines)
+	Version 13.30.3  :Dec 31, 2013	Link to edit groups in option to select my groups. (161188 lines)
+	Version 13.30.2  :Dec 31, 2013	Options to edit group types is integrated in option to edit groups. (161244 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1004';
+
+	Version 13.30.1  :Dec 31, 2013	Options to remove all students and old users are moved to option to register/remove several users. (161339 lines)
+	Version 13.30    :Dec 30, 2013	Options to remove all students and old users are linked from option to register/remove several users. (161463 lines)
+	Version 13.29    :Dec 29, 2013	Removing a user is integrated in register a user.
+					Register / removing an administrator is integrated in register a user. (161391 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('57','61','229','231','580','581','582','585');
+
+	Version 13.28    :Dec 29, 2013	Teachers's office hours are integrated in listing of teachers' records. (161581 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='21';
+
+	Version 13.27.4  :Dec 28, 2013	Changes in current action when no user logged. (161608 lines)
+	Version 13.27.3  :Dec 28, 2013	Changes in layout related to country, institution, centre, degree and course. (161592 lines)
+	Version 13.27.2  :Dec 27, 2013	Changes in layout related to country, institution, centre, degree and course. (161570 lines)
+	Version 13.27.1  :Dec 24, 2013	Fixed bug when getting place data from database. (161471 lines)
+	Version 13.27    :Dec 24, 2013	Highlight of tabs and menu options. (161476 lines)
+	Version 13.26.3  :Dec 24, 2013	Fixed bug when sending password. Reported by @Jasgrf via Twitter. (161209 lines)
+	Version 13.26.2  :Dec 22, 2013	Country map attribution now uses a textarea and bigger size. (161207 lines)
+	Version 13.26.1  :Dec 22, 2013	Fixed bug in authentication with ID.
+					Changes in database fields for attribution.
+					Centre photo attribution now uses a textarea and bigger size. (161205 lines)
+					2 changes necessary in database:
+ALTER TABLE centres CHANGE COLUMN PhotoAttribution PhotoAttribution TEXT NOT NULL;
+ALTER TABLE countries CHANGE COLUMN MapAttribution MapAttribution TEXT NOT NULL;
+
+	Version 13.26    :Dec 21, 2013	Form to send a photo of the current centre. (161141 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1160','es','N','Solicitar env&iacute;o de foto del centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1161','es','N','Enviar foto del centro');
+
+	Version 13.25.1  :Dec 21, 2013	Changes in attribution of centre. (160998 lines)
+					1 change necessary in database:
+ALTER TABLE centres ADD COLUMN PhotoAttribution VARCHAR(255) NOT NULL AFTER WWW;
+
+	Version 13.25    :Dec 20, 2013	In information about the current centre a photo is shown.
+					New option to set the attribution of centre photo. (160970 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1159','es','N','Cambiar atribuci&oacute;n foto centro');
+
+	Version 13.24    :Dec 18, 2013	New option to set the attribution of SVG map of country. (160885 lines)
+					12 changes necessary in database:
+ALTER TABLE countries ADD COLUMN MapAttribution VARCHAR(255) NOT NULL AFTER Alpha2;
+ALTER TABLE countries ADD COLUMN WWW_ca VARCHAR(255) NOT NULL AFTER Name_pt;
+ALTER TABLE countries ADD COLUMN WWW_de VARCHAR(255) NOT NULL AFTER WWW_ca;
+ALTER TABLE countries ADD COLUMN WWW_en VARCHAR(255) NOT NULL AFTER WWW_de;
+ALTER TABLE countries ADD COLUMN WWW_es VARCHAR(255) NOT NULL AFTER WWW_en;
+ALTER TABLE countries ADD COLUMN WWW_fr VARCHAR(255) NOT NULL AFTER WWW_es;
+ALTER TABLE countries ADD COLUMN WWW_gn VARCHAR(255) NOT NULL AFTER WWW_fr;
+ALTER TABLE countries ADD COLUMN WWW_it VARCHAR(255) NOT NULL AFTER WWW_gn;
+ALTER TABLE countries ADD COLUMN WWW_pl VARCHAR(255) NOT NULL AFTER WWW_it;
+ALTER TABLE countries ADD COLUMN WWW_pt VARCHAR(255) NOT NULL AFTER WWW_pl;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1157','es','N','Cambiar web pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1158','es','N','Cambiar atribuci&oacute;n mapa pa&iacute;s');
+
+	Version 13.23.2  :Dec 16, 2013	Show SVG map of country if exists. (160656 lines)
+Copy maps of countries from swad source directory to public directory.
+Example:
+cp -R /home/<user>/swad/swad/cty /var/www/html/swad/
+
+	Version 13.23.1  :Dec 16, 2013	Changes in layour of tabs. (160631 lines)
+	Version 13.23    :Dec 15, 2013	Options for places and holidays are moved from system tab to institution tab.
+					Changes in tabs. (160630 lines)
+					10 changes necessary in database:
+ALTER TABLE places ADD COLUMN InsCod INT NOT NULL AFTER PlcCod, ADD INDEX (InsCod);
+ALTER TABLE holidays ADD COLUMN InsCod INT NOT NULL AFTER HldCod, ADD INDEX (InsCod);
+
+	// ugr.es:
+UPDATE places SET InsCod='1';
+UPDATE holidays SET InsCod='1';
+
+	// una.py:
+UPDATE places SET InsCod='92';
+UPDATE holidays SET InsCod='92';
+
+ALTER TABLE centres ADD COLUMN PlcCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (PlcCod);
+DROP TABLE IF EXISTS tmp_centres_places;
+CREATE TEMPORARY TABLE tmp_centres_places (InsCod INT NOT NULL,CtrCod INT NOT NULL,PlcCod INT NOT NULL,INDEX(InsCod),INDEX (CtrCod),INDEX(PlcCod)) SELECT DISTINCTROW centres.InsCod,centres.CtrCod,degrees.PlcCod FROM degrees,centres WHERE degrees.CtrCod=centres.CtrCod ORDER BY centres.InsCod,centres.CtrCod,degrees.PlcCod DESC;
+UPDATE centres,tmp_centres_places SET centres.PlcCod=tmp_centres_places.PlcCod WHERE centres.CtrCod=tmp_centres_places.CtrCod AND centres.InsCod=tmp_centres_places.InsCod;
+DROP TABLE tmp_centres_places;
+ALTER TABLE degrees DROP COLUMN PlcCod;
+	Version 13.22.4  :Dec 15, 2013	List only the departments of the current institution. (160514 lines)
+	Version 13.22.3  :Dec 15, 2013	Option to show and edit departments is moved from system tab to institution tab. (160510 lines)
+	Version 13.22.2  :Dec 15, 2013	Show number of departments in an institution. (160506 lines)
+	Version 13.22.1  :Dec 14, 2013	Fixed minor bug in selection of centres.
+					Some code refeactoring. (160483 lines)
+	Version 13.22    :Dec 13, 2013	Information on country and institution. (160446 lines)
+	Version 13.21    :Dec 13, 2013	Big title in heading show the country, the institution, the centre, the degree or the course.
+					New options to view country, institution and centre configuration. (160040 lines)
+					6 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1151','es','N','Ver informaci&oacute;n centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1152','es','N','Imprimir informaci&oacute;n centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1153','es','N','Ver informaci&oacute;n instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1154','es','N','Imprimir informaci&oacute;n instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1155','es','N','Ver informaci&oacute;n instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1156','es','N','Imprimir informaci&oacute;n instituci&oacute;n');
+
+	Version 13.20    :Dec 12, 2013	Course configuration is integrated with course introduction.
+					New option to view degree configuration. (159558 lines)
+					3 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1023';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1149','es','N','Ver configuraci&oacute;n titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1150','es','N','Imprimir configuraci&oacute;n titulaci&oacute;n');
+
+	Version 13.19    :Dec 11, 2013	Four new tabs: country, institution, centre, degree.
+					My courses changes to profile tab. (159405 lines)
+					7 changes necessary in database:
+UPDATE usr_last SET LastTab=12 WHERE LastTab=8;
+UPDATE usr_last SET LastTab=11 WHERE LastTab=7;
+UPDATE usr_last SET LastTab=10 WHERE LastTab=6;
+UPDATE usr_last SET LastTab=9 WHERE LastTab=5;
+UPDATE usr_last SET LastTab=8 WHERE LastTab=4;
+UPDATE usr_last SET LastTab=7 WHERE LastTab=3;
+UPDATE usr_last SET LastTab=6 WHERE LastTab=2;
+
+	Version 13.18.8  :Dec 10, 2013	Changes related to user's IDs. (158895 lines)
+	Version 13.18.7  :Dec 10, 2013	Changes related to user's IDs. (158755 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_IDs ADD COLUMN Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER CreatTime;
+UPDATE usr_IDs SET Confirmed='Y';
+
+	Version 13.18.6  :Dec 10, 2013	Changes related to user's IDs. (158724 lines)
+	Version 13.18.5  :Dec 09, 2013	Changes related to user's IDs. Not finished. (158755 lines)
+	Version 13.18.4  :Dec 07, 2013	Changes related to user's IDs. (158667 lines)
+	Version 13.18.3  :Dec 05, 2013	User's ID removed from log. (158680 lines)
+					2 slow changes necessary in database (may spend many minutes or even hours depending on the size of log tables):
+ALTER TABLE log_recent DROP COLUMN UsrID;
+ALTER TABLE log DROP COLUMN UsrID;
+
+	Version 13.18.2  :Dec 03, 2013	Changes related to list of user's ID. (158681 lines)
+	Version 13.18.1  :Dec 01, 2013	Changes in messages related to user's ID. (158640 lines)
+	Version 13.18    :Dec 01, 2013	User's directories for activities and works are stored using user's code instead of user's ID. (158785 lines)
+Important change necessary to move old works to new works:
+Configure swad_convert_works.c (change defines), compile it and execute swad_convert_works as root.
+Check if all works fine.
+
+	Version 13.17    :Nov 26, 2013	User's private briefcase is stored using user's code instead of user's ID. (158598 lines)
+Important change necessary to move old briefcases to new briefcases:
+Configure swad_convert_briefcases.c (change defines), compile it and execute swad_convert_briefcases as root.
+Check if all works fine, and then remove usr_backup private directory.
+
+	Version 13.16    :Nov 26, 2013	User's private photo is stored using user's code instead of user's ID. (158473 lines)
+Important change necessary to move old private photos to new private photos:
+Configure swad_convert_photos.c (change defines), compile it and execute swad_convert_photos as root.
+Check if all works fine, and then remove photo_backup private directory.
+
+	Version 13.15.1  :Nov 24, 2013	Changes related to user's ID. (158319 lines)
+					1 change necessary in database:
+ALTER TABLE usr_data DROP COLUMN UsrID;
+
+	Version 13.15    :Nov 22, 2013	New table for user's IDs. (158043 lines)
+					4 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1147','es','N','Eliminar uno de mis ID');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1148','es','N','Crear un nuevo ID para m&iacute;');
+CREATE TABLE IF NOT EXISTS usr_IDs (UsrCod INT NOT NULL,UsrID CHAR(16) NOT NULL,CreatTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,UsrID),INDEX(UsrID));
+INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime) SELECT UsrCod,UsrID,NOW() FROM usr_data WHERE UsrID<>'';
+
+	Version 13.14.2  :Nov 22, 2013	It is mandatory to fill the nickname. (158034 lines)
+	Version 13.14.2  :Nov 21, 2013	Changes in user's account related to QR codes. (157959 lines)
+	Version 13.14.1  :Nov 19, 2013	Changes in web service functions getNotifications and markNotificationsAsRead. (157963 lines)
+	Version 13.14    :Nov 19, 2013	New web service function markNotificationAsRead.
+					Changes in database table of notifications. (157944 lines)
+					1 change necessary in database:
+ALTER TABLE notif ADD NtfCod INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (NtfCod);
+
+	Version 13.13.11 :Nov 17, 2013	Several icons changed from 12x12 to 16x16.
+					Changes in messages and forums. (157880 lines)
+Copy icons from swad source directory to icons public directory.
+
+	Version 13.13.10 :Nov 16, 2013	Several icons changed from 12x12 and 12x16 to 16x16. (157839 lines)
+	Version 13.13.9  :Nov 16, 2013	Several icons changed from 12x12 and 12x16 to 16x16. (157835 lines)
+	Version 13.13.8  :Nov 16, 2013	Several icons changed from 12x12 to 16x16. (157779 lines)
+	Version 13.13.7  :Nov 15, 2013	Several icons changed from 12x12 to 16x16. (157725 lines)
+	Version 13.13.6  :Nov 15, 2013	Several icons changed from 12x12 to 16x16. (157703 lines)
+	Version 13.13.5  :Nov 15, 2013	Several icons changed from 12x12 to 16x16. (157696 lines)
+	Version 13.13.4  :Nov 14, 2013	Link in course record to edit common record. (157644 lines)
+	Version 13.13.3  :Nov 14, 2013	Link in common record to view record in course. (157613 lines)
+	Version 13.13.2  :Nov 14, 2013	Edition of record fields is now integrated in listing of students. (157573 lines)
+	Version 13.13.1  :Nov 14, 2013	Official students are now accessible from students' list. (157586 lines)
+	Version 13.13    :Nov 13, 2013	Links in right column to view connected users. (157600 lines)
+	Version 13.12    :Nov 13, 2013	New MIME type.
+					Option for changing another user's password is integrated in modification of another user's data. (157508 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='162';
+
+	Version 13.11    :Nov 08, 2013	Option for changing another user's photo is integrated in modification of another user's data.
+					Superusers can add/modify another user when no course selected. (? lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='373';
+
+	Version 13.10.2  :Nov 07, 2013	Several messages translated in timetables. (157580 lines)
+	Version 13.10.1  :Nov 03, 2013	Changes in timetables. (157452 lines)
+	Version 13.10    :Nov 02, 2013	Users can mark all notifications as seen.
+					Notifications are no longer marked as seen when mobile external service get them. (157443 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1146','es','N','Marcar notificaciones como vistas');
+
+	Version 13.9.1   :Nov 02, 2013	Timetables from monday to sunday. (157408 lines)
+					2 changes necessary in database:
+ALTER TABLE timetable_crs CHANGE COLUMN Day Day ENUM('L','M','X','J','V','S','D') NOT NULL;
+ALTER TABLE timetable_tut CHANGE COLUMN Day Day ENUM('L','M','X','J','V','S','D') NOT NULL;
+
+	Version 13.9     :Nov 02, 2013	Edition of tutorial hours is integrated in my timetable. (157395 lines)
+	Version 13.8     :Nov 02, 2013	Tutorial hours are shown in my timetable. (157480 lines)
+	Version 13.7.10  :Nov 01, 2013	Changes in my record. (157457 lines)
+	Version 13.7.9   :Nov 01, 2013	Changes in edition of test questions. (157439 lines)
+	Version 13.7.8   :Oct 31, 2013	Changes in common record. (157420 lines)
+	Version 13.7.7   :Oct 31, 2013	Changes in common record, unfinished. (157410 lines)
+	Version 13.7.6   :Oct 28, 2013	Changes in common record, unfinished. (157447 lines)
+	Version 13.7.5   :Oct 26, 2013	Statistics of clicks in banners. (157367 lines)
+	Version 13.7.4   :Oct 26, 2013	Changes in banners. (157187 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1145','es','N','Clic en un banner');
+
+	Version 13.7.3   :Oct 24, 2013	Clicks on banners are logged. (157180 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS log_banners (LogCod INT NOT NULL,BanCod INT NOT NULL,UNIQUE INDEX(LogCod),INDEX(BanCod));
+
+	Version 13.7.2   :Oct 21, 2013	Banners are shown in right column. (157117 lines)
+	Version 13.7.1   :Oct 21, 2013	Changes in banners. (157116 lines)
+					9 changes necessary in database:
+ALTER TABLE banners ADD COLUMN Img VARCHAR(255) NOT NULL AFTER FullName;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1137','es','N','Ver banners');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1138','es','N','Editar banners');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1139','es','N','Crear banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1140','es','N','Eliminar banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1141','es','N','Cambiar nombre corto de banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1142','es','N','Cambiar nombre largo de banner (');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1143','es','N','Cambiar URL de banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1144','es','N','Cambiar imagen de banner');
+
+	Version 13.7     :Oct 20, 2013	New module swad_banner for banners. (156936 lines)
+					1 change necessary in Makefile
+Add swad_banner.o to list of object files
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS banners (BanCod INT NOT NULL AUTO_INCREMENT,ShortName VARCHAR(32) NOT NULL,FullName VARCHAR(255) NOT NULL,WWW VARCHAR(255) NOT NULL,UNIQUE INDEX(BanCod));
+
+	Version 13.6     :Oct 20, 2013	A teacher/admin can register another user in groups. (155736 lines)
+	Version 13.5     :Oct 17, 2013	Register / remove several users using nicknames or e-mails, not only IDs. (155339 lines)
+	Version 13.4.8   :Oct 16, 2013	Fixed bug in searching of documents. (155326 lines)
+	Version 13.4.7   :Oct 16, 2013	Creating ZIP is permitted for all users. (155305 lines)
+	Version 13.4.6   :Oct 16, 2013	Create ZIP only if full size is less than a limit. (155281 lines)
+	Version 13.4.5   :Oct 16, 2013	Changes in ZIP of works and folders. (155227 lines)
+	Version 13.4.4   :Oct 15, 2013	Changes in ZIP of a folder. (155152 lines)
+	Version 13.4.3   :Oct 15, 2013	Update number of my views of files inside a folder when creating a ZIP file of that folder. (155148 lines)
+	Version 13.4.2   :Oct 14, 2013	Compress files of a folder to download them. (155046 lines)
+					12 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1125','es','N','Crear ZIP doc. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1126','es','N','Crear ZIP admin.doc.asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1127','es','N','Crear ZIP admin.doc.grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1128','es','N','Crear ZIP compart.asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1129','es','N','Crear ZIP compart.grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1130','es','N','Crear ZIP carpeta mis activid.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1131','es','N','Crear ZIP carpeta mis trabajos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1132','es','N','Crear ZIP carpeta activid. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1133','es','N','Crear ZIP carpeta trabajos asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1134','es','N','Crear ZIP carpeta admin. calif. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1135','es','N','Crear ZIP carpeta admin. calif. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1136','es','N','Crear ZIP carpeta malet&iacute;n');
+
+	Version 13.4.1   :Oct 14, 2013	Compress files of a folder to download them. (154976 lines)
+	Version 13.4     :Oct 13, 2013	New module swad_zip for compressing files.
+					Starting new button to ZIP folders for downloading in future versions. (154835 lines)
+					1 change necessary in Makefile
+Add swad_zip.o to list of object files
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1124','es','N','Crear ZIP doc. asg.');
+
+	Version 13.3.2   :Oct 12, 2013	Clicks to download files are marked in yellow in last clicks.
+					Different holidays can have the same name. (154636 lines)
+	Version 13.3.1   :Oct 11, 2013	Files are downloaded directly by CGI in all zones. (154668 lines)
+					12 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1112','es','N','Descargar arch. doc. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1113','es','N','Descargar arch. doc. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1114','es','N','Descargar arch. doc. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1115','es','N','Descargar arch. com. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1116','es','N','Descargar arch. com. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1117','es','N','Descargar arch. mis actividades');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1118','es','N','Descargar arch. mis trabajos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1119','es','N','Descargar arch. activ. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1120','es','N','Descargar arch. trab. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1121','es','N','Descargar arch. admin.calif.asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1122','es','N','Descargar arch. admin.calif.grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1123','es','N','Descargar arch. malet&iacute;n');
+
+	Version 13.3     :Oct 10, 2013	Files are downloaded directly by CGI in documents zone. (154772 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1111','es','N','Descargar arch. doc. asg.');
+
+	Version 13.2.2   :Oct 09, 2013	User's QR code is moved to user's account.
+					New QR code for confirmed e-mail. (154443 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1021';
+
+	Version 13.2.1   :Oct 08, 2013	Fixed minor bug when updating last access to courses. (154537 lines)
+	Version 13.2     :Oct 08, 2013	New option to remove old courses. (154532 lines)
+					5 changes necessary in database:
+CREATE TABLE IF NOT EXISTS crs_last (CrsCod INT NOT NULL,LastTime DATETIME NOT NULL DEFAULT 0,UNIQUE INDEX(CrsCod),INDEX(LastTime));
+REPLACE INTO crs_last (CrsCod,LastTime) SELECT CrsCod,MAX(ClickTime) FROM log WHERE Role>='2' GROUP BY CrsCod;
+DELETE FROM crs_last WHERE CrsCod NOT IN (SELECT CrsCod FROM courses);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1109','es','N','Solicitar elim. asignaturas antiguas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1110','es','N','Eliminar asignaturas antiguas');
+
+	Version 13.1.2   :Oct 04, 2013	Changes in temporary directories for download. (154222 lines)
+	Version 13.1.1   :Oct 02, 2013	Fixed bug in temporary directories for download. (154174 lines)
+	Version 13.1     :Oct 01, 2013	New MIME type.
+					Files are downloaded automatically (without pop-up blocking) (154161 lines)
+	Version 13.0.1   :Sep 25, 2013	Files are downloaded automatically. (154138 lines)
+	Version 13.0     :Sep 23, 2013	Users can choose which notifications they want to receive. (154129 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_data CHANGE NotifyEvents EmailNtfEvents INT NOT NULL DEFAULT 0;
+ALTER TABLE usr_data ADD COLUMN NotifNtfEvents INT NOT NULL DEFAULT -1 AFTER SecureIcons;
+
+	Version 12.70    :Sep 22, 2013	New option in course info to test a new WYSIWYG text editor. (154041 lines)
+					40 changes necessary in database:
+ALTER TABLE crs_info_src ADD COLUMN InfoSrc2 ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL AFTER InfoSrc;
+UPDATE crs_info_src SET InfoSrc2='none' WHERE InfoSrc='none';
+UPDATE crs_info_src SET InfoSrc2='editor' WHERE InfoSrc='editor';
+UPDATE crs_info_src SET InfoSrc2='plain_text' WHERE InfoSrc='text';
+UPDATE crs_info_src SET InfoSrc2='page' WHERE InfoSrc='page';
+UPDATE crs_info_src SET InfoSrc2='URL' WHERE InfoSrc='URL';
+ALTER TABLE crs_info_src DROP COLUMN InfoSrc;
+ALTER TABLE crs_info_src CHANGE COLUMN InfoSrc2 InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL;
+
+UPDATE actions SET Txt='Editor de texto plano de info. asg.'   WHERE ActCod='850' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de guía docente' WHERE ActCod='787' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de teoría'       WHERE ActCod='379' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de prácticas'    WHERE ActCod='389' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de bibliografía' WHERE ActCod='377' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de FAQ'          WHERE ActCod='405' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de enlaces'      WHERE ActCod='400' AND Language='es';
+UPDATE actions SET Txt='Editor de texto plano de evaluación'   WHERE ActCod='387' AND Language='es';
+
+UPDATE actions SET Txt='Enviar texto plano de info. asg.'   WHERE ActCod='851' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de guía docente' WHERE ActCod='790' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de teoría'       WHERE ActCod='394' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de prácticas'    WHERE ActCod='396' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de bibliografía' WHERE ActCod='398' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de FAQ'          WHERE ActCod='406' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de enlaces'      WHERE ActCod='401' AND Language='es';
+UPDATE actions SET Txt='Enviar texto plano de evaluación'   WHERE ActCod='397' AND Language='es';
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1093','es','N','Editor de texto enriq. de info. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1094','es','N','Editor de texto enriq. de guía docente');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1095','es','N','Editor de texto enriq. de teoría');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1096','es','N','Editor de texto enriq. de prácticas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1097','es','N','Editor de texto enriq. de bibliografía');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1098','es','N','Editor de texto enriq. de FAQ');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1099','es','N','Editor de texto enriq. de enlaces');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1100','es','N','Editor de texto enriq. de evaluación');
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1101','es','N','Enviar texto enriq. de info. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1102','es','N','Enviar texto enriq. de guía docente');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1103','es','N','Enviar texto enriq. de teoría');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1104','es','N','Enviar texto enriq. de prácticas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1105','es','N','Enviar texto enriq. de bibliografía');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1106','es','N','Enviar texto enriq. de FAQ');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1107','es','N','Enviar texto enriq. de enlaces');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1108','es','N','Enviar texto enriq. de evaluación');
+
+	Version 12.69    :Sep 22, 2013	Statistics about use of icons. (153664 lines)
+	Version 12.68.5  :Sep 20, 2013	Default icon set is changed from Nuvola to Awesome. (153535 lines)
+	Version 12.68.4  :Sep 19, 2013	Internal changes in creation of new users. (153534 lines)
+	Version 12.68.3  :Sep 19, 2013	Fixed bug in creation of new users. (153508 lines)
+	Version 12.68.2  :Sep 19, 2013	Fixed bug in notifications about enrollment requests, reported by Antonio Martínez López. (153491 lines)
+	Version 12.68.1  :Sep 18, 2013	Fixed bug in icon set. (153479 lines)
+	Version 12.68    :Sep 18, 2013	Users can choose two icon sets: Awesome and Nuvola. (153475 lines)
+Create directory for icon set in directory of icons:
+
+cd <public_swad_directory>/icon
+mkdir iconset
+cd iconset
+mkdir awesome
+mkdir nuvola
+cp -a ../action16x16 awesome
+cp -a ../action32x32 awesome
+cp -a ../action64x64 awesome
+cp -a ../action16x16 nuvola
+cp -a ../action32x32 nuvola
+cp -a ../action64x64 nuvola
+
+					5 changes necessary in database:
+ALTER TABLE usr_data ADD COLUMN IconSet CHAR(16) NOT NULL AFTER Theme, ADD INDEX (IconSet);
+UPDATE usr_data SET IconSet='nuvola';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1092','es','N','Cambiar conjunto de iconos');
+ALTER TABLE IP_prefs ADD COLUMN IconSet CHAR(16) NOT NULL AFTER Theme;
+UPDATE IP_prefs SET IconSet='nuvola';
+
+	Version 12.67.6  :Sep 17, 2013	Changes in layout. (153199 lines)
+	Version 12.67.5  :Sep 15, 2013	Changes in layout. (153161 lines)
+	Version 12.67.4  :Sep 14, 2013	Changes in layout. (153175 lines)
+	Version 12.67.3  :Sep 14, 2013	Fixed bug in form to enter ID, @nick or e-mail. (153198 lines)
+	Version 12.67.2  :Sep 14, 2013	Fixed bug in statistics. (153198 lines)
+	Version 12.67.1  :Sep 14, 2013	Changes in nickname form.
+					Several messages translated. (153197 lines)
+	Version 12.67    :Sep 13, 2013	Nickname and e-mail are allowed to create, remove, change a user. (153137 lines)
+	Version 12.66.1  :Sep 12, 2013	User's encrypted code is used instead user's ID when possible. (153107 lines)
+	Version 12.66    :Sep 11, 2013	User's code instead of user's ID in log tables. (153015 lines)
+					4 slow changes necessary in database (may spend many minutes or even hours depending on the size of log tables):
+ALTER TABLE log_recent ADD COLUMN UsrCod INT NOT NULL DEFAULT -1 AFTER CrsCod, ADD INDEX (UsrCod);
+ALTER TABLE log ADD COLUMN UsrCod INT NOT NULL DEFAULT -1 AFTER CrsCod, ADD INDEX (UsrCod);
+UPDATE log_recent,usr_data SET log_recent.UsrCod=usr_data.UsrCod WHERE log_recent.UsrCod='-1' AND log_recent.UsrID<>'' AND log_recent.UsrID=usr_data.UsrID;
+UPDATE log,usr_data SET log.UsrCod=usr_data.UsrCod WHERE log.UsrCod='-1' AND log.UsrID<>'' AND log.UsrID=usr_data.UsrID;
+
+	Version 12.65.4 :Sep 10, 2013	Shortcut to degree. (152979 lines)
+	Version 12.65.3 :Sep 06, 2013	New awesome-font icons. (152916 lines)
+	Version 12.65.2 :Sep 05, 2013	Hide test exam total result when no feedback is selected. (152909 lines)
+	Version 12.65.1 :Sep 04, 2013	Fixed bug when refreshing last clicks. (152898 lines)
+	Version 12.65   :Sep 04, 2013	When a user logs in and no course is selected, use last visited course.
+					Clear list of user's courses when he/she logs out. (152890 lines)
+	Version 12.64.6 :Jul 17, 2013	Fixed bug in mail domains.
+					Changes in e-mail form in user's account. (152848 lines)
+	Version 12.64.5 :Jun 29, 2013	Fixed bug in web service, reported by Juan Miguel Boyero Corral.
+					New MIME type allowed. (152811 lines)
+	Version 12.64.4 :Jun 11, 2013	Users can log in web service with e-mail. (152706 lines)
+	Version 12.64.3 :Jun 11, 2013	Fixed bug in nicknames, reported by Juan Miguel Boyero Corral. (152704 lines)
+	Version 12.64.2 :Jun 11, 2013	Several messages translated to spanish and english. (152715 lines)
+	Version 12.64.1 :Jun 11, 2013	New button to confirm e-mail. (152335 lines)
+	Version 12.64   :Jun 11, 2013	Users can login with e-mail.
+					Messages can be sent with e-mail.
+					Fixed bug when changing the e-mail, reported by Francisco A. Ocaña Lara. (152361 lines)
+	Version 12.63.12:Jun 10, 2013	Changes in user's record card.
+					E-mail field removed from user's data table. (152320 lines)
+					4 changes necessary in database:
+DROP TABLE IF EXISTS usr_data_copy;
+CREATE TABLE usr_data_copy LIKE usr_data;
+INSERT INTO usr_data_copy SELECT * FROM usr_data;
+ALTER TABLE usr_data DROP COLUMN E_mail;
+
+	Version 12.63.11:Jun 06, 2013	Changes in user's record card.
+					Nickname field removed from user's data table. (152303 lines)
+					1 change necessary in database:
+ALTER TABLE usr_data DROP COLUMN Nickname;
+
+	Version 12.63.10:Jun 06, 2013	Changes in user's record card. (152251 lines)
+	Version 12.63.9 :May 29, 2013	E-mail address is no longer filled in user's record card, only in account.
+					Nickname and e-mail are shown in record card after user's ID. (152189 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1091','es','N','Confirmar direcci&oacute;n de correo');
+
+	Version 12.63.8 :May 29, 2013	E-mail address can be confirmed. (152163 lines)
+	Version 12.63.7 :May 29, 2013	E-mail address can be confirmed. (152117 lines)
+	Version 12.63.6 :May 28, 2013	E-mail address can be confirmed. (152109 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS pending_emails (UsrCod INT NOT NULL,E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,MailKey CHAR(43) COLLATE latin1_bin NOT NULL,DateAndTime DATETIME NOT NULL,INDEX(UsrCod),UNIQUE INDEX(MailKey));
+
+	Version 12.63.5 :May 27, 2013	E-mail address can be confirmed. (152061 lines)
+					1 change necessary in database:
+ALTER TABLE usr_emails ADD COLUMN Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER CreatTime;
+
+	Version 12.63.4 :May 23, 2013	Several messages translated. (151958 lines)
+	Version 12.63.3 :May 23, 2013	Old nicknames can be removed. (151875 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1089','es','N','Eliminar apodo');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1090','es','N','Eliminar direcci&oacute;n de correo');
+
+	Version 12.63.2 :May 23, 2013	Changing user's e-mail. (151732 lines)
+					3 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1086','es','N','Ver datos arch. calif. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1087','es','N','Ver datos arch. calif. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1088','es','N','Cambiar mi direcci&oacute;n de correo');
+
+	Version 12.63.1 :May 22, 2013	Changing user's e-mail. (151625 lines)
+	Version 12.63   :May 21, 2013	Option "Nickname" is changed to option "User's account". (151396 lines)
+					1 change necessary in database:
+RENAME TABLE nicknames TO usr_nicknames;
+CREATE TABLE IF NOT EXISTS usr_emails (UsrCod INT NOT NULL,E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,CreatTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,E_mail),UNIQUE INDEX(E_mail));
+INSERT IGNORE INTO usr_emails (UsrCod,E_mail,CreatTime) SELECT UsrCod,E_mail,NOW() FROM usr_data WHERE E_mail<>'';
+
+	Version 12.62.5 :May 16, 2013	Big warning icon for insuficient indicators in a course. (151188 lines)
+	Version 12.62.4 :May 13, 2013	Warning message about number of indicators in a course. (151179 lines)
+	Version 12.62.3 :May 10, 2013	Fixed bug in number of questions in tests, reported by Antonio Manuel Fernández Pérez. (151151 lines)
+	Version 12.62.2 :May 10, 2013	Fixed bug when getting UNIX_TIMESTAMP fields from database and value returned is NULL.
+					Changes in Makefile for MariaDB. (151156 lines)
+					1 change necessary in Makefile:
+Change old line:
+LIBS = -lmysqlclient -lz -L/usr/lib64/mysql -lm -lgsoap
+in Makefile to new line:
+LIBS = -lssl -lcrypto -lpthread -lrt -lmysqlclient -lz -L/usr/lib64/mysql -lm -lgsoap
+
+	Version 12.62.1 :May 05, 2013	Change of order in options of menu statistics. (151145 lines)
+	Version 12.62   :May 03, 2013	Default forums are local forums instead of all forums.
+					New notification for post in course forums. (151144 lines)
+					5 changes necessary in database:
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=9;
+UPDATE usr_data SET NotifyEvents=((NotifyEvents & b'10111111111') | ((NotifyEvents << 2) & b'100000000000') | ((NotifyEvents << 1) & b'1000000000000')) WHERE NotifyEvents<>0;
+
+	Version 12.61.2 :Apr 28, 2013	Changes in formatting of source code. (151021 lines)
+	Version 12.61.1 :Apr 24, 2013	Birthdays already congratulated are not congratulated again in the same day. (150434 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS birthdays_today (UsrCod INT NOT NULL,Today DATE NOT NULL,UNIQUE INDEX(UsrCod),INDEX(Today));
+
+	Version 12.61   :Apr 24, 2013	Added birthday wishes. (150387 lines)
+	Version 12.60.2 :Apr 23, 2013	Optimizations in user's last data.
+					Fixed bug when removing old users. (150205 lines)
+	Version 12.60.1 :Apr 23, 2013	Fixed bug in user's last data. (150187 lines)
+	Version 12.60   :Apr 22, 2013	User's data are splitted into two tables: usr_data (static data) and usr_last (dynamic data). (150169 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS usr_last (
+	UsrCod INT NOT NULL,
+	WhatToSearch TINYINT NOT NULL DEFAULT 0,
+	LastCrs INT NOT NULL DEFAULT -1,
+	LastTab TINYINT NOT NULL DEFAULT 0,
+	LastTime DATETIME NOT NULL DEFAULT 0,
+	LastAccNotif DATETIME NOT NULL DEFAULT 0,
+	LastAccBriefcase DATETIME NOT NULL DEFAULT 0,
+	UNIQUE INDEX(UsrCod),
+	INDEX(LastTime)) SELECT UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif,LastAccBriefcase FROM usr_data;
+ALTER TABLE usr_data DROP COLUMN WhatToSearch,DROP COLUMN LastCrs,DROP COLUMN LastTab,DROP COLUMN LastTime,DROP COLUMN LastAccNotif,DROP COLUMN LastAccBriefcase;
+
+	Version 12.59.1 :Apr 20, 2013	Last type of search is stored in user's data.
+					Removed old translations. (150089 lines)
+					1 change necessary in database:
+ALTER TABLE usr_data ADD COLUMN WhatToSearch TINYINT NOT NULL DEFAULT 0 AFTER NotifyEvents;
+
+	Version 12.59   :Apr 18, 2013	Last search is stored in session. (150294 lines)
+					2 changes necessary in database:
+ALTER TABLE sessions ADD COLUMN WhatToSearch TINYINT NOT NULL DEFAULT 0 AFTER LastPageMsgSnt;
+ALTER TABLE sessions ADD COLUMN SearchString VARCHAR(255) NOT NULL AFTER WhatToSearch;
+
+	Version 12.58.3 :Apr 18, 2013	Changes in maximum number of users in listings.
+					Removed field SideCols from sessions table.
+					Removed backup tables created in version 12.50.
+					Removed table hidden_downloads. (150250 lines)
+					4 changes necessary in database:
+ALTER TABLE sessions DROP COLUMN SideCols;
+DROP TABLE IF EXISTS notif_backup;
+DROP TABLE IF EXISTS marks_backup;
+DROP TABLE IF EXISTS hidden_downloads;
+
+	Version 12.58.2 :Apr 17, 2013	Fixed bug in list of administrators. (150230 lines)
+	Version 12.58.1 :Apr 17, 2013	Changes in words to search when searching for documents. (150218 lines)
+	Version 12.58   :Apr 16, 2013	Search of documents is splitted into my documents, documents in my courses and open documents. (150214 lines)
+	Version 12.57.1 :Apr 16, 2013	Optimizations in search of documents. (150033 lines)
+	Version 12.57   :Apr 16, 2013	Changes in search of documents.
+					Fixed bug when deleting a course, reported by María Dolores Ruiz López. (149941 lines)
+	Version 12.56   :Apr 16, 2013	Changes in search. (149823 lines)
+	Version 12.55   :Apr 15, 2013	Changes in search. (149549 lines)
+	Version 12.54.1 :Apr 09, 2013	Changes in search form. (149642 lines)
+	Version 12.54   :Apr 09, 2013	Changes in selection of my courses.
+					New module swad_search for search. (149639 lines)
+	Version 12.53   :Apr 09, 2013	New form to search on page top. (149548 lines)
+	Version 12.52.3 :Apr 04, 2013	When a user is removed completely, his/her notifications are removed. (149420 lines)
+	Version 12.52.2 :Apr 04, 2013	Files of marks can be hidden. (149404 lines)
+	Version 12.52.1 :Apr 04, 2013	Fixed bug when seeing marks, reported by José Samos Jiménez.
+					Changed border style when downloading a file. (149396 lines)
+	Version 12.52   :Apr 04, 2013	Hidden documents are now stored in table of files in database. (149306 lines)
+					10 changes necessary in database:
+ALTER TABLE files ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Path;
+
+DROP TABLE IF EXISTS files_copy;
+CREATE TABLE files_copy LIKE files;
+INSERT INTO files_copy SELECT * FROM files;
+
+INSERT INTO files_copy (CrsCod,GrpCod,ZoneUsrCod,FileBrowser,PublisherUsrCod,Path,Hidden,Public,License) SELECT CrsCod,GrpCod,'-1','3','-1',Path,'Y','N','1' FROM hidden_downloads WHERE GrpCod='-1' AND NOT EXISTS (SELECT * FROM files_copy WHERE files_copy.FileBrowser='3' AND hidden_downloads.CrsCod=files_copy.CrsCod AND hidden_downloads.GrpCod=files_copy.GrpCod AND hidden_downloads.Path=files_copy.Path);
+INSERT INTO files_copy (CrsCod,GrpCod,ZoneUsrCod,FileBrowser,PublisherUsrCod,Path,Hidden,Public,License) SELECT CrsCod,GrpCod,'-1','11','-1',Path,'Y','N','1' FROM hidden_downloads WHERE GrpCod>'0' AND NOT EXISTS (SELECT * FROM files_copy WHERE files_copy.FileBrowser='3' AND hidden_downloads.CrsCod=files_copy.CrsCod AND hidden_downloads.GrpCod=files_copy.GrpCod AND hidden_downloads.Path=files_copy.Path);
+
+UPDATE files_copy,hidden_downloads SET files_copy.Hidden='Y' WHERE files_copy.FileBrowser='3' AND files_copy.CrsCod=hidden_downloads.CrsCod AND hidden_downloads.GrpCod='-1' AND files_copy.Path=hidden_downloads.Path;
+UPDATE files_copy,hidden_downloads SET files_copy.Hidden='Y' WHERE files_copy.FileBrowser='11' AND files_copy.CrsCod=hidden_downloads.CrsCod AND hidden_downloads.GrpCod>'0' AND files_copy.GrpCod=hidden_downloads.GrpCod AND files_copy.Path=hidden_downloads.Path;
+
+DROP TABLE files;
+RENAME TABLE files_copy TO files;
+
+	Version 12.51.2 :Apr 03, 2013	Changes in notificactions about new files. (149386 lines)
+	Version 12.51.1 :Apr 03, 2013	Fixed bug in test importation, reported by Amalia Morales Hernández. (149335 lines)
+	Version 12.51   :Apr 02, 2013	Changes in marks zones. (149328 lines)
+	Version 12.50   :Apr 02, 2013	Use FilCod in notif instead of MrkCod for marks files. (149292 lines)
+					30 changes necessary in database:
+CREATE TABLE files_backup LIKE files;
+INSERT INTO files_backup SELECT * FROM files;
+CREATE TABLE marks_backup LIKE marks;
+INSERT INTO marks_backup SELECT * FROM marks;
+CREATE TABLE notif_backup LIKE notif;
+INSERT INTO notif_backup SELECT * FROM notif;
+
+DROP TABLE IF EXISTS files_copy;
+CREATE TABLE files_copy LIKE files;
+INSERT INTO files_copy SELECT * FROM files;
+
+DROP TABLE IF EXISTS marks_copy;
+CREATE TABLE marks_copy LIKE marks;
+INSERT INTO marks_copy SELECT * FROM marks;
+DELETE FROM marks_copy WHERE (LOWER(Path) NOT LIKE '%.htm' AND LOWER(Path) NOT LIKE '%.html');
+
+INSERT INTO files_copy (CrsCod,GrpCod,ZoneUsrCod,FileBrowser,PublisherUsrCod,Path,Public,License) SELECT CrsCod,GrpCod,'-1','8','-1',Path,'N','1' FROM marks_copy WHERE GrpCod='-1' AND NOT EXISTS (SELECT * FROM files_copy WHERE files_copy.FileBrowser='8' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path);
+INSERT INTO files_copy (CrsCod,GrpCod,ZoneUsrCod,FileBrowser,PublisherUsrCod,Path,Public,License) SELECT CrsCod,GrpCod,'-1','13','-1',Path,'N','1' FROM marks_copy WHERE GrpCod>'0' AND NOT EXISTS (SELECT * FROM files_copy WHERE files_copy.FileBrowser='13' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path);
+
+DROP TABLE IF EXISTS marks_properties;
+CREATE TABLE IF NOT EXISTS marks_properties (FilCod INT NOT NULL,Header INT NOT NULL,Footer INT NOT NULL,UNIQUE INDEX(FilCod));
+INSERT INTO marks_properties (FilCod,Header,Footer) SELECT files_copy.FilCod,marks_copy.Header,marks_copy.Footer FROM files_copy,marks_copy WHERE (files_copy.FileBrowser='8' AND marks_copy.GrpCod='-1' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path) OR (files_copy.FileBrowser='13' AND marks_copy.GrpCod>'0' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path);
+
+DROP TABLE IF EXISTS notif_copy;
+CREATE TABLE notif_copy LIKE notif;
+INSERT INTO notif_copy SELECT * FROM notif;
+UPDATE notif_copy,marks_copy,files_copy SET notif_copy.Cod=files_copy.FilCod WHERE notif_copy.NotifyEvent='5' AND notif_copy.Cod=marks_copy.MrkCod AND marks_copy.GrpCod='-1' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path AND files_copy.FileBrowser='8';
+UPDATE notif_copy,marks_copy,files_copy SET notif_copy.Cod=files_copy.FilCod WHERE notif_copy.NotifyEvent='5' AND notif_copy.Cod=marks_copy.MrkCod AND marks_copy.GrpCod>'0' AND marks_copy.CrsCod=files_copy.CrsCod AND marks_copy.GrpCod=files_copy.GrpCod AND marks_copy.Path=files_copy.Path AND files_copy.FileBrowser='13';
+UPDATE notif_copy SET Cod='-1' WHERE NotifyEvent='5' AND Cod NOT IN (SELECT FilCod FROM marks_properties);
+
+DROP TABLE files;
+RENAME TABLE files_copy TO files;
+
+DROP TABLE marks;
+DROP TABLE marks_copy;
+
+DROP TABLE notif;
+RENAME TABLE notif_copy TO notif;
+
+	Version 12.49.5 :Mar 31, 2013	Expand not-expanded folders when accessing a file from notifications. (149271 lines)
+	Version 12.49.4 :Mar 31, 2013	Changes in notifications when uploading or pasting files.
+					"Common zone" now is called "Shared files area". (149227 lines)
+	Version 12.49.3 :Mar 28, 2013	Notifications are not created when uploading / pasting into a folder not visible. (149201 lines)
+	Version 12.49.2 :Mar 28, 2013	Check if a file is hidden or deleted before showing it. (149196 lines)
+	Version 12.49.1 :Mar 27, 2013	Changes in notifications. (149135 lines)
+	Version 12.49   :Mar 26, 2013	Some icons changed.
+					Changes in notifications.
+					QR code for nickname now starts by @. (149062 lines)
+	Version 12.48.5 :Mar 26, 2013	Changes in notifications. (148926 lines)
+					1 change necessary in database:
+ALTER TABLE notif ADD INDEX (CrsCod);
+
+	Version 12.48.4 :Mar 25, 2013	Changes in notifications. (149136 lines)
+	Version 12.48.3 :Mar 25, 2013	Changes in notifications. (149078 lines)
+					1 change necessary in database:
+ALTER TABLE crs_usr_requests ADD COLUMN ReqCod INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (ReqCod);
+
+	Version 12.48.2 :Mar 25, 2013	Changes in notifications. (148972 lines)
+	Version 12.48.1 :Mar 25, 2013	Changes in notifications of documents or shared files. (148951 lines)
+	Version 12.48   :Mar 24, 2013	Four new events in notifications. (148912 lines)
+					29 changes necessary in database:
+UPDATE notif SET NotifyEvent=53 WHERE NotifyEvent=1;
+UPDATE notif SET NotifyEvent=54 WHERE NotifyEvent=2;
+UPDATE notif SET NotifyEvent=55 WHERE NotifyEvent=3;
+UPDATE notif SET NotifyEvent=58 WHERE NotifyEvent=4;
+UPDATE notif SET NotifyEvent=59 WHERE NotifyEvent=5;
+UPDATE notif SET NotifyEvent=60 WHERE NotifyEvent=6;
+UPDATE notif SET NotifyEvent=61 WHERE NotifyEvent=7;
+UPDATE sta_notif SET NotifyEvent=53 WHERE NotifyEvent=1;
+UPDATE sta_notif SET NotifyEvent=54 WHERE NotifyEvent=2;
+UPDATE sta_notif SET NotifyEvent=55 WHERE NotifyEvent=3;
+UPDATE sta_notif SET NotifyEvent=58 WHERE NotifyEvent=4;
+UPDATE sta_notif SET NotifyEvent=59 WHERE NotifyEvent=5;
+UPDATE sta_notif SET NotifyEvent=60 WHERE NotifyEvent=6;
+UPDATE sta_notif SET NotifyEvent=61 WHERE NotifyEvent=7;
+UPDATE notif SET NotifyEvent=3 WHERE NotifyEvent=53;
+UPDATE notif SET NotifyEvent=4 WHERE NotifyEvent=54;
+UPDATE notif SET NotifyEvent=5 WHERE NotifyEvent=55;
+UPDATE notif SET NotifyEvent=8 WHERE NotifyEvent=58;
+UPDATE notif SET NotifyEvent=9 WHERE NotifyEvent=59;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=60;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=61;
+UPDATE sta_notif SET NotifyEvent=3 WHERE NotifyEvent=53;
+UPDATE sta_notif SET NotifyEvent=4 WHERE NotifyEvent=54;
+UPDATE sta_notif SET NotifyEvent=5 WHERE NotifyEvent=55;
+UPDATE sta_notif SET NotifyEvent=8 WHERE NotifyEvent=58;
+UPDATE sta_notif SET NotifyEvent=9 WHERE NotifyEvent=59;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=60;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=61;
+UPDATE usr_data SET NotifyEvents=(((NotifyEvents << 4) & b'111100000000') | ((NotifyEvents << 2) & b'111000')) WHERE NotifyEvents<>0;
+
+	Version 12.47.3 :Mar 20, 2013	Changes related to minimum time between two consecutive tests. (148456 lines)
+					4 changes necessary in database:
+ALTER TABLE crs_usr ADD COLUMN LastAccTst DATETIME NOT NULL AFTER NextAccTst;
+ALTER TABLE crs_usr ADD COLUMN NumQstsLastTst INT NOT NULL DEFAULT 0 AFTER LastAccTst;
+UPDATE crs_usr SET LastAccTst=NOW();
+ALTER TABLE crs_usr DROP COLUMN NextAccTst;
+
+	Version 12.47.2 :Mar 20, 2013	Test exam questions older than modifications in question are not shown.
+					Code refactoring in tests. (148416 lines)
+	Version 12.47.1 :Mar 19, 2013	Database table tst_exam_answers is joined into table tst_exam_questions. (148288 lines)
+					4 changes necessary in database:
+ALTER TABLE tst_exam_questions ADD COLUMN Indexes TEXT NOT NULL AFTER Score;
+ALTER TABLE tst_exam_questions ADD COLUMN Answers TEXT NOT NULL AFTER Indexes;
+UPDATE tst_exam_questions,tst_exam_answers SET tst_exam_questions.Indexes=tst_exam_answers.Indexes,tst_exam_questions.Answers=tst_exam_answers.Answers WHERE tst_exam_questions.TstCod=tst_exam_answers.TstCod AND tst_exam_questions.QstCod=tst_exam_answers.QstCod;
+DROP TABLE tst_exam_answers;
+
+	Version 12.47   :Mar 18, 2013	Changes in test exams. (148369 lines)
+	Version 12.46   :Mar 17, 2013	Students can view their results in past test exams. (148193 lines)
+					5 changes necessary in database:
+ALTER TABLE tst_exams ADD COLUMN AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER UsrCod;
+UPDATE tst_exams SET AllowTeachers='Y';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1083','es','N','Seleccionar fechas para mis result. test');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1084','es','N','Ver mis resultados de tests');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1085','es','N','Ver un examen de test m&iacute;o ya realizado');
+
+	Version 12.45.1 :Mar 17, 2013	Students can decide if an exam will be saved.
+					View of exams available for teachers. (148034 lines)
+					1 change advisable (not mandatory) in database:
+DELETE FROM tst_exams; DELETE FROM tst_exam_questions; DELETE FROM tst_exam_answers;
+
+	Version 12.45   :Mar 17, 2013	Changes in tests.
+					Several messages translated. (147981 lines)
+	Version 12.44   :Mar 16, 2013	User, date, number of questions and tags of questions in heading of test exam result. (147846 lines)
+	Version 12.43.2 :Mar 16, 2013	Fixed bugs in test exams related to floating point. (147697 lines)
+	Version 12.43.1 :Mar 16, 2013	Changes in test exams results. (147682 lines)
+	Version 12.43   :Mar 15, 2013	Changes in test exams results. (147640 lines)
+					5 changes necessary in database:
+DROP TABLE tst_exam_questions;
+CREATE TABLE IF NOT EXISTS tst_exam_questions (TstCod INT NOT NULL,QstCod INT NOT NULL,QstInd INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,INDEX(TstCod,QstCod));
+DROP TABLE tst_exam_answers;
+CREATE TABLE IF NOT EXISTS tst_exam_answers (TstCod INT NOT NULL,QstCod INT NOT NULL,Indexes TEXT NOT NULL,Answers TEXT NOT NULL,INDEX(TstCod,QstCod));
+DELETE FROM tst_exams;
+
+	Version 12.42.3 :Mar 14, 2013	Changes in test exams results. (147503 lines)
+	Version 12.42.2 :Mar 14, 2013	Test exams are selected in a range of dates. (147433 lines)
+	Version 12.42.1 :Mar 14, 2013	Changes in results of test exams. (147421 lines)
+					2 changes necessary in database:
+DROP TABLE tst_exams;
+CREATE TABLE IF NOT EXISTS tst_exams (TstCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL,UsrCod INT NOT NULL,TstTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(TstCod),INDEX(CrsCod,UsrCod));
+
+	Version 12.42   :Mar 14, 2013	Changes in results of test exams. (147389 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1082','es','N','Ver un examen de test ya realizado');
+
+	Version 12.41.1 :Mar 12, 2013	Results of a test exam are stored in database and shown on web. (147294 lines)
+	Version 12.41   :Mar 11, 2013	New option to select students to see the results of test exams. (147186 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1080','es','N','Seleccionar usuarios para result. test');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1081','es','N','Ver resultados de tests de usuarios');
+
+	Version 12.40.5 :Mar 10, 2013	New tables to store result of test exams. (146962 lines)
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS tst_exams (TstCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL,UsrCod INT NOT NULL,TstTime DATETIME NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,NumQuestions INT NOT NULL DEFAULT 0,UNIQUE INDEX(TstCod),INDEX(CrsCod,UsrCod));
+CREATE TABLE IF NOT EXISTS tst_exam_questions (TstCod INT NOT NULL,QstCod INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,INDEX(TstCod,QstCod));
+CREATE TABLE IF NOT EXISTS tst_exam_answers (TstCod INT NOT NULL,QstCod INT NOT NULL,AnsInd INT NOT NULL,Answer TEXT NOT NULL,INDEX(TstCod,QstCod));
+
+	Version 12.40.4 :Mar 10, 2013	Added feedback to web service function getTests. (146898 lines)
+	Version 12.40.3 :Mar 09, 2013	New column with number of teachers in pending requests for inscription. (146890 lines)
+	Version 12.40.2 :Mar 08, 2013	Change in tst_questions database table. (146878 lines)
+					1 change necessary in database:
+ALTER TABLE tst_questions CHANGE AnsType AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL;
+
+	Version 12.40.1 :Mar 07, 2013	Fixed bug related to length of Twitter.
+					Fixed bug related to length of Nickname in login.
+					Fixed bug in search of courses. (146875 lines)
+	Version 12.40   :Mar 07, 2013	Export/import test questions with feedback. (146810 lines)
+	Version 12.39.2 :Mar 06, 2013	Feedback when solving test. (146738 lines)
+	Version 12.39.1 :Mar 05, 2013	Feedback in test questions. (146698 lines)
+					2 changes necessary in database:
+ALTER TABLE tst_questions ADD COLUMN Feedback TEXT NOT NULL AFTER Stem;
+ALTER TABLE tst_config CHANGE Feedback Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL;
+
+	Version 12.39   :Mar 04, 2013	Changed icons to create and download zip file.
+					Feedback for answers in test questions (not finished). (146598 lines)
+					1 change necessary in database:
+ALTER TABLE tst_answers ADD COLUMN Feedback TEXT NOT NULL AFTER Answer;
+
+	Version 12.38.6 :Mar 02, 2013	Changed icons to create and download zip file.
+					In course works/assignment file zone, all files are shown by default. (146395 lines)
+	Version 12.38.5 :Feb 27, 2013	Added alt attributes to all image buttons. (146398 lines)
+	Version 12.38.4 :Feb 26, 2013	Speed optimization in query of last clicks. (146195 lines)
+	Version 12.38.3 :Feb 22, 2013	Fixed bug in notifications about marks. (146195 lines)
+	Version 12.38.2 :Feb 20, 2013	Fixed bug in users' directories.
+					Users' directories are now created automatically. (146192 lines)
+	Version 12.38.1 :Feb 13, 2013	Fixed bug in statistics. (146183 lines)
+	Version 12.38   :Feb 13, 2013	New scope: current institution. (146176 lines)
+	Version 12.37   :Feb 13, 2013	New scope: current institution (still under development). (145587 lines)
+	Version 12.36   :Feb 12, 2013	New module swad_scope.
+					Code refactoring related to scope (location ranges). (145170 lines)
+	Version 12.35   :Feb 12, 2013	Unification of interface and code related to location ranges. (145003 lines)
+	Version 12.34.1 :Feb 11, 2013	Unification of interface and code related to location ranges in connected users. (144481 lines)
+	Version 12.34   :Feb 11, 2013	Unification of interface and code related to location ranges.
+					Statistics of centres. (144425 lines)
+	Version 12.33   :Feb 10, 2013	New users' range for current centre.
+					Refactorization of code related to users' lists location. (144061 lines)
+	Version 12.32.5 :Jan 30, 2013	Changes in the text of several options in menu.
+					Changes in order of options of enrollment tab. (143920 lines)
+	Version 12.32.4 :Jan 29, 2013	Fixed bug in calendar. (143918 lines)
+	Version 12.32.3 :Jan 15, 2013	New file extension allowed, requested by Javier Mateos: .dmg (Disk Image in Masc OS). (143896 lines)
+	Version 12.32.2 :Dic 30, 2012	Changed DNI to UsrID in tables log and log_recent. (143896 lines)
+					2 changes necessary in database (it could take a long time, even several hours):
+ALTER TABLE log_recent CHANGE DNI UsrID CHAR(16) NOT NULL;
+ALTER TABLE log CHANGE DNI UsrID CHAR(16) NOT NULL;
+
+	Version 12.32.2 :Dic 29, 2012	Several messages translated to french. (143895 lines)
+	Version 12.32.1 :Dic 29, 2012	Changed DNI to UsrID in tables usr_data and imported_students. (144051 lines)
+					2 changes necessary in database:
+ALTER TABLE imported_students CHANGE DNI UsrID CHAR(16) NOT NULL;
+ALTER TABLE usr_data CHANGE DNI UsrID CHAR(16) NOT NULL;
+
+	Version 12.32   :Dic 29, 2012	Changes in rules to accept users' IDs and nicknames. (144043 lines)
+	Version 12.31   :Dic 29, 2012	Nicknames must be entered with '@'. (144088 lines)
+	Version 12.30   :Dic 28, 2012	Code refactoring related to user's ID. (144171 lines)
+	Version 12.29.5 :Dic 28, 2012	Several messages translated (0 messages to be translated) and other minor changes. (144127 lines)
+	Version 12.29.4 :Dic 27, 2012	Removed old nickname check. (143975 lines)
+	Version 12.29.3 :Dic 26, 2012	Several messages translated (3 messages to be translated). (144033 lines)
+	Version 12.29.2 :Dic 23, 2012	Notices are drawn without tables, and with different widths. (143997 lines)
+	Version 12.29.1 :Dic 22, 2012	Notices are drawn using CSS3 instead of images. (143998 lines)
+					1 update necessary:
+Remove directory with icons for notices.
+Example:
+rm -Rf /var/www/html/swad/icon/notice/
+
+	Version 12.29   :Dic 18, 2012	Changes in actions related to see or admin documents. (144043 lines)
+					4 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1078','es','N','Ver documentos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1079','es','N','Ver calificaciones');
+UPDATE actions SET Txt='Ver o administrar documentos' WHERE ActCod='0';
+UPDATE actions SET Txt='Ver o administrar calificaciones' WHERE ActCod='17';
+
+	Version 12.28.4 :Dic 18, 2012	Old action to admin docs is removed. (144004 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1062';
+					1 update necessary:
+Copy new icon visible16x16.gif from swad source directory to icons public directory.
+Example:
+cp /home/<user>/swad/swad/icon/visible16x16.gif /var/www/html/swad/icon/
+
+	Version 12.28.3 :Dic 16, 2012	Changes in CSS related to user's photo. (143946 lines)
+	Version 12.28.2 :Dic 16, 2012	Fixed bugs in web service related to file browser. (143874 lines)
+	Version 12.28.1 :Dic 16, 2012	Abort if click is too fast.
+					Changes in redirection to language. (143857 lines)
+	Version 12.28   :Dic 16, 2012	Change language after user authentication. (143831 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1077','es','N','Cambiar de idioma tras autenticar');
+
+	Version 12.27.10:Dic 12, 2012	Small change in design of iframe for course info. (? lines)
+	Version 12.27.9 :Dic 11, 2012	Rounded rectangles for months now use CSS instead of tables. (143811 lines)
+	Version 12.27.8 :Dic 11, 2012	Fixed bugs in attendance events. (143800 lines)
+	Version 12.27.7 :Dic 11, 2012	Rectangles 2D without shadow now use CSS instead of tables. (143800 lines)
+	Version 12.27.6 :Dic 10, 2012	Rectangles 3D with shadow now use CSS instead of tables. (143793 lines)
+	Version 12.27.5 :Dic 10, 2012	Action title now use CSS instead of tables. (143770 lines)
+	Version 12.27.4 :Dic 10, 2012	Changes in CSS of alerts. (143739 lines)
+	Version 12.27.3 :Dic 10, 2012	Alerts now use CSS instead of tables. (143789 lines)
+	Version 12.27.2 :Dic 09, 2012	Several messages translated (5 messages to be translated).
+					Optimizations on attendance. (143714 lines)
+	Version 12.27.1 :Dic 09, 2012	Optimizations on file browser and web service. (143662 lines)
+	Version 12.27   :Dic 05, 2012	Changes in web service getFile function. (143748 lines)
+	Version 12.26   :Dic 04, 2012	Changes in web service getFile function. (143643 lines)
+	Version 12.25   :Dic 02, 2012	Changes in buffers related to TEXT and LONGTEXT database fields.
+					Refactoring of code in every module. (143471 lines)
+	Version 12.24.5 :Nov 30, 2012	Changes in space used for buffer related to TEXT and LONGTEXT database fields. (142652 lines)
+					2 changes necessary in database:
+ALTER TABLE notices CHANGE Content Content TEXT NOT NULL;
+ALTER TABLE notices_deleted CHANGE Content Content TEXT NOT NULL;
+
+	Version 12.24.4 :Nov 29, 2012	Changes in comments inside attendance events. (142624 lines)
+					2 changes necessary in database:
+ALTER TABLE att_usr CHANGE CommentStd CommentStd TEXT NOT NULL;
+ALTER TABLE att_usr CHANGE CommentTch CommentTch TEXT NOT NULL;
+
+	Version 12.24.3 :Nov 29, 2012	Changes in web service getDirectoryTree function. (142573 lines)
+	Version 12.24.2 :Nov 27, 2012	Changes in web service getDirectoryTree function. (142561 lines)
+	Version 12.24.1 :Nov 27, 2012	Fixed bug in attendance events, reported by José Miguel Colella Carbonara. (142521 lines)
+	Version 12.24   :Nov 26, 2012	Students can see attendance events. (142520 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1076','es','N','Registrar estudiante asistente a evento');
+
+	Version 12.23.3 :Nov 26, 2012	Changes in attendance events. (142407 lines)
+					3 changes necessary in database:
+ALTER TABLE att_usr CHANGE Comment CommentStd VARCHAR(255) NOT NULL;
+ALTER TABLE att_usr ADD COLUMN CommentTch VARCHAR(255) NOT NULL AFTER CommentStd;
+ALTER TABLE att_events CHANGE CommentVisibility CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER EndTime;
+
+	Version 12.23.2 :Nov 26, 2012	Changes in attendance events. (142406 lines)
+					1 change necessary in database:
+ALTER TABLE att_usr ADD COLUMN Present ENUM('N','Y') NOT NULL DEFAULT 'Y' AFTER UsrCod;
+
+	Version 12.23.1 :Nov 26, 2012	Changes in attendance events. (142397 lines)
+	Version 12.23   :Nov 24, 2012	Adding comments to attendance events. (142378 lines)
+					2 changes necessary in database:
+ALTER TABLE att_events ADD COLUMN CommentVisibility TINYINT NOT NULL DEFAULT 0 AFTER EndTime;
+ALTER TABLE att_usr ADD COLUMN Comment VARCHAR(255) NOT NULL AFTER UsrCod;
+
+	Version 12.22.2 :Nov 23, 2012	Internal changes to remove warnings in Eclipse. (142185 lines)
+	Version 12.22.1 :Nov 20, 2012	Changed database collation to latin1_spanish_ci, because latin1_general_ci does not order properly. (142032 lines)
+					10 changes necessary in database:
+ALTER DATABASE swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
+ALTER TABLE centres CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE courses CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE degrees CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE institutions CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE usr_data CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE nicknames CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE nicknames CHANGE Nickname Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL;
+Remove manually entries with duplicated values for Nickname in table nicknames and retry the last two lines.
+UPDATE usr_data SET Nickname='' WHERE Nickname<>'' AND Nickname NOT IN (SELECT Nickname COLLATE latin1_bin FROM nicknames);
+
+	Version 12.22   :Nov 20, 2012	Changes in rules to validate a nickname. (142019 lines)
+	Version 12.21   :Nov 19, 2012	New table in database to remember nicknames used by a user. (141971 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS nicknames (UsrCod INT NOT NULL,Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,CreatTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,Nickname),UNIQUE INDEX(Nickname));
+REPLACE INTO nicknames (UsrCod,Nickname,CreatTime) SELECT UsrCod,NickName,NOW() FROM usr_data WHERE Nickname<>'';
+
+	Version 12.20.7 :Nov 18, 2012	Changes in attendance events. (141847 lines)
+	Version 12.20.6 :Nov 18, 2012	Changes in attendance events. (141843 lines)
+	Version 12.20.5 :Nov 18, 2012	Changes in attendance events. (141836 lines)
+	Version 12.20.4 :Nov 17, 2012	Several messages translated (0 messages to be translated). (141798 lines)
+	Version 12.20.3 :Nov 17, 2012	Changes in attendance events. (141624 lines)
+	Version 12.20.2 :Nov 17, 2012	Refactorization of code. Lot of returns (in the middle of funcions) removed. (141568 lines)
+	Version 12.20.1 :Nov 16, 2012	Changes in function getDirectoryTree of the web service. (141571 lines)
+	Version 12.20   :Nov 13, 2012	Lot of icons changed.
+					Fixed several bugs.
+					Control of attendance published. (141564 lines)
+					1 update necessary:
+Copy new icons from swad source directory to icons public directory.
+Example:
+cp /home/<user>/swad/swad/icon/<files>.png /var/www/html/swad/icon/
+cp /home/<user>/swad/swad/icon/<files>.gif /var/www/html/swad/icon/
+
+	Version 12.19.1 :Nov 12, 2012	Changes in attendance events. (141438 lines)
+	Version 12.19   :Nov 12, 2012	Changes in attendance events. (141375 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1073','es','N','Selec. estud. y eventos listado asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1074','es','N','Listar asistencia a varios eventos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1075','es','N','Imprimir asistencia a varios eventos');
+
+	Version 12.18.4 :Nov 11, 2012	Changes in attendance events. (141205 lines)
+	Version 12.18.3 :Nov 07, 2012	Changes in attendance events. (141042 lines)
+	Version 12.18.2 :Nov 07, 2012	Fixed bug in attendance module when removing a user. (140998 lines)
+	Version 12.18.1 :Nov 07, 2012	Fixed bug when removing an attendance event. (140997 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1072','es','N','Registrar estudiantes asistentes a evento');
+
+	Version 12.18   :Nov 07, 2012	Changes in attendance events.
+					Fixed bugs when removing users, groups and courses. (140997 lines)
+	Version 12.17   :Nov 06, 2012	Changes in view of an attendance event. (140859 lines)
+	Version 12.16.1 :Nov 06, 2012	Minor changes in configuration. (140828 lines)
+	Version 12.16   :Nov 06, 2012	Changes in view of an attendance event. (140826 lines)
+	Version 12.15   :Nov 05, 2012	Minor changes.
+					New table att_usr to store users who attended an event.
+					New option to see one attendance event. (140776 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS att_usr (AttCod INT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(AttCod,UsrCod),INDEX(UsrCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1071','es','N','Listar estudiantes asistentes a evento');
+
+	Version 12.14.2 :Nov 04, 2012	Edition of attendance events. (140639 lines)
+					10 changes necessary in database:
+CREATE TABLE IF NOT EXISTS att_events (AttCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(255) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(AttCod),INDEX(CrsCod,Hidden));
+CREATE TABLE IF NOT EXISTS att_grp (AttCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(AttCod,GrpCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1063','es','N','Solicitar creación evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1064','es','N','Solicitar edición evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1065','es','N','Crear evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1066','es','N','Modificar evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1067','es','N','Solicitar elim. evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1068','es','N','Eliminar evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1069','es','N','Ocultar evento asistencia');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1070','es','N','Mostrar evento asistencia');
+					1 change neccesary in Makefile:
+Add swad_attendance.o to list of OBJS in Makefile
+
+	Version 12.14.1 :Nov 04, 2012	Edition of attendance events. (140546 lines)
+	Version 12.14   :Nov 03, 2012	New module swad_attendance for control of attendance.
+					Starting edition of attendance events. (140301 lines)
+	Version 12.13.1 :Nov 03, 2012	Changes related to avoiding fast clicks from the same IP.
+					Several messages translated (0 messages to be translated). (138799 lines)
+	Version 12.13   :Nov 03, 2012	Temporary option to admin documents (to be removed in december 2012). (138684 lines)
+					2 changes necessary in database:
+UPDATE actions SET Obsolete='N' WHERE ActCod IN (1054,1055,1056,1057,1058,1059,1060,1061);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1062','es','N','Administrar documentos (opción antigua)');
+
+	Version 12.12.4 :Nov 02, 2012	Advertisement of mobile version. (138586 lines)
+	Version 12.12.3 :Nov 02, 2012	Several messages translated (still 3 messages to be translated). (138530 lines)
+	Version 12.12.2 :Nov 01, 2012	Several messages translated (still 19 messages to be translated). (138223 lines)
+	Version 12.12.1 :Nov 01, 2012	Changes in expanded folders. (138017 lines)
+					2 changes recommended (not mandatory) in database:
+DELETE FROM expanded_folders WHERE FileBrowser IN (3,8,11,13);
+OPTIMIZE TABLE expanded_folders;
+
+	Version 12.12   :Oct 30, 2012	Changes in function getDirectoryTree in the web service.
+					New function getFile in the web service. (137943 lines)
+	Version 12.11.1 :Oct 29, 2012	Changes in function getDirectoryTree in the web service. (137876 lines)
+	Version 12.11   :Oct 29, 2012	Changes in function getDirectoryTree in the web service. (137866 lines)
+	Version 12.10.13:Oct 28, 2012	Several messages translated (still 28 messages to be translated). (137736 lines)
+	Version 12.10.12:Oct 27, 2012	Configuration of tests is removed from menu.
+					Removed file swad_changelog.c (? lines)
+					It is necessary to remove swad_changelog.o from OBJS in Makefile:
+Remove swad_changelog.o from OBJS in Makefile.
+
+	Version 12.10.11:Oct 27, 2012	New button in tests to configure them. (137680 lines)
+	Version 12.10.10:Oct 27, 2012	Edition of tests is removed from menu. (137656 lines)
+	Version 12.10.9 :Oct 27, 2012	New button in tests to edit them. (137716 lines)
+	Version 12.10.7 :Oct 27, 2012	Marks admin is removed from menu. (137697 lines)
+	Version 12.10.6 :Oct 27, 2012	New button in marks file zone to edit them. (137752 lines)
+	Version 12.10.5 :Oct 26, 2012	Docs admin is removed from menu. (137740 lines)
+	Version 12.10.4 :Oct 25, 2012	New button in documents zone to edit them. (137800 lines)
+	Version 12.10.3 :Oct 25, 2012	Changes in database inserts related to deleted notices and messages. (137776 lines)
+	Version 12.10.2 :Oct 23, 2012	Changes check for valid ID. (137775 lines)
+	Version 12.10.1 :Oct 17, 2012	Changes in file browsers. (137774 lines)
+	Version 12.10   :Oct 16, 2012	Opening time is shown when selecting groups.
+					Several messages translated (still 38 messages to be translated). (137767 lines)
+	Version 12.9.1  :Oct 15, 2012	Fixed bugs in web service function sendMyGroups, reported by Helena Rodríguez Gijón. (137599 lines)
+	Version 12.9    :Oct 14, 2012	Change user's groups in web service function sendMyGroups. (137598 lines)
+	Version 12.8.4  :Oct 14, 2012	Optimizations in groups. (137576 lines)
+	Version 12.8.3  :Oct 14, 2012	Changes in web services.
+					Optimizations in groups. (137585 lines)
+	Version 12.8.2  :Oct 13, 2012	New web service function sendMyGroups. (137532 lines)
+	Version 12.8.1  :Oct 13, 2012	New fields in web service function getGroupTypes. (137426 lines)
+	Version 12.8    :Oct 12, 2012	New web service function getGroupTypes. (137406 lines)
+	Version 12.7    :Oct 12, 2012	New fields in web service functions getGroups and getNotifications. (137324 lines)
+	Version 12.6.5  :Oct 11, 2012	Added MIME type for documents uploaded. (137275 lines)
+	Version 12.6.4  :Oct 10, 2012	Changes in input image forms. (137188 lines)
+	Version 12.6.3  :Oct 10, 2012	Fixed bug in automatic open of groups. (137190 lines)
+	Version 12.6.2  :Oct 09, 2012	The default option in a tab is now the last option instead of the most frequent option.
+					Last course is stored in user's data, to use in the future. (137164 lines).
+					1 change necessary in database:
+ALTER TABLE usr_data ADD COLUMN LastCrs INT NOT NULL DEFAULT -1 AFTER NotifyEvents;
+
+	Version 12.6.1  :Oct 09, 2012	Optimization in deletes of file_view table. (137140 lines).
+	Version 12.6    :Oct 09, 2012	New statistic for Open Educational Resources (OERs).
+					Fixed bug when removing a course, a group or a user. (137125 lines)
+					6 changes necessary in database:
+DELETE FROM file_view WHERE FilCod IN (SELECT FilCod FROM files WHERE CrsCod>0 AND CrsCod NOT IN (SELECT CrsCod FROM courses));
+DELETE FROM file_view WHERE FilCod IN (SELECT FilCod FROM files WHERE GrpCod>0 AND GrpCod NOT IN (SELECT GrpCod FROM crs_grp));
+DELETE FROM file_view WHERE FilCod IN (SELECT FilCod FROM files WHERE ZoneUsrCod>0 AND ZoneUsrCod NOT IN (SELECT UsrCod FROM usr_data));
+DELETE FROM files WHERE CrsCod>0 AND CrsCod NOT IN (SELECT CrsCod FROM courses);
+DELETE FROM files WHERE GrpCod>0 AND GrpCod NOT IN (SELECT GrpCod FROM crs_grp);
+DELETE FROM files WHERE ZoneUsrCod>0 AND ZoneUsrCod NOT IN (SELECT UsrCod FROM usr_data);
+
+	Version 12.5.2  :Oct 08, 2012	Change in menu of my courses. (136967 lines)
+	Version 12.5.1  :Oct 07, 2012	Fixed minor bug in unlocking tables after inscription. (136954 lines)
+	Version 12.5    :Oct 07, 2012	Optimizations in selection of groups.
+					Inscription in groups is now an atomic operation using LOCK TABLES. (136949 lines)
+	Version 12.4.3  :Oct 06, 2012	Optimization in selection of groups. (136925 lines)
+	Version 12.4.2  :Oct 06, 2012	Degree is now visible in selector of my courses. (136925 lines)
+	Version 12.4.1  :Oct 05, 2012	Optimizations in selection of groups. (136924 lines)
+	Version 12.4    :Oct 04, 2012	New field in table of test questions to store the number of times each question is answered with a non blank answer. (136815 lines)
+					2 changes necessary in database:
+ALTER TABLE tst_questions ADD COLUMN NumHitsNotBlank INT NOT NULL DEFAULT 0 AFTER NumHits;
+UPDATE tst_questions SET NumHitsNotBlank=NumHits;
+
+	Version 12.3    :Oct 02, 2012	Changes in edition of group types. (136616 lines)
+					1 change necessary in database:
+DROP INDEX OpenTime ON crs_grp_types;
+
+	Version 12.2    :Oct 01, 2012	New field date in form of group types. (136589 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1061','es','Y','Cambiar fecha apertura tipo grupo');
+ALTER TABLE crs_grp_types ADD COLUMN MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Multiple;
+
+	Version 12.1    :Sep 30, 2012	New field date in group types table. (136396 lines)
+					2 changes necessary in database:
+ALTER TABLE crs_grp_types ADD COLUMN OpenTime DATETIME NOT NULL DEFAULT 0 AFTER Multiple;
+CREATE INDEX OpenTime ON crs_grp_types (OpenTime);
+
+	Version 12.0.5  :Sep 30, 2012	Changes in listing of pending requests for enrollment. (136342 lines)
+	Version 12.0.4  :Sep 30, 2012	Selection of students or teachers when listing pending requests for enrollment. (136337 lines)
+	Version 12.0.3  :Sep 30, 2012	Change in menu of system tab. (136273 lines)
+	Version 12.0.2  :Sep 29, 2012	Minor change in configuration of tests. (136272 lines)
+	Version 12.0.1  :Sep 24, 2012	Minor change in order of option in system tab. (136268 lines)
+	Version 12.0    :Sep 24, 2012	New option to show degrees with pending courses. (136268 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1060','es','Y','Titul. con asignat. pendientes');
+
+	Version 11.79.3 :Sep 24, 2012	Fixed bug in database when importing students. (135981 lines)
+	Version 11.79.2 :Sep 23, 2012	Fixed bug in mail domains, reported by Francisco Ocaña Lara. (135977 lines)
+	Version 11.79.1 :Sep 23, 2012	"Academic year" no longer used.
+					Changes in calendar. (135975 lines)
+	Version 11.79   :Sep 23, 2012	Confirmation of rejection of a request for inscription. (135961 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Preguntar si rechazar solicitud inscripción' WHERE ActCod='1058';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1059','es','Y','Rechazar solicitud inscripción');
+
+	Version 11.78.1 :Sep 20, 2012	New button to reject a request for inscription in a course. (135881 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1058','es','Y','Rechazar solicitud inscripción');
+
+	Version 11.78   :Sep 19, 2012	New button to accept a request for inscription in a course. (135864 lines)
+	Version 11.77.2 :Sep 19, 2012	Changes in listing of inscription requests. (135798 lines)
+	Version 11.77.1 :Sep 19, 2012	Code optimization when creating database tables. (135754 lines)
+	Version 11.77   :Sep 17, 2012	Listing of inscription requests. (135964 lines)
+	Version 11.76.4 :Sep 17, 2012	Listing of inscription requests for the current course. (135850 lines)
+	Version 11.76.3 :Sep 17, 2012	New database table for requesting inscrption in courses crs_usr_requests.
+					Changes in request for inscription in courses. (135795 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS crs_usr_requests (CrsCod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,Role TINYINT NOT NULL DEFAULT 0,RequestTime DATETIME NOT NULL,UNIQUE INDEX(CrsCod,UsrCod),INDEX(UsrCod));
+
+	Version 11.76.2 :Sep 17, 2012	Changes related to requesting courses.
+					New option to show pending inscription requests. (135766 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1057','es','Y','Listar inscripciones pendientes');
+
+	Version 11.76.1 :Sep 16, 2012	New column when editing courses for requester of a course.
+					New option to confirm application for registrarion. (135687 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Formulario solicitud inscripción' WHERE ActCod='1054';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1056','es','Y','Solicitar inscripción');
+
+	Version 11.76   :Sep 15, 2012	Programming new option to request the creation of a new course.
+					New option to apply for enrollment.
+					New option to change the status of a course. (135559 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1054','es','Y','Solicitar inscripción');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1055','es','Y','Cambiar estado asignatura');
+
+	Version 11.75.9 :Sep 14, 2012	Programming new option to request the creation of a new course. (135172 lines)
+	Version 11.75.8 :Sep 14, 2012	Programming new option to request the creation of a new course. (135157 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1052','es','Y','Solicitar asignaturas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1053','es','N','Solicitar asignatura');
+
+	Version 11.75.7 :Sep 13, 2012	Programming new option to request the creation of a new course. (135143 lines)
+					3 changes necessary in database:
+ALTER TABLE courses ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER AllowDirectLogIn;
+ALTER TABLE courses ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;
+CREATE INDEX Status ON courses (Status);
+
+	Version 11.75.6 :Sep 12, 2012	Programming new option to request the creation of a new course. (135135 lines)
+	Version 11.75.5 :Sep 11, 2012	Programming new option to request the creation of a new course. (135090 lines)
+	Version 11.75.4 :Sep 10, 2012	Programming new option to request the creation of a new course. (134762 lines)
+	Version 11.75.3 :Sep 09, 2012	Starting new option to request the creation of a new course. (134758 lines)
+	Version 11.75.2 :Aug 02, 2012	Maximum number of years in a degree grows from 6 to 12. (134751 lines)
+	Version 11.75.1 :Jul 31, 2012	Fixed wrong path of script, reported by Justa Gómez Navajas. (134667 lines)
+	Version 11.75   :Jul 30, 2012	Module swad_course is moved to swad_info.
+					Functions related to edition of courses are moved to a new module swad_course. (134666 lines)
+	Version 11.74.4 :Jul 30, 2012	Changes in main paths. (134564 lines)
+	Version 11.74.3 :Jul 30, 2012	Minor changes in forums related to layout and icons. (? lines)
+	Version 11.74.2 :Jul 30, 2012	Fixed bug in notifications about new posts in forums of centres. (134547 lines)
+	Version 11.74.1 :Jul 27, 2012	Changed several messages in swad_text.c.
+					Teachers can not change other users' passwords. (134539 lines)
+	Version 11.74   :Jul 24, 2012	Changed "dar de alta/baja" to "inscribir/eliminar" in Spanish and Catala.
+					Changed the order of several options in menus.
+					Users' tab is moved after enrollment tab. (134512 lines)
+	Version 11.73   :Jul 21, 2012	Fixed important bug in trimming leading spaces of strings. (134526 lines)
+	Version 11.72.9 :Jul 20, 2012	Fixed bug in edition of plugins. (134511 lines)
+	Version 11.72.8 :Jul 20, 2012	Changed database collation to latin1_spanish_ci. (134486 lines)
+					6 changes necessary in database:
+ALTER DATABASE swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
+ALTER TABLE usr_data CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE courses CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE degrees CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE centres CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+ALTER TABLE institutions CONVERT TO CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+
+	Version 11.72.7 :Jul 11, 2012	Changes in common record layout.
+					It is necessary to change the name of the file with the data protection policy. (134608 lines)
+cd &lt;public_swad_directory&gt;
+mkdir data_protection
+mv swad_data_protection.html data_protection/index.html
+
+	Version 11.72.6 :Jul 11, 2012	The word "DNI" is changed to "ID (DNI/c&eacute;dula/pasaporte) in Spanish. (134447 lines)
+	Version 11.72.5 :Jul 09, 2012	The data protection clause is moved to an external file. (134445 lines)
+	Version 11.72.4 :Jul 09, 2012	Changes in configuration related with automatic sending of e-mail. (134601 lines)
+	Version 11.72.3 :Jul 08, 2012	New statistics of forums of centres. (134595 lines)
+	Version 11.72.2 :Jul 08, 2012	Fixed bug in forums. (134592 lines)
+	Version 11.72.1 :Jul 08, 2012	Fixed bug in list of countries. (134591 lines)
+	Version 11.72   :Jul 08, 2012	New feature: forums for centres.
+					New field CtrCod in database table of notifications.
+					Centres now have icons.
+					New field Logo in database table of centres.
+					Fixed bug in edition of centres. (134575 lines)
+					It is necessary to create a new directory for the icons of the centres. For example:
+mkdir /var/www/html/swad/icon/centre
+					3 changes necessary in database:
+
+ALTER TABLE notif ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;
+ALTER TABLE centres ADD COLUMN Logo VARCHAR(16) NOT NULL AFTER FullName;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Cambiar logo de centro');
+
+	Version 11.71.2 :Jul 07, 2012	Changes in mobile layout. (134228 lines)
+	Version 11.71.1 :Jul 06, 2012	Fixed minor bug in selection of centres. (134227 lines)
+	Version 11.71   :Jul 05, 2012	Lot of changes in countries, institutions, centres, degrees and courses.
+					DegTypCod removed from sessions table. (134220 lines)
+	Version 11.70.1 :Jul 05, 2012	Fixed bug in ordering of centres. (134249 lines)
+	Version 11.70   :Jul 05, 2012	Changes in edition of centres and institutions. (134246 lines)
+	Version 11.69.1 :Jul 04, 2012	Fixed bug related to degree types and institutions. (134192 lines)
+	Version 11.69   :Jul 04, 2012	Field InsCod removed from tables of degrees and degree types. (134211 lines)
+	Version 11.68   :Jul 03, 2012	Changes in edition of degrees.
+					Fixed bug in edition of degrees. (134198 lines)
+	Version 11.67.1 :Jun 29, 2012	A degree must belong to a centre, it can not belong to an unknown centre. (134239 lines)
+	Version 11.67   :Jun 29, 2012	Lot of changes in selection of institutions, centres, degrees. (134293 lines)
+	Version 11.66   :Jun 28, 2012	A degree now belongs to a centre.
+					Changes in selection of centres and degree types. (134203 lines)
+	Version 11.65.1 :Jun 27, 2012	Changes in edition of degrees. (133930 lines)
+	Version 11.65   :Jun 25, 2012	Changes in edition of degrees, centres and departments.
+					Fixed bug in selection of degrees.
+					lockfile based semaphore is no longer used. (133915 lines)
+	Version 11.64.8 :Jun 25, 2012	Changes in selection of countries.
+					Fixed bug in edition of institutions. (133966 lines)
+	Version 11.64.7 :Jun 23, 2012	More changes resulting from the use of -Wextra. (133946 lines)
+	Version 11.64.6 :Jun 22, 2012	Using Eclipse CDT and -Wextra. (133928 lines)
+	Version 11.64.5 :Jun 19, 2012	Changes related with the command to send automatic emails. (133865 lines)
+	Version 11.64.4 :Jun 18, 2012	Changes to use without external authentication service. (? lines)
+	Version 11.64.3 :Jun 17, 2012	Changes in configuration and layout. (133785 lines)
+	Version 11.64.2 :Jun 09, 2012	Changes in configuration. (133737 lines)
+	Version 11.64.1 :Jun 02, 2012	Changes in internal directories. (133736 lines)
+	Version 11.64   :Jun 01, 2012	Lot of changes in internal directories. (133793 lines)
+	Version 11.63.2 :May 31, 2012	Changes in names of variables related to file browsers. (133778 lines)
+	Version 11.63.1 :May 28, 2012	Changes in configuration, for installation in Ubuntu. (133737 lines)
+	Version 11.63   :May 28, 2012	Changes in configuration, for installation in Ubuntu. (133735 lines)
+	Version 11.62.6 :May 04, 2012	Changes in link to download a file. (133630 lines)
+	Version 11.62.5 :May 02, 2012	Several messages translated (still 28 messages to be translated).
+					Changes in file metadata. (133611 lines)
+	Version 11.62.4 :May 01, 2012	File extensions 12x12 icons are replaced by 16x16 icons. (133335 lines)
+	Version 11.62.3 :May 01, 2012	New file extensions icons, in 12x12 and 32x32 sizes. (133330 lines)
+	Version 11.62.2 :Apr 30, 2012	Fixed bug in file browsers. (133327 lines)
+	Version 11.62.1 :Apr 30, 2012	Fixed bug in file browsers. (133434 lines)
+	Version 11.62   :Apr 29, 2012	Files are not linked directly. User must click on filename to access file metadata and download it.
+					Number of views of a file is stored in database. (133427 lines)
+	Version 11.61   :Apr 29, 2012	New fields size and date in file metadata. (133230 lines)
+	Version 11.60.5 :Apr 28, 2012	Change related with file metadata. (133188 lines)
+	Version 11.60.4 :Apr 28, 2012	File metadata is extended to the briefcase. (133181 lines)
+	Version 11.60.3 :Apr 28, 2012	File metadata is extended to the zones of course assignments and course works. (133167 lines)
+	Version 11.60.2 :Apr 28, 2012	File metadata is extended to the zones of my assignments and my works. (133129 lines)
+	Version 11.60.1 :Apr 28, 2012	File metadata is extended to the zone of administration of files of marks. (133099 lines)
+	Version 11.60   :Apr 28, 2012	Link to download file when showing file metadata. (133056 lines)
+	Version 11.59.5 :Apr 26, 2012	Fixed bug in file browsers, reported by Francisco Miguel Reyes Rodríguez. (133010 lines)
+	Version 11.59.4 :Apr 26, 2012	Fixed bug in user's briefcase. (133007 lines)
+	Version 11.59.3 :Apr 26, 2012	Group file zones can not have public files. (133006 lines)
+	Version 11.59.2 :Apr 26, 2012	Lot of changes in file zones and groups. (132983 lines)
+	Version 11.59.1 :Apr 25, 2012	Changes in selection of file browser zone. (132926 lines)
+	Version 11.59   :Apr 25, 2012	Changes in selection of file browser zone. (132917 lines)
+	Version 11.58.4 :Apr 24, 2012	Width in number of survey answer is now fixed. (132938 lines)
+	Version 11.58.3 :Apr 23, 2012	Fixed bug in table of files. (132938 lines)
+	Version 11.58.2 :Apr 22, 2012	Course common zone is now public (only for public files, of course). (132905 lines)
+	Version 11.58.1 :Apr 22, 2012	Added unknown/other license for files. (132894 lines)
+	Version 11.58   :Apr 22, 2012	File license is stored in database.
+					Changes in edition of file properties.
+					Publicity/license of files made available for users. (132850 lines)
+	Version 11.57.1 :Apr 22, 2012	File/folder names are limited in length when shown. (132832 lines)
+	Version 11.57   :Apr 21, 2012	Database table 'file_public' is removed. The publicity of a file is stored in table 'files'. (132826 lines)
+	Version 11.56.1 :Apr 21, 2012	Changes in file browser layouts. (132920 lines)
+	Version 11.56   :Apr 21, 2012	All the folders/files are stored in database, including the creator. (132920 lines)
+	Version 11.55.10:Apr 20, 2012	Internal optimizations in functions related to file browsers. (132889 lines)
+	Version 11.55.10:Apr 19, 2012	New field 'FileBrowser' in database table 'files'. (132853 lines)
+	Version 11.55.9 :Apr 19, 2012	Database table 'crs_common_files' is renamed to files. (132829 lines)
+	Version 11.55.8 :Apr 19, 2012	File licenses translated to several languages. (132828 lines)
+	Version 11.55.7 :Apr 19, 2012	Changes in web service function getCourses. (132827 lines)
+	Version 11.55.6 :Apr 18, 2012	Changes in selection of languages. (132657 lines)
+	Version 11.55.5 :Apr 18, 2012	Fixed bug in file browsers. Changed icon for nickname action. (132580 lines)
+	Version 11.55.4 :Apr 15, 2012	Minor changes in web service. (132575 lines)
+	Version 11.55.3 :Apr 15, 2012	New function getGroups in the web service. (132571 lines)
+	Version 11.55.2 :Apr 14, 2012	New function getDirectoryTree in the web service. (132478 lines)
+	Version 11.55.1 :Apr 13, 2012	Now the privacity of a file changes when receiving the form. (132443 lines)
+	Version 11.55   :Apr 12, 2012	New options to edit metadata of a file. (132421 lines)
+	Version 11.54   :Apr 12, 2012	Documents are open to public not logged. (132323 lines)
+	Version 11.53.4 :Apr 11, 2012	Changes in search of courses. (132258 lines)
+	Version 11.53.3 :Apr 04, 2012	Changes in selection of courses.
+					Changes in "About" messages. (132224 lines)
+	Version 11.53.2 :Apr 04, 2012	Changes in selection of countries and institutions. (132232 lines)
+	Version 11.53.1 :Apr 04, 2012	Changes in selection of countries and institutions.
+					Fixed bug in web service function getCourses, reported by Helena Rodríguez Gijón. (132247 lines)
+	Version 11.53   :Apr 03, 2012	Changes in web service functions. (132237 lines)
+	Version 11.52.3 :Apr 02, 2012	Lot of words translated to Guarani. (132323 lines)
+	Version 11.52.2 :Apr 01, 2012	More words translated to Guarani. (132323 lines)
+	Version 11.52.1 :Apr 01, 2012	Some words translated to Guarani.
+					Fixed bug in edition of institutional links. (132321 lines)
+	Version 11.52   :Apr 01, 2012	New language: Guarani. Some words translated. (132314 lines)
+	Version 11.51.1 :Mar 28, 2012	The number of indicators is shown in configuration of a course. (127821 lines)
+	Version 11.51   :Mar 28, 2012	Changes in selection of courses. (127838 lines)
+	Version 11.50.3 :Mar 27, 2012	Removed view of XHTML code for direct access to a course. (127844 lines)
+	Version 11.50.2 :Mar 26, 2012	Optimizations in links to print views. (127917 lines)
+	Version 11.50.1 :Mar 26, 2012	Minor changes in configuration of the current course. (127938 lines)
+	Version 11.50   :Mar 26, 2012	Course year and semester can be edited in configuration of the current course.
+					Print view of configuration of the current course. (127936 lines)
+	Version 11.49.1 :Mar 26, 2012	Legal notice included in file browsers. (127830 lines)
+	Version 11.49   :Mar 26, 2012	New table IP_last to prevent more than one click from the same IP in the same second. (127816 lines)
+	Version 11.48.2 :Mar 26, 2012	Optimization in layout of class photo. (127762 lines)
+	Version 11.48.1 :Mar 25, 2012	Configuration of the current course is available for all users. (127784 lines)
+	Version 11.48   :Mar 25, 2012	More information in configuration of the current course. (127771 lines)
+	Version 11.47.2 :Mar 24, 2012	Changes in parameters with action and tab.
+					QR code with link to an exam announcement. (127660 lines)
+	Version 11.47.1 :Mar 18, 2012	Few changes in selectors of country, institution, degree type, degree, year and course. (127635 lines)
+	Version 11.47   :Mar 18, 2012	Changes in selectors of country, institution, degree type, degree, year and course. (127670 lines)
+	Version 11.46.3 :Mar 18, 2012	Added selectors of country, institution and degree type before list of degrees. (127691 lines)
+	Version 11.46.2 :Mar 17, 2012	Added selector of country before list of institutions.
+					Added selectors of country and institution before list of degree types.
+					Fixed bug in web service, reported by Juan Miguel Boyero Corral. (127691 lines)
+	Version 11.46.1 :Mar 16, 2012	Fixed bugs in forms with country or institution codes. (127648 lines)
+	Version 11.46   :Mar 15, 2012	Added selectors Country and Institution to menus for selection of courses. (127623 lines)
+	Version 11.45   :Mar 15, 2012	Lot of changes in selections of countries in the "System" tab. (127429 lines)
+	Version 11.44   :Mar 14, 2012	Lot of changes in selections of institutions and degree types in the "System" tab. (127314 lines)
+	Version 11.43   :Mar 13, 2012	Changes in order of options in the "System" tab. (127178 lines)
+	Version 11.42.5 :Mar 12, 2012	Fixed bug while getting actions from database when actions table is empty.
+					Fixed bug while counting number of students in countries. (127169 lines)
+	Version 11.42.4 :Mar 11, 2012	Changes related to configuration, setup, directories. (127163 lines)
+	Version 11.42.3 :Mar 08, 2012	Changed "alumno/a" to "estudiante" in Spanish and Català. (127155 lines)
+	Version 11.42.2 :Mar 08, 2012	Configuring swad to work when no database available. (127154 lines)
+	Version 11.42.1 :Mar 07, 2012	Configuring swad to work when no database available. (127141 lines)
+	Version 11.42   :Mar 04, 2012	New function sendNotice in the web service. Still need to send notifications. (127136 lines)
+	Version 11.41.1 :Mar 04, 2012	Changes in selection of degree types, degrees and courses for mobile version. (127061 lines)
+	Version 11.41   :Mar 04, 2012	Changes in selection of degree types, degrees and courses for desktop version. (127044 lines)
+	Version 11.40.5 :Mar 04, 2012	Passing parameter with the degree type if no session opened. (127028 lines)
+	Version 11.40.4 :Feb 27, 2012	Minor change in connected users. (127038 lines)
+	Version 11.40.3 :Feb 26, 2012	Fixed bug sending notifications by email. (127037 lines)
+	Version 11.40.2 :Feb 26, 2012	Removed <acronym> directive. (127036 lines)
+	Version 11.40.1 :Feb 13, 2012	Fixed bug in notifications, reported by prof. Antonio González Casado. (127045 lines)
+	Version 11.40   :Feb 07, 2012	New module swad_QR.
+					QR codes can be selected with IDs or nicknames.
+					'@' is inserted automatically and the start of a Twitter account. (127021 lines)
+	Version 11.39   :Feb 06, 2012	The institutional code of a course can be changed in the edition of courses. (126819 lines)
+	Version 11.38   :Feb 06, 2012	The institutional code of a course can be changed in the configuration of the course. (126704 lines)
+	Version 11.37.6 :Feb 04, 2012	Several messages translated (still 25 messages to be translated). (126659 lines)
+	Version 11.37.5 :Feb 04, 2012	Several messages translated (still 38 messages to be translated). (126411 lines)
+	Version 11.37.4 :Feb 04, 2012	New column in table of indicators with the number of indicators. (126238 lines)
+	Version 11.37.3 :Feb 04, 2012	New module swad_indicator. (126228 lines)
+	Version 11.37.2 :Feb 03, 2012	New filter to select the number of indicators of courses. (126127 lines)
+	Version 11.37.1 :Feb 03, 2012	Lot of changes in indicators of courses. (126085 lines)
+	Version 11.37   :Feb 02, 2012	A brief version of indicators of courses is shown directly in the main window. (126032 lines)
+	Version 11.36.2 :Feb 01, 2012	Changes in indicators of courses.
+					Parameter NxtAct is changed to ActCod. (125916 lines)
+	Version 11.36.1 :Jan 30, 2012	Changes in layout. (125867 lines)
+	Version 11.36   :Jan 30, 2012	Statistics about courses can be filtered by type of degree. (125839 lines)
+	Version 11.35   :Jan 30, 2012	Statistics about courses can be filtered by department. (125754 lines)
+	Version 11.34   :Jan 29, 2012	Now teachers can select if the students in a course may log in directly or from the external authentication service. (125666 lines)
+	Version 11.33   :Jan 23, 2012	If a student logs in directly, and the course selected belongs to a degree without direct authentication, his/her role is changed to invited.
+					The duration of a session is changed from 1 hour to 2 hours. (125407 lines)
+	Version 11.32.1 :Jan 20, 2012	Published the new option to show user's QR code. (125405 lines)
+	Version 11.32   :Jan 20, 2012	New option to show user's QR code. (125393 lines)
+	Version 11.31.1 :Jan 19, 2012	Changes in Google Geochart settings for listing of countries. (125306 lines)
+	Version 11.31   :Jan 19, 2012	Added Google Geochart to list of countries. (125268 lines)
+	Version 11.30.8 :Jan 17, 2012	Fixed bug when exporting test questions. (125186 lines)
+	Version 11.30.7 :Jan 15, 2012	Several messages translated (still 39 messages to be translated). (125168 lines)
+	Version 11.30.6 :Jan 14, 2012	Several messages translated (still 53 messages to be translated).
+					Other minor changes. (124913 lines)
+	Version 11.30.5 :Jan 14, 2012	Pending notifications are sent by e-mail on refresh actions. (124802 lines)
+	Version 11.30.4 :Jan 14, 2012	When a user is removed from a course or from a group, it is better not to set notifications as inaccessible because the user can be enrolled again. (124802 lines)
+	Version 11.30.3 :Jan 14, 2012	When a course is removed, the notifications in that course are set as removed.
+					When a user is removed from a course or from a group, the notifications inaccessible are set as inaccessible. (124842 lines)
+	Version 11.30.2 :Jan 13, 2012	When a group is removed, the notifications about files of marks in that group are set as removed. (124757 lines)
+	Version 11.30.1 :Jan 11, 2012	Lot of changes in notifications. (124739 lines)
+	Version 11.30   :Jan 10, 2012	The marks of a student are sent in HTML as the content of a notification via web service. (124707 lines)
+	Version 11.29.5 :Jan 10, 2012	Notifications marked as removed when a file of marks, or a folder which contains file(s) of marks, is removed. (124706 lines)
+	Version 11.29.4 :Jan 10, 2012	Changes in notification of new file of marks. (124660 lines)
+	Version 11.29.3 :Jan 10, 2012	Changes in notification of new file of marks. (124589 lines)
+	Version 11.29.2 :Jan 09, 2012	Several functions moved from swad_file_browser to swad_mark. (? lines)
+	Version 11.29.1 :Jan 03, 2012	Fixed bug in notifications of new messages. Reported by Guía Carmona Tienda. (124516 lines)
+	Version 11.29   :Dic 30, 2011	Optimizations when deleting all the messages of a user or several users. (124513 lines)
+	Version 11.28.1 :Dic 28, 2011	Changes in layout. (124471 lines)
+	Version 11.28   :Dic 23, 2011	New options to contract an expanded message. (124470 lines)
+	Version 11.27.2 :Dic 22, 2011	Optimizations on pagination of items. (124389 lines)
+	Version 11.27.1 :Dic 22, 2011	Number of new messages is removed. (124461 lines)
+	Version 11.27   :Dic 21, 2011	Changes in received and sent messages.
+					When a user clicks on a notification of message, that message is expanded. (124461 lines)
+	Version 11.26.2 :Dic 20, 2011	Notifications of removed events are marked with light colors. (124430 lines)
+	Version 11.26.1 :Dic 19, 2011	Notifications of removed events are marked with red background. (124279 lines)
+	Version 11.26   :Dic 19, 2011	Notifications are marked as removed when the source of the notification is removed.
+					Notifications marked as removed are shown, but not as new notifications. (124231 lines)
+	Version 11.25.3 :Dic 17, 2011	Several messages translated. (124191 lines)
+	Version 11.25.2 :Dic 12, 2011	Fixed bug when writing a private message.
+					Removing the use of the struct for another user in parst of the code. (124044 lines)
+	Version 11.25.1 :Dic 11, 2011	More changes in layout. (124011 lines)
+	Version 11.25   :Dic 10, 2011	More changes in layout. (124038 lines)
+	Version 11.24.3 :Dic 09, 2011	Optimization in header layout. (123954 lines)
+	Version 11.24.2 :Dic 09, 2011	Reordering of several options in groups. (123952 lines)
+	Version 11.24.1 :Dic 08, 2011	Fixed bug in test tags related to sending tests to plugins via web service, reported by Juan Miguel Boyero Corral. (123951 lines)
+	Version 11.24   :Dic 08, 2011	Lot of changes in layout.
+					Options are grouped in menus. (123948 lines)
+	Version 11.23.2 :Dic 07, 2011	More changes in layout. (123982 lines)
+	Version 11.23.1 :Dic 06, 2011	More changes in layout. (123980 lines)
+	Version 11.23   :Dic 06, 2011	Lot of changes in layout. (123975 lines)
+	Version 11.22.9 :Nov 29, 2011	More optimizations for big lists of users. (124061 lines)
+	Version 11.22.8 :Nov 28, 2011	Fixed problem with big lists of users, reported by Francisco A. Ocaña Lara. (124056 lines)
+	Version 11.22.7 :Nov 28, 2011	Fixed bug when registering users in a course. (124051 lines)
+	Version 11.22.6 :Nov 28, 2011	More optimizations for big lists of users. (124050 lines)
+	Version 11.22.5 :Nov 28, 2011	More optimizations for big lists of users. (124117 lines)
+	Version 11.22.4 :Nov 28, 2011	Fixed bug in list of teacher, reported by Francisco Serrano Carmona.
+					Fixed bug in link to teacher's card. (124099 lines)
+	Version 11.22.3 :Nov 28, 2011	More optimizations for big lists of users. (124116 lines)
+	Version 11.22.2 :Nov 28, 2011	Fixed bugs in lists of users. (124077 lines)
+	Version 11.22.1 :Nov 27, 2011	Lot of optimizations in lists of users. (123959 lines)
+	Version 11.22   :Nov 26, 2011	Lot of optimizations in lists of users. (124073 lines)
+	Version 11.21.3 :Nov 25, 2011	Optimizations in lists of users. (124080 lines)
+	Version 11.21.2 :Nov 25, 2011	New form to confirm that user wants to see big lists of students. ( lines)
+	Version 11.21.1 :Nov 25, 2011	Indexes for ordering lists of users are no longer needed, so they are removed. (124130 lines)
+	Version 11.21	:Nov 24, 2011	Users lists are now ordered in database queries, not in C postprocessing.
+					Bug in message about allowed post, reported by Francisco A. Ocaña Lara. (124115 lines)
+	Version 11.20.3	:Nov 23, 2011	Optimization when renaming test tags. (124070 lines)
+	Version 11.20.2	:Nov 23, 2011	Fixed bug when renaming test tags. (124095 lines)
+	Version 11.20.1	:Nov 22, 2011	Accesses to web service are highlighted in Stats > Last clicks. (124068 lines)
+	Version 11.20	:Nov 22, 2011	New option to list banned senders of private messages.
+					A user can not send messages to users who have banned him/her. (124015 lines)
+	Version 11.19	:Nov 22, 2011	New option to ban/unban senders of private messages. (123833 lines)
+	Version 11.18.2 :Nov 22, 2011	Starting new option to ban/unban senders of private messages. (123770 lines)
+	Version 11.18.1 :Nov 20, 2011	Internal changes in marks. Now a temporary html file is used to store student's marks. (123705 lines)
+	Version 11.18   :Nov 19, 2011	Teachers must indicate if they want that test may be pluggable or not. (123597 lines)
+	Version 11.17   :Nov 19, 2011	New statistics related with accesses from plugins. (123434 lines)
+	Version 11.16   :Nov 17, 2011	New database table to log the web functions called. (123238 lines)
+	Version 11.15.4 :Nov 17, 2011	When a user closes the session, the click is logged with his/her current role, not with unknown role as before. (123159 lines)
+	Version 11.15.3 :Nov 14, 2011	Web service action is logged into log table. (123102 lines)
+	Version 11.15.2 :Nov 14, 2011	Added legal data protection clause when editing personal record. (123097 lines)
+	Version 11.15.1 :Nov 13, 2011	New institutional course codes now can overwrite previous institutional course codes when importing students. (122920 lines)
+	Version 11.15   :Nov 12, 2011	Institutional course codes are imported when importing students to a course.
+					Institutional course codes are shown in lists of courses. (122921 lines)
+	Version 11.14   :Nov 08, 2011	New option to show degree types. (122875 lines)
+	Version 11.13   :Nov 08, 2011	New option to show degrees. (122725 lines)
+	Version 11.12.2 :Nov 06, 2011	Fixed bug when accesing table for translating unique action code to Act_Action_t. (122509 lines)
+	Version 11.12.1 :Nov 06, 2011	Invariable action code ActCod is stored in table of MFU actions instead of Action. (122510 lines)
+	Version 11.12   :Nov 06, 2011	Using new table for translating unique action code to Act_Action_t. (122494 lines)
+	Version 11.11.3 :Nov 05, 2011	Building new table for translating unique action code to Act_Action_t. (122889 lines)
+	Version 11.11.2 :Nov 04, 2011	Changes in listing of courses of a degree. (124523 lines)
+	Version 11.11.1 :Nov 04, 2011	Changes in listing of courses of a degree. (124517 lines)
+	Version 11.11   :Nov 03, 2011	New option to show courses of a degree. (124535 lines)
+	Version 11.10.2 :Nov 02, 2011	Optimization in XML module. (124342 lines)
+	Version 11.10.1 :Nov 01, 2011	Removed extra parameters from Actions struct. (124358 lines)
+	Version 11.10   :Nov 01, 2011	When a user changes the tab, her/his most used option option is shown. (124374 lines)
+	Version 11.9    :Nov 01, 2011	When a user changes the tab, the first available option is shown. (124351 lines)
+	Version 11.8.3  :Oct 28, 2011	Sharing code to put 16x16 icons. (124331 lines)
+	Version 11.8.2  :Oct 26, 2011	Size of some icons changed from 32x32 to 16x16. (124428 lines)
+	Version 11.8.1  :Oct 26, 2011	Small changes in XML format when exporting/importing test questions.
+					Added MIME type for documents uploaded. (124423 lines)
+	Version 11.8    :Oct 25, 2011	Exporting/importing test question is published for teachers. (124406 lines)
+	Version 11.7.4  :Oct 25, 2011	Size of more icons changed from 12x12 to 32x32.
+					Optimizations in test module. (124405 lines)
+	Version 11.7.3  :Oct 25, 2011	Size of some icons changed from 12x12 to 32x32. (124365 lines)
+	Version 11.7.2  :Oct 24, 2011	Fixed lot of bugs and optimized code in test module. (124339 lines)
+	Version 11.7.1  :Oct 24, 2011	Fixed bugs when importing questions are storing them in database. (124245 lines)
+	Version 11.7    :Oct 24, 2011	Imported questions are stored in database. (124225 lines)
+	Version 11.6.12 :Oct 24, 2011	Imported questions are prepared to be stored in database. (124221 lines)
+	Version 11.6.11 :Oct 23, 2011	Fixed bug in XML parsing.
+					Implementing exporting/importing of test questions. (124191 lines)
+	Version 11.6.10 :Oct 23, 2011	Implementing exporting/importing of test questions. Check the existence of each imported question in database. (124031 lines)
+	Version 11.6.9  :Oct 22, 2011	Implementing exporting/importing of test questions. (123971 lines)
+	Version 11.6.8  :Oct 22, 2011	Implementing exporting/importing of test questions. (123854 lines)
+	Version 11.6.7  :Oct 22, 2011	Implementing exporting/importing of test questions. (123855 lines)
+	Version 11.6.6  :Oct 21, 2011	Implementing exporting/importing of test questions. (123786 lines)
+	Version 11.6.5  :Oct 21, 2011	Implementing exporting/importing of test questions (changes in XML file). (123821 lines)
+	Version 11.6.4  :Oct 19, 2011	Implementing exporting/importing of test questions (changes in XML file). (123821 lines)
+	Version 11.6.3  :Oct 19, 2011	Implementing exporting/importing of test questions (changes in XML file). (123835 lines)
+	Version 11.6.2  :Oct 19, 2011	Implementing new functions to analyze and get XML elements. (123835 lines)
+	Version 11.6.1  :Oct 18, 2011	Implementing new functions to analyze and get XML elements. (123719 lines)
+	Version 11.6    :Oct 17, 2011	New functions to analyze and get XML elements. (123619 lines)
+	Version 11.5.2  :Oct 16, 2011	Implementing importing of test questions. (123443 lines)
+	Version 11.5.1  :Oct 16, 2011	New actions to implement importing of test questions. (123407 lines)
+	Version 11.5    :Oct 13, 2011	New field in table of imported groups to store the external course code. Suggested by Francisco A. Ocaña Lara. (123342 lines)
+	Version 11.4.3  :Oct 12, 2011	Changes in XML format for test questions. (123338 lines)
+	Version 11.4.2  :Oct 11, 2011	Implementing importing of test questions. (123314 lines)
+	Version 11.4.1  :Oct 10, 2011	Implementing exporting of test questions (changes in XML file). (123130 lines)
+	Version 11.4    :Oct 10, 2011	Implementing exporting of test questions (correct XML file created). (123150 lines)
+	Version 11.3.2  :Oct 09, 2011	Fixed bugs in edition of group types.
+					Implementing exporting of test questions. (123075 lines)
+	Version 11.3.1  :Oct 09, 2011	Implementing exporting of test questions. (122900 lines)
+	Version 11.3    :Oct 09, 2011	The option to edit a new test question is integrated inside another option. (122843 lines)
+	Version 11.2.2  :Oct 08, 2011	Warning to alert that in the future, users must be logged in from external service in some degree types. (122855 lines)
+	Version 11.2.1  :Oct 08, 2011	Changes in the selection of one of my courses. (122847 lines)
+	Version 11.2    :Oct 07, 2011	When a user directly logged belongs to the current course, but the current degree requires external log in, the role is changed to invited. (122822 lines)
+	Version 11.1.1  :Oct 06, 2011	Changes in edition of degree types. (122819 lines)
+	Version 11.1    :Oct 06, 2011	New fields in degree types to select between login directly or login from the external authentication service. (122785 lines)
+	Version 11.0.3  :Oct 04, 2011	Changes in layout of users' common records. (122754 lines)
+	Version 11.0.2  :Oct 02, 2011	New link to export test questions (not yet implemented). (122724 lines)
+	Version 11.0.1  :Oct 02, 2011	New icons for groups. (122704 lines)
+	Version 11.0    :Sep 29, 2011	Groups edition splitted into two options: group types edition and groups edition. (122703 lines)
+	Version 10.57.3 :Sep 27, 2011	Fixed bugs in WS function sendMessage. (122628 lines)
+	Version 10.57.2 :Sep 25, 2011	Fixed bug in users' listing. (122629 lines)
+	Version 10.57.1 :Jul 19, 2011	Optimizations on file browser. (122536 lines)
+	Version 10.57   :Jul 18, 2011	Files in documents and common zones will be able to be public. Only available for superusers at the moment. (122535 lines)
+	Version 10.56.2 :Jul 18, 2011	Fixed bug in WS function sendMessage, reported by Juan Miguel Boyero Corral. (122206 lines)
+	Version 10.56.1 :Jul 05, 2011	Lost of changes in the new option to show last clicks in real time. (122209 lines)
+	Version 10.56   :Jul 05, 2011	New option to show last clicks in real time. (122104 lines)
+	Version 10.55   :Jul 04, 2011	Finished programming of new WS function sendMessage. (121957 lines)
+	Version 10.54.3 :Jul 04, 2011	Optimization in sending of a message. (121868 lines)
+	Version 10.54.2 :Jul 03, 2011	Programming new WS function sendMessage. (121922 lines)
+	Version 10.54.1 :Jul 02, 2011	Programming new WS function sendMessage. (121865 lines)
+	Version 10.54   :Jul 02, 2011	New field added to WS function getUsers.
+					Programming new WS function sendMessage. (121829 lines)
+	Version 10.53.5 :Jul 02, 2011	New fields added to WS function getNotifications. (121749 lines)
+	Version 10.53.4 :Jun 30, 2011	Changes in database tables. (121743 lines)
+	Version 10.53.3 :Jun 30, 2011	Change in enrollment of users with a new role. (121742 lines)
+	Version 10.53.2 :Jun 14, 2011	New statistics about number of test questions. (121716 lines)
+	Version 10.53.1 :Jun 13, 2011	New statistics about number of test questions. (121638 lines)
+	Version 10.53   :Jun 10, 2011	A lot of messages translated to Polish by Wojtek Kieca, Tomasz Olechowski and Mateusz Stanko, students from Zespol Szkol Techniczny nr. 9. (121585 lines)
+	Version 10.52.2 :Jun 02, 2011	Changes in styles for statistics of use of the platform. (121635 lines)
+	Version 10.52.1 :Jun 02, 2011	Statistics about number of test questions splitted by type of answer. (121604 lines)
+	Version 10.52   :Jun 01, 2011	New statistics about number of test questions. (121527 lines)
+	Version 10.51   :Jun 01, 2011	New statistics about number of assignments. (121418 lines)
+	Version 10.50.4 :May 31, 2011	Changes in statistics about number of users with Twitter and Skype. (121294 lines)
+	Version 10.50.3 :May 30, 2011	New statistics about number of users with Twitter and Skype. (121273 lines)
+	Version 10.50.2 :May 30, 2011	New statistics about number of surveys. (121192 lines)
+	Version 10.50.1 :May 26, 2011	Preparing statistics about number of assignments and number of test questions. (121132 lines)
+	Version 10.50   :May 26, 2011	Statistics about number of surveys. (121069 lines)
+	Version 10.49   :May 24, 2011	New action to show my recent most frequently used actions. (120917 lines)
+	Version 10.48.2 :May 24, 2011	Fixed bug in list of countries. (120760 lines)
+	Version 10.48.1 :May 24, 2011	Focus is set to login form. Suggested by Alberto Villegas Erce. (120750 lines)
+	Version 10.48   :May 23, 2011	Shortened the maximum length of Skype user name from 255 to 60.
+					New field in user's data for Twitter. (120745 lines)
+	Version 10.47.3 :May 18, 2011	Several messages translated to catalan by Joan Lluís Díaz Rodríguez. (120618 lines)
+	Version 10.47.2 :May 13, 2011	The notifications about assignments and surveys are marked as seen when the user clicks on them. (120616 lines)
+	Version 10.47.1 :May 13, 2011	Changes in notifications about surveys. (120631 lines)
+	Version 10.47   :May 12, 2011	Assignments and surveys are notified. (120621 lines)
+	Version 10.46   :May 12, 2011	Preparing code and database for two new notifications. (120412 lines)
+	Version 10.45.6 :May 11, 2011	Several messages translated to Catalan. (120249 lines)
+	Version 10.45.5 :May 11, 2011	Several messages translated to Catalan. (120248 lines)
+	Version 10.45.4 :May 10, 2011	Several messages translated to Catalan. (120247 lines)
+	Version 10.45.3 :May 10, 2011	Several messages translated to Catalan.
+					New field in countries table for names in Catalan. (120227 lines)
+	Version 10.45.2 :May 10, 2011	Several messages translated to Catalan. (120221 lines)
+	Version 10.45.1 :May 10, 2011	Several messages translated to Catalan. (120220 lines)
+	Version 10.45   :May 09, 2011	Code ready for translation to Catalan. (120219 lines)
+	Version 10.44.6 :May 09, 2011	Translating to Catalan.
+					Fixed bug in web service function getTest, reported by Juan Miguel Boyero Corral. (120019 lines)
+	Version 10.44.5 :May 06, 2011	New web service function getTestConfig.
+					Changes in web service function getTests. (115982 lines)
+	Version 10.44.4 :May 05, 2011	Fixed bug in web service function getTest, reported by Juan Miguel Boyero Corral. (115920 lines)
+	Version 10.44.3 :May 05, 2011	Changes storing and processing the number of new notifications. (115923 lines)
+	Version 10.44.2 :May 04, 2011	Removed matching of external role with any of the internal roles availables for a user. (115917 lines)
+	Version 10.44.1 :May 02, 2011	Teachers can configure if they want to deliver test questions to plugins. (115912 lines)
+	Version 10.44   :May 01, 2011	New field ChangeTime in tst_tags table.
+					getTests function completed. (115854 lines)
+	Version 10.43.4 :Apr 30, 2011	Implementing getTests function, part of the web service. (115823 lines)
+	Version 10.43.3 :Apr 30, 2011	Implementing getTests function, part of the web service. (115708 lines)
+	Version 10.43.2 :Apr 28, 2011	Implementing getTests function, part of the web service. (115590 lines)
+	Version 10.43.1 :Apr 26, 2011	Several messages translated. (115422 lines)
+	Version 10.43   :Apr 25, 2011	Hundred of messages (1263 lines) translated (or revised) to italian, by Giuseppe Antonio Pagin & Antonella Grande. (115298 lines)
+	Version 10.42.2 :Apr 13, 2011	Messages are marked as open and notifications are marked as seen when they are sent via web service. (115288 lines)
+	Version 10.42.1 :Apr 13, 2011	The summary of a notification is trimmed before sending it via web service. (115265 lines)
+	Version 10.42   :Apr 13, 2011	The summary of a notification is now splitted in brief summary and full content.
+					WSDL has changed. (115260 lines)
+	Version 10.41.8 :Apr 09, 2011	Corrections in italian translation. (115190 lines)
+	Version 10.41.7 :Apr 09, 2011	Several messages translated to italian, by Francisco Manuel Herrero Pérez. (115191 lines)
+	Version 10.41.6 :Apr 09, 2011	The teaching guide is considered as an indicator of assessment criteria. (115188 lines)
+	Version 10.41.5 :Apr 08, 2011	The full content of a notification is sent in web service. (115184 lines)
+	Version 10.41.4 :Apr 08, 2011	Fixed bug when getting data of a centre. (115169 lines)
+	Version 10.41.3 :Apr 07, 2011	Fixed bug in assigment dates, reported by José Samos Gutiérrez. (115169 lines)
+	Version 10.41.2 :Apr 04, 2011	Several messages translated to polish. (115167 lines)
+	Version 10.41.1 :Apr 04, 2011	Several messages translated to polish. (115149 lines)
+	Version 10.41   :Apr 03, 2011	Added polish language (translation needed). (115154 lines)
+	Version 10.40.2 :Apr 01, 2011	Changes in AJAX to refresh in the current language. (110963 lines)
+	Version 10.40.1 :Apr 01, 2011	Language is no longer stored in IP_prefs table.
+					Changes related to languages. (110958 lines)
+	Version 10.40   :Apr 01, 2011	The big change to a new translation system has been finished. (110943 lines)
+	Version 10.39.2 :Mar 31, 2011	The big change to a new translation system continues. (110895 lines)
+	Version 10.39.1 :Mar 30, 2011	The big change to a new translation system continues. (111028 lines)
+	Version 10.39   :Mar 25, 2011	One swad for each language instead of the same swad for all languages. (101215 lines)
+	Version 10.38.4 :Mar 25, 2011	Changes in selector of courses. (101004 lines)
+	Version 10.38.3 :Mar 23, 2011	Changed search icon size from 32x32 to 20x20. (101018 lines)
+	Version 10.38.2 :Mar 22, 2011	Changed search icon size from 20x20 to 32x32. (101017 lines)
+	Version 10.38.1 :Mar 21, 2011	Changed warning message related to external login service. (101016 lines)
+	Version 10.38   :Mar 14, 2011	Superusers can see users connected belonging to current course, degree or platform. (101013 lines)
+	Version 10.37.3 :Mar 13, 2011	Optimization querying number of users in an institution. (100727 lines)
+	Version 10.37.2 :Mar 13, 2011	Changes in messages about users not belonging to any course. (100732 lines)
+	Version 10.37.1 :Mar 12, 2011	Changes in roles stored in table of connected users. (100706 lines)
+	Version 10.37   :Mar 10, 2011	Lists of institutions, degrees and courses now have an attribute with the role of the user.
+					A lot of changes related to permissions to see forums. (100659 lines)
+	Version 10.36   :Mar 10, 2011	The number of students in a group is not stored in database, but counted when necessary. (100585 lines)
+	Version 10.35.4 :Mar 10, 2011	Users who do not belong to any course are logged as invited.
+					Changes in permissions related to forums and chat.
+					Fixed bug counting number of users in countries. (100666 lines)
+	Version 10.35.3 :Mar 10, 2011	Removed obsolete action to register an existing user in a course. (100666 lines)
+	Version 10.35.2 :Mar 10, 2011	Fixed bug in statistics of users in a course, reported by Nicola Comunale Rizzo. (100706 lines)
+	Version 10.35.1 :Mar 10, 2011	Counting number of students in a group instead of getting directly. This change should be reversed if slow. (100725 lines)
+	Version 10.35   :Mar 10, 2011	Changes and bug fixes counting number of students in groups. (? lines)
+	Version 10.34   :Mar 09, 2011	Lot of changes in enrollment of users. (100696 lines)
+	Version 10.33.3 :Mar 08, 2011	Changes in enrollment of users. (100666 lines)
+	Version 10.33.2 :Mar 08, 2011	Fixed bugs and other changes related to importation of students from an external site. (100659 lines)
+	Version 10.33.1 :Mar 08, 2011	Few changes related to roles in courses. (100638 lines)
+	Version 10.33   :Mar 08, 2011	Added indexes to table crs_usr.
+					Removed slow query when getting data of a degree.
+					Removing old entries of some tables is made when refreshing users. (100631 lines)
+	Version 10.32.3 :Mar 08, 2011	Different roles are obtained from crs_usr table, never from usr_data. (100676 lines)
+	Version 10.32.2 :Mar 08, 2011	List of departments counts only teachers with courses. (100695 lines)
+	Version 10.32.1 :Mar 07, 2011	List of centres counts only teachers with courses. (100699 lines)
+	Version 10.32   :Mar 07, 2011	Changes in global statistics about number of users.
+					Fixed bug in query related to search of teachers. (100696 lines)
+	Version 10.31.1 :Mar 07, 2011	UsrDat->Roles is not computed, but read from usr_data table. (100666 lines)
+	Version 10.31   :Mar 06, 2011	A user can be enrolled as "teacher" in course A and as "student" in course B. (100660 lines)
+	Version 10.30.4 :Mar 06, 2011	Changed "UsrType" to "Role" in log and log_recent database tables. (100587 lines)
+	Version 10.30.3 :Mar 06, 2011	Internal changes related to roles. (100587 lines)
+	Version 10.30.2 :Mar 06, 2011	Changed "Gender" for "Sex" in database tables. (100580 lines)
+	Version 10.30.1 :Mar 06, 2011	Changes in database table of connected users. (100582 lines)
+	Version 10.30   :Mar 06, 2011	Changes related to roles put into production.
+					Few bugs fixed. (100564 lines)
+	Version 10.29.1 :Mar 06, 2011	Lot of internal changes related to roles. (100564 lines)
+	Version 10.29   :Mar 05, 2011	Lot of internal changes related to roles.
+					"Gender" is changed for "Sex". (100520 lines)
+	Version 10.28.1 :Mar 03, 2011	Lot of internal changes related to roles. (? lines)
+	Version 10.28   :Mar 03, 2011	Lot of internal changes related to roles. (100386 lines)
+	Version 10.27.1 :Mar 02, 2011	Internal changes related to roles. (? lines)
+	Version 10.27   :Mar 02, 2011	User type related variables and database fields are changed form UsrType to Role, except fields in log tables. (100252 lines)
+	Version 10.26   :Mar 01, 2011	After sending a file to a folder, a new form to send another file to the same folder is shown. (100231 lines)
+	Version 10.25.10:Mar 01, 2011	Text "Class photo" or "List" is shown near icons in selection of type of users' listing. (100183 lines)
+	Version 10.25.9 :Mar 01, 2011	Acceptance of enrollment is set to true when importing students from official groups. (100164 lines)
+	Version 10.25.8 :Feb 22, 2011	beginTime and eventTime are changed to long. Reported by Juan Miguel Boyero Corral. (100127 lines)
+	Version 10.25.7 :Feb 22, 2011	eventTime is changed from time_t to unsigned long. Reported by Juan Miguel Boyero Corral. (100126 lines)
+	Version 10.25.6 :Feb 22, 2011	Deleting a user removes her/him from connected and sessions tables. (100125 lines)
+	Version 10.25.5 :Feb 22, 2011	Notifications affected by a removed message will be removed. Reported by Juan Traverso Viagas. (100119 lines)
+	Version 10.25.4 :Feb 22, 2011	Changes in actions which wait for lock file.
+					Reduction of times to delete entries in several tables. (100111 lines)
+	Version 10.25.3 :Feb 15, 2011	Fixed bugs in notifications, reported by Abdelilah Aoulad Yachou. (100110 lines)
+	Version 10.25.2 :Feb 15, 2011	The new SOAP web service function to get notifications now fills a summary of the event. (100104 lines)
+	Version 10.25.1 :Feb 14, 2011	Changes in the SOAP web service function to get notifications of a user. (100080 lines)
+	Version 10.25   :Feb 14, 2011	Almost finished the new SOAP web service function to get notifications of a user. (100071 lines)
+	Version 10.24.2 :Feb 14, 2011	Change in notifications: a user can see the number of unseen notifications and the number of new notifications. (99952 lines)
+	Version 10.24.1 :Feb 13, 2011	Removed form to new messages. (99895 lines)
+	Version 10.24   :Feb 13, 2011	Blinking warning for new notifications. (99895 lines)
+	Version 10.23.2 :Feb 12, 2011	Link to edit preferences in notifications. (99812 lines)
+	Version 10.23.1 :Feb 12, 2011	Fixed bug in status of notifications when sent by email. (99797 lines)
+	Version 10.23   :Feb 12, 2011	All the events are listed in Messages > Notifications, even those who don't have to be sent by email. (99795 lines)
+	Version 10.22.7 :Feb 11, 2011	"Sent" and "Seen" are replaced by status in notif table. (? lines)
+	Version 10.22.6 :Feb 11, 2011	Mark filenames are shown in notifications. (99743 lines)
+	Version 10.22.5 :Feb 10, 2011	Internal changes related to notifications. (99707 lines)
+	Version 10.22.4 :Feb 10, 2011	A short view of exam announcements is included in notifications.
+					Marks code is added to marks table, in order to be used in notifications table. (99725 lines)
+	Version 10.22.3 :Feb 10, 2011	Forum type is no longer stored in notifications table. Instead, forum type is got from post code.
+					Fixed bug when storing in notifications table the institution, degree and course codes for forums. (99679 lines)
+	Version 10.22.2 :Feb 10, 2011	Exam announcement code is stored in notifications table when a teacher creates/modifies an exam announcement. (99645 lines)
+	Version 10.22.1 :Feb 09, 2011	A short view of notices, messages and forum replies is included in notifications. (99644 lines)
+	Version 10.22   :Feb 08, 2011	Sending of email in a notification is cancelled when user visit the event which caused the notification. (99518 lines)
+	Version 10.21.3 :Feb 07, 2011	Changes in list my notifications. (99461 lines)
+	Version 10.21.2 :Feb 06, 2011	Changes in list my notifications. (99432 lines)
+	Version 10.21.1 :Feb 06, 2011	Changes in list my notifications. (99395 lines)
+	Version 10.21   :Feb 05, 2011	New option to list my notifications. (99280 lines)
+	Version 10.20.1 :Feb 04, 2011	Starting new SOAP web service function to get notifications of a user.
+					gsoap updated to version 2.8.1 (2011/01/14) (99111 lines)
+	Version 10.20   :Jan 24, 2011	Administrators options are moved to users tab.
+					Degree tab is renamed as system tab.
+					Users tab is splitted into two tabs: users and enrollment. (99030 lines)
+	Version 10.19.1 :Jan 23, 2011	Changes in option to view the connected users. (98898 lines)
+	Version 10.19   :Jan 23, 2011	New option to view the connected users. (98882 lines)
+	Version 10.18   :Jan 22, 2011	New option to change the rol of the logged user. (98788 lines)
+	Version 10.17   :Jan 20, 2011	Checked and fixed order of messages translated. (98724 lines)
+	Version 10.16.12:Jan 20, 2011	Several messages translated, only to english and spanish (0 messages to be translated). (98748 lines)
+	Version 10.16.11:Jan 19, 2011	Several messages translated, only to english and spanish (still 8 messages to be translated). (98629 lines)
+	Version 10.16.10:Jan 18, 2011	Several messages translated, only to english and spanish (still 11 messages to be translated). (98563 lines)
+	Version 10.16.9 :Jan 18, 2011	Several messages translated, only to english and spanish (still 21 messages to be translated). (98490 lines)
+	Version 10.16.8 :Jan 17, 2011	Several messages translated, only to english and spanish (still 31 messages to be translated). (98353 lines)
+	Version 10.16.7 :Jan 04, 2011	Added subtitle for each action. (98290 lines)
+	Version 10.16.6 :Jan 04, 2011	Message "0 new messages" is no longer shown when user has not new messages. (98242 lines)
+	Version 10.16.5 :Jan 04, 2011	Changes in layout for mobile devices. (98245 lines)
+	Version 10.16.4 :Jan 03, 2011	Changes in layout for mobile devices. (98245 lines)
+	Version 10.16.3 :Jan 03, 2011	Changes in layout for mobile devices. (98244 lines)
+	Version 10.16.2 :Dec 31, 2010	Changes in layout for mobile devices. (98241 lines)
+	Version 10.16.1 :Dec 30, 2010	Changes in layout for mobile devices. (98235 lines)
+	Version 10.16   :Dec 29, 2010	Changes in layout for mobile devices. (98231 lines)
+	Version 10.15.5 :Dec 28, 2010	Changes in layout for mobile devices. (98120 lines)
+	Version 10.15.4 :Dec 27, 2010	Several messages translated, only to english and spanish (still 37 messages to be translated). (98354 lines)
+	Version 10.15.3 :Dec 26, 2010	Several messages translated, only to english and spanish (still 46 messages to be translated). (98265 lines)
+	Version 10.15.2 :Dec 21, 2010	Changes in layout for mobile devices. (98197 lines)
+	Version 10.15.1 :Dec 19, 2010	Changes in layout for mobile devices.
+	Version 10.15   :Dec 19, 2010	Changes in layout for mobile devices. (97736 lines)
+	Version 10.14.1 :Dec 14, 2010	Size is not shown for folders.
+	Version 10.14   :Dec 14, 2010	Support for web services accessed directly via mobile devices. (97595 lines)
+	Version 10.13.15:Dec 12, 2010	Private directory of photos moves from /var/lib/mysql/photo to /var/www/swad/photo. (97391 lines)
+
+					Above this, blank lines are not numbered
+					Below this, blank lines are numbered
+
+	Version 10.13.14:Dec 09, 2010	Several messages translated, only to english and spanish (still 49 messages to be translated). (109059 lines)
+	Version 10.13.13:Dec 08, 2010	Several messages translated, only to english and spanish (still 55 messages to be translated). (108991 lines)
+	Version 10.13.12:Dec 08, 2010	Several messages translated, only to english and spanish (still 68 messages to be translated). (108845 lines)
+	Version 10.13.11:Dec 08, 2010	Several messages translated, some of them only to english and spanish (still 73 messages to be translated). (108777 lines)
+	Version 10.13.10:Dec 08, 2010	Several messages translated, only to english and spanish (still 83 messages to be translated). (108727 lines)
+	Version 10.13.9 :Dec 07, 2010	Several messages translated, only to english and spanish (still 91 messages to be translated). (108601 lines)
+	Version 10.13.8 :Dec 07, 2010	Several messages translated, only to english and spanish (still 99 messages to be translated). (108485 lines)
+	Version 10.13.7 :Dec 07, 2010	Several messages translated, only to english and spanish (still 105 messages to be translated). (108425 lines)
+	Version 10.13.6 :Dec 06, 2010	Several messages translated, only to english and spanish (still 118 messages to be translated). (108280 lines)
+	Version 10.13.5 :Dec 06, 2010	Several messages translated, some of them only to english and spanish (still 127 messages to be translated). (108140 lines)
+	Version 10.13.4 :Dec 06, 2010	Several messages translated, only to english and spanish (still 141 messages to be translated). (107992 lines)
+	Version 10.13.3 :Dec 04, 2010	Fixed small bug in surveys. (107874 lines)
+	Version 10.13.2 :Dec 01, 2010	Several messages translated, some of them only to english and spanish (still 153 messages to be translated). (107873 lines)
+	Version 10.13.1 :Dec 01, 2010	Several messages translated, only to english and spanish (still 172 messages to be translated). (107730 lines)
+	Version 10.13   :Nov 30, 2010	New option to reset surveys (set answers to zero). (107679 lines)
+	Version 10.12.2 :Nov 30, 2010	Graphic changes in surveys. (107529 lines)
+	Version 10.12.1 :Nov 30, 2010	Increase disk quota for briefcases.
+					Changes in forums.
+					Changed small icon for update/recycle.
+					Changed icon for surveys. (107532 lines)
+	Version 10.12   :Nov 29, 2010	Surveys are published for all users. (107522 lines)
+	Version 10.11.9 :Nov 29, 2010	Changes in surveys. (107521 lines)
+	Version 10.11.8 :Nov 29, 2010	Changes in surveys. (107447 lines)
+	Version 10.11.7 :Nov 28, 2010	Changes in surveys related to location range. (107390 lines)
+	Version 10.11.6 :Nov 28, 2010	Changes in surveys related to location range. (107371 lines)
+	Version 10.11.5 :Nov 26, 2010	Changes in surveys.
+					Changes in location ranges (platform, degree, course). (107314 lines)
+	Version 10.11.4 :Nov 25, 2010	Optimizations in surveys. (107246 lines)
+	Version 10.11.3 :Nov 24, 2010	Icons based on CD/DVD are changed to icons based on folders. (107246 lines)
+	Version 10.11.2 :Nov 24, 2010	Hidden files/folders are shown in light style. (107245 lines)
+	Version 10.11.1 :Nov 24, 2010	Hidden/visible icons are replaced by eyes. (107225 lines)
+	Version 10.11   :Nov 23, 2010	Optimization in database queries when counting number of rows. (107222 lines)
+	Version 10.10.5 :Nov 23, 2010	Changes in surveys related to answers in database. (108448 lines)
+	Version 10.10.4 :Nov 22, 2010	"Download" is renamed as "Documents". (108477 lines)
+	Version 10.10.3 :Nov 22, 2010	Graphic changes in white theme, now selected as default. (108476 lines)
+	Version 10.10.2 :Nov 21, 2010	Changes in surveys. (108475 lines)
+	Version 10.10.1 :Nov 21, 2010	Changes in surveys. (108432 lines)
+	Version 10.10   :Nov 21, 2010	Changes in layout. (108338 lines)
+	Version 10.9.5  :Nov 21, 2010	Showed status of each survey. (108339 lines)
+	Version 10.9.4  :Nov 21, 2010	Graphic changes in assignments. (108189 lines)
+	Version 10.9.3  :Nov 21, 2010	Form to select types of users who can answer a survey. (108174 lines)
+	Version 10.9.2  :Nov 20, 2010	Several messages translated, some of them only to english and spanish (still 178 messages to be translated). (108124 lines)
+	Version 10.9.1  :Nov 19, 2010	Several messages translated, some of them only to english and spanish (still 192 messages to be translated). (107981 lines)
+	Version 10.9    :Nov 18, 2010	Internal changes in parameters with multiple values.
+					The number of recipients in messages written by students is now limited. (107871 lines)
+	Version 10.8.3  :Nov 15, 2010	Several messages translated, some of them only to english and spanish (still 196 messages to be translated). (107795 lines)
+	Version 10.8.2  :Nov 15, 2010	Changes in surveys. (107711 lines)
+	Version 10.8.1  :Nov 15, 2010	Changes in surveys related with deletions in database. (107677 lines)
+	Version 10.8    :Nov 14, 2010	Added new white theme. (107583 lines)
+	Version 10.7.14 :Nov 08, 2010	Several messages translated, only to english and spanish (still 206 messages to be translated). (107550 lines)
+	Version 10.7.13 :Nov 07, 2010	Changes in layout of tables with frame. (107536 lines)
+	Version 10.7.12 :Nov 07, 2010	Changes in surveys. (107536 lines)
+	Version 10.7.11 :Nov 07, 2010	Changes in surveys. (107440 lines)
+	Version 10.7.10 :Nov 07, 2010	Changes in surveys. (107355 lines)
+	Version 10.7.9  :Nov 06, 2010	User's answers to a survey are stored into database. (107214 lines)
+	Version 10.7.8  :Nov 06, 2010	Change in list of threads inside a forum. (107028 lines)
+	Version 10.7.7  :Nov 04, 2010	Several messages translated, only to english and spanish (still 216 messages to be translated).
+					Added file extension .dwd (Davka writer, an hebrew word processor). (107012 lines)
+	Version 10.7.6  :Nov 03, 2010	Degree administrators can register/remove several teachers in/from a course. (106850 lines)
+	Version 10.7.5  :Nov 03, 2010	Changes in edition of surveys.
+					Several internal optimizations. (106835 lines)
+	Version 10.7.4  :Nov 02, 2010	Changes in edition of surveys. (106841 lines)
+	Version 10.7.3  :Oct 31, 2010	Changes in edition of surveys. (106685 lines)
+	Version 10.7.2  :Oct 31, 2010	Changes in edition of surveys. (106679 lines)
+	Version 10.7.1  :Oct 30, 2010	Changes in edition of surveys. (106742 lines)
+	Version 10.7    :Oct 30, 2010	Internal change: new functions to send hidden parameters. (106709 lines)
+	Version 10.6.4  :Oct 30, 2010	Changes in edition of surveys.
+					Several messages translated, only to english and spanish (still 224 messages to be translated) (106817 lines)
+	Version 10.6.3  :Oct 30, 2010	Hidden/visible icons are replaced by closed/open icons. (107109 lines)
+	Version 10.6.2  :Oct 29, 2010	Changes in edition of surveys. (107032 lines)
+	Version 10.6.1  :Oct 28, 2010	Changes in edition of surveys. (106866 lines)
+	Version 10.6    :Oct 24, 2010	Changes in edition of surveys. (105796 lines)
+	Version 10.5.2  :Oct 23, 2010	Several messages translated, only to english and spanish (still 222 messages to be translated). (105080 lines)
+	Version 10.5.1  :Oct 21, 2010	Changes in style sheet and images for grey theme. (104925 lines)
+	Version 10.5    :Oct 20, 2010	Added new grey theme. (104924 lines)
+	Version 10.4.1  :Oct 17, 2010	Fixed bug in table of actions. (104868 lines)
+	Version 10.4    :Oct 17, 2010	New option to create surveys. (104867 lines)
+	Version 10.3.4  :Oct 16, 2010	Actions like "show print view" are shown in a new blank window, not in a popup. (103722 lines)
+	Version 10.3.3  :Oct 16, 2010	Changes in search/select option. (103738 lines)
+	Version 10.3.2  :Oct 14, 2010	Hidden assignments are shown in lighter colours. (103729 lines)
+	Version 10.3.1  :Oct 14, 2010	Fixed bug reported by F. Javier Fernández Baldomero: no folders must be created for hidden assignments. (103716 lines)
+	Version 10.3    :Oct 13, 2010	Assignments can be hidden/shown by teachers. (103714 lines)
+	Version 10.2.4  :Oct 13, 2010	Basic information about exam announcements is placed in RSS feeds. (103559 lines)
+	Version 10.2.3  :Oct 13, 2010	New module swad_RSS for managing RSS feeds. (103446 lines)
+	Version 10.2.2  :Oct 13, 2010	Fixed bug when creating RSS file. (103351 lines)
+	Version 10.2.1  :Oct 13, 2010	Links to RSS files are shown. (103341 lines)
+	Version 10.2    :Oct 12, 2010	Notices are published via RSS 2.0. One RSS file is created for each course. (103277 lines)
+	Version 10.1    :Oct 06, 2010	Green icon is replace by a button when editing new items. (103045 lines)
+	Version 10.0    :Sep 26, 2010	Change to year 2010-2011.
+					New items are moved to top of page when editing degrees, courses, etc. (102898 lines)
+	Version  9.51.1 :Jul 21, 2010	Small changes related to connected users. (102921 lines)
+	Version  9.51   :Jul 21, 2010	Connected users are "refreshed" after a few seconds using Javascript on client side. (102923 lines)
+	Version  9.50.1 :Jul 20, 2010	Fixed bug in drawing of a month. (102756 lines)
+	Version  9.50   :Jul 20, 2010	The parameters NxtTab and NxtAct are passed as numbers instead of strings. (102754 lines)
+	Version  9.49.2 :Jul 20, 2010	Small change in table log_comments. (102755 lines)
+	Version  9.49.1 :Jul 20, 2010	Fixed bug in statistics per course. (102754 lines)
+	Version  9.49   :Jun 20, 2010	IP address size is changed from 40 to 15 in order to reduce space required in database tables.
+					Log comments are stored in a separate table. (102753 lines)
+	Version  9.48.3 :Jun 19, 2010	Several messages translated (still 223 messages to be translated). (102689 lines)
+	Version  9.48.2 :Jul 17, 2010	Added column Obsolete to actions table. (102517 lines)
+	Version  9.48.1 :Jul 16, 2010	The text of the actions is no longer stored in log tables. (102517 lines)
+	Version  9.48   :Jul 16, 2010	The text of the actions is moved to a database table. (102517 lines)
+	Version  9.47   :Jul 15, 2010	The text of the actions is moved to a new internal table. (102458 lines)
+	Version  9.46.27:Jun 22, 2010	Several messages translated, only to english and spanish (still 234 messages to be translated). (99532 lines)
+	Version  9.46.26:Jun 21, 2010	Fixed bug in exam annoluncements, reported by Eva Martínez Ortigosa. (99461 lines)
+	Version  9.46.25:Jun 20, 2010	Several messages translated, only to english and spanish (still 239 messages to be translated). (99461 lines)
+	Version  9.46.24:Jun 19, 2010	Several messages translated, only to english and spanish (still 249 messages to be translated).
+					Don't show error message when sending pending notification mails. (99320 lines)
+	Version  9.46.23:Jun 19, 2010	Several messages translated, only to english and spanish (still 255 messages to be translated). (99218 lines)
+	Version  9.46.22:Jun 19, 2010	Several messages translated, only to english and spanish (still 269 messages to be translated). (99049 lines)
+	Version  9.46.21:Jun 15, 2010	Several messages translated, only to english and spanish (still 280 messages to be translated).
+					New icon to select/search course in head. (98944 lines)
+	Version  9.46.20:Jun 12, 2010	Several messages translated, only to english and spanish (still 285 messages to be translated). (98884 lines)
+	Version  9.46.19:Jun 12, 2010	Several messages translated, only to english and spanish (still 299 messages to be translated). (98704 lines)
+	Version  9.46.18:Jun 11, 2010	Several messages translated, only to english and spanish (still 306 messages to be translated). (98635 lines)
+	Version  9.46.17:Jun 11, 2010	Several messages translated, only to english and spanish (still 312 messages to be translated).
+					Filenames not valid are converted to valid when uploaded. (98581 lines)
+	Version  9.46.16:Jun 10, 2010	Several messages translated, only to english and spanish (still 320 messages to be translated). (98488 lines)
+	Version  9.46.15:Jun 09, 2010	Several messages translated, only to english and spanish (still 326 messages to be translated). (98432 lines)
+	Version  9.46.14:Jun 09, 2010	Several messages translated, only to english and spanish (still 332 messages to be translated). (98396 lines)
+	Version  9.46.13:Jun 09, 2010	Several messages translated, only to english and spanish (still 337 messages to be translated). (98337 lines)
+	Version  9.46.12:Jun 07, 2010	Several messages translated, only to english and spanish (still 346 messages to be translated). (98207 lines)
+	Version  9.46.11:Jun 07, 2010	Several messages translated, only to english and spanish (still 349 messages to be translated). (98125 lines)
+	Version  9.46.10:May 28, 2010	Several messages translated, only to english and spanish (still 353 messages to be translated). (98072 lines)
+	Version  9.46.9 :May 27, 2010	Several messages translated, only to english and spanish (still 363 messages to be translated). (97973 lines)
+	Version  9.46.8 :May 25, 2010	Several messages translated, only to english and spanish (still 369 messages to be translated). (97948 lines)
+	Version  9.46.7 :May 25, 2010	Several messages translated, only to english and spanish (still 377 messages to be translated). (97878 lines)
+	Version  9.46.6 :May 25, 2010	Several messages translated, only to english and spanish (still 386 messages to be translated). (97788 lines)
+	Version  9.46.5 :May 20, 2010	Icons and users' photos are moved to other directories in disk.
+					Several messages translated, only to english and spanish (still 405 messages to be translated). (97152 lines)
+	Version  9.46.4 :May 04, 2010	Fixed bug in MFU actions, reported by Rafael Ábalos Marco. (97084 lines)
+	Version  9.46.3 :May 03, 2010	Several messages translated, only to english and spanish (still 411 messages to be translated). (97076 lines)
+	Version  9.46.2 :May 03, 2010	Several messages translated, only to english and spanish (still 427 messages to be translated). (96350 lines)
+	Version  9.46.1 :May 03, 2010	Several messages translated, only to english and spanish (still 449 messages to be translated). (96129 lines)
+	Version  9.46   :Apr 27, 2010	When a student confirms that he has read a given course info, this fact is stored in database. (95955 lines)
+	Version  9.45.6 :Apr 27, 2010	Students are informed about course info that must read. (95737 lines)
+	Version  9.45.5 :Apr 27, 2010	Teacher's preference about whether info must be read by students is stored in database. (95598 lines)
+	Version  9.45.4 :Apr 22, 2010	New checkbox for teachers to force student to read some course info. (95452 lines)
+	Version  9.45.3 :Apr 21, 2010	Fixed bug when changing to a new course after creation. (95355 lines)
+	Version  9.45.2 :Apr 12, 2010	The list of countries can be ordered by number of users. (95353 lines)
+	Version  9.45.1 :Apr 08, 2010	The list of countries can be retrieved without the number of institutions. (95341 lines)
+	Version  9.45   :Mar 24, 2010	Added country field to common record.
+					The number of users from each country is listed in listing of countries. (95318 lines)
+	Version  9.44.6 :Mar 23, 2010	Country is shown for each entry in list of institutions. (95177 lines)
+	Version  9.44.5 :Mar 23, 2010	Changes in edition of countries. (95124 lines)
+	Version  9.44.4 :Mar 23, 2010	Changes in edition of institutions: new field country for each institution. (95129 lines)
+	Version  9.44.3 :Mar 23, 2010	Changes in edition of countries. (95007 lines)
+	Version  9.44.2 :Mar 22, 2010	Changes in edition of countries. (94909 lines)
+	Version  9.44.1 :Mar 22, 2010	Changes in edition of countries.
+					Assignments are ordered also by title. (94841 lines)
+	Version  9.44   :Mar 22, 2010	New option to see and edit countries. (94819 lines)
+	Version  9.43.10:Mar 21, 2010	Several messages translated, only to english and spanish (still 457 messages to be translated).
+					The word "hebra" is renamed as "discusión" in Spanish. (93666 lines)
+	Version  9.43.9 :Mar 20, 2010	When a course is created or updated, a link is shown to go to that course.
+					Added two new allowed file extensions. (93627 lines)
+	Version  9.43.8 :Mar 20, 2010	Several messages translated, only to english and spanish (still 457 messages to be translated). (93581 lines)
+	Version  9.43.7 :Mar 20, 2010	Several messages translated, only to english and spanish (still 472 messages to be translated). (93430 lines)
+	Version  9.43.6 :Mar 18, 2010	Fixed MySQL wrong query. (93224 lines)
+	Version  9.43.5 :Mar 17, 2010	Fixed small bug, reported by Germán Luzón González.
+					Several messages translated, only to english and spanish (still 498 messages to be translated). (93223 lines)
+	Version  9.43.4 :Mar 07, 2010	New link to enter from external site. (93126 lines)
+	Version  9.43.3 :Mar 07, 2010	Non existing users coming from external site are created as new swad users. (93104 lines)
+	Version  9.43.2 :Mar 05, 2010	New option to call the roll, still empty. (93086 lines)
+	Version  9.43.1 :Feb 27, 2010	Changed some criteria for indicators. (93054 lines)
+	Version  9.43   :Feb 27, 2010	When a teacher changes to one of his/her courses, a warning is shown to indicate how many indicators are valid. (93055 lines)
+	Version  9.42.8 :Feb 27, 2010	A count of how many courses have n indicators valid is shown in statistics of courses.
+					New function to compute the indicators of a course. (93032 lines)
+	Version  9.42.7 :Feb 25, 2010	Fixed bug in search of user's ID in first column of an HTML table of marks. (92975 lines)
+	Version  9.42.6 :Feb 25, 2010	Changes in search of user's ID in first column of an HTML table of marks. (92978 lines)
+	Version  9.42.5 :Feb 24, 2010	Changes in Deutsch translation, by Rafael Barranco-Droege.
+					Fixed bug in homework zip file. (92947 lines)
+	Version  9.42.4 :Feb 19, 2010	Changes in the function used to convert strings that allow to write in other alphabets, such as Cyrillic. (92930 lines)
+	Version  9.42.3 :Feb 17, 2010	Changes in file of translations. (92911 lines)
+	Version  9.42.2 :Feb 17, 2010	Mail domains can be ordered by three criteria: domain, info or number of users. (90496 lines)
+	Version  9.42.1 :Feb 16, 2010	Several actions no longer use lockfile.
+					The number of users with each of the mail domains is listed. (90365 lines)
+	Version  9.42   :Feb 15, 2010	New action to edit mail domains allowed for notifications. (90291 lines)
+	Version  9.41.5 :Feb 13, 2010	New table notices_deleted.
+					Deleted notices are moved to notices_deleted. (89403 lines)
+	Version  9.41.4 :Feb 12, 2010	Changes in detection of user's ID in first column of the HTML table inside a file of marks.
+					A superuser can eliminate totally from the platform a list of users who belong to a course. (89316 lines)
+	Version  9.41.3 :Feb 09, 2010	Changes in style sheet to display properly in Ubuntu.
+					Notifications are sent only to selected mail domains. (89233 lines)
+	Version  9.41.2 :Feb 09, 2010	Changes in calculation of most frequently actions. (89182 lines)
+	Version  9.41.1 :Feb 08, 2010	Changes in calculation of most frequently actions. (89173 lines)
+	Version  9.41   :Feb 07, 2010	Most frequently actions are shown in a quick menu. (89150 lines)
+	Version  9.40.1 :Feb 04, 2010	Added new allowed file extension and MIME type. (88948 lines)
+	Version  9.40   :Feb 04, 2010	Changed column LastPageMsgRec to LastPageMsgRcv in table os sessions.
+					New table msg_content_deleted.
+					Contents of fully deleted messages are moved to msg_content_deleted. (88945 lines)
+	Version  9.39.5 :Feb 04, 2010	Fixed bug in pagination of messages. (88909 lines)
+	Version  9.39.4 :Feb 04, 2010	Recipients of messages are listed alphabetically. (88907 lines)
+	Version  9.39.3 :Feb 04, 2010	New table msg_rcv_deleted.
+					Deleted received messages are moved to msg_rcv_deleted. (88877 lines)
+	Version  9.39.2 :Feb 03, 2010	New table msg_snt_deleted.
+					Deleted sent messages are moved to msg_snt_deleted. (88826 lines)
+	Version  9.39.1 :Feb 03, 2010	Optimization for speed in querys of messages filtered by content. (88796 lines)
+	Version  9.39   :Feb 02, 2010	New table msg_content with subject and content of sent messages. (88944 lines)
+	Version  9.38.2 :Feb 02, 2010	Table messages is renamed to msg_snt.
+					Table msg_received is renamed to msg_rcv. (88714 lines)
+	Version  9.38.1 :Feb 02, 2010	Changes in file of translations. (88684 lines)
+	Version  9.38   :Feb 01, 2010	New option with introductory information about the course.
+					Changes in edition of course info. (87958 lines)
+	Version  9.37.2 :Feb 01, 2010	Changes in file of translations. (87805 lines)
+	Version  9.37.1 :Feb 01, 2010	New row for total stats of forums. (87245 lines)
+	Version  9.37   :Feb 01, 2010	All modules in swad have been renamed at the suggestion of J.J.Merelo. (87110 lines)
+	Version  9.36.8 :Jan 31, 2010	Small change in reception of ZIP file for course info. (87109 lines)
+	Version  9.36.7 :Jan 31, 2010	Several messages translated (still 492 messages to be translated). (87106 lines)
+	Version  9.36.6 :Jan 30, 2010	Changes in layout of header.
+					Deprecated "align" attributes in tags "img" are changed to CSS styles. (87096 lines)
+	Version  9.36.5 :Jan 30, 2010	Changes in layout of header. (87043 lines)
+	Version  9.36.4 :Jan 27, 2010	Fixed security hole in call to command, detected by J.J.Merelo. (87092 lines)
+	Version  9.36.3 :Jan 26, 2010	A new parameter passed by the GET method allows entering SWAD with a selected layout. (87031 lines)
+	Version  9.36.2 :Jan 26, 2010	Changes in log in / log out. (87016 lines)
+	Version  9.36.1 :Jan 26, 2010	Changes in layout of top of page. (86978 lines)
+	Version  9.36   :Jan 25, 2010	A lot of changes in log in / log out. (86994 lines)
+	Version  9.35.7 :Jan 24, 2010	My courses are now ordered by degree short name / course short name.
+					Changes in selector of layout and theme. (86905 lines)
+	Version  9.35.6 :Jan 24, 2010	Changes in selection and search of courses. (86844 lines)
+	Version  9.35.5 :Jan 23, 2010	Changes in Stats > Courses stats. (86739 lines)
+	Version  9.35.4 :Jan 22, 2010	Fixed bug in deletion of a course. (86697 lines)
+	Version  9.35.3 :Jan 22, 2010	Changes in date-time shown above the current month.
+					New criteria to assess courses in Stats > Courses stats. (86690 lines)
+	Version  9.35.2 :Jan 21, 2010	Changes in selection and search of courses.
+					Changes in date-time shown above the current month. (86649 lines)
+	Version  9.35.1 :Jan 21, 2010	Small changes in selector of courses. (86530 lines)
+	Version  9.35   :Jan 20, 2010	Changes in layout.
+					Selection of courses is moved from left menu to search option. (86508 lines)
+	Version  9.34.2 :Jan 18, 2010	Layout is stored in table of IP preferences, so it is remembered even when no user logged. (86452 lines)
+	Version  9.34.1 :Jan 18, 2010	Stats about number of users with each layout are shown. (86437 lines)
+	Version  9.34   :Jan 18, 2010	Layout is selected in preferences and stored in database. (86364 lines)
+	Version  9.33.2 :Jan 18, 2010	Changes in layout of top of page. (86208 lines)
+	Version  9.33.1 :Jan 17, 2010	Changes in layout of top of page. (86184 lines)
+	Version  9.33   :Jan 17, 2010	Changes in layout of top of page. (86185 lines)
+	Version  9.32.4 :Jan 17, 2010	Changes in layout of connected users.
+					Fixed bug in connected users. (86190 lines)
+	Version  9.32.3 :Jan 16, 2010	Changes in interface.
+					Simplified the search for courses from the home page. (86141 lines)
+	Version  9.32.2 :Jan 15, 2010	Changes in simple interface.
+					Fixed bug when a student want to change his/her groups. (86006 lines)
+	Version  9.32.1 :Jan 15, 2010	Changes in simple interface. (85870 lines)
+	Version  9.32   :Jan 15, 2010	New interface more simple for small and mobile devices. (85853 lines)
+	Version  9.31.2 :Jan 13, 2010	Moved icons for front page of swad from icon folder to another folder.
+					Moved images for yellow notes to a special folder inside icon directory. (85441 lines)
+	Version  9.31.1 :Jan 13, 2010	New field in table of actions to describe if an action send normal plain forms or data (files). (85432 lines)
+	Version  9.31   :Jan 12, 2010	New checks to validate indicators in statistics of courses.
+					When getting info source of a course, new checks are made to detect empty info. (85442 lines)
+	Version  9.30.2 :Jan 11, 2010	Changes in the names of several actions.
+					Icons directory has been cleaned, deleting obsolete icons.
+					Several messages have been marked as needing translation (still 485 messages to be translated). (85263 lines)
+	Version  9.30.1 :Jan 09, 2010	The external module to import courses and students is moved completely apart from swad.
+					The number of lines in the source code of SWAD does not take into account that external module. (85219 lines)
+	Version  9.30   :Jan 08, 2010	Some constants of the external module to import courses and students are moved to swad_config.h.
+					First version published as free software in the SWAD web. (85721 lines)
+	Version  9.29.13:Jan 08, 2010	Minor changes in soap server. (85318 lines)
+	Version  9.29.12:Jan 08, 2010	Several messages translated, only to english and spanish (still 475 messages to be translated). (85317 lines)
+	Version  9.29.11:Jan 08, 2010	Several messages translated, only to english and spanish (still 498 messages to be translated). (85090 lines)
+	Version  9.29.10:Jan 07, 2010	Database constants are defined in swad_config.h.
+					Several messages translated (still 536 messages to be translated). (84930 lines)
+	Version  9.29.9 :Jan 07, 2010	The list of future improvements is moved apart from the source code. (84784 lines)
+	Version  9.29.8 :Jan 07, 2010	Several messages translated (still 548 messages to be translated). (84957 lines)
+	Version  9.29.7 :Jan 07, 2010	Several messages translated (still 565 messages to be translated). (84764 lines)
+	Version  9.29.6 :Jan 07, 2010	Several messages translated, only to english and spanish (still 578 messages to be translated). (84633 lines)
+	Version  9.29.5 :Jan 07, 2010	Several messages translated, only to english and spanish (still 588 messages to be translated). (84600 lines)
+	Version  9.29.4 :Jan 07, 2010	Several messages translated, only to english and spanish (still 595 messages to be translated). (84533 lines)
+	Version  9.29.3 :Jan 06, 2010	Commands called from SWAD are defined in swad_config.h.
+					Expiration times and other periods are defined in swad_config.h (84358 lines)
+	Version  9.29.2 :Jan 04, 2010	Several messages translated, only to english and spanish (still 607 messages to be translated). (84322 lines)
+	Version  9.29.1 :Jan 01, 2010	Several messages translated, only to english and spanish (still 611 messages to be translated).
+					Changes on table marks in database. (84286 lines)
+	Version  9.29   :Jan 01, 2010	Several messages translated, only to english and spanish (still 613 messages to be translated).
+					window.status messages deleted because the don't work in recent web browsers. (84233 lines)
+	Versión  9.28.2 :31/dic/2009	Añadida felicitación de año nuevo. (84197 líneas)
+	Versión  9.28.1 :31/dic/2009	Durante la creación de las tablas de la base de datos se muestran comentarios por pantalla.
+					Comentarios en el archivo de configuración swad_config.h.
+					Añadidos comentarios iniciales en cada uno de los archivos fuente. (84175 líneas)
+	Versión  9.28   :31/dic/2009	Marcados más mensajes para futura traducción (617 en total).
+					Numerosos cambios internos en mensajes. (83900 líneas)
+	Versión  9.27.2 :31/dic/2009	Se eliminan las sesiones importadas antiguas. (83954 líneas)
+	Versión  9.27.1 :31/dic/2009	Renombradas las dos tablas de la base de datos relacionadas con las fichas de alumnos en la asignatura. (83936 líneas)
+	Versión  9.27   :31/dic/2009	Los campos de la tabla log se renombran para ser exactos a los de la tabla log_recent. (83935 líneas)
+	Versión  9.26.8 :30/dic/2009	Algunos cambios internos. (83973 líneas)
+	Versión  9.26.7 :30/dic/2009	Cambiados los nombres de los directorios y de los ficheros que guardan los temarios.
+					Eliminados archivos antiguos de configuración y descripción de asignaturas que ya no se usan. (83962 líneas)
+	Versión  9.26.6 :30/dic/2009	Marcados más mensajes para futura traducción (534 en total). (83956 líneas)
+	Versión  9.26.5 :30/dic/2009	Traducción de varios mensajes. (83961 líneas)
+	Versión  9.26.4 :30/dic/2009	Marcados otros 125 mensajes para futura traducción (475 en total). (83924 líneas)
+	Versión  9.26.3 :30/dic/2009	Traducción de varios mensajes.
+					Marcados unos 350 mensajes para futura traducción. (83884 líneas)
+	Versión  9.26.2 :30/dic/2009	Corregido error en estilo. (83880 líneas)
+	Versión  9.26.1 :29/dic/2009	Traducción de varios mensajes. (83879 líneas)
+	Versión  9.26   :29/dic/2009	Traducción de varios mensajes.
+					Revisión exhaustiva de todos los includes.
+					Cambio de algunos módulos por otros.
+					Numerosos cambios internos. (83844 líneas)
+	Versión  9.25.8 :29/dic/2009	Traducción de varios mensajes de error. (83701 líneas)
+	Versión  9.25.7 :28/dic/2009	Traducción de varios mensajes de error. (83766 líneas)
+	Versión  9.25.6 :28/dic/2009	Traducción de varios mensajes de error. (83734 líneas)
+	Versión  9.25.5 :28/dic/2009	Optimización en todas las consultas INSERT que devuelven el código del último item insertado. (83715 líneas)
+	Versión  9.25.4 :28/dic/2009	Optimización y traducción al inglés de mensajes de error en todas las consultas REPLACE a la base de datos. (83712 líneas)
+	Versión  9.25.3 :28/dic/2009	Optimización y traducción al inglés de mensajes de error en todas las consultas INSERT a la base de datos.
+					Eliminado archivo fuente no usado. (83709 líneas)
+	Versión  9.25.2 :28/dic/2009	Optimización y traducción al inglés de mensajes de error en todas las consultas UPDATE a la base de datos. (84522 líneas)
+	Versión  9.25.1 :28/dic/2009	Optimización y traducción al inglés de mensajes de error en todas las consultas DELETE a la base de datos. (84723 líneas)
+	Versión  9.25   :28/dic/2009	Traducidos a inglés muchos mensajes de error relacionados con la base de datos. (84849 líneas)
+	Versión  9.24.2 :27/dic/2009	Optimización en el número de filas devueltas por las consultas SELECT en la base de datos. (84390 líneas)
+	Versión  9.24.1 :27/dic/2009	Optimización en todas las consultas SELECT en la base de datos. (85147 líneas)
+	Versión  9.24   :26/dic/2009	Optimización en muchas consultas SELECT en la base de datos. (85884 líneas)
+	Versión  9.23.2 :26/dic/2009	Traducidos a inglés muchos mensajes de error relacionados con la base de datos. (86494 líneas)
+	Versión  9.23.1 :26/dic/2009	Pequeños cambios internos relacionados con la base de datos. (86492 líneas)
+	Versión  9.23   :26/dic/2009	Creación automática de todas las tablas de la base de datos si no existen. (86490 líneas)
+	Versión  9.22.3 :25/dic/2009	Nueva opción para instalar SWAD (aún vacía). (86047 líneas)
+	Versión  9.22.2 :24/dic/2009	Cambios en algunos directorios de iconos. (85945 líneas)
+	Versión  9.22.1 :24/dic/2009	El nombre del servicio de autenticación externo (PRADO) se convierte en una constante fácilmente alterable. (85945 líneas)
+	Versión  9.22   :24/dic/2009	El cliente de PRADO se convierte en un programa externo llamado desde SWAD.
+					SWAD ya no incluye un cliente (PRADO) y un servidor (servicio web de SWAD) SOAP, sino sólo el servidor. (85919 líneas)
+	Versión  9.21.4 :23/dic/2009	Cambios internos en el módulo relacionado con PRADO. (85173 líneas)
+	Versión  9.21.3 :23/dic/2009	Cambios internos en el módulo relacionado con PRADO. (85002 líneas)
+	Versión  9.21.2 :23/dic/2009	Muchos cambios internos en el módulo relacionado con PRADO.
+					Nuevo módulo swad_import.c para alumnos y grupos importados. (84968 líneas)
+	Versión  9.21.1 :22/dic/2009	Algunos cambios internos en el módulo relacionado con PRADO. (84876 líneas)
+	Versión  9.21   :21/dic/2009	Numerosos cambios en swad_web_service.c.
+					Cambios en las reglas para aceptar un ID y un apodo (84958 líneas)
+	Versión  9.20   :20/dic/2009	Cambios de nombres de algunas tablas y muchos campos de tablas de la base de datos. (85201 líneas)
+	Versión  9.19.9 :18/dic/2009	Mejorados comentarios en servicios web y PRADO.
+					Corregido error en edición de actividades. (85134 líneas)
+	Versión  9.19.8 :17/dic/2009	En las estadísticas de asignaturas se muestra el número de profesores y el número de alumnos de cada asignatura. (85181 líneas)
+	Versión  9.19.7 :17/dic/2009	El registro de cambios se sitúa en un archivo aparte swad_changelog.c. (85142 líneas)
+	Versión  9.19.6 :16/dic/2009	Se contemplan más apartados a evaluar en los indicadores de las estadísticas de asignaturas. (85097 líneas)
+	Versión  9.19.5 :16/dic/2009	Se contemplan más apartados a evaluar en los indicadores de las estadísticas de asignaturas. (85091 líneas)
+	Versión  9.19.4 :16/dic/2009	Corregido bug reciente en envío de trabajos detectado por Fermín Sánchez de Medina López-Huertas y Juan Santana Lario. (85000 líneas)
+	Versión  9.19.3 :16/dic/2009	En las estadísticas de asignaturas se muestra si cada asignatura tiene tutorías virtuales o no. (84999 líneas)
+	Versión  9.19.2 :15/dic/2009	En las estadísticas de asignaturas se usan colores verde y rojo, y se muestra si cada asignatura tiene actividades o no. (84886 líneas)
+	Versión  9.19.1 :15/dic/2009	Una vez se ha definido una actividad con envío de archivos activado, éste se permite desactivar siempre que aún no haya ninguna carpeta para esa actividad. (84832 líneas)
+	Versión  9.19   :14/dic/2009	Cuando se elimina una actividad, se eliminan las carpetas asociadas.
+					Una vez se ha definido una actividad con envío de archivos activado, no se puede desactivar (para desactivar el envío sólo queda la posibilidad de eliminar la actividad).
+					Los nombres de las carpetas de actividades se almacenan en la base de datos con sensibilidad a las mayúsculas, pudiendo haber dos carpetas con el mismo nombre y diferentes mayúsculas/minúsculas.
+					No se permite cambiar el nombre a una carpeta de actividad si ya existe alguna carpeta con ese nombre para algún usuario.
+					Cuando se renombra una carpeta de actividad, se eliminan los portapapeles afectados y se renombran las carpetas expandidas afectadas. (84812 líneas)
+	Versión  9.18.2 :14/dic/2009	Se muestran estadísticas de archivos para las actividades. (84579 líneas)
+	Versión  9.18.1 :13/dic/2009	Pequeñas correcciones en la edición de actividades. (84562 líneas)
+	Versión  9.18   :13/dic/2009	Se publica para todos la edición de actividades. (84540 líneas)
+	Versión  9.17.1 :12/dic/2009	Traducción de algunos mensajes relacionados con la paginación. (84514 líneas)
+	Versión  9.17   :12/dic/2009	Cambios internos relacionados con la paginación.
+					Las actividades se listan por páginas. (84487 líneas)
+	Versión  9.16.7 :12/dic/2009	Cambio interno en la forma de listar actividades. (84399 líneas)
+	Versión  9.16.6 :12/dic/2009	Se chequea si un usuario tiene permiso para crear archivos en una determinada actividad. (84431 líneas)
+	Versión  9.16.5 :12/dic/2009	Desde la lista de actividades, se pueden enviar archivos a la carpeta correspondiente. (84393 líneas)
+	Versión  9.16.4 :11/dic/2009	Corregidos algunos bugs relacionados con la edición de actividades. (84344 líneas)
+	Versión  9.16.3 :11/dic/2009	Cuando se elimina un grupo, se eliminan todas sus asociaciones con actividades.
+					Cuando se elimina un tipo de grupo, se eliminan todas las asociaciones de grupos de ese tipo con actividades. (84332 líneas)
+	Versión  9.16.2 :11/dic/2009	Cuando se elimina una asignatura, se eliminan todas sus actividades. (84291 líneas)
+	Versión  9.16.1 :11/dic/2009	Se muestran los nombres de los grupos en los listados de actividades. (84263 líneas)
+	Versión  9.16   :08/dic/2009	Selector para mostrar las actividades asociadas al usuario o todas las actividades. (84185 líneas)
+	Versión  9.15   :08/dic/2009	Los grupos asociados a una actividad se almacenan en la base de datos. (84146 líneas)
+	Versión  9.14.2 :08/dic/2009	Se uniformizan más los listados de grupos. (83935 líneas)
+	Versión  9.14.1 :08/dic/2009	Se uniformizan los listados de grupos. (83953 líneas)
+	Versión  9.14   :07/dic/2009	Se incorpora la selección de grupos al formulario de edición de una actividad. (83999 líneas)
+	Versión  9.13.16:07/dic/2009	Cambio en la tabla de actividades de la base de datos. (83953 líneas)
+	Versión  9.13.15:07/dic/2009	Corregido pequeño bug en zonas comunes, detectado por Estefanía Sanjuan Cortijo. (83952 líneas)
+	Versión  9.13.14:04/dic/2009	Cambios en la edición de actividades. (83990 líneas)
+	Versión  9.13.13:04/dic/2009	En el archivo ZIP con los trabajos, se incluyen actividades y trabajos. (83995 líneas)
+	Versión  9.13.12:04/dic/2009	Sólo se crean carpetas de una actividad si la actividad está abierta. (83948 líneas)
+	Versión  9.13.11:02/dic/2009	Comprobaciones para impedir modificar archivos en actividades cerradas. (83943 líneas)
+	Versión  9.13.10:02/dic/2009	Cambio en el enlace a los foros. (83872 líneas)
+	Versión  9.13.9 :02/dic/2009	Corregido bug en zonas comunes, detectado por el profesor Francisco Gómez Mula. (83846 líneas)
+	Versión  9.13.8 :02/dic/2009	Aumentados muchos tipos de letra, y los iconos de los menús de 24x24 a 32x32. (83848 líneas)
+	Versión  9.13.7 :01/dic/2009	En las carpetas de actividades, se muestran las fechas de inicio y final. (83847 líneas)
+	Versión  9.13.6 :30/nov/2009	Cambia la palabra activity por assignment en inglés.
+					Al editar una actividad, cuando se cambia el nombre de una carpeta de archivos de esa actividad, se renombra esa carpeta para todos los usuarios. (83730 líneas)
+	Versión  9.13.5 :30/nov/2009	Las carpetas de actividades se crean de nuevo internamente con el nombre dado por el profesor.
+					Traducción de algunos mensajes relacionados con la exploración de archivos.
+					Cambios internos en la exploración de archivos. (83647 líneas)
+	Versión  9.13.4 :29/nov/2009	Las carpetas de actividades se crean internamente con un nombre numérico.
+					Cambios internos en la exploración de archivos. (83623 líneas)
+	Versión  9.13.3 :28/nov/2009	Traducidos los mensajes de los resultados de la busqueda de asignaturas / profesores. (83581 líneas)
+	Versión  9.13.2 :28/nov/2009	Cambios en la busqueda de asignaturas / profesores. (83531 líneas)
+	Versión  9.13.1 :28/nov/2009	Cambios en la busqueda de asignaturas / profesores. (83510 líneas)
+	Versión  9.13   :28/nov/2009	Cambios en el diseño de la cabecera y el pie de la página.
+					En la cabecera de la página se pueden buscar asignaturas. (83500 líneas)
+	Versión  9.12.9 :27/nov/2009	Desaparece la información del tamaño de las carpetas en la exploración de archivos.
+					Cambio en el diseño de la cabecera de la página. (83447 líneas)
+	Versión  9.12.8 :26/nov/2009	Numerosas optimizaciones internas en la exploración de archivos. (83433 líneas)
+	Versión  9.12.7 :26/nov/2009	Cambios internos en la exploración de archivos. (83577 líneas)
+	Versión  9.12.6 :26/nov/2009	Cambios internos en la exploración de archivos.
+					Se muestran también las actividades en "Mis trabajos". (83547 líneas)
+	Versión  9.12.5 :25/nov/2009	Numerosos cambios internos y comprobaciones de seguridad en la exploración de archivos. (83507 líneas)
+	Versión  9.12.4 :24/nov/2009	Se crean automáticamente las carpetas del primer nivel de actividades. (83467 líneas)
+	Versión  9.12.3 :22/nov/2009	Pequeños cambios en la edición de actividades. (83410 líneas)
+	Versión  9.12.2 :21/nov/2009	Cambios en la edición de actividades. Se especifica la carpeta donde irán los archivos de la actividad. (83404 líneas)
+	Versión  9.12.1 :21/nov/2009	En las actividades se cambian las fechas de inicio y fin de solo fecha a fecha-hora. (83338 líneas)
+	Versión  9.12   :14/nov/2009	Continúa la creación de zona de archivos para actividades.
+					Numerosos cambios internos en la exploración de archivos. (83165 líneas)
+	Versión  9.11   :13/nov/2009	Comienza la creación de zona de archivos para actividades. (82981 líneas)
+	Versión  9.10.6 :12/nov/2009	Cambios en la edición de actividades. (82550 líneas)
+	Versión  9.10.5 :11/nov/2009	Numerosos cambios en la edición de actividades. (82761 líneas)
+	Versión  9.10.4 :09/nov/2009	Cambios en la edición de actividades. (82765 líneas)
+	Versión  9.10.3 :09/nov/2009	Cambios en la edición de actividades. (82731 líneas)
+	Versión  9.10.2 :09/nov/2009	Cada actividad se puede editar por separado. (82765 líneas)
+	Versión  9.10.1 :05/nov/2009	Numerosos cambios en la opción para proponer actividades. (82684 líneas)
+	Versión  9.10   :04/nov/2009	Nueva opción para proponer actividades. (82505 líneas)
+	Versión  9.9.3  :03/nov/2009	Corregidos errores en el listado de los datos de los alumnos de una titulación. (81318 líneas)
+	Versión  9.9.2  :02/nov/2009	En la eliminación de usuarios antiguos se puede elegir entre alumnos y profesores. (81295 líneas)
+	Versión  9.9.1  :02/nov/2009	Eliminado el código usado para cambiar los ID que empezaban por cero. (81272 líneas)
+	Versión  9.9    :02/nov/2009	La opción de dar de alta/baja alumnos ahora permite dar de alta/baja varios profesores. (81389 líneas)
+	Versión  9.8    :27/oct/2009	Termina la eliminación de los ceros al principio de un ID en los formularios.
+					La tabla usr_data se cambia eliminando todos los ceros iniciales en los ID.
+					Se renombran todas las carpetas y archivos de usuarios cuyo ID empieza por cero.
+					¡Sería necesario cambiar también las tablas log y log_recent! No se hace de momento por el tiempo que requeriría (varias horas). (81335 líneas)
+	Versión  9.7.2  :25/oct/2009	Comienza la eliminación de los ceros al principio de un ID en los formularios. (81086 líneas)
+	Versión  9.7.1  :19/oct/2009	Optimización interna relacionada con la memoria ocupada por la lista de alumnos de la asignatura.
+					Corregido pequeño bug en la lista de correos electrónicos de estudiantes. (80982 líneas)
+	Versión  9.7    :19/oct/2009	En el alta/baja de varios alumnos, ahora hay una cuarta acción: dar de baja a los alumnos no especificados, y de alta a los alumnos especificados. (80963 líneas)
+	Versión  9.6    :17/oct/2009	Eliminadas las opciones de dar de alta varios alumnos y dar de baja varios alumnos, y las correspondientes funciones del programa. (80936 líneas)
+	Versión  9.5    :17/oct/2009	Termina la implementación de alta/baja de alumnos importados de PRADO. (81542 líneas)
+	Versión  9.4.2  :15/oct/2009	Continúa la implementación de alta/baja de alumnos importados de PRADO. (81442 líneas)
+	Versión  9.4.1  :15/oct/2009	Comienza la implementación de alta/baja de alumnos importados de PRADO. (81318 líneas)
+	Versión  9.4    :15/oct/2009	Termina la unificación de las altas y bajas de varios alumnos en una única opción, aunque aún no se abre a todos los profesores. (81408 líneas)
+	Versión  9.3.2  :14/oct/2009	Comienza la unificación de las altas y bajas de varios alumnos en una única opción. (80800 líneas)
+	Versión  9.3.1  :14/oct/2009	Las listas oficiales de grupos y alumnos no se obtienen de PRADO más de una vez por sesión. (80707 líneas)
+	Versión  9.3    :14/oct/2009	Los profesores tienen acceso a sus listas oficiales de grupos y alumnos. (80678 líneas)
+	Versión  9.2.7  :13/oct/2009	Continúa la implementación de la opción para importar la lista de alumnos de una asignatura desde PRADO.
+					Se guarda la consulta de alumnos en una tabla de la base de datos. (80692 líneas)
+	Versión  9.2.6  :09/oct/2009	Continúa la implementación de la opción para importar la lista de alumnos de una asignatura desde PRADO. (80518 líneas)
+	Versión  9.2.5  :08/oct/2009	Continúa la implementación de la opción para importar la lista de alumnos de una asignatura desde PRADO.
+					Se parsea el listado de asignaturas y alumnos devuelto por PRADO en formato XML. (80373 líneas)
+	Versión  9.2.4  :06/oct/2009	Mejoras internas en la identificación desde PRADO. Se almacena la sesión de PRADO en una tabla de la base de datos.
+					Comienza la implementación de una nueva opción para importar la lista de alumnos de una asignatura desde PRADO. (80133 líneas)
+	Versión  9.2.3  :06/oct/2009	Ya se puede entrar en SWAD desde PRADO, con validación del usuario. (79966 líneas)
+	Versión  9.2.2  :05/oct/2009	Continúan pruebas de PRADO. (79956 líneas)
+	Versión  9.2.1  :05/oct/2009	Continúan pruebas de PRADO. (79826 líneas)
+	Versión  9.2    :02/oct/2009	Comienzan pruebas de PRADO. (79524 líneas)
+	Versión  9.1    :01/oct/2009	Los profesores pueden acceder a "Mis trabajos".
+					Pequeño cambio en las reglas sobre quién puede ver qué fotos.
+					Añadido nuevo tipo MIME. (79342 líneas)
+	Versión  9.0.1  :30/sep/2009	Comienza edición del código institucional de cada asignatura. (79288 líneas)
+	Versión  9.0    :30/sep/2009	La descripción de la asignatura pasa a ser ahora la guía docente de la asignatura. (79261 líneas)
+
+	Versión  8.55.3 :17/sep/2009	Algunos cambios menores internos. (79260 líneas)
+	Versión  8.55.2 :11/sep/2009	Mejoras internas relacionadas con el rango de usuarios en los listados. (79255 líneas)
+	Versión  8.55.1 :10/sep/2009	Cambios relacionados con el listado de los alumnos de una titulación completa. (79233 líneas)
+	Versión  8.55   :03/sep/2009	Se permite ver un listado de los alumnos de una titulación completa. (79191 líneas)
+	Versión  8.54.2 :08/jul/2009	Pequeños cambios relacionados con el servicio web. (79016 líneas)
+	Versión  8.54.1 :06/jul/2009	Se comprueba que se llama a cada operación del servicio web desde una IP autorizada. (79015 líneas)
+	Versión  8.54   :06/jul/2009	Edición de los plugins. (78892 líneas)
+	Versión  8.53.11:05/jul/2009	Nuevo módulo swad_web_service para implementar el servicio web. (77954 líneas)
+	Versión  8.53.10:02/jul/2009	Continúa la implementación del servicio web. (77867 líneas)
+	Versión  8.53.9 :02/jul/2009	Continúa la implementación del servicio web. (77812 líneas)
+	Versión  8.53.8 :02/jul/2009	Continúa la implementación del servicio web. (77793 líneas)
+	Versión  8.53.7 :02/jul/2009	Continúa la implementación del servicio web. (77801 líneas)
+	Versión  8.53.6 :30/jun/2009	Continúa la implementación del servicio web. (77786 líneas)
+	Versión  8.53.5 :30/jun/2009	Continúa la implementación del servicio web.
+					Añadida tabla ws_keys a la base de datos para almacenar las claves del servicio web. (77725 líneas)
+	Versión  8.53.4 :29/jun/2009	Continúa la implementación del servicio web. (77412 líneas)
+	Versión  8.53.3 :29/jun/2009	Continúa la implementación del servicio web. (77263 líneas)
+	Versión  8.53.2 :29/jun/2009	Continúa la implementación del servicio web. (77275 líneas)
+	Versión  8.53.1 :28/jun/2009	Continúa la implementación del servicio web. (77143 líneas)
+	Versión  8.53   :28/jun/2009	Continúa la implementación del servicio web, usando la biblioteca gSOAP. (77145 líneas)
+	Versión  8.52.2 :24/jun/2009	Continúa la implementación del plugin de control de asistencia a clase. (77052 líneas)
+	Versión  8.52.1 :24/jun/2009	Comienza la implementación del plugin de control de asistencia a clase. (76935 líneas)
+	Versión  8.52   :23/jun/2009	Nueva pestaña para complementos (plugins). (76896 líneas)
+	Versión  8.51.2 :23/jun/2009	No se envían notificaciones de mensajes de foros eliminados. (76730 líneas)
+	Versión  8.51.1 :23/jun/2009	No se envían notificaciones de avisos eliminados. (76725 líneas)
+	Versión  8.51   :22/jun/2009	Las notificaciones se envían diferidamente. (76676 líneas)
+	Versión  8.50.2 :22/jun/2009	En las estadísticas de notificaciones se distingue entre eventos notificados y correo enviados. (76473 líneas)
+	Versión  8.50.1 :21/jun/2009	Cambios internos relacionados con las notificaciones por mail. (76430 líneas)
+	Versión  8.50   :20/jun/2009	Traducción de varios mensajes, de variables y comentarios internos, y de tablas, relacionados con las convocatorias de examen. (76421 líneas)
+	Versión  8.49.5 :20/jun/2009	Cambios en los nombres de campos de algunas tablas de la base de datos. (76274 líneas)
+	Versión  8.49.4 :18/jun/2009	Cambios en los nombres de campos de algunas tablas de la base de datos. (76209 líneas)
+	Versión  8.49.3 :18/jun/2009	Traducción de varios mensajes, y de variables y comentarios internos relacionados con altas y bajas de usuarios. (76200 líneas)
+	Versión  8.49.2 :17/jun/2009	Traducción de varios mensajes. (76154 líneas)
+	Versión  8.49.1 :15/jun/2009	Traducción de varios mensajes, y de variables y comentarios internos relacionados con los test. (76107 líneas)
+	Versión  8.49   :08/jun/2009	Traducción de variables y comentarios internos.
+					Nuevo módulo swad_record para las funciones relacionadas con las fichas. (75969 líneas)
+	Versión  8.48.7 :06/jun/2009	Traducción de varios mensajes, y de variables y comentarios internos. (75827 líneas)
+	Versión  8.48.6 :06/jun/2009	Optimizaciones internas al escribir los nombres de los usuarios. (75724 líneas)
+	Versión  8.48.5 :05/jun/2009	Nuevo módulo swad_notice para las funciones relacionadas con los avisos (notas amarillas). (75722 líneas)
+	Versión  8.48.4 :05/jun/2009	Nuevo módulo swad_pagination para las funciones relacionadas con la paginación de mensajes y foros. (75634 líneas)
+	Versión  8.48.3 :05/jun/2009	Nuevo módulo swad_forum para las funciones relacionadas con los foros. (75543 líneas)
+	Versión  8.48.2 :04/jun/2009	Nuevo módulo swad_chat para las funciones relacionadas con el chat. (75418 líneas)
+	Versión  8.48.1 :03/jun/2009	Numerosos cambios internos y traducción de algunos mensajes. (75331 líneas)
+	Versión  8.48   :03/jun/2009	Cambios internos en la forma de almacenar los textos de los menús.
+					Traducción de algunos mensajes relacionados con la notificación por correo electrónico. (75230 líneas)
+	Versión  8.47.3 :03/jun/2009	Traducción de algunos mensajes relacionados con la notificación por correo electrónico. (75099 líneas)
+	Versión  8.47.2 :03/jun/2009	Traducción de algunos mensajes.
+					Renombradas las funciones relacionadas con foros y con chat para situarlas en módulos separados del módulo de mensajes. (75073 líneas)
+	Versión  8.47.1 :03/jun/2009	Se evitan notificaciones al autor del evento. (75039 líneas)
+	Versión  8.47   :02/jun/2009	Se envían notificaciones por correo de nuevos archivos de calificaciones.
+					Se muestran estadísticas del número de notificaciones de cada evento.
+					Todas las estadísticas de notificaciones se ponen a 0. (75029 líneas)
+	Versión  8.46.3 :02/jun/2009	Cambios internos relacionados con en el envío de notificaciones. (74787 líneas)
+	Versión  8.46.2 :02/jun/2009	En la estadística de foros se muestra el número de notificaciones en cada tipo de foro. (74720 líneas)
+	Versión  8.46.1 :02/jun/2009	Cambios internos y algunas traducciones en el envío de notificaciones. (74703 líneas)
+	Versión  8.46   :02/jun/2009	Se envían notificaciones por correo de respuestas en los foros. (74623 líneas)
+	Versión  8.45   :01/jun/2009	Nuevo módulo swad_notification sobre notificaciones por correo electrónico.
+					Se envían notificaciones por correo de convocatorias de examen. (74520 líneas)
+	Versión  8.44.1 :30/may/2009	Las convocatorias de examen no se eliminan realmente, sino que se marcan como eliminadas, para poder llevar en el futuro la estadística de las convocatorias totales. (74398 líneas)
+	Versión  8.44   :30/may/2009	Nueva estadística con el número de usuarios que han elegido cada tipo de notificación. (74378 líneas)
+	Versión  8.43   :30/may/2009	Se envían notificaciones por correo de avisos nuevos. (74270 líneas)
+	Versión  8.42.6 :30/may/2009	En las estadísticas de avisos, se muestra el número de correos electrónicos de notificación enviados para avisar de avisos nuevos. (74096 líneas)
+	Versión  8.42.5 :30/may/2009	Cambios internos en la forma de almacenar el estado de los avisos. (74067 líneas)
+	Versión  8.42.4 :30/may/2009	Los avisos no se eliminan realmente, sino que se marcan como eliminados, para poder llevar la estadística de los avisos totales. (74044 líneas)
+	Versión  8.42.3 :30/may/2009	Se almacenan en las preferencias del usuario, en la base de datos, todas las posibles causas de notificación por correo electrónico. (74021 líneas)
+	Versión  8.42.2 :29/may/2009	En las preferencias, el usuario puede elegir en qué ocasiones desea que se le envíen notificaciones por correo electrónico. (74034 líneas)
+	Versión  8.42.1 :28/may/2009	Traducción de varios comentarios y variables internos. (73916 líneas)
+	Versión  8.42   :28/may/2009	Termina la implementación del envío de correos electrónicos de aviso. (73909 líneas)
+	Versión  8.41.4 :28/may/2009	Continúa la implementación del envío de correos electrónicos de aviso. (73839 líneas)
+	Versión  8.41.3 :28/may/2009	Continúa la implementación del envío de correos electrónicos de aviso. (73828 líneas)
+	Versión  8.41.2 :27/may/2009	Continúa la implementación del envío de correos electrónicos de aviso. (73750 líneas)
+	Versión  8.41.1 :27/may/2009	Comienza la implementación del envío de correos electrónicos de aviso. (73698 líneas)
+	Versión  8.41   :26/may/2009	Cambios en la traducción al portugués, sugeridos por Rui Raposo (Univ. Aveiro, Portugal).
+					En las preferencias se puede cambiar la privacidad de la foto. (73650 líneas)
+	Versión  8.40.1 :25/may/2009	Traducción de varios mensajes. (73584 líneas)
+	Versión  8.40   :25/may/2009	Añadidas cabeceras de licencia "GNU Affero General Public License, versión 3". (73566 líneas)
+	Versión  8.39.8 :24/may/2009	Traducción de varios mensajes, y de comentarios y variables internos. (72427 líneas)
+	Versión  8.39.7 :23/may/2009	Traducción de varios mensajes. (72096 líneas)
+	Versión  8.39.6 :22/may/2009	Traducción de varios comentarios y variables internos. (72063 líneas)
+	Versión  8.39.5 :20/may/2009	Traducción de varios comentarios y variables internos. (72059 líneas)
+	Versión  8.39.4 :19/may/2009	Traducción de varios mensajes. (72066 líneas)
+	Versión  8.39.3 :19/may/2009	Traducción de varios mensajes. (71997 líneas)
+	Versión  8.39.2 :19/may/2009	Traducción de varios mensajes. (71884 líneas)
+	Versión  8.39.1 :18/may/2009	Corregido pequeño bug en configuración de test, detectado por Isabel María Sánchez Calle. (71841 líneas)
+	Versión  8.39   :18/may/2009	Los nombres de las carpetas raíz de los exploradores de archivos aparecen en más sitios en el idioma seleccionado. (71838 líneas)
+	Versión  8.38.9 :18/may/2009	El archivo zip con los trabajos de cada alumno ya no contiene una carpeta "trabajos" dentro de la carpeta de cada alumno. (71832 líneas)
+	Versión  8.38.8 :18/may/2009	Los nombres de las carpetas raíz de los exploradores de archivos aparecen en algunos sitios en el idioma seleccionado. (71836 líneas)
+	Versión  8.38.7 :17/may/2009	Traducción de varios mensajes, y de comentarios internos. (71767 líneas)
+	Versión  8.38.6 :16/may/2009	Traducción de varios mensajes, y de comentarios internos. (71661 líneas)
+	Versión  8.38.5 :15/may/2009	Traducción de varios mensajes, y de comentarios internos. (71574 líneas)
+	Versión  8.38.4 :12/may/2009	Traducción de varios mensajes, y de comentarios internos. (71397 líneas)
+	Versión  8.38.3 :11/may/2009	Traducción de varios mensajes, y de comentarios internos. (71338 líneas)
+	Versión  8.38.2 :11/may/2009	Traducción de varios mensajes, y de comentarios internos. (71240 líneas)
+	Versión  8.38.1 :10/may/2009	Muchas optimizaciones internas relacionadas con los códigos de usuarios cifrados. (71103 líneas)
+	Versión  8.38   :08/may/2009	El cifrado AES para códigos de usuarios se sustituye por SHA-256. (71166 líneas)
+	Versión  8.37.1 :07/may/2009	Eliminado código temporal para crear los códigos de usuario cifrados. (71202 líneas)
+	Versión  8.37   :07/may/2009	Traducción de comentarios y variables internos.
+					Añadido código único cifrado mediante SHA-256 para cada usuario. (71269 líneas)
+	Versión  8.36.4 :06/may/2009	Traducción de comentarios y variables internos. (71369 líneas)
+	Versión  8.36.3 :04/abr/2009	Traducción de algunos mensajes. (71104 líneas)
+	Versión  8.36.2 :01/abr/2009	Modificaciones internas relacionadas con los permisos de acceso a cada foro. (71040 líneas)
+	Versión  8.36.1 :01/abr/2009	Cambios en el listado de asignaturas y sus medidores. (71031 líneas)
+	Versión  8.36   :31/mar/2009	Nueva funcionalidad en estadísticas para listar las asignaturas y sus medidores. (70900 líneas)
+	Versión  8.35.2 :31/mar/2009	Traducción de algunos mensajes. (70648 líneas)
+	Versión  8.35.1 :30/mar/2009	Traducción de algunos mensajes relacionados con los foros y con el envío de fotos. (70585 líneas)
+	Versión  8.35   :30/mar/2009	El usuario puede elegir si desea ver todos sus foros o sólo los de la institución/titulación/asignatura seleccionada. (70472 líneas)
+	Versión  8.34.1 :29/mar/2009	Traducción de algunos mensajes relacionados con los foros. (70378 líneas)
+	Versión  8.34   :29/mar/2009	Cambios en el listado de los foros cuando el usuario está identificado como administrador o como superusuario. (70345 líneas)
+	Versión  8.33.3 :29/mar/2009	Optimizaciones internas relacionadas con las listas de instituciones, titulaciones y asignaturas del usuario identificado. (70258 líneas)
+	Versión  8.33.2 :28/mar/2009	Cambios en el texto del listado de foros, y en las comprobaciones efectuadas al eliminar mensajes y hebras de los foros. (70225 líneas)
+	Versión  8.33.1 :28/mar/2009	Cambios en el orden del listado de foros. (70178 líneas)
+	Versión  8.33   :28/mar/2009	Cambios en el listado de foros para mostrar todos los foros del usuario. (70177 líneas)
+	Versión  8.32.3 :28/mar/2009	Traducción al inglés de numerosos comentarios y variables. (70036 líneas)
+	Versión  8.32.2 :27/mar/2009	Comienza la implementación de cambios en el listado de foros para mostrar todos los foros del usuario. (70011 líneas)
+	Versión  8.32.1 :24/mar/2009	En el chat, los enlaces a las titulaciones aparecen con sus correspondientes iconos. (69865 líneas)
+	Versión  8.32   :21/mar/2009	Nueva estadística con el número de avisos activos y obsoletos. (69794 líneas)
+	Versión  8.31.2 :19/mar/2009	Cambios internos relacionados con el chat. El nuevo chat se pone a disposición de los usuarios. (69641 líneas)
+	Versión  8.31.1 :16/mar/2009	Cambios en el listado de salas de chat. (69630 líneas)
+	Versión  8.31   :16/mar/2009	Incorporada la nueva versión del chat en pruebas, programada por Daniel Jesús Calandria Hernández. (69672 líneas)
+	Versión  8.30.4 :16/mar/2009	Traducción de numerosos mensajes. (69446 líneas)
+	Versión  8.30.3 :16/mar/2009	Corregido pequeño bug en javascript relacionado con las estadísticas.
+					Traducción de varios mensajes. (69372 líneas)
+	Versión  8.30.2 :15/mar/2009	Traducción de varios mensajes. (69285 líneas)
+	Versión  8.30.1 :15/mar/2009	Cambios en el dibujo de los avisos. (69063 líneas)
+	Versión  8.30   :14/mar/2009	Los avisos se pueden marcar como obsoletos sin tener que eliminarlos. (69060 líneas)
+	Versión  8.29   :14/mar/2009	Cambios en la creación y eliminación de avisos. (68897 líneas)
+	Versión  8.28.1 :03/mar/2009	Mejora interna y traducción en las estadísticas de acceso. (68807 líneas)
+	Versión  8.28   :02/mar/2009	Las estadísticas de uso de la plataforma se muestran desglosadas. (68736 líneas)
+	Versión  8.27.4 :01/mar/2009	Traducción de algunos mensajes y comentarios internos relacionados con los test de autoevaluación.
+					Cambios en las tablas de la base de datos relacionadas con los test de autoevaluación. (68527 líneas)
+	Versión  8.27.3 :28/feb/2009	Traducción de algunos mensajes y comentarios internos relacionados con los test de autoevaluación. (68433 líneas)
+	Versión  8.27.2 :28/feb/2009	Traducción de algunos mensajes y comentarios internos relacionados con los test de autoevaluación. (68273 líneas)
+	Versión  8.27.1 :26/feb/2009	Traducción de algunos mensajes. (68189 líneas)
+	Versión  8.27   :25/feb/2009	Finaliza la implementación de la elección entre iconos seguros (https) y no seguros (http). (68101 líneas)
+	Versión  8.26.2 :24/feb/2009	Comienza la implementación de la elección entre iconos seguros (https) y no seguros (http). (68064 líneas)
+	Versión  8.26.1 :19/feb/2009	Reducido el número de días en el log reciente de 32 a 15 días. (67940 líneas)
+	Versión  8.26   :18/feb/2009	En las estadísticas de tamaño de las zonas de archivos se muestra el número de carpetas, archivos, y tamaño promedio por asignatura y por usuario. (67930 líneas)
+	Versión  8.25.3 :18/feb/2009	Mejora interna en las estadísticas de tamaño de las zonas de archivos. (67798 líneas)
+	Versión  8.25.2 :17/feb/2009	En Estadísticas se muestra el tamaño de otras zonas de archivos. (67860 líneas)
+	Versión  8.25.1 :17/feb/2009	En Estadísticas se muestra el tamaño de las zonas de descarga de archivos. (67667 líneas)
+	Versión  8.25   :16/feb/2009	Cada vez que un usuario ve una zona de almacenamiento de archivos, se guarda en una tabla de la base de datos, el tamaño de esa zona. (67475 líneas)
+	Versión  8.24.4 :16/feb/2009	Ampliación de las cuotas de almacenamiento. (67283 líneas)
+	Versión  8.24.3 :15/feb/2009	Cambio a un nuevo servidor. (67273 líneas)
+	Versión  8.24.2 :13/feb/2009	En Estadísticas se muestra el número de mensajes eliminados. (67272 líneas)
+	Versión  8.24.1 :13/feb/2009	Corregido problema estético en listado de archivos en IE7. (67197 líneas)
+	Versión  8.24   :12/feb/2009	Corregido bug en la eliminación de titulaciones: cuando se eliminaba una titulación, no se eliminaban las entradas correspondientes en la tabla de estadísticas de titulaciones.
+					En Estadísticas se muestra el número total de mensajes enviados y recibidos en toda la plataforma, en la titulación, o en la asignatura. (67172 líneas)
+	Versión  8.23.3 :11/feb/2009	Insertado anuncio Taller SWAD. (66941 líneas)
+	Versión  8.23.2 :10/feb/2009	En Estadísticas > Uso de SWAD, se muestran estadísticas de número de hebras por foro, número de mensajes por hebra y número de mensajes por foro. (66940 líneas)
+	Versión  8.23.1 :10/feb/2009	Traducción interna al inglés de numerosos comentarios, variables, etc. (66884 líneas)
+	Versión  8.23   :10/feb/2009	Termina la implementación de estadísticas de uso de los foros. (66883 líneas)
+	Versión  8.22.1 :10/feb/2009	Comienza la implementación de estadísticas de uso de los foros. (66745 líneas)
+	Versión  8.22   :09/feb/2009	Se crea un foro dentro de cada asignatura exclusivo para profesores. (66403 líneas)
+	Versión  8.21.2 :09/feb/2009	Traducción de numerosos mensajes.
+					Traducción interna al inglés de numerosos comentarios, variables, etc. (66395 líneas)
+	Versión  8.21.1 :08/feb/2009	Los enlaces institucionales de la derecha de la página se toman de la base de datos. (66003 líneas)
+	Versión  8.21   :08/feb/2009	Finaliza la implementación de la edición de enlaces institucionales. (66008 líneas)
+	Versión  8.20.1 :05/feb/2009	Comienza la implementación de la edición de enlaces institucionales. (65199 líneas)
+	Versión  8.20   :05/feb/2009	El usuario puede elegir si quiere ver todos los mensajes recibidos o sólo los no leídos. (65192 líneas)
+	Versión  8.19.3 :05/feb/2009	Optimización en el cálculo del número de mensajes no leídos. (65096 líneas)
+	Versión  8.19.2 :04/feb/2009	Corregido bug en el número de mensajes no leídos cuando se filtran los mensajes recibidos por asignatura, autor o contenido. (65048 líneas)
+	Versión  8.19.1 :04/feb/2009	Las estadísticas de preferencias (idioma, color y columnas) de la plataforma se pueden restringir a la titulación seleccionada o a la asignatura seleccionada.
+					Por defecto, las estadísticas de uso global se restringen a la titulación (en caso de que haya una titulación seleccionada). (64994 líneas)
+	Versión  8.19   :04/feb/2009	Las estadísticas de uso global de la plataforma se pueden restringir a la titulación seleccionada o a la asignatura seleccionada. (64934 líneas)
+	Versión  8.18.9 :01/feb/2009	El usuario puede escoger la titulación cuya foto promedio desea actualizar. (64785 líneas)
+	Versión  8.18.8 :01/feb/2009	Para actualizar las fotografías promedio, en lugar de escoger la titulación con la fotografía menos recientemente calculada, se escoje entre varias de las que tienen las fotografías menos recientemente calculadas. (64645 líneas)
+	Versión  8.18.7 :15/ene/2009	Corregido error en el cálculo del tiempo para calcular la fotografía promedio de una titulación. (64631 líneas)
+	Versión  8.18.6 :15/ene/2009	Corregido error en el cálculo del tiempo estimado para calcular la fotografía promedio de la titulación menos recientemente actualizada. (64610 líneas)
+	Versión  8.18.5 :15/ene/2009	En la fotografía promedio se muestra el tiempo estimado para calcular la fotografía promedio de la titulación menos recientemente actualizada. (64604 líneas)
+	Versión  8.18.4 :13/ene/2009	En la tabla de estadísticas de cada titulación se almacena el tiempo empleado en calcular la fotografía promedio. (64514 líneas)
+	Versión  8.18.3 :12/ene/2009	Pequeño cambio en la escritura del pie de la página. (64484 líneas)
+	Versión  8.18.2 :07/ene/2009	Corregido pequeño bug en la compresión de trabajos. (64475 líneas)
+	Versión  8.18.1 :31/dic/2008	Corregido pequeño bug en los foros. (64470 líneas)
+	Versión  8.18   :22/dic/2008	El cálculo de las fotografías promedio lo puede ir realizando cada usuario al verlas. Si el usuario pulsa en el enlace indicado a tal efecto, se calculan las fotografías promedio correspondientes a una titulación que llevaban más tiempo sin calcularse. (64465 líneas)
+	Versión  8.17.2 :21/dic/2008	Traducción de algunos mensajes. (64419 líneas)
+	Versión  8.17.1 :21/dic/2008	Pequeños cambios en el diseño de la página. (64416 líneas)
+	Versión  8.17   :21/dic/2008	Se añaden dos nuevos tipos de foros: temas generales y temas generalas para profesores. Se crean además dos foros para cada institución: uno para usuarios en general y otro para profesores. (64432 líneas)
+	Versión  8.16.6 :18/dic/2008	Los nombres únicos, usados para directorios temporales, nombres de fotos, etc. ahora incorporan también la dirección IP, y además se cifran mediante SHA-256. (64056 líneas)
+	Versión  8.16.5 :17/dic/2008	En los exámenes de autoevaluación aparece el logo de la institución asociada a la titulación elegida.
+					Optimizada la escritura de la cabecera de los exámenes de autoevaluación. (64077 líneas)
+	Versión  8.16.4 :17/dic/2008	En las orlas, listas, calendarios y horarios aparece el logo de la institución asociada a la titulación elegida. (64092 líneas)
+	Versión  8.16.3 :14/dic/2008	Cambios internos y en la base de datos relacionados con las convocatorias de examen.
+					En las convocatorias de examen aparece el logo y el nombre de la institución a la que pertenece la titulación. (64065 líneas)
+	Versión  8.16.2 :14/dic/2008	En el listado de instituciones se muestran el número de centros, de departamentos y de titulaciones de cada institución. (64065 líneas)
+	Versión  8.16.1 :14/dic/2008	Además de asociarse a un lugar, cada titulación se asocia a una institución.
+					Se permite la edición de la titulación en centros y departamentos existentes. (63846 líneas)
+	Versión  8.16   :13/dic/2008	Numerosos cambios internos.
+					Nuevo módulo para la gestión de parámetros de llamada al CGI. (63617 líneas)
+	Versión  8.15.4 :13/dic/2008	Separado módulo para la gestión de grupos del módulo de gestión de usuarios. (63476 líneas)
+	Versión  8.15.3 :11/dic/2008	Optimizada la consulta de titulaciones que se realiza antes de presentar el formulario de la ficha. Ahora no se obtiene el número de usuarios de cada titulación, innecesario en ese caso.
+					En el listado de titulaciones se muestran, para cada titulación, el número de usuarios totales, el número de alumnos y el número de profesores. (63393 líneas)
+	Versión  8.15.2 :11/dic/2008	Corregido bug en el listado de usuarios relacionado con las instituciones. (63373 líneas)
+	Versión  8.15.1 :10/dic/2008	En el listado de instituciones se muestra el número de usuarios de cada institución, no el número de profesores. (63370 líneas)
+	Versión  8.15   :10/dic/2008	Los alumnos también deben rellenar la institución (universidad) a la que pertenecen. (63338 líneas)
+	Versión  8.14.6 :10/dic/2008	Traducción de algunos mensajes.
+					Eliminada la etiqueta "font" del código XHTML. (63331 líneas)
+	Versión  8.14.5 :10/dic/2008	Nuevo modulo swad_file para operaciones con archivos.
+					Cambios internos: cambio de módulo de algunas funciones. (63259 líneas)
+	Versión  8.14.4 :10/dic/2008	Corregido pequeño bug relacionado con la selección de temas de diseño. (63199 líneas)
+	Versión  8.14.3 :09/dic/2008	Optimización del código para dibujar un mes. (63193 líneas)
+	Versión  8.14.2 :09/dic/2008	Sustitución del código antiguo de gestión de períodos no lectivos por el nuevo. (63175 líneas)
+	Versión  8.14.1 :09/dic/2008	Modificación en la edición de días festivos y períodos no lectivos. (63254 líneas)
+	Versión  8.14   :09/dic/2008	Se pueden editar los períodos no lectivos. (63213 líneas)
+	Versión  8.13.3 :08/dic/2008	Traducción de algunos mensajes. (62979 líneas)
+	Versión  8.13.2 :08/dic/2008	Eliminado código antiguo de gestión de días festivos y campus. (62949 líneas)
+	Versión  8.13.1 :08/dic/2008	Los días festivos usados en el dibujo de los meses se toman de la base de datos. (63201 líneas)
+	Versión  8.13   :08/dic/2008	Finaliza la implementación de la edición de días festivos. (63158 líneas)
+	Versión  8.12.6 :08/dic/2008	Continúa la implementación de la edición de días festivos. (63159 líneas)
+	Versión  8.12.5 :07/dic/2008	Continúa la implementación de la edición de días festivos. (62940 líneas)
+	Versión  8.12.4 :06/dic/2008	Comienza la implementación de la edición de días festivos. (62132 líneas)
+	Versión  8.12.3 :06/dic/2008	Algunos cambios en el módulo de estadísticas.
+					Los profesores pueden volver a consultar accesos en períodos largos de tiempo, pero sólo en el caso de accesos a la asignatura, no globales. (62113 líneas)
+	Versión  8.12.2 :06/dic/2008	Algunos cambios en el módulo de fechas. (62104 líneas)
+	Versión  8.12.1 :06/dic/2008	Se puede elegir lugar al editar una titulación. (62150 líneas)
+	Versión  8.12   :06/dic/2008	Se pueden editar lugares o localidades (por ejemplo, Granada, Ceuta, Melilla). (62043 líneas)
+	Versión  8.11.8 :05/dic/2008	En la fichas de un profesor aparece el logo y el nombre de la institución a la que pertenece ese profesor. (61146 líneas)
+	Versión  8.11.7 :04/dic/2008	Corregido bug en la edición de instituciones. (61118 líneas)
+	Versión  8.11.6 :03/dic/2008	Cambios relacionados con el tamaño máximo de un archivo recibido. (61110 líneas)
+	Versión  8.11.5 :01/dic/2008	Continúa la implementación de la institución asociada a cada centro y departamento. (61106 líneas)
+	Versión  8.11.4 :30/nov/2008	Corregido pequeño bug en la ficha de profesores, detectado por Luis E. Hueli Amador.
+					Añadidos nuevos tipos de archivos. (60970 líneas)
+	Versión  8.11.3 :30/nov/2008	Comienza la implementación de la institución asociada a cada centro y departamento. (60969 líneas)
+	Versión  8.11.2 :30/nov/2008	En el listado de instituciones aparece el logo de cada institución. (60954 líneas)
+	Versión  8.11.1 :30/nov/2008	Añadida institución a la ficha del profesor. (60936 líneas)
+	Versión  8.11   :30/nov/2008	Edición de instituciones (universidades, institutos, etc.). (60849 líneas)
+	Versión  8.10.3 :29/nov/2008	No se permite a los usuarios (excepto al superusuario) consultar estadísticas de acceso con un rango de fechas mayor que cierto número de días. (59767 líneas)
+	Versión  8.10.2 :24/nov/2008	Muchos cambios internos. Cambiado el archivo swad_const.h por swad_paths.h
+					Aumentadas algunas cuotas de almacenamiento. (59698 líneas)
+	Versión  8.10.1 :24/nov/2008	Los administradores de titulación pueden ver los ID de los profesores de esa titulación.
+					Muchos cambios internos. Eliminado el archivo swad_types.h (59688 líneas)
+	Versión  8.10   :21/nov/2008	La nueva versión del programa de procesamiento de fotografías se pone a disposición de todos los usuarios y se elimina la versión anterior.
+					Optimizaciones en la eliminación de fotografías. (59705 líneas)
+	Versión  8.9.1  :20/nov/2008	Nueva versión en pruebas del programa de procesamiento de fotografías. (59868 líneas)
+	Versión  8.9    :20/nov/2008	Nueva versión en pruebas del programa de procesamiento de fotografías, que permite seleccionar un rostro entre varios detectados. (59840 líneas)
+	Versión  8.8    :20/nov/2008	Los listados de centros y de departamentos se pueden ordenar por número de profesores. (59747 líneas)
+	Versión  8.7.2  :18/nov/2008	Traducción de varios mensajes y diversas optimizaciones de código. (59553 líneas)
+	Versión  8.7.1  :18/nov/2008	Mejoras en la traducción al alemán, por Rafael Barranco-Droege.
+					Traducción de varios mensajes. (59520 líneas)
+	Versión  8.7    :09/nov/2008	Optimizada la selección de usuarios antiguos a eliminar. (59413 líneas)
+	Versión  8.6.16 :08/nov/2008	Corregido bug al buscar los ID en la lista de alumnos a dar de alta o de baja. (59390 líneas)
+	Versión  8.6.15 :08/nov/2008	Corregido bug al enviar un mensaje indicando el ID del destinatario. (59386 líneas)
+	Versión  8.6.14 :03/nov/2008	Traducción de varios mensajes.
+					Mejoras en la implementación del programa de procesamiento de fotografías. (59374 líneas)
+	Versión  8.6.13 :03/nov/2008	Se admite como ID una cadena que contenga al menos 4 dígitos (hasta ahora el mínimo era 5 dígitos) y un grupo de hasta 5 letras (hasta ahora el máximo era 3).
+					Cambios menores en el envío del parámetro oculto con el ID de otro usuario.
+					Traducción de varios mensajes. (59313 líneas)
+	Versión  8.6.12 :03/nov/2008	Traducción de varios mensajes. (59298 líneas)
+	Versión  8.6.11 :02/nov/2008	Traducción de varios mensajes. (59214 líneas)
+	Versión  8.6.10 :02/nov/2008	Cambios en el diseño. (59090 líneas)
+	Versión  8.6.9  :01/nov/2008	Traducción de varios mensajes. (59077 líneas)
+	Versión  8.6.8  :01/nov/2008	Nuevo módulo swad_exam con funciones relacionadas con las convocatorias de examen (calls for exams). (59017 líneas)
+	Versión  8.6.7  :01/nov/2008	Nuevo módulo swad_layout con funciones relacionadas con el diseño (layout) de la página. (58961 líneas)
+	Versión  8.6.6  :01/nov/2008	Se limita la longitud de los nombres de titulación y asignatura en la parte superior de la pantalla.
+					Cambios en el diseño. (58995 líneas)
+	Versión  8.6.5  :31/oct/2008	Traducción de la ficha personal. (58955 líneas)
+	Versión  8.6.4  :31/oct/2008	Traducción de varios mensajes. (58698 líneas)
+	Versión  8.6.3  :31/oct/2008	Nueva opción provisional para hacer pruebas con el nuevos programa de procesamiento de fotografías.
+					Traducción de los títulos de cada acción. (58481 líneas)
+	Versión  8.6.2  :30/oct/2008	Traducción de varios elementos relacionados con centros y departamentos. (58096 líneas)
+	Versión  8.6.1  :29/oct/2008	Se obliga a los profesores a elegir centro y departamento.
+					Mejoras en el listado de centros y departamentos (57982 líneas)
+	Versión  8.6    :28/oct/2008	Se muestra junto a cada foro el número de hebras con mensajes nuevos, y junto a cada hebra el número de mensajes sin leer. (57801 líneas)
+	Versión  8.5    :27/oct/2008	Finaliza la edición de departamentos. (57628 líneas)
+	Versión  8.4    :27/oct/2008	Finaliza la edición de centros. (57041 líneas)
+	Versión  8.3.5  :27/oct/2008	Continúa la edición de centros. (56750 líneas)
+	Versión  8.3.4  :21/oct/2008	Continúa la edición de centros. (56578 líneas)
+	Versión  8.3.3  :21/oct/2008	Corregido pequeño bug que ocurría al eliminar un tipo de titulación. (56460 líneas)
+	Versión  8.3.2  :20/oct/2008	Comienza la edición de centros. (56433 líneas)
+	Versión  8.3.1  :20/oct/2008	Traducción de algunos mensajes. (56326 líneas)
+	Versión  8.3    :20/oct/2008	Finaliza la implementación de nuevas estadísticas de titulaciones en forma de lista. (56223 líneas)
+	Versión  8.2.5  :20/oct/2008	Continúa la implementación de nuevas estadísticas de titulaciones en forma de lista. (56181 líneas)
+	Versión  8.2.4  :19/oct/2008	Continúa la implementación de nuevas estadísticas de titulaciones en forma de lista. (56156 líneas)
+	Versión  8.2.3  :19/oct/2008	Las titulaciones de la orla de fotos promedio de titulaciones se pueden ordenar según cuatro criterios. (56051 líneas)
+	Versión  8.2.2  :18/oct/2008	Continúa la implementación de nuevas estadísticas de titulaciones en forma de lista. (55890 líneas)
+	Versión  8.2.1  :18/oct/2008	Comienza la implementación de nuevas estadísticas de titulaciones en forma de lista. (55837 líneas)
+	Versión  8.2    :17/oct/2008	Nuevos módulos swad_centre y swad_department para la edición de centros y departamentos. (55775 líneas)
+	Versión  8.1    :16/oct/2008	Nuevo módulo swad_syllabus para la edición de los temarios. (55671 líneas)
+	Versión  8.0    :15/oct/2008	Para seleccionar el idioma, en lugar de usar banderitas, se usa un selector desplegable. (55641 líneas)
+	Versión  7.73.1 :29/sep/2008	Cambiadas las fiestas para el curso 2008-2009. (55606 líneas)
+	Versión  7.73   :17/sep/2008	Se guarda en la base de datos la preferencia sobre la visualización de las fotos en las listas de usuarios. (55561 líneas)
+	Versión  7.72   :17/sep/2008	Las opciones para ver la orla y la lista de alumnos/profesores se juntan en una opción única. (55418 líneas)
+	Versión  7.71.1 :16/sep/2008	Mejoras estéticas en la selección de usuarios.
+					Se disingue el género en el plural del tipo de usuario (por ejemplo, si hay tres alumnas en una clase y ningún alumno, aparecerá la palabra "Alumnas" en lugar de "Alumnos"). (55295 líneas)
+	Versión  7.71   :15/sep/2008	En la selección de usuarios (para ver fichas, ver trabajos, escribir mensaje o ver estadísticas), se puede elegir entre una orla y una lista. Sugerencia del profesor Miguel Gea Megías. (55245 líneas)
+	Versión  7.70.5 :15/sep/2008	Traducción del tipo de usuario a 6 idiomas teniendo en cuenta el género y el número.
+					Cambios en la forma de enviar en la ficha el parámetro con el tipo de usuario. (55129 líneas)
+	Versión  7.70.4 :13/sep/2008	Cambios relacionados con el listado de usuarios para la selección de algunos de ellos. (55089 líneas)
+	Versión  7.70.3 :13/sep/2008	Cambios relacionados con el listado de usuarios para la selección de algunos de ellos. (55038 líneas)
+	Versión  7.70.2 :11/sep/2008	Cambios internos relacionados con el listado de usuarios para la selección de algunos de ellos. (54852 líneas)
+	Versión  7.70.1 :09/sep/2008	Bajo el formulario de creación de una nueva carpeta o envío de un archivo se muestra el árbol de archivos.
+					Cambios relacionados con el lenguaje y el tema por defecto. (54841 líneas)
+	Versión  7.70   :09/sep/2008	El título de las zonas de descarga se presenta dentro de la ventana de listado de archivos. (54832 líneas)
+	Versión  7.69.11:01/sep/2008	Corregido pequeño problema con el tiempo entre un test y otro detectado por Salvador Manuel Gómez López. (54757 líneas)
+	Versión  7.69.10:01/sep/2008	Cambio en el título de la página.
+					En los nombres de los foros se cambian las denominaciones largas de titulaciones y asignaturas por las abreviadas. (54751 líneas)
+	Versión  7.69.9 :29/jul/2008	Cambios internos relacionados con los temas de diseño. El tema por defecto pasa a ser el azul, en lugar del clásico amarillo. (54748 líneas)
+	Versión  7.69.8 :28/jul/2008	Desglosado departamento en dos.
+					Mejoras en la traducción, principalmente a alemán, realizadas por Rafael Barranco-Droege.
+					Comienza la edición de departamentos. (54888 líneas)
+	Versión  7.69.7 :17/jul/2008	Corregido pequeño bug en numeración de páginas de una hebra. (54830 líneas)
+	Versión  7.69.6 :17/jul/2008	Mejoras en la traducción, principalmente a alemán, realizadas por Rafael Barranco-Droege. (54829 líneas)
+	Versión  7.69.5 :15/jul/2008	Cambio interno en el directorio de logos. (54826 líneas)
+	Versión  7.69.4 :07/jul/2008	Nuevo logo de SWAD diseñado por dixi (http://www.dixi.es/). (54824 líneas)
+	Versión  7.69.3 :02/jul/2008	Corregido bug en consulta a base de datos en el listado de mensajes enviados. (54823 líneas)
+	Versión  7.69.2 :01/jul/2008	Los mensajes recibidos y enviados se pueden filtrar también por su contenido. (54818 líneas)
+	Versión  7.69.1 :01/jul/2008	Modificación en el filtrado de los mensajes por autores: ahora sólo se buscan nombres y apellidos en el orden en el que han sido indicados por el usuario. (54748 líneas)
+	Versión  7.69   :01/jul/2008	Los mensajes recibidos se pueden filtrar por el autor y los enviados por el destinatario (disponible para todos los usuarios).
+					Cambios internos en parámetros relacionados con los mensajes y los foros. (54747 líneas)
+	Versión  7.68.2 :30/jun/2008	Los mensajes recibidos se pueden filtrar por el autor (de momento sólo disponible para el superusuario). (54626 líneas)
+	Versión  7.68.1 :26/jun/2008	Mejora en la edición de los temarios sugerida por José Carlos Calvo Tudela. (54543 líneas)
+	Versión  7.68   :25/jun/2008	La opción de listado de centros y departamentos se desglosa en dos: centros por un lado y departamentos por otro.
+					Se listan el número de profesores en cada centro y en cada departamento. (54525 líneas)
+	Versión  7.67.8 :24/jun/2008	Añadida nueva opción en la pestaña de titulación para listar los centros y departamentos. (54381 líneas)
+	Versión  7.67.7 :24/jun/2008	Corregido problema con los administradores o superusuarios en el listado de usuarios conectados. (54377 líneas)
+	Versión  7.67.6 :24/jun/2008	Corregido error en la ordenación de titulaciones administradas por un usuario. (54376 líneas)
+	Versión  7.67.5 :23/jun/2008	Cuando sólo se muestran los primeros destinatarios de un mensaje, se ofrece la posibilidad de mostrar todos los detinatarios. (54377 líneas)
+	Versión  7.67.4 :23/jun/2008	Cuando hay muchos destinatarios en un mensaje, sólo se muestran los primeros. Idea basada en una sugerencia de Ricardo Palma Durán. (54356 líneas)
+	Versión  7.67.3 :22/jun/2008	Los números de las páginas de mensajes enviados/recibidos vistas más recientemente se almacenan en la tabla de sesiones en lugar de en la tabla de usuarios. (54305 líneas)
+	Versión  7.67.2 :22/jun/2008	Se almacenan los números de las páginas de mensajes enviados/recibidos vistas más recientemente, de forma que se entre en ellas al pulsar en las opciones de ver mensajes enviados/recibidos. Sugerencia del profesor Sergio Alonso Burgos. (54278 líneas)
+	Versión  7.67.1 :21/jun/2008	Corregido pequeño problema con las preferencias al expirar las sesiones. (54214 líneas)
+	Versión  7.67   :21/jun/2008	Finaliza el desarrollo de una nueva opción para fijar las preferencias del usuario. (54221 líneas)
+	Versión  7.66   :20/jun/2008	Ya no se pasan las preferencias como parámetros de todos los formularios cuando no hay ningún usuario identificado, sino que se toman de la tabla de preferencias asociadas a IP. (54180 líneas)
+	Versión  7.65.4 :20/jun/2008	En la tabla de las preferencias se almacena también el código de usuario. Así, si un usuario cambia sus preferencias en un ordenador estando identificado, y más tarde las vuelve a cambiar en un segundo ordenador estando también identificado, cuando vuelva al primero no se recordarán las preferencias más antiguas alteradas en el primer ordenador, sino las más recientes alteradas en el segundo ordenador. (54212 líneas)
+	Versión  7.65.3 :20/jun/2008	El módulo swad_theme pasa a llamarse swad_preference y contendrá las funciones relacionadas con las preferencias.
+					Se almacena en una nueva tabla de la base de datos las preferencias de la última vez que se accedió desde la misma IP. De este modo, al entrar desde la misma IP sin identificar, SWAD recordará los colores, el idioma y la configuración de columnas. (54200 líneas)
+	Versión  7.65.2 :20/jun/2008	Comienza el desarrollo de una nueva opción para fijar las preferencias del usuario. (53838 líneas)
+	Versión  7.65.1 :20/jun/2008	El marco de los usuarios conectados siempre es el mismo, independientemente del tema de diseño, para que el refresco de conectados no afecte a su aspecto. (53833 líneas)
+	Versión  7.65   :19/jun/2008	Nuevo módulo swad_preference relacionado con los temas de diseño.
+					Los usuarios pueden elegir el tema de diseño, que queda almacenado en sus datos. (53832 líneas)
+	Versión  7.64.1 :18/jun/2008	Algunos cambios relacionados con el diseño de los temas. (53608 líneas)
+	Versión  7.64   :17/jun/2008	Se permiten dos temas de diseño: el clásico en negro y amarillo y uno nuevo en celeste y blanco. (53607 líneas)
+	Versión  7.63.3 :12/jun/2008	Corregido pequeño bug en listado de accesos recientes dentro de una asignatura. (53405 líneas)
+	Versión  7.63.2 :08/jun/2008	El logo de SWAD y el de la institución aparecen en sendos rectángulos blancos. De este modo, será más fácil cambiarlos por otros logos personalizados cuando se ofrezca como software libre. (53404 líneas)
+	Versión  7.63.1 :04/jun/2008	Pequeña modificación de estilo en el listado de archivos de calificaciones.
+					Corregido problema con el menú de mis asignaturas. (53352 líneas)
+	Versión  7.63   :04/jun/2008	Cambios estéticos en la cabecera de la página. Se separan los profesores de los alumnos en el listado de usuarios conectados. (53340 líneas)
+	Versión  7.62.1 :04/jun/2008	Se elimina el campo de lista de usuarios destino de la tabla de mensajes recibidos. Ello supone perder la lista de destinatarios en los mensajes más antiguos que el 29 de junio de 2006. A cambio, se espera una ganancia en velocidad en dicha tabla de la base de datos. (53301 líneas)
+	Versión  7.62   :03/jun/2008	Los accesos del último mes o más recientes se consultan en la tabla de accesos recientes. (53302 líneas)
+	Versión  7.61.4 :03/jun/2008	La tabla del registro de accesos se divide en dos: una con el registro histórico de accesos y otra con el registro de los accesos recientes. Cada acceso se registra en ambas tablas. (53208 líneas)
+	Versión  7.61.3 :31/may/2008	En "Estadísticas>Uso de SWAD" se muestra el número de usuarios que han elegido cada uno de los cuatro posibles diseños de Las columnas laterales izquierda y derecha. (53165 líneas)
+	Versión  7.61.2 :28/may/2008	Las columnas laterales izquierda y derecha se ocultan o muestran de manera independiente. (53099 líneas)
+	Versión  7.61.1 :28/may/2008	Cambios estéticos en la cabecera de la página. Se muestra la fotografía del usuario identificado. (53021 líneas)
+	Versión  7.61   :28/may/2008	Termina la implementación de la posibilidad de expandir la zona central hacia los lados. (53022 líneas)
+	Versión  7.60.5 :28/may/2008	Comienza la implementación de la posibilidad de expandir la zona central hacia los lados. (52880 líneas)
+	Versión  7.60.4 :26/may/2008	Los nombres de las fotos de los usuarios se cifran con el algoritmo SHA-256 en lugar de hacerlo con el algoritmo AES. (52810 líneas)
+	Versión  7.60.3 :26/may/2008	Los identificadores de sesión se cifran con el algoritmo SHA-256 en lugar de hacerlo con el algoritmo AES. (52818 líneas)
+	Versión  7.60.2 :21/may/2008	Más cambios internos relacionados con el envío de la contraseña. (52824 líneas)
+	Versión  7.60.1 :21/may/2008	Cambios internos relacionados con el envío de la contraseña. (52812 líneas)
+	Versión  7.60   :21/may/2008	Cuando falla la autenticación de un usuario, no se indica en los mensajes de error si ha fallado la identificación o la contraseña.
+					Cambios en los formularios para el envío de una nueva contraseña por correo electrónico. (52823 líneas)
+	Versión  7.64.1 :18/jun/2008	Algunos cambios relacionados con el diseño de los temas. (53608 líneas)
+	Versión  7.64   :17/jun/2008	Se permiten dos temas de diseño: el clásico en negro y amarillo y uno nuevo en celeste y blanco. (53607 líneas)
+	Versión  7.63.3 :12/jun/2008	Corregido pequeño bug en listado de accesos recientes dentro de una asignatura. (53405 líneas)
+	Versión  7.63.2 :08/jun/2008	El logo de SWAD y el de la institución aparecen en sendos rectángulos blancos. De este modo, será más fácil cambiarlos por otros logos personalizados cuando se ofrezca como software libre. (53404 líneas)
+	Versión  7.63.1 :04/jun/2008	Pequeña modificación de estilo en el listado de archivos de calificaciones.
+					Corregido problema con el menú de mis asignaturas. (53352 líneas)
+	Versión  7.63   :04/jun/2008	Cambios estéticos en la cabecera de la página. Se separan los profesores de los alumnos en el listado de usuarios conectados. (53340 líneas)
+	Versión  7.62.1 :04/jun/2008	Se elimina el campo de lista de usuarios destino de la tabla de mensajes recibidos. Ello supone perder la lista de destinatarios en los mensajes más antiguos que el 29 de junio de 2006. A cambio, se espera una ganancia en velocidad en dicha tabla de la base de datos. (53301 líneas)
+	Versión  7.62   :03/jun/2008	Los accesos del último mes o más recientes se consultan en la tabla de accesos recientes. (53302 líneas)
+	Versión  7.61.4 :03/jun/2008	La tabla del registro de accesos se divide en dos: una con el registro histórico de accesos y otra con el registro de los accesos recientes. Cada acceso se registra en ambas tablas. (53208 líneas)
+	Versión  7.61.3 :31/may/2008	En "Estadísticas>Uso de SWAD" se muestra el número de usuarios que han elegido cada uno de los cuatro posibles diseños de Las columnas laterales izquierda y derecha. (53165 líneas)
+	Versión  7.61.2 :28/may/2008	Las columnas laterales izquierda y derecha se ocultan o muestran de manera independiente. (53099 líneas)
+	Versión  7.61.1 :28/may/2008	Cambios estéticos en la cabecera de la página. Se muestra la fotografía del usuario identificado. (53021 líneas)
+	Versión  7.61   :28/may/2008	Termina la implementación de la posibilidad de expandir la zona central hacia los lados. (53022 líneas)
+	Versión  7.60.5 :28/may/2008	Comienza la implementación de la posibilidad de expandir la zona central hacia los lados. (52880 líneas)
+	Versión  7.60.4 :26/may/2008	Los nombres de las fotos de los usuarios se cifran con el algoritmo SHA-256 en lugar de hacerlo con el algoritmo AES. (52810 líneas)
+	Versión  7.60.3 :26/may/2008	Los identificadores de sesión se cifran con el algoritmo SHA-256 en lugar de hacerlo con el algoritmo AES. (52818 líneas)
+	Versión  7.60.2 :21/may/2008	Más cambios internos relacionados con el envío de la contraseña. (52824 líneas)
+	Versión  7.60.1 :21/may/2008	Cambios internos relacionados con el envío de la contraseña. (52812 líneas)
+	Versión  7.60   :21/may/2008	Cuando falla la autenticación de un usuario, no se indica en los mensajes de error si ha fallado la identificación o la contraseña.
+					Cambios en los formularios para el envío de una nueva contraseña por correo electrónico. (52823 líneas)
+	Versión  7.59.4 :20/may/2008	Se obliga de nuevo a cambiar las contraseñas poco seguras.
+					Se rechazan las contraseñas iguales a más de n contraseñas de otros usuarios. (52736 líneas)
+	Versión  7.59.3 :19/may/2008	Las contraseñas planas pasan de tener un límite de 16 caracteres a tener una longitud máxima de 256 caracteres. (52654 líneas)
+	Versión  7.59.2 :19/may/2008	Eliminadas contraseñas antiguas de la base de datos. (52658 líneas)
+	Versión  7.59.1 :19/may/2008	Eliminado el sistema de contraseñas antiguo. (52658 líneas)
+	Versión  7.59   :19/may/2008	Las contraseñas se almacenan usando el algoritmo SHA-512. Se ha usado la implementación de Olivier Gay disponible en http://www.ouah.org/ogay/sha2/. (52782 líneas)
+	Versión  7.58   :16/may/2008	Eliminado el mecanismo de respuesta secreta para recordar la contraseña.
+					En ningún momento se recupera la contraseña plana de la base de datos. Todas las comparaciones se hacen entre contraseñas cifradas. (52572 líneas)
+	Versión  7.57   :15/may/2008	En lugar de enviar por correo la contraseña actual, se envía una nueva contraseña aleatoria, que sólo se activa si se usa. (52833 líneas)
+	Versión  7.56   :08/may/2008	En la tabla de log se almacenan las IP desde las que acceden los usuarios. (52699 líneas)
+	Versión  7.55.8 :07/may/2008	En la paginación de mensajes se muestran dos nuevos enlaces, uno a la página intermedia entre la primera y la actual, y otro a la página intermedia entre la actual y la última. (52671 líneas)
+	Versión  7.55.7 :06/may/2008	Cambios en la presentación de mensajes enviados y recibidos, y en la paginación de mensajes. (52611 líneas)
+	Versión  7.55.6 :06/may/2008	Cambios estéticos en la presentación de mensajes enviados y recibidos. (52615 líneas)
+	Versión  7.55.5 :06/may/2008	En los mensajes enviados y recibidos, se muestra junto a cada autor y destinatario, si éste ha leído o eliminado el mensaje. (52612 líneas)
+	Versión  7.55.4 :05/may/2008	La longitud mínima de la contraseña aumenta a 10 caracteres.
+					Cuando la contraseña no es suficientemente segura, se obliga al usuario a cambiarla. (52581 líneas)
+	Versión  7.55.3 :05/may/2008	En los mensajes enviados o recibidos, sólo se consulta el texto del mensaje cuando está expandido. (52528 líneas)
+	Versión  7.55.2 :05/may/2008	Los mensajes enviados se muestran en el nuevo formato (igual que los recibidos). (52486 líneas)
+	Versión  7.55.1 :04/may/2008	Se muestra el campo De: en el mensaje recibido expandido. (52497 líneas)
+	Versión  7.55   :04/may/2008	Cambios en el almacenamiento de mensajes enviados y recibidos. La tabla msg_sent ya no se usa. (52501 líneas)
+	Versión  7.54.2 :03/may/2008	Cambios en el formato de los mensajes recibidos. (52494 líneas)
+	Versión  7.54.1 :03/may/2008	Separada en dos la función para mostrar un mensaje enviado o recibido. (52423 líneas)
+	Versión  7.54   :03/may/2008	Sólo se muestran las cabeceras de los mensajes recibidos. Ahora hay que expandirlos para ver su contenido. (52383 líneas)
+	Versión  7.53.1 :02/may/2008	Separadas las funciones empleadas para mostrar los mensajes entre usuarios de las usadas para mostrar los mensajes de los foros. (52285 líneas)
+	Versión  7.53   :02/may/2008	Eliminada la tabla msg_new. El número de mensajes nuevos pasa a la tabla usr_data. (52163 líneas)
+	Versión  7.52   :02/may/2008	Más cambios internos relacionados con los ID de los usuarios.
+					Las listas de usuarios seleccionados ya no contienen ID sino códigos de usuario. (52270 líneas)
+
+	--------------------------------
+
+	Versión 0.9   : 21/sep/1999	 Comienzo de la versión inicial.
+	--------------------------------
+	Versión 1.0   : 1999-2000	Primera versión, que sólo incluía las fichas,las calificaciones y la descarga de documentos.
+	Versión 1.1   : 2000-2001	Incluía el envío automático de la foto.
+	--------------------------------
+	Versión  2.0   : 14/mar/2002	Segunda versión, mandada a Jenui 2002, que incluía foros de discusión y test de autoevaluación. (3233 líneas)
+	Versión  2.1   : 10/abr/2002	Listado jerárquico de directorios de descarga.
+					Foto del usuario identificado en la pantalla.
+					Foto de los usuarios de los foros.
+					Evaluación del test.
+	Versión  2.2   : 27/may/2002	Corregido bug en los foros.
+	Versión  2.3   : 04/jul/2002	Corregido bug en presentación de calificaciones.
+					Corregido bug en recepción de fotografía.
+					Ampliado tamaño de fotografía de 20 KiB a 100 KiB.
+					Corregido bug en recepción de parámetros en modo datos.
+	Versión  2.4   : 23/sep/2002	Corregido pequeño bug al presentar mensaje de error en ver calificaciones.
+	Versión  2.5   : 28/oct/2002	Listado de fichas de estudiantes.
+	Versión  2.6   : 29/oct/2002	Nuevas opciones in menu para profesores (no todas implementadas aún).
+					Vista de acccesos de usuarios.
+	Versión  2.7   : 30/oct/2002	Puesta a cero del archivo de accesos de usuarios.
+					El sistema recuerda la última acción realizada por cada usuario.
+	Versión  2.7.1 : 31/oct/2002	Cambio interno: automatización de la forma de presentar el menú.
+	Versión  2.8   : 31/oct/2002	Se usa un nuevo archivo-tabla: usuarios en esta asignatura.
+	Versión  2.9   : 05/nov/2002	Alta / baja de usuario en la asignatura presente.
+	Versión  2.10  : 06/nov/2002	Borrado de la ficha de un usuario.
+	--------------------------------
+	Versión  3.0   : 06/nov/2002	Corregido pequeño bug: un usuario que no estaba en la lista de esta asignatura podía acceder, ahora no.
+					Versión con la que se confeccionó el póster ICTE 2002.
+	Versión  3.1   : 10/ene/2003	He protegido mediante .htaccess y .htpasswd el directorio de descarga.
+					Esta versión evita que se listen los archivos .*
+	Versión  3.2   : 14/ene/2003	Lee un archivo HTML para cada asignatura donde aparece el nombre de usuario y el password para descarga de archivos
+	Versión  3.3   : 22/abr/2003	Definición de 3 tipos de usuario: administrador, profesor, estudiante, invitado y distintos privilegios para cada uno. (5480 líneas)
+	Versión  3.3.1 : 30/abr/2003	Aumentado el tamaño del cuerpo de los mensajes del foro.
+	Versión  3.4   : 30/abr/2003	Corregidos tamaños de cadenas en algunas funciones.
+	Versión  3.5   : 05/may/2003	Cambio del sitio donde aparece el nombre del alumno.
+					Cambio del modo de seleccionar una opción del menú. Ahora con un botón directo por opción. (5646 líneas)
+	Versión  3.6   : 06/may/2003	Cambio del modo de seleccionar una opción del menú. Ahora con un enlace directo por opción.
+					Cambio en la forma de presentar la ayuda de las opciones del menú. (5647 líneas)
+	--------------------------------
+	Versión  4.0   : 06/may/2003	El programa presenta el tablón de anuncios y el menú con 9 opciones estáticas:
+					profesor, Tutorías, Horario, Teoría, Prácticas, Bibliografía, Evaluación, FAQ y Enlaces. (6038 líneas)
+	Versión  4.0.1 : 07/may/2003	Pequeñas mejoras estéticas.
+	Versión  4.0.2 : 07/may/2003	Pequeñas mejoras estéticas.
+	Versión  4.0.3 : 07/may/2003	Corregido pequeño bug.
+	Versión  4.0.4 : 08/may/2003	Ajustes para que se visualice bien en Netscape. Correcto con Microsoft Internet Explorer 6.0 y Netscape 7.0
+	Versión  4.0.5 : 08/may/2003	Acceso directo a los mensajes de cada tema del foro pinchando sobre el tema.
+	Versión  4.1   : 08/may/2003	Paso de parámetros a través de un archivo de configuración.
+	Versión  4.2   : 12/may/2003	Usuarios "demostración". Versiones de demostración.
+					Recepción de fotografía a través de un archivo temporal.
+	Versión  4.2.1 : 13/may/2003	Ocultación con asteriscos de los datos presentados en las versiones de demostración.
+					Versión con la que se pidió el proyecto de innovación docente "Plataforma SWAD (Sistema Web a Apoyo a la Docencia)".
+	Versión  4.3   : 20/may/2003	Envío de correo electrónico a todos los alumnos de una asignatura.
+	Versión  4.3.1 : 01/oct/2003	Pequeño cambio en el sitio donde aparece el menú principal.
+	Versión  4.3.2 : 15/oct/2003	Todos los iconos se cargan ahora de "/~acanas/swad/iconos/" en lugar de "/iconos/".
+	Versión  4.3.3 : 22/oct/2003	Modificación en la presentación gráfica de los avisos (ahora simulando notas amarillas).
+	Versión  4.4   : 22/oct/2003	Envío y presentación automática de avisos.
+	Versión  4.4.1 : 23/oct/2003	Aparición de los avisos en orden inverso a la fecha de envío.
+	Versión  4.5   : 23/oct/2003	Eliminación selectiva de avisos. (6878 líneas)
+	Versión  4.6   : 28/oct/2003	Cambio importante en el aspecto gráfico de la plataforma. Menús separados en pestañas.
+	Versión  4.6.1 : 30/oct/2003	Pequeños cambios estéticos.
+	Versión  4.6.2 : 30/oct/2003	Llamada directa a la función de cada acción. Cambios en los tipos de letra de algunas opciones.
+	Versión  4.6.3 : 30/oct/2003	Se recuerda para cada usuario la última pestaña abierta en la sesión anterior.
+	Versión  4.7   : 05/nov/2003	Incorporación de las opciones del menú horizontal y otras relacionadas con la asignatura a la pestaña de la asignatura.
+	Versión  4.7.1 : 05/nov/2003	Se muestra el título de la opción elegida.
+	Versión  4.8   : 05/nov/2003	Envío de un archivo HTML con la tabla de calificaciones. (7223 líneas)
+	Versión  4.8.1 : 06/nov/2003	Mejoras internas en la recepción de foto y calificaciones.
+	Versión  4.8.2 : 07/nov/2003	Envío del número de filas de cabecera y de pie de la tabla de calificaciones.
+	Versión  4.8.3 : 10/nov/2003	Cambio en la presentación. No aparece arriba el nombre de la asignatura.
+	Versión  4.8.4 : 11/nov/2003	Nuevo menú izquierdo con acceso a la Universidad, al Centro, a los departamentos, etc.
+	Versión  4.8.5 : 12/nov/2003	Si no se pasan parámetros, directamente salta a la página de ayuda de la plataforma.
+	Versión  4.9   : 12/nov/2003	Aparece un calendario con el mes actual.
+	Versión  4.9.1 : 13/nov/2003	Corregido bug en la grabación de la tabla de último acceso.
+					Mejora en la presentación del registro de accesos.
+	Versión  4.9.2 : 13/nov/2003	Reducción del tamaño de los avisos (notas amarillas). Versión correspondiente a las III Jornadas Andaluzas de Software Libre.
+	Versión  4.9.3 : 14/nov/2003	Cambio del logo y del nombre de la plataforma (Sistema de Servicios Web de Apoyo al Aprendizaje y a la Docencia a Distancia)
+	Versión  4.9.4 : 17/nov/2003	Pequeños cambios estéticos.
+	Versión  4.10  : 18/nov/2003	Añadido menú de asignaturas de Ingeniero en Informática.
+	Versión  4.10.1: 19/nov/2003	Añadidos menús de asignaturas de ITIG e ITIS.
+	Versión  4.10.2: 20/nov/2003	Añadido menú de asignaturas optativas de las ITI. Se puede navegar entre asignaturas sin perder el ID y la contraseña.
+					Obtención automática de los nombres de archivos a partir del path de la asignatura, en lugar de leerlos del archivo de configuración. (8218 líneas)
+	Versión  4.10.3: 21/nov/2003	Corregido pequeños bugs en la presentación.
+	Versión  4.10.4: 24/nov/2003	Mejoras en la presentación del menú de asignaturas. (8221 líneas)
+	Versión  4.10.5: 24/nov/2003	Ligeros cambios estéticos.
+	Versión  4.11  : 25/nov/2003	Gestión de descarga de archivos muy mejorada.
+					Comienzo de la administración de descarga de archivos.
+	Versión  4.12  : 25/nov/2003	Borrado de archivos de descarga.
+	Versión  4.12.1: 26/nov/2003	Corregidos algunos bugs. Presentación de archivos para descarga mejorada.
+	Versión  4.13  : 26/nov/2003	Envío de archivos para descarga.
+	Versión  4.13.1: 27/nov/2003	Borrado recursivo de carpetas de descarga no vacías. Añadido reloj en Javascript.
+	Versión  4.13.2: 27/nov/2003	Añadida carpeta raíz para poder crear carpetas o archivos directamente en la carpeta de descargas.
+	Versión  4.13.3: 28/nov/2003	Pequeños cambios internos. Corregido pequeño bug en la presentación de las notas amarillas.
+	Versión  4.13.4: 02/dic/2003	Ligeros cambios estéticos, principalmente en la orla.
+	Versión  4.13.5: 03/dic/2003	Presentación del listado de accesos en orden inverso (comenzando por el último acceso).
+	Versión  4.14  : 03/dic/2003	Presentación del listado de accesos en varias páginas.
+	Versión  4.14.1: 04/dic/2003	Mejoras en el listado de accesos. (8910 líneas)
+	Versión  4.14.2: 04/dic/2003	El sistema recuerda el número de columnas en la orla, el número de columnas en el listado de fichas y el número de filas por página en el listado de accesos.
+	Versión  4.14.3: 05/dic/2003	En el mes se muestran en rojo los días festivos y en un color especial los días no lectivos.
+					En el futuro las listas de dias festivos y no lectivos deberían poder introducirse a través de un formulario.
+	Versión  4.15  : 05/dic/2003	Lista de accesos en los últimos minutos (usuarios conectados). Se listan distintos accesos del mismo usuario. (9109 líneas)
+	Versión  4.16  : 09/dic/2003	Lista de usuarios conectados (los que han accedido en los últimos minutos y no han salido). (9318 líneas)
+	Versión  4.16.1: 10/dic/2003	Los administradores no dejarán huella en el registro.
+	Versión  4.16.2: 10/dic/2003	Algunas mejoras gráficas en los anuncios. (9324 líneas)
+	Versión  4.16.3: 12/dic/2003	En los mensajes del foro se respetan los espacios en blanco originales.
+	Versión  4.17  : 16/dic/2003	Integrado el sistema de mejora de fotos realizado en el proyecto fin de carrera de Alberto Rodrigo Gámiz y Jesús Álvarez Martín. (9379 líneas)
+	Versión  4.17.1: 16/dic/2003	En los mensajes del foro se respetan los tabuladores originales.
+	Versión  4.17.2: 17/dic/2003	Solucionado problema en los mensajes del foro. (9419 líneas)
+	Versión  4.17.3: 17/dic/2003	Modificación en la presentación de usuarios conectados: ahora se muestra la foto. (9463 líneas)
+	Versión  4.17.4: 22/dic/2003	Al seleccionar un SELECT, se envía el formulario. (9467 líneas)
+	Versión  4.18  : 19/ene/2004	En los temas de los foros aparece la fecha del envío más reciente. (9616 líneas)
+	Versión  4.19  : 20/ene/2004	Los temas de los foros se ordenan por defecto según la fecha del envío más reciente, y pueden ordenarse según la fecha del primer envío. (9700 líneas)
+	Versión  4.19.1: 22/ene/2004	Mejoras internas en la presentación de los temas del foro.
+	Versión  4.19.2: 22/ene/2004	El formato de fecha almacenada en los archivos pasa a ser: segundos desde 1970. (9751 líneas)
+					Por compatibilidad aún se leen fechas en formato dia/mes/año hora:minuto. Este formato se abandonará en el futuro.
+	Versión  4.19.3: 28/ene/2004	Corregido bug en mensaje de error.
+	Versión  4.20  : 04/feb/2004	Generación automática del horario de una asignatura a partir de los datos de un archivo. (9967 líneas)
+	Versión  4.21  : 06/feb/2004	Modificación del horario de una asignatura por parte de un profesor. (10158 líneas)
+	Versión  4.22  : 09/feb/2004	Envío de enlaces a páginas de teoría, prácticas, bibliografía, evaluación, profesores, tutorías, FAQ y enlaces.
+					Corregido pequeño bug en descarga de archivo. (10382 líneas)
+	Versión  4.22.1: 10/feb/2004	Cambios en los menús. Versión enviada a Jenui 2004.
+	Versión  4.22.2: 12/feb/2004	Cambios en el envío de enlaces a páginas de teoría, prácticas, etc. (10368 líneas)
+	Versión  4.23  : 12/feb/2004	Nueva organización de las pestañas. (10297 líneas)
+	Versión  4.24  : 13/feb/2004	Recepción de archivos HTML y ZIP con teoría, prácticas, etc. (10384 líneas)
+	Versión  4.24.1: 16/feb/2004	Corregido pequeño bug en teoría, prácticas, etc. (10386 líneas)
+	Versión  4.24.2: 17/feb/2004	Pequeño cambio en los menús de administración de asignatura y usuarios.
+					Añadido campo "Grupo" a los horarios. (10447 líneas)
+	Versión  4.25  : 17/feb/2004	Mejorada la gestión de la tabla de usuarios de una asignatura. (10504 líneas)
+	Versión  4.26  : 18/feb/2004	En la orla, la lista de usuarios, la lista de fichas y el envío de correo, los usuarios se ordenan alfabéticamente independientemente del orden en el que estén almacenados en la lista de usuarios de la asignatura. (10566 líneas)
+	Versión  4.27  : 19/feb/2004	Nueva opción para añadir los usuarios de una lista con ID a la asignatura. (10806 líneas)
+	Versión  4.27.1: 24/feb/2004	Pequeños cambios internos. (10921 líneas)
+	Versión  4.27.2: 24/feb/2004	Corregido bug en el envío de carpetas.
+	Versión  4.28  : 25/feb/2004	Reorganización de las pestañas y menús. (10846 líneas)
+	Versión  4.28.1: 26/feb/2004	Cambio en el nombre del archivo de usuarios de una asignatura.
+	Versión  4.28.2: 01/mar/2004	Corregidos pequeños bugs.
+					Se puede ejecutar el cgi sin parámetros (sin una asignatura concreta). (10868 líneas)
+	Versión  4.28.3: 01/mar/2004	Cabecera de pestañas con bordes redondeados. (10876 líneas)
+	Versión  4.28.4: 02/mar/2004	Cambio en los bordes de las pestañas. (10873 líneas)
+	Versión  4.28.5: 04/mar/2004	Se crea el directorio de avisos si no existe.
+					Cambio estético: fondo superior pasa a degradado.
+	Versión  4.29  : 05/mar/2004	Uso de sesiones, en lugar de propagar el ID y el password. (11011 líneas)
+	Versión  4.29.1: 08/mar/2004	Corregido bug en las sesiones. Algunas mejoras internas. (10991 líneas)
+	Versión  4.29.2: 11/mar/2004	Corregido bug en inicio de sesión. (10999 líneas)
+	Versión  4.30  : 12/mar/2004	Implementando cambio importante en la forma de almacenar los datos de los usuarios. Ahora cada usuario tendrá un directorio.
+	Versión  4.30.1: 13/mar/2004	Continúa implementación de nueva forma de almacenar usuarios. No finalizada. (11106 líneas)
+	Versión  4.31  : 15/mar/2004	Implementación del maletin de almacenamiento personal. Falta comprobar cuota de disco. (11352 líneas)
+	Versión  4.31.1: 16/mar/2004	Cuotas en el maletín y otras mejoras internas. (11248 líneas)
+	Versión  4.31.2: 17/mar/2004	Terminando de implementar cambios relacionados con la nueva forma de almacenar las fichas de los usuarios. (11334 líneas)
+	Versión  4.31.3: 17/mar/2004	Terminando de implementar cambios relacionados con la nueva forma de almacenar las fichas de los usuarios. (11335 líneas)
+	Versión  4.31.4: 17/mar/2004	Terminada nueva forma de almacenar las fichas de los usuarios. Eliminada opción de cambiar fichas al sistema nuevo. (11264 líneas)
+	Versión  4.31.5: 18/mar/2004	Se eliminan algunos espacios entre etiquetas HTML para que la página se muestre correctamente en Explorer 5. (11280 líneas)
+	Versión  4.32  : 19/mar/2004	Mejora en la presentación de la lista de usuarios. Diversas mejoras internas. (11203 líneas)
+	Versión  4.32.1: 23/mar/2004	Se eliminan algunos espacios entre etiquetas HTML para que la página se muestre correctamente en Explorer 5. (11203 líneas)
+	Versión  4.33  : 25/mar/2004	Envío de mensaje instantáneo a usuarios conectados.
+	Versión  4.33.1: 26/mar/2004	Recepción de mensajes y almacenamiento en carpeta de mensajes recibidos. (11459 líneas)
+	Versión  4.33.2: 02/abr/2004	Corregido el error de seguridad en el maletín informado por el estudiante Luis Miguel Merino Bonilla. (11537 líneas)
+	Versión  4.34  : 08/abr/2004	Envío de mensaje a cualquier usuario. (11711 líneas)
+	Versión  4.34.1: 08/abr/2004	Posibilidad de seleccionar todos los usuarios como destinatarios de un mensaje. (11738 líneas)
+	Versión  4.35  : 08/abr/2004	Borrado selectivo de mensajes recibidos de otros usuarios. (11896 líneas)
+	Versión  4.36  : 11/abr/2004	Cambios importantes en la implementación interna del foro. (11903 líneas)
+	Versión  4.36.1: 12/abr/2004	Resaltados los mensajes sin leer. Cambios en la presentación. (11921 líneas)
+	Versión  4.36.2: 13/abr/2004	Pequeños cambios en la presentación. (11905 líneas)
+	Versión  4.36.3: 13/abr/2004	Mejoras internas en el envío de formularios. (11896 líneas)
+	Versión  4.37  : 14/abr/2004	Almacenamiento de mensajes enviados. (11980 líneas)
+	Versión  4.37.1: 14/abr/2004	Borrado de mensajes enviados. Cambio en redacción de mensajes a un usuario conectado. (11979 líneas)
+	Versión  4.37.2: 15/abr/2004	Cambio en presentación del envío de correo a todos los estudiantes. (11978 líneas)
+	Versión  4.37.3: 18/abr/2004	Corregido pequeño bug y eliminación de la presentación de la constraseña en la lista de usuarios. (11983 líneas)
+	Versión  4.37.4: 20/abr/2004	Mejoras en el cierre de sesiones. Aparece tiempo de generación de la página. (12031 líneas)
+	Versión  4.37.5: 20/abr/2004	Mejoras internas y correcciones de bugs relacionadas con en el cierre de sesiones. (12027 líneas)
+	Versión  4.38  : 22/abr/2004	Respuesta a mensaje recibido. (12058 líneas)
+	Versión  4.38.1: 24/abr/2004	Corregido pequeño bug en la creación del fichero con el número de mensajes nuevos. (12060 líneas)
+	Versión  4.38.2: 25/abr/2004	Cambio en el listado de usuarios conectados. Ahora aparece tiempo de inactividad. (12074 líneas)
+	Versión  4.38.3: 25/abr/2004	El registro de usuarios conectados pasa a ser común a todas las asignaturas. (12090 líneas)
+	Versión  4.39  : 25/abr/2004	Comienza la implementación de la edición del temario de teoría, almacenado en un fichero XML. (12233 líneas)
+	Versión  4.39.1: 27/abr/2004	Algunos cambios estéticos. (12161 líneas)
+	Versión  4.39.2: 27/abr/2004	Continúa la implementación de la edición del temario de teoría. (12260 líneas)
+	Versión  4.39.3: 30/abr/2004	Continúa la implementación de la edición del temario de teoría. (12303 líneas)
+	Versión  4.39.4: 03/may/2004	Continúa la implementación de la edición del temario de teoría. (12355 líneas)
+	Versión  4.39.5: 03/may/2004	Continúa la implementación de la edición del temario de teoría. (12552 líneas)
+	Versión  4.39.6: 04/may/2004	Termina la implementación de la edición del temario de teoría. (12814 líneas)
+	Versión  4.39.7: 04/may/2004	Mejoras para aumentar la rapidez de carga. (12807 líneas)
+	Versión  4.39.8: 05/may/2004	Extensión de edición del temario de teoría al de prácticas. (12835 líneas)
+	Versión  4.39.9: 06/may/2004	Mejoras en la inserción de nuevos items en un temario. (12870 líneas)
+	Versión  4.39.10:06/may/2004	Mejoras en la presentación de un temario. (12863 líneas)
+	Versión  4.39.11:07/may/2004	Las flechas de subir y bajar items del temario permiten ahora mover el subárbol. (12932 líneas)
+	Versión  4.39.12:07/may/2004	Desactivación de las flechas de borrar, subir, y bajar items del temario que no tengan sentido. (13004 líneas)
+	Versión  4.39.13:09/may/2004	Pequeñas optimizaciones en la edición de los temarios. (12993 líneas)
+	Versión  4.40   :10/may/2004	Cambio en la especificación de titulación, curso, cuatrimestre y asignatura. Se utilizará un único código. (13011 líneas)
+	Versión  4.40.1 :13/may/2004	Cambios en la edición del temario. (13005 líneas)
+	Versión  4.41   :26/may/2004	Se muestra la orla lista para imprimir. (13057 líneas)
+	Versión  4.41.1 :27/may/2004	Al mostrar nombres o apellidos de alumnos, aparece la primera letra en mayúscula y el resto en minúsculas. (13109 líneas)
+	Versión  4.42   :02/jun/2004	Cambio en el lugar donde se introduce el ID y la contraseña. (13098 líneas)
+	Versión  4.42.1 :02/jun/2004	Se muestran pestañas aunque no haya un usuario autenticado. (13120 líneas)
+	Versión  4.42.2 :03/jun/2004	Diversos cambios internos relacionados con los usuarios conectados. (13181 líneas)
+	Versión  4.42.3 :07/jun/2004	Aparece un icono en cada pestaña. (13185 líneas)
+	Versión  4.42.4 :22/jun/2004	Comienza la implementación del chat. (13236 líneas)
+	Versión  4.42.5 :29/jun/2004	Aparece el número de usuarios conectados en toda la plataforma y en la asignatura seleccionada. (13232 líneas)
+	Versión  4.43   :02/jul/2004	Añadido el plan de estudios de Ingeniero Electrónico. (13373 líneas)
+	Versión  4.43.1 :07/jul/2004	Al cambiar la contraseña, se pide la original. (13403 líneas)
+	Versión  4.44   :21/jul/2004	Se incluye el algoritmo Rijndael. (13450 líneas)
+					Compilar con: gcc swad.c rijndael.c -o swad -Wall
+	Versión  4.44.1 :22/jul/2004	Nombres de las fotografías cifrados (enlaces simbólicos a un directorio privado). (13491 líneas)
+	Versión  4.44.2 :22/jul/2004	Se borran todas las fotos temporales creadas hace más de cierto tiempo. (13487 líneas)
+	Versión  4.44.3 :23/jul/2004	Las contraseñas se almacenan cifradas a partir de esta versión. (13553 líneas)
+	Versión  4.44.4 :27/jul/2004	Mejora en el almacenamiento interno de los enlaces de la izquierda (Universidad, etc.). (13425 líneas)
+	Versión  4.45   :27/jul/2004	Nuevas fichas para profesores. (13464 líneas)
+	Versión  4.45.1 :29/jul/2004	Cambio en las fichas para profesores. El departamento y el centro se eligen de una lista. (13525 líneas)
+	Versión  4.45.2 :29/jul/2004	Se presentan los profesores de una asignatura a partir de los datos de sus fichas. (13532 líneas)
+	Versión  4.45.3 :29/jul/2004	Mejoras en la presentación de las fichas. (13532 líneas)
+	Versión  4.45.4 :30/jul/2004	Opción de mostrar las fichas listas para imprimir. (13603 líneas)
+	Versión  4.45.5 :30/jul/2004	Mejoras en la presentación de las fichas.
+					Añadidos todos los centros y algunos departamentos (13636 líneas)
+	Versión  4.45.6 :31/jul/2004	Añadidos todos los departamentos (13707 líneas)
+	Versión  4.45.7 :02/sep/2004	Corregido pequeño bug en presentación del título del calendario (13708 líneas)
+	Versión  4.45.8 :03/sep/2004	Añadidos iconos para ver y crear convocatorias de examen (opciones aún no implementadas) (13715 líneas)
+	Versión  4.45.9 :03/sep/2004	En el menú de la izquierda aparecen todos los departamentos (13713 líneas)
+	Versión  4.45.10:10/sep/2004	En el menú de la izquierda aparecen todos los centros. Corregido pequeño bug en listado descargas y maletín (13718 líneas)
+	Versión  4.46   :10/sep/2004	Posibilidad de renombrar las carpetas de descarga. (13852 líneas)
+	Versión  4.46.1 :13/sep/2004	Nueva pestaña de administración de la asignatura, ya que el menú de asignatura era demasiado grande. (13858 líneas)
+	Versión  4.46.2 :14/sep/2004	Corregido pequeño bug en pestañas. (13859 líneas)
+	Versión  4.46.3 :20/sep/2004	Cada tipo de usuario tiene una cuota distinta en el maletín. (13883 líneas)
+	Versión  4.46.4 :20/sep/2004	Creación automática del directorio de foros si no existe. (13917 líneas)
+	Versión  4.47   :20/sep/2004	Elección de la titulación, el curso y la asignatura mediante selectores. (13891 líneas)
+	Versión  4.47.1 :20/sep/2004	Los avisos pasan a la izquierda y el menú de enlaces a la derecha. (13887 líneas)
+	Versión  4.47.2 :21/sep/2004	Corregido pequeño bug y optimización en el dibujo de las pestañas. (13886 líneas)
+	Versión  4.47.3 :21/sep/2004	Las ventanas emergentes (por ej. para descarga) aparecen sin barra de direcciones. (13887 líneas)
+	Versión  4.47.4 :21/sep/2004	Mejora interna la implementación de las acciones relacionadas con descarga y maletin. (13872 líneas)
+	Versión  4.47.5 :21/sep/2004	Cada titulación lleva su escudo. (13879 líneas)
+	Versión  4.48   :21/sep/2004	Posibilidad de borrar en el foro los mensajes sin respuesta enviados por uno mismo. (13986 líneas)
+	Versión  4.49   :22/sep/2004	Se puede obtener el código HTML de acceso directo a una asignatura. (14047 líneas)
+	Versión  4.49.1 :22/sep/2004	El código HTML de acceso directo no será editable. (14057 líneas)
+	Versión  4.49.2 :22/sep/2004	Añadidas asignaturas en Ceuta. (14132 líneas)
+	Versión  4.49.3 :23/sep/2004	Se insertan retornos de página en la vista de impresión de las fichas. (14172 líneas)
+	Versión  4.49.4 :24/sep/2004	Se crean automáticamente los directorios de una asignatura si no existían. (14260 líneas)
+	Versión  4.49.5 :24/sep/2004	Corregido pequeño bug en el envío de correo a los alumnos. (14266 líneas)
+	Versión  4.49.6 :26/sep/2004	Se crea automáticamente el fichero de configuración de una asignatura si no existe.
+					Eliminado parámetro CURSO_ACADEMICO del fichero de configuración.
+					Corregidos bugs en la creación automática de ciertos ficheros de una asignatura. (14278 líneas)
+	Versión  4.49.7 :27/sep/2004	Comienza la implementación del uso de apodos (nicknames). (14333 líneas)
+	Versión  4.50   :28/sep/2004	Posibilidad de que aparezcan las fotos en el listado de datos de alumnos. (14380 líneas)
+	Versión  4.50.1 :28/sep/2004	Continúa la implementación del uso de apodos (nicknames). (14512 líneas)
+	Versión  4.51   :28/sep/2004	Incorporando la primera versión buena del chat realizada por Raúl Jiménez Benítez. (14518 líneas)
+	Versión  4.51.1 :29/sep/2004	Continúa la implementación del uso de apodos (nicknames). (14519 líneas)
+	Versión  4.51.2 :30/sep/2004	Creación automática de los directorios de bibliografía, evaluación, tutorías,... si no existen. (14533 líneas)
+	Versión  4.51.3 :30/sep/2004	Continúa la implementación del uso de apodos (nicknames).
+					Corregido bug en la recepción de ficheros HTML con tipo MIME text/plain. (14546 líneas)
+	Versión  4.51.4 :30/sep/2004	Corregidos varios bugs pequeños. (14562 líneas)
+	Versión  4.52   :01/oct/2004	A partir de ahora no se contemplan los usuarios de demostración.
+					Cambios en el significado de fotos públicas y privadas para profesores y alumnos.
+					Mejora en la presentación del nivel 1 del foro. (14301 líneas)
+	Versión  4.52.1 :03/oct/2004	Termina la implementación de la recepción de apodo (nickname) nuevo. (14347 líneas)
+	Versión  4.53   :03/oct/2004	Se puede hacer login con el ID o con el apodo (nickname). (14459 líneas)
+	Versión  4.54   :04/oct/2004	Cada profesor edita su horario de tutorías.
+					Se muestra el horario de todos los profesores de la asignatura (14561 líneas)
+	Versión  4.54.1 :04/oct/2004	Ligeros cambios en tamaños de fotos en orlas.
+					Mejora en la presentación de los mensajes de aviso y de error. (14534 líneas)
+	Versión  4.54.2 :04/oct/2004	Cambios en llamada al chat. Se deja funcionando una versión del chat con errores mínimos. (14604 líneas)
+	Versión  4.55   :05/oct/2004	Eliminación de todos los alumnos de la asignatura (para el comienzo de un nuevo curso, por ejemplo).
+					Versión con la que se hizo la presentación del CIAWI 2004 (14668 líneas)
+	Versión  4.55.1 :10/oct/2004	Se comprueba y mejora el formato de la fecha de nacimiento. (14828 líneas)
+	Versión  4.55.2 :10/oct/2004	Añadido campo de lugar de tutorías al horario de tutorías.
+					Cambio en la forma de almacenar los horarios (14836 líneas)
+	Versión  4.55.3 :10/oct/2004	Mejorado mensaje inicial en descarga de archivos. (14843 líneas)
+	Versión  4.55.4 :12/oct/2004	Pequeña modificación en la escritura de mensajes en el fichero de registro. (14848 líneas)
+	Versión  4.55.5 :12/oct/2004	Eliminado el tipo de orla que sólo permite ver los usuarios con foto. (14831 líneas)
+	Versión  4.56   :12/oct/2004	Permitir al administrador o a un profesor el cambio de contraseña de otro usuario. (14967 líneas)
+	Versión  4.57   :13/oct/2004	Comienza la implementación de la descripción de la asignatura (sugerida por José Luis Bernier). (14983 líneas)
+	Versión  4.57.1 :15/oct/2004	Algunos cambios en el chat. (14992 líneas)
+	Versión  4.57.2 :16/oct/2004	Se utiliza un tiempo pequeño para usuarios conectados y un tiempo mayor para el cierre de sesión. (14996 líneas)
+	Versión  4.58   :17/oct/2004	Cambio en el aspecto de las pestañas. (15017 líneas)
+	Versión  4.58.1 :18/oct/2004	Ligera modificación a los cambios anteriores en el aspecto de las pestañas. (15015 líneas)
+	Versión  4.59   :18/oct/2004	Calendario académico de la asignatura. (15113 líneas)
+	Versión  4.59.1 :20/oct/2004	Cambios en el calendario académico de la asignatura. (15207 líneas)
+	Versión  4.59.2 :21/oct/2004	Se muestra una vista de impresión del calendario académico de la asignatura. (15230 líneas)
+	Versión  4.59.3 :21/oct/2004	Reorganización en la presentación de algunos menús, avisos, etc. (15249 líneas)
+	Versión  4.59.4 :22/oct/2004	Ligeros cambios estéticos. (15249 líneas)
+	Versión  4.60   :22/oct/2004	Chat: acceso a varias salas aparte de la de la asignatura. (15326 líneas)
+	Versión  4.60.1 :24/oct/2004	Se muestra la descripción de la asignatura. (15416 líneas)
+	Versión  4.60.2 :24/oct/2004	Edición de la descripción de la asignatura. (15583 líneas)
+	Versión  4.60.3 :25/oct/2004	Antes de entrar en el chat, los espacios del apodo se cambian por "_" (el chat no acepta apodos con espacios). (15590 líneas)
+					Versión con la que se hizo la memoria del proyecto de innovación docente "Plataforma SWAD..." y la presentación en el congreso SIIE'04.
+	Versión  4.61   :27/oct/2004	Primera versión en http://swad.ugr.es/ (15591 líneas)
+	Versión  4.61.1 :03/nov/2004	Versión en https://swad.ugr.es/ (15593 líneas)
+	Versión  4.61.2 :08/nov/2004	Corregido bug en edición del horario (15612 líneas)
+	Versión  4.61.3 :08/nov/2004	Aumentada la cuota de disco para el maletín de los alumnos (15613 líneas)
+	Versión  4.62   :09/nov/2004	Añadiendo algunas carreras de Ceuta. (15833 líneas)
+	Versión  4.62.1 :11/nov/2004	Cambio en el almacenamiento de las asignaturas. (15802 líneas)
+	Versión  4.63   :13/nov/2004	La salida del CGI va a un fichero, y de ese fichero se escribe al final en la salida estándar. (15901 líneas)
+	Versión  4.63.1 :22/nov/2004	Aumentada la cuota de los alumnos a 30 MiB. Se escribe la cuota ocupada al presentar el maletín y el listado de alumnos. (15943 líneas)
+	Versión  4.63.2 :23/nov/2004	Pequeño cambio en la presentación de la orla para envío de mensajes. (15944 líneas)
+	Versión  4.63.3 :25/nov/2004	Se evita que se envíen mensajes sin destinatario. (15963 líneas)
+	Versión  4.63.4 :30/nov/2004	Se aceptan ID de hasta 10 dígitos, desde 6 dígitos, y también los que empiecen por dos letras.
+					Corregido bug en usuarios conectados: se puede ver una foto de otro usuario siguiendo los mismos criterios que en la orla.
+					Corregido pequeño bug en selección de todos los usuarios en el envío de mensajes (16000 líneas)
+	Versión  4.63.5 :30/nov/2004	En el envío de mensajes internos se usa el ID encriptado. (16014 líneas)
+	Versión  4.63.6 :30/nov/2004	Al pasar el ratón sobre una fotografía, se muestra en grande a la derecha. (16027 líneas)
+	Versión  4.63.7 :01/dic/2004	Mejorada la conversión a mayúsculas/minúsculas de letras con tilde y la comparación de cadenas. (16083 líneas)
+	Versión  4.64   :01/dic/2004	En el envío de mensajes entre usuarios aparece una orla de profesores y otra de alumnos. (16141 líneas)
+	Versión  4.65   :01/dic/2004	En los mensajes entre usuarios se incluye el mensaje original al responder. (16208 líneas)
+	Versión  4.65.1 :02/dic/2004	Ligeras modificaciones internas en el dibujo de la orla. (16245 líneas)
+	Versión  4.65.2 :02/dic/2004	Al ordenar la lista de usuarios, los que no tienen nombre y apellidos aparecen al final. (16278 líneas)
+	Versión  4.65.3 :07/dic/2004	Cambios para que las pestañas se vean bien en el Explorer 5. (16282 líneas)
+	Versión  4.65.4 :07/dic/2004	Cambios internos en la tabla de acciones. (16304 líneas)
+	Versión  4.65.5 :08/dic/2004	El código de acceso directo se presenta en XHTML. (16302 líneas)
+	Versión  4.65.6 :08/dic/2004	Pequeñas mejoras estéticas. (16295 líneas)
+	Versión  4.66   :13/dic/2004	El registro de accesos se guarda en una tabla MySQL. (16349 líneas)
+					gcc swad.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql
+	Versión  4.66.1 :14/dic/2004	Los accesos se toman de la tabla MySQL. (16105 líneas)
+	Versión  4.66.2 :14/dic/2004	Cambios en la presentación de los accesos. (16214 líneas)
+	Versión  4.66.3 :15/dic/2004	Cambios en la presentación de los accesos. (16225 líneas)
+	Versión  4.66.4 :15/dic/2004	Corregido bug en evaluación del test. (16202 líneas)
+	Versión  4.66.5 :15/dic/2004	Añadida la titulación Licenciado en Economía. (16368 líneas)
+	Versión  4.66.6 :16/dic/2004	Los ficheros de evaluación, FAQ, etc., aparte index.html, también pueden llamarse index.htm. (16395 líneas)
+	Versión  4.66.7 :22/dic/2004	Se obliga a los usuarios a introducir el nombre y el primer apellido. (16412 líneas)
+	Versión  4.67   :27/dic/2004	Los alumnos matriculados en cada asignatura se almacenan en una tabla MySQL. (16737 líneas)
+	Versión  4.67.1 :28/dic/2004	La última pestaña y los accesos al test se almacenan en la misma tabla MySQL. (16398 líneas)
+	Versión  4.68   :28/dic/2004	Los usuarios pueden identificarse al entrar a la plataforma, antes de elegir asignatura. (16389 líneas)
+	Versión  4.69   :29/dic/2004	Aparece un menú con acceso a las asignaturas en las que está dado de alta el usuario. (16471 líneas)
+	Versión  4.70   :29/dic/2004	Los apodos se almacenan en una tabla MySQL. (16555 líneas)
+	Versión  4.70.1 :29/dic/2004	Pequeños cambios internos. (16476 líneas)
+	Versión  4.71   :31/dic/2004	Comienza implementación de consulta de accesos entre dos fechas. (16581 líneas)
+	Versión  4.71.1 :03/ene/2005	Consulta de accesos entre dos fechas. (16622 líneas)
+	Versión  4.71.2 :08/ene/2005	Corregido bug en presentación del calendario. Nuevo formulario para la fecha de nacimiento. (16648 líneas)
+	Versión  4.72   :09/ene/2005	Número de accesos de cada usuario. (16793 líneas)
+	Versión  4.72.1 :09/ene/2005	Aparece la fotografía en el número de accesos de cada usuario. (16802 líneas)
+	Versión  4.72.2 :10/ene/2005	En la consulta de accesos cada fila aparece con un color. (16809 líneas)
+	Versión  4.73   :10/ene/2005	Número de accesos por fechas. (16879 líneas)
+	Versión  4.73.1 :11/ene/2005	Cambios en la presentación del número de accesos. (16869 líneas)
+	Versión  4.73.2 :11/ene/2005	Cambios en el zoom de las fotografías al pasar el ratón sobre ellas. (16901 líneas)
+	Versión  4.74   :12/ene/2005	Número de accesos por tipo de acción. (16980 líneas)
+	Versión  4.74.1 :13/ene/2005	Mejora gráfica en las estadísticas de acceso. (16990 líneas)
+	Versión  4.75   :15/ene/2005	Estadísticas de acceso por horas. (17094 líneas)
+	Versión  4.75.1 :15/ene/2005	Mejora gráfica en las estadísticas de acceso por horas. (17096 líneas)
+	Versión  4.76   :16/ene/2005	Estadísticas de acceso de todos los alumnos de SWAD a todas las asignaturas. (17177 líneas)
+	Versión  4.76.1 :17/ene/2005	Estadísticas de acceso de todos los alumnos, profesores, o usuarios de SWAD a todas las asignaturas. (17212 líneas)
+	Versión  4.76.2 :17/ene/2005	Pequeñas mejoras internas. Corregidos algunos bugs. (17215 líneas)
+	Versión  4.76.3 :18/ene/2005	Corregido pequeño bug. (17232 líneas)
+	Versión  4.76.4 :18/ene/2005	Mejora en la elección de fechas para accesos y estadísticas. (17286 líneas)
+	Versión  4.77   :18/ene/2005	Comienza implementación de exámenes de test en MySQL. (17381 líneas)
+	Versión  4.77.1 :19/ene/2005	Continúa implementación de exámenes de test en MySQL. Corregido pequeño problema en impresión de fotos profesores. (17455 líneas)
+	Versión  4.77.2 :19/ene/2005	Continúa implementación de exámenes de test en MySQL. (17521 líneas)
+	Versión  4.77.3 :20/ene/2005	Continúa implementación de exámenes de test en MySQL. (17622 líneas)
+	Versión  4.77.4 :20/ene/2005	Continúa implementación de exámenes de test en MySQL.
+					José Luis Bernier aporta la idea de añadir descriptores o palabras clave a cada pregunta de test. (17647 líneas)
+	Versión  4.77.5 :24/ene/2005	Continúa implementación de exámenes de test en MySQL. (17657 líneas)
+	Versión  4.77.6 :24/ene/2005	Continúa implementación de exámenes de test en MySQL. (17958 líneas)
+	Versión  4.77.7 :25/ene/2005	Continúa implementación de exámenes de test en MySQL. (18038 líneas)
+	Versión  4.77.8 :25/ene/2005	Continúa implementación de exámenes de test en MySQL. (18180 líneas)
+	Versión  4.77.9 :26/ene/2005	Actualizado MySQL de versión 3.23.58 a versión 4.1.9 (el comportamiento de TIMESTAMP es diferente en los SELECT) (18194 líneas)
+	Versión  4.77.10:27/ene/2005	Continúa implementación de exámenes de test en MySQL. (18425 líneas)
+	Versión  4.77.11:27/ene/2005	Continúa implementación de exámenes de test en MySQL. (18512 líneas)
+	Versión  4.77.12:28/ene/2005	Continúa implementación de exámenes de test en MySQL. (18623 líneas)
+	Versión  4.77.13:29/ene/2005	Terminada la edición de preguntas de exámenes de test en MySQL. (18688 líneas)
+	Versión  4.77.14:29/ene/2005	Continúa implementación de exámenes de test. (18625 líneas)
+	Versión  4.77.15:31/ene/2005	Continúa implementación de exámenes de test y otras mejoras. (19130 líneas)
+	Versión  4.77.16:31/ene/2005	Continúa implementación de exámenes de test. (19228 líneas)
+	Versión  4.77.17:01/feb/2005	Continúa implementación de exámenes de test. (19339 líneas)
+	Versión  4.77.18:01/feb/2005	Continúa implementación de exámenes de test. (19489 líneas)
+	Versión  4.77.19:02/feb/2005	Continúa implementación de exámenes de test. (19491 líneas)
+	Versión  4.77.20:03/feb/2005	Importación de los test antiguos a la base de datos. (19646 líneas)
+	Versión  4.77.21:04/feb/2005	Continúa implementación de exámenes de test, aparte de otros mínimos cambios. (19656 líneas)
+	Versión  4.77.22:04/feb/2005	Termina de momento la implementación de exámenes de test. Se ponen a disposición de los alumnos. (19737 líneas)
+	Versión  4.77.23:08/feb/2005	Añadida posibilidad de que se deje en blanco una pregunta de elección simple tras seleccionar una opción. (19764 líneas)
+	Versión  4.78   :08/feb/2005	Añadida opción para renombrar descriptores de preguntas de test. (19867 líneas)
+	Versión  4.79   :08/feb/2005	Eliminado el test antiguo. (19322 líneas)
+	Versión  4.79.1 :09/feb/2005	Corregido pequeño bug. (19335 líneas)
+	Versión  4.79.2 :09/feb/2005	Mejoras internas y correción de pequeño bug. (19339 líneas)
+	Versión  4.79.3 :09/feb/2005	Se evita que haya dos descriptores iguales en la misma pregunta al renombrar descriptores. (19406 líneas)
+	Versión  4.79.4 :10/feb/2005	Se evita que haya dos descriptores iguales en la recepción de una pregunta. (19416 líneas)
+	Versión  4.80   :10/feb/2005	Se almacenan las respuestas de los alumnos en el test para calcular la dificultad de las preguntas. (19504 líneas)
+	Versión  4.80.1 :10/feb/2005	Todos los profesores tienen acceso a editar el test. (19506 líneas)
+	Versión  4.80.2 :14/feb/2005	Corregido pequeño bug en los foros cuando el asunto de un mensaje es nulo. (19514 líneas)
+	Versión  4.80.3 :14/feb/2005	Las titulaciones y sus asignaturas pasan al fichero asignaturas.c
+					Añadida titulación de Caminos. (18578 líneas)
+	Versión  4.81   :14/feb/2005	Los alumnos conectados se guardan en la base de datos. (18595 líneas)
+	Versión  4.82   :15/feb/2005	Nueva estadística que permite comparar accesos por asignaturas. (18672 líneas)
+	Versión  4.82.1 :16/feb/2005	Añadida titulación de Maestro: Educación Especial (Ceuta) y pequeños cambios. (18669 líneas)
+	Versión  4.82.2 :17/feb/2005	Pequeños cambios estéticos. Se muestra la plataforma en la Facultad de Empresariales. (18685 líneas)
+	Versión  4.82.3 :18/feb/2005	Impedir que se envíen ficheros con caracteres no permitidos como tildes. (18702 líneas)
+	Versión  4.82.4 :18/feb/2005	"Mis asignaturas" salen ordenadas por código.
+					Desdoblados algunos grupos de Licenciado en Economía.
+					Añadidos 1º y 2º de Teleco.
+					Añadidas optativas de L.A.D.E. (18706 líneas)
+	Versión  4.82.5 :19/feb/2005	Añadida titulación Licenciado en Antropología Social y Cultural. (18707 líneas)
+	Versión  4.82.6 :20/feb/2005	Ampliados mensajes de ayuda. (18712 líneas)
+	Versión  4.83   :20/feb/2005	Las fichas se exportan a la base de datos. (18876 líneas)
+	Versión  4.83.1 :20/feb/2005	Corregidos algunos bugs en la exportación de las fichas. (19763 líneas)
+	Versión  4.84   :20/feb/2005	Se usan las fichas de la base de datos. (18772 líneas)
+	Versión  4.84.1 :21/feb/2005	Corregido bug en acceso a base de datos.
+					Desdoblados algunos grupos de Licenciado en Economía. Añadida asignatura Econlab. (18771 líneas)
+	Versión  4.84.2 :21/feb/2005	Añadida Diplomado en Ciencias Empresariales.
+					Desdoblada asignatura ITIG12TC.
+					Añadido enlace a la asignatura al ver estadísticas por asignaturas. Otros pequeños cambios. (18755 líneas)
+	Versión  4.84.3 :21/feb/2005	Se respetan retornos de carro en los avisos (notas amarillas).
+					Cambio en la eliminación de espacios iniciales y finales. (18896 líneas)
+	Versión  4.84.4 :21/feb/2005	Cambio mínimo en edición de temarios. (18897 líneas)
+	Versión  4.84.5 :22/feb/2005	Se impide que un profesor pueda dar de alta o de baja a un usuario existente que no sea alumno.
+					A partir de ahora no se indican aquí las nuevas titulaciones o asignaturas añadidas. (18929 líneas)
+	Versión  4.84.6 :22/feb/2005	Pequeño cambio en presentación de temarios. (18931 líneas)
+	Versión  4.84.7 :23/feb/2005	Pequeño cambio en presentación de orlita para mensajes y accesos. (18932 líneas)
+	Versión  4.85   :24/feb/2005	Se muestra la asignatura origen de un mensaje entre usuarios y se responde en esa asignatura. (18956 líneas)
+	Versión  4.85.1 :24/feb/2005	Añadido departamento nuevo. (18957 líneas)
+	Versión  4.85.2 :25/feb/2005	Añadidos o mejorados algunos mensajes de ayuda a profesores. (18977 líneas)
+	Versión  4.86   :27/feb/2005	Foro para profesores de SWAD. (19065 líneas)
+	Versión  4.86.1 :27/feb/2005	Se impide que aparezca la foto de un profesor con foto no pública en el foro para profesores. (19101 líneas)
+	Versión  4.86.2 :28/feb/2005	Cambios internos, estéticos y nuevos mensajes de ayuda. (19143 líneas)
+	Versión  4.86.3 :01/mar/2005	Cambios estéticos. La foto del listado de alumnos pasa a la primera columna, para que sea más fácil guardar las notas. (19133 líneas)
+	Versión  4.87   :01/mar/2005	Enlaces a la página del autor del mensaje en los foros.
+					Un profesor puede crear, renombrar y borrar grupos de teoría y de prácticas de una asignatura. (19631 líneas)
+	Versión  4.87.1 :02/mar/2005	Cambios en edición de grupos de teoría o prácticas. (19705 líneas)
+	Versión  4.87.2 :02/mar/2005	Añadido límite de alumnos en grupos de teoría o prácticas. (19826 líneas)
+	Versión  4.87.3 :02/mar/2005	Un alumno puede ver el grupo de teoría y el de prácticas a los que pertenece dentro de una asignatura. (20021 líneas)
+	Versión  4.87.4 :08/mar/2005	Se impide que se introduzcan direcciones de páginas web personales sin un ".". (20057 líneas)
+	Versión  4.87.5 :08/mar/2005	Corregidos pequeños bugs en el foro y en la consulta individualizada de calificaciones. (20060 líneas)
+	Versión  4.87.6 :09/mar/2005	Corregido pequeño bug en ordenación de usuarios para lista.
+					Se guarda en la base de datos el número de columnas de la orla para cada usuario y asignatura. (20156 líneas)
+	Versión  4.87.7 :09/mar/2005	Cambiado icono de foro y chat. Alterado orden de opciones de la pestaña "Mensajes". (20157 líneas)
+	Versión  4.87.8 :15/mar/2005	Nuevo acceso al correo de la UGR. (20158 líneas)
+	Versión  4.88   :15/mar/2005	Se añade nueva columna en la edición de preguntas de test: nº de veces que se ha contestado la pregunta.
+					Las preguntas se pueden ordenar por puntuación promedio. (20244 líneas)
+	Versión  4.88.1 :31/mar/2005	Pequeños cambios en mensajes de ayuda.
+					Se muestra el título de una hebra del foro al ver sus mensajes. (20297 líneas)
+	Versión  4.88.2 :05/abr/2005	Mejoras gráficas en el listado de archivos. (20337 líneas)
+	Versión  4.88.3 :06/abr/2005	Mejoras gráficas en el listado de archivos. (20323 líneas)
+	Versión  4.88.4 :06/abr/2005	Mejoras gráficas en el listado de archivos. (20345 líneas)
+	Versión  4.89   :06/abr/2005	Cambio en los colores de muchas opciones. (20347 líneas)
+	Versión  4.89.1 :13/abr/2005	Mejora gráfica en los foros. (20374 líneas)
+	Versión  4.89.2 :14/abr/2005	Algunas mejoras gráficas. (20395 líneas)
+	Versión  4.90   :17/abr/2005	Añadido nuevo foro común para todos los usuarios de SWAD. (20555 líneas)
+	Versión  4.90.1 :19/abr/2005	Subidas las cuotas de maletines y descargas. (20556 líneas)
+	Versión  4.90.2 :19/abr/2005	Para aumentar la velocidad se usa una hoja de estilo aparte (estilos.css), se añade un estilo para las fotos, y el acceso a centros y departamentos se realiza como una acción aparte. (20527 líneas)
+	Versión  4.91   :20/abr/2005	Los mensajes de foros, los mensajes enviados y los recibidos se listan de 10 en 10. (20629 líneas)
+	Versión  4.91.1 :21/abr/2005	Cambios relacionados con la división en páginas de los mensajes. (20641 líneas)
+	Versión  4.91.2 :22/abr/2005	Los mensajes recibidos y enviados se muestran desde el más antiguo al más reciente.
+					Otros cambios relacionados con mensajes. (20642 líneas)
+	Versión  4.91.3 :22/abr/2005	Se repiten los enlaces a las distintas páginas tras listar los mensajes. (20663 líneas)
+	Versión  4.91.4 :25/abr/2005	Continúa la implementación de los grupos de alumnos. (20933 líneas)
+	Versión  4.92   :25/abr/2005	Comienza la utilización de los grupos de alumnos para ver orlas, fichas, etc. (21135 líneas)
+	Versión  4.92.1 :26/abr/2005	Continúa la utilización de los grupos de alumnos para ver orlas, fichas, etc. (21199 líneas)
+	Versión  4.93   :27/abr/2005	Añadido listado de datos resumidos de alumnos en la ventana principal. (21226 líneas)
+	Versión  4.93.1 :28/abr/2005	Se utiliza un único formulario para apuntarse a grupos de teoría y prácticas. (21349 líneas)
+	Versión  4.93.2 :29/abr/2005	Es necesario confirmar el borrado de grupos de teoría o prácticas cuando contengan alumnos. (21430 líneas)
+	Versión  4.93.3 :29/abr/2005	Cuando se seleccionan los alumnos de un grupo en una orla, también aparecen todos los profesores de la asignatura. (21471 líneas)
+	Versión  4.93.4 :01/may/2005	Cambios en el diseño del horario. (21490 líneas)
+	Versión  4.93.5 :01/may/2005	Mostrar vista de impresión del horario. (21505 líneas)
+	Versión  4.93.6 :02/may/2005	Se pueden seleccionar los alumnos que no pertenecen a ningún grupo de teoría o de prácticas. (21688 líneas)
+	Versión  4.93.7 :04/may/2005	Corregido pequeño bug en mensaje a usuario desde usuarios conectados. (21689 líneas)
+	Versión  4.93.8 :11/may/2005	Cambio interno en la búsqueda en la base de datos de los alumnos que no pertenecen a ningún grupo. (21663 líneas)
+	Versión  4.93.9 :11/may/2005	Cambio en la fecha inicial en las acciones de ver accesos y estadísticas.
+					En la cabecera de la orla aparecen los grupos seleccionados. (21749 líneas)
+	Versión  4.93.10:12/may/2005	Corregido pequeño bug en selección de usuarios para escribirles un mensaje o para ver sus accesos. (21776 líneas)
+	Versión  4.94   :18/may/2005	Los iconos de los menús pasan de tamaño 48x32 a 32x32. (21778 líneas)
+	Versión  4.94.1 :19/may/2005	Cambios en la llamada al chat. (21780 líneas)
+	Versión  4.95   :23/may/2005	Los horarios de las asignaturas y de tutorías pasan a almacenarse en la base de datos. (22032 líneas)
+	Versión  4.95.1 :23/may/2005	Pequeños cambios en el almacenamiento de los horarios en la base de datos. (22041 líneas)
+	Versión  4.95.2 :31/may/2005	Corregido pequeño bug en cálculo de fecha inicial del último mes para presentación de estadísticas. (22042 líneas)
+	Versión  4.95.3 :31/may/2005	Se añade botón "Ayer" al formulario de selección de rango de fechas. (22068 líneas)
+	Versión  4.95.4 :31/may/2005	Todas las asignaturas cuelgan ahora de un directorio asg. (22079 líneas)
+	Versión  4.96   :31/may/2005	Nueva forma de descargar los archivos: no se abre una ventana nueva con un enlace, sino que se crean enlaces a todos los archivos en la ventana principal. (22122 líneas)
+	Versión  4.96.1 :01/jun/2005	Corregido bug en recepción de archivos y bug en borrado de descargas antiguas. (22124 líneas)
+	Versión  4.97   :01/jun/2005	Nueva opción que muestra el uso de SWAD: número de asignaturas, de alumnos, de profesores... (22289 líneas)
+	Versión  4.98   :02/jun/2005	Comienza la implementación de convocatorias de exámenes. (22408 líneas)
+	Versión  4.98.1 :13/jun/2005	Continúa la implementación de convocatorias de exámenes. (22495 líneas)
+	Versión  4.98.2 :14/jun/2005	Continúa la implementación de convocatorias de exámenes. (22645 líneas)
+	Versión  4.98.3 :14/jun/2005	Eliminados espacios en código HTML para que el menú de pestañas se vea bien en MSIE 5.0 (aulas de prácticas). (22631 líneas)
+			01/jul/2005	 El jurado del Premio de Innovación Docente 2005 de la Universidad de Granada ha decidido concederuna de las cuatro Menciones Honoríficas a la Innovación Docente 2005 al trabajo "Plataforma SWAD (Shared Workspace At a Distance)".
+	Versión  4.98.4 :02/sep/2005	Pequeña modificación interna. (22633 líneas)
+	Versión  4.98.5 :05/sep/2005	Continúa la implementación de convocatorias de exámenes. (22627 líneas)
+	Versión  4.98.6 :07/sep/2005	Corregido bug en la presentación de las fichas. Pequeño cambio interno en lectura de una fecha de un formulario.
+					Continúa la implementación de convocatorias de exámenes. (22724 líneas)
+	Versión  4.98.7 :08/sep/2005	Continúa la implementación de convocatorias de exámenes. (23078 líneas)
+	Versión  4.98.8 :08/sep/2005	Continúa la implementación de convocatorias de exámenes. (23098 líneas)
+	Versión  4.99   :18/sep/2005	A partir de hoy las asignaturas optativas y de libre configuración se agruparán en el curso 0. (23101 líneas)
+	Versión  4.99.1 :19/sep/2005	Finaliza la implementación de convocatorias de exámenes. (23269 líneas)
+	Versión  4.99.2 :20/sep/2005	Pequeñas modificaciones. (23276 líneas)
+	Versión  4.99.3 :20/sep/2005	Las convocatorias de examen aparecen destacadas en el calendario, con el correspondiente enlace.
+					Corregido bug en tamaño reservado para almacenar mensajes de ayuda, gracias a un error detectado por Francisco Pertíñez Vílchez. (23429 líneas)
+	Versión  4.99.4 :21/sep/2005	Cambia la ordenación de algunas opciones del menú de usuarios. Otros pequeños cambios. (23430 líneas)
+	Versión  4.100  :22/sep/2005	Si en una asignatura se han creado grupos, se obliga a los alumnos a apuntarse a ellos. (23504 líneas)
+	Versión  4.100.1:27/sep/2005	Corregido bug en edición de preguntas de test. (23505 líneas)
+	Versión  4.101  :27/sep/2005	Comienza la implementación de la zona de envío de trabajos a los profesores. (23558 líneas)
+	Versión  4.101.1:28/sep/2005	Corregido bug en maletín debido al comienzo de la implementación de la zona de envío de trabajos a los profesores. (23559 líneas)
+	Versión  4.102  :29/sep/2005	Se sustituye el chat por la pizarra-chat. (23560 líneas)
+	Versión  4.102.1:30/sep/2005	Añadidos mensajes de ayuda en la edición de grupos de alumnos. (23566 líneas)
+	Versión  5.0    :30/sep/2005	Cambio de la festividades para al curso 2005-2006.
+					Nuevo programa de procesamiento de fotografías, mejorado por Daniel Jesús Calandria Hernández. (23565 líneas)
+	Versión  5.1    :03/oct/2005	Los profesores pueden eliminar hebras completas de los foros de la asignatura, y el administrador también hebras de los foros comunes.
+					Corregido bug en el programa de procesamiento de fotografías. (23724 líneas)
+	Versión  5.1.1  :04/oct/2005	Ampliados campos de edición de temarios.
+					En el temario de prácticas aparece un enlace a la elección de grupos si hay grupos de prácticas y el alumno no está dado de alta en ninguno.
+					Subido tamaño máximo de archivo para recepción a 32 MiB. (23746 líneas)
+	Versión  5.2    :05/oct/2005	En la lista de alumnos se añaden dos columnas con los grupos de teoría y prácticas a los que está apuntado.
+					Corregido pequeño bug en selección de fechas de convocatoria de examen. (23841 líneas)
+	Versión  5.2.1  :05/oct/2005	Se muestra la cabecera original de los ficheros index.html o index.htm de enlaces, FAQ, etc. enviados al servidor.
+					Numerosos cambios internos. (23872 líneas)
+	Versión  5.2.2  :14/oct/2005	La longitud mínima del ID cambia a 5 números o a una letra más 5 números. (23876 líneas)
+	Versión  5.2.3  :14/oct/2005	Corregido bug en lectura de mensajes dentro de una hebra de foro. (23888 líneas)
+	Versión  5.2.4  :17/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (23917 líneas)
+	Versión  5.2.5  :17/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (24062 líneas)
+	Versión  5.2.6  :18/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (24083 líneas)
+	Versión  5.2.7  :18/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (24470 líneas)
+	Versión  5.2.8  :19/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (24537 líneas)
+	Versión  5.2.9  :19/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores. (24611 líneas)
+	Versión  5.2.10 :19/oct/2005	Continúa la implementación de la zona de envío de trabajos a los profesores.
+					Cambios internos relativos a los temarios de teoría y prácticas. (24361 líneas)
+	Versión  5.3    :19/oct/2005	Se resalta in menu la supracción de la que depende la subacción actual.
+					Terminada la implementación de la zona de envío de trabajos a los profesores a falta de activar permisos. (24556 líneas)
+	Versión  5.3.1  :20/oct/2005	En la zona de envío de trabajos de alumnos es posible crear un fichero zip para descarga de todos los trabajos. (24736 líneas)
+	Versión  5.3.2  :21/oct/2005	Cambio interno en la creación del fichero zip para descarga de todos los trabajos. (24679 líneas)
+	Versión  5.4    :21/oct/2005	Activados los permisos para el acceso de profesores y alumnos a las nuevas opciones de envío de trabajos. (24752 líneas)
+	Versión  5.4.1  :21/oct/2005	Nueva opción para dar de baja simultánea a varios alumnos. (24782 líneas)
+	Versión  5.4.2  :24/oct/2005	En aquellas opciones de la pestaña "Usuarios" en las que se necesita el ID de otro usuario, se pasa ahora por una pantalla intermedia para pedirlo. (24871 líneas)
+	Versión  5.4.3  :25/oct/2005	Eliminada temporalmente la red neuronal de reconocimiento de caras porque fallaba demasiado.
+					Añadida una nueva categoría en la clasificación de las asignaturas: el tipo de titulación. (24904 líneas)
+	Versión  5.4.4  :27/oct/2005	Mejoras internas en la selección de grupos. (24941 líneas)
+	Versión  5.4.5  :28/oct/2005	Los profesores pueden apuntarse a varios grupos de alumnos.(25153 líneas)
+	Versión  5.4.6  :29/oct/2005	En la lista de selección de grupos aparecen por defecto los grupos a los que el usuario está apuntado. (25035 líneas)
+	Versión  5.4.7  :01/nov/2005	Mejoras internas relativas a los grupos. (25009 líneas)
+	Versión  5.4.8  :02/nov/2005	Modificaciones en las tablas de la base de datos para los grupos de usuarios. (25011 líneas)
+	Versión  5.4.9  :03/nov/2005	Si no se ha enviado la fotografía, se presenta un mensaje indicándolo.
+					En el uso de SWAD se presenta el número de asignaturas con profesores y el número de asignaturas con alumnos. (25044 líneas)
+	Versión  5.4.10 :04/nov/2005	Si un alumno no ha enviado la fotografía, no puede ver la orla. (25045 líneas)
+	Versión  5.4.11 :06/nov/2005	Si un alumno no ha enviado la fotografía no puede acceder a ciertaos servicios. (25071 líneas)
+	Versión  5.5    :07/nov/2005	Acceso directo a una asignatura mediante el método GET.
+					Cambios en la localización de algunos directorios públicos en el servidor. (25102 líneas)
+	Versión  5.5.1  :08/nov/2005	Cambios en la localización de algunos directorios públicos en el servidor.
+					Modificado el código de acceso directo a la asignatura.
+					Ejemplo de acceso directo: https://swad.ugr.es/swad?CodAsg=II21EC1 (25086 líneas)
+	Versión  5.5.2  :08/nov/2005	Cambios internos relativos a la fecha y hora actuales. (25098 líneas)
+	Versión  5.5.3  :09/nov/2005	Mensajes de error más específicos cuando el nombre de un archivo o carpeta no es váido. (25109 líneas)
+	Versión  5.5.4  :09/nov/2005	Cambios en la comprobación de si una página recibida es HTML o ZIP. (25097 líneas)
+	Versión  5.6    :09/nov/2005	Cada estudiante tiene un número de accesos máximo a las opciones no permitidas a invitados mientras no envíe la foto. (25179 líneas)
+	Versión  5.6.1  :10/nov/2005	Mensaje indicando el software necesario para ejecutar la pizarra/chat. (25185 líneas)
+	Versión  5.6.2  :11/nov/2005	Corregido bug en edición de temarios de teoría y prácticas. (25183 líneas)
+	Versión  5.6.3  :14/nov/2005	Comienza la implementación de la creación de tipos de grupos. (25252 líneas)
+	Versión  5.6.4  :14/nov/2005	Continúa la implementación de la creación de tipos de grupos. (25689 líneas)
+	Versión  5.6.5  :15/nov/2005	Continúa la implementación de la creación de tipos de grupos. (26518 líneas)
+	Versión  5.6.6  :16/nov/2005	Continúa la implementación de la creación de tipos de grupos. (26859 líneas)
+	Versión  5.6.7  :16/nov/2005	Continúa la implementación de la creación de tipos de grupos. (27588 líneas)
+	Versión  5.6.8  :17/nov/2005	Continúa la implementación de la creación de tipos de grupos. (28058 líneas)
+	Versión  5.7    :17/nov/2005	Terminada la implementación de la creación de tipos de grupos. (28079 líneas)
+	Versión  5.7.1  :18/nov/2005	Eliminado el código de gestión de grupos antiguo, que ya no es necesario. (25990 líneas)
+	Versión  5.7.2  :20/nov/2005	Corregidos permisos de usuarios en la creación de grupos.
+					Eliminadas columnas ya innecesarias en la tabla de grupos. (25989 líneas)
+	Versión  5.7.3  :21/nov/2005	Corregido bug en adscripción a grupos. (26046 líneas)
+	Versión  5.7.4  :22/nov/2005	Añadidos nuevos tipos de ficheros que se pueden subir al servidor. (26048 líneas)
+	Versión  5.7.5  :24/nov/2005	Desdoblado el usuario "invitado" en "desconocido" (no identificado) e "invitado" (identificado, pero no perteneciente a la asignatura)
+					La pestaña personal está disponible para un invitado aún cuando está en una asignatura a la que no pertenece. (26061 líneas)
+	Versión  5.8    :24/nov/2005	Cuando se conecta un usuario le aparece su pestaña "Personal" antes de seleccionar la asignatura. (26069 líneas)
+	Versión  5.8.1  :25/nov/2005	Ahora un usuario puede acceder a sus mensajes recibidos directamente aun cuando no haya seleccionado asignatura.
+					Actualizados enlaces a departamentos. (26058 líneas)
+	Versión  5.8.2  :28/nov/2005	Corregido bug en creación de grupos. (26064 líneas)
+	Versión  5.8.3  :28/nov/2005	Corregido bug en lectura del código de asignatura cuando no se ha seleccionado ninguna y se intenta enviar un archivo. (26066 líneas)
+	Versión  5.8.4  :28/nov/2005	Añadidos accesos al registro incluso cuando no se ha seleccionado una asignatura. (26073 líneas)
+	Versión  5.8.5  :29/nov/2005	Corregido problema en las estadísticas de acceso por asignaturas cuando el código de una asignatura no existe.
+					Corregido bug cuando existe un tipo de grupo de adscripción obligatoria pero no hay ningún grupo de ese tipo. (26064 líneas)
+	Versión  5.9    :29/nov/2005	Nuevos foros para cada titulación: de profesores, y de profesores y alumnos. (26172 líneas)
+	Versión  5.9.1  :29/nov/2005	Pequeños cambios en el listado de foros disponibles. (26139 líneas)
+	Versión  5.9.2  :30/nov/2005	Pequeño cambio en el listado de foros disponibles. (26140 líneas)
+	Versión  5.9.3  :01/dic/2005	Pequeño cambio en el listado de foros disponibles.
+					Subida la anchura de las convocatorias de examen de 440 a 500 píxeles. (26142 líneas)
+	Versión  5.10   :01/dic/2005	Añadido campo en las fichas de los alumnos de observaciones para todas las asignaturas. (26281 líneas)
+	Versión  5.10.1 :02/dic/2005	Cambios en la presentación de la cabecera de las convocatorias de examen. (26286 líneas)
+	Versión  5.10.2 :02/dic/2005	Mejoras internas en asignación de memoria para datos de usuarios. (26313 líneas)
+	Versión  5.11   :03/dic/2005	Se sustituye la pestaña de administración de la asignatura por una de evaluación.
+					Reorganización de las opciones de los menús. (26313 líneas)
+	Versión  5.11.1 :04/dic/2005	Las esquinas de la orla se dibujan redondeadas. (26353 líneas)
+	Versión  5.11.2 :05/dic/2005	Las esquinas de algunas otros rectángulos se dibujan redondeadas. (26398 líneas)
+	Versión  5.11.3 :06/dic/2005	Las esquinas de más rectángulos se dibujan redondeadas. (26398 líneas)
+	Versión  5.11.4 :07/dic/2005	Pequeña mejora en la presentación de los temarios. (26396 líneas)
+	Versión  5.11.5 :07/dic/2005	Las esquinas de más rectángulos se dibujan redondeadas.
+					Diversas mejoras en la presentación. (26358 líneas)
+	Versión  5.11.6 :13/dic/2005	Mejorada la detección de piel en el programa de procesamiento de fotografías.
+					Cambios en la recepción de fotografías. (26355 líneas)
+	Versión  5.11.7 :14/dic/2005	Corregido bug en recepción de parámetros, detectado por Francisco Gómez Mula. (26375 líneas)
+	Versión  5.11.8 :15/dic/2005	Los destinatarios de mensajes tienen un código distinto del nombre usado para las fotografías, para evitar que un usuario astuto pueda averiguar el nombre de la foto de usuarios con foto privada. (26378 líneas)
+	Versión  5.11.9 :15/dic/2005	Corregido bug en alta de varios alumnos. (26382 líneas)
+	Versión  5.11.10:18/dic/2005	Algunas modificaciones internas referentes a los datos de los usuarios. (26347 líneas)
+	Versión  5.11.11:21/dic/2005	Pequeño cambio en el formulario de edición de tipos de grupo. (26351 líneas)
+	Versión  5.11.12:28/dic/2005	Cuando un profesor vea las calificaciones, se mostrarán las de un alumno aleatorio.
+					La opción está programada, pero no activada. (26457 líneas)
+	Versión  5.11.13:02/ene/2006	Se añade un marco a la foto cuando se presenta en tamaño máximo. (26471 líneas)
+	Versión  5.12   :03/ene/2006	Comienza la implementación del nuevo sistema de calificaciones de distintos exámenes. (26596 líneas)
+	Versión  5.12.1 :04/ene/2006	Continúa la implementación del nuevo sistema de calificaciones. (27236 líneas)
+	Versión  5.12.2 :05/ene/2006	Continúa la implementación del nuevo sistema de calificaciones. (27342 líneas)
+	Versión  5.12.3 :05/ene/2006	Terminada la implementación del nuevo sistema de calificaciones.
+					Eliminado el sistema antiguo. (26926 líneas)
+	Versión  5.12.4 :07/ene/2006	Ampliados tipos MIME permitidos en el envío de calificaciones, y otros cambios menores. (26947 líneas)
+	Versión  5.12.5 :10/ene/2006	Se pregunta antes de eliminar un archivo, y otros cambios menores. (27008 líneas)
+	Versión  5.12.6 :11/ene/2006	Mejoras gráficas en la presentación de estadísticas, principalmente en la de acceso por horas.
+					Compilar con: gcc swad.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql -lm (27018 líneas)
+	Versión  5.13   :12/ene/2006	Nueva estadística de accesos por intervalos de 5 minutos. (27164 líneas)
+	Versión  5.13.1 :13/ene/2006	Cambios en la presentación de las estadísticas de acceso cada 5 minutos. (27206 líneas)
+	Versión  5.13.2 :13/ene/2006	Pequeño cambio en la presentación de las estadísticas de acceso cada 5 minutos. (27236 líneas)
+	Versión  5.13.3 :16/ene/2006	Corregido pequeño bug en enlaces a convocatorias de examen en el calendario. (27238 líneas)
+	Versión  5.13.4 :17/ene/2006	Los bordes de los meses del calendario y de los accesos a servicios de la universidad se dibujan redondeados. (27269 líneas)
+	Versión  5.13.5 :20/ene/2006	Corregido pequeño bug en dibujo de bordes redondeados. (27275 líneas)
+	Versión  5.14   :24/ene/2006	Añadida nueva estadística: tasa de accesos por asignatura. (27407 líneas)
+	Versión  5.14.1 :25/ene/2006	Mejorada la estadística de tasa de accesos por asignatura. Optimizados algunos índices en la base de datos. (27457 líneas)
+	Versión  5.14.2 :26/ene/2006	Eliminado campo innecesario de la tabla de accesos en la base de datos. (27456 líneas)
+	Versión  5.14.3 :27/ene/2006	Corregido pequeño bug en listado de accesos detallados de usuarios de una asignatura. (27460 líneas)
+	Versión  5.15   :29/ene/2006	Nueva estadística de accesos por semana. (27654 líneas)
+	Versión  5.15.1 :31/ene/2006	Nueva estadística de accesos por mes. (27792 líneas)
+	Versión  5.15.2 :02/feb/2006	Ampliados tipos MIME permitidos en el envío de archivos.
+					Las estadísticas vuelven a mostrarse, por omisión, hasta el día actual. (27797 líneas)
+	Versión  5.16   :05/feb/2006	Añadidas fichas para cada asignatura, configurables por los profesores. (28545 líneas)
+	Versión  5.16.1 :06/feb/2006	En el listado de fichas se muestran los nuevos campos configurables. (28758 líneas)
+	Versión  5.16.2 :07/feb/2006	Comienza la implementación de la recepción de datos de los nuevos campos configurables. (28884 líneas)
+	Versión  5.16.3 :08/feb/2006	Terminada la recepción de datos de los nuevos campos configurables. (29008 líneas)
+	Versión  5.16.4 :16/feb/2006	Cambios gráficos en la presentación de las fichas. (29020 líneas)
+	Versión  5.16.5 :17/feb/2006	Añadido campo con número de filas en formulario de ficha de la asignatura. (29133 líneas)
+	Versión  5.17   :17/feb/2006	Terminado de implementar el sistema de fichas de asignaturas. Se ofrece a los usuarios. (29134 líneas)
+	Versión  5.18   :18/feb/2006	Nueva pestaña de estadísticas y algunas mejoras gráficas. (29142 líneas)
+	Versión  5.18.1 :18/feb/2006	Añadido formulario para seleccionar los alumnos cuyas fichas desean verse.
+					Se eliminan del menú parámetros extra de la orla y del listado de alumnos. (29208 líneas)
+	Versión  5.18.2 :19/feb/2006	Desde la orla y desde la lista de alumnos se puede acceder a la ficha de cada alumno. (29263 líneas)
+	Versión  5.19   :21/feb/2006	Nuevas estadísticas con el número de usuarios distintos que han accedido. (29334 líneas)
+	Versión  5.19.1 :22/feb/2006	Importantes cambios en las estadísticas. (29330 líneas)
+	Versión  5.19.2 :23/feb/2006	Mejoras gráficas en las estadísticas.
+					Añadidos nuevos tipos de ficheros permitidos. (29376 líneas)
+	Versión  5.19.3 :24/feb/2006	Mejora interna en la selección del número de alumnos por fila en la orla. (29377 líneas)
+	Versión  5.19.4 :24/feb/2006	Mejora en las estadísticas de acceso por semanas. (29432 líneas)
+	Versión  5.19.5 :26/feb/2006	Pequeños cambios internos. (29432 líneas)
+	Versión  5.19.6 :28/feb/2006	Mejora gráfica en la presentación de horarios. (29466 líneas)
+	Versión  5.19.7 :02/mar/2006	Corregido pequeño bug de javascript en Netscape y Firefox. (29467 líneas)
+	Versión  5.19.8 :08/mar/2006	Aparece un icono parpadeante cuando hay mensajes nuevos. Corregido pequeño bug en Firefox. (29475 líneas)
+	Versión  5.20   :08/mar/2006	Cada acción tiene un campo booleano que indica si se debe ejecutar un lockfile o no. (29486 líneas)
+	Versión  5.20.1 :09/mar/2006	Al responder a un mensaje, se marca el remitente en un color diferente para que destaque más. (29498 líneas)
+	Versión  5.21   :10/mar/2006	Aparece en las fichas un campo para hacer llamadas por skype. (29541 líneas)
+	Versión  5.22   :11/mar/2006	En la lista de alumnos se eliminan el campo de foto pública y el del tamaño del maletín.
+					En la lista resumida sólo se muestran los campos más importantes. (29532 líneas)
+	Versión  5.22.1 :11/mar/2006	En la lista de alumnos completa se muestran los campos de la fichas en la asignatura. (29582 líneas)
+	Versión  5.22.2 :11/mar/2006	Cambio importante en la presentación de la administración de descargas, maletín y trabajos. (29581 líneas)
+	Versión  5.22.3 :13/mar/2006	Comienza implementación de la ocultación de carpetas y archivos en descargas. (29620 líneas)
+	Versión  5.22.4 :14/mar/2006	Continúa la implementación de la ocultación de carpetas y archivos en descargas. (29983 líneas)
+	Versión  5.23   :14/mar/2006	Finaliza la implementación de la ocultación de carpetas y archivos en descargas. (29973 líneas)
+	Versión  5.23.1 :14/mar/2006	Corregido problema de visualización del árbol de exploración enb Firefox. (29974 líneas)
+	Versión  5.23.2 :15/mar/2006	Cambio de icono parpadeante de mensaje nuevo. (29975 líneas)
+	Versión  5.24   :15/mar/2006	Comienza la implementación de copiar-pegar en la exploración de archivos (propuesta de Javier Alba Tercedor) (30238 líneas)
+	Versión  5.24.1 :16/mar/2006	Continúa la implementación de copiar-pegar en la exploración de archivos. (30469 líneas)
+	Versión  5.24.2 :17/mar/2006	Continúa la implementación de copiar-pegar en la exploración de archivos. (30598 líneas)
+	Versión  5.24.3 :17/mar/2006	Continúa la implementación de copiar-pegar en la exploración de archivos. (30658 líneas)
+	Versión  5.24.4 :17/mar/2006	Terminada la implementación de copiar-pegar en la exploración de archivos. (30690 líneas)
+	Versión  5.24.5 :21/mar/2006	Cambio en el orden de las convocatorias de examen. Ahora se muestran primero las menos futuras. (30692 líneas)
+	Versión  5.24.6 :28/mar/2006	Pequeña corrección gráfica para Firefox en listado de árbol de archivos. (30697 líneas)
+	Versión  5.24.7 :28/mar/2006	Nuevo icono para pegar archivos o carpetas. (30786 líneas)
+	Versión  5.24.8 :29/mar/2006	Corregido pequeño error en presentación de nuevo icono para pegar archivos o carpetas.
+					Corregido bug con nombres de ficheros comenzando o terminando en espacios. (30802 líneas)
+	Versión  5.24.9 :03/abr/2006	Subido tamaño máximo de archivo de 32 MiB a 48 MiB. (30803 líneas)
+	Versión  5.24.10:03/abr/2006	Nuevo grupo de usuarios en estadísticas: "usuarios identificados". (30811 líneas)
+	Versión  5.25   :04/abr/2006	Subido cuota de descarga en asignaturas de 512 MiB a 1 GiB.
+					Cambiados algunos mensajes en estadísticas.
+					Se permite que se cierren grupos de alumnos. Un alumno no podrá apuntarse ni borrarse de un grupo cerrado. (30986 líneas)
+	Versión  5.25.1 :05/abr/2006	Si todos los grupos de un tipo están cerrados o completos, y la adscripción a ese tipo de grupo es obligatoria, y el alumno no está apuntado a ninguno de los grupos de ese tipo, no se le obliga a hacerlo, pues de lo contrario no podría acceder a otras opciones al no poder apuntarse a ninguno. (31020 líneas)
+	Versión  5.25.2 :06/abr/2006	Para agilizar algunas consultas en la base de datos, se añade un campo con el número de alumnos en la tabla de grupos.
+					Numerosos cambios internos en altas y bajas de usuarios. (31124 líneas)
+	Versión  5.25.3 :07/abr/2006	Se agilizan algunas consultas en la base de datos mediante el nuevo campo en la tabla de grupos que contiene el número de alumnos.
+					Cuando no hay grupos de cierto tipo abiertos con vacantes, no se muestra mensaje al alumno indicando que tiene que (o que puede) apuntarse a un grupo de ese tipo. (31202 líneas)
+	Versión  5.25.4 :08/abr/2006	Corregido bug en la copia de archivos (se copiaban más bytes de la cuenta). (31204 líneas)
+	Versión  5.26   :09/abr/2006	Comienza la implementación de zona de archivos común para todos los usuarios de una asignatura. (31234 líneas)
+	Versión  5.26.1 :10/abr/2006	Continúa la implementación de zona de archivos común para todos los usuarios de una asignatura. (31634 líneas)
+	Versión  5.26.2 :10/abr/2006	Finaliza la implementación de zona de archivos común para todos los usuarios de una asignatura.
+					Ahora no está permitido crear ni pegar un archivo existente en ningún árbol de exploración. (31743 líneas)
+	Versión  5.27   :11/abr/2006	Comienza la implementación de zona de archivos común para todos los usuarios de un grupo, sugerida por Daniel Calandria. (32036 líneas)
+	Versión  5.27.1 :12/abr/2006	Finaliza la implementación de zona de archivos común para todos los usuarios de un grupo. (32132 líneas)
+	Versión  5.27.2 :17/abr/2006	Corregido cálculo erróneo del núm. de alumnos no apuntados a grupos de cierto tipo cuando en ese tipo está permitido apuntarse a varios grupos. (32168 líneas)
+	Versión  5.28   :17/abr/2006	Nueva versión del programa de retoque fotográfico, totalmente reprogramada en C++ por Daniel Calandria.
+					Comienza la implementación de listado de profesores de SWAD (sólo para administradores). (32206 líneas)
+	Versión  5.28.1 :18/abr/2006	Termina la implementación de listado de profesores de SWAD (sólo para administradores).
+					Nueva versión del programa de retoque fotográfico. Ahora se presenta también la foto original.
+					Ligeras mejoras estéticas en marcos. (32444 líneas)
+	Versión  5.28.2 :19/abr/2006	Ligeras mejoras estéticas en marcos y en exploración de archivos.
+					Se muestra la fecha y el tamaño de las carpetas. (32431 líneas)
+	Versión  5.28.3 :19/abr/2006	Codificación en base 64 en lugar de 16 de los ID encriptados para que ocupen 22 caracteres en lugar de 32. (32550 líneas)
+	Versión  5.29   :20/abr/2006	Las sesiones se guardan en la base de datos en lugar de en ficheros. (32624 líneas)
+	Versión  5.29.1 :21/abr/2006	Para disminuir el tamaño de las páginas, y por tanto aumentar la velocidad, algunos parámetros ocultos se guardan en la base de datos en lugar de enviarlos a través del formulario. (32765 líneas)
+	Versión  5.29.2 :21/abr/2006	Para disminuir el tamaño de las páginas, y por tanto aumentar la velocidad, la pestaña siguiente no se pasa como parámetro.
+					Se muestra el nombre y apellidos de un usuario al pasar sobre su foto incluso en el Firefox. (32772 líneas)
+	Versión  5.29.3 :24/abr/2006	Se eliminan de la base de datos los parámetros ocultos cuyas sesiones ya no existan. (32790 líneas)
+	Versión  5.30   :24/abr/2006	En Descargas aparecen destacados los archivos nuevos desde la última vez que se entró.
+					Corregido bug en consulta de calificaciones. (32867 líneas)
+	Versión  5.30.1 :25/abr/2006	Aparecen destacados en todos los árboles de exploración los archivos nuevos desde la última vez que se entró y los recientes. (32912 líneas)
+	Versión  5.30.2 :25/abr/2006	También aparecen destacadas las carpetas con cambios recientes. (32915 líneas)
+	Versión  5.30.3 :28/abr/2006	Se aceptan ID que sean números y tengan una única letra en medio (no al final). (32931 líneas)
+	Versión  5.30.4 :02/may/2006	Cambiados casi todos los nombres de las acciones para homogeneizarlos.
+					Cambio en la comprobación de validez de un ID.
+					Añadidos nuevos tipos MIME. (32949 líneas)
+	Versión  5.31   :02/may/2006	Los usuarios conectados aparecen en distintos colores según estén o no accediendo a la asignatura seleccionada. (32945 líneas)
+	Versión  5.31.1 :03/may/2006	Comienza la comprobación de las filas de cabecera y pie al recibir un archivo de calificaciones. (32955 líneas)
+	Versión  5.32   :03/may/2006	Se averiguan las filas de cabecera y pie al recibir un archivo de calificaciones. (33032 líneas)
+	Versión  5.32.1 :03/may/2006	Corregido bug en lectura de ancho y alto de ciertos ficheros JPEG. (33035 líneas)
+	Versión  5.32.2 :06/may/2006	Corregido pequeño bug en "Mensajes recibidos". (33035 líneas)
+	Versión  5.32.3 :08/may/2006	Insertado anuncio del I Encuentro de Usuarios de SWAD. (33081 líneas)
+	Versión  5.33   :09/may/2006	Añadido campo con el código de la titulación en la tabla de accesos.
+					Cambiado campo Fecha de tipo TIMESTAMP a FechaHora de tipo DATETIME en la tabla de accesos,
+					para evitar cambios de Fecha involuntarios al actualizar la tabla.
+					Nuevas estadísticas por titulación. (33188 líneas)
+	Versión  5.33.1 :15/may/2006	Añadido tipo MIME. (33192 líneas)
+	Versión  5.34   :16/may/2006	Corregido bug relacionado con los formularios en el navegador Konqueror.
+					Numerosos cambios internos en el formato HTML generado en los formularios. (33097 líneas)
+	Versión  5.34.1 :22/may/2006	Pequeños cambios estéticos. (33099 líneas)
+			26/may/2006	 Se celebra el I Encuentro de Usuarios de SWAD.
+	Versión  5.34.2 :27/may/2006	Eliminado el anuncio del I Encuentro de Usuarios de SWAD. (33100 líneas)
+	Versión  5.34.3 :28/may/2006	Comienza la implementación de adscripción de alumnos a grupos por parte del profesor. (33298 líneas)
+	Versión  5.34.4 :29/may/2006	Continúa la implementación de adscripción de alumnos a grupos por parte del profesor. (33412 líneas)
+	Versión  5.34.5 :30/may/2006	Continúa la implementación de adscripción de alumnos a grupos por parte del profesor. (33509 líneas)
+	Versión  5.34.6 :31/may/2006	Continúa la implementación de adscripción de alumnos a grupos por parte del profesor. (33533 líneas)
+	Versión  5.35   :01/jun/2006	Finalizada la implementación de adscripción de alumnos a grupos por parte del profesor.
+					Corregido pequeño bug en lista de alumnos cuando había grupos y ningún alumno se había apuntado a ninguno. (33592 líneas)
+	Versión  5.35.1 :01/jun/2006	Cambios internos (en las consultas a la base de datos) en la presentación de grupos. (32584 líneas)
+	Versión  5.35.2 :01/jun/2006	Más cambios internos (en las consultas a la base de datos) en la presentación de grupos. (33528 líneas)
+	Versión  5.35.3 :04/jun/2006	Más cambios internos (en las consultas a la base de datos) en la presentación de grupos. (33494 líneas)
+	Versión  5.35.4 :05/jun/2006	Comienza implementación de tipos de respuesta de test numéricos entero y real. (33680 líneas)
+	Versión  5.35.5 :06/jun/2006	Continúa la implementación de tipos de respuesta de test numéricos entero y real. (33785 líneas)
+	Versión  5.36   :06/jun/2006	Finalizada la implementación de tipos de respuesta de test numéricos entero y real. (33839 líneas)
+	Versión  5.36.1 :07/jun/2006	Diversas mejoras internas en las preguntas con respuestas numéricas entera y real. (33838 líneas)
+	Versión  5.36.2 :09/jun/2006	Las convocatorias de examen también aparecen resaltadas en los primeros días del mes siguiente. (33834 líneas)
+	Versión  5.36.3 :09/jun/2006	Nombres de los foros más breves (sugerencia de Raúl Jiménez Ortega). Sólo se muestran los foros accesibles.
+					Se guardan en la tabla de accesos el tiempo de generación y el tiempo de envío de la página. (33856 líneas)
+	Versión  5.37   :11/jun/2006	Se muestran estadísticas por tiempo de generación y de envío de página. (33888 líneas)
+	Versión  5.37.1 :12/jun/2006	Añadidos nuevos tipos MIME y extensiones de archivos. (33899 líneas)
+	Versión  5.37.2 :17/jun/2006	Comienza el traspaso de mensajes y foros de archivos a la base de datos. (33928 líneas)
+	Versión  5.37.3 :21/jun/2006	Continúa el traspaso de mensajes y foros de archivos a la base de datos. (34315 líneas)
+	Versión  5.37.4 :22/jun/2006	Continúa el traspaso de mensajes y foros de archivos a la base de datos. (34451 líneas)
+	Versión  5.37.5 :22/jun/2006	Continúa el traspaso de mensajes y foros de archivos a la base de datos. (34483 líneas)
+	Versión  5.37.6 :23/jun/2006	Continúa el traspaso de mensajes y foros de archivos a la base de datos. (34601 líneas)
+	Versión  5.37.7 :24/jun/2006	Continúa el traspaso de mensajes y foros de archivos a la base de datos. (34700 líneas)
+	Versión  5.37.8 :25/jun/2006	Finaliza el traspaso de mensajes y foros de archivos a la base de datos. (34747 líneas)
+	Versión  5.37.9 :25/jun/2006	Comienza la implementación de los mensajes y foros en la base de datos. (36312 líneas)
+	Versión  5.37.10:25/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (36719 líneas)
+	Versión  5.37.11:26/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (36779 líneas)
+	Versión  5.37.12:27/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (36907 líneas)
+	Versión  5.37.13:27/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (36873 líneas)
+	Versión  5.37.14:27/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (37081 líneas)
+	Versión  5.37.15:28/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (37444 líneas)
+	Versión  5.37.16:28/jun/2006	Continúa la implementación de los mensajes y foros en la base de datos. (37511 líneas)
+	Versión  5.37.17:29/jun/2006	Finaliza la implementación de los mensajes y foros en la base de datos. (37530 líneas)
+	Versión  5.38   :29/jun/2006	Se ponen en marcha los avisos, mensajes entre usuarios y foros en la base de datos. (37601 líneas)
+	Versión  5.38.1 :29/jun/2006	Corregido pequeño bug al responder a un mensaje desde otra asignatura. (37602 líneas)
+	Versión  5.38.2 :30/jun/2006	Cuando se elimina un usuario, se eliminan sus mensajes enviados y recibidos de la base de datos. (37607 líneas)
+	Versión  5.39   :30/jun/2006	Las hebras de los foros se muestran paginadas. (37699 líneas)
+	Versión  5.39.1 :03/jul/2006	Eliminadas las funciones antiguas de tratamiento de mensajes, foros y avisos en archivos.
+					Nuevas funciones temporales para eliminar los archivos con mensajes, foros y avisos.
+					Eliminados todos los archivos con mensajes, foros y avisos. (34742 líneas)
+	Versión  5.39.2 :03/jul/2006	Eliminadas las funciones temporales para eliminar mensajes, foros y avisos en archivos. (34420 líneas)
+	Versión  5.39.3 :05/jul/2006	En la lista de hebras de un foro se muestran enlaces a las distintas páginas de mensajes de cada hebra. (34428 líneas)
+	Versión  5.39.4 :05/jul/2006	Eliminados los números de hebra según sugerencia de Raúl Jiménez Ortega, aunque aún se mantienen en la base de datos. (34475 líneas)
+	Versión  5.39.5 :05/jul/2006	Cambios en el listado de hebras. (34491 líneas)
+	Versión  5.39.6 :06/jul/2006	Cambios en la escritura de fechas (aparece la cadena "Hoy"). (34511 líneas)
+	Versión  5.39.7 :06/jul/2006	Cambios estéticos en el marco de la zona principal y las pestañas. (34512 líneas)
+	Versión  5.40   :07/jul/2006	En la base de datos se guarda información sobre si un mensaje ha sido respondido. (34578 líneas)
+	Versión  5.40.1 :08/jul/2006	Aparece un símbolo especial en los mensajes que ya han sido respondidos. (34605 líneas)
+	Versión  5.40.2 :08/jul/2006	Nueva función para actualizar un mensaje enviado cuando haya sido leído.
+					En los mensajes enviados y recibidos se muestra primero el más reciente.
+					El icono de los mensajes recibidos nuevos se muestra en verde. (34647 líneas)
+	Versión  5.41   :08/jul/2006	Se destacan en negrita las hebras que contienen mensajes no vistos. (34630 líneas)
+	Versión  5.41.1 :09/jul/2006	Corregido fallo estético en foros detectado por Raúl Jiménez Ortega. (34630 líneas)
+	Versión  5.41.2 :10/jul/2006	Se destacan en verde los mensajes no vistos de una hebra. (34697 líneas)
+	Versión  5.41.3 :11/jul/2006	Insertado anuncio beca predoctoral. (34706 líneas)
+	Versión  5.41.4 :17/jul/2006	Corregido bug en ID encriptados de destinatarios de mensajes, detectado por el profesor Germán Luzón González. (34722 líneas)
+	Versión  5.41.5 :18/jul/2006	Añadida comprobación de departamentos inexistentes en fichas de profesores. (34729 líneas)
+	Versión  5.41.6 :19/jul/2006	Corregido error de cálculo en presentación de estadísticas de acceso por días, semanas o meses cuando hay filas vacías.
+					Además, ahora aparecen filas vacías al principio y al final hasta completar el rango de fechas seleccionadas. (34801 líneas)
+	Versión  5.41.7 :31/jul/2006	Añadido tipo MIME.
+					Se resaltan en negrita los fotos que tienen mensajes nuevos.
+					Pequeño cambio en alta/baja de varios alumnos en/de un grupo. (34864 líneas)
+	Versión  5.41.8 :04/ago/2006	Corregido pequeño bug relacionado con el cálculo de la diferencia entre fechas, usado en las estadísticas. (34875 líneas)
+	Versión  5.41.9 :26/sep/2006	Corregido bug relacionado con la baja de todos los alumnos de una asignatura, detectado por la profesora Gracia López Contreras. (34876 líneas)
+	Versión  5.41.10:29/sep/2006	Se permite que los ID tengan dos letras consecutivas en medio.
+					Aumentados los tamaños máximos de archivos y las cuotas. (34880 líneas)
+	Versión  6.0    :01/oct/2006	Se cambia al curso 2006-2007.
+					Añadidos nuevos departamentos. (34883 líneas)
+	Versión  6.0.1  :03/oct/2006	Comienza la implementación de la elección de la fuente de información de cada apartado de la asignatura. (34936 líneas)
+	Versión  6.1    :05/oct/2006	Un profesor puede cambiar los datos básicos de la ficha de un alumno. (34998 líneas)
+	Versión  6.1.1  :05/oct/2006	Corregido pequeño bug en presentación de la orla. (34999 líneas)
+	Versión  6.1.2  :05/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35124 líneas)
+	Versión  6.1.3  :06/oct/2006	Añadida extensión de archivo permitida.
+					Los iconos de extensión de nombres de archivos se almacenan en una carpeta especial. (35129 líneas)
+	Versión  6.2    :06/oct/2006	Los profesores pueden enviar fotos de los alumnos.
+					Añadidos nuevos tipos MIME. (35297 líneas)
+	Versión  6.3    :07/oct/2006	La bibliografía, FAQ, enlaces y evaluación aparecen en el centro de la ventana principal (iframe) en lugar de en una ventana nueva. (35413 líneas)
+	Versión  6.3.1  :07/oct/2006	Corregido bug al recibir un ID cifrado.
+					Se aceptan ID con tres letras al principio o en medio.
+					Mejorado el comportamiento del cambio de altura del iframe central.
+					Las páginas externas también se muestran en la ventana principal (iframe).
+					Leves mejoras estéticas para el navegador Opera. (35412 líneas)
+	Versión  6.3.2  :07/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35440 líneas)
+	Versión  6.3.3  :10/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35474 líneas)
+	Versión  6.3.4  :18/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35815 líneas)
+	Versión  6.3.5  :18/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35858 líneas)
+	Versión  6.3.6  :19/oct/2006	Continúa la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35997 líneas)
+	Versión  6.4    :19/oct/2006	Termina la implementación de la elección de la fuente de información de cada apartado de la asignatura. (35827 líneas)
+	Versión  6.5    :19/oct/2006	Eliminado el código para la generación de la tabla de la base de datos sobre fuentes de información de las asignaturas, ya innecesario.
+					Desaparecen del menú las opciones para editar la información de la asignatura. (35769 líneas)
+	Versión  6.5.1  :20/oct/2006	A petición de algunos profesores de Farmacia, se disminuye a 10 el número de columnas de la orla de envío de mensajes.
+					Se aumenta el número de caracteres del nombre y apellidos de los alumnos en dicha orla. (35771 líneas)
+	Versión  6.5.2  :20/oct/2006	Cambio sugerido por Francisco Ocaña: los nombres de los alumnos aparecen ahora en tres filas, una para el nombre, otra para el apellido 1 y otra para el apellido 2. (35766 líneas)
+	Versión  6.5.3  :20/oct/2006	En las estadísticas por titulación o por asignatura, junto a las titulaciones aparece su icono. (35789 líneas)
+	Versión  6.5.4  :21/oct/2006	Corregido pequeño bug en lista de alumnos. (35790 líneas)
+	Versión  6.5.5  :21/oct/2006	La opción para editar la descripción de la asignatura se quita del menú y se integra en la de ver la descripción de la asignatura. (35801 líneas)
+	Versión  6.5.6  :22/oct/2006	La opción para editar el horario de la asignatura se quita del menú y se integra en la de ver el horario de la asignatura.
+					Se muestra un icono en los enlaces para la vista de impresión. (35833 líneas)
+	Versión  6.5.7  :22/oct/2006	Desaparece la opción del menú para editar las convocatorias, y se integra en la opción de ver las convocatorias. (35832 líneas)
+	Versión  6.6    :22/oct/2006	Las descripciones de las asignaturas se guardan en la base de datos en lugar de archivos XML.
+					Los diferentes tipos de información de la asignatura: descripción, teoría, prácticas, bibliografía, FAQ, enlaces y sistema de evaluación se pueden editar como texto. (35967 líneas)
+	Versión  6.6.1  :22/oct/2006	Corregido pequeño bug en presentación de información de la asignatura.
+					Eliminado el código para la generación de la tabla de la base de datos con la descripción de las asignaturas, ya innecesario. (35826 líneas)
+	Versión  6.6.2  :22/oct/2006	Añadidos enlaces a las titulaciones en las estadísticas por asignatura y por titulación. (35829 líneas)
+	Versión  6.6.3  :26/oct/2006	Se puede seleccionar si se muestran estadísticas de la titulación seleccionada o de todas las titulaciones. (35869 líneas)
+	Versión  6.6.4  :26/oct/2006	Pequeño cambio en la selección de estadísticas de una titulación o de todas las titulaciones.
+					Añadidos nuevos tipos MIME.
+					Aumentado el tiempo tras el cual se eliminan los enlaces públicos a árboles de exploración (sugerido por A. F. Díaz).
+					Se permiten cuotas mayores de 4 GiB (se utilizan variables de 64 bits).
+					Aumentada la cuota de las asignaturas. (35890 líneas)
+	Versión  6.6.5  :26/oct/2006	Se muestran iconos de asignatura, titulación y universidad delante de los nombres de cada foro.
+					Mejoras internas en consultas a la base de datos relacionadas con los foros. (35942 líneas)
+	Versión  6.6.6  :27/oct/2006	Aumentado el tamaño de iconos de los fotos (sugerencia de Francisco A. Ocaña). (35935 líneas)
+	Versión  6.6.7  :30/oct/2006	Nueva versión del programa de procesamiento de fotografías, realizada por Daniel Calandria.
+					Esta versión realiza el histograma para la mejora de contraste teniendo en cuenta sólo los píxeles de piel. (35937 líneas)
+	Versión  6.6.8  :30/oct/2006	Añadido mensaje de ayuda relacionado con el alta de alumnos en grupos. (35940 líneas)
+	Versión  6.7    :01/nov/2006	Se pueden dar de baja los alumnos que no están en una lista. (36027 líneas)
+	Versión  6.7.1  :03/nov/2006	Cambiados mensajes en respuestas de test para que los alumnos no se confundan. (36029 líneas)
+	Versión  6.7.2  :04/nov/2006	Nuevo diseño de las barras de las estadísticas. (36032 líneas)
+	Versión  6.7.3  :06/nov/2006	Comienza la implementación de un nuevo horario que permitirá clases superpuestas. (36706 líneas)
+	Versión  6.7.4  :06/nov/2006	Continúa la implementación de un nuevo horario que permitirá clases superpuestas. (36771 líneas)
+	Versión  6.7.5  :07/nov/2006	Continúa la implementación de un nuevo horario que permitirá clases superpuestas. (36852 líneas)
+	Versión  6.7.6  :07/nov/2006	Continúa la implementación de un nuevo horario que permitirá clases superpuestas. (36847 líneas)
+	Versión  6.7.7  :07/nov/2006	Termina la implementación de un nuevo horario que permite clases superpuestas. (36860 líneas)
+	Versión  6.8    :07/nov/2006	Eliminado el código de los horarios antiguos. (36231 líneas)
+	Versión  6.8.1  :08/nov/2006	Corrección de bug y cambios importantes en el cálculo y dibujo del horario.
+					Corregido diseño de la barra de estadísticas en tasa de accesos por asignatura. (36238 líneas)
+	Versión  6.8.2  :08/nov/2006	Mejoras gráficas en el dibujo del horario. (36240 líneas)
+	Versión  6.8.3  :08/nov/2006	Mejoras gráficas en el dibujo del horario. (36242 líneas)
+	Versión  6.8.4  :08/nov/2006	Nueva opción de la pestaña personal para que cada usuario obtenga el horario conjunto de todas sus asignaturas. (36313 líneas)
+	Versión  6.9    :11/nov/2006	En el horario de la asignatura se pueden seleccionar los grupos creados por el profesor. (36422 líneas)
+	Versión  6.9.1  :12/nov/2006	Corregido bug en eliminación de un grupo y de un tipo de grupo: hasta ahora no se eliminaban las zonas comunes de los grupos afectados.
+					Mejoras en la selección de grupos en el horario de la asignatura.
+					En el horario de las asignaturas del usuario identificado se muestran sólo las celdas correspondientes a sus grupos. (36447 líneas)
+	Versión  6.10   :14/nov/2006	Añadida nueva estadística en la que se muestra el uso distribuido por días y por horas. (36724 líneas)
+	Versión  6.10.1 :15/nov/2006	Mejoras gráficas en la estadística en la que se muestra el uso distribuido por días y por horas. (36745 líneas)
+	Versión  6.10.2 :21/nov/2006	En el horario se permite la posibilidad de mostrar sólo los grupos del usuario identificado o bien todos los grupos. (36869 líneas)
+	Versión  6.10.3 :23/nov/2006	Cambio de nombre de un departamento. (36870 líneas)
+	Versión  6.10.4 :29/nov/2006	El día actual aparece en el calendario destacado con un marco, en lugar de un color de fondo. (36850 líneas)
+	Versión  6.10.5 :30/nov/2006	Se muestra un número indicando la posición en el ranking en las estadísticas por titulación y por asignatura. (36872 líneas)
+	Versión  6.11   :30/nov/2006	Comienza la implementación en AJAX del refresco automático de los usuarios conectados. (36931 líneas)
+	Versión  6.11.1 :30/nov/2006	Continúa la implementación en AJAX del refresco automático de los usuarios conectados. (37001 líneas)
+	Versión  6.11.2 :05/dic/2006	Mejoras internas en la obtención y actualización de los usuarios conectados. (37044 líneas)
+	Versión  6.11.3 :05/dic/2006	Mejoras internas en la obtención y actualización de los usuarios conectados. (37065 líneas)
+	Versión  6.11.4 :06/dic/2006	Mejoras internas en la obtención y actualización de los usuarios conectados.
+					Continúa la implementación en AJAX del refresco automático de los usuarios conectados. (37125 líneas)
+	Versión  6.12   :06/dic/2006	Separado el programa en varios módulos.
+					Compilar con:
+					gcc swad.c swad_action.c swad_connected.c swad_string.c swad_user.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql -lm; strip swad
+	Versión  6.12.1 :07/dic/2006	Nuevos módulos para las funciones comunes y para las relacionadas con la base de datos. (37904 líneas)
+					Compilar con:
+					gcc swad.c swad_action.c swad_com.c swad_connected.c swad_database.c swad_string.c swad_user.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql -lm; strip swad
+	Versión  6.12.2 :07/dic/2006	Se refrescan los usuarios conectados mediante AJAX ejecutando este mismo programa swad. (37928 líneas)
+	Versión  6.12.3 :08/dic/2006	Corregido bug que aparecía al expirar la sesión. (37936 líneas)
+	Versión  6.12.4 :11/dic/2006	Corregidos bugs relacionados con los usuarios conectados en Netscape 7.2 y en MSIE 5.
+					Disminuido el tiempo de refresco de usuarios conectados de 1 minuto a 30 segundos. (37915 líneas)
+	Versión  6.12.5 :11/dic/2006	Algunas mejoras en los scripts AJAX para el refresco de los usuarios conectados. (37860 líneas)
+	Versión  6.12.6 :12/dic/2006	Un usuario se elimina de la lista de conectados cuando se cierra la última sesión de todas en las que estaba conectado simultáneamente, no cuando se cierra una sesión cualquiera. (37897 líneas)
+	Versión  6.13   :13/dic/2006	Se elimina la tabla de usuarios conectados de la base de datos y se usa sólo la de sesiones. (37771 líneas)
+	Versión  6.13.1 :13/dic/2006	Las tildes no se llevan bien con AJAX en Internet Explorer 5, aunque se indique el charset correcto. Por tanto se ha eliminado el envío de tildes. (37825 líneas)
+	Versión  6.13.2 :13/dic/2006	Se muestra una única vez cada usuario conectado, tal y como se hacía antes de eliminar la tabla de usuarios conectados de la base de datos. (37840 líneas)
+	Versión  6.13.3 :14/dic/2006	Pequeño cambio en consulta en la base de datos de los usuarios conectados y otros cambios menores. (37839 líneas)
+	Versión  6.13.4 :14/dic/2006	Cambios en los script relacionados con AJAX y los usuarios conectados para que funcionen en Konqueror. (37846 líneas)
+	Versión  6.14   :14/dic/2006	De nuevo se crea una tabla de usuarios conectados, para evitar el problema siguiente: si un usuario cierra una sesión y siguen abiertas sesiones más antiguas, se mostraría un tiempo más antiguo correspondiente a esas sesiones más antiguas.
+					Disminuido el tiempo de refresco de usuarios conectados de 30 segundos a 10 segundos. (37954 líneas)
+	Versión  6.14.1 :18/dic/2006	Revertido el último cambio en los script relacionados con AJAX para que no se mostraran errores en versiones muy antiguas de Netscape, ya que no funcionaban en IE5.
+					Corregido pequeño bug gráfico al mostrar el listado de preguntas de test.
+					Aumentados los tamaños máximos de algunas matrices internas. (37956 líneas)
+	Versión  6.14.2 :19/dic/2006	Pequeñas mejoras en la presentación de usuarios conectados.
+					Se elimina el parámetro con el código de la asignatura de los formularios cuando no se cambia de asignatura (el código se guarda junto con la sesión). (37949 líneas)
+	Versión  6.14.3 :19/dic/2006	Corregido bug detectado por Javier Fernández Baldomero relacionado con los parámetros ocultos y el refresco de usuarios. (37950 líneas)
+	Versión  6.15   :22/dic/2006	Las sesiones se cierran automáticamente cuando el navegador no refresca un contador de tiempo (sugerencia de Daniel J. Calandria).
+					Ahora, al poco tiempo de cerrar el navegador o abandonar la página de swad, la sesión se cierra automáticamente. (37929 líneas)
+	Versión  6.15.1 :31/dic/2006	Mensaje de felicitación del año 2007. (37935 líneas)
+	Versión  6.15.2 :02/ene/2007	Pequeña mejora estética al mostrar fotos de 12x16 en MSIE. (37932 líneas)
+	Versión  6.15.3 :10/ene/2007	Mejorado el acceso a fotografías públicas: antes un alumno o profesor no podía ver las fotos de otro alumno o profesor de la misma asignatura si no se encontraba en ese momento dentro de dicha asignatura. Ahora sí. (37940 líneas)
+	Versión  6.16   :10/ene/2007	Nuevo módulo interno para lo relacionado con las estadísticas.
+					Compilar con: gcc swad.c swad_action.c swad_com.c swad_connected.c swad_course.c swad_database.c swad_statistic.c swad_string.c swad_user.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql -lm
+					Corregido bug in menu de titulaciones-cursos-asignaturas. (38098 líneas)
+	Versión  6.16.1 :11/ene/2007	Nuevas estadísticas de acceso globales para el usuario identificado.
+					Nuevas estadísticas de acceso globales a la asignatura seleccionada. (38132 líneas)
+	Versión  6.16.2 :11/ene/2007	Mejora gráfica en las estadísticas de accesos por días y horas. (38202 líneas)
+	Versión  6.16.3 :12/ene/2007	Mejora gráfica en las estadísticas de accesos por días y horas. (38219 líneas)
+	Versión  6.17   :14/ene/2007	Foros y mensajes: se insertan enlaces en las cadenas que parecen una URL (http://... o https://...). (38474 líneas)
+	Versión  6.17.1 :14/ene/2007	Corregido pequeño bug en la inserción de enlaces. (38476 líneas)
+	Versión  6.17.2 :16/ene/2007	Aumentado el tamaño de algunos campos de la ficha. (38476 líneas)
+	Versión  6.17.3 :17/ene/2007	Corregido bug en los enlaces a foros en IE5, detectado por Luis Quesada Torres. (38472 líneas)
+	Versión  6.17.4 :17/ene/2007	Corregido bug que permitía SQL injection. (38478 líneas)
+	Versión  6.17.5 :17/ene/2007	Cambiado el orden en el que aparecen listados los foros. (38476 líneas)
+	Versión  6.18   :17/ene/2007	Ahora se permite el acceso a los foros de una titulación sin necesidad de haber seleccionado asignatura. (38579 líneas)
+	Versión  6.18.1 :18/ene/2007	Simplificada la comprobación de qué fotos pueden mostrarse. (38574 líneas)
+	Versión  6.18.2 :20/ene/2007	Corregido pequeño bug en la edición del sistema de evaluación. (38575 líneas)
+	Versión  6.18.3 :22/ene/2007	Aumentado el tiempo de refresco de usuarios conectados a 30 segundos.
+					Se muestra un margen con sombra en las fotos de usuarios ampliadas (38576 líneas)
+	Versión  6.19   :24/ene/2007	Numerosos cambios estéticos. (38580 líneas)
+	Versión  6.19.1 :25/ene/2007	Corregido bug en recepción de archivos, detectado por el profesor Juan Carlos de Pablos. (38587 líneas)
+	Versión  6.19.2 :26/ene/2007	Mejorada la comprobación de qué fotos pueden mostrarse. (38586 líneas)
+	Versión  6.19.3 :26/ene/2007	En el zoom de las fotos se muestra el nombre. (38618 líneas)
+	Versión  6.19.4 :28/ene/2007	Algunos cambios estéticos. Añadido un botón para cerrar la sesión. (38620 líneas)
+	Versión  6.19.5 :29/ene/2007	Aumentado el tiempo de refresco de usuarios conectados a 60 segundos. (38621 líneas)
+	Versión  6.19.6 :29/ene/2007	Añadidos tipos MIME y extensiones de archivos de OpenOffice.
+					Además de los mensajes de información y de error, se añade un tercer tipo de mensaje: advertencia. (38660 líneas)
+	Versión  6.19.7 :30/ene/2007	Se limita el tamaño de los URL mostrados en mensajes para que no aparezca la barra de desplazamiento horizontal del navegador.
+					Añadidas extensiones de archivos de BibTex. (38702 líneas)
+	Versión  6.20   :30/ene/2007	Nuevo módulo interno para lo relacionado con la exploración de archivos. (38777 líneas)
+					Compilar con: gcc swad.c swad_action.c swad_com.c swad_connected.c swad_course.c swad_database.c swad_file_browser.c swad_statistic.c swad_string.c swad_user.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib/mysql -lm
+	Versión  6.20.1 :01/feb/2007	Comienza la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (38887 líneas)
+	Versión  6.20.2 :02/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39270 líneas)
+	Versión  6.20.3 :02/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39300 líneas)
+	Versión  6.20.4 :02/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39398 líneas)
+	Versión  6.20.5 :03/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39410 líneas)
+	Versión  6.20.6 :03/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39435 líneas)
+	Versión  6.20.7 :04/feb/2007	Optimizada la eliminación de ciertas entradas de las tablas de la base de datos relacionadas con la exploración de archivos. (39348 líneas)
+	Versión  6.20.8 :04/feb/2007	Optimizado el renombramiento de ciertas entradas de las tablas de la base de datos relacionadas con la exploración de archivos. (39240 líneas)
+	Versión  6.20.9 :04/feb/2007	Continúa la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39378 líneas)
+	Versión  6.21   :05/feb/2007	Termina la implementación de la expansión/contracción de las carpetas en los árboles de exploración de archivos. (39370 líneas)
+	Versión  6.21.1 :05/feb/2007	Mejoras gráficas en los árboles de exploración de archivos. (39372 líneas)
+	Versión  6.21.2 :05/feb/2007	Comienza el cambio hacia iconos estilo Nuvola. (39458 líneas)
+	Versión  6.21.3 :07/feb/2007	Termina el cambio hacia iconos estilo Nuvola. (39485 líneas)
+	Versión  6.22   :07/feb/2007	Disponibles para todos los usuarios los nuevos iconos estilo Nuvola. (39439 líneas)
+	Versión  6.22.1 :07/feb/2007	Cambio de orden de algunas opciones de los menús. Añadidos nuevos tipos de archivos. (39435 líneas)
+	Versión  6.22.2 :07/feb/2007	En la parte principal aparece un icono y un título asociados a la acción actual. (39445 líneas)
+	Versión  6.22.3 :08/feb/2007	Se limita la longitud de enlaces (se puede pulsar sobre ellos) y firmas en los avisos. (39467 líneas)
+	Versión  6.22.4 :08/feb/2007	Nuevo diseño de los menús de opciones. (39517 líneas)
+	Versión  6.22.5 :09/feb/2007	Cambiados los tipos de letra para Linux. Corregida errata en foros. (39518 líneas)
+	Versión  6.23   :11/feb/2007	SWAD pasa a un nuevo servidor. (39532 líneas)
+	Versión  6.23.1 :13/feb/2007	Cambios internos relacionados con los listados de datos y fichas de usuarios. (39712 líneas)
+	Versión  6.24   :14/feb/2007	Se saltan los comentarios HTML en los archivos con tablas de calificaciones. (39664 líneas)
+	Versión  6.24.1 :14/feb/2007	Optimizaciones internas en la gestión de los archivos con tablas de calificaciones. (39546 líneas)
+	Versión  6.24.2 :17/feb/2007	Los tiempos de generación y envío de página se muestran en segundos, milisegundos o microsegundos según convenga. (39564 líneas)
+	Versión  6.24.3 :18/feb/2007	Se puede eliminar la foto personal o la de otro usuario. (39646 líneas)
+	Versión  6.24.4 :19/feb/2007	Mínimo cambio en script que ajusta el tamaño del iframe dedicado a FAQ, enlaces, etc.
+					Corregido bug en el ajuste de la acción actual cuando ésta es refrescar los usuarios conectados. Detectado por el alumno Juan Antonio Ruiz Torres. (39652 líneas)
+	Versión  6.24.5 :20/feb/2007	Un administrador puede cambiar la contraseña de otro usuario aunque no esté situado en una asignatura de ese usuario. (39654 líneas)
+	Versión  6.24.6 :20/feb/2007	Aumentado tiempo de refresco de usuarios conectados a 2 minutos. (39655 líneas)
+	Versión  6.24.7 :20/feb/2007	El tiempo de refresco varía en función del número de usuarios conectados. (39678 líneas)
+	Versión  6.24.8 :21/feb/2007	Añadido tipo MIME. (39680 líneas)
+	Versión  6.24.9 :22/feb/2007	Algunos cambios para que no haya warnings al compilar con -O3 (aunque se sigue compilando con -O2). (39690 líneas)
+					Aumentados algunos parámetros de tamaño en la configuración del servidor MySQL para ganar velocidad.
+	Versión  6.24.10:26/feb/2007	Un profesor puede darse de baja a sí mismo de una asignatura. (39701 líneas)
+	Versión  6.25   :26/feb/2007	Nueva opción para el administrador: dar de baja a los usuarios antiguos que no están ya en ninguna asignatura ni entran en SWAD. (39836 líneas)
+	Versión  6.26   :27/feb/2007	Nueva opción para eliminar todos los mensajes recibidos o enviados. (39923 líneas)
+	Versión  6.26.1 :01/mar/2007	Añadidos nuevas extensiones de archivos y nuevos tipos MIME. (39930 líneas)
+	Versión  6.27   :01/mar/2007	Se pueden mostrar o eliminar los mensajes recibidos o enviados desde una asignatura concreta. (40107 líneas)
+	Versión  6.27.1 :01/mar/2007	Por omisión aparecen los mensajes enviados o recibidos desde cualquier asignatura. (40086 líneas)
+	Versión  6.27.2 :02/mar/2007	Añadido tipo MIME.
+					La lista de asignaturas para la selección de mensajes enviados o recibidos se toma de los propios mensajes, no de la lista de asignaturas actuales. (40136 líneas)
+	Versión  6.27.3 :02/mar/2007	Cambios en la tabla de la base de datos que contiene los datos principales de los usuarios. (40156 líneas)
+	Versión  6.27.4 :04/mar/2007	El nombre público de la foto de cada usuario se almacena en un campo de la base de datos para su uso en el nuevo chat. (40254 líneas)
+	Versión  6.27.5 :05/mar/2007	El nombre público de la foto de cada usuario cambia en cada envío de foto para que no haya necesidad de recargar la página debido a la caché del navegador. (40284 líneas)
+	Versión  6.27.6 :06/mar/2007	El nombre público de la foto de cada usuario se genera cada vez pseudoaleatoriamente en lugar de hacerlo a partir del ID.
+					Se elimina el antiguo enlace público a la foto al recibir una nueva. (40295 líneas)
+	Versión  6.27.7 :06/mar/2007	Se cifran los identificadores de sesión.
+					Se usa el estándar base64url descrito en el documento RFC 4648 The Base16, Base32, and Base64 Data Encodings, http://tools.ietf.org/html/rfc4648. (40312 líneas)
+	Versión  6.27.8 :07/mar/2007	Transición suave entre páginas en IE similar a la de Firefox. (40315 líneas)
+	Versión  6.27.9 :07/mar/2007	Se cambia el separador ";" de destinatarios de correo por ",", debido a que el Thunderbird no adminte los ";". Detectado por Francisco Pelayo.
+					Cambio interno en la presentación de usuarios conectados.
+					Renombramiento de variables globales. (40317 líneas)
+	Versión  6.27.10:07/mar/2007	Las contraseñas se almacenan cifradas en base64url en lugar de base16.
+					El módulo swad_com pasa a llamarse swad_cryptography (por crytography).
+					Compilar con gcc swad.c swad_action.c swad_connected.c swad_course.c swad_cryptography.c swad_database.c swad_file_browser.c swad_statistic.c swad_string.c swad_user.c rijndael.c -o swad -Wall -O2 -lmysqlclient -lz -L/usr/lib64/mysql -lm -s (40236 líneas)
+	Versión  6.27.11:08/mar/2007	Corregido pequeño bug reciente relacionado con el refresco de usuarios conectados tras expirar la sesión. (40238 líneas)
+	Versión  6.27.12:08/mar/2007	Si el navegador no admite iframes, la información sólo se muestra en una ventana nueva. (40265 líneas)
+	Versión  6.28   :08/mar/2007	Comienza la implementación de la administración de titulaciones. (40296 líneas)
+	Versión  6.28.1 :09/mar/2007	Nuevos iconos estilo Nuvola en las pestañas. (40296 líneas)
+	Versión  6.28.2 :12/mar/2007	Enlace a artículo sobre Netiquette en foros y mensajes. (40316 líneas)
+	Versión  6.28.3 :16/mar/2007	A partir de ahora, los profesores ya pueden dar de alta y eliminar a otros profesores en sus asignaturas si estos últimos ya eran profesores en SWAD. (40359 líneas)
+	Versión  6.28.4 :19/mar/2007	Se fuerza a usar contraseñas más seguras. (40428 líneas)
+	Versión  6.29   :23/mar/2007	Se pone en marcha el nuevo chat realizado por Carlos Moreno Muñoz y Ana Belén Cara Carmona. (40524 líneas)
+	Versión  6.29.1 :26/mar/2007	Modificación en la llamada al nuevo chat. (40530 líneas)
+	Versión  6.29.2 :29/mar/2007	Añadidos nuevos tipos de archivos. (40534 líneas)
+	Versión  6.30   :10/abr/2007	Orla de profesores de SWAD. (40610 líneas)
+	Versión  6.30.1 :11/abr/2007	Orla de profesores de una asignatura, una titulación o SWAD. (40663 líneas)
+	Versión  6.30.2 :12/abr/2007	Añadidos dos nuevos tipos de archivos por sugerencia de Joaquín Derrac Rus.
+					Enlace a ayuda sobre el explorador de archivos. (40677 líneas)
+	Versión  6.30.3 :12/abr/2007	Se utiliza un Makefile para la compilación. (40679 líneas)
+	Versión  6.31   :17/abr/2007	Comienza la implementación de mensajes a usuarios de otras asignaturas usando sus ID o apodos. (40795 líneas)
+	Versión  6.31.1 :17/abr/2007	Nueva versión del programa de procesamiento de fotografías realizada por Daniel Calandria que implementa la detección de rostros. (40860 líneas)
+	Versión  6.31.2 :18/abr/2007	Continúa la implementación de mensajes a usuarios de otras asignaturas usando sus ID o apodos. (40929 líneas)
+	Versión  6.31.3 :20/abr/2007	Continúa la implementación de mensajes a usuarios de otras asignaturas usando sus ID o apodos. (41005 líneas)
+	Versión  6.31.4 :20/abr/2007	Finaliza la implementación de mensajes a usuarios de otras asignaturas usando sus ID o apodos. (41006 líneas)
+	Versión  6.31.5 :20/abr/2007	Sólo se permiten comas entre destinatarios de un mensaje, no puntos y comas, por simplicidad y para no tener problemas con caracteres del tipo &xx; (41007 líneas)
+	Versión  6.31.6 :25/abr/2007	Cambiados algunos iconos del menú de usuarios.
+					Mejorados mensajes de posibilidad u obligatoriedad de adscripción a grupos. (40991 líneas)
+	Versión  6.31.7 :25/abr/2007	Nuevos módulos para generar la foto media y mediana de un conjunto de fotos, realizados por Daniel Calandria.
+					Comienza la implementación de la foto media y mediana de un conjunto de usuarios. (40952 líneas)
+	Versión  6.31.8 :25/abr/2007	Continúa la implementación de la foto media y mediana de un conjunto de usuarios. (41022 líneas)
+	Versión  6.31.9 :02/may/2007	Continúa la implementación de la foto media y mediana de un conjunto de usuarios. (41354 líneas)
+	Versión  6.31.10:02/may/2007	Continúa la implementación de la foto media y mediana de un conjunto de usuarios.
+					Es necesario imprimir algo en la salida estándar cada cierto tiempo para evitar timeout del HTTP. (41360 líneas)
+	Versión  6.31.11:03/may/2007	Finaliza la implementación de la foto media y mediana de un conjunto de usuarios. (41505 líneas)
+	Versión  6.31.12:03/may/2007	Bajo las fotos de la orla de las titulaciones se muestra el número de alumnos de la titulación. (41651 líneas)
+	Versión  6.31.13:04/may/2007	Se puede elegir si el tamaño de las fotos de la orla de las titulaciones es proporcional al número de alumnos, proporcional al número de fotos, proporcional al porcentaje de fotos, o fijo. (41752 líneas)
+	Versión  6.31.14:05/may/2007	Corregido bug en la recepción de mensajes internos.
+					Nueva versión del programa de procesamiento de fotografías (realizado por Daniel Calandria), que corrige bugs y mejora la velocidad y el uso de memoria. (41757 líneas)
+	Versión  6.31.15:08/may/2007	Se permite abrir varias salas del nuevo chat desarrollado por Ana Belén Cara Carmona y Carlos Moreno Muñoz. (41805 líneas)
+	Versión  6.31.16:10/may/2007	Nueva versión del programa de procesamiento de fotografías (realizado por Daniel Calandria), que mejora el reconocimiento y muestra las fotografías originales con las caras reconocidas destacadas. (41793 líneas)
+	Versión  6.31.17:15/may/2007	Al llamar al nuevo chat se abre una nueva ventana para cada sala. (41792 líneas)
+	Versión  6.32   :19/may/2007	Añadidas nuevas salas de chat. Aparecen listadas en el mismo formato que los foros.
+					Junto a cada sala de chat aparece el número de usuarios conectados a esa sala. (41888 líneas)
+	Versión  6.32.1 :21/may/2007	El administrador puede ver todas las salas de chat que tienen usuarios conectados. (41939 líneas)
+	Versión  6.32.2 :22/may/2007	Cuando un usario se identifica, aparece un enlace a envío de contraseña si la contraseña actual no es suficientemente segura, y un enlace a envío de fotografía si el usuario no dispone de fotografía. (41949 líneas)
+	Versión  6.32.3 :25/may/2007	Añadido tipo MIME. Cambiado icono de pizarra. (41949 líneas)
+	Versión  6.33   :28/may/2007	Cambio en la forma de almacenar los descriptores de test en la base de datos. (42031 líneas)
+	Versión  6.33.1 :29/may/2007	Comienza el cambio en la forma de acceder a los descriptores de test en la base de datos. (42033 líneas)
+	Versión  6.33.2 :04/jun/2007	Continúa el cambio en la forma de acceder a los descriptores de test en la base de datos. (42151 líneas)
+	Versión  6.33.3 :05/jun/2007	Finaliza el cambio en la forma de acceder a los descriptores de test en la base de datos. (42066 líneas)
+	Versión  6.34   :05/jun/2007	Se permite prohibir el acceso a preguntas de test con ciertos descriptores.
+					En todos los enlaces a formularios aparece un acrónimo. (42241 líneas)
+	Versión  6.35   :06/jun/2007	Añadido formulario para configurar los números mínimo, por defecto y máximo de preguntas en los exámenes de autoevaluación. (42416 líneas)
+	Versión  6.35.1 :07/jun/2007	Se usan los números mínimo, por defecto y máximo de preguntas en la presentación de exámenes de autoevaluación. (42467 líneas)
+	Versión  6.36   :12/jun/2007	Añadido formulario para configurar el tipo de realimentación que se dará al alumno en los exámenes de autoevaluación. (42656 líneas)
+	Versión  6.37   :14/jun/2007	Se permiten preguntas de test de elección con las opciones desordenadas. (42789 líneas)
+	Versión  6.37.1 :14/jun/2007	El profesor puede configurar en cada pregunta de elección entre varias opciones si se pueden desordenar las opciones. (42867 líneas)
+	Versión  6.37.2 :15/jun/2007	Mejoras internas en los test de autoevaluación. (42875 líneas)
+	Versión  6.37.3 :21/jun/2007	Corregido pequeño bug en selección de grupos. (42876 líneas)
+	Versión  6.38   :21/jun/2007	Se incorpora la nueva pizarra creada por Ana Belén Cara Carmona y Carlos Moreno Muñoz, y se elimina la anterior. (42704 líneas)
+	Versión  6.39   :26/jun/2007	Nuevo tipo de respuesta de test: texto. (42919 líneas)
+	Versión  6.39.1 :26/jun/2007	Eliminado el límite que había en el número de test que puede realizar un alumno en cada asignatura. (42908 líneas)
+	Versión  6.39.2 :04/jul/2007	Aumentado el tiempo que se guardan las carpetas expandidas de un mes a dos meses. (42909 líneas)
+	Versión  6.39.3 :07/jul/2007	Al pulsar sobre un tipo de fuente de información de una asignatura, dicho tipo se selecciona directamente sin tener que pulsar en un botón de envío del formulario. (42903 líneas)
+	Versión  6.39.4 :12/jul/2007	Aumentadas cuotas. (42902 líneas)
+	Versión  6.39.5 :16/jul/2007	Corregido pequeño bug en ordenación de lista de usuarios. (42904 líneas)
+	Versión  6.40   :02/ago/2007	Añadidas estadísticas por acción. (42961 líneas)
+	Versión  6.40.1 :03/sep/2007	Corregido bug en consulta de estadísticas de acceso detalladas a una asignatura, detectado por Fco. Javier Fernández Baldomero. (42964 líneas)
+	Versión  6.40.2 :17/sep/2007	La gráfica de estadísticas de acceso por días y horas puede mostrarse en tonos de gris. (42988 líneas)
+	Versión  6.40.3 :24/sep/2007	Corregido bug en presentación de horarios. (43005 líneas)
+	Versión  6.41   :25/sep/2007	El administrador puede ocultar mensajes de foros que no cumplan las normas de netiquette. (43261 líneas)
+	Versión  6.41.1 :26/sep/2007	Los profesores también pueden ocultar mensajes del foro de la asignatura.
+					Corregido bug que tenía lugar cuando se intentaba eliminar un mensaje ya eliminado. (43311 líneas)
+	Versión  6.41.2 :30/sep/2007	Corregido bug en lista de asignaturas al ver los mensajes recibidos o enviados. (43362 líneas)
+	Versión  7.0    :01/oct/2007	Se cambia al curso 2007-2008. (43362 líneas)
+	Versión  7.0.1  :03/oct/2007	Algunas mejoras gráficas en edición de grupos. Añadido tipo de archivo. (43398 líneas)
+	Versión  7.0.2  :13/oct/2007	Añadidos dos tipos MIME de archivos. Cambio en un mensaje de error interno relacionado con las fotografías. (43418 líneas)
+	Versión  7.0.3  :15/oct/2007	Cambio estético en la eliminación de avisos. (43419 líneas)
+	Versión  7.0.4  :16/oct/2007	Las zonas comunes de grupos pasan de la pestaña Usuarios a la pestaña Asignatura. (43420 líneas)
+	Versión  7.1    :16/oct/2007	Si un usuario está apuntado a un único grupo, accede directamente a la zona común de ese grupo. (43493 líneas)
+	Versión  7.1.1  :17/oct/2007	Las zonas comunes de la asignatura y de los grupos son accesibles desde una única opción del menú.
+					Si no hay grupos en la asignatura o el usuario no está apunto a ningún grupo, se accede directamente a la zona común de la asignatura.
+					Añadido tipo MIME. (43513 líneas)
+	Versión  7.1.2  :18/oct/2007	Cambios en la forma de seleccionar las zonas comunes de asignatura y grupos. (43523 líneas)
+	Versión  7.1.3  :18/oct/2007	Se recuerda (almacenándolo en la base de datos) el grupo de la zona común más recientemente visitado. (43524 líneas)
+	Versión  7.2    :19/oct/2007	Se permiten zonas de descarga por grupos además de la zona de la asignatura. (43924 líneas)
+	Versión  7.2.1  :19/oct/2007	Al crear un nuevo grupo, por defecto estará cerrado.
+					Siempre se pide confirmación en la eliminación de un grupo. (43928 líneas)
+	Versión  7.2.2  :20/oct/2007	Cambios en la tabla de la base de datos de los grupos de las asignaturas relacionado con los grupos abiertos/cerrados. (43934 líneas)
+	Versión  7.3    :20/oct/2007	Pueden habilitarse/inhabilitarse las zonas comunes de cada grupo. (44066 líneas)
+	Versión  7.4    :22/oct/2007	Se permiten zonas de calificaciones por grupos. (44454 líneas)
+	Versión  7.4.1  :23/oct/2007	Mejora en el refresco mediante AJAX de los usuarios conectados, con la ayuda de José Carlos Calvo Tudela. (44461 líneas)
+	Versión  7.4.2  :23/oct/2007	El reloj junto al mes actual pasa de mostrar la hora del cliente a mostrar la hora del servidor. (44451 líneas)
+	Versión  7.4.3  :24/oct/2007	Corregido bug en el portapapeles al copiar de una zona de grupo de una asignatura y pegar en otra asignatura (detectado por Francisco A. Ocaña Lara). (44452 líneas)
+	Versión  7.4.4  :24/oct/2007	Mejoras internas relacionadas con las zonas de grupos y con el portapapeles. (44510 líneas)
+	Versión  7.4.5  :24/oct/2007	Corregido bug en la zona de trabajos de la asignatura (detectado por María Dolores Ruiz López). (44517 líneas)
+	Versión  7.4.6  :24/oct/2007	Cambios internos en la baja de todos los alumnos de una asignatura. (44528 líneas)
+	Versión  7.5    :24/oct/2007	El código javascript se mueve a un archivo aparte. (44358 líneas)
+	Versión  7.5.1  :25/oct/2007	Se permiten ID con letra al final, aunque internamente se siguen usando y almacenando sin ella. (44389 líneas)
+	Versión  7.5.2  :26/oct/2007	Comienza la migración a XHTML 1.0 Transitional.
+					Se añade el atributo align="left" a todas las celdas que no tenían alineación para que se vea bien en IE6. (44399 líneas)
+	Versión  7.5.3  :27/oct/2007	Continúa la migración a XHTML 1.0 Transitional. Eliminados todos los <nobr>. (44410 líneas)
+	Versión  7.5.4  :28/oct/2007	Continúa la migración a XHTML 1.0 Transitional. Cambios en la presentación gráfica de las pestañas. (44407 líneas)
+	Versión  7.5.5  :29/oct/2007	Continúa la migración a XHTML 1.0 Transitional. (44482 líneas)
+	Versión  7.5.6  :30/oct/2007	Continúa la migración a XHTML 1.0 Transitional. Casi todas las páginas generadas se validan correctamente. (44436 líneas)
+	Versión  7.5.7  :30/oct/2007	Mejoras en algunos iconos. (44445 líneas)
+	Versión  7.5.8  :31/oct/2007	Continúa la migración a XHTML 1.0 Transitional. Los enlaces (a href="...") a archivos en la zona de descargas se escriben sustituyendo "%20" en lugar de cada espacio. (44494 líneas)
+	Versión  7.5.9  :31/oct/2007	Continúa la migración a XHTML 1.0 Transitional.
+					Corregido problema de ordenación en español detectado por Luis E. Hueli Amador. (44495 líneas)
+	Versión  7.5.10 :31/oct/2007	Reemplazados todos los <BR> por <br /> en los mensajes en la base de datos.
+					Todas las páginas generadas validan XHTML 1.0 Transitional, exceptuando dos detalles:
+					- & debería ser sustituido por &amp; en todas las URL.
+					- los caracteres entre &#128; y &#159 deberían ser sustituidos por sus equivalentes UNICODE. (44503 líneas)
+	Versión  7.5.11 :01/nov/2007	Cambios en algunas tablas de la base de datos.
+					Cambios en los formularios para añadir campos a las fichas, tipos de grupo y grupos. (44497 líneas)
+	Versión  7.6    :03/nov/2007	Comienza la edición de tipos de titulaciones. (45236 líneas)
+	Versión  7.6.1  :03/nov/2007	Termina la edición de tipos de titulaciones. (45321 líneas)
+	Versión  7.6.2  :04/nov/2007	Comienza la edición de titulaciones. (45465 líneas)
+	Versión  7.6.3  :04/nov/2007	Continúa la edición de titulaciones. (45745 líneas)
+	Versión  7.6.4  :05/nov/2007	Continúa la edición de titulaciones. (45885 líneas)
+	Versión  7.6.5  :05/nov/2007	Continúa la edición de titulaciones. (45800 líneas)
+	Versión  7.6.6  :05/nov/2007	Continúa la edición de titulaciones. (46035 líneas)
+	Versión  7.6.7  :06/nov/2007	Continúa la edición de titulaciones. (46220 líneas)
+	Versión  7.6.8  :07/nov/2007	Todos los identificadores de acciones aparecen ahora en inglés. (46220 líneas)
+	Versión  7.6.9  :07/nov/2007	Termina la edición de titulaciones. (46383 líneas)
+	Versión  7.6.10 :07/nov/2007	Los campos ID pasan de VARCHAR(16) a CHAR(16) en todas las tablas excepto la tabla de log. (46384 líneas)
+	Versión  7.6.11 :08/nov/2007	Optimización en consultas a la base de datos en los listados de mensajes. (46441 líneas)
+	Versión  7.6.12 :08/nov/2007	Los campos con código de asignatura pasan de VARCHAR(16) a CHAR(16) en todas las tablas excepto la tabla de log. (46442 líneas)
+	Versión  7.6.13 :08/nov/2007	Más optimizaciones en consultas a la base de datos en los listados de mensajes. (46480 líneas)
+	Versión  7.6.14 :08/nov/2007	Cambios internos en los listados de mensajes. (46476 líneas)
+	Versión  7.6.15 :08/nov/2007	Cambios internos en la edición de preguntas de test. (46482 líneas)
+	Versión  7.6.16 :09/nov/2007	Cambios en la censura de mensajes: ahora, cuando se censura un mensaje, no se muestra el autor ni el asunto. (46490 líneas)
+	Versión  7.7    :09/nov/2007	Comienza la edición de asignaturas. (46439 líneas)
+	Versión  7.7.1  :10/nov/2007	Continúa la edición de asignaturas. (46710 líneas)
+	Versión  7.7.2  :11/nov/2007	Los campos VARCHAR(16) en la tabla de log pasan a CHAR(16). (46711 líneas)
+	Versión  7.7.3  :11/nov/2007	Continúa la edición de asignaturas. (46954 líneas)
+	Versión  7.7.4  :12/nov/2007	Optimizaciones en las consultas de mensajes recibidos y enviados.
+					Continúa la edición de asignaturas. (47091 líneas)
+	Versión  7.8    :13/nov/2007	Para mejorar la protección de datos, un usuario debe confirmar si desea que se le dé de alta en una asignatura. Sugerido por José Luis Bernier. (47417 líneas)
+	Versión  7.8.1  :13/nov/2007	Los alumnos pueden darse de baja de una asignatura. (47427 líneas)
+	Versión  7.8.2  :13/nov/2007	Continúa la edición de asignaturas. (47441 líneas)
+	Versión  7.8.3  :14/nov/2007	Aparecen visibles el nombre y apellidos de los usuarios que aún no han confirmado su alta en una asignatura. (47390 líneas)
+	Versión  7.8.4  :14/nov/2007	Continúa la edición de asignaturas. (47507 líneas)
+	Versión  7.8.5  :14/nov/2007	En el listado de alumnos se indica mediante negritas si cada alumno ha confirmado su alta en las asignatura. (47513 líneas)
+	Versión  7.8.6  :18/nov/2007	En el listado de alumnos se indica mediante un icono si cada alumno ha confirmado su alta en las asignatura. (47516 líneas)
+	Versión  7.8.7  :19/nov/2007	Continúa la edición de asignaturas. (47577 líneas)
+	Versión  7.8.8  :19/nov/2007	Continúa la edición de asignaturas. (47616 líneas)
+	Versión  7.8.9  :20/nov/2007	Continúa la edición de asignaturas. (47730 líneas)
+	Versión  7.8.10 :20/nov/2007	Continúa la edición de asignaturas. (47809 líneas)
+	Versión  7.8.11 :21/nov/2007	Comienza la implementación de dos opciones para importar las titulaciones y las asignaturas a la base de datos. (47842 líneas)
+	Versión  7.8.12 :23/nov/2007	Añadida extensión de archivo y nuevos tipos MIME. (47852 líneas)
+	Versión  7.9    :23/nov/2007	Añadido formulario para cambiar la respuesta secreta usada para recordar la contraseña. (47997 líneas)
+	Versión  7.9.1  :24/nov/2007	Cuando un usuario olvida su contraseña, se le ofrece una opción para ver su pregunta y su respuesta secreta. (48156 líneas)
+	Versión  7.9.2  :24/nov/2007	Puesta en marcha de la respuesta secreta. (48130 líneas)
+	Versión  7.9.3  :26/nov/2007	Finaliza la importación de titulaciones. (48221 líneas)
+	Versión  7.9.4  :26/nov/2007	Finaliza la importación de asignaturas. (48416 líneas)
+	Versión  7.9.5  :27/nov/2007	Comienza el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (48440 líneas)
+	Versión  7.9.6  :28/nov/2007	Cambio interno: movidas muchas funciones de usuarios de swad.c a swad_user.c. (48457 líneas)
+	Versión  7.9.7  :28/nov/2007	Cambio interno: movidas más funciones de usuarios de swad.c a swad_user.c.
+					Cambio interno: nuevo módulo swad_timetable (time table) para los horarios. (48531 líneas)
+	Versión  7.9.8  :28/nov/2007	En la lista de datos completos de usuarios la primera columna será el ID. (48556 líneas)
+	Versión  7.9.9  :28/nov/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (48591 líneas)
+	Versión  7.9.10 :29/nov/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (48610 líneas)
+	Versión  7.9.11 :29/nov/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (48632 líneas)
+	Versión  7.9.12 :30/nov/2007	Pequeño cambio en elección de grupos de cara a la validación XHTML. (48633 líneas)
+	Versión  7.9.13 :30/nov/2007	Corregido bug en convocatorias detectado por el profesor Luis E. Hueli Amador.
+					Cambios internos en la recepción de algunos parámetros. (48679 líneas)
+	Versión  7.9.14 :01/dic/2007	Cambios internos en la recepción de algunos parámetros.
+					Movidas funciones de sesiones de swad.c a swad_session.c (48788 líneas)
+	Versión  7.9.15 :01/dic/2007	Donde se mostraba el número de conectados, ahora se muestra cuántas sesiones hay abiertas y cuántos usuarios conectados. (48804 líneas)
+	Versión  7.9.16 :02/dic/2007	Los usuarios conectados se desglosan en alumnos y profesores conectados. (48868 líneas)
+	Versión  7.9.17 :02/dic/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (48863 líneas)
+	Versión  7.9.18 :03/dic/2007	Corregido pequeño bug en inserción automática de enlaces en URL. (48864 líneas)
+	Versión  7.9.19 :06/dic/2007	Se permite que un ID acabe en dos letras. En ese caso, se eliminan las dos letras finales. (48869 líneas)
+	Versión  7.9.20 :06/dic/2007	Añadido anuncio de seminario-taller sobre swad. (48903 líneas)
+	Versión  7.10   :09/dic/2007	Añadido código de asignatura completo a tabla de asignaturas en la base de datos. (48938 líneas)
+	Versión  7.10.1 :09/dic/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (49067 líneas)
+	Versión  7.10.2 :10/dic/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (49191 líneas)
+	Versión  7.10.3 :10/dic/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (49289 líneas)
+	Versión  7.10.4 :10/dic/2007	Continúa el paso al nuevo sistema de códigos numéricos de titulaciones y asignaturas. (49411 líneas)
+	Versión  7.11   :10/dic/2007	Eliminado el almacenamiento interno de las titulaciones y las asignaturas dentro de este programa. Ahora sólo se almacenan en la base de datos. El programa ha pasado de 2253208 bytes a 738792 bytes. (49408 líneas)
+	Versión  7.11.1 :10/dic/2007	Eliminadas las funciones dedicadas a la importación de titulaciones y asignaturas. (49246 líneas)
+	Versión  7.11.2 :10/dic/2007	Eliminados códigos antiguos de asignaturas de las tablas de sesiones, de conectados y de portapapeles. (49229 líneas)
+	Versión  7.11.3 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de horarios de asignaturas. (49242 líneas)
+	Versión  7.11.4 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de asignaturas-usuarios. (49243 líneas)
+	Versión  7.11.5 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de archivos comunes.
+					Se cambian todas las columnas Path en las tablas de la base de datos para que sean sensibles a mayúsculas/minúsculas, para corregir un bug en archivos comunes detectado por Francisco José Garzón Palomares. (49249 líneas)
+	Versión  7.11.6 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de tipos de grupo en cada asignatura. (49247 líneas)
+	Versión  7.11.7 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de archivos de calificaciones. (49246 líneas)
+	Versión  7.11.8 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de campos de fichas de asignaturas. (49246 líneas)
+	Versión  7.11.9 :11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de carpetas expandidas. (49244 líneas)
+	Versión  7.11.10:11/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de descargas ocultas. (49244 líneas)
+	Versión  7.11.11:12/dic/2007	Eliminados códigos antiguos de asignaturas de las tres tablas relacionadas con los test de autoevaluación. (49242 líneas)
+	Versión  7.11.12:12/dic/2007	Eliminados códigos antiguos de asignaturas de las tablas de convocatorias de examen y de información de las asignaturas. (49238 líneas)
+	Versión  7.11.13:12/dic/2007	Eliminados códigos antiguos de asignaturas de las tablas de mensajes y avisos. (49234 líneas)
+	Versión  7.11.14:12/dic/2007	Eliminados códigos antiguos de asignaturas de las tablas de hebras y de log. (49221 líneas)
+	Versión  7.12   :14/dic/2007	Eliminados códigos antiguos de asignaturas de las salas de chat.
+					Se usan nuevos códigos numéricos de titulación y asignatura en los menús. (49315 líneas)
+	Versión  7.12.1 :14/dic/2007	Corregido bug en asignación de cuatrimestres de las asignaturas. (49319 líneas)
+	Versión  7.12.2 :14/dic/2007	Cambios internos relacionados con la selección de asignaturas. (49288 líneas)
+	Versión  7.12.3 :14/dic/2007	Eliminados códigos antiguos de asignaturas de la tabla de estadísticas de titulaciones. (49286 líneas)
+	Versión  7.12.4 :15/dic/2007	Más cambios internos relacionados con códigos antiguos de titulaciones y asignaturas. (49267 líneas)
+	Versión  7.13   :15/dic/2007	Se refresca mediante AJAX el número de mensajes nuevos.
+					Eliminada la posibilidad de enviar mensajes desde los usuarios conectados. (49296 líneas)
+	Versión  7.13.1 :16/dic/2007	Eliminados campos antiguos de titulación y asignatura de la tabla de log. (49290 líneas)
+	Versión  7.14   :16/dic/2007	Movidos todos los directorios antiguos de asignaturas a los nuevos directorios correspondientes a los códigos numéricos de las asignaturas. (49310 líneas)
+	Versión  7.14.1 :18/dic/2007	Corregido bug en menú de asignaturas, detectado por Eva Martínez Ortigosa. (49316 líneas)
+	Versión  7.15   :18/dic/2007	Nuevo campo en las fichas para el género, usado para que el programa muestre mensajes no sexistas. (49373 líneas)
+	Versión  7.15.1 :19/dic/2007	Corregido pequeño bug en creación de nuevos usuarios detectado por Gabriel Martínez Fernández. (49374 líneas)
+	Versión  7.15.2 :19/dic/2007	Eliminado el código para los cambios de directorios de asignaturas al nuevo sistema. (49277 líneas)
+	Versión  7.15.3 :20/dic/2007	Los administradores pasan a ser superusuarios y se crea un nuevo de tipo de usuario administrador de titulaciones. (49280 líneas)
+	Versión  7.15.4 :20/dic/2007	Se avisa a los usuarios que deben cambiar los antiguos enlaces con el parámetro CodAsg por los nuevos con el parámetro CrsCod. (49298 líneas)
+	Versión  7.15.5 :21/dic/2007	Corregido bug en el parámetro CrsCod informado por José Luis Aróstegui.
+					Cambios relacionados con los usuarios administradores. (49354 líneas)
+	Versión  7.15.6 :22/dic/2007	Corregido bug en alta de profesores informado por Yolanda Aragón.
+					Cambios relacionados con las estadísticas de acceso. (49386 líneas)
+	Versión  7.15.7 :24/dic/2007	Se puede acceder a menús dentro de una titulación sin elegir asignatura. (49389 líneas)
+	Versión  7.15.8 :24/dic/2007	Los tamaños de las fotos en la orla de titulaciones dependen ahora del número de píxeles en lugar del ancho. (48387 líneas)
+	Versión  7.15.9 :07/ene/2008	Cambios relacionados con el renombramiento de asignaturas. (49406 líneas)
+	Versión  7.15.10:07/ene/2008	Corregido bug en la creación de una nueva asignatura. (49407 líneas)
+	Versión  7.15.11:08/ene/2008	Corregido bug en la creación de una nueva titulación.
+					Modificación en la estadística de número total de titulaciones. (49442 líneas)
+	Versión  7.15.12:10/ene/2008	Es obligatorio especificar el género en la ficha personal. (49443 líneas)
+	Versión  7.16   :10/ene/2008	Se limita el intervalo entre dos accesos consecutivos de un alumno al test de una asignatura. (49550 líneas)
+	Versión  7.17   :10/ene/2008	Para disminuir el tamaño de la página de edición de titulaciones, ésta opción se desglosa en dos: edición de tipos de titulación y edición de titulaciones. (49570 líneas)
+	Versión  7.18   :12/ene/2008	Nueva opción para buscar asignaturas. (49751 líneas)
+	Versión  7.18.1 :14/ene/2008	Mejora en la búsqueda de asignaturas: se buscan las asignaturas que contengan todas las palabras buscadas. (49803 líneas)
+	Versión  7.19   :14/ene/2008	Se pueden buscar asignaturas a partir del profesor que las imparte. (49871 líneas)
+	Versión  7.19.1 :15/ene/2008	Se pueden buscar asignaturas de la titulación actual. (49932 líneas)
+	Versión  7.20   :16/ene/2008	Se almacena en una tabla el estado de cada test de autoevaluación, de modo que un test no pueda ser respondido más de una vez. (50074 líneas)
+	Versión  7.20.1 :17/ene/2008	En la edición de titulaciones no se muestra el código antiguo de la titulación. (50068 líneas)
+	Versión  7.20.2 :17/ene/2008	En la edición de asignaturas no se muestra el código antiguo de la asignatura.
+					Eliminación de algunos códigos antiguos de titulaciones y asignaturas en la base de datos. (49959 líneas)
+	Versión  7.21   :17/ene/2008	En los listados de asignaturas aparece el número de alumnos y el de profesores.
+					Cambios internos en la forma de consultar el número de alumnos de una asignatura. (49951 líneas)
+	Versión  7.21.1 :17/ene/2008	Para aligerar la edición de titulaciones, sólo aparecen las titulaciones del tipo seleccionado. (49966 líneas)
+	Versión  7.21.2 :18/ene/2008	Cambios internos en la edición de titulaciones y asignaturas. (49971 líneas)
+	Versión  7.22   :21/ene/2008	La lista de profesores es visible por los profesores y se muestra, al igual que la orla de profesores, restringida a la asignatura, a la titulación o a toda la institución. (49981 líneas)
+	Versión  7.23   :21/ene/2008	Añadida opción para listar los administradores de titulaciones. (50168 líneas)
+	Versión  7.24   :21/ene/2008	Añadida opción para añadir un administrador a la titulación actual. (50308 líneas)
+	Versión  7.25   :22/ene/2008	Añadida opción para eliminar un administrador de la titulación actual. (50594 líneas)
+	Versión  7.26   :22/ene/2008	Cambio interno: los punteros a las funciones de cada acción se sitúan en la tabla de acciones. (50083 líneas)
+	Versión  7.26.1 :23/ene/2008	Algunos cambios relacionados con los administradores de titulaciones. (50093 líneas)
+	Versión  7.26.2 :23/ene/2008	Los superusuarios están dados de alta en la tabla de administradores de titulaciones como administradores de todas las titulaciones. (50126 líneas)
+	Versión  7.27   :24/ene/2008	Un usuario puede elegir entre identificarse como usuario normal (alumno o profesor) o como administrador o superusuario (si ello es posible). (50218 líneas)
+	Versión  7.27.1 :24/ene/2008	Numerosos cambios relacionados con los administradores de titulaciones. (50188 líneas)
+	Versión  7.28   :24/ene/2008	Eliminada la estadística de accesos disribuidos por asignatura, y divididos por el nº de usuarios actuales en cada asignatura.
+					Se muestran estadísticas de acceso de administradores. (50066 líneas)
+	Versión  7.28.1 :25/ene/2008	En la edición de titulaciones, el número de asignaturas de una titulación se calcula cada vez en lugar de almacenarse en la tabla de titulaciones. (50021 líneas)
+	Versión  7.28.2 :25/ene/2008	Mejoras en la eliminación de un tipo de titulación. (50052 líneas)
+	Versión  7.28.3 :25/ene/2008	Mejoras en la eliminación de una titulación.
+					Numerosos cambios internos en la edición de titulaciones y asignaturas. (50171 líneas)
+	Versión  7.28.4 :28/ene/2008	Se muestran menos mensajes en las altas y bajas de varios alumnos.
+					Eliminado el campo de la tabla de log que indicaba si en un acceso el usuario pertenecía o no a la asignatura. (50173 líneas)
+	Versión  7.28.5 :28/ene/2008	Mejoras en la eliminación de una asignatura. (50186 líneas)
+	Versión  7.28.6 :29/ene/2008	Mejoras en la eliminación de una asignatura. (50278 líneas)
+	Versión  7.28.7 :29/ene/2008	Mejora en búsqueda de asignaturas.
+					Mejoras en la eliminación de una asignatura. (50364 líneas)
+	Versión  7.28.8 :29/ene/2008	Al crear o editar una asignatura, se comprueba que el curso es válido dentro de su titulación. (50393 líneas)
+	Versión  7.28.9 :29/ene/2008	Cambios en los permisos de acceso a los foros por parte de administradores.
+					Corregido bug en lista de destinatarios de mensajes entre usuarios. (50352 líneas)
+	Versión  7.28.10:30/ene/2008	En la lista de administradores se muestran las titulaciones administradas. (50495 líneas)
+	Versión  7.28.11:30/ene/2008	Añadidos permisos para que los administradores den de alta/baja a otros usuarios.
+					Pequeños cambios en los listados de datos de usuarios. (50494 líneas)
+	Versión  7.29   :30/ene/2008	Los administradores sólo pueden cambiar una asignatura a otra de las titulaciones que administran, no a cualquier titulación. (50595 líneas)
+	Versión  7.29.1 :30/ene/2008	Optimización en la obtención de los datos de una titulación. (50524 líneas)
+	Versión  7.29.2 :30/ene/2008	Optimización en la obtención de los datos de una asignatura.
+					Mejoras en listado de foros disponibles y de salas de chat disponibles. (50519 líneas)
+	Versión  7.29.3 :30/ene/2008	Corregido bug relacionado con el refresco del enlace a los mensajes nuevos. (50525 líneas)
+	Versión  7.29.4 :30/ene/2008	Mejora en edición de asignaturas. (50523 líneas)
+	Versión  7.29.5 :30/ene/2008	En la búsqueda de asignaturas se permite dejar los dos campos (asignatura y profesor) en blanco. Ese ese caso se buscan todas las asignaturas. (50521 líneas)
+	Versión  7.29.6 :31/ene/2008	Los administradores tienen permiso para acceder a listas de profesores.
+					Corregido error de HTML en formulario de cambio de tipo de usuario.
+					Por defecto una nueva pregunta de tipo test es de elección única. (50539 líneas)
+	Versión  7.30   :01/feb/2008	Corregido bug en el cálculo del número de semanas de un año y del número de semana correspondiente a una fecha.
+					El antiguo módulo swad_course pasa a llamarse swad_degree.
+					Creado un nuevo módulo swad_date para las funciones relacionadas con fechas. (50624 líneas)
+	Versión  7.30.1 :01/feb/2008	Corregido bug al cambiar una asignatura de curso. (50625 líneas)
+	Versión  7.31   :01/feb/2008	En la lista de profesores se destacan aquellos que han confirmado su alta en al menos una de las asignaturas en las que están dados de alta dentro del rango de asignaturas seleccionado para el listado. (50654 líneas)
+	Versión  7.31.1 :01/feb/2008	En la lista de profesores se destacan aquellos que han confirmado su alta en todas las asignaturas en las que están dados de alta dentro del rango de asignaturas seleccionado para el listado. (50658 líneas)
+	Versión  7.31.2 :03/feb/2008	Corregido bug en comprobación de número de preguntas en la evaluación de un test, detectado por Juan Antonio Aldea Armenteros.
+					Mejora en diseño de los formularios de estadísticas. (50738 líneas)
+	Versión  7.31.3 :05/feb/2008	Varias funciones relacionadas con fechas se han movido al módulo de fechas.
+					La fecha inicial de las estadísticas de acceso pasa del 13/12/2004 al 01/01/2005. (50738 líneas)
+	Versión  7.31.4 :06/feb/2008	Añadida extensión de archivo.
+					Corregido pequeño bug en edición de asignaturas.
+					Corregido pequeño bug en listado de profesores en ninguna asignatura. (50754 líneas)
+	Versión  7.31.5 :07/feb/2008	Añadido anuncio de seminario-taller sobre swad. (50758 líneas)
+	Versión  7.31.6 :07/feb/2008	Corregido bug en formulario de creación de asignatura.
+					Pequeño cambio en listado de datos de usuarios. (50759 líneas)
+	Versión  7.32   :09/feb/2008	Cuando se busca un profesor sin rellenar el campo asignatura, se listan todas las asignaturas impartidas por ese profesor. (50892 líneas)
+	Versión  7.32.1 :10/feb/2008	Mejora en el listado de profesores encontrados en la opción de búsqueda. Ahora aparece, en cada una de las asignaturas de un profesor, un icono indicando si ha aceptado el alta. (50943 líneas)
+	Versión  7.32.2 :15/feb/2008	La acción "mostrar mensajes recibidos" se desdobla en una acción para el menú principal y otra para la cabecera superior.
+					Cambios internos en funciones de rango de usuarios en estadísticas. (50963 líneas)
+	Versión  7.32.3 :16/feb/2008	En la opción "Estadísticas > Uso de SWAD" se muestra el número total de asignaturas. (50990 líneas)
+	Versión  7.32.4 :19/feb/2008	La creación de archivos zip con trabajos de alumnos se realiza con la más baja prioridad. (50991 líneas)
+	Versión  7.32.5 :20/feb/2008	Corregido pequeño bug en realización de exámenes de autoevaluación. (50996 líneas)
+	Versión  7.32.6 :25/feb/2008	SWAD se integra en el CEVUG. Se insertan enlaces al CEVUG. (50998 líneas)
+	Versión  7.32.7 :27/feb/2008	Corregido bug en cambio de apodo. (50995 líneas)
+	Versión  7.32.8 :28/feb/2008	Cambio en mensaje de error cuando un profesor no puede cambiar la contraseña de un alumno por no haber aceptado el alta. (51001 líneas)
+	Versión  7.32.9 :29/feb/2008	Se obliga a los usuarios a rellenar su correo electrónico en la ficha. (51007 líneas)
+	Versión  7.32.10:01/mar/2008	Corregido bug en estadísticas de acceso por días. (51023 líneas)
+	Versión  7.33   :01/mar/2008	Antes se mostraban preguntas de test con algún descriptor oculto, siempre que tuvieran al menos un descriptor permitido. Ahora no se muestra una pregunta de test si tiene alguno de sus descriptores oculto. (51038 líneas)
+	Versión  7.33.1 :02/mar/2008	Mejora interna en consulta a base de datos para generar exámenes test de autoevaluación. (51059 líneas)
+	Versión  7.34   :02/mar/2008	Reordenación de las opciones de la pestaña "Titulación". (51060 líneas)
+	Versión  7.35   :05/mar/2008	Comienza la implementación de envío de un correo electrónico en caso de olvido de contraseña, gracias al script programado por Antonio F. Díaz García en Python. (51144 líneas)
+	Versión  7.35.1 :06/mar/2008	Termina la implementación de envío de la contraseña por correo electrónico. (51138 líneas)
+	Versión  7.35.2 :07/mar/2008	Los administradores ya pueden ver la orla de alumnos de asignaturas que no sean la suya. (51144 líneas)
+	Versión  7.36   :08/mar/2008	Al listar los foros se indica el número de hebras y mensajes de cada foro. (51243 líneas)
+	Versión  7.37   :08/mar/2008	Al listar los mensajes de un foro se muestra el número de mensajes totales de cada usuario en ese foro.
+					Eliminado el campo de índice de hebra, que ya no se usaba, de la tabla de hebras. (51203 líneas)
+	Versión  7.38   :08/mar/2008	Nuevo módulo swad_message para todas las funciones relacionadas con mensajes. (51254 líneas)
+	Versión  7.38.1 :08/mar/2008	Cambios internos relacionados con variables globales. (51239 líneas)
+	Versión  7.39   :10/mar/2008	Se permiten administradores globales. (51246 líneas)
+	Versión  7.39.1 :10/mar/2008	Los teléfonos pasan de 9 dígitos a 16, ya que el profesor Manuel Cáceres indica que tienen nuevos teléfonos de 9 dígitos más una extensión de 5 dígitos. (51249 líneas)
+	Versión  7.40   :10/mar/2008	Los mensajes de los foros se quitan de la tabla messages (general para todos los mensajes y muy grande) y se pasan a la tabla forum_post (más pequeña), para ganar velocidad. (51315 líneas)
+	Versión  7.40.1 :11/mar/2008	Corregido bug relacionado con la eliminación de foros al borrar asignaturas y titulaciones. (51348 líneas)
+	Versión  7.41   :11/mar/2008	Los avisos se quitan de la tabla messages (general para todos los mensajes y muy grande) y se pasan a la tabla msg_notices (más pequeña), para ganar velocidad. (51348 líneas)
+	Versión  7.42   :12/mar/2008	Eliminados definitivamente los códigos antiguos de asignaturas. (51173 líneas)
+	Versión  7.42.1 :12/mar/2008	Los administradores de todas las titulaciones pueden actuar como administradores aunque no haya titulación seleccionada, y como tales, pueden cambiarle la contraseña a cualquier alumno o profesor. (51211 líneas)
+	Versión  7.42.2 :26/mar/2008	En cada hebra del foro se muestra el número de lectores distintos de esa hebra. (51250 líneas)
+	Versión  7.42.3 :26/mar/2008	En cada hebra del foro se muestra el número de mensajes totales y el número de escritores distintos de esa hebra. (51328 líneas)
+	Versión  7.43   :31/mar/2008	Se pueden mover hebras de un foro a otro. (51773 líneas)
+	Versión  7.44   :01/abr/2008	Añadidos dos foros sobre SWAD: uno para todos los usuarios y otro para profesores. (51879 líneas)
+	Versión  7.44.1 :01/abr/2008	Mejoras en la paginación de hebras relacionadas con el movimiento de hebras. (51898 líneas)
+	Versión  7.44.2 :02/abr/2008	Mejoras internas en consulta de hebras de un foro. (51927 líneas)
+	Versión  7.44.3 :03/abr/2008	Numerosos cambios en los enlaces a los foros. (51879 líneas)
+	Versión  7.44.4 :04/abr/2008	Cambios internos en algunas variables globales. (51879 líneas)
+	Versión  7.44.5 :04/abr/2008	Nuevo módulo swad_course para todas las funciones relacionadas con la gestión de información de la asignatura seleccionada. (51947 líneas)
+	Versión  7.44.5 :04/abr/2008	Nuevo módulo swad_course para todas las funciones relacionadas con la gestión de información de la asignatura seleccionada. (51947 líneas)
+	Versión  7.45   :04/abr/2008	Los apodos se almacenan en la tabla de datos de los usuarios. (51896 líneas)
+	Versión  7.46   :04/abr/2008	Los datos de los profesores se almacenan en la tabla de datos de los usuarios. (51862 líneas)
+	Versión  7.47   :04/abr/2008	Los datos de los alumnos se almacenan en la tabla de datos de los usuarios. (51751 líneas)
+	Versión  7.47.1 :04/abr/2008	Renombrados los campos de la tabla de la base de datos que almacena los datos de los usuarios. (51752 líneas)
+	Versión  7.48   :08/abr/2008	Pestañas y menús en 6 idiomas: alemán, inglés, español, francés, italiano y portugués. (52442 líneas)
+	Versión  7.48.1 :08/abr/2008	Cambios relacionados con la selección del idioma. (52068 líneas)
+	Versión  7.48.2 :08/abr/2008	Se puede seleccionar el idioma aunque no haya un usuario identificado. (52137 líneas)
+	Versión  7.48.3 :08/abr/2008	Traducidos algunos botones y mensajes. (52203 líneas)
+	Versión  7.48.4 :09/abr/2008	Cambios en la traducción al italiano propuestos por Nicola Comunale. (52204 líneas)
+	Versión  7.48.5 :09/abr/2008	Se muestran estadísticas del número de usuarios que ha elegido cada idioma. (52266 líneas)
+	Versión  7.48.6 :09/abr/2008	Se limita la longitud de nombre y apellidos al mostrar el autor de un mensaje o una hebra. (52267 líneas)
+	Versión  7.49   :10/abr/2008	Delante de cada hebra en la que el usuario ha escrito mensajes aparece su foto. (52306 líneas)
+	Versión  7.49.1 :10/abr/2008	Pequeñas mejoras gráficas en los foros.
+					Eliminado código antiguo relacionado con el horario. (52274 líneas)
+	Versión  7.49.2 :10/abr/2008	Corregido pequeño bug relacionado con el número de mensajes escritos por el usuario en cada hebra.
+					Corregido pequeño bug relacionado con acrónimos en los enlaces de formularios. (52285 líneas)
+	Versión  7.49.3 :14/abr/2008	Mejorado mensaje de error relacionado con la tabla de mensajes.
+					Insertados dos anuncios de seminarios de swad para profesores. (52314 líneas)
+	Versión  7.49.4 :19/abr/2008	Importante optimización del código de la función encargada de convertir cadenas de caracteres.
+					Eliminados anuncios de seminarios. (52319 líneas)
+	Versión  7.49.5 :19/abr/2008	Renombrados los campos de la tabla de la base de datos que almacena los usuarios en cada asignatura. (52316 líneas)
+	Versión  7.50   :19/abr/2008	La última pestaña accedida se guarda en la tabla de datos del usuario, no en la tabla de usuarios en cada asignatura. De este modo, ahora no cambia la pestaña accedida al cambiar de asignatura. (52318 líneas)
+	Versión  7.50.1 :20/abr/2008	Corregido bug en lista de alumnos detectado por Pablo J. Gómez López y Luis E. Hueli Amador.
+					Movidas varias funciones relacionadas con cadenas de caracteres al módulo swad_string. (52272 líneas)
+	Versión  7.50.2 :20/abr/2008	Renombrados los campos de las tablas de la base de datos que almacenan los tipos de grupo, los grupos en cada asignatura, y los usuarios en cada grupo. (52268 líneas)
+	Versión  7.50.3 :20/abr/2008	Renombradas algunas tablas la base de datos. (52269 líneas)
+	Versión  7.51   :21/abr/2008	Comienza la implementación de la identificación de usuarios mediante un código numérico. (52305 líneas)
+	Versión  7.51.1 :22/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico.
+					Corregido bug relacionado con la eliminación de los mensajes nuevos de un usuario. (52323 líneas)
+	Versión  7.51.2 :22/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52328 líneas)
+	Versión  7.51.3 :22/abr/2008	Corregido importante bug en eliminación de avisos. (52326 líneas)
+	Versión  7.51.4 :24/abr/2008	Corregido bug al presentar el enunciado de los test de autoevaluación. (52328 líneas)
+	Versión  7.51.5 :27/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52327 líneas)
+	Versión  7.51.6 :27/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52312 líneas)
+	Versión  7.51.7 :28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52365 líneas)
+	Versión  7.51.8 :28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52376 líneas)
+	Versión  7.51.9 :28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52380 líneas)
+	Versión  7.51.10:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52391 líneas)
+	Versión  7.51.11:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52392 líneas)
+	Versión  7.51.12:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52392 líneas)
+	Versión  7.51.13:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52392 líneas)
+	Versión  7.51.14:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52391 líneas)
+	Versión  7.51.15:28/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52424 líneas)
+	Versión  7.51.16:29/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52475 líneas)
+	Versión  7.51.17:29/abr/2008	Continúa la implementación de la identificación de usuarios mediante un código numérico. (52476 líneas)
+	Versión  7.51.18:29/abr/2008	Comienza el cambio de parámetro oculto con el ID de otro usuario a código de ese usuario. (52535 líneas)
+	Versión  7.51.19:29/abr/2008	Finaliza el cambio de parámetro oculto con el ID de otro usuario a código de ese usuario. (52502 líneas)
+	Versión  7.51.20:01/may/2008	Más cambios internos relacionados con los ID de los usuarios. (52416 líneas)
+	Versión  7.51.21:01/may/2008	Más cambios internos relacionados con los ID de los usuarios. (52305 líneas)
+	Versión  7.51.22:02/may/2008	Más cambios internos relacionados con los ID de los usuarios. (52307 líneas)
+*/
+#endif

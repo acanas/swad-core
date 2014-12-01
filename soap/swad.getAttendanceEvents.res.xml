@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:swad="urn:swad">
+ <SOAP-ENV:Body>
+  <swad:getAttendanceEventsOutput>
+   <numEvents>0</numEvents>
+   <eventsArray>
+    <item>
+     <attendanceEventCode>0</attendanceEventCode>
+     <hidden>0</hidden>
+     <userSurname1></userSurname1>
+     <userSurname2></userSurname2>
+     <userFirstname></userFirstname>
+     <userPhoto></userPhoto>
+     <startTime>0</startTime>
+     <endTime>0</endTime>
+     <commentsTeachersVisible>0</commentsTeachersVisible>
+     <title></title>
+     <text></text>
+     <groups></groups>
+    </item>
+   </eventsArray>
+  </swad:getAttendanceEventsOutput>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

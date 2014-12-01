@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:swad="urn:swad">
+ <SOAP-ENV:Body>
+  <swad:getTestsOutput>
+   <tagsArray>
+    <item>
+     <tagCode>0</tagCode>
+     <tagText></tagText>
+    </item>
+   </tagsArray>
+   <questionsArray>
+    <item>
+     <questionCode>0</questionCode>
+     <answerType></answerType>
+     <shuffle>0</shuffle>
+     <stem></stem>
+     <feedback></feedback>
+    </item>
+   </questionsArray>
+   <answersArray>
+    <item>
+     <questionCode>0</questionCode>
+     <answerIndex>0</answerIndex>
+     <correct>0</correct>
+     <answerText></answerText>
+     <answerFeedback></answerFeedback>
+    </item>
+   </answersArray>
+   <questionTagsArray>
+    <item>
+     <questionCode>0</questionCode>
+     <tagCode>0</tagCode>
+     <tagIndex>0</tagIndex>
+    </item>
+   </questionTagsArray>
+  </swad:getTestsOutput>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

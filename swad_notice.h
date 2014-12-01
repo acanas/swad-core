@@ -1,0 +1,70 @@
+// swad_notice.h: notices (yellow notes)
+
+#ifndef _SWAD_NOT
+#define _SWAD_NOT
+/*
+    SWAD (Shared Workspace At a Distance in Spanish),
+    is a web platform developed at the University of Granada (Spain),
+    and used to support university teaching.
+
+    This file is part of SWAD core.
+    Copyright (C) 1999-2014 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_statistic.h"
+
+/*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
+
+#define Not_NUM_TYPES_LISTING 2
+typedef enum
+  {
+   Not_LIST_BRIEF_NOTICES = 0,
+   Not_LIST_FULL_NOTICES  = 1,
+  } Not_Listing_t;
+
+#define Not_NUM_STATUS 2
+typedef enum
+  {
+   Not_ACTIVE_NOTICE   = 0,
+   Not_OBSOLETE_NOTICE = 1,
+  } Not_Status_t;	// Don't change these numbers because they are used in database
+
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
+
+void Not_ShowFormNotice (void);
+void Not_ReceiveNotice (void);
+void Not_ListNotices (void);
+void Not_HideActiveNotice (void);
+void Not_RevealHiddenNotice (void);
+void Not_DeleteNotice (void);
+void Not_ShowANotice (void);
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing);
+void Not_GetNotifNotice (char *SummaryStr,char **ContentStr,long NotCod,unsigned MaxChars,bool GetContent);
+unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned *NumNotif);
+unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif);
+
+#endif
