@@ -1,0 +1,3922 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+ <head>
+  <title>SWAD: Tools</title>
+  <style type="text/css">
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+A:active {text-decoration: none;}
+A:hover	{color:#000000;}
+body		{margin:0px;}
+td,p,.h		{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#404040;font-size:11pt;}
+table		{border-width:0px; border-style:none;}
+img		{border-width:0px; border-style:none;}
+.SWAD{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#F8B000;font-size:16pt;font-weight:bold;}
+  </style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40768375-1', 'openswad.org', {
+    'anonymizeIp': true,
+    'storage': 'none',
+    'clientId': window.localStorage.getItem('ga_clientId')
+  });
+  ga(function(tracker) {
+    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));
+  });
+  ga('send', 'pageview');
+
+</script>
+ </head>
+
+ <body>
+  <table width="100%" border="0" cellspacing="0" cellpadding="20">
+   <tr>
+    <td align="center">
+     <table width="90%" border="0" cellspacing="20" cellpadding="0">
+
+      <tr>
+       <td align="center" class="SWAD">
+	        <a href="http://openswad.org/" class="SWAD"><img src="/logo/swad224x64.png" alt="SWAD" width="224" height="64" />
+	        <br />shared workspace at a distance</a>
+       </td>
+      </tr>
+
+      <tr>
+       <td align="center">
+		<h1>Tools and features (to be updated)</h1>
+		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
+		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2014
+       </td>
+      </tr>
+
+      <tr>
+       <td align="center">
+		<small>Snapshots: versions 7.69.11 (2008-09-01) to 7.73.1 (2008-09-29)</small>
+       </td>
+      </tr>
+
+      <tr>
+       <td align="left">
+
+<dl>
+
+<dt><h2>Resumen de herramientas y funcionalidades ofrecidas</h2></dt>
+
+<dd>
+
+	<p align="justify">
+	La plataforma SWAD ofrece las siguientes funcionalidades:<br />
+		<ul>
+		<li>Administraci&oacute;n de titulaciones y asignaturas
+			<ul>
+			<li>b&uacute;squeda de asignaturas y profesores</li>
+			<li>lista y edici&oacute;n de instituciones</li>
+			<li>lista y edici&oacute;n de centros</li>
+			<li>lista y edici&oacute;n de departamentos</li>
+			<li>lista y edici&oacute;n de lugares</li>
+			<li>lista y edici&oacute;n de d&iacute;as festivos</li>
+			<li>lista y gesti&oacute;n de administradores</li>
+			<li>edici&oacute;n de tipos de titulaciones</li>
+			<li>edici&oacute;n de titulaciones</li>
+			<li>edici&oacute;n de asignaturas</li>
+			<li>lista y edici&oacute;n de enlaces institucionales</li>
+			<li>instalaci&oacute;n de la plataforma</li>
+			</ul>
+		</li>
+		<li>Informaci&oacute;n y documentaci&oacute;n de asignaturas
+			<ul>
+			<li>gu&iacute;a docente de la asignatura</li>
+			<li>calendario acad&eacute;mico</li>
+			<li>horario de clases</li>
+			<li>temarios de teor&iacute;a y pr&aacute;cticas</li>
+			<li>descarga de archivos (documentos, transparencias, relaciones de problemas, etc., aunque sin creaci&oacute;n de contenidos html)
+			<li>zonas comunes de almacenamiento</li>
+			<li>bibliograf&iacute;a</li>
+			<li>FAQ</li>
+			<li>enlaces</li>
+			</ul>
+		</li>
+		<li>Evaluaci&oacute;n de estudiantes
+			<ul>
+			<li>informaci&oacute;n sobre el sistema de evaluaci&oacute;n</li>
+			<li>gesti&oacute;n de actividades</li>
+			<li>ficha personalizada del estudiante en la asignatura</li>
+			<li>entrega de actividades y otros trabajos</li>
+			<li>ex&aacute;menes de autoevaluaci&oacute;n de tipo test</li>
+			<li>convocatorias de examen</li>
+			<li>consulta de calificaciones individualizada</li>
+			</ul>
+		</li>
+		<li>Informaci&oacute;n y administraci&oacute;n de estudiantes y profesores
+			<ul>
+			<li>listas y fichas de estudiantes y profesores</li>
+			<li>horarios de tutor&iacute;as de profesores</li>
+			<li>gesti&oacute;n de grupos</li>
+			<li>alta y baja de usuarios</li>
+			<li>cambio de contrase&ntilde;a y fotograf&iacute;a de otros usuarios</li>
+			</ul>
+		</li>
+		<li>Comunicaci&oacute;n entre usuarios
+			<ul>
+			<li>avisos</li>
+			<li>mensajer&iacute;a web interna</li>
+			<li>env&iacute;o de correo electr&uacute;nico</li>
+			<li>foros de discusi&oacute;n</li>
+			<li>chat</li>
+			</ul>
+		</li>
+		<li>Estad&iacute;sticas y control de visitas
+			<ul>
+			<li>estad&iacute;sticas de acceso a la asignatura
+				<ul>
+				<li>consulta por usuario, fecha, hora, acci&oacute;n,...</li>
+				<li>listado accesos detallados</li>
+				</ul>
+			</li>
+			<li>estad&iacute;sticas acceso globales
+				<ul>
+				<li>consulta por usuario, fecha, hora, acci&oacute;n, titulaci&oacute;n, asignatura,...</li>
+				</ul>
+			</li>
+			<li>utilizaci&oacute;n del sistema</li>
+			<li>estad&iacute;sticas de asignaturas</li>
+			<li>orla de titulaciones</li>
+			</ul>
+		</li>
+		<li>Informaci&oacute;n personal
+			<ul>
+			<li>cambio de contrase&ntilde;a y apodo</li>
+			<li>ficha con datos personales</li>
+			<li>cambio de fotograf&iacute;a</li>
+			<li>preferencias personales</li>
+			<li>horario de todas las asignaturas</li>
+			<li>edici&oacute;n del horario de tutor&iacute;as</li>
+			<li>malet&iacute;n (disco duro virtual) personal</li>
+			</ul>
+		</li>
+		</ul>
+	</p>
+
+</dd>
+
+<dt><h2>Descripci&oacute;n detallada de herramientas y funcionalidades ofrecidas</h2></dt>
+
+<dd>
+
+	<p align="justify">
+	A continuaci&oacute;n se indica c&oacute;mo se accede a la plataforma y se describen en detalle todos los servicios que ofrece.
+	</p>
+	<ul>
+	<li><a name="acceso"><h3>Acceso a la plataforma:</h3>
+		<p align="justify">
+		El acceso a la plataforma SWAD puede realizarse:<br />
+		<ol>
+			<li>Directamente sin especificar una asignatura.
+				<p align="justify">
+				En este caso aparecer&aacute; la siguiente p&aacute;gina, en la que el usuario puede identificarse
+				o escoger el tipo de titulaci&oacute;n, la titulaci&oacute;n, el curso y la asignatura:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/entrada-sin-asignatura.png"><img border="0" src="img/entrada-sin-asignatura_chica.png" alt="Acceso a la plataforma SWAD" width="320" height="200"><br />
+						Entrada a SWAD sin especificar la asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li>Desde una p&aacute;gina con accesos directos a asignaturas concretas dentro de SWAD.
+				<p>
+				En este caso se puede entrar directamente en una asignatura dentro de SWAD
+				desde una p&aacute;gina que contenga un enlace adecuado.
+				Para conseguir dicho enlace hay que entrar en la asignatura deseada usando los men&uacute;s,
+				pulsar en &quot;acceso directo&quot;
+				(bajo el men&uacute; de selecci&oacute;n de titulaci&oacute;n-curso-asignatura),
+				copiar todo o parte del c&oacute;digo <a href="http://es.wikipedia.org/wiki/XHTML">XHTML</a> [W3C 2008] que se muestra,
+				y pegarlo en el sitio de la p&aacute;gina web donde se desea que aparezca el enlace a la asignatura:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/codigo-XHTML-acceso-asignatura.png">
+						<img border="0" src="img/codigo-XHTML-acceso-asignatura_chica.png" alt="C&oacute;digo HTML de acceso a una asignatura" width="320" height="200"><br />
+						Ejemplo de c&oacute;digo HTML de acceso a una asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p>
+				Por ejemplo, la siguiente p&aacute;gina de una profesora
+				contiene cuatro accesos directos a asignaturas:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/ejemplo-pagina-acceso.png">
+						<img border="0" src="img/ejemplo-pagina-acceso_chica.png" alt="Ejemplo de p&aacute;gina de acceso a varias asignaturas en SWAD" width="320" height="200"><br />
+						Ejemplo de p&aacute;gina de una profesora, con acceso a cuatro asignaturas en SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Cuando se pulsa sobre uno de los enlaces de la p&aacute;gina anterior,
+				se entra a una asignatura concreta dentro de la plataforma SWAD
+				y aparece la siguiente p&aacute;gina:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/entrada-asignatura.png"><img border="0" src="img/entrada-asignatura_chica.png" alt="Acceso a una asignatura concreta de la plataforma SWAD" width="320" height="200">
+						</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+		</ol>
+	</li>
+	<li><h3>Identificaci&oacute;n</h3>
+		<p align="justify">
+		SWAD permite el acceso identificado de varios tipos de usuarios:
+		<ul>
+			<li>invitados (usuarios que no pertenecen a la asignatura seleccionada)</li>
+			<li>estudiantes</li>
+			<li>profesores</li>
+			<li>administradores de titulaciones</li>
+			<li>administradores del sistema (superusuarios)</li>
+
+		</ul>
+		<br />
+		El usuario ha de introducir en la parte superior de la p&aacute;gina
+		su n&uacute;mero de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+		o su <a href="http://es.wikipedia.org/wiki/Alias">apodo (<em>nickname</em>)</a>,
+		y una <a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a>.
+		La primera vez que un usuario entra en SWAD, no tiene que introducir ninguna <a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a>:
+		la plataforma le obligar&aacute; a introducir una antes de acceder a cualquier servicio.
+		Cuando se pulsa &quot;Entrar&quot;, el sistema consulta la base de datos permitiendo o denegando el acceso.
+		</p>
+		<p align="justify">
+		Una vez que ha accedido, el usuario puede seleccionar una de las asignaturas en las que est&aacute; inscrito
+		mediante el men&uacute; &quot;Mis asignaturas&quot;, situado a la izquierda de la p&aacute;gina:
+		</p>
+		<p align="justify">
+		<table border="0">
+			<tr>
+			<td align="left" valign="top">
+				<a href="img/identificacion.png"><img border="0" src="img/identificacion_chica.png" alt="Identificaci&oacute;n" width="320" height="200"><br />
+				Identificaci&oacute;n</a>
+			</td>
+			<td align="left" valign="top">
+				<a href="img/acceso.png"><img border="0" src="img/acceso_chica.png" alt="Acceso identificado" width="320" height="200"><br />
+				Selecci&oacute;n de una asignatura en el men&uacute; &quot;Mis asignaturas&quot;</a>
+			</td>
+			</tr>
+		</table>
+		</p>
+		<p align="justify">
+		Delante del nombre del usuario aparece el tipo de usuario bajo el que est&aacute; identificado.
+		En el caso de que sea posible que un usuario se identifique como distintos tipos,
+		por ejemplo profesor o administrador de titulaci&oacute;n,
+		delante del nombre aparece un selector que le permite cambiar el tipo de identificaci&oacute;n.
+		</p>
+	</li>
+	<li><h3>Organizaci&oacute;n de la p&aacute;gina</h3>
+		<p align="justify">
+		Para facilitar la navegaci&oacute;n, se ha cuidado la homogeneidad
+		de la <a href="http://es.wikipedia.org/wiki/Interfaz_de_usuario">interfaz de usuario</a>
+		y la usabilidad ofreciendo una &uacute;nica p&aacute;gina
+		con varias pesta&ntilde;as y un men&uacute; en cada una de las pesta&ntilde;as:
+		</p>
+		<p align="center">
+		<a href="img/organizacion.png"><img border="0" src="img/organizacion_chica.png" alt="Organizaci&oacute;n de la p&aacute;gina" width="640" height="400"></a>
+		</p>
+		<p align="justify">
+		En la parte superior de la pantalla se muestran los nombres de la titulaci&oacute;n y la asignatura seleccionadas y el usuario identificado.
+		Los men&uacute;s de la izquierda permiten el acceso a cualquier asignatura. Tambi&oacute;n a la izquierda y debajo de los men&uacute;s anteriores
+		se muestran un calendario -en el que aparecen destacadas la fecha actual en verde y las convocatorias de examen en naranja-,
+		la hora actual, y un tabl&oacute;n de avisos.
+		La parte derecha muestra los usuarios conectados actualmente,
+		botones para la selecci&oacute;n del idioma y del dise&ntilde;o,
+		y un men&uacute; con enlaces a diversos servicios de la instituci&oacute;n.
+		</p>
+		<p align="justify">
+		La zona central ofrece siete pesta&ntilde;as, cada una con un men&uacute; diferente para acceder a los distintos servicios:
+		</p>
+		<p>
+		<ul>
+			<li>Pesta&ntilde;a &quot;Titulaci&oacute;n&quot;: administraci&oacute;n de titulaciones y asignaturas.</li>
+			<li>Pesta&ntilde;a &quot;Asignatura&quot;: informaci&oacute;n sobre la asignatura seleccionada.</li>
+			<li>Pesta&ntilde;a &quot;Evaluaci&oacute;n&quot;: evaluaci&oacute;n de estudiantes en la asignatura seleccionada</li>
+			<li>Pesta&ntilde;a &quot;Usuarios&quot;: informaci&oacute;n de usuarios de la asignatura seleccionada</li>
+			<li>Pesta&ntilde;a &quot;Mensajes&quot;: comunicaci&oacute;n entre usuarios</li>
+			<li>Pesta&ntilde;a &quot;Estad&iacute;sticas&quot;: diversas estad&iacute;sticas de acceso</li>
+			<li>Pesta&ntilde;a &quot;Personal&quot;: datos personales, independientes de la asignatura seleccionada</li>
+		</ul>
+		</p>
+		<p align="justify">
+		En cada pesta&ntilde;a se muestran m&aacute;s o menos opciones dependiendo de:
+		</p>
+		<p>
+		<ul>
+			<li>el tipo de usuario que ve la p&aacute;gina (no identificado, invitado, estudiante, profesor, administrador de titulaci&oacute;n o superusuario)</li>
+			<li>si el usuario ha seleccionado o no una asignatura</li>
+			<li>en caso de haber seleccionado una asignatura, si el usuario pertenece o no a la asignatura seleccionada</li>
+		</ul>
+		</p>
+		<p align="justify">
+		En los apartados siguientes se describen todos los servicios u opciones de cada pesta&ntilde;a.
+		</p>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de administraci&oacute;n de titulaciones y asignaturas -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Titulaci&oacute;n&quot;:</h3>
+
+		<p align="justify">En la pesta&ntilde;a &quot;Titulaci&oacute;n&quot; se muestra la siguiente informaci&oacute;n relacionada
+		con la administraci&oacute;n de las titulaciones y de las asignaturas de la titulaci&oacute;n seleccionada:</p>
+
+		<ul>
+			<li><h4>Buscar</h4>
+				<p align="justify">
+				Se presenta un formulario que permite buscar asignaturas y profesores en toda la plataforma o solo en la titulaci&oacute;n seleccionada.
+				</p>
+				<p align="justify">
+				Si solo se rellena el campo <em>Asignatura</em>, se listar&aacute;n las asignaturas cuyos nombres contengan todas las cadenas de caracteres introducidas:
+				</p>
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/buscar-asignatura.png"><img border="0" src="img/buscar-asignatura_chica.png" alt="B&uacute;squeda de asignatura" width="320" height="200"><br />
+						B&uacute;squeda de asignatura</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/resultados-busqueda-asignatura.png"><img border="0" src="img/resultados-busqueda-asignatura_chica.png" alt="Resultados de una b&uacute;squeda de asignatura" width="320" height="200"><br />
+						Resultados de una b&uacute;squeda de asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si se rellenan los dos campos, <em>Asignatura</em> y <em>Profesor</em>,
+				se listar&aacute;n las asignaturas cuyos nombres contengan todas las cadenas de caracteres introducidas en el campo <em>Asignatura</em>,
+				y que sean impartidas por alg&uacute;n profesor con nombre o apellidos que contengan todas las cadenas de caracteres introducidas en el campo <em>Profesor</em>:
+				</p>
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/buscar-asignatura-profesor.png"><img border="0" src="img/buscar-asignatura-profesor_chica.png" alt="B&uacute;squeda de asignatura y profesor" width="320" height="200"><br />
+						B&uacute;squeda de asignatura y profesor</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/resultados-busqueda-asignatura-profesor.png"><img border="0" src="img/resultados-busqueda-asignatura-profesor_chica.png" alt="Resultados de una b&uacute;squeda de asignatura" width="320" height="200"><br />
+						Resultados de una b&uacute;squeda de asignatura y profesor</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si solo se rellena el campo <em>Profesor</em>,
+				se listar&aacute;n los profesores cuyos nombres o apellidos contengan todas las cadenas de caracteres introducidas,
+				y bajo cada profesor se listan sus asignaturas:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/buscar-profesor.png"><img border="0" src="img/buscar-profesor_chica.png" alt="B&uacute;squeda de profesor" width="320" height="200"><br />
+						B&uacute;squeda de profesor</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/resultados-busqueda-profesor.png"><img border="0" src="img/resultados-busqueda-profesor_chica.png" alt="Resultados de una b&uacute;squeda de profesor" width="320" height="200"><br />
+						Resultados de una b&uacute;squeda de profesor</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+
+			</li>
+			<li><h4>Centros</h4>
+				<p align="justify">
+				Se muestra un listado de los centros de la instituci&oacute;n.
+				En cada fila aparece el nombre del centro a la izquierda, con un enlace a la web correspondiente,
+				y a la derecha el n&uacute;mero de profesores que han seleccionado ese centro en sus datos personales.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/centros.png"><img border="0" src="img/centros_chica.png" alt="Lista de centros" width="320" height="200"><br />
+						Lista de centros</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Actualmente la edici&oacute;n de los centros se realiza manualmente,
+				pero a corto plazo esta opci&oacute;n dispondr&aacute; de edici&oacute;n de centros
+				por parte de superusuarios mediante un formulario.
+				</p>
+			</li>
+			<li><h4>Departamentos</h4>
+				<p align="justify">
+				Se muestra un listado de los departamentos de la instituci&oacute;n.
+				En cada fila aparece el nombre del departamento a la izquierda, con un enlace a la web correspondiente,
+				y a la derecha el n&uacute;mero de profesores que han seleccionado ese departamento en sus datos personales.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/departamentos.png"><img border="0" src="img/departamentos_chica.png" alt="Lista de departamentos" width="320" height="200"><br />
+						Lista de departamentos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Actualmente la edici&oacute;n de los departamentos se realiza manualmente,
+				pero a corto plazo esta opci&oacute;n dispondr&aacute; de edici&oacute;n de departamentos
+				por parte de superusuarios mediante un formulario.
+				</p>
+			</li>
+			<li><h4>Lista de administradores de titulaci&oacute;n</h4>
+				<p align="justify">
+				Se muestra la lista de los administradores de la titulaci&oacute;n actual o de todas las titulaciones.
+				Un administrador de titulaci&oacute;n es un profesor o un estudiante que ha sido de alta por un superusuario como administrador en esa titulaci&oacute;n.
+				Bajo cada administrador aparecen enlaces a las titulaciones que administra.
+				La filosof&iacute;a de SWAD es la descentralizaci&oacute;n, de modo que
+				si un usuario necesita hacer ciertas gestiones en la titulaci&oacute;n, como dar de alta una nueva asignatura o un nuevo profesor,
+				debe ponerse en contacto con alguno de los administradores de su titulaci&oacute;n.
+				En caso de que no haya ning&uacute;n administrador de una determinada titulaci&oacute;n,
+				puede recurrirse a administradores especiales de todas las titulaciones.
+				Los superusuarios tambi&oacute;n pueden realizar tareas de administraci&oacute;n de titulaciones.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-administradores-titulacion.png"><img border="0" src="img/lista-administradores-titulacion_chica.png" alt="Lista de administradores de titulaciones" width="320" height="200"><br />
+						Lista de administradores de titulaciones</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Alta de un administrador de titulaci&oacute;n</h4>
+				<p align="justify">
+				Los superusuarios pueden dar de alta profesores o estudiantes como administradores de titulaci&oacute;n.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario a dar de alta como administrador de la titulaci&oacute;n actual:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-alta-administrador-titulacion.png"><img border="0" src="img/peticion-DNI-alta-administrador-titulacion_chica.png" alt="DNI/Pasaporte del usuario a dar de alta como administrador de titulaci&oacute;n" width="320" height="200"><br />
+						DNI/Pasaporte del usuario a dar de alta como administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				A continuaci&oacute;n aparece la ficha del usuario y se pide confirmaci&oacute;n sobre su alta como administrador de la titulaci&oacute;n:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/alta-administrador-titulacion.png"><img border="0" src="img/alta-administrador-titulacion_chica.png" alt="Alta de administrador de titulaci&oacute;n" width="320" height="200"><br />
+						Alta de administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El usuario queda asignado a la titulaci&oacute;n actual como administrador de esta:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-alta-administrador-titulacion.png"><img border="0" src="img/confirmacion-alta-administrador-titulacion_chica.png" alt="Confirmaci&oacute;n de alta como administrador de titulaci&oacute;n" width="320" height="200"><br />
+						Confirmaci&oacute;n del alta de administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Baja de un administrador de titulaci&oacute;n</h4>
+				<p align="justify">
+				Los superusuarios pueden dar de baja administradores de titulaci&oacute;n.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario a dar de baja como administrador de la titulaci&oacute;n actual:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-baja-administrador-titulacion.png"><img border="0" src="img/peticion-DNI-baja-administrador-titulacion_chica.png" alt="DNI/Pasaporte del usuario a dar de baja como administrador de titulaci&oacute;n" width="320" height="200"><br />
+						DNI/Pasaporte del usuario a dar de baja como administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				A continuaci&oacute;n aparece la ficha del usuario y se pide confirmaci&oacute;n sobre su baja como administrador de la titulaci&oacute;n:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/baja-administrador-titulacion.png"><img border="0" src="img/baja-administrador-titulacion_chica.png" alt="Baja de administrador de titulaci&oacute;n" width="320" height="200"><br />
+						Baja de administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El usuario pierde su asignaci&oacute;n a la titulaci&oacute;n actual como administrador de esta:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-baja-administrador-titulacion.png"><img border="0" src="img/confirmacion-baja-administrador-titulacion_chica.png" alt="Confirmaci&oacute;n de baja como administrador de titulaci&oacute;n" width="320" height="200"><br />
+						Confirmaci&oacute;n del baja de administrador de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n de tipos de titulaci&oacute;n</h4>
+				<p align="justify">
+				Los superusuarios pueden editar los tipos de titulaci&oacute;n (licenciatura, diplomatura, m&aacute;ster, etc.) existentes o crear nuevos tipos.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>
+				con tres columnas:
+				</p>
+				<ol>
+					<li>C&oacute;digo interno del tipo de titulaci&oacute;n (no editable).</li>
+					<li>Nombre del tipo de titulaci&oacute;n: permite renombrarlo.</li>
+					<li>N&uacute;mero de titulaciones existentes de ese tipo (no editable).</li>
+				</ol>
+				<p align="justify">
+				Es posible eliminar un tipo de titulaci&oacute;n existente pulsando en el aspa roja que la precede,
+				siempre que el tipo de titulaci&oacute;n no contenga titulaciones. En caso de que se desee eliminar un tipo que contenga titulaciones,
+				es necesario eliminar primero todas sus titulaciones.
+				Tambi&oacute;n es posible renombrar un tipo de titulaci&oacute;n existente pulsando sobre su nombre.
+				Para crear un nuevo tipo de titulaci&oacute;n hay que rellenar su nombre en la &uacute;ltima fila y pulsar el icono verde:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/editar-tipos-titulacion.png"><img border="0" src="img/editar-tipos-titulacion_chica.png" alt="Edici&oacute;n de tipos de titulaci&oacute;n" width="320" height="200"><br />
+						Edici&oacute;n de tipos de titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n de titulaciones del tipo actual</h4>
+				<p align="justify">
+				Los superusuarios y los administradores de titulaci&oacute;n pueden editar las titulaciones existentes
+				(un superusuario puede modificar todas las titulaciones, y un administrador de titulaciones solo aquellas que administra).
+				Solo los superusuarios pueden crear nuevas titulaciones del tipo seleccionado (licenciatura, diplomatura, m&aacute;ster, etc.).
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>
+				con 11 columnas:
+				</p>
+				<ol>
+					<li>C&oacute;digo interno de la titulaci&oacute;n (no editable).</li>
+					<li>Tipo de titulaci&oacute;n: permite modificar el tipo de titulaci&oacute;n de una titulaci&oacute;n existente.</li>
+					<li>Localidad: actualmente es posible elegir entre Granada, Ceuta y Melilla, aunque en el futuro estas localidades ser&aacute;n editables por los superusuarios. El sitio elegido influye en los d&iacute;as festivos que aparecer&aacute;n en el calendario de las asignaturas de esa titulaci&oacute;n.</li>
+					<li>Nombre breve de la titulaci&oacute;n: se mostrar&aacute; en el men&uacute; de la izquierda y en otros lugares.</li>
+					<li>Nombre completo de la titulaci&oacute;n: se mostrar&aacute; en la parte superior central de la p&aacute;gina.</li>
+					<li>Primer curso: desde 1&ordm; a 6&ordm;, o ninguno si se elige 0.</li>
+					<li>&Uacute;ltimo curso: desde 1&ordm; a 6&ordm;, o ninguno si se elige 0.</li>
+					<li>Curso de optativas/libre configuraci&oacute;n: seleccionando esta casilla se activa un curso especial de asignaturas optativas de varios cursos y asignaturas de libre configuraci&oacute;n.</li>
+					<li>Logotipo: imagen o escudo de la titulaci&oacute;n.</li>
+					<li>WWW: URL del sitio web de la titulaci&oacute;n.</li>
+					<li>N&uacute;mero de asignaturas existentes en esa titulaci&oacute;n (no editable).</li>
+				</ol>
+				<p align="justify">
+				Es posible eliminar una titulaci&oacute;n existente pulsando en el aspa roja que la precede,
+				siempre que la titulaci&oacute;n no contenga asignaturas. En caso de que se desee eliminar una titulaci&oacute;n que contenga asignaturas,
+				es necesario eliminar primero todas sus asignaturas.
+				Tambi&oacute;n es posible cambiar los datos de las titulaciones existentes.
+				Para crear una nueva titulaci&oacute;n hay que rellenar sus datos en la &uacute;ltima fila y pulsar el icono verde:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/editar-titulaciones.png"><img border="0" src="img/editar-titulaciones_chica.png" alt="Edici&oacute;n de titulaciones" width="320" height="200"><br />
+						Edici&oacute;n de titulaciones</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n de asignaturas de la titulaci&oacute;n actual</h4>
+				<p align="justify">
+				Los superusuarios y los administradores de titulaci&oacute;n pueden crear nuevas asignaturas y editar las existentes
+				(un superusuario puede modificar todas las asignaturas, y un administrador de titulaciones solo las de aquellas titulaciones que administra).
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>
+				con 8 columnas:
+				</p>
+				<ol>
+					<li>C&oacute;digo interno de la asignatura (no editable).</li>
+					<li>Titulaci&oacute;n: permite modificar la titulaci&oacute;n de una asignatura existente.</li>
+					<li>Curso: de 1&oacute; a 6&oacute; o bien el curso especial de asignaturas optativas de varios cursos o de libre configuraci&oacute;n.</li>
+					<li>Cuatrimestre: 1&oacute;, 2&oacute; o anual. De momento este campo no se utiliza para otros fines.</li>
+					<li>Nombre breve de la asignatura: se mostrar&aacute; en el men&uacute; de la izquierda y en otros lugares.</li>
+					<li>Nombre completo de la asignatura: se mostrar&aacute; en la parte superior central de la p&aacute;gina.</li>
+					<li>N&uacute;mero de estudiantes existentes en esa asignatura (no editable).</li>
+					<li>N&uacute;mero de profesores existentes en esa asignatura (no editable).</li>
+				</ol>
+				<p align="justify">
+				Es posible eliminar una asignatura existente pulsando en el aspa roja que la precede,
+				siempre que la asignatura no contenga estudiantes ni profesores. En caso de que se desee eliminar una asignatura que contenga usuarios,
+				es necesario eliminarlos previamente.
+				Tambi&oacute;n es posible cambiar los datos de las asignaturas existentes.
+				Para crear una nueva asignatura hay que rellenar sus datos en la &uacute;ltima fila y pulsar el icono verde:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/editar-asignaturas.png"><img border="0" src="img/editar-asignaturas_chica.png" alt="Edici&oacute;n de asignaturas" width="320" height="200"><br />
+						Edici&oacute;n de asignaturas</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+		</ul>
+	</li>
+
+
+	<!-- Pesta&ntilde;a de informaci&oacute;n sobre la asignatura -->
+
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Asignatura&quot;:</h3>
+
+		<p align="justify">En la pesta&ntilde;a &quot;Asignatura&quot; se muestra la siguiente informaci&oacute;n relacionada con la asignatura seleccionada:</p>
+
+		<ul>
+			<li><h4>Descripci&oacute;n de la asignatura</h4>
+				<p align="justify">
+				Se presenta un texto o p&aacute;gina web que informa
+				sobre el contenido y los objetivos de la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/descripcion.png"><img border="0" src="img/descripcion_chica.png" alt="Descripcion de una asignatura" width="320" height="200"><br />
+						Descripci&oacute;n de la asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el texto introductorio que informa
+				sobre el contenido y los objetivos de la asignatura. Tambi&oacute;n pueden optar por usar una p&aacute;gina web alojada en SWAD o por una web externa.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-tipo-edicion-descripcion.png"><img border="0" src="img/seleccion-tipo-edicion-descripcion_chica.png" alt="Selecci&oacute;n del tipo de edici&oacute;n de la descripci&oacute;n de una asignatura" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de edici&oacute;n de la descripci&oacute;n</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/edicion-descripcion.png"><img border="0" src="img/edicion-descripcion_chica.png" alt="Edici&oacute;n de la descripci&oacute;n de una asignatura" width="320" height="200"><br />
+						Edici&oacute;n de la descripci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Calendario acad&eacute;mico</h4>
+				<p align="justify">
+				Se muestra un calendario acad&eacute;mico del curso, en el que aparecen
+				todas las fiestas nacionales, auton&oacute;micas, y locales seg&uacute;n la localidad
+				donde se encuentre el centro en el que se imparte la asignatura (actualmente la localidad puede ser solo Granada, Ceuta o Melilla).
+				El d&iacute;a actual se se&ntilde;ala recuadrado en verde.
+				En el calendario se destacan en color naranja las convocatorias de examen introducidas por los profesores.
+				Si el usuario pulsa sobre una convocatoria acceder&aacute; a la opci&oacute;n que muestra las convocatorias disponibles.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/calendario.png"><img border="0" src="img/calendario_chica.png" alt="Calendario acad&eacute;mico" width="320" height="200"><br />
+						Calendario acad&eacute;mico</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Pulsando en &quot;Mostrar vista de impresi&oacute;n&quot; aparece en una nueva ventana
+				una vista del calendario listo para imprimir (en esta vista no se destaca el d&iacute;a actual):
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/calendario-impresion.png"><img border="0" src="img/calendario-impresion_chica.png" alt="Vista de impresi&oacute;n del calendario acad&eacute;mico" width="320" height="200"><br />
+						Impresi&oacute;n del calendario acad&eacute;mico</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Horario de clases</h4>
+				<p align="justify">
+				Se muestra el horario en forma de tabla. Es posible ver todas las clases de la asignatura actual,
+				o &uacute;nicamente las clases de los grupos en los que est&aacute; inscrito el usuario identificado.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/horario.png"><img border="0" src="img/horario_chica.png" alt="Horario de clases" width="320" height="200"><br />
+						Horario de clases</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Pulsando en &quot;Mostrar vista de impresi&oacute;n&quot; aparece en una nueva ventana
+				una vista del horario listo para imprimir:
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/horario-impresion.png"><img border="0" src="img/horario-impresion_chica.png" alt="Vista de impresi&oacute;n del horario de clases" width="320" height="200"><br />
+						Impresi&oacute;n del horario de clases</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el horario.
+				En cada celda aparece un men&uacute; para seleccionar entre teor&iacute;a y pr&aacute;cticas (en el futuro se deber&iacute;a poder elegir otros tipos de clases),
+				otro para seleccionar la duraci&oacute;n de la clase en saltos de media hora,
+				otro para seleccionar el grupo de entre aquellos que se hayan introducido en <em>Usuarios &gt; Editar grupos</em>,
+				y un &uacute;ltimo campo para introducir el aula.
+ 				Se permiten hasta tres clases solapadas en la misma hora.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/edicion-horario.png"><img border="0" src="img/edicion-horario_chica.png" alt="Edici&oacute;n del horario de clases" width="320" height="200"><br />
+						Edici&oacute;n del horario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Temario de teor&iacute;a</h4>
+				<p align="justify">
+				Se muestra el temario de teor&iacute;a de la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/teoria.png"><img border="0" src="img/teoria_chica.png" alt="Temario de teor&iacute;a" width="320" height="200"><br />
+						Temario de teor&iacute;a</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el temario de teor&iacute;a usando un editor espec&iacute;fico,
+				aunque tambi&oacute;n pueden optar por usar un texto plano, una p&aacute;gina web alojada en SWAD o una web externa.
+				En el editor espec&iacute;fico, los profesores pueden eliminar un apartado, insertar uno nuevo,
+				subir o bajar su posici&oacute;n, y aumentar o disminuir su nivel.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-tipo-edicion-teoria.png"><img border="0" src="img/seleccion-tipo-edicion-teoria_chica.png" alt="Selecci&oacute;n del tipo de edici&oacute;n del temario de teor&iacute;a" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de edici&oacute;n del temario de teor&iacute;a</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/edicion-teoria.png"><img border="0" src="img/edicion-teoria_chica.png" alt="Edici&oacute;n del temario de teor&iacute;a" width="320" height="200"><br />
+						Edici&oacute;n del temario de teor&iacute;a</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Temario de pr&aacute;cticas</h4>
+				<p align="justify">
+				Se muestra el temario de pr&aacute;cticas de la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/practicas.png"><img border="0" src="img/practicas_chica.png" alt="Temario de pr&aacute;cticas" width="320" height="200"><br />
+						Temario de pr&aacute;cticas</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El funcionamiento es id&eacute;ntico al del temario de teor&iacute;a.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-tipo-edicion-practicas.png"><img border="0" src="img/seleccion-tipo-edicion-practicas_chica.png" alt="Selecci&oacute;n del tipo de edici&oacute;n del temario de pr&aacute;cticas" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de edici&oacute;n del temario de pr&aacute;cticas</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/edicion-practicas.png"><img border="0" src="img/edicion-practicas_chica.png" alt="Edici&oacute;n del temario de pr&aacute;cticas" width="320" height="200"><br />
+						Edici&oacute;n del temario de pr&aacute;cticas</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Descarga de archivos</h4>
+				<p align="justify">
+				Permite acceder a materiales como transparencias, relaciones de problemas
+				o guiones de pr&aacute;cticas, organizados jer&aacute;rquicamente en <a href="http://es.wikipedia.org/wiki/Carpeta">carpetas</a>.
+				El icono &quot;+&quot; que precede a una carpeta permite abrirla para ver su contenido,
+				y el icono &quot;-&quot; permite cerrarla.
+				SWAD recuerda para cada usuario el estado abierto/cerrado de cada una de las carpetas.
+				Si transcurre cierto tiempo sin que el usuario visite una zona de almacenamiento de archivos,
+				el estado de visualizaci&oacute;n se olvidar&aacute; y la carpeta aparecer&aacute; contraida.
+				Tambi&oacute;n es posible ver temporalmente los contenidos de todas las carpetas
+				sin que ello modifique su estado de visualizaci&oacute;n en futuras visitas.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/descarga-archivos.png"><img border="0" src="img/descarga-archivos_chica.png" alt="Descarga de archivos" width="320" height="200"><br />
+						Descarga de archivos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El usuario puede pulsar sobre el nombre de un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a> para mostrarlo en pantalla, guardarlo en disco, imprimirlo, etc.:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/archivo-descargado.png"><img border="0" src="img/archivo-descargado_chica.png" alt="Archivo descargado" width="320" height="200"><br />
+						Archivo descargado</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Administraci&oacute;n de la zona de descarga</h4>
+				<p align="justify">
+				Los profesores pueden modificar el contenido de la zona de descarga.
+				Pueden eliminar <a href="http://es.wikipedia.org/wiki/Carpeta">carpetas</a> o
+				<a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a> (icono con aspa roja),
+				crear nuevas carpetas (icono con carpeta amarilla y s&iacute;mbolo &quot;+&quot; en verde),
+				cambiar el nombre de una carpeta (pulsando sobre su nombre),
+				enviar archivos (icono con carpeta amarilla y s&iacute;mbolo &quot;+&quot; en verde) al <a href="http://es.wikipedia.org/wiki/Servidor_inform&aacute;tico">servidor</a>,
+				copiar-pegar archivos o carpetas dentro de SWAD (iconos habituales de copiar-pegar),
+				y ocultarlos temporalmente (icono con se&ntilde;al de fin de prohibici&oacute;n/direcci&oacute;n prohibida).
+				SWAD obliga a que los nombres de archivos y carpetas no contengan tildes ni ciertos caracteres especiales (la e&ntilde;e, por ejemplo)
+				porque ello ocasionar&iacute;a problemas
+				en la descarga de <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				desde algunos navegadores -esta restricci&oacute;n solo se aplica a los nombres de archivos y carpetas,
+				en el resto de SWAD s&iacute; pueden utilizarse tildes y caracteres especiales-.
+				En el futuro se podr&aacute; a&ntilde;adir comentarios a las carpetas y archivos que resuman sus contenidos.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/admin-descarga-archivos.png"><img border="0" src="img/admin-descarga-archivos_chica.png" alt="Administraci&oacute;n de archivos" width="320" height="200"><br />
+						Administraci&oacute;n de archivos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/nuevo-archivo-descarga.png"><img border="0" src="img/nuevo-archivo-descarga_chica.png" alt="Creaci&oacute;n de una nueva carpeta o archivo" width="320" height="200"><br />
+						Creaci&oacute;n de una nueva carpeta o archivo</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				La generaci&oacute;n mediante este servicio del listado de <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a> a descargar
+				es atractiva por dos motivos:
+				</p>
+				<ul>
+					<li>
+					Permite que el acceso al material de descarga quede restringido al &aacute;mbito de la clase -no obstante, en el futuro existir&aacute;
+					la posibilidad opcional de que el profesor ofrezca contenidos abiertos a usuarios externos a la asignatura-.
+					</li>
+					<li>
+					Ahorra al profesor el trabajo de editar una p&aacute;gina web con un enlace a cada <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a>.
+					Basta con enviar el archivo a &quot;Descargas&quot;
+					para que est&aacute; inmediatamente disponible para los estudiantes.
+					</li>
+				</ul>
+				<p align="justify">
+				La copia de archivos y carpetas dentro de SWAD afecta a todas las zonas donde hay un &aacute;rbol editable de carpetas y archivos:
+				</p>
+				<ul>
+					<li>Administraci&oacute;n de descargas (solo para profesores)</li>
+					<li>Zonas comunes</li>
+					<li>Mis trabajos (solo para estudiantes)</li>
+					<li>Trabajos de estudiantes de la asignatura (solo para profesores)</li>
+					<li>Administraci&oacute;n de calificaciones (solo para profesores)</li>
+					<li>Malet&iacute;n</li>
+				</ul>
+				<p align="justify">
+				El procedimiento para copiar un archivo o una carpeta completa de uno de estos sitios a otro es el siguiente:
+				</p>
+				<ol>
+					<li>Situarse en la zona de origen (una de las anteriores).</li>
+					<li>Pulsar sobre el icono &quot;copiar&quot; -dos documentos superpuestos-
+					    en la fila de la carpeta o archivo que se desea copiar.
+					    Se marca claramente en otro color el archivo o carpeta seleccionados como origen.</li>
+					<li>Situarse en la zona de destino (una de las anteriores).</li>
+					<li>Pulsar sobre el icono &quot;pegar&quot;
+					    en la fila de la carpeta destino dentro de la cual se desea pegar.</li>
+				</ol>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/copiar-archivo.png"><img border="0" src="img/copiar-archivo_chica.png" alt="Copiar un archivo" width="320" height="200"><br />
+						Copiar un archivo</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/pegar-archivo.png"><img border="0" src="img/pegar-archivo_chica.png" alt="Pegar un archivo" width="320" height="200"><br />
+						Pegar de un archivo</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Zonas comunes</h4>
+				<p align="justify">
+				Se trata de unas zonas de archivos similares a las de descarga,
+				pero con la particularidad de que los estudiantes tambi&oacute;n pueden administrarlas creando carpetas, colgando archivos, etc.
+				Esta zona se puede utilizar para que todos los estudiantes y profesores de una asignatura, o bien los de un grupo,
+				puedan compartir un conjunto de archivos. En cada fila del listado aparece el usuario que cre&oacute; la carpeta o colg&oacute; el archivo.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/zona-comun.png"><img border="0" src="img/zona-comun_chica.png" alt="Zona com&uacute;n" width="320" height="200"><br />
+						Zona com&uacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Normalmente no se usa esta zona para que el profesor ponga el material de clase;
+				para ello ya existe la zona de descargas.
+				Esta tampoco es la zona habitual para que un estudiante env&iacute;e trabajos al profesor;
+				para ello suele usarse <em>Evaluaci&oacute;n &gt; Mis trabajos/Trabajos estudiantes</em>.
+				No obstante, s&iacute; puede usarse para que los estudiantes suban trabajos
+				en aquellos casos en los que el profesor desee que sean vistos por toda la clase.
+				</p>
+			</li>
+			<li><h4>Bibliograf&iacute;a</h4>
+				<p align="justify">
+				Se muestra en texto plano, en una p&aacute;gina web alojada en SWAD, o en una p&aacute;gina web externa,
+				la bibliograf&iacute;a usada en la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/bibliografia.png"><img border="0" src="img/bibliografia_chica.png" alt="Bibliograf&iacute;a" width="320" height="200"><br />
+						Bibliograf&iacute;a (en este ejemplo se muestra una p&aacute;gina alojada en SWAD)</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el texto plano,
+				enviar una p&aacute;gina web creada externamente para que se aloje en SWAD,
+				o escribir el <a href="http://es.wikipedia.org/wiki/Direcci%C3%B3n_de_Internet">URL (direcci&oacute;n web)</a> de una p&aacute;gina externa
+				con la bibliograf&iacute;a usada en la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/envio-bibliografia.png"><img border="0" src="img/envio-bibliografia_chica.png" alt="Env&iacute;o de bibliograf&iacute;a como p&aacute;gina web alojada en SWAD" width="320" height="200"><br />
+						Env&iacute;o de la bibliograf&iacute;a como p&aacute;gina web alojada en SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En el futuro tambi&oacute;n existir&aacute; un editor de bibliograf&iacute;a espec&iacute;fico para SWAD,
+				mediante el cual se podr&aacute; editar informaci&oacute;n de cada libro como su t&iacute;tulo, autores,
+				<a href="http://es.wikipedia.org/wiki/ISBN">ISBN</a>, una imagen con la portada,
+				un enlace a la p&aacute;gina de la editorial donde se presenta ese texto, etc.
+				de forma similar a como se hace en la base de datos
+				web de libros de texto universitarios [Arana 2004, Arana et al. 2004, Ca&ntilde;as et al. 2005],
+				realizada por Rub&eacute;n Arana G&oacute;mez en el
+				<a href="http://atc.ugr.es/">Departamento de Arquitectura y Tecnolog&iacute;a de Computadores</a>
+				de la <a href="http://www.ugr.es/">Universidad de Granada</a>.
+				</p>
+			</li>
+			<li><h4>FAQ (preguntas m&aacute;s frecuentes)</h4>
+				<p align="justify">
+				Se muestra un texto o una p&aacute;gina web donde el profesor incluye respuestas a
+				todas aquellas cuestiones formuladas m&aacute;s frecuentemente
+				(<a href="http://es.wikipedia.org/wiki/FAQ">FAQ</a>, del ingl&eacute;s <em>Frequently Asked Questions</em>)
+				por los estudiantes de la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/FAQ.png"><img border="0" src="img/FAQ_chica.png" alt="Ejemplo de p&aacute;gina de FAQ" width="320" height="200"><br />
+						FAQ</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				<p align="justify">
+				Los profesores pueden editar el texto de la <a href="http://es.wikipedia.org/wiki/FAQ">FAQ</a>.
+				Tambi&oacute;n pueden optar por usar una p&aacute;gina web alojada en SWAD o por una web externa.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-tipo-edicion-FAQ.png"><img border="0" src="img/seleccion-tipo-edicion-FAQ_chica.png" alt="Selecci&oacute;n del tipo de edici&oacute;n de la FAQ" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de edici&oacute;n de la FAQ</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/edicion-FAQ.png"><img border="0" src="img/edicion-FAQ_chica.png" alt="Edici&oacute;n de la FAQ como texto plano" width="320" height="200"><br />
+						Edici&oacute;n de la FAQ como texto plano</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Enlaces a p&aacute;ginas relacionadas con la materia</h4>
+				<p align="justify">
+				Se muestran en texto plano, en una p&aacute;gina web alojada en SWAD, o en una p&aacute;gina web externa,
+				enlaces relacionados con la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/enlaces.png"><img border="0" src="img/enlaces_chica.png" alt="Ejemplo de p&aacute;gina externa de enlaces" width="320" height="200"><br />
+						P&aacute;gina externa con enlaces relacionados con la asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el texto plano,
+				enviar una p&aacute;gina web creada externamente para que se aloje en SWAD,
+				o escribir el <a href="http://es.wikipedia.org/wiki/Direcci%C3%B3n_de_Internet">URL (direcci&oacute;n web)</a> de una p&aacute;gina externa
+				con los enlaces.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/envio-enlaces.png"><img border="0" src="img/envio-enlaces_chica.png" alt="Env&iacute;o de enlaces como p&aacute;gina web externa" width="320" height="200"><br />
+						Env&iacute;o de enlaces como p&aacute;gina web externa</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de evaluaci&oacute;n de la asignatura -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Evaluaci&oacute;n&quot;:</h3>
+
+		<p align="justify">La pesta&ntilde;a &quot;Evaluaci&oacute;n&quot;
+		permite acceder a los siguientes servicios:</p>
+
+		<ul>
+			<li><h4>Informaci&oacute;n sobre el sistema de evaluaci&oacute;n del estudiante</h4>
+				<p align="justify">
+				Se muestra en texto plano, en una p&aacute;gina web alojada en SWAD, o en una p&aacute;gina web externa,
+				el sistema de evaluaci&oacute;n usado en la asignatura, indicando por ejemplo la valoraci&oacute;n del examen,
+				de las pr&aacute;cticas, etc.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/evaluacion.png"><img border="0" src="img/evaluacion_chica.png" alt="Sistema de evaluaci&oacute;n" width="320" height="200"><br />
+						Sistema de evaluaci&oacute;n (en este ejemplo se muestra una p&aacute;gina alojada en SWAD)</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden editar el texto plano,
+				enviar una p&aacute;gina web creada externamente para que se aloje en SWAD,
+				o escribir el <a href="http://es.wikipedia.org/wiki/Direcci%C3%B3n_de_Internet">URL (direcci&oacute;n web)</a> de una p&aacute;gina externa
+				con el sistema de evaluaci&oacute;n usado en la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/envio-evaluacion.png"><img border="0" src="img/envio-evaluacion_chica.png" alt="Env&iacute;o del sistema de evaluaci&oacute;n como p&aacute;gina web alojada en SWAD" width="320" height="200"><br />
+						Env&iacute;o del sistema de evaluaci&oacute;n como p&aacute;gina web alojada en SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Ficha del estudiante personalizada para la asignatura</h4>
+				<p align="justify">
+				Los profesores pueden usar la opci&oacute;n <em>Usuarios &gt; Campos fichas</em>
+				para crear campos en las fichas espec&iacute;ficos para la asignatura, por ejemplo campos para introducir calificaciones,
+				observaciones que puedan rellenar los estudiantes, etc.
+				Si el profesor ha creado dichos campos en las fichas,
+				el estudiante podr&aacute; ver aquellos que el profesor haya sido definidos como &quot;visibles y no editables&quot;,
+				y podr&aacute; editar aquellos que el profesor haya definido como &quot;visibles y editables por el estudiante&quot;.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mi-ficha-en-asignatura.png"><img border="0" src="img/mi-ficha-en-asignatura_chica.png" alt="Ficha del estudiante personalizada para la asignatura" width="320" height="200"><br />
+						Ficha del estudiante personalizada para la asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Env&iacute;o de trabajos de un estudiante</h4>
+				<p align="justify">
+				Un estudiante puede enviar sus trabajos de una asignatura
+				(<a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				relacionados con pr&aacute;cticas, problemas, etc. de esa asignatura)
+				a una <a href="http://es.wikipedia.org/wiki/Carpeta">carpeta</a> destinada a tal efecto.
+				Los trabajos enviados por un estudiante a una asignatura solo pueden ser vistos y editados por el estudiante
+				y por los profesores de la asignatura. El sistema de env&iacute;o de trabajos
+				es similar al de administraci&oacute;n de <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				para descarga en una asignatura, a las zonas comunes,
+				al sistema de administraci&oacute;n de calificaciones
+				y al malet&iacute;n personal.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mis-trabajos.png"><img border="0" src="img/mis-trabajos_chica.png" alt="Env&iacute;o de trabajos de un estudiante" width="320" height="200"><br />
+						Env&iacute;o de trabajos de un estudiante</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n por parte del profesor de los trabajos de los estudiantes</h4>
+				<p align="justify">
+				Los profesores pueden ver y editar los trabajos enviados por los estudiantes.
+				Para ello, primero tienen que seleccionar los estudiantes a cuyos trabajos desean acceder:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-estudiantes-trabajos.png"><img border="0" src="img/seleccion-estudiantes-trabajos_chica.png" alt="Selecci&oacute;n de estudiantes para acceder a sus trabajos" width="320" height="200"><br />
+						Selecci&oacute;n de estudiantes para acceder a sus trabajos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Una vez seleccionados los estudiantes, se accede a la zona de trabajos de cada uno de ellos:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/trabajos-estudiantes.png"><img border="0" src="img/trabajos-estudiantes_chica.png" alt="Carpetas de trabajos de los estudiantes seleccionados" width="320" height="200"><br />
+						Carpetas de trabajos de los estudiantes seleccionados</a>
+					</td>
+					</tr>
+				</table>
+				<p align="justify">
+				El profesor tambi&oacute;n puede crear un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a>
+				comprimido en <a href="http://es.wikipedia.org/wiki/Formato_de_compresi%C3%B3n_ZIP">formato ZIP</a>
+				con los trabajos de todos los estudiantes seleccionados,
+				para permitir una descarga c&oacute;moda a su ordenador.
+				Al descomprimir el <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a>
+				<a href="http://es.wikipedia.org/wiki/Formato_de_compresi%C3%B3n_ZIP">ZIP</a> en el ordenador personal,
+				se crean tantas <a href="http://es.wikipedia.org/wiki/Carpeta">carpetas</a> como estudiantes seleccionados,
+				cada una con el nombre y DNI de un estudiante.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/trabajos-zip.png"><img border="0" src="img/trabajos-zip_chica.png" alt="Archivo ZIP con los trabajos de los estudiantes seleccionados" width="320" height="200"><br />
+						Archivo ZIP con los trabajos de los estudiantes seleccionados</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Dado que el profesor tambi&oacute;n puede crear <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				en las <a href="http://es.wikipedia.org/wiki/Carpeta">carpetas</a> de los estudiantes,
+				este sistema puede usarse para enviar <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				con trabajos personalizados para cada estudiante.
+				</p>
+			</li>
+			<li><h4>Ex&aacute;menes de autoevaluaci&oacute;n</h4>
+				<p align="justify">
+				Este servicio genera y eval&uacute;a un examen de tipo test con preguntas aleatorias
+				extra&iacute;das de la base de datos de preguntas creada por los profesores de la asignatura.
+				Se trata de uno de los servicios m&aacute;s valorados por los estudiantes,
+				ya que les permite autoevaluarse y llegar al examen con mayor confianza.
+				</p>
+
+				<p align="justify">
+				Actualmente hay seis tipos de respuestas:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>Verdadero / falso</li>
+					<li>Elecci&oacute;n &uacute;nica entre varias opciones</li>
+					<li>Elecci&oacute;n m&uacute;ltiple entre varias opciones</li>
+					<li>Texto</li>
+					<li>N&uacute;mero entero</li>
+					<li>N&uacute;mero real</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Inicialmente, el estudiante debe elegir:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>Los descriptores o temas sobre los que quiere realizar el test</li>
+					<li>Los tipos de respuestas posibles</li>
+					<li>El n&uacute;mero de preguntas</li>
+				</ul>
+				</p>
+				<p align="justify">
+				En el ejemplo de la imagen el estudiante ha elegido un test de 3 preguntas:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/eleccion-test.png"><img border="0" src="img/eleccion-test_chica.png" alt="Elecci&oacute;n del tipo de test" width="320" height="200"><br />
+						Elecci&oacute;n del tipo de test</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/test-autoevaluacion.png"><img border="0" src="img/test-autoevaluacion_chica.png" alt="Test de autoevaluaci&oacute;n" width="320" height="200"><br />
+						Formulario del test</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Una vez realizado el test, el estudiante puede recibir realimentaci&oacute;n sobre sus respuestas y las respuestas correctas.
+				Los profesores pueden escoger entre cuatro tipos de realimentaci&oacute;n para el estudiante:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>M&aacute;ximo detalle: se muestra la respuesta correcta en cada pregunta</li>
+					<li>Detalle medio: se muestra la puntuaci&oacute;n de cada pregunta, pero no la respuesta correcta</li>
+					<li>M&iacute;nimo detalle: solo se muestra la puntuaci&oacute;n total del examen</li>
+					<li>Ninguna realimentaci&oacute;n</li>
+				</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/evaluacion-test.png"><img border="0" src="img/evaluacion-test_chica.png" alt="Evaluaci&oacute;n del test con el m&aacute;ximo detalle en la realimentaci&oacute;n" width="320" height="200"><br />
+						Evaluaci&oacute;n del test con el m&aacute;ximo detalle en la realimentaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Para los tres primeros tipos de respuestas -V/F, elecci&oacute;n &uacute;nica y elecci&oacute;n m&uacute;ltiple-,
+				el c&aacute;lculo de la calificaci&oacute;n tiene como objetivo que el estudiante obtenga un 0 cuando elija respuestas al azar.
+				Para una determinada pregunta,
+				si <I>N</I> es el n&uacute;mero de respuestas (SWAD obliga a <I>N</I> &gt;= 2),
+				<I>V</I> el n&uacute;mero de respuestas declaradas como verdaderas por el profesor (SWAD obliga a <I>V</I> &gt;= 1),
+				<I>F</I> el n&uacute;mero de respuestas declaradas como falsas (<I>F</I> = <I>N</I> - <I>V</I>),
+				<I>A</I> el n&uacute;mero de aciertos del estudiante
+				y <I>E</I> el n&uacute;mero de errores,
+				las expresiones utilizadas para el c&aacute;lculo de la calificaci&oacute;n o resultado <I>R</I> de la pregunta son:
+				</p>
+				<p align="justify">
+					<dl>
+						<dt></dt>
+						<dd>
+							<dl>
+								<dt>Si 0 &lt; <I>V</I> &lt; <I>N</I></dt>
+					 				<dd><I>R</I> = <I>A</I>/<I>V</I> - <I>E</I>/(<I>N</I> - <I>V</I>) =
+										       <I>A</I>/<I>V</I> - <I>E</I>/<I>F</I><br />
+									    En respuestas verdadero/falso <I>V</I> = 1 y <I>N</I> = 2, luego
+									    <I>R</I> = <I>A</I> - <I>E</I><br />
+									    En respuestas de elecci&oacute;n &uacute;nica <I>V</I> = 1 y <I>N</I> &gt;= 2, luego
+									    <I>R</I> = <I>A</I> - <I>E</I>/(<I>N</I> - 1)
+								        </dd>
+								<dt>Si <I>V</I> = <I>N</I> (todas las respuestas son verdaderas, solo posible en respuestas de elecci&oacute;n m&uacute;ltiple)</dt>
+									<dd><I>R</I> = <I>A</I>/<I>N</I> = <I>A</I>/<I>V</I></dd>
+							</dl>
+							</dd>
+					</dl>
+				</p>
+				<p align="justify">
+				SWAD incorpora un mecanismo para evitar que los estudiantes repitan una y otra vez un mismo test
+				pulsando en el bot&oacute;n de <em>p&aacute;gina atr&aacute;s</em> del navegador.
+				Una vez que un estudiante ha contestado un test y este ha sido evaluado,
+				si vuelve hacia atr&aacute;s en el navegador e intenta evaluar de nuevo el mismo test, se deniega la acci&oacute;n.
+				</p>
+				<p align="justify">
+				Tambi&oacute;n existe la posibilidad de que el profesor defina -en <em>Evaluaci&oacute;n &gt; Configurar test</em>-
+				un intervalo m&iacute;nimo de tiempo entre dos ex&aacute;menes para un mismo estudiante.
+				Dicho tiempo se define por pregunta, y SWAD lo multiplica por el n&uacute;mero de preguntas del &uacute;ltimo examen.
+				Si el tiempo transcurrido tras ese &uacute;ltimo examen es insuficiente,
+				el estudiante tendr&aacute; que esperar para poder realizar uno nuevo,
+				y ser&aacute; informado sobre cu&aacute;ndo expira el per&iacute;odo de denegaci&oacute;n.
+				</p>
+			</li>
+			<li><h4>Escritura de una nueva pregunta del test de autoevaluaci&oacute;n</h4>
+				<p align="justify">
+				Pulsando en &quot;Escribir pregunta&quot; aparece el siguiente <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> en el que los profesores pueden
+				escribir nuevas preguntas de test de autoevaluaci&oacute;n:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/escribiendo-pregunta.png"><img border="0" src="img/escribiendo-pregunta_chica.png" alt="Edici&oacute;n de una pregunta" width="320" height="200"><br />
+						Formulario de edici&oacute;n de una pregunta</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En la parte superior izquierda pueden elegirse hasta 5 descriptores para la pregunta,
+				de entre todos los descriptores que se hayan escrito anteriormente en otras preguntas.
+				En la parte superior derecha pueden introducirse nuevos descriptores a&uacute;n no escritos.
+				Debajo de los descriptores, se escribe el enunciado de la pregunta.
+				Bajo el enunciado puede elegirse uno de los siguientes tipos de pregunta:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>Verdadero / falso</li>
+					<li>Elecci&oacute;n &uacute;nica entre varias opciones</li>
+					<li>Elecci&oacute;n m&uacute;ltiple entre varias opciones</li>
+					<li>Texto</li>
+					<li>N&uacute;mero entero</li>
+					<li>N&uacute;mero real</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Por &uacute;ltimo se escriben las respuestas. En el caso de una respuesta del tipo verdadero / falso, se elige la respuesta correcta.
+				En el caso de respuesta de elecci&oacute;n &uacute;nica o m&uacute;ltiple se escriben las respuestas posibles -desde 2 hasta 10-
+				y se indica cu&aacute;l o cu&aacute;les son las correctas mediante las marcas situadas a la izquierda de las respuestas,
+				y se indica si se desea que SWAD baraje el orden de las respuestas al azar.
+				Si la respuesta es de texto, se escriben las posibles respuestas correctas -desde 2 hasta 10-
+				teniendo en cuenta que SWAD no es sensible al uso de may&uacute;sculas/min&uacute;sculas
+				(por ejemplo, si se pregunta por el autor de la Teor&iacute;a de la Relatividad General
+				se pueden ofrecer como v&aacute;lidas las respuestas
+				&quot;Albert Einstein&quot; o &quot;Einstein&quot;).
+				Para una respuesta del tipo n&uacute;mero entero hay que indicar el n&uacute;mero correcto.
+				Por &uacute;ltimo, para una respuesta del tipo n&uacute;mero real hay que especificar el intervalo cerrado correcto
+				(por ejemplo, si se pregunta por el valor de Pi se puede establecer como rango v&aacute;lido el intervalo [3,140...3,142]).
+				Los n&uacute;meros reales pueden introducirse con puntos o con comas y se permite el uso de notaci&oacute;n exponencial.
+				</p>
+				<p align="justify">
+				Cuando se env&iacute;a el <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>, se obtiene una confirmaci&oacute;n como la siguiente:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/pregunta-escrita.png"><img border="0" src="img/pregunta-escrita_chica.png" alt="Confirmaci&oacute;n de la pregunta editada" width="320" height="200"><br />
+						Confirmaci&oacute;n de la pregunta editada</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En la pantalla de confirmaci&oacute;n el profesor puede eliminar la pregunta reci&oacute;n escrita o volver a editarla.
+				En el caso de respuesta de elecci&oacute;n &uacute;nica o m&uacute;ltiple tambi&oacute;n se permite elegir
+				si se desea que SWAD baraje el orden de las respuestas al azar.
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n de preguntas del test de autoevaluaci&oacute;n escritas previamente</h4>
+				<p align="justify">
+				Pulsando en <em>Editar preguntas</em> aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> en el que el profesor elige qu&eacute; preguntas quiere editar.
+				El <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> permite elegir los descriptores de las preguntas, el tipo de respuestas de las preguntas,
+				y un rango de fechas en el que fueron editadas:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-preguntas-edicion.png"><img border="0" src="img/seleccion-preguntas-edicion_chica.png" alt="Selecci&oacute;n de las preguntas a editar" width="320" height="200"><br />
+						Selecci&oacute;n de las preguntas a editar</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Una vez seleccionadas las preguntas, aparece un listado como el siguiente:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/listado-preguntas-edicion.png"><img border="0" src="img/listado-preguntas-edicion_chica.png" alt="Listado de las preguntas a editar" width="320" height="200"><br />
+						Listado de las preguntas a editar</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El profesor puede eliminar o volver a editar (modificar) cualquiera de las preguntas del listado, pulsando en los iconos correspondientes.
+				En el caso de respuesta de elecci&oacute;n &uacute;nica o m&uacute;ltiple tambi&oacute;n se permite elegir
+				si se desea que SWAD baraje el orden de las respuestas al azar.
+				</p>
+				<p align="justify">
+				Por omisi&oacute;n, las preguntas se listan ordenadas alfab&eacute;ticamente por el enunciado.
+				Tambi&oacute;n pueden ordenarse por el n&uacute;mero de veces que han sido respondidas,
+				y por la puntuaci&oacute;n media obtenida. Este &uacute;ltimo criterio permite al profesor la identificaci&oacute;n de la dificultad de las preguntas
+				o de posibles errores en el enunciado o en las respuestas.
+				Para obtener la puntuaci&oacute;n media, SWAD almacena junto a cada pregunta la puntuaci&oacute;n total y el n&uacute;mero de veces que ha sido respondida.
+				Este sistema es similar al desarrollado previamente por el profesor
+				<a href="http://geneura.ugr.es/~pedro/">Pedro &Aacute;. Castillo</a>,
+				del <a href="http://atc.ugr.es/">Dpto. de Arquitectura y Tecnolog&iacute;a de Computadores</a>
+				de la <a href="http://www.ugr.es/">Universidad de Granada</a> [Castillo et al. 2003].
+				</p>
+			</li>
+			<li><h4>Configuraci&oacute;n de test de autoevaluaci&oacute;n</h4>
+				<p align="justify">
+				Pulsando en <em>Configurar test</em> aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>
+				en el que el profesor puede:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>Prohibir o permitir cada uno de los descriptores.
+					En un test de autoevaluaci&oacute;n no aparecer&aacute;n preguntas que tengan alg&uacute;n descriptor inhabilitado.</li>
+					<li>Renombrar cada uno de los descriptores. Basta con modificar su nombre y pulsar Intro o hacer click con el rat&oacute;n fuera de la zona de edici&oacute;n.</li>
+					<li>Establecer los valores m&iacute;nimo, por defecto y m&aacute;ximo del n&uacute;mero de preguntas en un test de autoevaluaci&oacute;n.</li>
+					<li>Establecer el tiempo m&iacute;nimo (en segundos) por pregunta entre la realizaci&oacute;n de dos tests consecutivos por parte de un estudiante.</li>
+					<li>Escoger la realimentaci&oacute;n para estudiantes entre las siguientes opciones:
+						<ul>
+							<li>M&aacute;ximo detalle: se muestra la respuesta correcta en cada pregunta</li>
+							<li>Detalle medio: se muestra la puntuaci&oacute;n de cada pregunta, pero no la respuesta correcta</li>
+							<li>M&iacute;nimo detalle: solo se muestra la puntuaci&oacute;n total del examen</li>
+							<li>Ninguna realimentaci&oacute;n</li>
+						</ul>
+				</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/configurar-test.png"><img border="0" src="img/configurar-test_chica.png" alt="Configuraci&oacute;n de test de autoevaluaci&oacute;n" width="320" height="200"><br />
+						Configuraci&oacute;n de test de autoevaluaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Convocatorias de ex&aacute;menes</h4>
+				<p align="justify">
+				Cualquier usuario puede ver las convocatorias de examen disponibles en la asignatura
+				pulsando en esta opci&oacute;n o bien en el calendario
+				(las fechas de ex&aacute;menes aparecen destacadas en color naranja).
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/convocatoria.png"><img border="0" src="img/convocatoria_chica.png" alt="Convocatoria de examen" width="320" height="200"><br />
+						Convocatoria de examen</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n puede mostrarse una vista de cada convocatoria lista para imprimir:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/convocatoria-impresion.png"><img border="0" src="img/convocatoria-impresion_chica.png" alt="Convocatoria de examen lista para imprimir" width="320" height="200"><br />
+						Convocatoria de examen, lista para imprimir</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores pueden crear nuevas convocatorias de examen, y pueden editar o eliminar las convocatorias existentes:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-nueva-convocatoria.png"><img border="0" src="img/seleccion-nueva-convocatoria_chica.png" alt="Selecci&oacute;n de nueva convocatoria de examen" width="320" height="200"><br />
+						Selecci&oacute;n de nueva convocatoria</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/nueva-convocatoria.png"><img border="0" src="img/nueva-convocatoria_chica.png" alt="Nueva convocatoria de examen" width="320" height="200"><br />
+						Edici&oacute;n de nueva convocatoria</a>
+					</td>
+					</tr>
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-convocatoria-existente.png"><img border="0" src="img/seleccion-convocatoria-existente_chica.png" alt="Selecci&oacute;n de edici&oacute;n de una convocatoria de examen existente" width="320" height="200"><br />
+						Selecci&oacute;n de edici&oacute;n de convocatoria</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/edicion-convocatoria-existente.png"><img border="0" src="img/edicion-convocatoria-existente_chica.png" alt="Edici&oacute;n de una convocatoria de examen existente" width="320" height="200"><br />
+						Edici&oacute;n de convocatoria existente</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Consulta de calificaciones</h4>
+				<p align="justify">
+				Seg&uacute;n [Canaleta y Vernet 2003]:<br />
+					<small><CITE>
+					<STRONG>El modo m&aacute;s usual de informar a los estudiantes de sus calificaciones
+					es que cada asignatura publique listas con sus notas.
+					Si nos fijamos, esta acci&oacute;n vulnera el principio de privacidad ya que se est&aacute;n haciendo p&uacute;blicos
+					datos de car&aacute;cter personal de los estudiantes</STRONG>. Los art&iacute;culos 6 y 11 de la LOPD informan que para
+					comunicar datos personales a un tercero se necesita el consentimiento previo del afectado. De
+					este modo todos los estudiantes deber&iacute;an hacer constar, o no, si permiten la notificaci&oacute;n p&uacute;blica
+					de calificaciones. Esto crear&iacute;a un primer problema ya que ciertos estudiantes aceptar&iacute;an dicha
+					publicaci&oacute;n pero otros no. Un segundo problema viene dado por el derecho que tiene el estudiante,
+					seg&uacute;n los mismos art&iacute;culos, a revocar dicha autorizaci&oacute;n en cualquier momento. Creemos que
+					este camino no lleva a ninguna soluci&oacute;n viable. Se ha optado por soluciones intermedias como puede
+					ser la publicaci&oacute;n de listas de notas donde solo existe el n&uacute;mero de expediente de cada estudiante y
+					su nota. Esta soluci&oacute;n tampoco cumple el objetivo de privacidad si existen sistemas accesibles al
+					p&uacute;blico que permitan a partir del nombre de un estudiante obtener su expediente. <STRONG>La propuesta que
+					parece m&aacute;s l&oacute;gica es la de comunicar los resultados de las diferentes asignaturas
+					personalmente a cada interesado. En este aspecto las tecnolog&iacute;as de la informaci&oacute;n nos facilitan
+					dicha tarea ya que es relativamente sencillo dise&ntilde;ar un entorno donde se permita el acceso
+					personalizado al expediente de cada estudiante seg&uacute;n su nombre de usuario y contrase&ntilde;a.</STRONG>
+					</CITE></small>
+				</p>
+				<p align="justify">
+				SWAD permite dicho acceso personalizado a las calificaciones de cada estudiante, es decir, aunque el profesor
+				env&iacute;a al <a href="http://es.wikipedia.org/wiki/Servidor_inform&aacute;tico">servidor</a> un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a>
+				con las calificaciones de todos los estudiantes de una clase, un estudiante solo puede ver las suyas.
+				</p>
+				<p align="justify">
+				Para el almacenamiento de las calificaciones, SWAD no utiliza
+				un formato cerrado con unas columnas o campos prefijados.
+				La &uacute;nica restricci&oacute;n consiste en que el profesor guarde
+				las calificaciones de los estudiantes en una tabla
+				en formato <a href="http://es.wikipedia.org/wiki/HTML">HTML</a> [W3C 2008],
+				que puede generar con cualquier programa que lo permita,
+				como la <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a> <a href="http://es.wikipedia.org/wiki/Microsoft_Excel">Microsoft Excel</a>.
+				La tabla puede tener cualquier n&uacute;mero de filas de encabezado y de pie
+				(ambos n&uacute;meros son detectados autom&aacute;ticamente por SWAD y el profesor puede cambiarlos posteriormente),
+				y entre estas dos partes ha de contener una fila por cada estudiante
+				con la &uacute;nica restricci&oacute;n de que la primera columna sea
+				el n&uacute;mero de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>.
+				Por lo dem&aacute;s, el n&uacute;mero de columnas y su formato es indiferente.
+				</p>
+				<p align="justify">
+				Este servicio presenta en pantalla un listado de archivos de calificaciones:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/consulta-calificaciones.png"><img border="0" src="img/consulta-calificaciones_chica.png" alt="Consulta de calificaciones individualizada" width="320" height="200"><br />
+						Consulta de calificaciones individualizada</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Cuando un estudiante pulsa sobre uno de ellos, en una nueva ventana se presenta el encabezado,
+				la fila correspondiente al estudiante y el pie de la tabla.
+				Si la consulta es realizada por un profesor, se presentan las calificaciones de un estudiante de la asignatura elegido al azar.
+				Como muestra el ejemplo siguiente, el profesor puede ofrecer a cada estudiante informaci&oacute;n
+				muy exhaustiva, incluyendo las calificaciones obtenidas
+				en cada uno de los criterios evaluados en cada pr&aacute;ctica,
+				o en cada apartado de cada pregunta del examen.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/calificaciones1.png"><img border="0" src="img/calificaciones1_chica.png" alt="Consulta de calificaciones" width="320" height="200"><br />
+						Calificaciones de un estudiante (1/6)</a>
+					</td>
+					</tr>
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/calificaciones2.png"><img border="0" src="img/calificaciones2_chica.png" alt="Consulta de calificaciones" width="320" height="200"><br />
+						Calificaciones de un estudiante (2/3)</a>
+					</td>
+					</tr>
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/calificaciones3.png"><img border="0" src="img/calificaciones3_chica.png" alt="Consulta de calificaciones" width="320" height="200"><br />
+						Calificaciones de un estudiante (3/3)</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				La utilizaci&oacute;n de una <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a> detallada ofrece varias ventajas:
+				</p>
+				<ul>
+					<li>
+					<p align="justify">
+					El profesor dispone en un solo documento de una informaci&oacute;n completa
+					sobre la evaluaci&oacute;n de cada estudiante.
+					</p>
+					<li>
+					<p align="justify">
+					La suma de las calificaciones de cada apartado la realiza la propia <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a>,
+					evitando posibles errores, e incluso posibilitando la asignaci&oacute;n autom&aacute;tica
+					de la calificaci&oacute;n final mediante f&oacute;rmulas.
+					Evidentemente, un dise&ntilde;o complejo requiere mucho trabajo inicial,
+					pero el resultado es reutilizable en cursos posteriores.
+					</p>
+					<li>
+					<p align="justify">
+					Por &uacute;ltimo, cada estudiante conoce perfectamente el resultado obtenido en cada apartado.
+					</p>
+				</ul>
+			</li>
+			<li><h4>Administraci&oacute;n de archivos con las calificaciones</h4>
+				<p align="justify">
+				Los profesores pueden enviar varios <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>
+				con las calificaciones de todos los estudiantes (por ej. un archivo para las calificaciones de pr&aacute;cticas,
+				otro para las del examen de febrero, otro para las del examen de septiembre, etc.). Los archivos pueden organizarse en carpetas
+				(por ej. una carpeta para cada grupo, para cada profesor, etc.).
+				</p>
+				<p align="justify">
+				Los archivos deben ser de tipo <a href="http://es.wikipedia.org/wiki/HTML">HTML</a> [W3C 2008]
+				y deben contener una &uacute;nica tabla con las calificaciones.
+				Los archivos pueden generarse, por ejemplo, partiendo de una <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a>.
+				</p>
+				<p align="justify">
+				Una vez enviado un archivo, por omisi&oacute;n aparece listado
+				junto con los n&uacute;meros de filas de cabecera y de pie que SWAD haya detectado autom&aacute;ticamente.
+				El profesor puede cambiar dichos n&uacute;meros en cualquier momento pulsando sobre ellos:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/administracion-calificaciones.png"><img border="0" src="img/administracion-calificaciones_chica.png" alt="Administraci&oacute;n de archivos de calificaciones" width="320" height="200"><br />
+						Administraci&oacute;n de archivos de calificaciones</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				La plataforma mostrar&aacute; para un estudiante concreto las filas de cabecera,
+				la fila correspondiente a ese estudiante y las filas de pie.
+				En esta opci&oacute;n de administraci&oacute;n de calificaciones, cuando un profesor pulsa sobre un archivo,
+				se muestra la tabla de calificaciones <a href="http://es.wikipedia.org/wiki/HTML">HTML</a> completa.
+				En la opci&oacute;n de consulta de calificaciones, los profesores solo ven las calificaciones de un estudiante de la asignatura elegido al azar.
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de usuarios de la asignatura -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Usuarios&quot;:</h3>
+
+		<p align="justify">
+		En la pesta&ntilde;a &quot;Usuarios&quot; se muestran las siguientes opciones
+		relacionadas con la gesti&oacute;n de usuarios de la asignatura seleccionada:
+		</p>
+
+		<ul>
+			<li><h4>Lista de estudiantes</h4>
+				<p align="justify">
+				Esta opci&oacute;n es visible por estudiantes y profesores y muestra una orla o una lista
+				de los estudiantes de la asignatura o de los grupos seleccionados.
+				Un profesor pueden ver las fotograf&iacute;as de todos sus estudiantes (l&oacute;gicamente, de aquellos que dispongan de fotograf&iacute;a).
+				Un estudiante solo puede ver las fotograf&iacute;as de sus compa&ntilde;eros si ha enviado su fotograf&iacute;a y adem&aacute;s ha indicado que sea p&uacute;blica.
+				</p>
+
+				<p align="justify">
+				Si se opta por ver una <strong>orla</strong>, es posible seleccionar el n&uacute;mero de columnas en las que se distribuir&aacute;n los estudiantes.
+				Bajo las fotograf&iacute;as aparecen el nombre y el lugar de origen.
+				Cuando un profesor pulsa sobre un estudiante,
+				se muestran su ficha com&uacute;n y su ficha en la asignatura.
+				Un estudiante puede pulsar sobre todos aquellos estudiantes que tengan
+				<a href="http://es.wikipedia.org/wiki/P&aacute;gina_web">p&aacute;gina web</a> personal,
+				que se mostrar&aacute; en una nueva ventana del navegador.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla.png"><img border="0" src="img/orla_chica.png" alt="Orla de estudiantes" width="320" height="200"><br />
+						Orla de estudiantes</a>
+					</td>
+					</tr>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n puede mostrarse una vista de la orla lista para imprimir:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla-impresion.png"><img border="0" src="img/orla-impresion_chica.png" alt="Orla de estudiantes, lista para imprimir" width="320" height="200"><br />
+						Orla de estudiantes, lista para imprimir</a>
+					</td>
+					</tr>
+					</tr>
+				</table>
+				</p>
+
+				<p align="justify">
+				Si se opta por ver una <strong>lista</strong>, aparece un estudiante en cada fila.
+				Pulsando sobre la fotograf&iacute;a
+				o el <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				de un estudiante, se muestran su ficha com&uacute;n y su ficha en la asignatura.
+				Tambi&oacute;n es posible acceder f&aacute;cilmente a la <a href="http://es.wikipedia.org/wiki/P&aacute;gina_web">p&aacute;gina web</a>
+				o la direcci&oacute;n de <a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a>
+				de cada uno pulsando sobre el enlace correspondiente.
+				La lista de los estudiantes puede mostrarse con fotograf&iacute;as o sin ellas,
+				con los datos resumidos (opci&oacute;n por omisi&oacute;n, en la ventana principal) o con los datos completos (en una ventana aparte):
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-sin-fotos.png"><img border="0" src="img/lista-estudiantes-sin-fotos_chica.png" alt="Lista de estudiantes, sin fotos, datos resumidos" width="320" height="200"><br />
+						Lista de estudiantes, sin fotos, datos resumidos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-sin-fotos-datos-completos.png"><img border="0" src="img/lista-estudiantes-sin-fotos-datos-completos_chica.png" alt="Lista de estudiantes, sin fotos, datos completos" width="320" height="200"><br />
+						Lista de estudiantes, sin fotos, datos completos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-con-fotos.png"><img border="0" src="img/lista-estudiantes-con-fotos_chica.png" alt="Lista de estudiantes, con fotos, datos resumidos" width="320" height="200"><br />
+						Lista de estudiantes, con fotos, datos resumidos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-con-fotos-datos-completos.png"><img border="0" src="img/lista-estudiantes-con-fotos-datos-completos_chica.png" alt="Lista de estudiantes, con fotos, datos completos" width="320" height="200"><br />
+						Lista de estudiantes, con fotos, datos completos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Hay que destacar que es posible guardar la lista (con o sin fotos) en una <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a>
+				o <a href="http://es.wikipedia.org/wiki/Procesador_de_textos">procesador de textos</a>, sin m&aacute;s que seleccionar la tabla, copiar con Ctrl-C,
+				y pegar con Ctrl-V sobre la aplicaci&oacute;n destino:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-con-fotos-copiar.png"><img border="0" src="img/lista-estudiantes-con-fotos-copiar_chica.png" alt="Copiar la lista de estudiantes del navegador" width="320" height="200"><br />
+						Copiar la lista de estudiantes del navegador</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/lista-estudiantes-con-fotos-pegar.png"><img border="0" src="img/lista-estudiantes-con-fotos-pegar_chica.png" alt="Pegar la lista de estudiantes en una hoja de c&aacute;lculo" width="320" height="200"><br />
+						Pegar la lista de estudiantes en una hoja de c&aacute;lculo</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Esta lista puede usarse, por ejemplo, para guardar los datos de los estudiantes en el ordenador personal del profesor,
+				o para crear a partir de ella una tabla de calificaciones.
+				</p>
+
+			</li>
+			<li><h4>Lista de profesores</h4>
+				<p align="justify">
+				Se muestra una orla o una lista de los profesores de la asignatura, los de la titulaci&oacute;n,
+				los de todas las titulaciones, o los que no est&aacute;n inscritos en ninguna asignatura.
+				Un estudiante o un profesor pueden ver las fotograf&iacute;as de los profesores solo si son p&uacute;blicas.
+				</p>
+				<p align="justify">
+				En el caso de presentar una <strong>orla</strong>, al igual que ocurre con la de estudiantes,
+				es posible seleccionar el n&uacute;mero de columnas en las que se distribuir&aacute;n los usuarios.
+				Bajo las fotograf&iacute;as aparecen los nombres de los profesores.
+				Cuando la orla muestra los profesores de la asignatura, al pulsar sobre un profesor
+				se muestra su ficha. Si la orla muestra profesores de la titulaci&oacute;n, los de todas las titulaciones,
+				o los que no est&aacute;n inscritos en ninguna asignatura, al pulsar sobre un profesor que tenga
+				<a href="http://es.wikipedia.org/wiki/P&aacute;gina_web">p&aacute;gina web</a> personal,
+				esta se mostrar&aacute; en una nueva ventana del navegador.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla-profesores.png"><img border="0" src="img/orla-profesores_chica.png" alt="Orla de profesores de una titulaci&oacute;n" width="320" height="200"><br />
+						Orla de profesores de una titulaci&oacute;n</a>
+					</td>
+					</tr>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n puede mostrarse una vista de la orla de profesores lista para imprimir:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla-profesores-impresion.png"><img border="0" src="img/orla-profesores-impresion_chica.png" alt="Orla de profesores de una titulaci&oacute;n, lista para imprimir" width="320" height="200"><br />
+						Orla de profesores de una titulaci&oacute;n, lista para imprimir</a>
+					</td>
+					</tr>
+					</tr>
+				</table>
+				</p>
+
+				<p align="justify">
+				Si se opta por ver una <strong>lista</strong>, aparece un profesor en cada fila.
+				La lista de los profesores puede mostrarse con fotograf&iacute;as o sin ellas,
+				con los datos resumidos (opci&oacute;n por omisi&oacute;n, en la ventana principal) o con los datos completos (en una ventana aparte):
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-profesores-sin-fotos.png"><img border="0" src="img/lista-profesores-sin-fotos_chica.png" alt="Lista de profesores de una titulaci&oacute;n, sin fotos, datos resumidos" width="320" height="200"><br />
+						Lista de profesores de una titulaci&oacute;n, sin fotos, datos resumidos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/lista-profesores-sin-fotos-datos-completos.png"><img border="0" src="img/lista-profesores-sin-fotos-datos-completos_chica.png" alt="Lista de profesores de una titulaci&oacute;n, sin fotos, datos completos" width="320" height="200"><br />
+						Lista de profesores de una titulaci&oacute;n, sin fotos, datos completos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/lista-profesores-con-fotos.png"><img border="0" src="img/lista-profesores-con-fotos_chica.png" alt="Lista de profesores de una titulaci&oacute;n, con fotos, datos resumidos" width="320" height="200"><br />
+						Lista de profesores de una titulaci&oacute;n, con fotos, datos resumidos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/lista-profesores-con-fotos-datos-completos.png"><img border="0" src="img/lista-profesores-con-fotos-datos-completos_chica.png" alt="Lista de profesores de una titulaci&oacute;n, con fotos, datos completos" width="320" height="200"><br />
+						Lista de profesores de una titulaci&oacute;n, con fotos, datos completos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Fichas de estudiantes</h4>
+				<p align="justify">
+				Los datos de los estudiantes tambi&oacute;n pueden mostrarse en forma de fichas.
+				En primer lugar el profesor selecciona los estudiantes cuyas fichas desea ver o editar.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/seleccion-fichas-estudiantes.png"><img border="0" src="img/seleccion-fichas-estudiantes_chica.png" alt="Selecci&oacute;n de estudiantes para mostrar sus fichas" width="320" height="200"><br />
+						Selecci&oacute;n de estudiantes para mostrar sus fichas</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Una vez seleccionados los estudiantes, se muestra para cada uno de ellos:
+				</p>
+				<ul>
+					<li>La ficha con los datos personales, com&uacute;n para todas las asignaturas
+					    y no editable por el profesor.</li>
+					<li>La ficha con los datos de la asignatura seleccionada,
+					    solo si el profesor ha definido
+					    <a href="http://es.wikipedia.org/wiki/Campo_%28inform%C3%A1tica%29">campos</a>
+					    personalizados de fichas en la asignatura.
+					    El profesor puede editar cualquier campo de esta ficha.</li>
+				</ul>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/fichas-estudiantes.png"><img border="0" src="img/fichas-estudiantes_chica.png" alt="Listado de fichas de estudiantes" width="320" height="200"><br />
+						Fichas de estudiantes</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n existe la posibilidad de mostrar las fichas listas para imprimir.
+				En este caso puede seleccionarse el n&uacute;mero de fichas que se imprimir&aacute;n en cada p&aacute;gina:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						 <a href="img/fichas-estudiantes-impresion.png"><img border="0" src="img/fichas-estudiantes-impresion_chica.png" alt="Listado de fichas de estudiantes" width="320" height="200"><br />
+						Impresi&oacute;n de fichas de estudiantes</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Campos de fichas de estudiantes en la asignatura</h4>
+				<p align="justify">
+				Los profesores de una asignatura pueden definir
+				<a href="http://es.wikipedia.org/wiki/Campo_%28inform%C3%A1tica%29">campos</a> de texto
+				para las fichas de los estudiantes en esa asignatura.
+				</p>
+				<p align="justify">
+				Cada campo se puede personalizar con los siguientes atributos:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>El nombre del campo que aparecer&aacute; en la ficha.</li>
+					<li>El n&uacute;mero de l&iacute;neas del &aacute;rea de edici&oacute;n asociada al campo (por omisi&oacute;n, una l&iacute;nea).</li>
+					<li>La visibilidad del campo por parte del estudiante:
+						<ul>
+							<li>Campo oculto a los estudiantes (opci&oacute;n por omisi&oacute;n).</li>
+							<li>Campo visible por los estudiantes, pero no editable por ellos.</li>
+							<li>Campo visible y editable por los estudiantes.</li>
+						</ul>
+					    (los profesores de la asignatura siempre pueden ver y editar cualquier campo)
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/campos-fichas-estudiantes.png"><img border="0" src="img/campos-fichas-estudiantes_chica.png" alt="Edici&oacute;n de campos de fichas de estudiantes" width="320" height="200"><br />
+						Edici&oacute;n de campos de fichas de estudiantes</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Fichas de profesores de la asignatura</h4>
+				<p align="justify">
+				Se muestran las fichas de los profesores de la asignatura.
+				Como ocurre con las fichas de los estudiantes, tambi&oacute;n puede mostrarse una vista de impresi&oacute;n
+				seleccionando el n&uacute;mero de filas por p&aacute;gina.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/fichas-profesores.png"><img border="0" src="img/fichas-profesores_chica.png" alt="Fichas de profesores" width="320" height="200"><br />
+						Fichas de profesores</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n existe la posibilidad de mostrar las fichas listas para imprimir.
+				En este caso puede seleccionarse el n&uacute;mero de fichas que se imprimir&aacute;n en cada p&aacute;gina:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						 <a href="img/fichas-profesores-impresion.png"><img border="0" src="img/fichas-profesores-impresion_chica.png" alt="Impresi&oacute;n de fichas de profesores" width="320" height="200"><br />
+						Impresi&oacute;n de fichas de profesores</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Horarios de tutor&iacute;as</h4>
+				<p align="justify">
+				Se muestra la ficha de cada profesor de la asignatura junto con su horario de tutor&iacute;as en forma de tabla.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/tutorias.png"><img border="0" src="img/tutorias_chica.png" alt="Ejemplo de p&aacute;gina de tutorias" width="320" height="200"><br />
+						Horarios de tutor&iacute;as</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n de grupos</h4>
+				<p align="justify">
+				Los profesores pueden crear grupos de estudiantes dentro de una asignatura.
+				En primer lugar deben crear uno o m&aacute;s tipos de grupos, con cualquier nombre,
+				por ejemplo &quot;Teor&iacute;a&quot;, &quot;Pr&aacute;ctica 1&quot;, &quot;Pr&aacute;ctica 2&quot;, &quot;Trabajos voluntarios&quot;, etc.
+				En cada tipo de grupo pueden elegir el tipo de adscripci&oacute;n de los estudiantes a los grupos de ese tipo:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>Por un lado, los profesores pueden elegir si para ese tipo de grupo:
+						<ul>
+							<li>Elegir grupo es obligatorio (opci&oacute;n por omisi&oacute;n)</li>
+							<li>Elegir grupo es voluntario</li>
+						</ul>
+					</li>
+					<li>Por otro lado, los profesores pueden elegir si para ese tipo de grupo:
+						<ul>
+							<li>Un estudiante solo puede apuntarse a un grupo (opci&oacute;n por omisi&oacute;n)</li>
+							<li>Un estudiante puede apuntarse a varios grupos</li>
+						</ul>
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Una vez creados uno o m&aacute;s tipos de grupos, los profesores pueden crear uno o m&aacute;s grupos de cada tipo, con cualquier nombre,
+				por ejemplo &quot;A&quot;, &quot;B&quot;, &quot;Ma&ntilde;ana&quot;, &quot;Tarde&quot;, &quot;Lunes de 12 a 14 h&quot, etc.
+				En cada grupo pueden elegir el tipo de grupo, el nombre, y opcionalmente un n&uacute;mero m&aacute;ximo de estudiantes en el grupo.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/edicion-grupos.png"><img border="0" src="img/edicion-grupos_chica.png" alt="Edici&oacute;n de tipos de grupo y de grupos" width="320" height="200"><br />
+						Edici&oacute;n de tipos de grupo y de grupos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Puede establecerse si cada grupo queda abierto o cerrado (opci&oacute;n por omisi&oacute;n)
+				pulsando sobre el icono que representa un candado.
+				Un grupo abierto permite a los estudiantes apuntarse o borrarse de &eacute;l,
+				mientras que si el grupo est&aacute; cerrado los estudiantes solo pueden ser a&ntilde;adidos o eliminados de &eacute;l por los profesores.
+				</p>
+				<p align="justify">
+				Tambi&oacute;n es posible habilitar zonas de almacenamiento espec&iacute;ficas para cada grupo
+				pulsando sobre el icono que representa un disco (por omisi&oacute;n no se habilitan las zonas de almacenamiento espec&iacute;ficas).
+				Estas &aacute;reas de almacenamiento espec&iacute;ficas para el grupo se crean en:
+				</p>
+				<p align="justify">
+					<ul>
+						<li>Asignatura &gt; Descargas / Administraci&oacute;n de descargas</li>
+						<li>Asignatura &gt; Zonas comunes</li>
+						<li>Evaluaci&oacute;n &gt; Calificaciones / Administraci&oacute;n de calificaciones</li>
+					</ul>
+				</p>
+				<p align="justify">
+				El n&uacute;mero m&aacute;ximo de estudiantes establece un l&iacute;mite de estudiantes que pueden adscribirse a un grupo.
+				Cuando se alcanza el l&iacute;mite, ning&uacute;n estudiante m&aacute;s puede apuntarse a ese grupo.
+				Esta opci&oacute;n es &uacute;til cuando el profesor desea cerrar el grupo a un n&uacute;mero determinado de estudiantes como m&aacute;ximo,
+				por ejemplo porque el laboratorio donde se imparta la docencia tenga un aforo limitado.
+				Un ejemplo de utilizaci&oacute;n del l&iacute;mite consiste en crear varios grupos de pr&aacute;cticas cerrados (ning&uacute;n estudiante podr&aacute; apuntarse),
+				avisar a los estudiantes de que a una determinada fecha y hora se abrir&aacute; la adscripci&oacute;n a esos grupos,
+				en esa fecha y hora abrir los grupos,
+				y dejar que los estudiantes elijan as&iacute; su grupo en igualdad de condiciones.
+				Si el n&uacute;mero m&aacute;ximo se deja en blanco, o se introducen caracteres no num&eacute;ricos o un n&uacute;mero muy alto -por ejemplo 100000-, el grupo queda sin l&iacute;mite de estudiantes.
+				</p>
+			</li>
+			<li><h4>Elecci&oacute;n de grupos</h4>
+				<p align="justify">
+				Los estudiantes pueden o deben elegir uno o varios grupos, dependiendo del tipo de adscripci&oacute;n que hayan elegido los profesores.
+				Si para alg&uacute;n tipo de grupo la adscripci&oacute;n es obligatoria,
+				existen uno o m&aacute;s grupos de ese tipo abiertos y con plazas vacantes,
+				y el estudiante identificado no ha elegido ning&uacute;n grupo de ese tipo,
+				la plataforma le obligar&aacute; a elegir grupo antes de seguir accediendo a otros servicios.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/eleccion-grupos-estudiante.png"><img border="0" src="img/eleccion-grupos-estudiante_chica.png" alt="Elecci&oacute;n de grupos por parte de un estudiante" width="320" height="200"><br />
+						Elecci&oacute;n de grupos por parte de un estudiante</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los profesores tambi&oacute;n pueden elegir opcionalmente varios grupos,
+				independientemente del tipo de adscripci&oacute;n que tengan los tipos de grupos asociados a ellos.
+				En este caso, la elecci&oacute;n de grupos tiene dos fines:
+				el primero es que el profesor solo pueda dar de alta o de baja estudiantes en sus grupos,
+				y el segundo que al profesor le aparezcan seleccionados por omisi&oacute;n los grupos elegidos
+				cada vez que acceda a los siguientes servicios:
+				</p>
+				<p align="justify">
+					<ul>
+						<li>Evaluaci&oacute;n &gt; Trabajos estudiantes</li>
+						<li>Usuarios &gt; Lista estudiantes</li>
+						<li>Usuarios &gt; Fichas estudiantes</li>
+						<li>Mensajes &gt; Enviar correo</li>
+						<li>Mensajes &gt; Escribir mensaje</li>
+						<li>Estad&iacute;sticas &gt; Accesos asignatura</li>
+					</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/eleccion-grupos-profesor.png"><img border="0" src="img/eleccion-grupos-profesor_chica.png" alt="Elecci&oacute;n de grupos por parte de un profesor" width="320" height="200"><br />
+						Elecci&oacute;n de grupos por parte de un profesor</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Como se observa en las dos capturas de pantalla anteriores,
+				ciertos grupos aparecen destacados en color celeste.
+				Se trata de los grupos seleccionados actualmente.
+				</p>
+			</li>
+			<li><h4>Alta de un usuario en la asignatura o modificaci&oacute;n de sus datos</h4>
+				<p align="justify">
+				Los profesores de una asignatura pueden dar de alta estudiantes en ella,
+				y los administradores de titulaci&oacute;n pueden dar de alta estudiantes o profesores.
+				Un profesor de una asignatura puede dar de alta en ella a otro profesor
+				solo si el segundo ya est&aacute; inscrito en SWAD como profesor;
+				esto significa que un profesor no puede crear nuevos profesores
+				que no hayan sido inscritos previamente en SWAD.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario a dar de alta o cuyos datos desean modificarse:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-alta-usuario.png"><img border="0" src="img/peticion-DNI-alta-usuario_chica.png" alt="DNI/Pasaporte del usuario a dar de alta" width="320" height="200"><br />
+						DNI/Pasaporte del usuario a dar de alta</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el usuario a dar de alta no existe, se crea, y el profesor o administrador
+				que lo da de alta puede rellenar algunos de sus datos b&iacute;sicos si lo desea:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/alta-usuario-inexistente-esta-asignatura.png"><img border="0" src="img/alta-usuario-inexistente-esta-asignatura_chica.png" alt="Alta de usuario en esta asignatura" width="320" height="200"><br />
+						Formulario de alta cuando no existe el usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el usuario a dar de alta ya existe, se a&ntilde;ade a la asignatura:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/alta-usuario-esta-asignatura.png"><img border="0" src="img/alta-usuario-esta-asignatura_chica.png" alt="Alta en la asignatura de un usuario que ya existe en SWAD" width="320" height="200"><br />
+						Alta en la asignatura de un usuario que ya existe en SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El usuario a dar de alta se asigna a la asignatura como perteneciente a ella:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-alta-usuario.png"><img border="0" src="img/confirmacion-alta-usuario_chica.png" alt="Confirmaci&oacute;n del alta" width="320" height="200"><br />
+						Confirmaci&oacute;n del alta</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n se puede usar esta opci&oacute;n para modificar los datos b&iacute;sicos de un usuario de la asignatura que ya haya confirmado su alta:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/modificacion-datos-usuario.png"><img border="0" src="img/modificacion-datos-usuario_chica.png" alt="Modificaci&oacute;n de los datos b&iacute;sicos de un usuario" width="320" height="200"><br />
+						Modificaci&oacute;n de los datos b&iacute;sicos de un usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Alta de varios estudiantes en la asignatura</h4>
+				<p align="justify">
+				Un profesor puede dar de alta varios estudiantes de una sola vez.
+				Para ello, pueden escribir o pegar una lista de
+				n&uacute;meros de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>,
+				o bien pueden especificar un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a> con dicha lista.
+				En ambos casos, los n&uacute;meros de DNI/Pasaporte pueden aparecer separados por cualquier cadena de texto
+				-siempre que esta no contenga varios n&uacute;meros consecutivos, por ej. n&uacute;meros de tel&eacute;fono,
+				ya que ser&iacute;an interpretados como DNI/Pasaportes-.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/alta-varios-estudiantes.png"><img border="0" src="img/alta-varios-estudiantes_chica.png" alt="Alta de varios estudiantes en esta asignatura" width="320" height="200"><br />
+						Formulario para enviar los DNI/Pasaportes</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-alta-varios-estudiantes.png"><img border="0" src="img/confirmacion-alta-varios-estudiantes_chica.png" alt="Confirmaci&oacute;n de altas de estudiantes" width="320" height="200"><br />
+						Confirmaci&oacute;n de altas de estudiantes</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si la lista incluye el DNI/Pasaporte de un estudiante que ya estuviera inscrito en la asignatura,
+				dicho estudiante no se duplicar&aacute;.
+				De este modo, se puede volver a pegar una versi&oacute;n nueva de la lista cuando se desee.
+				</p>
+				<p align="justify">
+				El profesor puede usar esta opci&oacute;n para dar de alta estudiantes en grupos,
+				siempre que &eacute;l se haya inscrito previamente en esos grupos (opci&oacute;n <em>Usuarios &gt; Mis grupos</em>).
+				Para ello debe escribir o pegar una lista con los DNI de los estudiantes
+				a dar de alta en algunos grupos.
+				No importa que los estudiantes ya est&aacute;n inscritos en la asignatura o no.
+				En caso de no seleccionar ning&uacute;n grupo antes de dar de alta,
+				se da de alta a los estudiantes en la asignatura, sin adscripci&oacute;n a ning&uacute;n grupo.
+				</p>
+				<p align="justify">
+				En caso de seleccionar los grupos en los que se desea dar de alta a estudiantes:
+				<ul>
+					<li>
+					Si se est&aacute; dando de alta estudiantes y un tipo de grupo es de adscripci&oacute;n &uacute;nica,
+					se inscribir&aacute; a cada estudiante en el grupo de ese tipo seleccionado
+					y se le dar&aacute; de baja de otro posible grupo de ese tipo al que perteneciera.
+					Si al dar de alta la adscripci&oacute;n de un tipo de grupo es m&uacute;ltiple
+					y el estudiante ya perteneciera a otros grupos de ese tipo no seleccionados,
+					no se le da de baja de esos otros grupos, sino que el estudiante seguir&aacute; perteneciendo
+					a los que estuviera, y tambi&oacute;n pertenecer&aacute; ahora a los grupos indicados por el profesor.
+					</li>
+					<li>
+					Si la selecci&oacute;n de un grupo est&aacute; desactivada
+					es porque el profesor no pertenece a ese grupo.
+					Esto lo puede cambiar apunt&aacute;ndose a los grupos que imparta
+					en la opci&oacute;n <em>Usuarios &gt; Mis grupos</em>.
+					</li>
+					<li>
+					Cuando el profesor da de alta estudiantes en grupos no importa que dichos grupos est&eacute;n cerrados o abiertos
+					ni que se sobrepase el l&iacute;mite de estudiantes del grupo.
+					</li>
+				</ul>
+				</p>
+			</li>
+			<li><h4>Cambio de la contrase&ntilde;a de otro usuario</h4>
+				<p align="justify">
+				Un profesor puede cambiar la <a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a> de uno de sus estudiantes,
+				un administrador de titulaci&oacute;n puede cambiar la de cualquier profesor o estudiante de la titulaci&oacute;n,
+				y un superusuario puede cambiar la de cualquier usuario.
+				Esta opci&oacute;n es &uacute;til cuando dicho usuario ha olvidado su contrase&ntilde;a,
+				y por alg&uacute;n motivo no puede recibir una contrase&ntilde;a nueva en su correo electr&uacute;nico
+				-por ej. si la direcci&oacute;n de correo electr&uacute;nico que escribi&oacute; en su ficha es incorrecta-.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario cuya contrase&ntilde;a quiere cambiarse:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-cambio-contrasena.png"><img border="0" src="img/peticion-DNI-cambio-contrasena_chica.png" alt="DNI/Pasaporte del usuario cuya contrase&ntilde;a se desa cambiar" width="320" height="200"><br />
+						DNI/Pasaporte del usuario cuya contrase&ntilde;a se desea cambiar</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				La nueva <a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a> debe teclearse dos veces para evitar posibles errores:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/cambio-contrasena-otro-usuario.png"><img border="0" src="img/cambio-contrasena-otro-usuario_chica.png" alt="Cambio de la contrase&ntilde;a de otro usuario" width="320" height="200"><br />
+						Formulario para el cambio de contrase&ntilde;a de otro usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Env&iacute;o o eliminaci&oacute;n de la fotograf&iacute;a de otro usuario</h4>
+				<p align="justify">
+				Un profesor puede enviar o eliminar la fotograf&iacute;a de uno de sus estudiantes,
+				un administrador de titulaci&oacute;n puede enviar o eliminar la de cualquier profesor o estudiante de la titulaci&oacute;n,
+				y un superusuario puede enviar o eliminar la de cualquier usuario.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario cuya fotograf&iacute;a se quiere enviar o eliminar:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-envio-fotografia.png"><img border="0" src="img/peticion-DNI-envio-fotografia_chica.png" alt="DNI/Pasaporte del usuario cuya fotograf&iacute;a se desea enviar" width="320" height="200"><br />
+						DNI/Pasaporte del usuario cuya fotograf&iacute;a se desea enviar</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/envio-fotografia-otro-usuario.png"><img border="0" src="img/envio-fotografia-otro-usuario_chica.png" alt="Env&iacute;o o eliminaci&oacute;n de la fotograf&iacute;a de otro usuario" width="320" height="200"><br />
+						Formulario para el env&iacute;o o eliminaci&oacute;n de la fotograf&iacute;a de otro usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Baja de un usuario de la asignatura</h4>
+				<p align="justify">
+				Los profesores de una asignatura pueden dar de baja estudiantes o profesores de ella,
+				y los administradores de titulaci&oacute;n pueden dar de baja estudiantes o profesores de cualquier asignatura de la titulaci&oacute;n.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario a dar de baja:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-baja-usuario.png"><img border="0" src="img/peticion-DNI-baja-usuario_chica.png" alt="DNI/Pasaporte del usuario a dar de baja" width="320" height="200"><br />
+						DNI/Pasaporte del usuario a dar de baja</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el usuario a dar de baja est&aacute; inscrito en la asignatura, se muestra un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> de confirmaci&oacute;n de la baja:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/baja-usuario-esta-asignatura.png"><img border="0" src="img/baja-usuario-esta-asignatura_chica.png" alt="Baja de usuario de esta asignatura" width="320" height="200"><br />
+						Formulario de confirmaci&oacute;n de baja del usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el profesor o administrador confirma la baja,
+				el usuario deja de pertenecer a la asignatura,
+				se pierden sus posibles asignaciones a grupos dentro de la asignatura,
+				se eliminan sus trabajos en la asignatura,
+				y se eliminan de su ficha los campos personalizados para la asignatura.
+				Sin embargo, no se eliminan los datos personales del usuario ni su pertenencia a otras asignaturas.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-baja-usuario-esta-asignatura.png"><img border="0" src="img/confirmacion-baja-usuario-esta-asignatura_chica.png" alt="Borrado de un usuario de esta asignatura" width="320" height="200"><br />
+						Confirmaci&oacute;n de la baja de esta asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Baja de varios estudiantes de la asignatura</h4>
+				<p align="justify">
+				Un profesor puede dar de baja a varios estudiantes de una sola vez.
+				Para ello, puede escribir o pegar una lista de
+				n&uacute;meros de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>,
+				o bien puede especificar un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a> con dicha lista.
+				En ambos casos, los n&uacute;meros de DNI/Pasaporte pueden aparecer separados por cualquier cadena de texto
+				-siempre que esta no contenga varios n&uacute;meros consecutivos, por ej. n&uacute;meros de tel&eacute;fono,
+				ya que ser&iacute;an interpretados como DNI/Pasaportes-.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/baja-varios-estudiantes.png"><img border="0" src="img/baja-varios-estudiantes_chica.png" alt="Baja de varios estudiantes de esta asignatura" width="320" height="200"><br />
+						Formulario para enviar los DNI/Pasaportes</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-baja-varios-estudiantes.png"><img border="0" src="img/confirmacion-baja-varios-estudiantes_chica.png" alt="Confirmaci&oacute;n de bajas de estudiantes" width="320" height="200"><br />
+						Confirmaci&oacute;n de bajas de estudiantes</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si no se selecciona ning&uacute;n grupo, los estudiantes indicados dejan de pertenecer a la asignatura,
+				se pierden sus posibles asignaciones a grupos dentro de la asignatura,
+				se eliminan sus trabajos en la asignatura,
+				y se eliminan de sus fichas los campos personalizados para la asignatura.
+				Sin embargo, no se eliminan los datos personales de los estudiantes ni su pertenencia a otras asignaturas.
+				</p>
+				<p align="justify">
+				El profesor tambi&oacute;n puede dar de baja estudiantes de grupos.
+				Para ello debe escribir o pegar una lista con los DNI de los estudiantes
+				a dar de baja de algunos grupos.
+				En caso de seleccionar los grupos de los que se desea dar de baja a estudiantes:
+				<ul>
+					<li>
+					Al dar de baja estudiantes habiendo grupos seleccionados,
+					se da de baja a cada estudiante indicado de todos los grupos seleccionados a los que perteneciera,
+					pero no de la asignatura.
+					</li>
+					<li>
+					Si la selecci&oacute;n de un grupo est&aacute; desactivada
+					es porque el profesor no pertenece a ese grupo.
+					Esto lo puede cambiar apunt&aacute;ndose a los grupos que imparta
+					en la opci&oacute;n <em>Usuarios &gt; Mis grupos</em>.
+					</li>
+					<li>
+					Cuando el profesor da de baja estudiantes de grupos no importa que dichos grupos est&eacute;n cerrados o abiertos.
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Tambi&oacute;n se puede seleccionar si se quiere dar de baja a los estudiantes que est&eacute;n en la lista indicada de DNI (opci&oacute;n por omisi&oacute;n),
+				o si se quiere dar de baja a los estudiantes que <em>no</em> est&aacute;n en la lista indicada.
+				Esta &uacute;ltima posibilidad -dar de baja a los estudiantes que <em>no</em> est&aacute;n en la lista especificada-
+				se puede usar conjuntamente con la opci&oacute;n <em>Usuarios &gt; Alta varios estudiantes</em>
+				para actualizar la lista de estudiantes de una asignatura.
+				El proceso a seguir ser&iacute;a el siguiente, sin importar el orden:
+				<ul>
+					<li>
+					Dar de alta la nueva lista de estudiantes,
+					escribiendo/pegando la nueva lista en <em>Usuarios &gt; Alta varios estudiantes</em>.
+					</li>
+					<li>
+					Dar de baja a todos los estudiantes que <em>no</em> est&aacute;n en la nueva lista,
+					escribiendo/pegando la nueva lista en <em>Usuarios &gt; Baja varios estudiantes</em>
+					y seleccionado "Dar de baja a los estudiantes que <em>no</em> est&aacute;n en la lista".
+					</li>
+				</ul>
+				</p>
+			</li>
+			<li><h4>Baja de todos los estudiantes de la asignatura</h4>
+				<p align="justify">
+				Un profesor puede dar de baja a todos los estudiantes de la asignatura de una sola vez, tras confirmar dicha baja:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/baja-todos-estudiantes.png"><img border="0" src="img/baja-todos-estudiantes_chica.png" alt="Baja de todos los estudiantes de esta asignatura" width="320" height="200"><br />
+						Confirmaci&oacute;n de baja de todos los estudiantes de la asignatura</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Todos los estudiantes de la asignatura dejan de pertenecer a ella,
+				se pierden sus posibles asignaciones a grupos dentro de la asignatura,
+				se eliminan sus trabajos en la asignatura,
+				y se eliminan de sus fichas los campos personalizados para la asignatura.
+				Sin embargo, no se eliminan los datos personales de los estudiantes ni su pertenencia a otras asignaturas.
+				</p>
+			</li>
+			<li><h4>Eliminaci&oacute;n total de un usuario</h4>
+				<p align="justify">
+				Solo los superusuarios pueden eliminar completamente a un usuario.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide el
+				<a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				del usuario a eliminar:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/peticion-DNI-eliminacion-usuario.png"><img border="0" src="img/peticion-DNI-eliminacion-usuario_chica.png" alt="DNI/Pasaporte del usuario a eliminar" width="320" height="200"><br />
+						DNI/Pasaporte del usuario a eliminar</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el usuario a eliminar existe, se muestra un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> de confirmaci&oacute;n de la eliminaci&oacute;n:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/eliminacion-usuario.png"><img border="0" src="img/eliminacion-usuario_chica.png" alt="Eliminaci&oacute;n completa de un usuario" width="320" height="200"><br />
+						Formulario de confirmaci&oacute;n de eliminaci&oacute;n del usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el superusuario confirma la eliminaci&oacute;n, el usuario deja de pertenecer a todas las asignaturas donde estuviera inscrito,
+				se pierden sus posibles asignaciones a grupos dentro de todas las asignaturas,
+				se eliminan sus trabajos en todas las asignaturas,
+				se eliminan sus mensajes recibidos,
+				se borra completamente su maletin,
+				y se eliminan todos sus datos sin posibilidad de deshacer la operaci&oacute;n.
+				No se elimina el contenido de sus intervenciones en foros, ni los archivos enviados a zonas comunes,
+				ni el registro de accesos.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/confirmacion-eliminacion-usuario.png"><img border="0" src="img/confirmacion-eliminacion-usuario_chica.png" alt="Borrado de la ficha de un usuario" width="320" height="200"><br />
+						Confirmaci&oacute;n de la eliminaci&oacute;n del usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Eliminaci&oacute;n total de usuarios antiguos</h4>
+				<p align="justify">
+				Esta opci&oacute;n est&aacute; reservada a superusuarios, y les permite eliminar usuarios antiguos.
+				</p>
+				<p align="justify">
+				Cuando se pulsa esta opci&oacute;n, aparece un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> que pide
+				un n&uacute;mero <em>n</em> de meses, contado desde la fecha actual hacia atr&aacute;s (por omisi&oacute;n, el n&uacute;mero de meses es 12).
+				Al pulsar en el bot&oacute;n se eliminar&aacute;n los usuarios que no est&eacute;n inscritos en ninguna asignatura
+				y que lleven m&aacute;s de esos <em>n</em> meses sin acceder a SWAD.
+				Los superusuarios deber&iacute;an usar esta opci&oacute;n al menos una vez al a&ntilde;o
+				para hacer limpieza en el servidor y preservar la protecci&oacute;n de datos,
+				de modo que los datos de los usuarios antiguos que ya no son necesarios
+				vayan siendo eliminados.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/eliminacion-usuarios-antiguos.png"><img border="0" src="img/eliminacion-usuarios-antiguos_chica.png" alt="Eliminaci&oacute;n total de usuarios antiguos" width="320" height="200"><br />
+						Eliminaci&oacute;n total de usuarios antiguos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de mensajes -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Mensajes&quot;:</h3>
+
+		<p align="justify">En la pesta&ntilde;a &quot;Mensajes&quot; se muestran las opciones relacionadas con la comunicaci&oacute;n entre usuarios:</p>
+
+		<ul>
+			<li><h4>Env&iacute;o de un nuevo aviso</h4>
+				<p align="justify">
+				Los profesores pueden enviar avisos nuevos en sus asignaturas,
+				que aparecer&aacute;n a la izquierda de la p&aacute;gina
+				en forma de <a href="http://www.3m.com/us/office/postit/"><NOBR>Post-it&reg;</NOBR></a> amarillo:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/nuevo-aviso.png"><img border="0" src="img/nuevo-aviso_chica.png" alt="Env&iacute;o de un nuevo aviso" width="320" height="200"><br />
+						Formulario para escritura del aviso</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/recepcion-aviso.png"><img border="0" src="img/recepcion-aviso_chica.png" alt="Recepci&oacute;n del aviso" width="320" height="200"><br />
+						Recepci&oacute;n del aviso</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Cualquier usuario que acceda a SWAD, identificado o no, ver&aacute; los avisos creados de esta forma.
+				Se aconseja que el mensaje sea breve.
+				Si se desea crear un aviso extenso o solo visible por los estudiantes de una asignatura,
+				se puede usar el foro de la asignatura,
+				se puede enviar un mensaje a todos a trav&eacute;s del sistema de mensajer&iacute;a interna,
+				o se puede crear un archivo con el texto y a&ntilde;adirlo a la zona de descarga.
+ 				</p>
+			</li>
+			<li><h4>Eliminaci&oacute;n de avisos</h4>
+				<p align="justify">
+				Los profesores pueden eliminar avisos de sus asignaturas:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/avisos-a-borrar.png"><img border="0" src="img/avisos-a-borrar_chica.png" alt="Avisos a borrar" width="320" height="200"><br />
+						Formulario de eliminaci&oacute;n de avisos</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/aviso-borrado.png"><img border="0" src="img/aviso-borrado_chica.png" alt="Borrado del aviso" width="320" height="200"><br />
+						Eliminaci&oacute;n del aviso</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				No existe la posibilidad de modificar el contenido de un aviso.
+				Por tanto, si nos hemos equivocado al escribir un aviso,
+				se puede copiar el texto del aviso err&oacute;neo, pegarlo en un nuevo aviso, realizar las correcciones, enviar el nuevo aviso
+				y eliminar el aviso err&oacute;neo.
+				</p>
+			</li>
+			<li><h4>Env&iacute;o de un mensaje interno a otro(s) usuario(s)</h4>
+				<p align="justify">
+				Este servicio permite el env&iacute;o de mensajes entre usuarios.
+				Los destinatarios se eligen seleccion&aacute;ndolos de una orla o de una lista
+				en la que existe la posibilidad de seleccionar a todos los usuarios:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mensaje-nuevo1.png"><img border="0" src="img/mensaje-nuevo1_chica.png" alt="Formulario de edici&oacute;n de un mensaje nuevo (1 de 2)" width="320" height="200"><br />
+						Formulario para editar el mensaje (1 de 2)</a>
+					</td>
+					</tr>
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mensaje-nuevo2.png"><img border="0" src="img/mensaje-nuevo2_chica.png" alt="Formulario de edici&oacute;n de un mensaje nuevo (2 de 2)" width="320" height="200"><br />
+						Formulario para editar el mensaje (2 de 2)</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/mensaje-enviado.png"><img border="0" src="img/mensaje-enviado_chica.png" alt="Confirmaci&oacute;n de env&iacute;o de un mensaje" width="320" height="200"><br />
+						Confirmaci&oacute;n del env&iacute;o</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Este servicio permite una comunicaci&oacute;n entre estudiantes y profesores con tres ventajas:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>est&aacute; libre de <a href="http://es.wikipedia.org/wiki/Spam"><em>spam</em></a></li>
+					<li>es accesible desde cualquier sitio que disponga de conexi&oacute;n a internet,
+					    sin necesidad de programas especiales (basta el navegador)</li>
+					<li>permite mantener separados los mensajes de estudiantes
+					    del <a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a> general</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Igual que en un gestor de <a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a>,
+				es posible ver todos los mensajes enviados y recibidos,
+				as&iacute; como eliminar mensajes y responderlos.
+				</p>
+			</li>
+			<li><h4>Mensajes internos enviados a otros usuarios</h4>
+				<p align="justify">
+				Esta opci&oacute;n permite ver los mensajes enviados agrupadas en p&aacute;ginas de hasta 10 mensajes.
+				Los mensajes se muestran ordenados por fecha y hora de env&iacute;o,
+				comenzando por el m&aacute;s reciente hasta el m&aacute;s antiguo
+				(al contrario que en los mensajes de una hebra de un foro).
+				Por omisi&oacute;n se muestra la p&aacute;gina que contiene los mensajes enviados m&aacute;s recientemente.
+				Solo uno de los mensajes se muestra completo, incluyendo el asunto, los destinatarios y el contenido.
+				Del resto solo se muestra el remitente (siempre el usuario identificado), el asunto y la fecha de env&iacute;o/recepci&oacute;n.
+				Para elegir el mensaje que se desea mostrar completo hay que pulsar sobre el asunto.
+				Delante del nombre de cada destinatario del mensaje que se muestra completo
+				aparece un icono que indica si el mensaje ya ha sido abierto (y probablemente le&iacute;do) por ese destinatario.
+				</p>
+				<p align="justify">
+				Se pueden mostrar todos los mensajes enviados,
+				o filtrarlos por la asignatura desde la que fueron enviados,
+				por el destinatario y por el contenido.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mensajes-enviados.png"><img border="0" src="img/mensajes-enviados_chica.png" alt="Lista de mensajes enviados" width="320" height="200"><br />
+						Lista de mensajes enviados</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Es posible eliminar definitivamente un mensaje enviado pulsando el aspa roja:
+				</p>
+			</li>
+			<li><h4>Mensajes internos recibidos de otros usuarios</h4>
+				<p align="justify">
+				Esta opci&oacute;n permite ver todos los mensajes internos recibidos de otros usuarios.
+				De igual modo que en la opci&oacute;n de mensajes enviados, los mensajes se muestran ordenados por fecha y hora de env&iacute;o,
+				comenzando por el m&aacute;s reciente hasta el m&aacute;s antiguo
+				(al contrario que en los mensajes de una hebra de un foro).
+				Por omisi&oacute;n se muestra la p&aacute;gina que contiene los mensajes recibidos m&aacute;s recientemente.
+				Solo uno de los mensajes se muestra completo, incluyendo el asunto, el remitente, los destinatarios y el contenido.
+				Del resto solo se muestra el remitente, el asunto y la fecha de env&iacute;o/recepci&oacute;n.
+				Para elegir el mensaje que se desea mostrar completo hay que pulsar sobre el asunto.
+				Delante del nombre de cada destinatario del mensaje que se muestra completo
+				aparece un icono que indica si el mensaje ya ha sido abierto (y probablemente le&iacute;do) por ese destinatario.
+				Junto a cada mensaje se muestran la fotograf&iacute;a y nombre del autor del mensaje,
+				y la asignatura desde la cual fue enviado.
+				</p>
+				<p align="justify">
+				Se pueden mostrar todos los mensajes recibidos,
+				o filtrarlos por la asignatura desde la que fueron enviados,
+				por el remitente y por el contenido.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/mensajes-recibidos.png"><img border="0" src="img/mensajes-recibidos_chica.png" alt="Lista de mensajes recibidos" width="320" height="200"><br />
+						Lista de mensajes recibidos</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Es posible eliminar definitivamente un mensaje recibido, pulsando el aspa roja.
+				</p>
+				<p align="justify">
+				Los mensajes recibidos pueden ser respondidos pulsando en
+				&quot;Responder&quot; o en &quot;Ir a asignatura y responder&quot;:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>
+					Si se ha seleccionado una asignatura y el mensaje recibido fue enviado desde esa misma asignatura,
+					aparece &quot;Responder&quot;.
+					</li>
+					<li>
+					Si no se ha seleccionado ninguna asignatura o si el mensaje recibido fue enviado desde otra asignatura,
+					aparece &quot;Ir a asignatura y responder&quot;.
+					En este caso se selecciona autom&aacute;ticamente la asignatura de origen al responder.
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Al pulsar sobre &quot;Responder&quot; o &quot;Ir a asignatura y responder&quot; se muestra
+				la opci&oacute;n de escribir un mensaje interno, con el remitente seleccionado como destinatario por omisi&oacute;n y destacado en color verde,
+				y el mensaje original mostrado en el &aacute;rea de escritura del mensaje:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/respuesta-mensaje-recibido.png"><img border="0" src="img/respuesta-mensaje-recibido_chica.png" alt="Respuesta a un mensaje recibido" width="320" height="200"><br />
+						Respuesta a un mensaje recibido</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Env&iacute;o de correo electr&uacute;nico</h4>
+				<p align="justify">
+				Los profesores pueden enviar mensajes de
+				<a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a>
+				a todos los estudiantes de los grupos seleccionados dentro de una asignatura,
+				usando su gestor de correo electr&uacute;nico.
+				</p>
+				<p align="justify">
+				Al pulsar en <em>Crear mensaje de correo electr&uacute;nico</em>
+				se abrir&aacute; el gestor de correo predeterminado del profesor con un nuevo mensaje listo para su edici&oacute;n.
+				En dicho mensaje, el campo <em>Para</em> queda vac&iacute;o,
+				en el campo <em>CC (copia)</em> aparece el correo del profesor que env&iacute;a el mensaje,
+				en el campo <em>CCO (copia oculta)</em> la lista de estudiantes,
+				y en el campo <em>Asunto</em> el nombre de la asignatura.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/correo.png"><img border="0" src="img/correo_chica.png" alt="Env&iacute;o de correo electr&uacute;nico" width="320" height="200"><br />
+						Env&iacute;o de correo electr&uacute;nico</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si el n&uacute;mero de destinatarios es grande (varias decenas),
+				es probable que el mensaje no llegue a muchos de sus destinatarios
+				debido a la actuaci&oacute;n de filtros anti <a href="http://es.wikipedia.org/wiki/Spam"><em>spam</em></a>
+				en los servidores de correo.
+				Incluso algunos gestores de
+				<a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a>
+				no se abren cuando el n&uacute;mero de destinatarios es grande.
+				En estos casos conviene usar los foros de discusi&oacute;n o el sistema de mensajer&iacute;a interna.
+				</p>
+			</li>
+			<li><h4>Foros de discusi&oacute;n</h4>
+				<p align="justify">
+				Dentro de SWAD existen los siguientes <a href="http://es.wikipedia.org/wiki/Foro_(Internet)">foros de discusi&oacute;n</a>:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>
+					Un foro &uacute;nico sobre el <strong>uso de SWAD</strong> para todos los <strong>estudiantes y profesores</strong>.
+					</li>
+					<li>
+					Un foro &uacute;nico sobre el <strong>uso de SWAD</strong> para todos los <strong>profesores</strong>.
+					</li>
+					<li>
+					Un foro &uacute;nico de toda la <strong>universidad</strong> para todos los <strong>estudiantes y profesores</strong>.
+					</li>
+					<li>
+					Un foro &uacute;nico de toda la <strong>universidad</strong> para todos los <strong>profesores</strong>.
+					</li>
+					<li>
+					Un foro espec&iacute;fico de cada <strong>titulaci&oacute;n</strong> para <strong>estudiantes y profesores</strong> inscritos en asignaturas de esa titulaci&oacute;n.
+					</li>
+					<li>
+					Un foro espec&iacute;fico de cada <strong>titulaci&oacute;n</strong> para <strong>profesores</strong> inscritos en asignaturas de esa titulaci&oacute;n.
+					</li>
+					<li>
+					Un foro espec&iacute;fico de cada <strong>asignatura</strong> para <strong>estudiantes y profesores</strong> inscritos en ella.
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				En la siguiente pantalla se muestra el acceso a cada uno de esos foros:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/foros.png"><img border="0" src="img/foros_chica.png" alt="Foros de discusi&oacute;n en SWAD" width="320" height="200"><br />
+						Acceso a los foros de discusi&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Si un foro aparece en negrita significa que contiene hebras con mensajes m&aacute;s recientes
+				que el mensaje m&aacute;s reciente visto por el usuario identificado en visitas anteriores a ese foro.
+				</p>
+				<p align="justify">
+				Dentro cada uno de los foros hay dos niveles:
+				</p>
+				<ul>
+					<li>
+						<p align="justify">
+						<em>Nivel 1: hebras o temas de discusi&oacute;n</em>.
+						Para cada hebra se presentan el asunto,
+						los autores (fotograf&iacute;a incluida) y las fechas
+						del primer y del &uacute;ltimo mensaje de esa hebra,
+						el n&uacute;mero de mensajes totales de la hebra,
+						el n&uacute;mero de usuarios distintos que han escrito alg&uacute;n mensaje en la hebra,
+						y el n&uacute;mero de usuarios distintos que han le&iacute;do alg&uacute;n mensaje de la hebra.
+						Las hebras aparecen ordenadas en orden temporal decreciente
+						por la fecha del primer mensaje
+						o por la fecha del &uacute;ltimo mensaje (opci&oacute;n por omisi&oacute;n).
+						Las hebras de un foro se agrupan en p&aacute;ginas de 10 hebras.
+						Si una hebra contiene mensajes m&aacute;s recientes que la &uacute;ltima visita del usuario identificado a dicha hebra,
+						esta aparecer&aacute; en verde.
+						</p>
+						<p align="justify">
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/foro-discusion-nivel1.png"><img border="0" src="img/foro-discusion-nivel1_chica.png" alt="Foro de discusi&oacute;n (primer nivel)" width="320" height="200"><br />
+								Primer nivel de un foro (hebras de discusi&oacute;n)</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						<em>Nivel 2: mensajes dentro de una hebra</em>.
+						Se muestran la fecha, el asunto, el autor (fotograf&iacute;a incluida),
+						y el contenido de todos los mensajes dentro de la hebra, ordenados comenzando por el m&aacute;s antiguo y terminando por el m&aacute;s reciente.
+						Los mensajes de una hebra aparecen agrupados en p&aacute;ginas de 10 mensajes.
+						Los mensajes m&aacute;s recientes que la &uacute;ltima visita del usuario identificado a la hebra aparecen en verde.
+						</p>
+						<p align="justify">
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/foro-discusion-nivel2.png"><img border="0" src="img/foro-discusion-nivel2_chica.png" alt="Foro de discusi&oacute;n (segundo nivel)" width="320" height="200"><br />
+								Segundo nivel de un foro (mensajes dentro de una hebra)</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+				</ul>
+				<p align="justify">
+				En ambos niveles se muestra tambi&oacute;n un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> para enviar un nuevo mensaje.
+				La herramienta firma cada mensaje autom&aacute;ticamente con el nombre del autor,
+				advirti&oacute;ndose de ello al usuario. No es posible escribir mensajes an&oacute;nimos.
+				</p>
+				<p align="justify">
+				El autor de un mensaje puede eliminar dicho mensaje si a&uacute;n no ha tenido respuestas.
+				Los profesores pueden eliminar definitivamente hebras de discusi&oacute;n de los foros de sus asignaturas.
+				Los administradores de titulaci&oacute;n y los superusuarios tambi&oacute;n pueden eliminar hebras de los foros de las titulaciones.
+				Los superusuarios pueden eliminar hebras de los foros de SWAD y de la universidad.
+				</p>
+				<p align="justify">
+				Los profesores pueden moderar (censurar) mensajes individuales dentro de las hebras de los foros de sus asignaturas.
+				Los administradores de titulaci&oacute;n y los superusuarios tambi&oacute;n pueden moderar mensajes de hebras de los foros de las titulaciones.
+				Los superusuarios pueden moderar mensajes de hebras de los foros de SWAD y de la universidad.
+				</p>
+				<p align="justify">
+				Los superusuarios pueden mover hebras de un foro a otro.
+				</p>
+			</li>
+			<li><h4>Pizarra y chat</h4>
+				<p align="justify">
+				Esta opci&oacute;n permite acceder a diversas salas de
+				pizarra vitual/<a href="http://es.wikipedia.org/wiki/Chat">chat</a>.
+				</p>
+				<p align="justify">
+				<ul>
+					<li>
+					Una sala &uacute;nica de toda la <strong>universidad</strong> para todos los <strong>estudiantes y profesores</strong>.
+					</li>
+					<li>
+					Una sala &uacute;nica de toda la <strong>universidad</strong> para todos los <strong>estudiantes</strong>.
+					</li>
+					<li>
+					Una sala &uacute;nica de toda la <strong>universidad</strong> para todos los <strong>profesores</strong>.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>titulaci&oacute;n</strong> para <strong>estudiantes y profesores</strong> inscritos en asignaturas de esa titulaci&oacute;n.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>titulaci&oacute;n</strong> para <strong>estudiantes</strong> inscritos en asignaturas de esa titulaci&oacute;n.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>titulaci&oacute;n</strong> para <strong>profesores</strong> inscritos en asignaturas de esa titulaci&oacute;n.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>asignatura</strong> para <strong>estudiantes y profesores</strong> inscritos en ella.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>asignatura</strong> para <strong>estudiantes</strong> inscritos en ella.
+					</li>
+					<li>
+					Una sala espec&iacute;fica de cada <strong>asignatura</strong> para <strong>profesores</strong> inscritos en ella.
+					</li>
+				</ul>
+				</p>
+				<p align="justify">
+				En la siguiente pantalla se muestra el acceso a cada una de las salas disponibles para el usuario identificado (en este caso un profesor).
+				Junto a cada sala se indica el n&uacute;mero de usuarios conectados actualmente en ella.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/salas-chat.png"><img border="0" src="img/salas-chat_chica.png" alt="Salas de chat" width="320" height="200"><br />
+						Salas de chat</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Al entrar a una de las salas, aparece la ventana con la conversaci&oacute;n y los usuarios de esa sala.
+				</p>
+				<p align="justify">
+				La siguiente captura de pantalla (de la versi&oacute;n 4.60.3 de 25 de octubre de 2004)
+				muestra el aspecto que ten&iacute;a el primer m&oacute;dulo de
+				<a href="http://es.wikipedia.org/wiki/Chat">chat</a> sin pizarra:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/chat-version1.png"><img border="0" src="img/chat-version1_chica.png" alt="Chat (primera versi&oacute;n)" width="256" height="192"><br />
+						Primera versi&oacute;n del m&oacute;dulo de chat</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En la versi&oacute;n 4.102 de 29/sep/2005 se cambi&oacute; el m&oacute;dulo anterior
+				por un nuevo chat que ya inclu&iacute;a la pizarra virtual.
+				En ella pod&iacute;an dibujarse esquemas como si se tratara se una <a href="http://es.wikipedia.org/wiki/Pizarra">pizarra</a> convencional:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/pizarra-chat-version2.png"><img border="0" src="img/pizarra-chat-version2_chica.png" alt="Pizarra/chat (segunda versi&oacute;n)" width="256" height="192"><br />
+						Segunda versi&oacute;n del chat, que ya incorporaba la pizarra virtual</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En la versi&oacute;n Versi&oacute;n 6.38 de 21/jun/2007 se cambi&oacute; el m&oacute;dulo anterior de pizarra virtual y chat por uno completamente nuevo:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/pizarra-chat-version3.png"><img border="0" src="img/pizarra-chat-version3_chica.png" alt="Pizarra/chat (tercera versi&oacute;n)" width="320" height="200"><br />
+						Versi&oacute;n actual del chat con pizarra virtual</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Las principales ventajas de este chat respecto a las versiones anteriores son
+				la identificaci&oacute;n de los usuarios mediante fotograf&iacute;as y nombres en lugar de apodos
+				y la posibilidad de guardar tanto las conversaciones como los dibujos de la pizarra.
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de usuarios de la asignatura -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Estad&iacute;sticas&quot;:</h3>
+		<p align="justify">
+		Cada vez que un usuario accede a alguna de las funcionalidades de la plataforma,
+		se registran:
+		</p>
+		<p align="justify">
+		<ul>
+			<li>La titulaci&oacute;n desde la que accede</li>
+			<li>La asignatura desde la que accede</li>
+			<li>El DNI y el tipo de usuario</li>
+			<li>La fecha y la hora</li>
+			<li>El tiempo de generaci&oacute;n de la p&aacute;gina y el tiempo de env&iacute;o</li>
+			<li>La acci&oacute;n realizada</li>
+			<li>La <a href="http://es.wikipedia.org/wiki/Direcci%C3%B3n_IP">direcci&oacute;n IP</a> desde la que se accede</li>
+			<li>Observaciones como mensajes de error graves</li>
+		</ul>
+		</p>
+		<p align="justify">
+		En la pesta&ntilde;a &quot;Estad&iacute;sticas&quot; se muestran las siguientes opciones
+		relacionadas con la consulta de accesos y estad&iacute;sticas sobre la asignatura seleccionada
+		o sobre todo el sistema:
+		</p>
+		<ul>
+			<li><h4>Estad&iacute;sticas de acceso a la asignatura</h4>
+				<p align="justify">
+				Los profesores de una asignatura pueden consultar de diversas formas
+				los accesos realizados entre dos fechas a elegir (por omisi&oacute;n, el &uacute;ltimo mes),
+				por los profesores y estudiantes seleccionados, mediante el siguiente <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/accesos-asignatura1.png"><img border="0" src="img/accesos-asignatura1_chica.png" alt="Selecci&oacute;n del tipo de consulta de accesos a la asignatura (1 de 2)" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de consulta de accesos a la asignatura (1 de 2)</a>
+					</td>
+					</tr>
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/accesos-asignatura2.png"><img border="0" src="img/accesos-asignatura2_chica.png" alt="Selecci&oacute;n del tipo de consulta de accesos a la asignatura (2 de 2)" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de consulta de accesos a la asignatura (2 de 2)</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Se puede consultar, dentro de un rango de fechas:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>El n&uacute;mero total de accesos</li>
+					<li>El n&uacute;mero de usuarios distintos</li>
+					<li>El n&uacute;mero de accesos por usuario</li>
+					<li>El tiempo de generaci&oacute;n de p&aacute;gina</li>
+					<li>El tiempo de env&iacute;o de p&aacute;gina</li>
+				</ul>
+				</p>
+				<p align="justify">
+				La consulta se puede restringir a una acci&oacute;n concreta o a todas las acciones, y los resultados se pueden distribuir:
+				</p>
+				<ul>
+					<li>
+						<p align="justify">
+						Por usuario:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-usuario.png"><img border="0" src="img/accesos-asignatura-por-usuario_chica.png" alt="Accesos a la asignatura por usuario" width="320" height="200"><br />
+								Accesos a la asignatura por usuario</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por d&iacute;as:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-dias.png"><img border="0" src="img/accesos-asignatura-por-dias_chica.png" alt="Accesos a la asignatura por d&iacute;as" width="320" height="200"><br />
+								Accesos a la asignatura por d&iacute;as</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por d&iacute;as y hora del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-dias-y-hora.png"><img border="0" src="img/accesos-asignatura-por-dias-y-hora_chica.png" alt="Accesos a la asignatura por d&iacute;as y hora del d&iacute;a" width="320" height="200"><br />
+								Accesos a la asignatura por d&iacute;as y hora del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por semanas:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-meses.png"><img border="0" src="img/accesos-asignatura-por-semanas_chica.png" alt="Accesos a la asignatura por semanas" width="320" height="200"><br />
+								Accesos a la asignatura por semanas</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por meses:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-meses.png"><img border="0" src="img/accesos-asignatura-por-meses_chica.png" alt="Accesos a la asignatura por meses" width="320" height="200"><br />
+								Accesos a la asignatura por meses</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por hora del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-hora.png"><img border="0" src="img/accesos-asignatura-por-hora_chica.png" alt="Accesos a la asignatura por hora del d&iacute;a" width="320" height="200"><br />
+								Accesos a la asignatura por hora del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por minuto del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-minuto.png"><img border="0" src="img/accesos-asignatura-por-minuto_chica.png" alt="Accesos a la asignatura por minuto del d&iacute;a" width="320" height="200"><br />
+								Accesos a la asignatura por minuto del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por acci&oacute;n:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-asignatura-por-accion.png"><img border="0" src="img/accesos-asignatura-por-accion_chica.png" alt="Accesos a la asignatura por acci&oacute;n" width="320" height="200"><br />
+								Accesos a la asignatura por acci&oacute;n</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+				</ul>
+				<p align="justify">
+				Tambi&oacute;n se puede realizar una consulta detallada de los accesos:
+				</p>
+				<p align="justify">
+					<table border="0">
+						<tr>
+						<td align="left" valign="top">
+							<a href="img/accesos-asignatura-detallados.png"><img border="0" src="img/accesos-asignatura-detallados_chica.png" alt="Accesos a la asignatura detallados" width="320" height="200"><br />
+							Accesos a la asignatura detallados</a>
+						</td>
+						</tr>
+					</table>
+				</p>
+			</li>
+			<li><h4>Estad&iacute;sticas de acceso a toda la plataforma</h4>
+				<p align="justify">
+				Cualquier usuario identificado de SWAD puede consultar de diversas formas
+				los accesos realizados entre dos fechas a elegir (por omisi&oacute;n, el &uacute;ltimo mes),
+				por los usuarios del tipo seleccionado, mediante el siguiente <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/accesos-swad.png"><img border="0" src="img/accesos-swad_chica.png" alt="Selecci&oacute;n del tipo de consulta de accesos a SWAD" width="320" height="200"><br />
+						Selecci&oacute;n del tipo de consulta de accesos a SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Se pueden consultar los accesos de los siguientes tipos de usuarios:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>todos los usuarios identificados (opci&oacute;n por omisi&oacute;n)</li>
+					<li>todos los accesos, de usuarios identificados o sin identificar</li>
+					<li>administradores de titulaci&oacute;n</li>
+					<li>profesores (accesos de profesores identificados, exceptuando los accesos a asignaturas en las que no est&eacute;n inscritos)</li>
+					<li>estudiantes (accesos de estudiantes identificados, exceptuando los accesos a asignaturas en las que no est&eacute;n inscritos)</li>
+					<li>invitados (accesos de estudiantes y profesores identificados a asignaturas en las que no est&aacute;n inscritos)</li>
+					<li>desconocidos (accesos de usuarios sin identificar)</li>
+					<li>el usuario identificado</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Se puede consultar:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>El n&uacute;mero total de accesos</li>
+					<li>El n&uacute;mero de usuarios distintos</li>
+					<li>El n&uacute;mero de accesos por usuario</li>
+					<li>El tiempo de generaci&oacute;n de p&aacute;gina</li>
+					<li>El tiempo de env&iacute;o de p&aacute;gina</li>
+				</ul>
+				</p>
+				<p align="justify">
+				Adem&aacute;s, se puede restringir la consulta a:
+				</p>
+				<p align="justify">
+				<ul>
+					<li>todos los accesos</li>
+					<li>los accesos realizados dentro de la titulaci&oacute;n actual</li>
+					<li>los accesos realizados dentro de la asignatura actual</li>
+				</ul>
+				</p>
+				<p align="justify">
+				La consulta se puede restringir a una acci&oacute;n concreta o a todas las acciones, y los resultados se pueden distribuir:
+				</p>
+				<ul>
+					<li>
+						<p align="justify">
+						Por d&iacute;as:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-dias.png"><img border="0" src="img/accesos-swad-por-dias_chica.png" alt="Accesos a SWAD por d&iacute;as" width="320" height="200"><br />
+								Accesos a SWAD por d&iacute;as</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por d&iacute;as y hora del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-dias-y-hora.png"><img border="0" src="img/accesos-swad-por-dias-y-hora_chica.png" alt="Accesos a la asignatura por d&iacute;as y hora del d&iacute;a" width="320" height="200"><br />
+								Accesos a SWAD por d&iacute;as y hora del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por semanas:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-semanas.png"><img border="0" src="img/accesos-swad-por-semanas_chica.png" alt="Accesos a SWAD por semanas" width="320" height="200"><br />
+								Accesos a SWAD por semanas</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por meses:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-meses.png"><img border="0" src="img/accesos-swad-por-meses_chica.png" alt="Accesos a SWAD por meses" width="320" height="200"><br />
+								Accesos a SWAD por meses</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por hora del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-hora.png"><img border="0" src="img/accesos-swad-por-hora_chica.png" alt="Accesos a SWAD por hora del d&iacute;a" width="320" height="200"><br />
+								Accesos a SWAD por hora del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por minuto del d&iacute;a:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-minuto.png"><img border="0" src="img/accesos-swad-por-minuto_chica.png" alt="Accesos a SWAD por minuto del d&iacute;a" width="320" height="200"><br />
+								Accesos a SWAD por minuto del d&iacute;a</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por acci&oacute;n:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-accion.png"><img border="0" src="img/accesos-swad-por-accion_chica.png" alt="Accesos a SWAD por acci&oacute;n" width="320" height="200"><br />
+								Accesos a SWAD por acci&oacute;n</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por titulaci&oacute;n:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-titulacion.png"><img border="0" src="img/accesos-swad-por-titulacion_chica.png" alt="Accesos a SWAD por titulaci&oacute;n" width="320" height="200"><br />
+								Accesos a SWAD por titulaci&oacute;n</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Por asignatura:
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/accesos-swad-por-asignatura.png"><img border="0" src="img/accesos-swad-por-asignatura_chica.png" alt="Accesos a SWAD por asignatura" width="320" height="200"><br />
+								Accesos a SWAD por asignatura</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+				</ul>
+				</p>
+			</li>
+			<li><h4>Uso de swad</h4>
+				<p align="justify">
+				Cualquier usuario puede consultar el uso actual de SWAD:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/uso-swad.png"><img border="0" src="img/uso-swad_chica.png" alt="Uso de SWAD" width="320" height="200"><br />
+						Uso de SWAD</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				En esta opci&oacute;n se muestra en primer lugar el n&uacute;mero de titulaciones,
+				el n&uacute;mero total de asignaturas creadas en SWAD,
+				el n&uacute;mero de asignaturas en las que hay profesores inscritos,
+				y el n&uacute;mero de asignaturas en las que hay estudiantes inscritos.
+				</p>
+				<p align="justify">
+				En segundo lugar se muestran dos filas, una para estudiantes y otra para profesores,
+				en las que se indican:
+				</p>
+				<ul>
+					<li>el n&uacute;mero de usuarios de cada tipo inscritos en al menos una asignatura</li>
+					<li>el n&uacute;mero de usuarios de cada tipo que no est&aacute;n inscritos en ninguna asignatura</li>
+					<li>la suma de los dos n&uacute;meros anteriores</li>
+					<li>el n&uacute;mero promedio de asignaturas en las que est&aacute; inscrito cada usuario
+					(considerando solo los usuarios que est&aacute;n inscritos en al menos una asignatura)</li>
+					<li>el n&uacute;mero promedio de usuarios inscritos en cada asignatura
+					(considerando solo las asignaturas con al menos un usuario)</li>
+				</ul>
+				<p align="justify">
+				Tambi&oacute;n se muestran estad&iacute;sticas sobre el n&uacute;mero de usuarios (y el porcentaje sobre el total)
+				que en el momento actual han elegido cada uno de los idiomas,
+				cada uno de los dise&ntilde;os de colores de la pantalla, y cada una de las configuraciones de columnas posibles.
+				</p>
+			</li>
+			<li><h4>Orla de titulaciones</h4>
+				<p align="justify">
+				Consiste en una orla en la que se muestra la mediana (opci&oacute;n por omisi&oacute;n) o la media aritm&eacute;tica, calculadas p&iacute;xel a p&iacute;xel,
+				de las fotograf&iacute;as de todos los estudiantes de cada titulaci&oacute;n.
+				El tama&ntilde;o (&aacute;rea) de las fotograf&iacute;as promedio puede ser:
+				<ul>
+					<li>proporcional al n&uacute;mero de estudiantes con fotograf&iacute;a en cada titulaci&oacute;n (opci&oacute;n por omisi&oacute;n)</li>
+					<li>proporcional al n&uacute;mero de estudiantes en cada titulaci&oacute;n</li>
+					<li>proporcional al porcentaje de estudiantes con fotograf&iacute;a en cada titulaci&oacute;n</li>
+					<li>igual para todas las titulaciones</li>
+				</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla-titulaciones.png"><img border="0" src="img/orla-titulaciones_chica.png" alt="Orla con las fotograf&iacute;as promedio de cada titulaci&oacute;n" width="320" height="200"><br />
+						Orla con las fotograf&iacute;as promedio de cada titulaci&oacute;n</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Es posible mostrar una vista de la orla lista para imprimir:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/orla-titulaciones-impresion.png"><img border="0" src="img/orla-titulaciones-impresion_chica.png" alt="Orla con las fotograf&iacute;as promedio de cada titulaci&oacute;n lista para imprimir" width="320" height="200"><br />
+						Orla con las fotograf&iacute;as promedio de cada titulaci&oacute;n lista para imprimir</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Las fotograf&iacute;as promedio no est&aacute;n siempre actualizadas, ya que cada actualizaci&oacute;n consume varios minutos.
+				Los superusuarios disponen de un enlace para actualizarlas de tiempo en tiempo.
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	<!-- Pesta&ntilde;a de datos personales -->
+
+	<li><h3>Opciones de la pesta&ntilde;a &quot;Personal&quot;:</h3>
+
+		<p align="justify">La pesta&ntilde;a &quot;Personal&quot; no depende de la asignatura en la que nos encontremos y
+		permite el acceso a los datos personales del usuario identificado:</p>
+
+		<ul>
+			<li><h4>Contrase&ntilde;a de acceso</h4>
+				<p align="justify">
+				Esta opci&oacute;n permite cambiar la <a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a> de acceso del usuario identificado.
+				Se muestra una pantalla en la que ha de introducirse una vez
+				la contrase&ntilde;a actual y dos veces la nueva contrase&ntilde;a:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/contrasena-acceso.png"><img border="0" src="img/contrasena-acceso_chica.png" alt="Contrase&ntilde;a de acceso" width="320" height="200"><br />
+						Petici&oacute;n de una nueva contrase&ntilde;a</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/cambio-contrasena.png"><img border="0" src="img/cambio-contrasena_chica.png" alt="Cambio de la contrase&ntilde;a de acceso" width="320" height="200"><br />
+						Cambio de la contrase&ntilde;a</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				La primera vez que un usuario entra a SWAD solo tiene que escribir
+				el n&uacute;mero de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>.
+				(puede escribir una contrase&ntilde;a, pero es ignorada).
+				Antes de acceder a cualquiera de las dem&aacute;s opciones,
+				el usuario tiene que fijar necesariamente una
+				<a href="http://es.wikipedia.org/wiki/Contrase&ntilde;a">contrase&ntilde;a</a>,
+				que podr&aacute; cambiar en adelante tantas veces como desee.
+				</p>
+				<p align="justify">
+				Existen ciertas restricciones respecto a la contrase&ntilde;a:
+				<ul>
+					<li>ha de tener al menos 10 caracteres</li>
+					<li>no puede ser un DNI, un nombre o un apellido de los almacenados en la base de datos de usuarios</li>
+					<li>al menos un car&aacute;cter ha de ser no num&eacute;rico</li>
+					<li>no puede haber m&aacute;s de tres usuarios con la misma contrase&ntilde;a</li>
+					<li>se distinguen las may&uacute;sculas de las min&uacute;sculas</li>
+				</ul>
+				</p>
+			</li>
+			<li><h4>Apodo o <em>nickname</em></h4>
+				<p align="justify">
+				Cada usuario puede tener un <a href="http://es.wikipedia.org/wiki/Alias">apodo, alias, o <em>nickname</em></a>,
+				&uacute;til para acceder a la plataforma sin tener que escribir el
+				n&uacute;mero de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>,
+				y para identificaci&oacute;n en las salas de
+				pizarra/<a href="http://es.wikipedia.org/wiki/Chat">chat</a>.
+				Un <a href="http://es.wikipedia.org/wiki/Alias">apodo</a> no puede ser usado por m&aacute;s de un usuario,
+				por lo que se asigna al primero que lo solicita.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/apodo.png"><img border="0" src="img/apodo_chica.png" alt="Cambio de apodo" width="320" height="200"><br />
+						Petici&oacute;n de un nuevo apodo</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="img/cambio-apodo.png"><img border="0" src="img/cambio-apodo_chica.png" alt="Comfirmaci&oacute;n del cambio de apodo" width="320" height="200"><br />
+						Confirmaci&oacute;n de cambio de apodo</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Ficha personal</h4>
+				<p align="justify">
+				En la pantalla se presenta un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a>
+				inspirado en la ficha cl&iacute;sica en papel.
+				Este servicio es com&uacute;n para todas las asignaturas que comparten la plataforma,
+				de modo que cada vez que el usuario actualiza su ficha, los datos est&aacute;n disponibles
+				en cualquiera de las asignaturas en que las que est&aacute; inscrito.
+				Se guarda informaci&oacute;n diferente para estudiantes y profesores:
+				</p>
+				<ul>
+					<li>
+						<p align="justify">
+						Ficha de un estudiante:
+						<ul>
+							<li>G&eacute;nero <em>(campo obligatorio)</em></li>
+							<li>Primer apellido <em>(campo obligatorio)</em></li>
+							<li>Segundo apellido</li>
+							<li>Nombre <em>(campo obligatorio)</em></li>
+							<li>Fotograf&iacute;a</li>
+							<li>Privacidad de la fotograf&iacute;a (*)</li>
+							<li>Correo electr&uacute;nico <em>(campo obligatorio)</em></li>
+							<li>P&aacute;gina web</li>
+ 							<li>Nombre en Skype</li>
+							<li>Domicilio local</li>
+							<li>Tel&eacute;fono (local)</li>
+							<li>Domicilio familiar</li>
+							<li>Tel&eacute;fono (familiar)</li>
+							<li>Lugar de origen (ciudad, pa&iacute;s,...)</li>
+							<li>Fecha de nacimiento (d&iacute;a, mes y a&ntilde;o)</li>
+							<li>Observaciones comunes para todas las asignaturas</li>
+						</ul>
+						</p>
+						<p align="justify">
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/ficha-estudiante.png"><img border="0" src="img/ficha-estudiante_chica.png" alt="Ficha personal de un estudiante" width="320" height="200"><br />
+								Formulario para la ficha de un estudiante</a>
+							</td>
+							<td align="left" valign="top">
+								<a href="img/actualizacion-ficha-estudiante.png"><img border="0" src="img/actualizacion-ficha-estudiante_chica.png" alt="Actualizaci&oacute;n de ficha de un estudiante" width="320" height="200"><br />
+								Actualizaci&oacute;n de la ficha de un estudiante</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+					<li>
+						<p align="justify">
+						Ficha de un profesor:
+						<ul>
+							<li>G&eacute;nero <em>(campo obligatorio)</em></li>
+							<li>Primer apellido <em>(campo obligatorio)</em></li>
+							<li>Segundo apellido</li>
+							<li>Nombre <em>(campo obligatorio)</em></li>
+							<li>Fotograf&iacute;a</li>
+							<li>Privacidad de la fotograf&iacute;a (*)</li>
+							<li>Correo electr&uacute;nico <em>(campo obligatorio)</em></li>
+							<li>P&aacute;gina web</li>
+ 							<li>Nombre en Skype</li>
+							<li>Departamento <em>(a elegir en una lista desplegable)</em></li>
+							<li>Centro <em>(a elegir en una lista desplegable)</em></li>
+							<li>Despacho</li>
+							<li>Tel&eacute;fono</li>
+						</ul>
+						</p>
+						<p align="justify">
+						<table border="0">
+							<tr>
+							<td align="left" valign="top">
+								<a href="img/ficha-profesor.png"><img border="0" src="img/ficha-profesor_chica.png" alt="Ficha personal de un profesor o administrador" width="320" height="200"><br />
+								Formulario para la ficha de una profesora</a>
+							</td>
+							<td align="left" valign="top">
+								<a href="img/actualizacion-ficha-profesor.png"><img border="0" src="img/actualizacion-ficha-profesor_chica.png" alt="Actualizaci&oacute;n de ficha de una profesora" width="320" height="200"><br />
+								Actualizaci&oacute;n de la ficha de una profesora</a>
+							</td>
+							</tr>
+						</table>
+						</p>
+					</li>
+				</ul>
+				<p align="justify">
+				(*) Seg&uacute;n [Canaleta y Vernet 2003]:<br />
+					<small><CITE>Otra pr&aacute;ctica habitual, realizada sin ning&uacute;n &aacute;nimo perverso, es la divulgaci&oacute;n a trav&eacute;s de la
+					Red de im&aacute;genes personales. <STRONG>Sea a trav&eacute;s de Internet o en una intranet de un centro
+					universitario, la divulgaci&oacute;n de fotograf&iacute;as personales est&aacute; prohibida sin el consentimiento
+					expl&iacute;cito de la persona.</STRONG>
+					</CITE></small>
+				<br />
+				En SWAD, un usuario puede elegir si su foto es p&uacute;blica o privada (opci&oacute;n por omisi&oacute;n).
+				Un estudiante puede ver la fotos de otro estudiante solo si ambas fotos existen y son p&uacute;blicas.
+				Un estudiante puede ver las fotos de otro usuario que no sea estudiante solo si la foto del otro usuario es p&uacute;blica o si ambos comparten alguna asignatura.
+				Un profesor o un administrador de titulaci&oacute;n solo puede ver la foto de otro usuario si la foto del otro usuario es p&uacute;blica o si ambos comparten alguna asignatura.
+				Los superusuarios pueden ver cualquier foto.
+				</p>
+			</li>
+			<li><h4>Env&iacute;o o eliminaci&oacute;n de fotograf&iacute;a</h4>
+				<p align="justify">
+				La conveniencia de que el profesor disponga de una fotograf&iacute;a del estudiante
+				que le permita asociar un nombre a una persona est&aacute; fuera de duda.
+				El profesor, por ejemplo, puede incluir las fotos
+				en una <a href="http://es.wikipedia.org/wiki/Hoja_de_c&aacute;lculo">hoja de c&aacute;lculo</a>
+				utilizada para la evaluaci&oacute;n de los estudiantes, de modo que sepa en todo momento a qui&oacute;n est&aacute; evaluando.
+				</p>
+				<p align="justify">
+				En el primer a&ntilde;o de utilizaci&oacute;n de esta plataforma,
+				el estudiante deb&iacute;a enviar por <a href="http://es.wikipedia.org/wiki/Correo_electr&uacute;nico">correo electr&uacute;nico</a> su fotograf&iacute;a
+				adjunt&aacute;ndola en un <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a> <em><a href="http://es.wikipedia.org/wiki/JPEG">jpeg</a></em> cuyo nombre fuera
+				el n&uacute;mero de <a href="http://www.mir.es/sites/mir/dni/">DNI</a>/<a href="http://es.wikipedia.org/wiki/Pasaporte">Pasaporte</a>
+				m&aacute;s la <a href="http://es.wikipedia.org/wiki/Extensi&oacute;n_de_archivo">extensi&oacute;n</a> ".jpg".
+				Esto significaba un trabajo extra para el profesor: leer el correo,
+				guardar la foto en la <a href="http://es.wikipedia.org/wiki/Carpeta">carpeta</a> adecuada
+				dentro del <a href="http://es.wikipedia.org/wiki/Servidor_web">servidor web</a>,
+				y en muchas ocasiones realizar correcciones en el <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a>,
+				bien porque no fuera de la resoluci&oacute;n convenida, porque la calidad de la fotograf&iacute;a fuera &iacute;nfima,
+				porque no estuviera en formato <em><a href="http://es.wikipedia.org/wiki/JPEG">jpeg</a></em>
+				o porque el nombre no fuera correcto.
+				</p>
+				<p align="justify">
+				Desde la versi&oacute;n 1.1 se proporciona un <a href="http://es.wikipedia.org/wiki/Formulario">formulario</a> para el env&iacute;o de la fotograf&iacute;a.
+				La recepci&oacute;n y comprobaci&oacute;n de formato,
+				y la asignaci&oacute;n del nombre del <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivo</a> se realizan autom&aacute;ticamente.
+				<p align="justify">
+				En el curso 2003-2004, los antiguos estudiantes Jes&uacute;s &Aacute;lvarez Mart&iacute;n
+				y Alberto Rodrigo G&aacute;miz dise&ntilde;aron -en su proyecto fin de carrera de
+				<em>Ingeniero Inform&aacute;tico</em> titulado
+				<em>Detecci&oacute;n y mejora autom&aacute;ticas de la calidad de fotograf&iacute;as de tipo carnet
+				digitales en un entorno web de gesti&oacute;n de fichas de estudiantes</em> [&Aacute;lvarez y Rodrigo 2003] -
+				un programa para mejorar autom&aacute;ticamente las fotograf&iacute;as de baja calidad
+				o rechazar las que no mantienen una relaci&oacute;n de aspecto adecuada,
+				las que tienen un fondo oscuro o las que no corresponden a un rostro humano.
+				</p>
+				<p align="justify">
+				Desde mediados de 2005, el antiguo estudiante Daniel Jes&uacute;s Calandria Hern&aacute;ndez est&aacute; encargado de mejorar dicho programa
+				y poco a poco se van incorporando actualizaciones en el procesamiento de las fotograf&iacute;as.
+				Actualmente, el programa es capaz de reconocer y seleccionar el rostro en una fotograf&iacute;a de cuerpo entero.
+				</p>
+				<p align="justify">
+				En las siguientes capturas de pantalla se muestran el formulario para enviar o eliminar la fotograf&iacute;a
+				y la confirmaci&oacute;n de su recepci&oacute;n y procesamiento o de su eliminaci&oacute;n:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/envio-foto.png"><img border="0" src="img/envio-foto_chica.png" alt="Env&iacute;o de foto" width="320" height="200"><br />
+						Formulario para enviar la fotograf&iacute;a</a>
+					</td>
+					<td align="left" valign="top">
+		 				<a href="img/recepcion-foto.png"><img border="0" src="img/recepcion-foto_chica.png" alt="Recepci&oacute;n de foto" width="320" height="200"><br />
+						Recepci&oacute;n y procesamiento de la fotograf&iacute;a</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				Los art&iacute;culos [Rodrigo et al. 2005] y [Calandria et al. 2007] ofrecen m&aacute;s informaci&oacute;n sobre el procesamiento de las fotograf&iacute;as.
+				</p>
+			</li>
+			<li><h4>Preferencias</h4>
+				<p align="justify">
+				Mediante esta opci&oacute;n, el usuario puede ajustar ciertas preferencias en la plataforma:
+				<ul>
+					<li>El idioma: alem&aacute;n, ingl&eacute;s, espa&ntilde;ol (opci&oacute;n por omisi&oacute;n), franc&eacute;s, italiano o portugu&eacute;s</li>
+					<li>El dise&ntilde;o de colores: amarillo o azul (opci&oacute;n por omisi&oacute;n)</li>
+					<li>La visibilidad de las columnas laterales (por omisi&oacute;n se muestran las dos columnas)</li>
+				</ul>
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/preferencias.png"><img border="0" src="img/preferencias_chica.png" alt="Selecci&oacute;n de preferencias" width="320" height="200"><br />
+						Selecci&oacute;n de preferencias</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Horario de mis asignaturas</h4>
+				<p align="justify">
+				Mediante esta opci&oacute;n, un usuario puede ver en una &uacute;nica tabla
+				el horario de todas las asignaturas en las que est&eacute; inscrito.
+				Puede seleccionar si quiere que se muestren todos los grupos de esas asignaturas
+				o solo los grupos en los que est&eacute; inscrito.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/horario-mis-asignaturas.png"><img border="0" src="img/horario-mis-asignaturas_chica.png" alt="Horario de todas las asignaturas" width="320" height="200"><br />
+						Horario de todas las asignaturas</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+			<li><h4>Edici&oacute;n del horario de tutor&iacute;as</h4>
+				<p align="justify">
+				Cada profesor puede editar su horario de tutor&iacute;as
+				con un sistema semejante al de edici&oacute;n del horario de la asignatura.
+				En cada casilla se puede indicar la duraci&oacute;n
+				y el lugar donde se realiza la tutor&iacute;a:
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/edicion-tutorias.png"><img border="0" src="img/edicion-tutorias_chica.png" alt="Edici&oacute;n del horario de tutor&iacute;as" width="320" height="200"><br />
+						Edici&oacute;n del horario de tutor&iacute;as</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+				<p align="justify">
+				El horario de tutor&iacute;as es com&uacute;n para todas las asignaturas.
+				Va asociado, por tanto, al profesor, y no a una asignatura concreta.
+				Por este motivo la edici&oacute;n del horario se encuentra en la pesta&ntilde;a <em>Personal</em>.
+				</p>
+			</li>
+			<li><h4>Malet&iacute;n</h4>
+				<p align="justify">
+				Cada usuario dispone de un espacio de almacenamiento en el <a href="http://es.wikipedia.org/wiki/Servidor_inform&aacute;tico">servidor</a> de SWAD,
+				con una cuota limitada tanto por tama&ntilde;o como por n&uacute;mero de <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>.
+				El usuario puede crear nuevas <a href="http://es.wikipedia.org/wiki/Carpeta">carpetas</a> o enviar <a href="http://es.wikipedia.org/wiki/Archivo_inform%C3%A1tico">archivos</a>, que podr&aacute; descargar posteriormente.
+				Esta posibilidad es &uacute;til para guardar <a href="http://es.wikipedia.org/wiki/Copia_de_seguridad">copias de seguridad</a>
+				o para mover informaci&oacute;n entre distintas localizaciones f&iacute;sicas
+				(por ejemplo, entre el centro universitario y el domicilio del usuario),
+				siempre que se disponga de conexi&oacute;n a internet, sin necesidad de utilizar
+				medios de almacenamiento externos como
+				<a href="http://es.wikipedia.org/wiki/Memoria_USB">pendrives</a>,
+				<a href="http://es.wikipedia.org/wiki/CD-R">CD-R</a>, <a href="http://es.wikipedia.org/wiki/DVD-R">DVD-R</a>, etc.
+				</p>
+				<p align="justify">
+				<table border="0">
+					<tr>
+					<td align="left" valign="top">
+						<a href="img/maletin.png"><img border="0" src="img/maletin_chica.png" alt="Malet&iacute;n de un usuario" width="320" height="200"><br />
+						Malet&iacute;n de un usuario</a>
+					</td>
+					</tr>
+				</table>
+				</p>
+			</li>
+		</ul>
+
+	</li>
+
+	</ul>
+</dd>
+
+<dt><h2>Referencias</h2></dt>
+
+<dd>
+	<small>
+	<dl>
+		<dt>[&Aacute;lvarez y Rodrigo 2003]</dt>
+			<dd>
+			J. &Aacute;lvarez, A. Rodrigo.
+			<em>Detecci&oacute;n y mejora autom&aacute;ticas de la calidad de fotograf&iacute;as de tipo carnet digitales
+			en un entorno web de gesti&oacute;n de fichas de estudiantes.</em>
+			Proyecto fin de carrera. Ingeniero Inform&aacute;tico. <a href="http://www.ugr.es/" target="_blank">Universidad de Granada</a>. Diciembre 2003.
+			</dd>
+		<dt>[Arana 2004]</dt>
+			<dd>
+			R. Arana.
+			<em>Base de datos web de libros de texto universitarios.</em>
+			Proyecto fin de carrera. Ingeniero Inform&aacute;tico. <a href="http://www.ugr.es/" target="_blank">Universidad de Granada</a>. Mayo 2004.<br />
+			</dd>
+		<dt>[Arana et al. 2004]</dt>
+			<dd>
+			R. Arana, A. Ca&ntilde;as, J. L. Bernier, E. M. Ortigosa, A. F. D&iacute;az.
+			<em>Base de datos web de libros de texto usados para docencia.</em>
+			Actas de la Conferencia Ibero-Americana IADIS WWW/Internet 2004, Madrid, octubre 2004.
+			</dd>
+		<dt>[Calandria et al. 2007]</dt>
+			<dd>
+			D. J. Calandria, A. Ca&ntilde;as, A. F. D&iacute;az.
+			<em>Detecci&oacute;n de rostros humanos mediante SVM y generaci&oacute;n de fotograf&iacute;as de tipo carn&eacute;.</em>
+			Actas del Simposio de Inteligencia Computacional SICO'2007 (celebrado dentro del CEDI 2007), Thomson, 2007.
+			</dd>
+		<dt>[Canaleta y Vernet 2003]</dt>
+			<dd>
+			X. Canaleta, D. Vernet.
+			<em>Gesti&oacute;n acad&eacute;mica y protecci&oacute;n de datos</em>.
+			Actas de JENUI'2003, IX Jornadas de Ense&ntilde;anza Universitaria de la Inform&aacute;tica, pp. 151-158,
+			Thomson Paraninfo S.A., Madrid, abril 2003.<br />
+			<a href="http://web.salleurl.edu/~xavic/material/JENUI2003.pdf" target="_blank">http://web.salleurl.edu/~xavic/material/JENUI2003.pdf</a><br />
+			<a href="http://web.salleurl.edu/~dave/papers/jenui2003a.pdf" target="_blank">http://web.salleurl.edu/~dave/papers/jenui2003a.pdf</a>
+			</dd>
+		<dt>[Ca&ntilde;as et al. 2005]</dt>
+			<dd>
+			A. Ca&ntilde;as, E. M. Ortigosa, J. L. Bernier, R. Arana, B. Prieto, A. F. D&iacute;az.
+			<em>Web database for text books used for teaching.</em>
+			Recent Research Developments in Learning Technologies, III International Conference on Multimedia & ICT's in Education (mICTE2005), Vol. 3, pp. 995-999, C&aacute;ceres (Spain), June 7-10th 2005.
+			</dd>
+		<dt>[Castillo et al. 2003]</dt>
+			<dd>
+			P. &Aacute;. Castillo, A. Prieto, A. Ca&ntilde;as, B. Prieto.
+			<em>Autoevaluaci&oacute;n a trav&eacute;s de Internet por medio de test.</em>
+			Actas de las IX Jornadas de Ense&ntilde;anza Universitaria de la Inform&aacute;tica (JENUI2003),
+			pp. 613-616, Thomson Paraninfo, S.A., C&aacute;diz, 9-12 julio 2003.
+			</dd>
+		<dt>[Rodrigo et al. 2005]</dt>
+			<dd>
+			A. E. Rodrigo,  A. Ca&ntilde;as, A. R. Masegosa, J. &Aacute;lvarez, D.J. Calandria.
+			<em>Detecci&oacute;n de rostros y mejora de la calidad de imagen en fotograf&iacute;as
+			de tipo carn&eacute; enviadas a una plataforma web.</em>
+			Actas del Simposio de Inteligencia Computacional,
+			SICO2005 (IEEE Computacional Inteligence society, SC), pp. 387-394.
+			Thomson, ISBN 84-9732-444-7,
+			I Congreso Espa&ntilde;ol de Inform&aacute;tica Inform&aacute;tica (CEDI2005). Granada, 13-16 Septiembre 2005.
+			</dd>
+	</dl>
+	</small>
+</dd>
+
+</dl>
+
+	</td>
+	</tr>
+</table>
+</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,2082 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+ <head>
+  <title>SWAD: Installation</title>
+  <style type="text/css">
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+A:active {text-decoration: none;}
+A:hover	{color:#000000;}
+body		{margin:0px;}
+td,p,ul,.h	{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#404040;font-size:11pt;}
+code		{color:#027AC6;}
+table		{border-width:0px; border-style:none;}
+img		{border-width:0px; border-style:none;}
+.SWAD{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#F8B000;font-size:16pt;font-weight:bold;}
+  </style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40768375-1', 'openswad.org', {
+    'anonymizeIp': true,
+    'storage': 'none',
+    'clientId': window.localStorage.getItem('ga_clientId')
+  });
+  ga(function(tracker) {
+    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));
+  });
+  ga('send', 'pageview');
+
+</script>
+ </head>
+
+ <body>
+  <table width="100%" border="0" cellpadding="20" cellspacing="0">
+   <tr>
+    <td align="center">
+     <table width="90%" border="0" cellspacing="20">
+
+	<tr>
+	<td align="center" class="SWAD">
+	        <a href="http://openswad.org/" class="SWAD"><img src="/logo/swad224x64.png" alt="SWAD" width="224" height="64" />
+	        <br />shared workspace at a distance</a>
+	</td>
+	</tr>
+
+	<tr>
+	<td align="center">
+		<h1>Installing SWAD</h1>
+		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
+		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2014
+	</td>
+	</tr>
+
+	<tr>
+	<td align="left">
+		<ol>
+		<li><a href="#server">Renting a server from an external provider (optional)</a></li>
+		<li><a href="#domain">Domain registration (optional)</a></li>
+		<li><a href="#system">Installing system software</a></li>
+		<li><a href="#apache">Installing and configuring Apache web server</a></li>
+		<li><a href="#mysql">Installing and configuring MySQL</a></li>
+		<li><a href="#download-swad">Downloading SWAD core</a></li>
+		<li><a href="#swad-database">Creating SWAD database</a></li>
+		<li><a href="#swad-files">Creating SWAD directories and files</a></li>
+		<li><a href="#swad-icons">Installing SWAD icons</a></li>
+		<li><a href="#dropzone">Installing DropzoneJS</a></li>
+		<li><a href="#gsoap">Compiling and installing gSOAP, required to compile SWAD core</a></li>
+		<li><a href="#compile-swad">Compiling and installing SWAD core</a></li>
+		<li><a href="#fotomaton">Installing photo processing program <code>fotomaton</code></a></li>
+		<li><a href="#photo-average">Installing photo averaging programs <code>foto_mediana</code> and <code>foto_promedio</code></a></li>
+		<li><a href="#chat-server">Installing chat server <code>swad-ircd</code></a></li>
+		<li><a href="#mail">Installing the script to send email <code>swad_smtp.py</code></a></li>
+		<li><a href="#services">Automating startup of services</a></li>
+		</ol>
+	</td>
+	</tr>
+
+	<tr>
+	<td align="left">
+
+	<ol>
+
+	<li>
+
+	<h2><a name="server">Renting a server from an external provider (optional)</a></h2>
+
+	<p>
+	This section is not aplicable if you have your own server.
+	For example, <a href="http://swad.ugr.es/">swad.ugr.es</a> is hosted
+	in a <a href="http://swad.ugr.es/server/">server at the University of Granada</a>.
+	</p>
+
+	<p>
+	An example of the server hiring process
+	used to install SWAD is described here.
+	Specifically, we focus in the case of the <a href="http://openswad.org/">OpenSWAD</a> server.
+	</p>
+
+	<p>
+	First, note that there are various types of
+	<a href="http://en.wikipedia.org/wiki/Web_hosting_service">web hosting services</a>,
+	the most common:
+	</p>
+		<ul>
+			<li><a href="http://en.wikipedia.org/wiki/Virtual_hosting">Virtual hosting</a>:
+				hardware resources are shared and the benefits are not very large,
+				it is cheap and ideal for single pages or with few visits..
+			</li>
+			<li><a href="http://en.wikipedia.org/wiki/Virtual_private_server">Virtual private server</a>:
+				hardware resources are shared, but the customer sees a complete machine
+				where he/she can install the desired software.
+			</li>
+			<li><a href="http://en.wikipedia.org/wiki/Dedicated_hosting_service">Dedicated hosting server</a>:
+				a full real machine exists and the customer has all its resources.
+			</li>
+		</ul>
+
+	<p>
+	For OpenSWAD we choose the third option, hosting in a dedicated server,
+	thinking about the medium-term needs.
+	There are a lot of providers of this type of hosting, and we opted for the company
+	<a href="http://www.hetzner.de/">Hetzner Online AG</a>, that offers good service at a competitive price.
+	</p>
+	
+	<p>
+	On March 2012 we choosed a
+	Dedicated server EX4
+	for its good price / performance ratio.
+	In this server we have root user and we must configure everything on our own,
+	as opposed to &quot;managed server&quot;, much more expensive because is managed by the supplier.
+	The monthly cost of this server is &euro;49 (19% VAT included)
+	and it also has a starting cost of setup of &euro;149 (19% VAT included).
+	Application is made online through web forms and the payment is conducted through credit card.
+	In response they email the assigned IP and the root password to access the server,
+	that you should change as you have access.
+	Chosen server features included:
+	</p>
+
+		<ul>
+			<li><a href="http://ark.intel.com/products/52213">Intel&reg; Core&trade; i7-2600</a> Quadcore,
+				Hyper-Threading Technology</li>
+			<li>RAM: 16 GiB <a href="http://en.wikipedia.org/wiki/DDR3">DDR3</a></li>
+			<li>Hard disks: 2 HD of 3 TB <a href="http://en.wikipedia.org/wiki/Serial_ATA">SATA</a>,
+				6 Gbit/s, 7200 rpm (Software-<a href="http://en.wikipedia.org/wiki/RAID#RAID_1">RAID 1</a>)</li>
+			<li><a href="http://en.wikipedia.org/wiki/Network_interface_controller">NIC</a>:
+				1 Gbit/s network card connected at 100 Mbit/s</li>
+			<li>Backup space: 100 GB</li>
+			<li>Trafic: connection is restricted to 10 Mbit/s if more than
+				10 TB/month are output.</li>
+		</ul>
+
+	<p>
+	On the software side, in the same form used to request the server,
+	we choosed, amongst various pre-installed operating systems,
+	the distribution of GNU / Linux <a href="http://en.wikipedia.org/wiki/CentOS">CentOS</a> 5.7.
+	</p>
+	
+	<p>
+	On May 2014 we have upgraded the server to a
+	<a href="http://www.hetzner.de/en/hosting/produkte_rootserver/ex40">Dedicated server EX40</a>,
+	which includes the following features by &euro;49/month (19% VAT included) and a setup fee of &euro;49 (19% VAT included):
+	</p>
+
+		<ul>
+		<li><a href="http://ark.intel.com/es-es/products/75122/">Intel&reg; Core&trade; i7-4770</a>
+			Quadcore Haswell incl. Hyper-Threading Technology</li>
+		<li>RAM 32 GiB DDR3 RAM</li>
+		<li>Hard Drive 2 x 2 TB SATA 6 Gb/s 7200 rpm. HDD (Software-RAID 1) Class Enterprise</li>
+		<li>Connection 1 Gbit/s-Port</li>
+		<li>Guaranteed Bandwidth 200 Mbit/s</li>
+		<li>Backup Space 100 GB</li>
+		<li>Inclusive Traffic 20 TB, connection is restricted to 10 Mbit/s if more than
+			20 TB/month are output.</li>
+		</ul>
+
+	<p>
+	In this new server we have choosed the distribution of GNU / Linux <a href="http://en.wikipedia.org/wiki/CentOS">CentOS</a> 6.5.
+	</p>
+
+	<p>
+	In the rest of this installation guide we give instructions for CentOS 6.5 and Ubuntu 14.04 LTS,
+	assuming that the user is root for some commands in CentOS 6.5 and a sudoer user in Ubuntu 14.04 LTS.
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="domain">Domain registration (optional)</a></h2>
+
+	<p>
+	This section is not aplicable if you have a domain or subdomain asociated to the server.
+	</p>
+
+	<p>
+	In the case of OpenSWAD, we decided adquire the domain through
+	the same company that provided the hosting:
+	<a href="http://www.hetzner.de/">Hetzner Online AG</a>.
+	We only needed <a href="http://openswad.org/">openswad.org</a>,
+	but we decided adquire <a href="http://openswad.com/">openswad.com</a> and
+	<a href="http://openswad.net/">openswad.net</a> also.
+	Each of these three domains has a yearly cost of &euro;7,90 (19% VAT included)
+	if you make a initial payment of &euro;29 (19% VAT included).
+	In our case we were exempt from this initial payment having previously engaged
+	the dedicated hosting service.
+	In order to obtain a user and a password required in the domain registration,
+	Hetzner requires the sending of a FAX with the bank details
+	for the direct debit from the receipts.
+	After sending the FAX, they immediately emailed the credentials to access,
+	and through web forms we proceeded to register the three domains.
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="system">Installing system software</a></h2>
+
+	<p>
+	In our case, once changed the root password with <code>passwd</code>,
+	we found that the distribution CentOS 6.5 was really minimal.
+	In case of minimal distribution, it is necessary to install several packages.
+	</p>
+	
+	<ul>
+	
+	<li>
+	Install the C compiler (necessary to compile SWAD):
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install gcc</code>
+	</td>
+	<td width="50%" valign="top">
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	<li>
+	Install the C++ compiler if not installed
+	(necessary to compile <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a>
+	and the programs used for processing users' photographs):
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install gcc-c++</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install build-essential</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	<li>
+	Install the programs <code>zip</code> and <code>unzip</code> if not installed:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install zip unzip</code>
+	</td>
+	<td width="50%" valign="top">
+	</td>
+	</tr>
+	</table>
+	</li>
+	
+	<li>
+	Install <code>wget</code>, <code>gmake</code>, <code>automake</code> and <code>make</code>
+	if your distribution is so minimal that they are not already installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install wget</code><br />
+		<code>yum -y install gmake</code><br />
+		<code>yum -y install automake</code><br />
+		<code>yum -y install make</code>
+	</td>
+	<td width="50%" valign="top">
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	<li>
+	It may be necessary to update packages and reboot after the update:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y update</code><br />
+		<code>reboot</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get update</code><br />
+		<code>sudo reboot</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+	
+	</ul>
+
+	<p>
+	Some of the programs used in SWAD (for example the program
+	to process users' photographs <code>fotomaton</code>)
+	need <a href="http://git-scm.com/">Git</a>,
+	<a href="http://libjpeg.sourceforge.net/">libjpeg</a>,
+	and <a href="http://opencv.org/">OpenCV</a>.
+	</p>
+
+	<ul>
+
+	<li>
+	To install <a href="http://git-scm.com/">Git</a>, you can use:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install git</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install git</code>
+	</td>
+	</tr>
+	</table>
+	If this method does not work, because <code>git</code> is not in the repositories,
+	you can try the following:<br />
+		<code>yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel</code><br />
+		<code>wget http://git-core.googlecode.com/files/git-1.7.9.3.tar.gz</code> (or later version)<br />
+		<code>tar -xzvf ./git-1.7.9.3.tar.gz</code> (or later version)<br />
+		<code>cd ./git-1.7.9.3</code> (or later version)<br />
+		<code>./configure</code><br />
+		<code>make</code><br />
+		<code>make install</code>
+	</li>
+
+	<li>
+	To install <a href="http://libjpeg.sourceforge.net/">libjpeg</a>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install libjpeg-devel</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install libjpeg-dev</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	<li>
+	To install <a href="http://opencv.org/">OpenCV</a>,
+	may be that you need having installed previously version 2.6 or later of
+	<a href="http://www.cmake.org/">CMake</a>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install cmake</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install cmake</code>
+	</td>
+	</tr>
+	</table>
+	or manually:<br />
+		<code>wget http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz</code> (or later version)<br />
+		<code>tar xvzf cmake-2.8.12.2.tar.gz</code> (or later version)<br />
+		<code>mkdir cmake-build</code><br />
+		<code>cd cmake-build</code><br />
+		<code>../cmake-2.8.12.2/bootstrap</code> (or later version)<br />
+		<code>gmake</code><br />
+		<code>gmake install</code>
+	</li>
+
+	<li>
+	For the configuration of <a href="http://opencv.org/">OpenCV</a>
+	it is also necessary to have <code>pkg-config</code> installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install pkgconfig</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install pkg-config</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	<li>
+	To install <a href="http://opencv.org/">OpenCV</a>,
+	download the code from <a href="http://opencv.org/downloads.html">http://opencv.org/downloads.html</a>.
+	We recommend to follow the steps of the installation guide, available in:<br />
+		<a href="http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html">http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html</a>.
+	As an example, we followed these steps:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+ 		<code>cd ~</code><br />
+ 		<code>wget sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip</code> (or later)<br />
+ 		<code>unzip opencv-2.4.9.zip</code> (or later)<br />
+		<code>cd opencv-2.4.9</code> (or later)<br />
+		<code>mkdir release</code><br />
+		<code>cd release</code><br />
+		<code>cmake ..</code><br />
+		<code>make</code><br />
+		<code>make install</code>
+	</td>
+	<td width="50%" valign="top">
+ 		<code>cd ~</code><br />
+ 		<code>git clone https://github.com/Itseez/opencv.git</code><br />
+		<code>cd opencv</code><br />
+		<code>mkdir release</code><br />
+		<code>cd release</code><br />
+		<code>cmake ..</code><br />
+		<code>make</code><br />
+		<code>sudo make install</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	</ul>
+
+	</li>
+
+	<li>
+
+	<h2><a name="apache">Installing and configuring Apache web server</a></h2>
+
+	<p>
+	If Apache is not installed, you can install it with:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install httpd</code><br />
+		<code>yum -y install mod_ssl openssl</code>
+	</td>
+	<td width="50%" valign="top">	
+		<code>sudo apt-get install apache2 apache2-utils</code><br />
+		<p>
+		Activate the cgi module:<br />
+			<code>sudo a2enmod cgi</code><br />
+			<code>sudo service apache2 restart</code><br />
+		</p>
+		<p>
+		Activate the secure server:<br />
+			<code>sudo a2enmod ssl</code><br />
+			<code>sudo service apache2 restart</code><br />
+			<code>sudo a2ensite default-ssl</code><br />
+			<code>sudo service apache2 reload</code>
+		</p>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Once Apache is installed, you have to configure it.
+	The configuration is in the directories:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>/etc/httpd/conf/</code><br />
+		<code>/etc/httpd/conf.d/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>/etc/apache2/</code><br />
+		<code>/etc/apache2/conf.d</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Go to configuration directory and make a backup of the original configuration file:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cd /etc/httpd/conf/</code><br />
+		<code>cp -a httpd.conf httpd.conf.original</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>cd /etc/apache2/</code><br />
+		<code>sudo cp -a apache2.conf apache2.conf.original</code>	
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		Edit the file <code>httpd.conf</code>, make the following changes, and save it:
+		<ul>
+
+		<li>
+		In <code>Section 1: Global Environment</code>, search the line:<br />
+		<code>Timeout 60</code> / <code>Timeout 120</code> (or another value)<br />
+		and replace it by:<br />
+		<code>Timeout 300</code><br />
+		This allows running SWAD CGI during 5 minutes,
+		because some slow options require a lot of time.
+		If response time expires before the end of the CGI,
+		an error 500 will be generated.
+		</li>
+
+		<li>
+		In <code>Section 2: 'Main' server configuration</code>, search the line:<br />
+		<code>ServerAdmin root@localhost</code><br />
+		and replace the email address by that of the admin.<br />
+		</li>
+
+		<li>
+		In <code>Section 2: 'Main' server configuration</code>, search the commented line:<br />
+		<code>#ServerName www.example.com:80</code><br />
+		and add the line:<br />
+		<code>ServerName your-URL</code><br />
+		after it. <code>your-URL</code> is the server address, for example <code>openswad.org</code>.
+		</li>
+
+		<li>
+		In the options for the root directory for web pages,
+		usually <code>/var/www/html</code>,
+		search the line:<br />
+		<code>Options Indexes FollowSymLinks</code><br />
+		and replace it by:<br />
+		<code>Options FollowSymLinks</code><br />
+		Remove <code>Indexes</code> to not list files in directories.
+		</li>
+
+		<li>
+		In the section <code>DirectoryIndex</code> search the line:<br />
+		<code>DirectoryIndex index.html index.html.var</code><br />
+		and replace it by:<br />
+		<code>DirectoryIndex index.html index.htm index.php</code><br />
+		</li>
+
+		<li>
+		Optionally, if you want to redirect from http://... to https://...
+		you should add the following lines at the end of the
+		<code>Section 3: Virtual Hosts</code>:<br />
+		<code>&lt;VirtualHost _default_:*&gt;<br />
+		Redirect permanent / https://openswad.org/<br />
+		&lt;/VirtualHost&gt;</code><br />
+		(replace https://openswad.org/ by your https address).
+		</li>
+
+		</ul>
+	</td>
+	<td width="50%" valign="top">
+		Edit the file <code>apache2.conf</code>:<br />
+		<code>sudo gedit apache2.conf</code><br />
+		Make the following changes, and save it:
+		<ul>
+
+		<li>
+		In <code>Global configuration</code> check that the following line is present:<br />
+		<code>Timeout 300</code><br />
+		This allows running SWAD CGI during 5 minutes,
+		because some slow options require a lot of time.
+		If response time expires before the end of the CGI,
+		an error 500 will be generated.
+		</li>
+
+		<li>
+		In the options for the directory <code>/var/www/</code>,
+		search the line:<br />
+		<code>Options Indexes FollowSymLinks</code><br />
+		and replace it by:<br />
+		<code>Options FollowSymLinks</code><br />
+		Remove <code>Indexes</code> to not list files in directories.
+		</li>
+
+		</ul>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Go to configuration directory and make a backup of the original configuration files:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cd /etc/httpd/conf.d/</code><br />
+		<code>cp -a ssl.conf ssl.conf.original</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>cd /etc/apache2/sites-available/</code><br />
+		<code>sudo cp -a 000-default.conf 000-default.conf.original</code><br />
+		<code>sudo cp -a default-ssl.conf default-ssl.conf.original</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		Edit the file <code>ssl.conf</code>, make the following changes, and save it:
+		<ul>
+		<li>
+		At the end of the file, before <code>&lt;/VirtualHost&gt;</code>,
+		add the following lines:<br />
+		<code>ScriptAlias /swad/index.html "/var/www/cgi-bin/swad/swad_es"</code><br />
+		<code>ScriptAlias /swad/ca "/var/www/cgi-bin/swad/swad_ca"</code><br />
+		<code>ScriptAlias /swad/de "/var/www/cgi-bin/swad/swad_de"</code><br />
+		<code>ScriptAlias /swad/en "/var/www/cgi-bin/swad/swad_en"</code><br />
+		<code>ScriptAlias /swad/es "/var/www/cgi-bin/swad/swad_es"</code><br />
+		<code>ScriptAlias /swad/fr "/var/www/cgi-bin/swad/swad_fr"</code><br />
+		<code>ScriptAlias /swad/gn "/var/www/cgi-bin/swad/swad_gn"</code><br />
+		<code>ScriptAlias /swad/it "/var/www/cgi-bin/swad/swad_it"</code><br />
+		<code>ScriptAlias /swad/pl "/var/www/cgi-bin/swad/swad_pl"</code><br />
+		<code>ScriptAlias /swad/pt "/var/www/cgi-bin/swad/swad_pt"</code><br />
+		In the previous lines, <code>/var/www/cgi-bin/swad/</code> is the path to the SWAD executable programs,
+		that could be in another location.
+		</li>
+		</ul>
+	</td>
+	<td width="50%" valign="top">
+		Edit the file <code>000-default.conf</code>:<br />
+		<code>sudo gedit 000-default.conf</code><br />
+		Make the following changes, and save it:
+		<ul>
+		<li>
+		Find the line:<br />
+		<code>ServerAdmin webmaster@localhost</code><br />
+		and replace the email address by that of the admin.<br />
+		</li>
+		</ul>
+
+		Edit the file <code>default-ssl.conf</code>:<br />
+		<code>sudo gedit default-ssl.conf</code><br />
+		Make the following changes, and save it:
+		<ul>
+		<li>
+		Find the line:<br />
+		<code>ServerAdmin webmaster@localhost</code><br />
+		and replace the email address by that of the admin.<br />
+		</li>
+		<li>
+		At the end of the file, before <code>&lt;/VirtualHost&gt;</code>,
+		add the following lines:<br />
+		<code>ScriptAlias /swad/index.html "/usr/lib/cgi-bin/swad/swad_es"</code><br />
+		<code>ScriptAlias /swad/ca "/usr/lib/cgi-bin/swad/swad_ca"</code><br />
+		<code>ScriptAlias /swad/de "/usr/lib/cgi-bin/swad/swad_de"</code><br />
+		<code>ScriptAlias /swad/en "/usr/lib/cgi-bin/swad/swad_en"</code><br />
+		<code>ScriptAlias /swad/es "/usr/lib/cgi-bin/swad/swad_es"</code><br />
+		<code>ScriptAlias /swad/fr "/usr/lib/cgi-bin/swad/swad_fr"</code><br />
+		<code>ScriptAlias /swad/gn "/usr/lib/cgi-bin/swad/swad_gn"</code><br />
+		<code>ScriptAlias /swad/it "/usr/lib/cgi-bin/swad/swad_it"</code><br />
+		<code>ScriptAlias /swad/pl "/usr/lib/cgi-bin/swad/swad_pl"</code><br />
+		<code>ScriptAlias /swad/pt "/usr/lib/cgi-bin/swad/swad_pt"</code><br />
+		In the previous lines, <code>/usr/lib/cgi-bin/swad/</code> is the path to the SWAD executable programs,
+		that could be in another location. 
+		</li>
+		</ul>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Restart the Apache web server with the changes just made:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>service httpd restart</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo service apache2 restart</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="mysql">Installing and configuring MySQL</a></h2>
+
+	<p>
+	Install the database manager MySQL, if not installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install mysql mysql-server</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install mysql-server</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	Install the development system for MySQL (necessary to compile SWAD):
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install mysql-devel</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install libmysqlclient-dev</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	We asume that MySQL is already installed. Now we must configure it.
+	Go to configuration directory and make a backup of the original file <code>my.cnf</code>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cd /etc/</code><br />
+		<code>cp -a my.cnf my.cnf.original</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>cd /etc/mysql/</code><br />
+		<code>sudo cp -a my.cnf my.cnf.original</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Edit inside the file <code>my.cnf</code> all the optimizations
+	that you consider neccesary for MySQL,
+	in function of the configuration of your server.
+	Probably you should increase <code>query_cache_size</code> and <code>key_buffer</code> / <code>key_buffer_size</code>.
+	</p>
+
+	<p>
+	Start MySQL server with the changes just made:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>service mysqld restart</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo service mysql restart</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Set a password for the MySQL root user:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+	To do so, start the server, then issue the following command:<br />
+
+	<code>/usr/bin/mysqladmin -u root password 'new-password'</code><br />
+	
+	Alternatively you can run:<br />
+	<code>/usr/bin/mysql_secure_installation</code><br />
+	
+	which will also give you the option of removing the test
+	databases and anonymous user created by default.  This is
+	strongly recommended for production servers.
+	</td>
+	<td width="50%" valign="top">
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Alternativelly, you can <a href="https://kb.askmonty.org/en/installing-mariadb-with-yum/">install the database manager MariaDB</a>.<br />
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="download-swad">Downloading SWAD core</a></h2>
+
+	<p>
+	The source code of SWAD core is in GitHub:
+	<a href="https://github.com/acanas/swad-core">https://github.com/acanas/swad-core</a>
+	</p>
+
+	<p>
+	You can work in the <em>home</em> directory of a user: <code>/home/&lt;user_directory&gt;</code>
+	</p>
+
+	<p>
+	Create the directory <code>/home/&lt;user_directory&gt;/swad</code>:<br />
+		<code>mkdir /home/&lt;user_directory&gt;/swad</code><br />
+	and go to that directory:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad</code>
+	</p>
+
+	<p>
+	Download the last version of SWAD:<br />
+		<code>git clone https://github.com/acanas/swad-core</code>
+	</p>
+	
+	<p>
+	A directory <code>swad-core</code> should have been created 
+	inside <code>/home/&lt;user_directory&gt;/swad</code>.
+	You already have the source code and other directories of SWAD core
+	in the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="swad-database">Creating SWAD database</a></h2>
+
+	<p>
+	Use <code>mysql</code> command to connect to server with MySQL user <code>root</code>:<br />
+		<code>mysql -u root -p mysql</code><br />
+	</p>
+
+	<p>
+	If you have not set a password for the MySQL user <code>root</code> in the installation process,
+	you must do it now:<br />
+		<code>mysql&gt; SET PASSWORD FOR 'root'@'localhost'=PASSWORD('mypass');</code>
+		(instead of <code>mypass</code> you should a personal password)<br />
+	and enter again in <code>mysql</code> command with the MySQL root user:<br />
+		<code>mysql&gt; quit</code><br />
+		<code>mysql -u root -p mysql</code><br />
+ 	</p>
+
+	<p>
+	Create a new database called <code>swad</code>:<br />
+		<code>mysql&gt; CREATE DATABASE IF NOT EXISTS swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;</code><br />
+	(by now, SWAD does not use <a href="http://en.wikipedia.org/wiki/UTF-8">UTF-8</a>)
+ 	</p>
+
+	<p>
+	Create a new MySQL user called <code>swad</code> with all the permissions
+	over the <code>swad</code> database just created:<br />
+		<code>mysql&gt; CREATE USER 'swad'@'localhost' IDENTIFIED BY 'some_pass';</code>
+			(instead of <code>some_pass</code> you should use your own password)<br />
+		<code>mysql&gt; GRANT ALL PRIVILEGES ON swad.* TO 'swad'@'localhost' WITH GRANT OPTION;</code><br />
+		<code>mysql&gt; SHOW GRANTS FOR 'swad'@'localhost';</code><br />
+		<code>mysql&gt; quit</code><br />
+ 	</p>
+
+	<p>
+	Inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core/sql</code>
+	it should exist a script file <code>swad.sql</code>.<br/>
+	At the script start, a new database is created
+	and the type of character comparison (<em>collation</em>) by default is stored.
+	Comparisons when searching users or courses depend on the default collation.
+	You can change by another if you want,
+	preferably case insensitive (ending in <code>_ci</code>).<br />
+	Move to that directory and create the database tables <code>swad</code>
+	using the file <code>swad.sql</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/sql</code><br />
+		<code>mysql -u swad -p &lt; swad.sql</code>
+	</p>
+
+	<p>
+	Check that <code>swad</code> database tables are created:<br />
+		<code>mysql -u swad -p swad</code><br />
+		<code>mysql&gt; SHOW TABLES;</code><br />
+		<code>mysql&gt; quit</code><br />
+ 	</p>
+
+	<p>
+	Inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core/sql</code>
+	it should also exist other SQL files:
+		<ul>
+			<li><code>actions.sql</code></li>
+			<li><code>countries.sql</code></li>
+			<li><code>institutions.sql</code></li>
+			<li><code>centres.sql</code> (optional)</li>
+			<li><code>deg_types.sql</code> (optional)</li>
+			<li><code>degrees.sql</code> (optional)</li>
+			<li><code>departments.sql</code> (optional)</li>
+			<li><code>mail_domains.sql</code> (optional)</li>
+			<li><code>places.sql</code> (optional)</li>
+		</ul>
+	that were created respectively from <a href="http://swad.ugr.es/">http://swad.ugr.es/</a>
+	with the commands:
+		<ul>
+			<li><code>mysqldump -l -h localhost -u swad -p swad actions > actions.sql</code></li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad countries > countries.sql</code></li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad institutions > institutions.sql</code></li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad centres > centres.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad deg_types > deg_types.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad degrees > degrees.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad departments > departments.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad mail_domains > mail_domains.sql</code> (optional)</li>
+			<li><code>mysqldump -l -h localhost -u swad -p swad places > places.sql</code> (optional)</li>
+		</ul>
+	</p>
+	
+	<p>
+	Move to this directory and create the contents of the respective tables
+	in database::<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/sql</code><br />
+		<code>mysql -u swad -p swad &lt; actions.sql</code><br />
+		<code>mysql -u swad -p swad &lt; countries.sql</code><br />
+		<code>mysql -u swad -p swad &lt; institutions.sql</code><br />
+		<code>mysql -u swad -p swad &lt; centres.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; deg_types.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; degrees.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; departments.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; mail_domains.sql</code> (optional)<br />
+		<code>mysql -u swad -p swad &lt; places.sql</code> (optional)
+	</p>
+
+	<p>
+	Create a superuser:<br />
+		<code>mysql -u swad -p swad</code><br />
+		<code>mysql&gt; SET @MyID:='my_id';</code><br />
+			Instead of <code>my_id</code> you should use your ID number (DNI / c&eacute;dula / passport...).<br />
+		<code>mysql&gt; SET @EncryptedUsrCod:='base64url_string_43_chars';</code><br />
+			Instead of <code>base64url_string_43_chars</code>
+			you will use a random 43 characters string where every character
+			can be one of the following 64 ones (they can be repeated):<br />
+  			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',<br />
+			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',<br />
+			'0','1','2','3','4','5','6','7','8','9','-','_'<br />
+		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod) VALUES(@EncryptedUsrCod);</code><br />
+		<code>mysql&gt; INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime,Confirmed) VALUES(LAST_INSERT_ID(),@MyID,NOW(),'Y');</code><br />
+		<code>mysql&gt; INSERT INTO deg_admin (UsrCod,DegCod) VALUES (LAST_INSERT_ID(),'-2');</code><br />
+		<code>mysql&gt; quit</code>
+ 	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="swad-files">Creating SWAD directories and files</a></h2>
+
+	<p>
+	Hereinafter, SWAD will use three main directories:
+	</p>
+	
+	<ul>
+		<li>The directory for SWAD <strong>executable programs</strong>.
+			It is either the <code>cgi-bin</code> main directory or a child of it.
+			Usually you will create a directory <code>swad</code>
+			inside the directory <code>cgi-bin</code>,
+			so that the directory for SWAD executable programs will be:
+			<table width="100%">
+			<tr>
+			<th>CentOS 6.5</th>
+			<th>Ubuntu 14.04</th>
+			</tr>
+			<tr>
+			<td width="50%" valign="top">
+				<code>/var/www/cgi-bin/swad/</code>
+			</td>
+			<td width="50%" valign="top">
+				<code>/usr/lib/cgi-bin/swad/</code>
+			</td>
+			</tr>
+			</table>
+		</li>
+		<li>The directory for SWAD <strong>public pages</strong>.
+			It may be the main directory for public pages
+			or either it may be a child of it:
+			<table width="100%">
+			<tr>
+			<th>CentOS 6.5</th>
+			<th>Ubuntu 14.04</th>
+			</tr>
+			<tr>
+			<td width="50%" valign="top">
+				<code>/var/www/html/swad/</code>
+			</td>
+			<td width="50%" valign="top">
+				<code>/var/www/html/swad/</code>
+			</td>
+			</tr>
+			</table>
+		<li>The directory for SWAD <strong>private data</strong>.
+			It may be in any place <strong>not visible</strong> in the web:
+			<table width="100%">
+			<tr>
+			<th>CentOS 6.5</th>
+			<th>Ubuntu 14.04</th>
+			</tr>
+			<tr>
+			<td width="50%" valign="top">
+				<code>/var/www/swad/</code>
+			</td>
+			<td width="50%" valign="top">
+				<code>/var/www/swad/</code>
+			</td>
+			</tr>
+			</table>
+	</ul>
+
+	<p>
+	Create the public directory <code>swad</code>, that will store the SWAD public content,
+	inside the main public directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/html/swad</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/html/swad</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	Create the public directory <code>crs</code>, that will store the public content
+	of the courses, inside the SWAD public directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/html/swad/crs</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/html/swad/crs</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Create the directory private <code>swad</code>, that will store the SWAD private content,
+	inside a directory not visible by browsers:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/swad</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/swad</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Create the private directory <code>crs</code>, that will store the private content
+	of the courses, inside the SWAD private directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/swad/crs</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/swad/crs</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Change the owner of the public and private directories:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>chown -R apache:apache /var/www/html/swad /var/www/swad</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo chown -R www-data:www-data /var/www/html/swad /var/www/swad</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	To show the icon in the address bar of browser, you can put a file <code>favicon.ico</code> in the main web directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>/var/www/html/</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it will be necessary to change the permissions of the file <code>favicon.ico</code>:<br />
+			<code>ls -lZ /var/www/html/favicon.ico</code><br />
+			<code>chcon -t httpd_sys_content_t /var/www/html/favicon.ico</code><br />
+			<code>ls -lZ /var/www/html/favicon.ico</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>/var/www/html/</code>
+	</td>
+	</tr>
+	</table>
+	This favicon could be distinct from the SWAD logo.
+	In the file <code>favicon.ico</code> included inside the directory <code>icon</code>
+	indicated below, there is a SWAD icon that wil be shown when the platform is on screen.
+	</p>
+
+	</li>
+
+	<li>
+	
+	<h2><a name="swad-icons">Installing SWAD icons</a></h2>
+
+	<p>
+	In the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code> it should exist a directory <code>icon</code>
+	that must be copied into the SWAD public directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -R /home/&lt;user_directory&gt;/swad/swad-core/icon /var/www/html/swad/</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/icon</code><br />
+		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		it should be necessary to change the permissions of the directory <code>icon</code> and its contents:<br />
+			<code>ls -lZ /var/www/html/swad/</code><br />
+			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/icon</code><br />
+			<code>ls -lZ /var/www/html/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -R /home/&lt;user_directory&gt;/swad/swad-core/icon /var/www/html/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/icon</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="dropzone">Installing DropzoneJS</a></h2>
+
+	<p>
+	<a href="http://www.dropzonejs.com/">DropzoneJS</a> is a Javascript library required to upload
+	one or more files using drag and drop.
+	To install it, you must copy the directory <code>dropzone</code>,
+	located inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>,
+	to the SWAD public directory:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -R /home/&lt;user_directory&gt;/swad/swad-core/dropzone /var/www/html/swad/</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/dropzone</code><br />
+		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		it should be necessary to change the permissions of the directory <code>dropzone</code> and its contents:<br />
+			<code>ls -lZ /var/www/html/swad/</code><br />
+			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/dropzone</code><br />
+			<code>ls -lZ /var/www/html/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -R /home/&lt;user_directory&gt;/swad/swad-core/dropzone /var/www/html/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/dropzone</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	</li>
+
+	<li>
+
+	<h2><a name="gsoap">Compiling and installing gSOAP, required to compile SWAD core</a></h2>
+	
+	<p>
+	Install <a href="http://en.wikipedia.org/wiki/Yacc">yacc</a> if not installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install byacc</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install byacc</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Install <a href="http://en.wikipedia.org/wiki/Flex_lexical_analyser">flex</a> if not installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install flex</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install flex</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Install <a href="http://en.wikipedia.org/wiki/GNU_Bison">GNU bison</a> if not installed:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install bison bison-devel</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install bison</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+  	Install the library <code>ssl</code> if not installed:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install libssl-dev</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	You need to install the <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a> <em>toolkit</em>,
+	that can be downloaded from:<br />
+	<a href="http://www.cs.fsu.edu/~engelen/soap.html">http://www.cs.fsu.edu/~engelen/soap.html</a><br />
+	<a href="http://sourceforge.net/projects/gsoap2/files/">http://sourceforge.net/projects/gsoap2/files/</a><br />
+	(Tested with the version 2.8.18,
+	probably more recent versions also work.)
+	</p>
+
+	<p>
+	Inside <code>/home/&lt;user_directory&gt;/swad</code>, create a directory <code>gsoap</code>:<br />
+		<code>mkdir /home/&lt;user_directory&gt;/swad/gsoap</code><br />
+	
+	Go to directory <code>/home/&lt;user_directory&gt;/swad/gsoap</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/gsoap</code><br />
+
+	Download the file <code>gsoap_2.8.18.zip</code> (or later)
+	and copy it in <code>/home/&lt;user_directory&gt;/swad/gsoap</code><br />
+	<code>wget http://downloads.sourceforge.net/project/gsoap2/gSOAP/gsoap_2.8.18.zip</code><br />
+
+	Uncompress gSOAP:<br />
+		<code>unzip gsoap_2.8.18.zip</code> (or later)<br />
+	It should have been created the directory <code>gsoap-2.8</code>. Go to that directory:<br />
+		<code>cd gsoap-2.8</code><br />
+	Configure:<br />
+		<code>./configure</code><br />
+	Check if all the necessary packages are installed. Otherwise, install them.<br />
+	Compile:<br />
+		<code>make</code><br />
+	Install:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>make install</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo make install</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="compile-swad">Compiling and installing SWAD core</a></h2>
+
+	<p>
+	We asume that the public and private directories have been created,
+	and the source code of SWAD core
+	is in <code>/home/&lt;user_directory&gt;/swad/swad-core</code>.
+	</p>
+
+	<p>
+	Go to directory <code>/home/&lt;user_directory&gt;/swad/swad-core/soap</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/soap</code><br />
+	</p>
+
+	<p>
+	Edit the file <code>swad_web_service.h</code>. Search the line:<br />
+		<code>//gsoap swad service location: URL</code><br />
+	Replace <code>URL</code> (everything after the two points)
+	by your SWAD address,
+	for example <code>https://swad.ugr.es/</code> or <code>https://cevuna.una.py/swad/</code>,
+	and save the file.
+	</p>
+
+	<p>
+	Compile the SWAD web service:<br />
+		<code> soapcpp2 -c -S swad_web_service.h</code><br />
+	</p>
+
+	<p>
+	Copy the file WSDL just created (<code>swad.wsdl</code>) to a public location:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/html/swad/ws/</code><br />
+		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/soap/swad.wsdl /var/www/html/swad/ws/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/html/swad/ws/</code><br />
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/soap/swad.wsdl /var/www/html/swad/ws/</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Return to directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core</code><br />
+	</p>
+ 
+ 	<p>
+	Edit the file <code>swad.cfg</code>
+	making the necessary modifications and save it.
+	Copy the file <code>swad.cfg</code> just edited to SWAD directory for executable programs:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /var/www/cgi-bin/swad/</code><br />
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /usr/lib/cgi-bin/swad/</code><br />
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Edit the file <code>swad_config.h</code>
+	making the necessary modifications and save it.
+	If the directories or other constants 
+	indicated in the file <code>swad_config.h</code> change,
+	you must modify <code>swad_config.h</code> and recompile the SWAD core.
+	</p>
+
+	<p>
+	Compile SWAD core:<br />
+		<code>make clean; make</code><br />
+	An executable file for each language should have been created:<br />
+		<code>swad_ca</code><br />
+		<code>swad_de</code><br />
+		<code>swad_en</code><br />
+		<code>swad_es</code><br />
+		<code>swad_fr</code><br />
+		<code>swad_gn</code><br />
+		<code>swad_it</code><br />
+		<code>swad_pl</code><br />
+		<code>swad_pt</code><br />
+	</p>
+
+	<p>
+	Create the directory of SWAD executable programs, if not exist:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /usr/lib/cgi-bin/swad/</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	Edit the script <code>swad_copy.sh</code>,
+	in the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>.<br />
+	The content of the script <code>swad_copy.sh</code> should be similar to this:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>
+#!/bin/bash<br />
+<br />
+CGI=/usr/lib/cgi-bin/swad<br />
+PUBLIC_HTML=/var/www/html/swad<br />
+APACHE_USER=www-data<br />
+APACHE_GROUP=www-data<br />
+USER=&lt;user&gt;<br />
+CORE=/home/$USER/swad/swad-core<br />
+<br />
+cp -af $CGI/swad_ca $CGI/swad_ca.old<br />
+cp -af $CGI/swad_de $CGI/swad_de.old<br />
+cp -af $CGI/swad_en $CGI/swad_en.old<br />
+cp -af $CGI/swad_es $CGI/swad_es.old<br />
+cp -af $CGI/swad_fr $CGI/swad_fr.old<br />
+cp -af $CGI/swad_gn $CGI/swad_gn.old<br />
+cp -af $CGI/swad_it $CGI/swad_it.old<br />
+cp -af $CGI/swad_pl $CGI/swad_pl.old<br />
+cp -af $CGI/swad_pt $CGI/swad_pt.old<br />
+<br />
+cp -f $CORE/swad_ca $CORE/swad_de $CORE/swad_en $CORE/swad_es $CORE/swad_fr $CORE/swad_gn $CORE/swad_it $CORE/swad_pl $CORE/swad_pt $CGI<br />
+cp -f $CORE/js/swad.js $PUBLIC_HTML<br />
+cp -f $CORE/css/swad_desktop.css $CORE/css/swad_mobile.css $PUBLIC_HTML<br />
+<br />
+chown -R $APACHE_USER:$APACHE_GROUP $CGI<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.js<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_desktop.css<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
+		</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>
+#!/bin/bash<br />
+<br />
+CGI=/var/www/cgi-bin/swad<br />
+PUBLIC_HTML=/var/www/html/swad<br />
+APACHE_USER=apache<br />
+APACHE_GROUP=apache<br />
+USER=&lt;user&gt;<br />
+CORE=/home/$USER/swad/swad-core<br />
+<br />
+cp -af $CGI/swad_ca $CGI/swad_ca.old<br />
+cp -af $CGI/swad_de $CGI/swad_de.old<br />
+cp -af $CGI/swad_en $CGI/swad_en.old<br />
+cp -af $CGI/swad_es $CGI/swad_es.old<br />
+cp -af $CGI/swad_fr $CGI/swad_fr.old<br />
+cp -af $CGI/swad_gn $CGI/swad_gn.old<br />
+cp -af $CGI/swad_it $CGI/swad_it.old<br />
+cp -af $CGI/swad_pl $CGI/swad_pl.old<br />
+cp -af $CGI/swad_pt $CGI/swad_pt.old<br />
+<br />
+cp -f $CORE/swad_ca $CORE/swad_de $CORE/swad_en $CORE/swad_es $CORE/swad_fr $CORE/swad_gn $CORE/swad_it $CORE/swad_pl $CORE/swad_pt $CGI<br />
+cp -f $CORE/js/swad.js $PUBLIC_HTML<br />
+cp -f $CORE/css/swad_desktop.css $CORE/css/swad_mobile.css $PUBLIC_HTML<br />
+<br />
+chown -R $APACHE_USER:$APACHE_GROUP $CGI<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.js<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_desktop.css<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
+		</code>
+	</td>
+	</tr>
+	</table>
+	Change the directories indicated in the script by the correct ones and save it.
+	</p>
+
+	<p>
+	Copy the script <code>swad_copy.sh</code> to SWAD directory for executable programs
+	and give execution permission to the file <code>swad_copy.sh</code>:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad_copy.sh /var/www/cgi-bin/swad/</code><br />
+		<code>chmod a+x /var/www/cgi-bin/swad/swad_copy.sh</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad_copy.sh /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo chmod a+x /usr/lib/cgi-bin/swad/swad_copy.sh</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Run the script <code>swad_copy.sh</code>
+	now and every time you compile SWAD if you want to update the executables:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>/var/www/cgi-bin/swad/swad_copy.sh</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo /usr/lib/cgi-bin/swad/swad_copy.sh</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Now, SWAD should work in:<br />
+		<code>https://our_server/swad/</code><br />
+	However, it is still necessary to install other programs, as detailed below.
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="fotomaton">Installing photo processing program <code>fotomaton</code></a></h2>
+
+	<p>
+	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, you must do this:<br />
+		<code>PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}</code><br />
+		<code>export PKG_CONFIG_PATH</code><br />
+	</p>
+
+	<p>
+	The source code of photo processing program <code>fotomaton</code>
+	is available in the forge de GitHub:
+	<a href="https://github.com/dcalandria/swad-fotomaton">https://github.com/dcalandria/swad-fotomaton</a>
+	</p>
+
+	<p>
+	You can compile this program in the local directory:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
+	</p>
+
+	<p>
+	Download the program from the forge using the following command:<br />
+		<code>git clone git://github.com/dcalandria/swad-fotomaton.git</code><br />
+	This will create the directory <code>swad-fotomaton</code>
+	inside <code>/home/&lt;user_directory&gt;/swad</code>.
+	</p>
+
+	<p>
+	Go to directory <code>swad-fotomaton</code>:<br />
+		<code>cd swad-fotomaton</code><br />
+	And compile:<br />
+		<code>make</code><br />
+	As result, it should have been created an executable file <code>fotomaton</code>.
+	</p>
+
+	<p>
+	Try to execute the program directly to check that there are no errors in libraries:<br />
+		<code>./fotomaton</code><br />
+	If there are errors related with <a href="http://opencv.org/">OpenCV</a> libraries, check what libraries use OpenCV:<br />
+		<code>pkg-config --libs opencv</code><br />
+	Create a file called <code>opencv.conf</code> in <code>/etc/ld.so.conf.d/</code>
+	that holds the path to the OpenCV libraries (by default <code>/usr/local/lib</code>),
+	and then run <code>ldconfig</code> as <code>root</code>:<br />
+		<code>ldconfig</code><br />
+    	Or either, add the location of the OpenCV libraries
+    	to <code>LD_LIBRARY_PATH</code>.
+	</p>
+
+	<p>
+	Copy the executable file <code>fotomaton</code>
+	created after the make, into the directory of SWAD executable programs:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a ./fotomaton /var/www/cgi-bin/swad/</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it could be necessary to change the permissions of the file <code>fotomaton</code>:<br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+			<code>chcon -t httpd_sys_script_exec_t /var/www/cgi-bin/swad/fotomaton</code><br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a ./fotomaton /usr/lib/cgi-bin/swad/</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	To make <code>fotomaton</code> work, the correct call is:<br />
+	<code>fotomaton &lt;classifier&gt; &lt;input_file&gt; &lt;width&gt;</code><br />
+	The first parameter is a data file that is needed by face recognizer,
+	and that you must place in the same directory where you have copied the program <code>fotomaton</code>.
+	In the package downloaded from GitHub or in the directory
+	<code>/home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data</code>
+	you should find a file <code>options</code> that holds these data
+	necessary for the face recognizer.
+	Copy it in the same directory of SWAD executable programs
+	where you have copied the executable <code>fotomaton</code>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data/options /var/www/cgi-bin/swad/</code><br />
+		<code>chown -R apache:apache /var/www/cgi-bin/swad/options</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it could be necessary to change the permissions of the file <code>options</code>:<br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+			<code>chcon -t httpd_sys_content_t /var/www/cgi-bin/swad/options</code><br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data/options /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /usr/lib/cgi-bin/swad/options</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="photo-average">Installing photo averaging programs
+	<code>foto_mediana</code> and <code>foto_promedio</code></a></h2>
+
+	<p>
+	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, you must do this:<br />
+		<code>PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}</code><br />
+		<code>export PKG_CONFIG_PATH</code><br />
+	</p>
+
+	<p>
+	The source code of the programs <code>foto_mediana</code> and <code>foto_promedio</code>,
+	that calculate respectively the median and the average (pixel by pixel) of several photos,
+	is available in the GitHub forge:
+	<a href="https://github.com/dcalandria/foto_promedio">https://github.com/dcalandria/foto_promedio</a>
+	</p>
+	
+	<p>
+	You can compile these two programs in the local directory:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
+	</p>
+
+	<p>
+	Download the programs from repository using the following command:<br />
+		<code>git clone git://github.com/dcalandria/foto_promedio.git</code><br />
+	This will create the directory <code>foto-promedio</code>
+	inside <code>/home/&lt;user_directory&gt;/swad</code>.
+	</p>
+	
+	<p>
+	Go to directory <code>foto_promedio</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
+		<code>cd foto_promedio</code><br />
+	And compile:<br />
+		<code>make</code><br />
+	As result it should have been created the executable files
+	<code>foto_mediana</code> and <code>foto_promedio</code>.
+	</p>
+	
+	<p>
+	Copy the executable files <code>foto_mediana</code> and <code>foto_promedio</code>,
+	created after the make, to the directory of SWAD executables:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_mediana /var/www/cgi-bin/swad/</code><br />
+		<code>cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_promedio /var/www/cgi-bin/swad/</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it could be necessary to change the permissions of the files
+		<code>foto_mediana</code> and <code>foto_promedio</code>:<br />
+		<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+		<code>chcon -t httpd_sys_script_exec_t /var/www/cgi-bin/swad/foto_mediana</code><br />
+		<code>chcon -t httpd_sys_script_exec_t /var/www/cgi-bin/swad/foto_promedio</code><br />
+		<code>ls -lZ /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_mediana /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/foto_promedio/foto_promedio /usr/lib/cgi-bin/swad/</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	</li>
+
+	<li>
+
+	<h2><a name="chat-server">Installing chat server <code>swad-ircd</code></a></h2>
+
+	<p>
+	The source code of chat server <code>swad-ircd</code>
+	is available in the GitHub forge:
+	<a href="https://github.com/dcalandria/swad-ircd">https://github.com/dcalandria/swad-ircd</a>
+	</p>
+
+	<p>
+	You can make the compilation of this program in the local directory:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
+	</p>
+
+	<p>
+	Download the program from repository using the following command:<br />
+		<code>git clone git://github.com/dcalandria/swad-ircd.git</code><br />
+	This will create the directory <code>swad-ircd</code>
+	inside <code>/home/&lt;user_directory&gt;/swad</code>.
+	</p>
+
+	<p>
+	Go to directory <code>swad-ircd</code>:<br />
+		<code>cd swad-ircd</code><br />
+	Compile:<br />
+		<code>make</code><br />
+	As result it should have been created an executable file <code>swad_ircd</code>.
+	</p>
+	
+	<p>
+	For reasons of order, copy the executable file <code>swad_ircd</code>
+	created after the make in the directory of SWAD executables:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-ircd/swad_ircd /var/www/cgi-bin/swad/</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it could be necessary change the permissions of file <code>swad_ircd</code>:<br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+			<code>chcon -t httpd_sys_script_exec_t /var/www/cgi-bin/swad/swad_ircd</code><br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-ircd/swad_ircd /usr/lib/cgi-bin/swad/</code>
+	</td>
+	</tr>
+	</table>
+	Actually this program is a daemon that always shall be in execution,
+	and it could be placed in any directory.
+	</p>
+	
+	<p>
+	Go to directory of SWAD executables
+	and run the daemon <code>swad-ircd</code> as <code>root</code>:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cd /var/www/cgi-bin/swad/</code><br />
+		<code>nohup ./swad_ircd &</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>cd /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo nohup ./swad_ircd &</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	In the local directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>
+	it should exist a directory <code>chat</code>, with two files:<br />
+		<ul>
+			<li><code>chat.html</code></li>
+			<li><code>swad_chat.jar</code></li>
+		</ul><br />
+	Check it:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/chat</code><br />
+		<code>ls -l</code>
+	</p>
+
+	<p>
+	Create a directory <code>chat</code> in the public directory for web pages of SWAD
+	and copy the file <code>swad_chat.jar</code> in that directory:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mkdir /var/www/html/swad/chat</code><br />
+		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/chat/swad_chat.jar /var/www/html/swad/chat</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mkdir /var/www/html/swad/chat</code><br />
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/chat/swad_chat.jar /var/www/html/swad/chat</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Edit the file <code>chat.html</code>, change all the paths and URLs in order to reflect
+	the particular configuration of your server, and save it.
+	Copy the modified file <code>chat.html</code> in the directory of SWAD executables:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/chat/chat.html /var/www/cgi-bin/swad/</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it should be necessary to change the permissions of the file <code>chat.html</code>:<br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+			<code>chcon -t httpd_sys_content_t /var/www/cgi-bin/swad/chat.html</code><br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/chat/chat.html /usr/lib/cgi-bin/swad/</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	Finally, it is necessary to open the port 5000, through which the chat server
+	comunicates with the clients.
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+	To activate permanently the port 5000,
+	in CentOS you can edit the file <code>/etc/sysconfig/iptables</code>
+	and add a line like the following:<br />
+		<code>-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 5000 -j ACCEPT</code><br />
+	It will be necessary to restart the <code>iptables</code> service:<br />
+		<code>/sbin/service iptables restart</code>
+	</td>
+	<td width="50%" valign="top">
+	To activate permanently the port 5000,
+	in Ubuntu you can execute the following commands:<br />
+		<code>sudo iptables -A INPUT -p tcp --dport 5000 -j ACCEPT</code><br />
+		<code>sudo iptables-save</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="mail">Installing the script to send email <code>swad_smtp.py</code></a></h2>
+
+	<p>
+	Copy the script <code>swad_smtp.py</code>,
+	that should be in the directory <code>/home/&lt;user_directory&gt;/swad/swad-core/py</code>,
+	to the directory of SWAD executables.
+	Then give execution permission to file <code>swad_smtp.py</code>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/py/swad_smtp.py /var/www/cgi-bin/swad/</code><br />
+		<code>chmod a+x /var/www/cgi-bin/swad/swad_smtp.py</code><br />
+		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		and it could be necessary to change the <code>swad_smtp.py</code> file permissions:<br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+			<code>chcon -t httpd_sys_script_exec_t /var/www/cgi-bin/swad/swad_smtp.py</code><br />
+			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
+		This script connects to the network to send emails.
+		As stated in the manual of <a href="http://linux.die.net/man/8/httpd_selinux">httpd_selinux</a>,
+		if you want the script can connect to the network when SELinux is working,
+		it is necessary to activate <code>httpd_can_network_connect</code>:<br />
+			<code>setsebool -P httpd_can_network_connect 1</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/py/swad_smtp.py /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo chmod a+x /usr/lib/cgi-bin/swad/swad_smtp.py</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	The script <code>swad_smtp.py</code> has been tested to work properly
+	with Python 2.6.6 and Python 2.7.1. If it does not work, try to upgrade Python.
+	</p>
+
+	<p>
+	If the server used to send e-mail is our server,
+	we need to check that an SMTP mail server is installed,
+	and if not, install and start it.
+	For example, we can install the server <code>postfix</code>
+	following the instructions in
+	<a href="http://wiki.centos.org/HowTos/postfix">http://wiki.centos.org/HowTos/postfix</a>,
+	<a href="http://ostechnix.wordpress.com/2013/02/08/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/">http://ostechnix.wordpress.com/2013/02/08/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/</a>, or
+	<a href="http://www.server-world.info/en/note?os=CentOS_5&p=mail">http://www.server-world.info/en/note?os=CentOS_5&p=mail</a>.
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="services">Automating startup of services</a></h2>
+
+	<p>
+	It is desirable that MySQL, Apache and chat servers start automatically when the server is reset.
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>chkconfig httpd on</code><br />
+		<code>chkconfig mysqld on</code><br />
+		<code>chkconfig --list</code><br />
+		And you can add to file <code>/etc/rc.d/rc.local</code> the following line:<br />
+		<code>/var/www/cgi-bin/swad/swad_ircd &</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo update-rc.d mysql defaults</code><br />
+		<code>sudo update-rc.d apache2 defaults</code><br />
+		You can add to file <code>/etc/rc.local</code> the following line before <code>exit 0</code>:<br />
+		<code>/usr/lib/cgi-bin/swad/swad_ircd &</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	</li>
+
+	</ol>
+
+	</td>
+	</tr>
+
+     </table>
+    </td>
+   </tr>
+  </table>
+ </body>
+
+</html>
