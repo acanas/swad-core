@@ -3740,7 +3740,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
       Gbl.CurrentAct = ActSeeCtyInf;
    else
-      Gbl.CurrentAct = ActFrmLogIn;
+      Gbl.CurrentAct = Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED;
    Lay_SetCurrentTab ();
   }
 
@@ -3786,10 +3786,11 @@ void Act_AdjustCurrentAction (void)
          return;
         }
 
-   /***** If I have no e-mail or no nickname in database,
+   /***** If I have no nickname, e-mail or ID in database,
           the only action possible is show a form to change my account *****/
-   if (!Gbl.Usrs.Me.UsrDat.Email[0] ||
-       !Gbl.Usrs.Me.UsrDat.Nickname[0])
+   if (!Gbl.Usrs.Me.UsrDat.Nickname[0] ||
+       !Gbl.Usrs.Me.UsrDat.Email[0] ||
+       !Gbl.Usrs.Me.UsrDat.IDs.Num)
      {
       switch (Gbl.CurrentAct)
         {

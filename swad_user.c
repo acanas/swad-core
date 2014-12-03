@@ -164,11 +164,9 @@ static void Usr_SetUsrRoleAndPrefs (void);
 static Rol_Role_t Usr_GetMaxRole (unsigned Roles);
 
 static void Usr_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
-                                                     const char *NewEmail,
-                                                     const char *NewID);
+                                                     const char *NewEmail);
 static bool Usr_GetParamsNewAccount (char *NewNicknameWithoutArroba,
                                      char *NewEmail,
-                                     char *NewID,
                                      char *NewEncryptedPassword);
 static void Usr_PutLinkToRemoveMyAccount (void);
 static void Usr_PrintAccountSeparator (void);
@@ -1761,7 +1759,7 @@ void Usr_Logout (void)
 void Usr_WriteFormLogin (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Create_new_user_account;
+   extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
    extern const char *Txt_nick_email_or_ID;
@@ -1770,10 +1768,11 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_I_forgot_my_password;
 
    /***** Link to create a new account *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
    Act_FormStart (ActFrmUsrAcc);
-   Act_LinkFormSubmit (Txt_Create_new_user_account,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("arroba",Txt_Create_account,Txt_Create_new_user_account);
+   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("arroba",Txt_Create_account,Gbl.Title);
    fprintf (Gbl.F.Out,"</form>");
 
    /***** Link to enter from external site *****/
@@ -2729,17 +2728,13 @@ static bool Usr_CreateNewAccountAndLogIn (void)
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    char NewEmail[Cns_MAX_BYTES_STRING+1];
-   char NewID[ID_MAX_LENGTH_USR_ID+1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
 
-   if (Usr_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewID,NewEncryptedPassword))
+   if (Usr_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
      {
-      /***** Set user's ID to the ID typed by the user *****/
-      ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
-      strncpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,NewID,ID_MAX_LENGTH_USR_ID);
-      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-      Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
-      Gbl.Usrs.Me.UsrDat.IDs.List[0].Confirmed = false;	// User's ID will be stored as not confirmed
+      /***** User's has no ID *****/
+      Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
+      Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
 
       /***** Set password to the password typed by the user *****/
       strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
@@ -2764,7 +2759,7 @@ static bool Usr_CreateNewAccountAndLogIn (void)
    else
      {
       /***** Show form again ******/
-      Usr_ShowFormRequestNewAccountWithParams (NewNicknameWithoutArroba,NewEmail,NewID);
+      Usr_ShowFormRequestNewAccountWithParams (NewNicknameWithoutArroba,NewEmail);
       return false;
      }
   }
@@ -3091,15 +3086,14 @@ void Usr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 /*****************************************************************************/
 
 static void Usr_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
-                                                     const char *NewEmail,
-                                                     const char *NewID)
+                                                     const char *NewEmail)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
    extern const char *Txt_Email;
-   extern const char *Txt_ID;
-   extern const char *Txt_Create_new_user_account;
+   // extern const char *Txt_ID;
+   extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
 
    /***** Link to log in *****/
@@ -3113,7 +3107,8 @@ static void Usr_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Form to enter the ID of the new user *****/
    fprintf (Gbl.F.Out,"<div align=\"center\">");
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Create_new_user_account);
+   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
 
    /***** Nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3145,21 +3140,6 @@ static void Usr_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Cns_MAX_BYTES_STRING,
             NewEmail);
 
-   /***** User's ID *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">"
-                      "%s: "
-                      "</td>"
-	              "<td align=\"left\">"
-                      "<input type=\"text\" name=\"NewID\""
-                      " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>"
-                      "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_ID,
-            ID_MAX_LENGTH_USR_ID,
-            NewID);
-
    /***** Password *****/
    Pwd_PutFormToGetNewPasswordTwice ();
 
@@ -3182,21 +3162,19 @@ static void Usr_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
 static bool Usr_GetParamsNewAccount (char *NewNicknameWithoutArroba,
                                      char *NewEmail,
-                                     char *NewID,
                                      char *NewEncryptedPassword)
   {
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   extern const char *Txt_The_ID_X_is_not_valid;
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    char Query[1024];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
    bool Error = false;
 
-   /***** Step 1/4: Get new nickname from form *****/
+   /***** Step 1/3: Get new nickname from form *****/
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
 
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
@@ -3228,7 +3206,7 @@ static bool Usr_GetParamsNewAccount (char *NewNicknameWithoutArroba,
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
-   /***** Step 2/4: Get new e-mail from form *****/
+   /***** Step 2/3: Get new e-mail from form *****/
    Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_STRING);
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
@@ -3253,20 +3231,7 @@ static bool Usr_GetParamsNewAccount (char *NewNicknameWithoutArroba,
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
-   /***** Step 3/4: Get new user's ID from form *****/
-   Par_GetParToText ("NewID",NewID,ID_MAX_LENGTH_USR_ID);
-   // Users' IDs are always stored internally in capitals and without leading zeros
-   Str_RemoveLeadingZeros (NewID);
-   Str_ConvertToUpperText (NewID);
-
-   if (!ID_CheckIfUsrIDIsValid (NewID))	// New ID is not valid
-     {
-      Error = true;
-      sprintf (Gbl.Message,Txt_The_ID_X_is_not_valid,NewID);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
-
-   /***** Step 3/4: Get new user's ID from form *****/
+   /***** Step 3/3: Get new user's ID from form *****/
    Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
    Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
    if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
@@ -3317,7 +3282,7 @@ void Usr_ShowFormAccount (void)
    if (Gbl.Usrs.Me.Logged)
       Usr_ShowFormChangeMyAccount ();
    else
-      Usr_ShowFormRequestNewAccountWithParams ("","","");
+      Usr_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
@@ -3326,9 +3291,9 @@ void Usr_ShowFormAccount (void)
 
 void Usr_ShowFormChangeMyAccount (void)
   {
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname_and_email_address;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_email_address;
+   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_ID;
    extern const char *Txt_User_account;
 
    /***** Get current user's nickname and e-mail address
@@ -3338,14 +3303,11 @@ void Usr_ShowFormChangeMyAccount (void)
 
    /***** Check nickname and e-mail *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
-     {
-      if (!Gbl.Usrs.Me.UsrDat.Email[0])
-         Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname_and_email_address);
-      else
-	 Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
-     }
+      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
    else if (!Gbl.Usrs.Me.UsrDat.Email[0])
       Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_email_address);
+   else if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
+      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_ID);
 
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div align=\"center\">");

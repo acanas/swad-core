@@ -608,8 +608,8 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
       if (UsrDat->IDs.Num < 2)	// One unique ID
 	 ICanRemove = false;
       else if (ItsMe)
-	 // I can remove my ID if it is not confirmed
-	 ICanRemove = ID_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
+	 // I can remove my ID only if it is not confirmed
+	 ICanRemove = !ID_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
       else
 	 ICanRemove = true;
 

@@ -37,15 +37,13 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-/* Platform name and server */
-#define Cfg_PLATFORM_SHORT_NAME		"SWAD"
-#define Cfg_PLATFORM_FULL_NAME		"SWAD (Shared Workspace At a Distance)"
-
 /* IMPORTANT:
    - If one of the following paths does not exist, it should be created during installation!
 */
 #if defined LOCALHOST_UBUNTU			// localhost (Ubuntu) ******************
 
+#define Cfg_PLATFORM_SHORT_NAME			"SWAD"
+#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD local"			// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
 #define Cfg_HTTP_SwAD_HOME_PAGE			"http://localhost"		// Without ending slash
@@ -73,6 +71,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
@@ -88,6 +87,8 @@
 
 #elif defined OPENSWAD_ORG			// openswad.org ************************
 
+#define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
+#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
 #define Cfg_HTTP_SwAD_HOME_PAGE			"http://openswad.org/swad"		// Without ending slash
@@ -115,6 +116,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
@@ -147,6 +149,8 @@
 
 #elif defined SWAD_UGR_ES			// swad.ugr.es *************************
 
+#define Cfg_PLATFORM_SHORT_NAME			"SWAD"
+#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UGR"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
 #define Cfg_HTTP_SwAD_HOME_PAGE			"http://swad.ugr.es/swad"		// Without ending slash
@@ -174,6 +178,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmLogIn
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	"PRADO"
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
@@ -196,6 +201,8 @@
 
 #elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad ******************
 
+#define Cfg_PLATFORM_SHORT_NAME			"SWAD"
+#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UNA"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"www.cevuna.una.py"			// Server name (main part of the URL)
 #define Cfg_HTTP_SwAD_HOME_PAGE			"http://www.cevuna.una.py/swad"		// Without ending slash
@@ -223,6 +230,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmLogIn
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""

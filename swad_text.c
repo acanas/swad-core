@@ -3221,6 +3221,36 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_email_addres
 	" voc&ecirc; deve preencher o seu endere&ccedil;o de e-mail.";
 #endif
 
+const char *Txt_Before_going_to_any_other_option_you_must_fill_your_ID =
+#if   L==0
+	"Abans d'accedir a qualsevol altra opci&oacute;"
+	" ha de omplir el seu ID (DNI/c&egrave;dula).";
+#elif L==1
+	"Bevor ich auf jede andere Option"
+	" m&uuml;ssen Sie Ihren Ausweis-Nr. &auml;nder.";
+#elif L==2
+	"Before going to any other option"
+	" you must fill your ID.";
+#elif L==3
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe rellenar su ID (DNI/c&eacute;dula).";
+#elif L==4
+	"Avant d'aller &agrave; une autre option"
+	" vous devez remplir votre ID.";
+#elif L==5
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe rellenar su ID (DNI/c&eacute;dula).";	// Okoteve traducción
+#elif L==6
+	"Prima di scegliere qualsiasi altra opzione"
+	" devi compilare il tuo ID.";
+#elif L==7
+	"Zanim przejdziemy do innych opcji"
+	" nalezy w tym nick swoje zmie&nacute; identyfikatory.";
+#elif L==8
+	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
+	" voc&ecirc; deve preencher o seu n&ordm;. identif.";
+#endif
+
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 #if   L==0
 	"Abans d'accedir a qualsevol altra opci&oacute;"
@@ -3249,36 +3279,6 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 #elif L==8
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	" voc&ecirc; deve preencher a seu alcunha.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname_and_email_address =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir el seu sobrenom i la seva adre&ccedil;a de correu electr&ograve;nic.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihren Namen und E-Mail-Adresse ein.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your nickname and email address.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su apodo y su direcci&oacute;n de correo electr&oacute;nico.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre surnom et votre adresse e-mail.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su apodo y su direcci&oacute;n de correo electr&oacute;nico.";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare il tuo soprannome e il tuo indirizzo e-mail.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy w tym nick i adresu e-mail.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher a seu alcunha e endereço de e-mail.";
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_institution =
@@ -5669,27 +5669,6 @@ const char *Txt_Create_mail_domain =
 	"Tworzenie domeny mail";
 #elif L==8
 	"Criar dom&iacute;nio de email";
-#endif
-
-const char *Txt_Create_new_user_account =
-#if   L==0
-	"Crea nou compte d'usuari";
-#elif L==1
-	"Neues Benutzerkonto anlegen";
-#elif L==2
-	"Create new user account";
-#elif L==3
-	"Crear nueva cuenta de usuario";
-#elif L==4
-	"Cr&eacute;er nouveau compte d'utilisateur";
-#elif L==5
-	"Crear nueva cuenta de usuario";	// Okoteve traducción
-#elif L==6
-	"Crea nuovo account utente";
-#elif L==7
-	"Utw&oacute;rz nowe konto u&zdot;ytkownika";
-#elif L==8
-	"Criar uma nova conta de usu&aacute;rio";
 #endif
 
 const char *Txt_Create_notice =
@@ -24095,6 +24074,27 @@ const char *Txt_New_notice =
 	"Nowe obwieszczenie";
 #elif L==8
 	"Novo aviso";
+#endif
+
+const char *Txt_New_on_PLATFORM_Sign_up =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"No t&eacute; compte a %s? Registra't ara";
+#elif L==1
+	"Neu bei %s? Registriere Dich!";
+#elif L==2
+	"New on %s? Sign up";
+#elif L==3
+	"&iquest;No tiene cuenta en %s? Reg&iacute;strese";
+#elif L==4
+	"Nouveau sur %s? Inscrivez-vous";
+#elif L==5
+	"&iquest;No tiene cuenta en %s? Reg&iacute;strese";	// Okoteve traducción
+#elif L==6
+	"Nuovo su %s? Iscriviti";
+#elif L==7
+	"Pierwszy raz na %s? Zarejestruj si&eogon;";
+#elif L==8
+	"Novo no %s? Inscreva-se";
 #endif
 
 const char *Txt_New_password =
@@ -49570,21 +49570,21 @@ const char *Txt_You_can_not_delete_this_ID =
 #if   L==0
 	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Necessita traduccio
 #elif L==1
-	"You can not delete this ID.";			// Need Übersetzung
+	"You can not delete this ID.";				// Need Übersetzung
 #elif L==2
 	"You can not delete this ID.";
 #elif L==3
 	"No puede eliminar este ID (DNI/c&eacute;dula).";
 #elif L==4
-	"You can not delete this ID.";			// Besoin de traduction
+	"You can not delete this ID.";				// Besoin de traduction
 #elif L==5
 	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==6
 	"Non puoi cancellare questo ID.";
 #elif L==7
-	"You can not delete this ID.";			// Potrzebujesz tlumaczenie
+	"You can not delete this ID.";				// Potrzebujesz tlumaczenie
 #elif L==8
-	"You can not delete this ID.";			// Necessita de tradução
+	"You can not delete this ID.";				// Necessita de tradução
 #endif
 
 const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created =

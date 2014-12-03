@@ -35,12 +35,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.30.1 (2014/11/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.30.2 (2014/12/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+        Version 14.30.2  :Dic 03, 2014	Changes in sign up.
+					Fixed bug when deleting user's IDs. (170252 lines)
         Version 14.30.1  :Nov 30, 2014	Internal course code is shown in course configuration. (170275 lines)
         Version 14.30    :Nov 29, 2014	Database password and email password are moved from executable files to configuration files. (170248 lines)
 					1 change necessary in Makefile:
