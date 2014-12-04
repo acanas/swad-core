@@ -4371,46 +4371,67 @@ const char *Txt_columns =
 	"colunas";
 #endif
 
-const char *Txt_Comments_from_students =
+const char *Txt_Comments =
 #if   L==0
-	"Comentaris d'estudiants";
+	"Comentaris";
 #elif L==1
-	"Kommentare von Studenten";
+	"Kommentare";
 #elif L==2
-	"Comments from students";
+	"Comments";
 #elif L==3
-	"Comentarios de estudiantes";
+	"Comentarios";
 #elif L==4
-	"Commentaires des &eacute;tudiants";
+	"Commentaires";
 #elif L==5
-	"Comentarios de estudiantes";	// Okoteve traducción
+	"Comentarios";	// Okoteve traducción
 #elif L==6
-	"Commenti degli studenti";
+	"Commenti";
 #elif L==7
-	"Komentarze od student&oacute;w";
+	"Komentarze";
 #elif L==8
-	"Coment&aacute;rios dos alunos";
+	"Coment&aacute;rios";
 #endif
 
-const char *Txt_Comments_from_teachers =
+const char *Txt_Student_comment =
 #if   L==0
-	"Comentaris de professors";
+	"Comentari de l'estudiant";
 #elif L==1
-	"Kommentare von Lehrern";
+	"Student-Kommentar";
 #elif L==2
-	"Comments from teachers";
+	"Student's comment";
 #elif L==3
-	"Comentarios de profesores";
+	"Comentario del estudiante";
 #elif L==4
-	"Commentaires des enseignants";
+	"Commentaire de l'&eacute;tudiant";
 #elif L==5
-	"Comentarios de profesores";	// Okoteve traducción
+	"Comentario del estudiante";	// Okoteve traducción
 #elif L==6
-	"Commenti degli professori";
+	"Commento di student";
 #elif L==7
-	"Komentarze od nauczycieli";
+	"Komentarz studenta";
 #elif L==8
-	"Coment&aacute;rios dos professores";
+	"Coment&aacute;rio do estudante";
+#endif
+
+const char *Txt_Teachers_comment =
+#if   L==0
+	"Comentari de professors";
+#elif L==1
+	"Lehrern-Kommentar";
+#elif L==2
+	"Teachers' comment";
+#elif L==3
+	"Comentario de profesores";
+#elif L==4
+	"Commentaire des enseignants";
+#elif L==5
+	"Comentario de profesores";	// Okoteve traducción
+#elif L==6
+	"Commento degli professori";
+#elif L==7
+	"Komentarz nauczycieli";
+#elif L==8
+	"Coment&aacute;rio dos professores";
 #endif
 
 const char *Txt_common_zone =
@@ -9633,6 +9654,27 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 	"Wydarzenie <strong>%s</strong> usuniete.";
 #elif L==8
 	"Evento <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Events =
+#if   L==0
+	 "Esdeveniments";
+#elif L==1
+	 "Ereignisse";
+#elif L==2
+	 "Events";
+#elif L==3
+	 "Eventos";
+#elif L==4
+	 "&Eacute;v&eacute;nements";
+#elif L==5
+	 "Eventos";	// Okoteve traducción
+#elif L==6
+	 "Eventi";
+#elif L==7
+	 "Wydarzen";
+#elif L==8
+	 "Eventos";
 #endif
 
 const char *Txt_Exam =

@@ -95,7 +95,7 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
-static void Att_ListAttEventsWithStds (void);
+static void Att_ListAttEventsWithStds (struct UsrData *UsrDat);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
 
@@ -1026,7 +1026,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
-   extern const char *Txt_Comments_from_teachers;
+   extern const char *Txt_Teachers_comment;
    extern const char *Txt_Start_date;
    extern const char *Txt_End_date;
    extern const char *Txt_Title;
@@ -1149,7 +1149,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                       "<td align=\"left\" valign=\"top\">"
                       "<select name=\"CommentTchVisible\">",
-            Txt_Comments_from_teachers);
+            Txt_Teachers_comment);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Att.CommentTchVisible)
@@ -1869,8 +1869,8 @@ void Att_SeeOneAttEvent (void)
 
 static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
   {
-   extern const char *Txt_Comments_from_students;
-   extern const char *Txt_Comments_from_teachers;
+   extern const char *Txt_Student_comment;
+   extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save;
 
@@ -1898,8 +1898,8 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 		      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
 		      "</tr>",
 	    Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-	    Txt_Comments_from_students,
-	    Txt_Comments_from_teachers);
+	    Txt_Student_comment,
+	    Txt_Teachers_comment);
 
    /* List of students (only me) */
    Att_WriteRowStdToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
@@ -1922,8 +1922,8 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
 static void Att_ListAttStudents (struct AttendanceEvent *Att)
   {
-   extern const char *Txt_Comments_from_students;
-   extern const char *Txt_Comments_from_teachers;
+   extern const char *Txt_Student_comment;
+   extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save;
    unsigned NumStd;
@@ -1962,8 +1962,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                          "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
                          "</tr>",
                Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-               Txt_Comments_from_students,
-               Txt_Comments_from_teachers);
+               Txt_Student_comment,
+               Txt_Teachers_comment);
 
       /* List of students */
       for (NumStd = 0;
@@ -2637,6 +2637,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
 void Usr_ListAttendanceStdsCrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Attendance;
    extern const char *Txt_Number_of_students;
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStd = 0;
@@ -2683,15 +2684,15 @@ void Usr_ListAttendanceStdsCrs (void)
 	 /* Get number of students in this event */
 	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,LstSelectedUsrCods,NumStdsInList);
 
-      /***** List those events that have students *****/
-      Att_ListAttEventsWithStds ();
+      /***** List those events that have students (without comments) *****/
+      Att_ListAttEventsWithStds (NULL);
 
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
       /***** Table head *****/
       if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Lay_StartRoundFrameTable10 (NULL,2,NULL);
+	 Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
       else
 	 Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
       Att_WriteTableHeadSeveralAttEvents ();
@@ -2737,6 +2738,10 @@ void Usr_ListAttendanceStdsCrs (void)
       else
 	 Lay_EndSquareFrameTable ();
 
+      /***** List events that have students (with comments) *****/
+      if (NumStdsInList == 1)	// Only if one unique student in list
+         Att_ListAttEventsWithStds (&UsrDat);
+
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
@@ -2759,16 +2764,28 @@ void Usr_ListAttendanceStdsCrs (void)
 /*****************************************************************************/
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
+// If UsrDat == NULL ==> don't show comments
+// If UsrDat != NULL ==> show comments
 
-static void Att_ListAttEventsWithStds (void)
+static void Att_ListAttEventsWithStds (struct UsrData *UsrDat)
   {
+   extern const char *Txt_Comments;
+   extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Present;
+   extern const char *Txt_Absent;
+   extern const char *Txt_Student_comment;
+   extern const char *Txt_Teachers_comment;
    unsigned NumAttEvent;
+   bool Present;
+   char CommentStd[Cns_MAX_BYTES_TEXT+1];
+   char CommentTch[Cns_MAX_BYTES_TEXT+1];
 
    /***** Header *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable10 (NULL,2,UsrDat ? Txt_Comments :
+	                                          Txt_Events);
    else
       Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
    fprintf (Gbl.F.Out,"<tr>"
@@ -2802,6 +2819,52 @@ static void Att_ListAttEventsWithStds (void)
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
 		  Gbl.AttEvents.Lst[NumAttEvent].Title,
 		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
+
+	 /***** Write comments for this student *****/
+	 if (UsrDat)
+	   {
+	    /* Get comments for this student */
+	    Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
+
+	    /* Show comments */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td align=\"right\" class=\"DAT\"></td>"
+			       "<td align=\"left\" class=\"DAT\">");
+	    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+			       " alt=\"\" title=\"%s\" class=\"ICON16x16\" /> %s",
+		     Gbl.Prefs.IconsURL,
+		     Present ? "check" :
+			       "check-empty",
+		     Present ? Txt_Present :
+			       Txt_Absent,
+		     Present ? Txt_Present :
+			       Txt_Absent);
+	    if (CommentStd[0] ||
+		CommentTch[0])
+	      {
+	       fprintf (Gbl.F.Out,"<dl>");
+	       if (CommentStd[0])
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CommentStd,Cns_MAX_BYTES_TEXT,false);
+		  fprintf (Gbl.F.Out,"<dt>%s:</dt><dd>%s</dd>",
+			   Txt_Student_comment,
+			   CommentStd);
+		 }
+	       if (CommentTch[0])
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CommentTch,Cns_MAX_BYTES_TEXT,false);
+		  fprintf (Gbl.F.Out,"<dt>%s:</dt><dd>%s</dd>",
+			   Txt_Teachers_comment,
+			   CommentTch);
+		 }
+	       fprintf (Gbl.F.Out,"</dl>");
+	      }
+	    fprintf (Gbl.F.Out,"</td>"
+			       "<td align=\"right\" class=\"DAT\"></td>"
+			       "</tr>");
+	   }
 	}
 
    /***** Footer *****/
