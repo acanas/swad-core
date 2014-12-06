@@ -1189,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS usr_nicknames (
 --
 CREATE TABLE IF NOT EXISTS usr_webs (
 	UsrCod INT NOT NULL,
-	Web ENUM('www','edmodo','facebook','flickr','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL,
+	Web ENUM('www','edmodo','facebook','flickr','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL,
 	URL VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(UsrCod,Web));
 --

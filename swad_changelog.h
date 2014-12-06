@@ -35,12 +35,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.32 (2014/12/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.32.1 (2014/12/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 13.32.1  :Dic 06, 2014	Added new social network. (170518 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','delicious','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
         Version 14.32    :Dic 06, 2014	Changes in listing of attendance. (170509 lines)
         Version 14.31.1  :Dic 05, 2014	Comments are shown in list of attendances when several students are listed. (170450 lines)
         Version 14.31    :Dic 04, 2014	Comments are shown in list of attendances when one unique student is listed. (170353 lines)

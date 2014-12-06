@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 20
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 21
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -51,6 +51,7 @@ typedef enum
    Net_FACEBOOK,
    Net_FLICKR,
    Net_FOURSQUARE,
+   Net_GITHUB,
    Net_GOOGLE_PLUS,
    Net_GOOGLE_SCHOLAR,
    Net_INSTAGRAM,
@@ -74,7 +75,8 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "edmodo",		// Net_EDMODO
    "facebook",		// Net_FACEBOOK
    "flickr",		// Net_FLICKR
-   "foursquare",	// Net_FOURSQUARE
+   "foursquare",	// Net_FOURSQUAREhub
+   "github",		// Net_GITHUB
    "googleplus",	// Net_GOOGLE_PLUS
    "googlescholar",	// Net_GOOGLE_SCHOLAR
    "instagram",		// Net_INSTAGRAM
@@ -99,6 +101,7 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "Facebook",		// Net_FACEBOOK
    "Flickr",		// Net_FLICKR
    "Foursquare",	// Net_FOURSQUARE
+   "GitHub",		// Net_GITHUB
    "Google+",		// Net_GOOGLE_PLUS
    "Google Scholar",	// Net_GOOGLE_SCHOLAR
    "Instagram",		// Net_INSTAGRAM
@@ -177,7 +180,7 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
 /********************* Show form to edit my social networks ******************/
 /*****************************************************************************/
 
-#define COL2_WIDTH 400
+#define Net_COL2_WIDTH 400
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
@@ -223,14 +226,15 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td align=\"left\" class=\"%s\">"
 			 "<img src=\"%s/%s16x16.gif\""
-			 " style=\"width:16px;height:16px;margin-right:10px;vertical-align:middle;\" alt=\"\" title=\"%s\" />"
+			 " style=\"width:16px;height:16px;margin-right:10px;vertical-align:middle;\""
+			 " alt=\"\" title=\"%s\" />"
 			 "%s:</td>"
 			 "<td align=\"left\" width=\"%u\">",
 	       ClassForm,
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
-	       COL2_WIDTH);
+	       Net_COL2_WIDTH);
       Act_FormStart (ActChgMyNet);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
@@ -378,7 +382,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get number of users with webs / social networks");
+   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,
+                                        "can not get number of users with webs / social networks");
 
    /***** Number of users *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -417,7 +422,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td align=\"left\" class=\"DAT\">"
 			    "<img src=\"%s/%s16x16.gif\""
-			    " style=\"width:16px;height:16px;margin:0 2px;vertical-align:middle;\" alt=\"\" title=\"%s\" />"
+			    " style=\"width:16px;height:16px;margin:0 2px;vertical-align:middle;\""
+			    " alt=\"\" title=\"%s\" />"
 			    "%s</td>"
 			    "<td align=\"right\" class=\"DAT\">%u</td>"
 			    "<td align=\"right\" class=\"DAT\">%.2f%%</td>"
