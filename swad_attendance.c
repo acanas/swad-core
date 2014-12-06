@@ -96,9 +96,11 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
 static void Att_ListAttEventsWithStds (void);
-static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
+static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
+static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods);
+static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /********************** List all the attendance events ***********************/
@@ -2638,17 +2640,13 @@ void Usr_ReqListAttendanceStdsCrs (void)
 void Usr_ListAttendanceStdsCrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Attendance;
-   extern const char *Txt_Number_of_students;
-   extern const char *Txt_Comments;
    extern const char *Txt_You_must_select_one_ore_more_students;
-   unsigned NumStd = 0;
    unsigned NumStdsInList;
+   unsigned NumStd;
    long *LstSelectedUsrCods;
+   unsigned NumAttEvent;
    const char *Ptr;
    struct UsrData UsrDat;
-   unsigned NumAttEvent;
-   unsigned Total;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2679,12 +2677,16 @@ void Usr_ListAttendanceStdsCrs (void)
 	 LstSelectedUsrCods[NumStd] = UsrDat.UsrCod;
 	}
 
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+
       /***** Get number of students in each event *****/
       for (NumAttEvent = 0;
 	   NumAttEvent < Gbl.AttEvents.Num;
 	   NumAttEvent++)
 	 /* Get number of students in this event */
-	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,LstSelectedUsrCods,NumStdsInList);
+	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+	                                                                                           LstSelectedUsrCods,NumStdsInList);
 
       /***** List those events that have students (without comments) *****/
       Att_ListAttEventsWithStds ();
@@ -2692,77 +2694,11 @@ void Usr_ListAttendanceStdsCrs (void)
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
-      /***** Table head *****/
-      if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
-      else
-	 Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
-      Att_WriteTableHeadSeveralAttEvents ();
-
-      /***** List the students *****/
-      for (NumStd = 0;
-	   NumStd < NumStdsInList;
-	   NumStd++)
-	{
-	 UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
-	   {
-	    UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
-	    Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
-	   }
-	}
-
-      /***** Last row with the total of students present in each event *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"%u\" align=\"right\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none;border-width:1px;\">%s:</td>",
-	       Gbl.Usrs.Listing.WithPhotos ? 4 :
-		                             3,
-	       Txt_Number_of_students);
-      for (NumAttEvent = 0, Total = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
-	   NumAttEvent++)
-	 if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
-	   {
-	    fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT_N\""
-			       " style=\"border-style:solid none none none;border-width:1px;\">%u</td>",
-		     Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
-	    Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
-	   }
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-			 "</tr>",
-	       Total);
-
-      /***** Table end *****/
-      if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Lay_EndRoundFrameTable10 ();
-      else
-	 Lay_EndSquareFrameTable ();
+      /***** Show table with attendances for every student in list *****/
+      Att_ListStdsAttendanceTable (NumStdsInList,LstSelectedUsrCods);
 
       /***** List the students with details and comments *****/
-      if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Lay_StartRoundFrameTable10 (NULL,2,Txt_Comments);
-      else
-	 Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
-      for (NumStd = 0;
-	   NumStd < NumStdsInList;
-	   NumStd++)
-	{
-	 UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
-	   {
-	    UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
-	    Att_ListAttEventsForAStd (NumStd,&UsrDat);
-	   }
-	}
-      if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Lay_EndRoundFrameTable10 ();
-      else
-	 Lay_EndSquareFrameTable ();
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
 
       /***** Free list of user codes *****/
       free ((void *) LstSelectedUsrCods);
@@ -2793,6 +2729,7 @@ static void Att_ListAttEventsWithStds (void)
    extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
+   const char *BgColor;
    unsigned NumAttEvent;
 
    /***** Start frame *****/
@@ -2814,24 +2751,31 @@ static void Att_ListAttEventsWithStds (void)
 	NumAttEvent++)
       if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
 	{
+         BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
+
 	 /***** Get data of the attendance event from database *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
          Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
 
 	 /***** Write a row for this event *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" class=\"DAT\">%u:</td>"
-			    "<td align=\"left\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
-			    "<td align=\"right\" class=\"DAT\">%u</td>"
+			    "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
+			    "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
+			    "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u</td>"
 			    "</tr>",
+	          BgColor,
 		  NumAttEvent + 1,
+		  BgColor,
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Month,
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Year,
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Hour,
 		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
 		  Gbl.AttEvents.Lst[NumAttEvent].Title,
+		  BgColor,
 		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
+
+         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	}
 
    /***** End frame *****/
@@ -2842,10 +2786,243 @@ static void Att_ListAttEventsWithStds (void)
   }
 
 /*****************************************************************************/
-/********** Write list of those attendance events that have students *********/
+/*********** Show table with attendances for every student in list ***********/
 /*****************************************************************************/
-// If UsrDat == NULL ==> don't show comments
-// If UsrDat != NULL ==> show comments
+
+static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods)
+  {
+   extern const char *Txt_Attendance;
+   extern const char *Txt_Number_of_students;
+   struct UsrData UsrDat;
+   unsigned NumStd;
+   unsigned NumAttEvent;
+   unsigned Total;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Start frame *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd)
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
+   else
+      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
+   Att_WriteTableHeadSeveralAttEvents ();
+
+   /***** List the students *****/
+   for (NumStd = 0;
+	NumStd < NumStdsInList;
+	NumStd++)
+     {
+      UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
+	{
+	 UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+	 Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
+	}
+     }
+
+   /***** Last row with the total of students present in each event *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"%u\" align=\"right\" class=\"DAT_N\""
+		      " style=\"border-style:solid none none none;border-width:1px;\">%s:</td>",
+	    Gbl.Usrs.Listing.WithPhotos ? 4 :
+					  3,
+	    Txt_Number_of_students);
+   for (NumAttEvent = 0, Total = 0;
+	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent++)
+      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+	{
+	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT_N\""
+			    " style=\"border-style:solid none none none;border-width:1px;\">%u</td>",
+		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
+	 Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
+	}
+   fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT_N\""
+		      " style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
+		      "</tr>",
+	    Total);
+
+   /***** End frame *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd)
+      Lay_EndRoundFrameTable10 ();
+   else
+      Lay_EndSquareFrameTable ();
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/* Write table heading for listing of students in several attendance events **/
+/*****************************************************************************/
+
+static void Att_WriteTableHeadSeveralAttEvents (void)
+  {
+   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Attendance;
+   unsigned NumAttEvent;
+
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th align=\"left\" colspan=\"%u\" class=\"TIT_TBL\">%s</th>",
+            Gbl.Usrs.Listing.WithPhotos ? 4 :
+        	                          3,
+            Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+
+   for (NumAttEvent = 0;
+	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent++)
+      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+	{
+	 /***** Get data of this attendance event *****/
+	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
+
+	 fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">"
+			    "<span class=\"TIT_TBL\" title=\"%s\">%u</span>"
+			    "</th>",
+		  Gbl.AttEvents.Lst[NumAttEvent].Title,NumAttEvent+1);
+	}
+
+   fprintf (Gbl.F.Out,"<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "</tr>",
+            Txt_Attendance);
+  }
+
+/*****************************************************************************/
+/************ Write a row of a table with the data of a student **************/
+/*****************************************************************************/
+
+static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Present;
+   extern const char *Txt_Absent;
+   const char *BgColor;
+   char PhotoURL[PATH_MAX+1];
+   bool ShowPhoto;
+   unsigned NumAttEvent;
+   bool Present;
+   unsigned NumTimesPresent;
+
+   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
+
+   /***** Write number of student in the list *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%u</td>",
+            BgColor,
+            UsrDat->Accepted ? "DAT_SMALL_N" :
+        	               "DAT_SMALL",
+            NumStd + 1);
+
+   /***** Show student's photo *****/
+   if (Gbl.Usrs.Listing.WithPhotos)
+     {
+      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" width=\"18\">",BgColor);
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,
+                        ShowPhoto ? PhotoURL :
+                                    NULL,
+                        18,24,
+			Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+      fprintf (Gbl.F.Out,"</td>");
+     }
+
+   /***** Write user's ID ******/
+   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">",
+            BgColor,
+            UsrDat->Accepted ? "DAT_SMALL_N" :
+        	               "DAT_SMALL");
+   ID_WriteUsrIDs (UsrDat,true);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Write student's name *****/
+   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%s",
+	    BgColor,
+	    UsrDat->Accepted ? "DAT_SMALL_N" :
+		               "DAT_SMALL",
+	    UsrDat->Surname1);
+   if (UsrDat->Surname2[0])
+     fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+   fprintf (Gbl.F.Out,", %s</td>",
+	    UsrDat->FirstName);
+
+   /***** Icon to show if the user is already registered *****/
+   for (NumAttEvent = 0, NumTimesPresent = 0;
+	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent++)
+      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+	{
+	 /***** Check if this student is already registered in the current event *****/
+	 // Here it is not necessary to get comments
+	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod);
+
+	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
+	                    "<img src=\"%s/%s16x16.gif\""
+	                    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+	                    "</td>",
+		  Gbl.RowEvenOdd,
+		  Gbl.Prefs.IconsURL,
+		  Present ? "check" :
+			    "check-empty",
+		  Present ? Txt_Present :
+			    Txt_Absent);
+
+	 if (Present)
+	    NumTimesPresent++;
+	}
+
+   /***** Last column with the number of times this user is present *****/
+   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"DAT_N\">%u</td>"
+                      "</tr>",
+	    BgColor,NumTimesPresent);
+
+   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/**************** List the students with details and comments ****************/
+/*****************************************************************************/
+
+static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods)
+  {
+   extern const char *Txt_Details;
+   struct UsrData UsrDat;
+   unsigned NumStd;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Start frame *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd)
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_Details);
+   else
+      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
+
+   /***** List students with attendance details *****/
+   for (NumStd = 0;
+	NumStd < NumStdsInList;
+	NumStd++)
+     {
+      UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	{
+	 UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+	 Att_ListAttEventsForAStd (NumStd,&UsrDat);
+	}
+     }
+
+   /***** End frame *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd)
+      Lay_EndRoundFrameTable10 ();
+   else
+      Lay_EndSquareFrameTable ();
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/*************** Write list of attendance events for a student ***************/
+/*****************************************************************************/
 
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
   {
@@ -2978,131 +3155,6 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			       "</tr>");
 	   }
 	}
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/* Write table heading for listing of students in several attendance events **/
-/*****************************************************************************/
-
-static void Att_WriteTableHeadSeveralAttEvents (void)
-  {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Attendance;
-   unsigned NumAttEvent;
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" colspan=\"%u\" class=\"TIT_TBL\">%s</th>",
-            Gbl.Usrs.Listing.WithPhotos ? 4 :
-        	                          3,
-            Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
-
-   for (NumAttEvent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
-	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
-	{
-	 /***** Get data of this attendance event *****/
-	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
-
-	 fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">"
-			    "<span class=\"TIT_TBL\" title=\"%s\">%u</span>"
-			    "</th>",
-		  Gbl.AttEvents.Lst[NumAttEvent].Title,NumAttEvent+1);
-	}
-
-   fprintf (Gbl.F.Out,"<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "</tr>",
-            Txt_Attendance);
-  }
-
-/*****************************************************************************/
-/************ Write a row of a table with the data of a student **************/
-/*****************************************************************************/
-
-static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat)
-  {
-   extern const char *Txt_Present;
-   extern const char *Txt_Absent;
-   const char *BgColor;
-   char PhotoURL[PATH_MAX+1];
-   bool ShowPhoto;
-   unsigned NumAttEvent;
-   bool Present;
-   unsigned NumTimesPresent;
-
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
-
-   /***** Write number of student in the list *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%u</td>",
-            BgColor,
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL",
-            NumStd + 1);
-
-   /***** Show student's photo *****/
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" width=\"18\">",BgColor);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
-			Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
-      fprintf (Gbl.F.Out,"</td>");
-     }
-
-   /***** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL");
-   ID_WriteUsrIDs (UsrDat,true);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Write student's name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%s",
-	    BgColor,
-	    UsrDat->Accepted ? "DAT_SMALL_N" :
-		               "DAT_SMALL",
-	    UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-     fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
-   fprintf (Gbl.F.Out,", %s</td>",
-	    UsrDat->FirstName);
-
-   /***** Icon to show if the user is already registered *****/
-   for (NumAttEvent = 0, NumTimesPresent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
-	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
-	{
-	 /***** Check if this student is already registered in the current event *****/
-	 // Here it is not necessary to get comments
-	 Present = Att_CheckIfUsrIsPresentInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod);
-
-	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
-	                    "<img src=\"%s/%s16x16.gif\""
-	                    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
-	                    "</td>",
-		  Gbl.RowEvenOdd,
-		  Gbl.Prefs.IconsURL,
-		  Present ? "check" :
-			    "check-empty",
-		  Present ? Txt_Present :
-			    Txt_Absent);
-
-	 if (Present)
-	    NumTimesPresent++;
-	}
-
-   /***** Last column with the number of times this user is present *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"DAT_N\">%u</td>"
-                      "</tr>",
-	    BgColor,NumTimesPresent);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

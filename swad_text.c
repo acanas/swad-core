@@ -7533,6 +7533,27 @@ const char *Txt_Description =
 	"Descri&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Details =
+#if   L==0
+	"Detalls";
+#elif L==1
+	"Einzelheiten";
+#elif L==2
+	"Details";
+#elif L==3
+	"Detalles";
+#elif L==4
+	"D&eacute;tails";
+#elif L==5
+	"Detalles";	// Okoteve traducción
+#elif L==6
+	"Dettagli";
+#elif L==7
+	"Szczeg&oacute;&lstrok;y";
+#elif L==8
+	"Detalhes";
+#endif
+
 const char *Txt_Direct_authentication =
 #if   L==0
 	"&iquest;Autenticaci&oacute; directa?";

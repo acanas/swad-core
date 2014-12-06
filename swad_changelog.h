@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.31.1 (2014/12/05)"
+#define Log_PLATFORM_VERSION	"SWAD 14.32 (2014/12/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+        Version 14.32    :Dic 06, 2014	Changes in listing of attendance. (170509 lines)
         Version 14.31.1  :Dic 05, 2014	Comments are shown in list of attendances when several students are listed. (170450 lines)
         Version 14.31    :Dic 04, 2014	Comments are shown in list of attendances when one unique student is listed. (170353 lines)
         Version 14.30.2  :Dic 03, 2014	Changes in sign up.
