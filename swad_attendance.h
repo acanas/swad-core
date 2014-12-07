@@ -55,6 +55,7 @@ struct AttendanceEvent
    bool CommentTchVisible;
    unsigned NumStdsTotal;	// Number total of students who have assisted to the event
    unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
+   bool Selected;	// I have selected this attendance event
   };
 
 typedef enum

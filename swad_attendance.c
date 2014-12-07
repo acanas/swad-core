@@ -95,7 +95,9 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
-static void Att_ListAttEventsWithStds (void);
+static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods);
+static void Att_GetListSelectedAttCods (void);
+static void Att_ListEventsToSelect (void);
 static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
@@ -201,7 +203,7 @@ static void Att_ShowAllAttEvents (void)
                Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 
       /***** Write all the attendance events *****/
-      for (NumAttEvent = Pagination.FirstItemVisible;
+      for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
            NumAttEvent <= Pagination.LastItemVisible;
            NumAttEvent++)
          Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
@@ -1969,7 +1971,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                Txt_Teachers_comment);
 
       /* List of students */
-      for (NumStd = 0;
+      for (NumStd = 0, Gbl.RowEvenOdd = 0;
 	   NumStd < Gbl.Usrs.LstStds.NumUsrs;
 	   NumStd++)
         {
@@ -1977,7 +1979,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
            {
             UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumStd].Accepted;
-            Att_WriteRowStdToCallTheRoll (NumStd+1,&UsrDat,Att);
+            Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
            }
         }
 
@@ -2614,6 +2616,9 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Usr_ListUsersToSelect (Rol_ROLE_STUDENT);
          Lay_EndRoundFrameTable10 ();
 
+	 /* Free list of attendance events */
+         Att_FreeListAttEvents ();
+
          /* Send button */
          Lay_PutSendButton (Txt_Show_list);
          fprintf (Gbl.F.Out,"</form>"
@@ -2642,11 +2647,8 @@ void Usr_ListAttendanceStdsCrs (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStdsInList;
-   unsigned NumStd;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
-   const char *Ptr;
-   struct UsrData UsrDat;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2660,25 +2662,8 @@ void Usr_ListAttendanceStdsCrs (void)
       if (Gbl.CurrentAct == ActSeeLstAttStd)
 	 Att_PutFormToPrintListStds ();
 
-      /***** Create list of user codes *****/
-      if ((LstSelectedUsrCods = (long *) calloc ((size_t) NumStdsInList,sizeof (long))) == NULL)
-	 Lay_ShowErrorAndExit ("Not enough memory to store list of user codes.");
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
-      /***** Loop over the list Gbl.Usrs.Select.All getting users' codes *****/
-      for (NumStd = 0, Ptr = Gbl.Usrs.Select.All;
-	   NumStd < NumStdsInList && *Ptr;
-	   NumStd++)
-	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-	 LstSelectedUsrCods[NumStd] = UsrDat.UsrCod;
-	}
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      /***** Get list of students selected to show their attendances *****/
+      Att_GetListSelectedUsrCods (NumStdsInList,&LstSelectedUsrCods);
 
       /***** Get number of students in each event *****/
       for (NumAttEvent = 0;
@@ -2688,8 +2673,11 @@ void Usr_ListAttendanceStdsCrs (void)
 	 Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList = Att_GetNumStdsFromAListWhoAreInAttEvent (Gbl.AttEvents.Lst[NumAttEvent].AttCod,
 	                                                                                           LstSelectedUsrCods,NumStdsInList);
 
-      /***** List those events that have students (without comments) *****/
-      Att_ListAttEventsWithStds ();
+      /***** Get list of attendance events selected *****/
+      Att_GetListSelectedAttCods ();
+
+      /***** List events to select *****/
+      Att_ListEventsToSelect ();
 
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
@@ -2717,10 +2705,97 @@ void Usr_ListAttendanceStdsCrs (void)
   }
 
 /*****************************************************************************/
+/********** Get list of students selected to show their attendances **********/
+/*****************************************************************************/
+
+static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods)
+  {
+   unsigned NumStd;
+   const char *Ptr;
+   struct UsrData UsrDat;
+
+   /***** Create list of user codes *****/
+   if ((*LstSelectedUsrCods = (long *) calloc ((size_t) NumStdsInList,sizeof (long))) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store list of user codes.");
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Loop over the list Gbl.Usrs.Select.All getting users' codes *****/
+   for (NumStd = 0, Ptr = Gbl.Usrs.Select.All;
+	NumStd < NumStdsInList && *Ptr;
+	NumStd++)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      (*LstSelectedUsrCods)[NumStd] = UsrDat.UsrCod;
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/****************** Get list of attendance events selected *******************/
+/*****************************************************************************/
+
+static void Att_GetListSelectedAttCods (void)
+  {
+   unsigned MaxSizeListAttCodsSelected;
+   char *StrAttCodsSelected;
+   unsigned NumAttEvent;
+   const char *Ptr;
+   long AttCod;
+   char LongStr[1+10+1];
+
+   /***** Allocate memory for list of attendance events selected *****/
+   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1+10+1);
+   if ((StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected+1)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store list of attendance events selected.");
+
+   /***** Get parameter multiple with list of attendance events selected *****/
+   Par_GetParMultiToText ("AttCod",StrAttCodsSelected,MaxSizeListAttCodsSelected);
+
+   /***** Reset selection *****/
+   for (NumAttEvent = 0;
+	NumAttEvent < Gbl.AttEvents.Num;
+	NumAttEvent++)
+      Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
+
+   /***** Set which attendance events are selected *****/
+   if (StrAttCodsSelected[0])
+      for (Ptr = StrAttCodsSelected;
+	   *Ptr;
+	   )
+	{
+	 /* Get next attendance event selected */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
+
+	 /* Set as selected */
+	 for (NumAttEvent = 0;
+	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent++)
+	    if (Gbl.AttEvents.Lst[NumAttEvent].AttCod == AttCod)
+	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	}
+   else	// No events selected
+      /* Set as selected */
+      for (NumAttEvent = 0;
+	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent++)
+	 if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+	    Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+
+   /***** Free memory for list of attendance events selected *****/
+   free ((void *) StrAttCodsSelected);
+  }
+
+/*****************************************************************************/
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
 
-static void Att_ListAttEventsWithStds (void)
+static void Att_ListEventsToSelect (void)
   {
    extern const char *Txt_Events;
    extern const char *Txt_Event;
@@ -2746,37 +2821,51 @@ static void Att_ListAttEventsWithStds (void)
 	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** List the events with students *****/
-   for (NumAttEvent = 0;
+   for (NumAttEvent = 0, Gbl.RowEvenOdd = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
-	{
-         BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
+     {
+      BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
 
-	 /***** Get data of the attendance event from database *****/
-	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
-         Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
+      /***** Get data of the attendance event from database *****/
+      Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
+      Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
 
-	 /***** Write a row for this event *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
-			    "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
-			    "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u</td>"
-			    "</tr>",
-	          BgColor,
-		  NumAttEvent + 1,
-		  BgColor,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Month,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Year,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Hour,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
-		  Gbl.AttEvents.Lst[NumAttEvent].Title,
-		  BgColor,
-		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
+      /***** Write a row for this event *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td align=\"center\" bgcolor=\"%s\" class=\"DAT\">"
+			 "<input type=\"checkbox\" name=\"AttCod\" value=\"%ld\"",
+	       BgColor,
+	       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
+      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out,"</td>"
+			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
+			 "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
+			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u</td>"
+			 "</tr>",
+	       BgColor,
+	       NumAttEvent + 1,
+	       BgColor,
+	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,
+	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Month,
+	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Year,
+	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Hour,
+	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
+	       Gbl.AttEvents.Lst[NumAttEvent].Title,
+	       BgColor,
+	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
 
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-	}
+      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+     }
+
+   /***** Put button to refresh *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"4\" align=\"center\" class=\"DAT\">");
+   // TODO: Form to update attendance
+   Lay_PutSendIcon ("recycle","Actualizar asistencia en los eventos seleccionados","Actualizar asistencia");	// Need translation!!!
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
    /***** End frame *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
@@ -2809,7 +2898,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
    Att_WriteTableHeadSeveralAttEvents ();
 
    /***** List the students *****/
-   for (NumStd = 0;
+   for (NumStd = 0, Gbl.RowEvenOdd = 0;
 	NumStd < NumStdsInList;
 	NumStd++)
      {
@@ -2831,7 +2920,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
    for (NumAttEvent = 0, Total = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
 	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT_N\""
 			    " style=\"border-style:solid none none none;border-width:1px;\">%u</td>",
@@ -2998,7 +3087,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
       Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
 
    /***** List students with attendance details *****/
-   for (NumStd = 0;
+   for (NumStd = 0, Gbl.RowEvenOdd = 0;
 	NumStd < NumStdsInList;
 	NumStd++)
      {
@@ -3088,7 +3177,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
 	 /***** Get data of the attendance event from database *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
