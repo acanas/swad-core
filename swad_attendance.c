@@ -2869,6 +2869,7 @@ static void Att_ListEventsToSelect (void)
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Update_attendance_according_to_selected_events;
    extern const char *Txt_Update_attendance;
    const char *BgColor;
    unsigned NumAttEvent;
@@ -2936,8 +2937,8 @@ static void Att_ListEventsToSelect (void)
    /***** Put button to refresh *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td align=\"center\" colspan=\"4\" class=\"DAT\">");
-   Act_LinkFormSubmit ("Actualizar asistencia seg&uacute;n los eventos seleccionados",The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("recycle","Actualizar asistencia seg&uacute;n los eventos seleccionados",Txt_Update_attendance);	// Need translation!!!
+   Act_LinkFormSubmit (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("recycle",Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 

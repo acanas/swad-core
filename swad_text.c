@@ -47234,6 +47234,27 @@ const char *Txt_Update_attendance =
 	"Atualizar presen&ccedil;a";
 #endif
 
+const char *Txt_Update_attendance_according_to_selected_events =
+#if   L==0
+	"Actualitzar assist&egrave;ncia segons els esdeveniments seleccionats";
+#elif L==1
+	"Update Anwesenheit nach ausgew&auml;hlten Ereignisse";
+#elif L==2
+	"Update attendance according to selected events";
+#elif L==3
+	"Actualizar asistencia seg&uacute;n los eventos seleccionados";
+#elif L==4
+	"Mise &agrave; jour pr&eacute;sence en fonction d'&eacute;v&eacute;nements s&eacute;lectionnes";
+#elif L==5
+	"Actualizar asistencia seg&uacute;n los eventos seleccionados";	// Okoteve traducción
+#elif L==6
+	"Aggiornamento presenza in base a eventi selezionati";
+#elif L==7
+	"Update bytno&sacute;&cacute; according to selected events";	// Potrzebujesz tlumaczenie
+#elif L==8
+	"Atualizar presen&ccedil;a de acordo com eventos selecionados";
+#endif
+
 const char *Txt_Update_connected_users =
 #if   L==0
 	"Actualitzar usuaris connectats";
