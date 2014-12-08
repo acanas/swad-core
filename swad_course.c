@@ -157,10 +157,8 @@ static void Crs_Configuration (bool PrintView)
    bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
-   if (PrintView)
-      /* Calendar head */
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
-   else
+   /***** Messages and links above the frame *****/
+   if (!PrintView)
      {
       /* Get indicators and show warning */
       Ind_GetIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,&Indicators);
@@ -189,10 +187,10 @@ static void Crs_Configuration (bool PrintView)
       /* Start form */
       if (IsForm)
          Act_FormStart (ActChgCrsLog);
-
-      /* Frame head */
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
      }
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -331,9 +329,6 @@ static void Crs_Configuration (bool PrintView)
       QR_LinkToCourse (200);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
-
-      /***** End of the frame *****/
-      Lay_EndSquareFrameTable ();
      }
    else
      {
@@ -373,16 +368,16 @@ static void Crs_Configuration (bool PrintView)
                Gbl.Prefs.IconsURL,
                (Indicators.CountIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
         	                                                    "warning");
+     }
 
-      /***** End of the frame *****/
-      Lay_EndRoundFrameTable10 ();
+   /***** End of the frame *****/
+   Lay_EndRoundFrameTable10 ();
 
-      if (IsForm)
-        {
-         /***** End form *****/
-         Lay_PutSendButton (Txt_Save);
-         fprintf (Gbl.F.Out,"</form>");
-        }
+   /***** End form *****/
+   if (IsForm)
+     {
+      Lay_PutSendButton (Txt_Save);
+      fprintf (Gbl.F.Out,"</form>");
      }
   }
 

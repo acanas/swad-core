@@ -761,14 +761,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          Par_PutHiddenParamLong ("ExaCod",ExaCod);
          Lay_PutLinkToPrintView2 ();
          fprintf (Gbl.F.Out,"</div>");
-
-         Lay_StartRoundFrameTable10 ("500px",0,NULL);
 	 break;
       case Exa_PRINT_VIEW:
          StyleTitle  = "CONV_TIT_IMPR";
          StyleForm   = "CONV_NEG_IMPR";
          StyleNormal = "CONV_IMPR";
-         Lay_StartSquareFrameTable (DARK_GRAY,"white","500px",0);
          break;
       case Exa_FORM_VIEW:
          StyleForm = The_ClassFormul[Gbl.Prefs.Theme];
@@ -776,11 +773,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          Act_FormStart (ActRcvExaAnn);
          if (ExaCod >= 0)
             Par_PutHiddenParamLong ("ExaCod",ExaCod);
-         Lay_StartRoundFrameTable10 ("500px",0,NULL);
          break;
      }
 
-   /***** Start table *****/
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 ("500px",0,NULL);
    fprintf (Gbl.F.Out,"<tr>" \
 	              "<td align=\"center\">" \
                       "<table cellspacing=\"0\" cellpadding=\"20\" width=\"100%%\">" \
@@ -1186,24 +1183,23 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          break;
      }
 
-   /***** End of table *****/
+   /***** End frame *****/
    fprintf (Gbl.F.Out,"</table>" \
 	              "</td>" \
 	              "</tr>" \
 	              "</table>" \
 	              "</td>" \
 	              "</tr>");
+   Lay_EndRoundFrameTable10 ();
+
    switch (TypeViewExamAnnouncement)
      {
       case Exa_NORMAL_VIEW:
-         Lay_EndRoundFrameTable10 ();
 	 break;
       case Exa_PRINT_VIEW:
-         Lay_EndSquareFrameTable ();
          QR_ExamAnnnouncement ();
          break;
       case Exa_FORM_VIEW:
-         Lay_EndRoundFrameTable10 ();
          Lay_PutSendButton (Txt_Send_announcement_of_exam);
          fprintf (Gbl.F.Out,"</form>");
          break;

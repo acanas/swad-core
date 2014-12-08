@@ -224,22 +224,17 @@ static void Cty_Configuration (bool PrintView)
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      if (PrintView)
+      /***** Link to print view *****/
+      if (!PrintView)
 	{
-	 /* Calendar head */
-	 Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
-	}
-      else
-	{
-	  /* Link to print view */
 	 fprintf (Gbl.F.Out,"<div align=\"center\">");
 	 Lay_PutLinkToPrintView1 (ActPrnCtyInf);
 	 Lay_PutLinkToPrintView2 ();
 	 fprintf (Gbl.F.Out,"</div>");
-
-	 /* Frame head */
-	 Lay_StartRoundFrameTable10 (NULL,2,NULL);
 	}
+
+      /***** Start frame *****/
+      Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -352,9 +347,6 @@ static void Cty_Configuration (bool PrintView)
 	 QR_LinkToCountry (200);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
-
-	 /***** End of the frame *****/
-	 Lay_EndSquareFrameTable ();
 	}
       else
 	{
@@ -411,10 +403,10 @@ static void Cty_Configuration (bool PrintView)
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCty (Rol_ROLE_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
-
-	 /***** End of the frame *****/
-	 Lay_EndRoundFrameTable10 ();
 	}
+
+      /***** End frame *****/
+      Lay_EndRoundFrameTable10 ();
      }
   }
 

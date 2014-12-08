@@ -87,8 +87,6 @@ void Lay_DisableIncompatibleTabs (void);
 void Lay_PutFormToEdit (Act_Action_t Action);
 void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutSendButton (const char *TextSendButton);
-void Lay_StartSquareFrameTable (const char *BorderColor,const char *BgColor,const char *Width,unsigned CellPadding);
-void Lay_EndSquareFrameTable (void);
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title);
 void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable10 (void);

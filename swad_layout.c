@@ -1523,36 +1523,6 @@ void Lay_WriteTitle (const char *Title)
   }
 
 /*****************************************************************************/
-/*********************** Start and end a table with frame ********************/
-/*****************************************************************************/
-
-void Lay_StartSquareFrameTable (const char *BorderColor,const char *BgColor,const char *Width,unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table cellspacing=\"1\" cellpadding=\"0\"");
-   if (BorderColor)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",BorderColor);
-   if (Width)
-      fprintf (Gbl.F.Out," style=\"width:%s;\"",
-               Width);
-   fprintf (Gbl.F.Out,"><tr>"
-	              "<td align=\"center\" valign=\"top\"");
-   if (BgColor)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",BgColor);
-   fprintf (Gbl.F.Out,"><table cellspacing=\"0\" cellpadding=\"%u\" width=\"100%%\">",
-	    CellPadding);
-  }
-
-void Lay_EndSquareFrameTable (void)
-  {
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
-	              "</tr>"
-	              "</table>"
-	              "</div>");
-  }
-
-/*****************************************************************************/
 /****************** Start and end a table with rounded frame *****************/
 /*****************************************************************************/
 

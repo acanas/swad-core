@@ -6902,13 +6902,11 @@ void Usr_ListAllDataGsts (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_INV;
 
       /***** Start table with list of guests *****/
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,0);
-
-      /***** Heading row with column names *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">"
+                         "<tr>");
 
-      /* Columns fot the data */
+      /* Columns for the data */
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 	                                           1);
            NumCol < NumColumnsCommonCard;
@@ -6941,7 +6939,7 @@ void Usr_ListAllDataGsts (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndSquareFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
      }
    else        // Gbl.Usrs.LstGsts.NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol_ROLE_GUEST);
@@ -7036,7 +7034,7 @@ void Usr_ListAllDataStds (void)
             Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
       /***** Start table with list of students *****/
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,0);
+      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">");
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
@@ -7117,7 +7115,7 @@ void Usr_ListAllDataStds (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndSquareFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Sco_SCOPE_COURSE)
@@ -7263,11 +7261,9 @@ void Usr_ListAllDataTchs (void)
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
       /***** Start table with list of teachers *****/
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,0);
-
-      /***** Heading row with column names *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">"
+                         "<tr>");
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 	                                           1);
            NumCol < NumColumns;
@@ -7298,7 +7294,7 @@ void Usr_ListAllDataTchs (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndSquareFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
      }
    else        // Gbl.Usrs.LstTchs.NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_ROLE_TEACHER]);
@@ -8336,14 +8332,14 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstGsts.NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",NULL,0);
+      Lay_StartRoundFrameTable10 (NULL,0,NULL);
       Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CENTRE ||
 				  Gbl.Scope.Current == Sco_SCOPE_INSTITUTION) ? Gbl.CurrentIns.Ins.InsCod :
                                                                                 -1L,
 				 -1L,-1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_ROLE_GUEST);
-      Lay_EndSquareFrameTable ();
+      Lay_EndRoundFrameTable10 ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_ROLE_GUEST);
@@ -8376,7 +8372,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",NULL,0);
+      Lay_StartRoundFrameTable10 (NULL,0,NULL);
       Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_COURSE ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEGREE ||
@@ -8389,7 +8385,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_COURSE ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_ROLE_STUDENT);
-      Lay_EndSquareFrameTable ();
+      Lay_EndRoundFrameTable10 ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
@@ -8430,7 +8426,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (Gbl.Usrs.LstTchs.NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",NULL,0);
+      Lay_StartRoundFrameTable10 (NULL,0,NULL);
       Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_COURSE ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEGREE ||
@@ -8443,7 +8439,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_COURSE ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_ROLE_TEACHER);
-      Lay_EndSquareFrameTable ();
+      Lay_EndRoundFrameTable10 ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_ROLE_TEACHER]);

@@ -1490,12 +1490,9 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
    Col2Width = RecordWidth - FrameWidth*2 - Col1Width;
 
-   /***** Start table *****/
+   /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
-   if (TypeOfView == Rec_RECORD_PRINT)
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",StrRecordWidth,2);
-   else
-      Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
+   Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1585,11 +1582,8 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          DB_FreeMySQLResult (&mysql_res);
         }
 
-   /***** End of table *****/
-   if (TypeOfView == Rec_RECORD_PRINT)
-      Lay_EndSquareFrameTable ();
-   else
-      Lay_EndRoundFrameTable10 ();
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
 
    if (DataForm)
      {
@@ -2106,12 +2100,9 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    Col2Width = Cols1and2Width - Col1Width;
    Cols2and3Width = Col2Width + Col3Width;
 
-   /***** Start record frame *****/
+   /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
-   if (TypeOfView == Rec_RECORD_PRINT)
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",StrRecordWidth,2);
-   else
-      Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
+   Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2778,11 +2769,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</tr>");
      }
 
-   /***** End of table *****/
-   if (TypeOfView == Rec_RECORD_PRINT)
-      Lay_EndSquareFrameTable ();
-   else
-      Lay_EndRoundFrameTable10 ();
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
    }
 
 /*****************************************************************************/

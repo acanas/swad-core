@@ -233,11 +233,10 @@ void Dat_DrawCalendar (void)
       5,	// December  --> May
      };
    unsigned Row,Col;
-   // unsigned Month = (unsigned) (((((int) (Gbl.Now.Date.Month - 1) / 4) - 1) * 4 + 12) % 12 + 1);	// Start one row before current month
    unsigned Month = StartingMonth[Gbl.Now.Date.Month];
    unsigned Year = (Month < Gbl.Now.Date.Month) ? Gbl.Now.Date.Year :
 	                                          Gbl.Now.Date.Year - 1;
-   bool PutLinkToEvents = (Gbl.CurrentAct == ActSeeCal);
+   bool PrintView = (Gbl.CurrentAct == ActPrnCal);
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -247,31 +246,19 @@ void Dat_DrawCalendar (void)
      }
 
    /***** Start of table and title *****/
-   switch (Gbl.CurrentAct)
+   if (!PrintView)
      {
-      case ActSeeCal:
-	 /* Link to print view */
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
-         Lay_PutLinkToPrintView1 (ActPrnCal);
-         Lay_PutLinkToPrintView2 ();
-         fprintf (Gbl.F.Out,"</div>");
-
-	 /* Calendar head */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
-         Lay_WriteHeaderClassPhoto (1,false,false,
-                                    Gbl.CurrentIns.Ins.InsCod,
-                                    Gbl.CurrentDeg.Deg.DegCod,
-                                    Gbl.CurrentCrs.Crs.CrsCod);
-	 break;
-      case ActPrnCal:
-	 /* Calendar head */
-	 Lay_StartSquareFrameTable (DARK_BLUE,"white",NULL,0);
-         Lay_WriteHeaderClassPhoto (1,true,false,
-                                    Gbl.CurrentIns.Ins.InsCod,
-                                    Gbl.CurrentDeg.Deg.DegCod,
-                                    Gbl.CurrentCrs.Crs.CrsCod);
-         break;
+      /* Link to print view */
+      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      Lay_PutLinkToPrintView1 (ActPrnCal);
+      Lay_PutLinkToPrintView2 ();
+      fprintf (Gbl.F.Out,"</div>");
      }
+   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_WriteHeaderClassPhoto (1,PrintView,false,
+			      Gbl.CurrentIns.Ins.InsCod,
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Create list of calls for examination *****/
    Exa_CreateListOfExamAnnouncements ();
@@ -290,7 +277,7 @@ void Dat_DrawCalendar (void)
 	   Col++)
 	{
 	 fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" width=\"120\">");
-	 Dat_DrawMonth (Year,Month,true,PutLinkToEvents,(Gbl.CurrentAct == ActPrnCal));
+	 Dat_DrawMonth (Year,Month,true,!PrintView,(Gbl.CurrentAct == ActPrnCal));
 	 fprintf (Gbl.F.Out,"</td>");
 	 if (++Month == 13)
 	   {
@@ -307,16 +294,8 @@ void Dat_DrawCalendar (void)
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();
 
-   /***** End of the frame *****/
-   switch (Gbl.CurrentAct)
-     {
-      case ActSeeCal:
-         Lay_EndRoundFrameTable10 ();
-	 break;
-      case ActPrnCal:
-         Lay_EndSquareFrameTable ();
-         break;
-     }
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

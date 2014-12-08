@@ -1727,17 +1727,11 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    struct Date DateAvgPhoto;
    bool TRIsOpen = false;
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Degrees);
+
    /***** Class photo start *****/
-   if (SeeOrPrint == Pho_DEGREES_SEE)
-     {
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_Degrees);
-      Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,-1L,-1L,-1L);
-     }
-   else
-     {
-      Lay_StartSquareFrameTable (DARK_BLUE,"white",NULL,0);
-      Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,-1L,-1L,-1L);
-     }
+   Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,SeeOrPrint == Pho_DEGREES_PRINT,true,-1L,-1L,-1L);
 
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
@@ -1791,11 +1785,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Photos end *****/
-   if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_EndRoundFrameTable10 ();
-   else
-      Lay_EndSquareFrameTable ();
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

@@ -225,8 +225,8 @@ void TT_ShowClassTimeTable (void)
                          Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
    bool PutEditOfficeHours = (Gbl.CurrentAct == ActSeeMyTimTbl &&
                               (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_ROLE_TEACHER)));
-   bool PutPrintButton = (Gbl.CurrentAct == ActSeeCrsTimTbl ||
-	                  Gbl.CurrentAct == ActSeeMyTimTbl);
+   bool PrintView = (Gbl.CurrentAct == ActSeeCrsTimTbl ||
+	             Gbl.CurrentAct == ActSeeMyTimTbl);
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
@@ -245,7 +245,7 @@ void TT_ShowClassTimeTable (void)
      }
 
    /***** Put buttons *****/
-   if (PutEditButton || PutEditOfficeHours || PutPrintButton)
+   if (PutEditButton || PutEditOfficeHours || PrintView)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
 
@@ -266,7 +266,7 @@ void TT_ShowClassTimeTable (void)
 	 fprintf (Gbl.F.Out,"</form>");
 	}
 
-      if (PutPrintButton)
+      if (PrintView)
 	{
          Lay_PutLinkToPrintView1 (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
                                                                       ActPrnMyTimTbl);
@@ -276,37 +276,28 @@ void TT_ShowClassTimeTable (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   switch (Gbl.CurrentAct)
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+
+   /***** Start time table drawing *****/
+   if (TimeTableType == TT_COURSE_TIMETABLE)
+      Lay_WriteHeaderClassPhoto (1,PrintView,false,
+				 Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+
+   if (PrintView)
      {
-      case ActSeeCrsTimTbl:
-      case ActSeeMyTimTbl:
-         /***** Start time table drawing *****/
-         Lay_StartRoundFrameTable10 ("98%",0,NULL);
-         if (TimeTableType == TT_COURSE_TIMETABLE)
-            Lay_WriteHeaderClassPhoto (1,false,false,
-                                       Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
-
-         /***** Select whether show only my groups or all groups *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"center\">");
-         Act_FormStart (Gbl.CurrentAct);
-         Grp_ShowSelectorWhichGrps ();
-         fprintf (Gbl.F.Out,"</form>"
-                            "</td>"
-                            "</tr>");
-	 break;
-      case ActPrnCrsTimTbl:
-      case ActPrnMyTimTbl:
-         /***** Start time table drawing *****/
-	 Lay_StartSquareFrameTable (DARK_BLUE,"white","90%",0);
-         if (TimeTableType == TT_COURSE_TIMETABLE)
-            Lay_WriteHeaderClassPhoto (1,true,false,
-                                       Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
-
-         /***** Show whether only my groups or all groups are selected *****/
-         TT_ShowTimeTableGrpsSelected ();
-         break;
+      /***** Select whether show only my groups or all groups *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td align=\"center\">");
+      Act_FormStart (Gbl.CurrentAct);
+      Grp_ShowSelectorWhichGrps ();
+      fprintf (Gbl.F.Out,"</form>"
+			 "</td>"
+			 "</tr>");
      }
+   else
+      /***** Show whether only my groups or all groups are selected *****/
+      TT_ShowTimeTableGrpsSelected ();
 
    /***** Show the time table *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -315,18 +306,8 @@ void TT_ShowClassTimeTable (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** End of frame *****/
-   switch (Gbl.CurrentAct)
-     {
-      case ActSeeCrsTimTbl:
-      case ActSeeMyTimTbl:
-         Lay_EndRoundFrameTable10 ();
-	 break;
-      case ActPrnCrsTimTbl:
-      case ActPrnMyTimTbl:
-         Lay_EndSquareFrameTable ();
-         break;
-     }
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

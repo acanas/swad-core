@@ -246,12 +246,8 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      if (PrintView)
-	{
-	 /* Calendar head */
-	 Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
-	}
-      else
+      /***** Links to print view and upload photo *****/
+      if (!PrintView)
 	{
 	 fprintf (Gbl.F.Out,"<div align=\"center\">");
 
@@ -264,10 +260,10 @@ static void Ctr_Configuration (bool PrintView)
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 
 	 fprintf (Gbl.F.Out,"</div>");
-
-	 /* Frame head */
-	 Lay_StartRoundFrameTable10 (NULL,2,NULL);
 	}
+
+      /***** Start frame *****/
+      Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -402,9 +398,6 @@ static void Ctr_Configuration (bool PrintView)
 	 QR_LinkToCentre (200);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
-
-	 /***** End of the frame *****/
-	 Lay_EndSquareFrameTable ();
 	}
       else
 	{
@@ -443,10 +436,10 @@ static void Ctr_Configuration (bool PrintView)
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_ROLE_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
-
-	 /***** End of the frame *****/
-	 Lay_EndRoundFrameTable10 ();
 	}
+
+      /***** End frame *****/
+      Lay_EndRoundFrameTable10 ();
      }
   }
 
