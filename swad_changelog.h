@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.34.1 (2014/12/08)"
+#define Log_PLATFORM_VERSION	"SWAD 14.34.2 (2014/12/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.34.2  :Dic 08, 2014	Button to show more details on list of attendances. (170728 lines)
 	Version 14.34.1  :Dic 08, 2014	Translation of a message when refreshing list of attendances. (170710 lines)
 	Version 14.34    :Dic 08, 2014	Teachers can refresh list of attendances after selecting events. (170688 lines)
 	Version 14.33    :Dic 07, 2014	A teacher can select attendance events in list of attendances. (170595 lines)

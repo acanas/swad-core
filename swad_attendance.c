@@ -70,7 +70,6 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
 static void Att_GetParamAttOrderType (void);
 static void Att_PutFormToListStds (void);
-static void Att_PutFormToPrintListStds (char *StrAttCodsSelected);
 static void Att_PutFormToCreateNewAttEvent (void);
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
@@ -97,6 +96,8 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
 static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods);
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
+static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected);
+static void Att_PutButtonToShowDetails (char *StrAttCodsSelected);
 static void Att_ListEventsToSelect (void);
 static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
@@ -434,28 +435,6 @@ static void Att_PutFormToListStds (void)
    Act_LinkFormSubmit (Txt_Attendance_list,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("list",Txt_Attendance_list,Txt_Attendance_list);
    fprintf (Gbl.F.Out,"</form>");
-  }
-
-/*****************************************************************************/
-/**** Put a link (form) to list assistance of students to several events *****/
-/*****************************************************************************/
-
-static void Att_PutFormToPrintListStds (char *StrAttCodsSelected)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Print_view;
-
-   /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
-   Act_FormStart (ActPrnLstAttStd);
-   Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
-   if (StrAttCodsSelected[0])
-      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
   }
 
 /*****************************************************************************/
@@ -2651,8 +2630,10 @@ void Usr_ListAttendanceStdsCrs (void)
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
-   char *StrAttCodsSelected;
    unsigned NumAttEvent;
+   char *StrAttCodsSelected;
+   char YN[1+1];
+   bool ShowDetails;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2663,6 +2644,10 @@ void Usr_ListAttendanceStdsCrs (void)
    /* Check the number of students to list */
    if ((NumStdsInList = Usr_CountNumUsrsInEncryptedList ()))
      {
+      /***** Get boolean parameter that indicates if details must be shown *****/
+      Par_GetParToText ("ShowDetails",YN,1);
+      ShowDetails = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+
       /***** Get list of groups selected ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
@@ -2682,10 +2667,7 @@ void Usr_ListAttendanceStdsCrs (void)
 
       /***** Put link to print *****/
       if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Att_PutFormToPrintListStds (StrAttCodsSelected);
-
-      /***** Free memory for list of attendance events selected *****/
-      free ((void *) StrAttCodsSelected);
+	 Att_PutFormToPrintListStds (ShowDetails,StrAttCodsSelected);
 
       /***** List events to select *****/
       Att_ListEventsToSelect ();
@@ -2696,8 +2678,14 @@ void Usr_ListAttendanceStdsCrs (void)
       /***** Show table with attendances for every student in list *****/
       Att_ListStdsAttendanceTable (NumStdsInList,LstSelectedUsrCods);
 
-      /***** List the students with details and comments *****/
-      Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
+      /***** Show details or put button to show details *****/
+      if (ShowDetails)
+         Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
+      else if (Gbl.CurrentAct == ActSeeLstAttStd)
+	 Att_PutButtonToShowDetails (StrAttCodsSelected);
+
+      /***** Free memory for list of attendance events selected *****/
+      free ((void *) StrAttCodsSelected);
 
       /***** Free list of user codes *****/
       free ((void *) LstSelectedUsrCods);
@@ -2860,6 +2848,51 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
   }
 
 /*****************************************************************************/
+/**** Put a link (form) to list assistance of students to several events *****/
+/*****************************************************************************/
+
+static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Print_view;
+
+   /***** Link to print view *****/
+   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   Act_FormStart (ActPrnLstAttStd);
+   if (ShowDetails)
+      Par_PutHiddenParamChar ("ShowDetails",'Y');
+   Grp_PutParamsCodGrps ();
+   Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
+   if (StrAttCodsSelected[0])
+      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
+   Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
+   fprintf (Gbl.F.Out,"</form>"
+	              "</div>");
+  }
+
+/*****************************************************************************/
+/**** Put a link (form) to list assistance of students to several events *****/
+/*****************************************************************************/
+
+static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
+  {
+   extern const char *Txt_Show_more_details;
+
+   /***** Button to show more details *****/
+   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   Act_FormStart (ActSeeLstAttStd);
+   Par_PutHiddenParamChar ("ShowDetails",'Y');
+   Grp_PutParamsCodGrps ();
+   Usr_PutHiddenParUsrCodAll (ActSeeLstAttStd,Gbl.Usrs.Select.All);
+   if (StrAttCodsSelected[0])
+      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
+   Lay_PutSendButton (Txt_Show_more_details);
+   fprintf (Gbl.F.Out,"</form>"
+	              "</div>");
+  }
+
+/*****************************************************************************/
 /********** Write list of those attendance events that have students *********/
 /*****************************************************************************/
 
@@ -2874,19 +2907,19 @@ static void Att_ListEventsToSelect (void)
    const char *BgColor;
    unsigned NumAttEvent;
 
-   /***** Start frame *****/
+   /***** Start form to update the attendance
+	  depending on the events selected *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
      {
-      /***** Start form to update the attendance
-	     depending on the events selected *****/
       Act_FormStart (ActSeeLstAttStd);
+      Grp_PutParamsCodGrps ();
       Usr_PutHiddenParUsrCodAll (ActSeeLstAttStd,Gbl.Usrs.Select.All);
-
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
      }
-   else
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
+
+   /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th colspan=\"2\" align=\"left\" class=\"TIT_TBL\">%s</th>"
 		      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
@@ -2901,11 +2934,11 @@ static void Att_ListEventsToSelect (void)
      {
       BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      /***** Get data of the attendance event from database *****/
+      /* Get data of the attendance event from database */
       Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
       Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
 
-      /***** Write a row for this event *****/
+      /* Write a row for this event */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td align=\"center\" bgcolor=\"%s\" class=\"DAT\">"
 			 "<input type=\"checkbox\" name=\"AttCods\" value=\"%ld\"",
@@ -2935,23 +2968,22 @@ static void Att_ListEventsToSelect (void)
      }
 
    /***** Put button to refresh *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"center\" colspan=\"4\" class=\"DAT\">");
-   Act_LinkFormSubmit (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("recycle",Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-
-   /***** End frame *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
      {
-      Lay_EndRoundFrameTable10 ();
-
-      /***** End form *****/
-      fprintf (Gbl.F.Out,"</form>");
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td align=\"center\" colspan=\"4\" class=\"DAT\">");
+      Act_LinkFormSubmit (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("recycle",Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   else
-      Lay_EndSquareFrameTable ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd)
+      fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/
@@ -2971,10 +3003,9 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   if (Gbl.CurrentAct == ActSeeLstAttStd)
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
-   else
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
+
+   /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
 
    /***** List the students *****/
@@ -3013,10 +3044,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 	    Total);
 
    /***** End frame *****/
-   if (Gbl.CurrentAct == ActSeeLstAttStd)
-      Lay_EndRoundFrameTable10 ();
-   else
-      Lay_EndSquareFrameTable ();
+   Lay_EndRoundFrameTable10 ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -3161,10 +3189,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   if (Gbl.CurrentAct == ActSeeLstAttStd)
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Details);
-   else
-      Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Details);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;
@@ -3180,10 +3205,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
      }
 
    /***** End frame *****/
-   if (Gbl.CurrentAct == ActSeeLstAttStd)
-      Lay_EndRoundFrameTable10 ();
-   else
-      Lay_EndSquareFrameTable ();
+   Lay_EndRoundFrameTable10 ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
