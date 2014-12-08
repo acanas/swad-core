@@ -70,7 +70,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
 static void Att_GetParamAttOrderType (void);
 static void Att_PutFormToListStds (void);
-static void Att_PutFormToPrintListStds (void);
+static void Att_PutFormToPrintListStds (char *StrAttCodsSelected);
 static void Att_PutFormToCreateNewAttEvent (void);
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
@@ -96,7 +96,7 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
 static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods);
-static void Att_GetListSelectedAttCods (void);
+static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
 static void Att_ListEventsToSelect (void);
 static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
@@ -440,7 +440,7 @@ static void Att_PutFormToListStds (void)
 /**** Put a link (form) to list assistance of students to several events *****/
 /*****************************************************************************/
 
-static void Att_PutFormToPrintListStds (void)
+static void Att_PutFormToPrintListStds (char *StrAttCodsSelected)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Print_view;
@@ -448,7 +448,10 @@ static void Att_PutFormToPrintListStds (void)
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div align=\"center\">");
    Act_FormStart (ActPrnLstAttStd);
+   Grp_PutParamsCodGrps ();
    Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
+   if (StrAttCodsSelected[0])
+      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
    Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
    fprintf (Gbl.F.Out,"</form>"
@@ -2144,7 +2147,7 @@ static void Att_PutParamsCodGrps (long AttCod)
      {
       fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"GrpCods\" value=\"");
 
-      /* Get and write the group types and names */
+      /* Get groups */
       for (NumGrp = 0;
 	   NumGrp < NumGrps;
 	   NumGrp++)
@@ -2648,6 +2651,7 @@ void Usr_ListAttendanceStdsCrs (void)
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
+   char *StrAttCodsSelected;
    unsigned NumAttEvent;
 
    /***** Get list of attendance events *****/
@@ -2659,8 +2663,8 @@ void Usr_ListAttendanceStdsCrs (void)
    /* Check the number of students to list */
    if ((NumStdsInList = Usr_CountNumUsrsInEncryptedList ()))
      {
-      if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Att_PutFormToPrintListStds ();
+      /***** Get list of groups selected ******/
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get list of students selected to show their attendances *****/
       Att_GetListSelectedUsrCods (NumStdsInList,&LstSelectedUsrCods);
@@ -2674,7 +2678,14 @@ void Usr_ListAttendanceStdsCrs (void)
 	                                                                                           LstSelectedUsrCods,NumStdsInList);
 
       /***** Get list of attendance events selected *****/
-      Att_GetListSelectedAttCods ();
+      Att_GetListSelectedAttCods (&StrAttCodsSelected);
+
+      /***** Put link to print *****/
+      if (Gbl.CurrentAct == ActSeeLstAttStd)
+	 Att_PutFormToPrintListStds (StrAttCodsSelected);
+
+      /***** Free memory for list of attendance events selected *****/
+      free ((void *) StrAttCodsSelected);
 
       /***** List events to select *****/
       Att_ListEventsToSelect ();
@@ -2690,6 +2701,9 @@ void Usr_ListAttendanceStdsCrs (void)
 
       /***** Free list of user codes *****/
       free ((void *) LstSelectedUsrCods);
+
+      /***** Free list of groups selected *****/
+      Grp_FreeListCodSelectedGrps ();
      }
    else	// No students selected
      {
@@ -2739,32 +2753,40 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
 /****************** Get list of attendance events selected *******************/
 /*****************************************************************************/
 
-static void Att_GetListSelectedAttCods (void)
+static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
   {
    unsigned MaxSizeListAttCodsSelected;
-   char *StrAttCodsSelected;
    unsigned NumAttEvent;
    const char *Ptr;
    long AttCod;
    char LongStr[1+10+1];
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumGrpsInThisEvent;
+   unsigned NumGrpInThisEvent;
+   long GrpCodInThisEvent;
+   unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
    MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1+10+1);
-   if ((StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected+1)) == NULL)
+   if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store list of attendance events selected.");
 
    /***** Get parameter multiple with list of attendance events selected *****/
-   Par_GetParMultiToText ("AttCod",StrAttCodsSelected,MaxSizeListAttCodsSelected);
+   Par_GetParMultiToText ("AttCods",*StrAttCodsSelected,MaxSizeListAttCodsSelected);
 
-   /***** Reset selection *****/
-   for (NumAttEvent = 0;
-	NumAttEvent < Gbl.AttEvents.Num;
-	NumAttEvent++)
-      Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
+   /***** Set which attendance events will be shown as selected (checkboxes on) *****/
+   if ((*StrAttCodsSelected)[0])	// There are events selected
+     {
+      /* Reset selection */
+      for (NumAttEvent = 0;
+	   NumAttEvent < Gbl.AttEvents.Num;
+	   NumAttEvent++)
+	 Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
 
-   /***** Set which attendance events are selected *****/
-   if (StrAttCodsSelected[0])
-      for (Ptr = StrAttCodsSelected;
+      /* Set some events as selected */
+      for (Ptr = *StrAttCodsSelected;
 	   *Ptr;
 	   )
 	{
@@ -2772,23 +2794,69 @@ static void Att_GetListSelectedAttCods (void)
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
 	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
 
-	 /* Set as selected */
+	 /* Set each event in *StrAttCodsSelected as selected */
 	 for (NumAttEvent = 0;
 	      NumAttEvent < Gbl.AttEvents.Num;
 	      NumAttEvent++)
 	    if (Gbl.AttEvents.Lst[NumAttEvent].AttCod == AttCod)
 	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
 	}
-   else	// No events selected
-      /* Set as selected */
-      for (NumAttEvent = 0;
-	   NumAttEvent < Gbl.AttEvents.Num;
-	   NumAttEvent++)
-	 if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+     }
+   else				// No events selected
+     {
+      /***** Set which events will be marked as selected by default *****/
+      if (!Gbl.CurrentCrs.Grps.NumGrps ||	// Course has no groups
+          Gbl.Usrs.ClassPhoto.AllGroups)	// All groups selected
+	 /* Set all events as selected */
+	 for (NumAttEvent = 0;
+	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent++)
 	    Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+      else					// Course has groups and not all of them are selected
+	 for (NumAttEvent = 0;
+	      NumAttEvent < Gbl.AttEvents.Num;
+	      NumAttEvent++)
+	   {
+	    /* Reset selection */
+	    Gbl.AttEvents.Lst[NumAttEvent].Selected = false;
 
-   /***** Free memory for list of attendance events selected *****/
-   free ((void *) StrAttCodsSelected);
+	    /* Set this event as selected? */
+	    if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)	// Some students attended to this event
+	       Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+	    else						// No students attended to this event
+	      {
+	       /***** Get groups associated to an attendance event from database *****/
+	       sprintf (Query,"SELECT GrpCod FROM att_grp" \
+			      " WHERE att_grp.AttCod='%ld'",
+			Gbl.AttEvents.Lst[NumAttEvent].AttCod);
+	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");
+
+	       if (NumGrpsInThisEvent)	// This event is associated to groups
+		  /* Get groups associated to this event */
+		  for (NumGrpInThisEvent = 0;
+		       NumGrpInThisEvent < NumGrpsInThisEvent &&
+		       !Gbl.AttEvents.Lst[NumAttEvent].Selected;
+		       NumGrpInThisEvent++)
+		    {
+		     /* Get next group associated to this event */
+		     row = mysql_fetch_row (mysql_res);
+		     if ((GrpCodInThisEvent = Str_ConvertStrCodToLongCod (row[0])) > 0)
+			/* Check if this group is selected */
+			for (NumGrpSel = 0;
+			     NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps &&
+			     !Gbl.AttEvents.Lst[NumAttEvent].Selected;
+			     NumGrpSel++)
+			   if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel] == GrpCodInThisEvent)
+			      Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+		    }
+	       else			// This event is not associated to groups
+		  Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
+
+	       /***** Free structure that stores the query result *****/
+	       DB_FreeMySQLResult (&mysql_res);
+	      }
+	   }
+     }
   }
 
 /*****************************************************************************/
@@ -2797,19 +2865,24 @@ static void Att_GetListSelectedAttCods (void)
 
 static void Att_ListEventsToSelect (void)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Present;
-   extern const char *Txt_Absent;
-   extern const char *Txt_Student_comment;
-   extern const char *Txt_Teachers_comment;
+   extern const char *Txt_Update_attendance;
    const char *BgColor;
    unsigned NumAttEvent;
 
    /***** Start frame *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
+     {
+      /***** Start form to update the attendance
+	     depending on the events selected *****/
+      Act_FormStart (ActSeeLstAttStd);
+      Usr_PutHiddenParUsrCodAll (ActSeeLstAttStd,Gbl.Usrs.Select.All);
+
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
+     }
    else
       Lay_StartSquareFrameTable (NULL,NULL,NULL,2);
 
@@ -2820,7 +2893,7 @@ static void Att_ListEventsToSelect (void)
 	    Txt_Event,
 	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 
-   /***** List the events with students *****/
+   /***** List the events *****/
    for (NumAttEvent = 0, Gbl.RowEvenOdd = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
@@ -2834,12 +2907,13 @@ static void Att_ListEventsToSelect (void)
       /***** Write a row for this event *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td align=\"center\" bgcolor=\"%s\" class=\"DAT\">"
-			 "<input type=\"checkbox\" name=\"AttCod\" value=\"%ld\"",
+			 "<input type=\"checkbox\" name=\"AttCods\" value=\"%ld\"",
 	       BgColor,
 	       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out," />"
+	                 "</td>"
 			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
 			 "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
 			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u</td>"
@@ -2861,15 +2935,20 @@ static void Att_ListEventsToSelect (void)
 
    /***** Put button to refresh *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"4\" align=\"center\" class=\"DAT\">");
-   // TODO: Form to update attendance
-   Lay_PutSendIcon ("recycle","Actualizar asistencia en los eventos seleccionados","Actualizar asistencia");	// Need translation!!!
+		      "<td align=\"center\" colspan=\"4\" class=\"DAT\">");
+   Act_LinkFormSubmit ("Actualizar asistencia seg&uacute;n los eventos seleccionados",The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("recycle","Actualizar asistencia seg&uacute;n los eventos seleccionados",Txt_Update_attendance);	// Need translation!!!
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
    /***** End frame *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
+     {
       Lay_EndRoundFrameTable10 ();
+
+      /***** End form *****/
+      fprintf (Gbl.F.Out,"</form>");
+     }
    else
       Lay_EndSquareFrameTable ();
   }
@@ -2961,7 +3040,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
 	 /***** Get data of this attendance event *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
@@ -3038,7 +3117,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
    for (NumAttEvent = 0, NumTimesPresent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
-      if (Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList)
+      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
 	 /***** Check if this student is already registered in the current event *****/
 	 // Here it is not necessary to get comments

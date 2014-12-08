@@ -47213,6 +47213,27 @@ const char *Txt_Update =
 	"Atualizar";
 #endif
 
+const char *Txt_Update_attendance =
+#if   L==0
+	"Actualitzar assist&egrave;ncia";
+#elif L==1
+	"Update Anwesenheit";
+#elif L==2
+	"Update attendance";
+#elif L==3
+	"Actualizar asistencia";
+#elif L==4
+	"Mise &agrave; jour pr&eacute;sence";
+#elif L==5
+	"Actualizar asistencia";	// Okoteve traducción
+#elif L==6
+	"Aggiornamento presenza";
+#elif L==7
+	"Aktualizacja bytno&sacute;&cacute;";
+#elif L==8
+	"Atualizar presen&ccedil;a";
+#endif
+
 const char *Txt_Update_connected_users =
 #if   L==0
 	"Actualitzar usuaris connectats";

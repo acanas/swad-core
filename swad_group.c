@@ -273,7 +273,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
 
-   /***** Submit buton *****/
+   /***** Submit button *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\" colspan=\"7\" class=\"%s\"><br />",
             The_ClassFormul[Gbl.Prefs.Theme]);
@@ -283,7 +283,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 	              "</tr>");
 
    /***** End table *****/
-    Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 ();
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</form>"
