@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.34.3 (2014/12/08)"
+#define Log_PLATFORM_VERSION	"SWAD 14.34.4 (2014/12/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.34.4  :Dic 08, 2014	Some messages translated. (170623 lines)
 	Version 14.34.3  :Dic 08, 2014	Tables are printed with rounded corners. (170602 lines)
 	Version 14.34.2  :Dic 08, 2014	Button to show more details on list of attendances. (170728 lines)
 	Version 14.34.1  :Dic 08, 2014	Translation of a message when refreshing list of attendances. (170710 lines)

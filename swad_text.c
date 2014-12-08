@@ -455,7 +455,7 @@ const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[Txt
 	"Se non desideri più ricevere notifiche via e-mail,"
 	   " deselezionare l'opzione nelle preferenze del tuo profilo.",
 	"Jesli nie chcesz otrzymywac powiadomien e-mail,"
-	   " usun zaznaczenie opcje w ustawieniach swojego profilu.",
+	   " usu&nacute; zaznaczenie opcje w ustawieniach swojego profilu.",
 	"Se já não desejar receber notificações por e-mail,"
 	   " desmarque a opção nas preferências do seu perfil.",
 	};
@@ -1634,7 +1634,7 @@ const char *Txt_Action =
 #elif L==6
 	"Azione";
 #elif L==7
-	"Dzialanie";
+	"Dzia&lstrok;anie";
 #elif L==8
 	"A&ccedil;&atilde;o";
 #endif
@@ -7274,7 +7274,7 @@ const char *Txt_Delete_message =
 #elif L==6
 	"Rimuovere messaggio";
 #elif L==7
-	"Usun wiadomosc";
+	"Usu&nacute; wiadomosc";
 #elif L==8
 	"Remover mensagem";
 #endif
@@ -7316,7 +7316,7 @@ const char *Txt_Delete_messages_sent =
 #elif L==6
 	"Rimuovere messaggi inviati";
 #elif L==7
-	"Usun wiadomosci wyslanych";
+	"Usu&nacute; wiadomosci wyslanych";
 #elif L==8
 	"Eliminar mensagens enviadas";
 #endif
@@ -8996,7 +8996,7 @@ const char *Txt_Edit_office_hours =
 
 const char *Txt_Edit_question =
 #if   L==0
-	"Editar pregunta";	// Necessita traduccio
+	"Editar pregunta";
 #elif L==1
 	"Frage bearbeiten";
 #elif L==2
@@ -9019,13 +9019,13 @@ const char *Txt_Edit_record_fields =
 #if   L==0
 	"Editar camps de fitxes";
 #elif L==1
-	"Edit record fields";		// Need Übersetzung
+	"Datensatzfelder bearbeiten";
 #elif L==2
 	"Edit record fields";
 #elif L==3
 	"Editar campos de fichas";
 #elif L==4
-	"Edit record fields";		// Besoin de traduction
+	"Modifier champs de cartes";
 #elif L==5
 	"Editar campos de fichas";	// Okoteve traducción
 #elif L==6
@@ -9033,12 +9033,12 @@ const char *Txt_Edit_record_fields =
 #elif L==7
 	"Edycja rekord w dziedzinie";
 #elif L==8
-	"Edit record fields";		// Necessita de tradução
+	"Editar campos cart&otilde;es";
 #endif
 
 const char *Txt_Edit_survey =
 #if   L==0
-	"Editar encuesta";	// Necessita traduccio
+	"Editar enquesta";
 #elif L==1
 	"Umfrage bearbeiten";
 #elif L==2
@@ -9059,7 +9059,7 @@ const char *Txt_Edit_survey =
 
 const char *Txt_Edit_text =
 #if   L==0
-	"Editar texto";	// Necessita traduccio
+	"Editar text";
 #elif L==1
 	"Text bearbeiten";
 #elif L==2
@@ -9080,7 +9080,7 @@ const char *Txt_Edit_text =
 
 const char *Txt_eg_A_B =
 #if   L==0
-	"por ej.: A, B,...";	// Necessita traduccio
+	"per ex.: A, B,...";
 #elif L==1
 	"z. B.: A, B,...";
 #elif L==2
@@ -9101,7 +9101,7 @@ const char *Txt_eg_A_B =
 
 const char *Txt_eg_Lectures_Practicals =
 #if   L==0
-	"por ej.: Teor&iacute;a, Pr&aacute;cticas,...";	// Necessita traduccio
+	"per ex.: Teoria, Pr&agrave;ctiques,...";
 #elif L==1
 	"z. B.: Vorlesung, &Uuml;bung,...";
 #elif L==2
@@ -9122,7 +9122,7 @@ const char *Txt_eg_Lectures_Practicals =
 
 const char *Txt_Eliminate =
 #if   L==0
-	"Eliminar";	// Necessita traduccio
+	"Eliminar";
 #elif L==1
 	"Entfernen";
 #elif L==2
@@ -29546,28 +29546,7 @@ const char *Txt_Register =
 #elif L==8
 	"Registrar";
 #endif
-/*
-const char *Txt_Register_remove =
-#if   L==0
-	"Inscriure / eliminar";
-#elif L==1
-	"Anmeldung / entfernen";
-#elif L==2
-	"Register / remove";
-#elif L==3
-	"Inscribir / eliminar";
-#elif L==4
-	"Inscrire / enlever";
-#elif L==5
-	"Inscribir / eliminar";	// Okoteve traducción
-#elif L==6
-	"Registrare / rimuovere";
-#elif L==7
-	"Zarejestruj sie / usun";
-#elif L==8
-	"Registrar / tirar";
-#endif
-*/
+
 const char *Txt_Register_students =
 #if   L==0
 	"Inscriure estudiants";
@@ -29812,9 +29791,30 @@ const char *Txt_Remove =
 #elif L==6
 	"Rimuovere";
 #elif L==7
-	"Usun";
+	"Usu&nacute;";
 #elif L==8
 	"Remover";
+#endif
+
+const char *Txt_Remove_account =
+#if   L==0
+	"Eliminar compte";
+#elif L==1
+	"Konto entfernen";
+#elif L==2
+	"Remove account";
+#elif L==3
+	"Eliminar cuenta";
+#elif L==4
+	"Supprimer compte";
+#elif L==5
+	"Eliminar cuenta";	// Okoteve traducción
+#elif L==6
+	"Rimuovere account";
+#elif L==7
+	"Usu&nacute; konto";
+#elif L==8
+	"Remover conta";
 #endif
 
 const char *Txt_Remove_all_students =
@@ -29833,14 +29833,14 @@ const char *Txt_Remove_all_students =
 #elif L==6
 	"Rimuovere tutti gli stud.";
 #elif L==7
-	"Usun wszystkich student&oacute;w";
+	"Usu&nacute; wszystkich student&oacute;w";
 #elif L==8
 	"Tirar todos estudantes";
 #endif
 
 const char *Txt_Remove_announcement_of_exam =
 #if   L==0
-	"Eliminar convocatoria de examen";	// Necessita traduccio
+	"Eliminar convocat&ograve;ria d'examen";
 #elif L==1
 	"Entfernen Aufruf f&uuml;r Pr&uuml;fung";
 #elif L==2
@@ -29854,16 +29854,16 @@ const char *Txt_Remove_announcement_of_exam =
 #elif L==6
 	"Rimuovere sessione d'esame";
 #elif L==7
-	"Usun ogloszenie egzaminu";
+	"Usu&nacute; ogloszenie egzaminu";
 #elif L==8
 	"Remover chamada para o exame";
 #endif
 
 const char *Txt_Remove_assignment =
 #if   L==0
-	"Eliminar actividad";	// Necessita traduccio
+	"Eliminar activitat";
 #elif L==1
-	"Aufgabe Entfernen";
+	"Aufgabe entfernen";
 #elif L==2
 	"Remove assignment";
 #elif L==3
@@ -29875,7 +29875,7 @@ const char *Txt_Remove_assignment =
 #elif L==6
 	"Rimuovere attivit&agrave;";
 #elif L==7
-	"Usun przypisanie";
+	"Usu&nacute; przypisanie";
 #elif L==8
 	"Remover atividade";
 #endif
@@ -29896,7 +29896,7 @@ const char *Txt_Remove_banner =
 #elif L==6
 	"Rimuovere banner";
 #elif L==7
-	"Usun banner";
+	"Usu&nacute; banner";
 #elif L==8
 	"Remover banner";
 #endif
@@ -29917,7 +29917,7 @@ const char *Txt_Remove_centre =
 #elif L==6
 	"Rimuovere centro";
 #elif L==7
-	"Usun centrum";
+	"Usu&nacute; centrum";
 #elif L==8
 	"Remover centro";
 #endif
@@ -29938,7 +29938,7 @@ const char *Txt_Remove_country =
 #elif L==6
 	"Rimuovere paese";
 #elif L==7
-	"Usun kraj";
+	"Usu&nacute; kraj";
 #elif L==8
 	"Remover pa&iacute;s";
 #endif
@@ -29959,7 +29959,7 @@ const char *Txt_Remove_course =
 #elif L==6
 	"Rimuovere corso";
 #elif L==7
-	"Usun kurs";
+	"Usu&nacute; kurs";
 #elif L==8
 	"Remover disciplina";
 #endif
@@ -29980,7 +29980,7 @@ const char *Txt_Remove_degree =
 #elif L==6
 	"Rimuovere laurea";
 #elif L==7
-	"Usun stopnia";
+	"Usu&nacute; stopnia";
 #elif L==8
 	"Remover titula&ccedil;&atilde;o";
 #endif
@@ -30001,7 +30001,7 @@ const char *Txt_Remove_department =
 #elif L==6
 	"Rimuovere dipartimento";
 #elif L==7
-	"Usun dzia&lstrok;";
+	"Usu&nacute; dzia&lstrok;";
 #elif L==8
 	"Remover departamento";
 #endif
@@ -30022,7 +30022,7 @@ const char *Txt_Remove_email_X =	// Warning: it is very important to include %s 
 #elif L==6
 	"Rimuovere e-mail %s";
 #elif L==7
-	"Usun e-mail %s";
+	"Usu&nacute; e-mail %s";
 #elif L==8
 	"Remover e-mail %s";
 #endif
@@ -30043,7 +30043,7 @@ const char *Txt_Remove_event =
 #elif L==6
 	"Rimuovere evento";
 #elif L==7
-	"Usun wydarzenie";
+	"Usu&nacute; wydarzenie";
 #elif L==8
 	"Remover evento";
 #endif
@@ -30064,7 +30064,7 @@ const char *Txt_Remove_file =
 #elif L==6
 	"Rimuovere file";
 #elif L==7
-	"Usun plik";
+	"Usu&nacute; plik";
 #elif L==8
 	"Remover arquivo";
 #endif
@@ -30085,7 +30085,7 @@ const char *Txt_Remove_FILE_OR_LINK_X =	// Warning: it is very important to incl
 #elif L==6
 	"Rimuovere %s";
 #elif L==7
-	"Usun %s";
+	"Usu&nacute; %s";
 #elif L==8
 	"Remover %s";
 #endif
@@ -30106,7 +30106,7 @@ const char *Txt_Remove_folder_X = // Warning: it is very important to include %s
 #elif L==6
 	"Rimuovere cartella %s";
 #elif L==7
-	"Usun folder %s";
+	"Usu&nacute; folder %s";
 #elif L==8
 	"Remover diret&oacute;rio %s";
 #endif
@@ -30127,7 +30127,7 @@ const char *Txt_Remove_folder =
 #elif L==6
 	"Rimuovere cartella";
 #elif L==7
-	"Usun folder";
+	"Usu&nacute; folder";
 #elif L==8
 	"Remover diret&oacute;rio";
 #endif
@@ -30148,7 +30148,7 @@ const char *Txt_Remove_group =
 #elif L==6
 	"Rimuovere gruppo";
 #elif L==7
-	"Usun gruper";
+	"Usu&nacute; gruper";
 #elif L==8
 	"Remover grupo";
 #endif
@@ -30169,7 +30169,7 @@ const char *Txt_Remove_holiday =
 #elif L==6
 	"Rimuovere festivit&agrave;";
 #elif L==7
-	"Usun wakacje";
+	"Usu&nacute; wakacje";
 #elif L==8
 	"Remover f&eacute;ria";
 #endif
@@ -30211,7 +30211,7 @@ const char *Txt_Remove_institution =
 #elif L==6
 	"Rimuovere istituzione";
 #elif L==7
-	"Usun instytucje";
+	"Usu&nacute; instytucje";
 #elif L==8
 	"Remover institui&ccedil;&atilde;o";
 #endif
@@ -30232,7 +30232,7 @@ const char *Txt_Remove_link =
 #elif L==6
 	"Rimuovere link";
 #elif L==7
-	"Usun link";
+	"Usu&nacute; link";
 #elif L==8
 	"Remover liga&ccedil;&atilde;o";
 #endif
@@ -30253,7 +30253,7 @@ const char *Txt_Remove_mail_domain =
 #elif L==6
 	"Rimuovere campo mail";
 #elif L==7
-	"Usun domene mail";
+	"Usu&nacute; domene mail";
 #elif L==8
 	"Remover dom&iacute;nio de email";
 #endif
@@ -30274,7 +30274,7 @@ const char *Txt_Remove_nickname_X =	// Warning: it is very important to include 
 #elif L==6
 	"Rimuovere nome utente @%s";
 #elif L==7
-	"Usun pseudonim @%s";
+	"Usu&nacute; pseudonim @%s";
 #elif L==8
 	"Remover alcunha @%s";
 #endif
@@ -30295,7 +30295,7 @@ const char *Txt_Remove_me_as_an_administrator =
 #elif L==6
 	"Rimuovimi come amministratore";
 #elif L==7
-	"Usun mnie jako administrator";
+	"Usu&nacute; mnie jako administrator";
 #elif L==8
 	"Tirar me como administrador";
 #endif
@@ -30323,7 +30323,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_degree_X =	// Warning: it i
 	"Rimuovimi come amministratore"
 	" della laurea <strong>%s</strong>";
 #elif L==7
-	"Usun mnie jako administrator"
+	"Usu&nacute; mnie jako administrator"
 	" stopnia <strong>%s</strong>";
 #elif L==8
 	"Tirar me como administrador"
@@ -30367,7 +30367,7 @@ const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important t
 #elif L==6
 	"Rimuovimi dal corso <strong>%s</strong>";
 #elif L==7
-	"Usun mnie w kurs <strong>%s</strong>";
+	"Usu&nacute; mnie w kurs <strong>%s</strong>";
 #elif L==8
 	"Tirar me da disciplina <strong>%s</strong>";
 #endif
@@ -30388,7 +30388,7 @@ const char *Txt_Remove_notice =
 #elif L==6
 	"Rimuovere avviso";
 #elif L==7
-	"Usun ogloszenie";
+	"Usu&nacute; ogloszenie";
 #elif L==8
 	"Remover aviso";
 #endif
@@ -30409,7 +30409,7 @@ const char *Txt_Remove_old_users =
 #elif L==6
 	"Rimuovere vecchi utenti";
 #elif L==7
-	"Usunac starych uzytkownik&oacute;w";
+	"Usu&nacute; starych uzytkownik&oacute;w";
 #elif L==8
 	"Eliminar antigos utilizadores";
 #endif
@@ -30430,7 +30430,7 @@ const char *Txt_Remove_photo =
 #elif L==6
 	"Rimuovere foto";
 #elif L==7
-	"Usun zdjecie";
+	"Usu&nacute; zdjecie";
 #elif L==8
 	"Remover foto";
 #endif
@@ -30451,7 +30451,7 @@ const char *Txt_Remove_place =
 #elif L==6
 	"Rimuovere localit&grave;";
 #elif L==7
-	"Usun miejsce";
+	"Usu&nacute; miejsce";
 #elif L==8
 	"Remover localiza&ccedil;&atilde;o";
 #endif
@@ -30472,7 +30472,7 @@ const char *Txt_Remove_plugin =
 #elif L==6
 	"Rimuovere plugin";
 #elif L==7
-	"Usun plugin";
+	"Usu&nacute; plugin";
 #elif L==8
 	"Remover plugin";
 #endif
@@ -30493,7 +30493,7 @@ const char *Txt_Remove_post =
 #elif L==6
 	"Rimuovere post";
 #elif L==7
-	"Usun post";
+	"Usu&nacute; post";
 #elif L==8
 	"Remover post";
 #endif
@@ -30514,7 +30514,7 @@ const char *Txt_Remove_question =
 #elif L==6
 	"Rimuovere domanda";
 #elif L==7
-	"Usun pytanie";
+	"Usu&nacute; pytanie";
 #elif L==8
 	"Remover quest&atilde;o";
 #endif
@@ -30535,7 +30535,7 @@ const char *Txt_Remove_record_field =
 #elif L==6
 	"Rimuovere campo di scheda";
 #elif L==7
-	"Usun pola rekordu";
+	"Usu&nacute; pola rekordu";
 #elif L==8
 	"Remover campo de cart&atilde;o";
 #endif
@@ -30556,7 +30556,7 @@ const char *Txt_Remove_students =
 #elif L==6
 	"Rimuovere studenti";
 #elif L==7
-	"Usun student&oacute;w";
+	"Usu&nacute; student&oacute;w";
 #elif L==8
 	"Tirar estudantes";
 #endif
@@ -30577,7 +30577,7 @@ const char *Txt_Remove_survey =
 #elif L==6
 	"Rimuovere sondaggio";
 #elif L==7
-	"Usun badania";
+	"Usu&nacute; badania";
 #elif L==8
 	"Remover inqu&eacute;rito";
 #endif
@@ -30598,7 +30598,7 @@ const char *Txt_Remove_the_MESSAGE =
 #elif L==6
 	"Rimuovere il";
 #elif L==7
-	"Usun";
+	"Usu&nacute;";
 #elif L==8
 	"Remover a";
 #endif
@@ -30619,7 +30619,7 @@ const char *Txt_Remove_thread =
 #elif L==6
 	"Rimuovere discussione";
 #elif L==7
-	"Usun watkek";
+	"Usu&nacute; watkek";
 #elif L==8
 	"Remover thread";
 #endif
@@ -30640,7 +30640,7 @@ const char *Txt_Remove_type_of_degree =
 #elif L==6
 	"Rimuovere tipo di laurea";
 #elif L==7
-	"Usun typu stopien";
+	"Usu&nacute; typu stopien";
 #elif L==8
 	"Remover tipo de titula&ccedil;&atilde;";
 #endif
@@ -30661,7 +30661,7 @@ const char *Txt_Remove_type_of_group =
 #elif L==6
 	"Rimuovere tipo di gruppo";
 #elif L==7
-	"Usun typ grupy";
+	"Usu&nacute; typ grupy";
 #elif L==8
 	"Remover tipo de grupo";
 #endif
@@ -30682,7 +30682,7 @@ const char *Txt_Remove_the_users_not_indicated_in_step_1 =
 #elif L==6
 	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista";
 #elif L==7
-	"Usun u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie";
+	"Usu&nacute; u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie";
 #elif L==8
 	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista";
 #endif
@@ -30703,7 +30703,7 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 #elif L==6
 	"Rimuovere gli utenti che sono in lista";
 #elif L==7
-	"Usun u&zdot;ytkownikami, kt&oacute;rzy sa na liscie";
+	"Usu&nacute; u&zdot;ytkownikami, kt&oacute;rzy sa na liscie";
 #elif L==8
 	"Tirar os utilizadores que est&atilde;o na lista";
 #endif
@@ -30724,7 +30724,7 @@ const char *Txt_Remove_the_X_MESSAGES =
 #elif L==6
 	"Rimuovere il";
 #elif L==7
-	"Usun";
+	"Usu&nacute;";
 #elif L==8
 	"Remover as";
 #endif
@@ -30766,7 +30766,7 @@ const char *Txt_Remove_user_as_an_administrator =
 #elif L==6
 	"Rimuovi utente come amministratore";
 #elif L==7
-	"Usun u&zdot;ytkownika jako administrator";
+	"Usu&nacute; u&zdot;ytkownika jako administrator";
 #elif L==8
 	"Tirar utilizador como administrador";
 #endif
@@ -30794,7 +30794,7 @@ const char *Txt_Remove_user_as_an_administrator_of_the_degree_X =	// Warning: it
 	"Rimuovi utente come amministratore"
 	" della laurea <strong>%s</strong>";
 #elif L==7
-	"Usun u&zdot;ytkownika jako administrator"
+	"Usu&nacute; u&zdot;ytkownika jako administrator"
 	" stopnia <strong>%s</strong>";
 #elif L==8
 	"Tirar utilizador como administrador"
@@ -30817,7 +30817,7 @@ const char *Txt_Remove_user_from_the_course_X =	// Warning: it is very important
 #elif L==6
 	"Rimuovi utente dal corso <strong>%s</strong>";
 #elif L==7
-	"Usun u&zdot;ytkownika w kurs <strong>%s</strong>";
+	"Usu&nacute; u&zdot;ytkownika w kurs <strong>%s</strong>";
 #elif L==8
 	"Tirar utilizador da disciplina <strong>%s</strong>";
 #endif
@@ -36125,7 +36125,7 @@ const char *Txt_Size_of_photos =
 #elif L==6
 	"Dimensioni delle foto";
 #elif L==7
-	"Size of photos";		// Potrzebujesz tlumaczenie
+	"Rozmiar zdj&eogon;&cacute;";
 #elif L==8
 	"Tamanho das fotos";
 #endif
@@ -36167,14 +36167,14 @@ const char *Txt_Sort_degrees_by =
 #elif L==6
 	"Ordina laurea per";
 #elif L==7
-	"Sort degrees by";		// Potrzebujesz tlumaczenie
+	"Sortuj stopni wed&lstrok;ug";
 #elif L==8
 	"Classificar titula&ccedil;oes por";
 #endif
 
 const char *Txt_Source_of_information =
 #if   L==0
-	"Fuente de informaci&oacute;n";	// Necessita traduccio
+	"Font d'informaci&oacute;";
 #elif L==1
 	"Quelle von Informationen";
 #elif L==2
@@ -36188,7 +36188,7 @@ const char *Txt_Source_of_information =
 #elif L==6
 	"Fonte delle informazioni";
 #elif L==7
-	"Source of information";	// Potrzebujesz tlumaczenie
+	"&Zacute;r&oacute;d&lstrok;o informacji";
 #elif L==8
 	"Fonte de informa&ccedil;&atilde;o";
 #endif
@@ -36209,7 +36209,7 @@ const char *Txt_Start_date =
 #elif L==6
 	"Data iniziale";
 #elif L==7
-	"Start date";		// Potrzebujesz tlumaczenie
+	"Data rozpocz&eogon;cia";
 #elif L==8
 	"Data de in&iacute;cio";
 #endif
@@ -36217,7 +36217,7 @@ const char *Txt_Start_date =
 const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
    {
 #if   L==0
-	 "Mostrar clics detallados"	// Necessita traduccio
+	 "Mostra clics detallats"
 #elif L==1
 	 "Zeige detaillierte Klicks"
 #elif L==2
@@ -36231,7 +36231,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "Visualizza dettagli di scatto"
 #elif L==7
-	 "Show detailed clicks"		// Potrzebujesz tlumaczenie
+	 "Poka&zdot; szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
 #elif L==8
 	 "Mostrar detalhadamente cliques"
 #endif
@@ -36251,13 +36251,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "utente"
 #elif L==7
-	 "user"		// Potrzebujesz tlumaczenie
+	 "u&zdot;ytkownik"
 #elif L==8
 	 "utilizador"
 #endif
 	 ,
 #if   L==0
-	 "d&iacute;a"	// Necessita traduccio
+	 "dia"
 #elif L==1
 	 "Tag"
 #elif L==2
@@ -36271,13 +36271,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "giorno"
 #elif L==7
-	 "day"		// Potrzebujesz tlumaczenie
+	 "dzie&nacute;"
 #elif L==8
 	 "dia"
 #endif
 	 ,
 #if   L==0
-	 "d&iacute;a y hora"	// Necessita traduccio
+	 "dia i hora"
 #elif L==1
 	 "Tag und Stunde"
 #elif L==2
@@ -36291,13 +36291,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "giorno e ora"
 #elif L==7
-	 "day and hour"		// Potrzebujesz tlumaczenie
+	 "dzie&nacute; i godzin&eogon;"
 #elif L==8
 	 "dia e hora"
 #endif
 	 ,
 #if   L==0
-	 "semana"	// Necessita traduccio
+	 "setmana"
 #elif L==1
 	 "Woche"
 #elif L==2
@@ -36311,13 +36311,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "settimana"
 #elif L==7
-	 "week"		// Potrzebujesz tlumaczenie
+	 "tydzie&nacute;"
 #elif L==8
 	 "semana"
 #endif
 	 ,
 #if   L==0
-	 "mes"		// Necessita traduccio
+	 "mes"
 #elif L==1
 	 "Monat"
 #elif L==2
@@ -36331,13 +36331,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "mese"
 #elif L==7
-	 "month"	// Potrzebujesz tlumaczenie
+	 "miesi&aogon;c"
 #elif L==8
 	 "m&ecirc;s"
 #endif
 	 ,
 #if   L==0
-	 "hora"		// Necessita traduccio
+	 "hora"
 #elif L==1
 	 "Stunde"
 #elif L==2
@@ -36351,13 +36351,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "ora"
 #elif L==7
-	 "hour"		// Potrzebujesz tlumaczenie
+	 "godzina"
 #elif L==8
 	 "hora"
 #endif
 	 ,
 #if   L==0
-	 "minuto"	// Necessita traduccio
+	 "minut"
 #elif L==1
 	 "Minute"
 #elif L==2
@@ -36377,7 +36377,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #endif
 	 ,
 #if   L==0
-	 "acci&oacute;n"	// Necessita traduccio
+	 "acci&oacute;"
 #elif L==1
 	 "Handlung"
 #elif L==2
@@ -36391,13 +36391,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "azione"
 #elif L==7
-	 "action"		// Potrzebujesz tlumaczenie
+	 "dzia&lstrok;anie"
 #elif L==8
 	 "a&ccedil;&atilde;o"
 #endif
 	 ,
 #if   L==0
-	 "d&iacute;a"	// Necessita traduccio
+	 "dia"
 #elif L==1
 	 "Tag"
 #elif L==2
@@ -36411,13 +36411,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "giorno"
 #elif L==7
-	 "day"		// Potrzebujesz tlumaczenie
+	 "dzie&nacute;"
 #elif L==8
 	 "dia"
 #endif
 	 ,
 #if   L==0
-	 "d&iacute;a y hora"	// Necessita traduccio
+	 "dia i hora"
 #elif L==1
 	 "Tag und Stunde"
 #elif L==2
@@ -36431,13 +36431,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "giorno e ora"
 #elif L==7
-	 "day and hour"		// Potrzebujesz tlumaczenie
+	 "dzie&nacute; i godzin&eogon;"
 #elif L==8
 	 "dia e hora"
 #endif
 	 ,
 #if   L==0
-	 "semana"	// Necessita traduccio
+	 "setmana"
 #elif L==1
 	 "Woche"
 #elif L==2
@@ -36451,13 +36451,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "settimana"
 #elif L==7
-	 "week"		// Potrzebujesz tlumaczenie
+	 "tydzie&nacute;"
 #elif L==8
 	 "semana"
 #endif
 	 ,
 #if   L==0
-	 "mes"		// Necessita traduccio
+	 "mes"
 #elif L==1
 	 "Monat"
 #elif L==2
@@ -36471,13 +36471,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "mese"
 #elif L==7
-	 "month"	// Potrzebujesz tlumaczenie
+	 "miesi&aogon;c"
 #elif L==8
 	 "m&ecirc;s"
 #endif
 	 ,
 #if   L==0
-	 "hora"		// Necessita traduccio
+	 "hora"
 #elif L==1
 	 "Stunde"
 #elif L==2
@@ -36491,13 +36491,13 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "ora"
 #elif L==7
-	 "hour"		// Potrzebujesz tlumaczenie
+	 "godzina"
 #elif L==8
 	 "hora"
 #endif
 	 ,
 #if   L==0
-	 "minuto"	// Necessita traduccio
+	 "minut"
 #elif L==1
 	 "Minute"
 #elif L==2
@@ -36517,7 +36517,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #endif
 	 ,
 #if   L==0
-	 "acci&oacute;n"	// Necessita traduccio
+	 "acci&oacute;"
 #elif L==1
 	 "Handlung"
 #elif L==2
@@ -36531,7 +36531,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "azione"
 #elif L==7
-	 "action"	// Potrzebujesz tlumaczenie
+	 "dzia&lstrok;anie"
 #elif L==8
 	 "a&ccedil;&atilde;o"
 #endif
@@ -36597,7 +36597,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #endif
 	 ,
 #if   L==0
-	 "titulaci&oacute;n"	// Necessita traduccio
+	 "titulaci&oacute;"
 #elif L==1
 	 "Studiengang"
 #elif L==2
@@ -36611,7 +36611,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #elif L==6
 	 "laurea"
 #elif L==7
-	 "degree"		// Potrzebujesz tlumaczenie
+	 "stopie&nacute;"
 #elif L==8
 	 "titula&ccedil;&atilde;o"
 #endif
@@ -36640,7 +36640,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
    {
 #if   L==0
-	 "color"		// Necessita traduccio
+	 "color"
 #elif L==1
 	 "Farbe"
 #elif L==2
@@ -36650,17 +36650,17 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==4
 	 "couleur"
 #elif L==5
-	 "color"		// Okoteve traducción
+	 "color"	// Okoteve traducción
 #elif L==6
 	 "colore"
 #elif L==7
-	 "color"		// Potrzebujesz tlumaczenie
+	 "kolor"
 #elif L==8
 	 "cor"
 #endif
 	 ,
 #if   L==0
-	 "de negro a blanco"	// Necessita traduccio
+	 "de negre a blanc"
 #elif L==1
 	 "schwarz zu wei&szlig;"
 #elif L==2
@@ -36674,13 +36674,13 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==6
 	 "dal nero al bianco"
 #elif L==7
-	 "black to white"	// Potrzebujesz tlumaczenie
+	 "czarny na bia&lstrok;y"
 #elif L==8
 	 "do preto ao branco"
 #endif
 	 ,
 #if   L==0
-	 "de blanco a negro"	// Necessita traduccio
+	 "de blanc a negre"
 #elif L==1
 	 "wei&szlig; zu schwarz"
 #elif L==2
@@ -36694,7 +36694,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==6
 	 "dal bianco al nero"
 #elif L==7
-	 "white to black"	// Potrzebujesz tlumaczenie
+	 "bia&lstrok;y do czarny"
 #elif L==8
 	 "do branco ao preto"
 #endif
@@ -36717,13 +36717,13 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Documenti&nbsp;(crs.)"
 #elif L==7
-	   "Documents&nbsp;(crs.)"		// Potrzebujesz tlumaczenie
+	   "Dokumenty&nbsp;(kurs)"
 #elif L==8
 	   "Documentos&nbsp;(crs.)"
 #endif
 	   ,
 #if   L==0	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
-	   "Documentos&nbsp;(grp.)"	// Necessita traduccio
+	   "Documents&nbsp;(grp.)"
 #elif L==1
 	   "Dokumente&nbsp;(Grp.)"
 #elif L==2
@@ -36737,7 +36737,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Documenti&nbsp;(grp.)"
 #elif L==7
-	   "Documents&nbsp;(grp.)"	// Potrzebujesz tlumaczenie
+	   "Dokumenty&nbsp;(grp.)"
 #elif L==8
 	   "Documentos&nbsp;(grp.)"
 #endif
@@ -36757,7 +36757,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Condivisi&nbsp;(crs.)"
 #elif L==7
-	   "Shared&nbsp;(crs.)"		// Potrzebujesz tlumaczenie
+	   "Wsp&oacute;lna&nbsp;(kurs)"
 #elif L==8
 	   "Compartilhados&nbsp;(crs.)"
 #endif
@@ -36777,7 +36777,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Condivisi&nbsp;(grp.)"
 #elif L==7
-	   "Shared&nbsp;(grp.)"		// Potrzebujesz tlumaczenie
+	   "Wsp&oacute;lna&nbsp;(grp.)"
 #elif L==8
 	   "Compartilhados&nbsp;(grp.)"
 #endif
@@ -36837,7 +36837,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Attivit&agrave;"
 #elif L==7
-	   "Assignments"		// Potrzebujesz tlumaczenie
+	   "Zadania"
 #elif L==8
 	   "Atividades"
 #endif
@@ -36857,13 +36857,13 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Lavori"
 #elif L==7
-	   "Homework"	// Potrzebujesz tlumaczenie
+	   "Praca domowa"
 #elif L==8
 	   "Trabalhos"
 #endif
 	   ,
 #if   L==0	// Brw_FILE_BRW_UNKNOWN
-	   "Total"		// Necessita traduccio
+	   "Total"
 #elif L==1
 	   "Gesamtzahl"
 #elif L==2
@@ -36877,7 +36877,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==6
 	   "Totale"
 #elif L==7
-	   "Total"		// Potrzebujesz tlumaczenie
+	   "Ca&lstrok;kowity"
 #elif L==8
 	   "Total"
 #endif
@@ -36971,41 +36971,41 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #if   L==0
 	 "nombre d'estudiants"
 #elif L==1
-	 "number of students"		// Need Übersetzung
+	 "Anzahl der Studenten"
 #elif L==2
 	 "number of students"
 #elif L==3
 	 "n&ordm; de estudiantes"
 #elif L==4
-	 "number of students"		// Besoin de traduction
+	 "nombre d'&eacute;tudiants"
 #elif L==5
 	 "n&ordm; de estudiantes"	// Okoteve traducción
 #elif L==6
 	 "numero di studenti"
 #elif L==7
-	 "number of students"		// Potrzebujesz tlumaczenie
+	 "liczba student&oacute;w"
 #elif L==8
-	 "number of students"		// Necessita de tradução
+	 "n&uacute;mero de estudantes"
 #endif
 	 ,
 #if   L==0
-	 "n&ordm; de estudiantes con fotograf&iacute;a"	// Necessita traduccio
+	 "nombre d'estudiants amb fotografia"
 #elif L==1
-	 "number of students with photo"		// Need Übersetzung
+	 "Anzahl der Studenten mit Foto"
 #elif L==2
 	 "number of students with photo"
 #elif L==3
 	 "n&ordm; de estudiantes con fotograf&iacute;a"
 #elif L==4
-	 "number of students with photo"		// Besoin de traduction
+	 "nombre d'&eacute;tudiants avec photo"
 #elif L==5
 	 "n&ordm; de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==6
 	 "numero di studenti con foto"
 #elif L==7
-	 "number of students with photo"		// Potrzebujesz tlumaczenie
+	 "liczba student&oacute;w ze zdj&eogon;ciem"
 #elif L==8
-	 "number of students with photo"		// Necessita de tradução
+	 "n&uacute;mero de estudantes com foto"
 #endif
 	 ,
 #if   L==0
@@ -40117,6 +40117,27 @@ const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning
 	"The date range must be less than or equal to %u days.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_date_time_of_opening_of_groups_has_changed =
+#if   L==0
+	"La data / hora d'obertura de grups s'ha modificat.";
+#elif L==1
+	"The date / time of opening of groups has changed.";			// Need Übersetzung
+#elif L==2
+	"The date / time of opening of groups has changed.";
+#elif L==3
+	"Los cambios de grupo solicitados se han realizado correctamente.";
+#elif L==4
+	"The date / time of opening of groups has changed.";			// Besoin de traduction
+#elif L==5
+	"Los cambios de grupo solicitados se han realizado correctamente.";	// Okoteve traducción
+#elif L==6
+	"La data / ora di apertura dei gruppi &egrave; cambiata.";
+#elif L==7
+	"The date / time of opening of groups has changed.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The date / time of opening of groups has changed.";			// Necessita de tradução
+#endif
+
 const char *Txt_The_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"La titulaci&oacute;n <strong>%s</strong> ya existe.";	// Necessita traduccio
@@ -40355,6 +40376,48 @@ const char *Txt_The_email_address_X_matches_the_one_you_had_previously_registere
 #elif L==8
 	"The e-mail address <strong>%s</strong>"
 	" matches the one you had previously registered.";		// Necessita de tradução
+#endif
+
+const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Necessita traduccio
+#elif L==1
+	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Need Übersetzung
+#elif L==2
+	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";
+#elif L==3
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";
+#elif L==4
+	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Besoin de traduction
+#elif L==5
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Okoteve traducción
+#elif L==6
+	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora obbligatoria.";
+#elif L==7
+	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Necessita de tradução
+#endif
+
+const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Necessita traduccio
+#elif L==1
+	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Need Übersetzung
+#elif L==2
+	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";
+#elif L==3
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";
+#elif L==4
+	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Besoin de traduction
+#elif L==5
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Okoteve traducción
+#elif L==6
+	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora volontaria.";
+#elif L==7
+	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_event_has_been_modified =
@@ -42625,48 +42688,6 @@ const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is ver
 	"The record field <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Necessita traduccio
-#elif L==1
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Need Übersetzung
-#elif L==2
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";
-#elif L==3
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";
-#elif L==4
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Besoin de traduction
-#elif L==5
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Okoteve traducción
-#elif L==6
-	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora obbligatoria.";
-#elif L==7
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Necessita de tradução
-#endif
-
-const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Necessita traduccio
-#elif L==1
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Need Übersetzung
-#elif L==2
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";
-#elif L==3
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";
-#elif L==4
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Besoin de traduction
-#elif L==5
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Okoteve traducción
-#elif L==6
-	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora volontaria.";
-#elif L==7
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Necessita de tradução
-#endif
-
 const char *Txt_The_requested_group_changes_were_successful =
 #if   L==0
 	"Els canvis de grup sol·licitats s'han realitzat correctament.";
@@ -42688,25 +42709,25 @@ const char *Txt_The_requested_group_changes_were_successful =
 	"The requested group changes were successful.";				// Necessita de tradução
 #endif
 
-const char *Txt_The_date_time_of_opening_of_groups_has_changed =
+const char *Txt_The_rich_text_editor_is_not_yet_available =
 #if   L==0
-	"La data / hora d'obertura de grups s'ha modificat.";
+	"L'editor de text enriquit encara no est&agrave; disponible.";
 #elif L==1
-	"The date / time of opening of groups has changed.";			// Need Übersetzung
+	"Der Rich Text Editor ist noch nicht verfügbar.";
 #elif L==2
-	"The date / time of opening of groups has changed.";
+	"The rich text editor is not yet available.";
 #elif L==3
-	"Los cambios de grupo solicitados se han realizado correctamente.";
+        "El editor de texto enriquecido a&uacute;n no est&aacute; disponible.";
 #elif L==4
-	"The date / time of opening of groups has changed.";			// Besoin de traduction
+        "L'&eacute;diteur de texte riche n'est pas encore disponible.";
 #elif L==5
-	"Los cambios de grupo solicitados se han realizado correctamente.";	// Okoteve traducción
+        "El editor de texto enriquecido a&uacute;n no est&aacute; disponible.";	// Okoteve traducción
 #elif L==6
-	"La data / ora di apertura dei gruppi &egrave; cambiata.";
+        "Il rich text editor non &egrave; ancora disponibile.";
 #elif L==7
-	"The date / time of opening of groups has changed.";			// Potrzebujesz tlumaczenie
+        "Edytor tekstu nie jest jeszcze dost&eogon;pna.";
 #elif L==8
-	"The date / time of opening of groups has changed.";			// Necessita de tradução
+        "O editor de texto rico ainda n&atilde;o est&aacute; disponível.";
 #endif
 
 const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B =	// Warning: it is very important to include four %s in the following sentences
@@ -44235,7 +44256,7 @@ const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or
 
 const char *Txt_There_are_new_posts =
 #if   L==0
-	"Hay mensajes nuevos";	// Necessita traduccio
+	"Hi ha missatges nous";
 #elif L==1
 	"Es gibt neue Nachrichten";
 #elif L==2
@@ -44249,7 +44270,7 @@ const char *Txt_There_are_new_posts =
 #elif L==6
 	"Ci sono nuovi post";
 #elif L==7
-	"There are new posts";	// Potrzebujesz tlumaczenie
+	"Istnieje nowych post&oacute;w";
 #elif L==8
 	"H&aacute; novas posts";
 #endif
@@ -45264,7 +45285,7 @@ const char *Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_ =
 
 const char *Txt_This_survey_has_no_questions =
 #if   L==0
-	"Esta encuesta no tiene preguntas";	// Necessita traduccio
+	"Aquesta enquesta no t&eacute; preguntes";
 #elif L==1
 	"Diese Umfrage hat keine Fragen";
 #elif L==2
@@ -45278,7 +45299,7 @@ const char *Txt_This_survey_has_no_questions =
 #elif L==6
 	"Questo sondaggio non ha domande";
 #elif L==7
-	"This survey has no questions";		// Potrzebujesz tlumaczenie
+	"Badanie to nie ma pytania";
 #elif L==8
 	"Este inqu&eacute;rito n&atilde;o tem perguntas";
 #endif
@@ -45299,7 +45320,7 @@ const char *Txt_thread =
 #elif L==6
 	"discussione";
 #elif L==7
-	"thread";		// Potrzebujesz tlumaczenie
+	"w&aogon;tek";
 #elif L==8
 	"thread";
 #endif
@@ -45467,7 +45488,7 @@ const char *Txt_Threads =
 #elif L==6
 	"Discussione";
 #elif L==7
-	"Threads";	// Potrzebujesz tlumaczenie
+	"W&aogon;tki";
 #elif L==8
 	"Threads";
 #endif
@@ -45488,14 +45509,14 @@ const char *Txt_threads =
 #elif L==6
 	"discussione";
 #elif L==7
-	"threads";	// Potrzebujesz tlumaczenie
+	"w&aogon;tki";
 #elif L==8
 	"threads";
 #endif
 
 const char *Txt_time =
 #if   L==0
-	"tiempo";	// Necessita traduccio
+	"temps";
 #elif L==1
 	"Zeit";
 #elif L==2
@@ -45509,7 +45530,7 @@ const char *Txt_time =
 #elif L==6
 	"tempo";
 #elif L==7
-	"time";		// Potrzebujesz tlumaczenie
+	"czas";
 #elif L==8
 	"tempo";
 #endif
@@ -45603,7 +45624,7 @@ const char *Txt_TIME_TABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 
 const char *Txt_Title =
 #if   L==0
-	"T&iacute;tulo";	// Necessita traduccio
+	"T&iacute;tol";
 #elif L==1
 	"Titel";
 #elif L==2
@@ -45617,7 +45638,7 @@ const char *Txt_Title =
 #elif L==6
 	"Titolo";
 #elif L==7
-	"Title";		// Potrzebujesz tlumaczenie
+	"Tytu&lstrok;";
 #elif L==8
 	"T&iacute;tulo";
 #endif
@@ -46023,7 +46044,7 @@ const char *Txt_Too_fast =
 
 const char *Txt_Total =
 #if   L==0
-	"Total";	// Necessita traduccio
+	"Total";
 #elif L==1
 	"Gesamtzahl";
 #elif L==2
@@ -46037,14 +46058,14 @@ const char *Txt_Total =
 #elif L==6
 	"Totale";
 #elif L==7
-	"Total";	// Potrzebujesz tlumaczenie
+	"Ca&lstrok;kowity";
 #elif L==8
 	"Total";
 #endif
 
 const char *Txt_Total_BR_score =
 #if   L==0
-	"Puntuaci&oacute;n<br />total";	// Necessita traduccio
+	"Puntuaci&oacute;<br />total";
 #elif L==1
 	"Gesamt";
 #elif L==2
@@ -46058,7 +46079,7 @@ const char *Txt_Total_BR_score =
 #elif L==6
 	"Punteggio<br />totale";
 #elif L==7
-	"Total<br />score";			// Potrzebujesz tlumaczenie
+	"Ca&lstrok;kowity<br />wynik";
 #elif L==8
 	"Pontua&ccedil;&atilde;o<br />total";
 #endif
@@ -46095,7 +46116,7 @@ const char *Txt_Try_sending_another_image_where_the_face_appears_in_front_positi
 
 const char *Txt_TST_Correct_ANSWER =
 #if   L==0
-	"Correcta";	// Necessita traduccio
+	"Correcta";
 #elif L==1
 	"Richtige";
 #elif L==2
@@ -46109,7 +46130,7 @@ const char *Txt_TST_Correct_ANSWER =
 #elif L==6
 	"Corretta";
 #elif L==7
-	"Correct";	// Potrzebujesz tlumaczenie
+	"Poprawna";
 #elif L==8
 	"Correta";
 #endif
@@ -46198,7 +46219,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==6
 	 "Numero reale"
 #elif L==7
-	 "Real number"	// Potrzebujesz tlumaczenie
+	 "Liczba rzeczywista"
 #elif L==8
 	 "N&ordm; real"
 #endif
@@ -46218,7 +46239,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==6
 	 "V/F"
 #elif L==7
-	 "T/F"	// Potrzebujesz tlumaczenie
+	 "P/F"
 #elif L==8
 	 "V/F"
 #endif
@@ -46238,7 +46259,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==6
 	 "Scelta unica"
 #elif L==7
-	 "Unique choice"			// Potrzebujesz tlumaczenie
+	 "Unikalny wyb&oacute;r"
 #elif L==8
 	 "&Uacute;nica escolha"
 #endif
@@ -46258,7 +46279,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==6
 	 "Scelta multipla"
 #elif L==7
-	 "Multiple choice"			// Potrzebujesz tlumaczenie
+	 "Wielokrotnego wyboru"
 #elif L==8
 	 "M&uacute;ltipla escolha"
 #endif
@@ -46278,7 +46299,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 #elif L==6
 	 "Testo"
 #elif L==7
-	 "Text"	// Potrzebujesz tlumaczenie
+	 "Tekst"
 #elif L==8
 	 "Texto"
 #endif
@@ -46605,7 +46626,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 const char *Txt_TF_QST[2] =
    {
 #if   L==0	// True
-	 "V"	// Necessita traduccio
+	 "V"
 #elif L==1
 	 "R"
 #elif L==2
@@ -46619,13 +46640,13 @@ const char *Txt_TF_QST[2] =
 #elif L==6
 	 "V"
 #elif L==7
-	 "T"	// Potrzebujesz tlumaczenie
+	 "P"
 #elif L==8
 	 "V"
 #endif
 	 ,
 #if   L==0	// False
-	 "F"	// Necessita traduccio
+	 "F"
 #elif L==1
 	 "F"
 #elif L==2
@@ -46639,7 +46660,7 @@ const char *Txt_TF_QST[2] =
 #elif L==6
 	 "F"
 #elif L==7
-	 "F"	// Potrzebujesz tlumaczenie
+	 "F"
 #elif L==8
 	 "F"
 #endif
@@ -46661,7 +46682,7 @@ const char *Txt_Type =
 #elif L==6
 	"Tipo";
 #elif L==7
-	"Type";	// Potrzebujesz tlumaczenie
+	"Typ";
 #elif L==8
 	"Tipo";
 #endif

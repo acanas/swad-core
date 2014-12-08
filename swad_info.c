@@ -1740,6 +1740,7 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
+   extern const char *Txt_The_rich_text_editor_is_not_yet_available;
    extern const char *Txt_Send;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
@@ -1756,7 +1757,7 @@ void Inf_EditRichTxtInfo (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod != 1346 &&
        Gbl.Usrs.Me.UsrDat.UsrCod != 24383)	// TODO: Remove this when rich text editor is available
      {
-      Lay_ShowAlert (Lay_WARNING,"El editor de texto enriquecido a&uacute;n no est&aacute; disponible.");	// Need translation!!!!
+      Lay_ShowAlert (Lay_WARNING,Txt_The_rich_text_editor_is_not_yet_available);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();

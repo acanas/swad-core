@@ -3358,12 +3358,13 @@ static void Usr_PrintAccountSeparator (void)
 static void Usr_PutLinkToRemoveMyAccount (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Remove_account;
 
    Act_FormStart (ActUpdOthUsrDat);
    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Usr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-   Act_LinkFormSubmit ("Eliminar cuenta",The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon","Eliminar cuenta","Eliminar cuenta");	// Need translation!!!!
+   Act_LinkFormSubmit (Txt_Remove_account,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("delon",Txt_Remove_account,Txt_Remove_account);
    fprintf (Gbl.F.Out,"</form>");
   }
 
