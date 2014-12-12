@@ -27,7 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-
 /*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
@@ -68,6 +67,8 @@ typedef enum
    Pho_DEGREE_NAME        = 3,
   } Pho_HowOrderDegrees_t;
 
+#define Pho_MAX_CLICKS_WITHOUT_PHOTO	 50
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -88,6 +89,9 @@ void Pho_UpdateMyPhoto1 (void);
 void Pho_UpdateMyPhoto2 (void);
 void Pho_UpdateUsrPhoto1 (void);
 void Pho_UpdateUsrPhoto2 (void);
+
+unsigned Pho_UpdateMyClicksWithoutPhoto (void);
+void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
 bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL);
 bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL,bool HTTPS);

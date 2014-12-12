@@ -31,8 +31,8 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
+#include "swad_account.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_mail.h"
 #include "swad_parameter.h"
@@ -1109,7 +1109,7 @@ void Mai_RemoveEmail (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_your_current_email);
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
@@ -1189,7 +1189,7 @@ void Mai_UpdateEmail (void)
      }
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/

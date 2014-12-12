@@ -27,8 +27,8 @@
 
 #include <string.h>		// For string functions
 
+#include "swad_account.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -311,7 +311,7 @@ void Nck_RemoveNick (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_your_current_nickname);
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
@@ -406,7 +406,7 @@ void Nck_UpdateNick (void)
 	          Gbl.Message);
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/

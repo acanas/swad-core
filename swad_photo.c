@@ -661,7 +661,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       Pho_UpdatePhotoName (UsrDat);
 
       /* Remove the user from the list of users without photo */
-      Enr_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
+      Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
       Gbl.Error = false;
      }
@@ -697,6 +697,67 @@ static void Pho_UpdatePhoto2 (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Photo_has_been_updated);
   }
 
+/*****************************************************************************/
+/******************* Update number of clicks without photo *******************/
+/*****************************************************************************/
+
+unsigned Pho_UpdateMyClicksWithoutPhoto (void)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned NumClicks;
+
+   /***** Get number of clicks without photo from database *****/
+   sprintf (Query,"SELECT NumClicks FROM clicks_without_photo"
+                  " WHERE UsrCod='%ld'",
+            Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of clicks without photo");
+
+   /***** Update the list of clicks without photo *****/
+   if (NumRows)        // The user exists ==> update number of clicks without photo
+     {
+      /* Get current number of clicks */
+      row = mysql_fetch_row (mysql_res);
+      sscanf (row[0],"%u",&NumClicks);
+
+      /* Update number of clicks */
+      if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
+        {
+         sprintf (Query,"UPDATE clicks_without_photo SET NumClicks=NumClicks+1 WHERE UsrCod='%ld'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+         DB_QueryUPDATE (Query,"can not update number of clicks without photo");
+         NumClicks++;
+        }
+     }
+   else                                        // The user does not exist ==> add him/her
+     {
+      /* Add the user, with one access */
+      sprintf (Query,"INSERT INTO clicks_without_photo (UsrCod,NumClicks) VALUES ('%ld',1)",
+               Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryINSERT (Query,"can not create number of clicks without photo");
+      NumClicks = 1;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Return the number of rows of the result *****/
+   return NumClicks;
+  }
+
+/*****************************************************************************/
+/******** Remove user from table with number of clicks without photo *********/
+/*****************************************************************************/
+
+void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
+  {
+   char Query[512];
+
+   sprintf (Query,"DELETE FROM clicks_without_photo WHERE UsrCod='%ld'",UsrCod);
+   DB_QueryDELETE (Query,"can not remove a user from the list of users without photo");
+  }
 
 /*****************************************************************************/
 /********************* Check if user's photo can be shown ********************/

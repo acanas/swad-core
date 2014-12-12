@@ -1,7 +1,7 @@
-// swad_role.h: user's roles
+// swad_account.h: user's account
 
-#ifndef _SWAD_ROL
-#define _SWAD_ROL
+#ifndef _SWAD_ACC
+#define _SWAD_ACC
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,10 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_bool.h"
+#include "swad_constant.h"
+#include "swad_user.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -35,54 +39,22 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-// Related with user's roles
-/*
-   Don't change these numbers!
-   They are used for users' permissions and for user's types in database
-
-   Only Rol_ROLE_STUDENT and Rol_ROLE_TEACHER are allowed
-   as user permanent roles in courses,
-   but a user may be logged temporarily as other roles
-*/
-#define Rol_NUM_ROLES 9
-typedef enum
-  {
-   Rol_ROLE_UNKNOWN	= 0,	// User not logged in
-   Rol_ROLE_GUEST	= 1,	// User not belonging to any course
-   Rol_ROLE_VISITOR	= 2,	// Student or teacher in other courses...
-   	   	   	   	// ...but not belonging to the current course
-   Rol_ROLE_STUDENT	= 3,	// Student in current course
-   Rol_ROLE_TEACHER	= 4,	// Teacher in current course
-   Rol_ROLE_DEG_ADMIN	= 5,	// Degree administrator
-   Rol_ROLE_CTR_ADMIN	= 6,	// Centre administrator
-   Rol_ROLE_INS_ADMIN	= 7,	// Institution administrator
-   Rol_ROLE_SUPERUSER	= 8,	// Superuser
-  } Rol_Role_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-unsigned Rol_GetNumAvailableRoles (void);
-Rol_Role_t Rol_GetMaxRole (unsigned Roles);
-Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
-Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
-Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);
-Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
-Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod);
-unsigned Rol_GetRolesInAllCrss (long UsrCod);
+void Acc_ShowFormAccount (void);
+void Acc_ShowFormChangeMyAccount (void);
+bool Acc_CreateNewAccountAndLogIn (void);
+void Acc_CreateNewUsr (struct UsrData *UsrDat);
+void Acc_AfterCreationNewAccount (void);
 
-Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
-unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);
+void Acc_ReqRemUsrGbl (void);
+void Acc_RemUsrGbl (void);
 
-void Rol_PutFormToChangeMyRole (bool FormInHead);
-void Rol_ChangeMyRole (void);
-
-void Rol_WriteSelectorRoles (unsigned Roles);
-void Rol_GetSelectedRoles (unsigned *Roles);
-
-void Rol_PutAllRolesRegRemUsrsCrs (void);
-
-Rol_Role_t Rol_GetRequestedRole (long UsrCod);
+bool Acc_CheckIfICanEliminateAccount (bool ItsMe);
+void Acc_AskIfCompletelyEliminateAccount (bool ItsMe);
+void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
+                                     Cns_QuietOrVerbose_t QuietOrVerbose);
 
 #endif

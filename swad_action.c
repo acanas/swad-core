@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_account.h"
 #include "swad_action.h"
 #include "swad_announcement.h"
 #include "swad_banner.h"
@@ -1951,7 +1952,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
    /* ActRemUsrCrs	*/{  58,-1,TabUsr,ActReqMdfOneUsr	,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
-   /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrGbl			,NULL},
+   /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemUsrGbl			,NULL},
 
    /* ActReqRemAllStdCrs*/{  88,-1,TabUsr,ActReqMdfSevUsr	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemAllStdsThisCrs	,NULL},
    /* ActRemAllStdCrs	*/{  87,-1,TabUsr,ActReqMdfSevUsr	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAllStdsThisCrs		,NULL},
@@ -2186,7 +2187,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabPrf ******************************************************************
    // Actions in menu:
    /* ActFrmLogIn	*/{ 843, 0,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLoginLogout	,"keyuser"		},
-   /* ActFrmUsrAcc	*/{  36, 1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowFormAccount		,"arroba"		},
+   /* ActFrmUsrAcc	*/{  36, 1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba"		},
    /* ActReqSndNewPwd	*/{ 665, 2,TabPrf,ActReqSndNewPwd	,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,"key"			},
    /* ActFrmChgMyPwd	*/{  34, 3,TabPrf,ActFrmChgMyPwd	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,"key"			},
    /* ActReqEdiRecCom	*/{ 285, 4,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card"			},
@@ -2208,7 +2209,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsRoleAndLogout	,NULL},
 
-   /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AfterCreationNewAccount	,NULL},
+   /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
 
    /* ActRemIDMe	*/{1147,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
    /* ActNewIDMe	*/{1148,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewMyUsrID			,NULL},
@@ -3889,7 +3890,7 @@ void Act_AdjustCurrentAction (void)
                   if (!Gbl.Usrs.Me.MyPhotoExists)
                      if (!(Act_Actions[Gbl.CurrentAct].PermisIfIBelongToCrs & (1 << Rol_ROLE_UNKNOWN)) &&	// If current action is not available for unknown users...
                          Gbl.CurrentAct != ActReqMyPho)	// ...and current action is not ActReqMyPho...
-                        if ((Gbl.Usrs.Me.NumAccWithoutPhoto = Usr_UpdateMyClicksWithoutPhoto ()) > Usr_MAX_CLICKS_WITHOUT_PHOTO)
+                        if ((Gbl.Usrs.Me.NumAccWithoutPhoto = Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
 	                  {
 	                   /* If limit of clicks has been reached,
 	                      the only action possible is show a form to send my photo */

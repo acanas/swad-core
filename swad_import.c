@@ -32,6 +32,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
+#include "swad_account.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrollment.h"
@@ -246,7 +247,7 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 
                /* Create user */
                UsrDat.IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
-               Enr_CreateNewUsr (&UsrDat);
+               Acc_CreateNewUsr (&UsrDat);
 
                /* Update e-mail */
 	       if (!Mai_UpdateEmailInDB (&UsrDat,UsrDat.Email))	// Email was already registered and confirmed by another user

@@ -34,6 +34,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
+#include "swad_account.h"
 #include "swad_announcement.h"
 #include "swad_config.h"
 #include "swad_connected.h"
@@ -185,12 +186,12 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
-      if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Usr_MAX_CLICKS_WITHOUT_PHOTO)
+      if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Lay_ShowAlert (Lay_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
-                  Usr_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
+                  Pho_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
          Lay_ShowAlert (Lay_WARNING,Message);
 
 	 fprintf (Gbl.F.Out,"<div align=\"center\">");
@@ -1666,7 +1667,7 @@ void Usr_ChkUsrAndGetUsrData (void)
       if (Gbl.CurrentAct == ActCreUsrAcc)
 	{
 	 /***** Create new account and login *****/
-	 if (Enr_CreateNewAccountAndLogIn ())			// User logged in
+	 if (Acc_CreateNewAccountAndLogIn ())			// User logged in
 	   {
 	    Gbl.Usrs.Me.Logged = true;
 	    Usr_SetUsrRoleAndPrefs ();
@@ -2317,56 +2318,6 @@ void Usr_ShowFormsRoleAndLogout (void)
       Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
      }
-  }
-
-/*****************************************************************************/
-/******************* Update number of clicks without photo *******************/
-/*****************************************************************************/
-
-unsigned Usr_UpdateMyClicksWithoutPhoto (void)
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned NumClicks;
-
-   /***** Get number of clicks without photo from database *****/
-   sprintf (Query,"SELECT NumClicks FROM clicks_without_photo"
-                  " WHERE UsrCod='%ld'",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of clicks without photo");
-
-   /***** Update the list of clicks without photo *****/
-   if (NumRows)        // The user exists ==> update number of clicks without photo
-     {
-      /* Get current number of clicks */
-      row = mysql_fetch_row (mysql_res);
-      sscanf (row[0],"%u",&NumClicks);
-
-      /* Update number of clicks */
-      if (NumClicks <= Usr_MAX_CLICKS_WITHOUT_PHOTO)
-        {
-         sprintf (Query,"UPDATE clicks_without_photo SET NumClicks=NumClicks+1 WHERE UsrCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryUPDATE (Query,"can not update number of clicks without photo");
-         NumClicks++;
-        }
-     }
-   else                                        // The user does not exist ==> add him/her
-     {
-      /* Add the user, with one access */
-      sprintf (Query,"INSERT INTO clicks_without_photo (UsrCod,NumClicks) VALUES ('%ld',1)",
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryINSERT (Query,"can not create number of clicks without photo");
-      NumClicks = 1;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Return the number of rows of the result *****/
-   return NumClicks;
   }
 
 /*****************************************************************************/

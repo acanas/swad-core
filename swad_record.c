@@ -2339,7 +2339,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
               {
                /* If there is a request of this user, default role is the requested role */
-               if ((DefaultRoleInCurrentCrs = Enr_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
+               if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
                   DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
                 	                                                                Rol_ROLE_STUDENT;
               }

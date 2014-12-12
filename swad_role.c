@@ -433,3 +433,31 @@ static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
    fprintf (Gbl.F.Out," />%s</li>",
             Txt_ROLES_SINGULAR_Abc[Role][Usr_SEX_UNKNOWN]);
   }
+
+/*****************************************************************************/
+/************ Get requested role of a user in current course *****************/
+/*****************************************************************************/
+
+Rol_Role_t Rol_GetRequestedRole (long UsrCod)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Rol_Role_t Role = Rol_ROLE_UNKNOWN;
+
+   /***** Get requested role from database *****/
+   sprintf (Query,"SELECT Role FROM crs_usr_requests"
+                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+            Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get requested role"))
+     {
+      /***** Get role *****/
+      row = mysql_fetch_row (mysql_res);
+      Role = Rol_ConvertUnsignedStrToRole (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return Role;
+  }

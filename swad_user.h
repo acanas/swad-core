@@ -47,8 +47,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Usr_MAX_CLICKS_WITHOUT_PHOTO	 50
-
 #define Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS  6
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
@@ -244,8 +242,6 @@ void Usr_ChkUsrAndGetUsrData (void);
 
 void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void);
 void Usr_ShowFormsRoleAndLogout (void);
-
-unsigned Usr_UpdateMyClicksWithoutPhoto (void);
 
 bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 bool Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (long UsrCod);

@@ -29,9 +29,9 @@
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 
+#include "swad_account.h"
 #include "swad_bool.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
@@ -558,7 +558,7 @@ void ID_RemoveMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
@@ -673,7 +673,7 @@ void ID_NewMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Enr_ShowFormChangeMyAccount ();
+   Acc_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
