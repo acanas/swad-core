@@ -33,6 +33,7 @@
 #include "swad_action.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_network.h"
@@ -2338,7 +2339,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
               {
                /* If there is a request of this user, default role is the requested role */
-               if ((DefaultRoleInCurrentCrs = Usr_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
+               if ((DefaultRoleInCurrentCrs = Enr_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
                   DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
                 	                                                                Rol_ROLE_STUDENT;
               }
@@ -2799,7 +2800,7 @@ void Rec_UpdateMyRecord (void)
    Rec_GetUsrExtraDataFromRecordForm (&Gbl.Usrs.Me.UsrDat);
 
    /***** Update my data in database *****/
-   Usr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
+   Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
   }
 
 /*****************************************************************************/
@@ -3215,7 +3216,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.InsCod = -1L;
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
-   Usr_UpdateInstitutionCentreDepartment ();
+   Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
    Rec_ShowFormMyInsCtrDpt ();
@@ -3246,7 +3247,7 @@ void Rec_UpdateMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
-   Usr_UpdateInstitutionCentreDepartment ();
+   Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
    Rec_ShowFormMyInsCtrDpt ();
@@ -3278,7 +3279,7 @@ void Rec_UpdateMyCentre (void)
 
    /***** Update institution, centre and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
-   Usr_UpdateInstitutionCentreDepartment ();
+   Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
    Rec_ShowFormMyInsCtrDpt ();
@@ -3310,7 +3311,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Update institution, centre and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
-   Usr_UpdateInstitutionCentreDepartment ();
+   Enr_UpdateInstitutionCentreDepartment ();
 
    /***** Show form again *****/
    Rec_ShowFormMyInsCtrDpt ();

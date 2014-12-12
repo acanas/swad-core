@@ -853,6 +853,7 @@ const char *Brw_MIMETypesAllowed[] =
    "video/x-ms-wmv",			// WMV (Windows Media File)
    "video/x-msvideo",			// AVI
    "x-world/x-vrml",			// VRML Worlds wrl
+   "x-java",				// Source code in Java
    "zz-application/zz-winassoc-cdr",	// Corel Draw (CDR)
    "zz-application/zz-winassoc-mpp"	// Microsoft Project mpp
   };

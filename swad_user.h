@@ -103,20 +103,6 @@ typedef enum
   } Usr_ShowUsrsType_t;
 #define Usr_SHOW_USRS_TYPE_DEFAULT Usr_CLASS_PHOTO
 
-typedef enum
-  {
-   Usr_REPLACE_DATA,
-   Usr_INSERT_NEW_DATA,
-   } Usr_ReplaceInsert_t;
-
-// Related with users adding or removing
-typedef enum
-  {
-   Usr_REQUEST_REMOVE_USR,
-   Usr_REMOVE_USR,
-  } Usr_ReqDelOrDelUsr_t;
-
-
 // Related with user's data
 struct UsrData
   {
@@ -200,15 +186,12 @@ struct ListUsrCods
    unsigned NumUsrs;	// Number of users in the list
   };
 
-typedef enum
-  {
-   Usr_SET_ACCEPTED_TO_FALSE,
-   Usr_SET_ACCEPTED_TO_TRUE,
-  } Usr_KeepOrSetAccepted_t;
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
+
+void Usr_WriteSelectorRoles (unsigned Roles);
+void Usr_GetSelectedRoles (unsigned *Roles);
 
 void Usr_InformAboutNumClicksBeforePhoto (void);
 
@@ -228,8 +211,8 @@ Rol_Role_t Usr_GetMyMaxRoleInIns (long InsCod);
 Rol_Role_t Usr_GetMyMaxRoleInCtr (long CtrCod);
 Rol_Role_t Usr_GetMyMaxRoleInDeg (long DegCod);
 Rol_Role_t Usr_GetMyRoleInCrs (long CrsCod);
+Rol_Role_t Usr_GetRoleInCrs (long CrsCod,long UsrCod);
 unsigned Usr_GetRolesInAllCrss (long UsrCod);
-void Usr_AcceptUsrInCrs (long UsrCod);
 void Usr_BuildFullName (struct UsrData *UsrDat);
 
 void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars);
@@ -253,11 +236,7 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
 unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
 
-void Usr_AskRemoveOldUsrs (void);
-void Usr_RemoveOldUsrs (void);
-
-void Usr_ReqAcceptRegisterInCrs (void);
-void Usr_AcceptRegisterMeInCrs (void);
+bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod);
 
 void Usr_WriteFormLoginLogout (void);
 void Usr_Logout (void);
@@ -267,6 +246,7 @@ void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);
 void Usr_PutFormLogOut (void);
 void Usr_GetParamUsrIdLogin (void);
+unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_PutParamOtherUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
 void Usr_GetParamOtherUsrCodEncrypted (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
@@ -278,32 +258,11 @@ void Usr_ChangeMyRole (void);
 void Usr_ShowFormsRoleAndLogout (void);
 
 unsigned Usr_UpdateMyClicksWithoutPhoto (void);
-void Usr_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
-
-void Usr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);
-
-void Usr_AfterCreationNewAccount (void);
-void Usr_ShowFormAccount (void);
-void Usr_ShowFormChangeMyAccount (void);
 
 bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 bool Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (long UsrCod);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
-
-void Usr_CreatAndShowNewUsrRecordAndRegInCrs (void);
-void Usr_ModifAndShowUsrCardAndRegInCrsAndGrps (void);
-void Usr_GetNotifEnrollment (char *SummaryStr,
-                             long CrsCod,long UsrCod,
-                             unsigned MaxChars);
-void Usr_CreateNewUsr (struct UsrData *UsrDat);
-void Usr_UpdateUsrData (struct UsrData *UsrDat);
-void Usr_UpdateInstitutionCentreDepartment (void);
-void Usr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
-                                  Cns_QuietOrVerbose_t QuietOrVerbose,
-                                  Usr_KeepOrSetAccepted_t KeepOrSetAccepted);
-
-void Usr_RemoveUsrBriefcase (struct UsrData *UsrDat);
 
 void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckboxToSelectUsr);
 void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GrpNames);
@@ -369,34 +328,7 @@ void Usr_SeeStdClassPhotoPrn (void);
 void Usr_SeeTchClassPhotoPrn (void);
 void Usr_PutSelectorNumColsClassPhoto (void);
 
-void Usr_ShowFormRegRemSeveralUsrs (void);
-void Usr_ReceiveFormUsrsCrs (void);
-void Usr_AskRemAllStdsThisCrs (void);
-void Usr_RemAllStdsThisCrs (void);
-unsigned Usr_RemAllStdsInCrs (struct Course *Crs);
-void Usr_ReqSignUpInCrs (void);
-void Usr_SignUpInCrs (void);
-void Usr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
-                                    long ReqCod,unsigned MaxChars,bool GetContent);
-void Usr_AskIfRejectSignUp (void);
-void Usr_RejectSignUp (void);
-void Usr_ShowEnrollmentRequests (void);
-void Usr_WriteSelectorRoles (unsigned Roles);
-void Usr_GetSelectedRoles (unsigned *Roles);
-Rol_Role_t Usr_GetRequestedRole (long UsrCod);
-void Usr_ReqRegRemUsr (void);
-void Usr_AskIfRegRemAnotherUsr (void);
-void Usr_AddAdmToDeg (void);
-
-void Usr_ReqRemMeFromCrs (void);
-void Usr_ReqRemUsrFromCrs (void);
-void Usr_RemUsrFromCrs (void);
-void Usr_ReqRemOrRemUsrFromCrs (Usr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
-void Usr_ReqRemUsrGbl (void);
-void Usr_RemAdm (void);
-void Usr_RemUsrGbl (void);
-void Usr_ReqDelOrDelUsrGbl (Usr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
-void Usr_AskIfRemAdmFromDeg (bool ItsMe);
+void Usr_ConstructPathUsr (long UsrCod,char *PathUsr);
 bool Usr_ChkIfUsrCodExists (long UsrCod);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);

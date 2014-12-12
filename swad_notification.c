@@ -35,6 +35,7 @@
 #include "swad_config.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_mark.h"
@@ -699,10 +700,10 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_ENROLLMENT:
-	 Usr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod,MaxChars);
+	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod,MaxChars);
          break;
       case Ntf_EVENT_ENROLLMENT_REQUEST:
-	 Usr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_NOTICE:
          Not_GetNotifNotice (SummaryStr,ContentStr,Cod,MaxChars,GetContent);

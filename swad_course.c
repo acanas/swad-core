@@ -35,6 +35,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_degree.h"
+#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_indicator.h"
@@ -1884,7 +1885,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Remove all the students in the course *****/
-   Usr_RemAllStdsInCrs (&Crs);
+   Enr_RemAllStdsInCrs (&Crs);
 
    /***** Set all the notifications from the course as removed,
           except notifications about new messages *****/

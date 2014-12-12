@@ -31,6 +31,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_password.h"
@@ -184,7 +185,7 @@ void Pwd_ActChgMyPwd1 (void)
            {
             strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
             Ses_UpdateSessionDataInDB ();
-            Usr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
+            Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
             strcpy (Gbl.Message,Txt_Your_password_has_been_changed_successfully);
             Gbl.Usrs.Error = false;
            }
@@ -472,7 +473,7 @@ void Pwd_UpdateOtherPwd1 (void)
 	      {
 	       /* Update other user's data */
 	       strcpy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword);
-	       Usr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
+	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
 	       sprintf (Gbl.Message,Txt_The_X_password_has_been_changed_successfully,
 			Gbl.Usrs.Other.UsrDat.FullName);

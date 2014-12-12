@@ -34,6 +34,7 @@
 
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_import.h"
@@ -202,7 +203,7 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 			   UsrDat.Sex = ImpStd.Sex;
 
 			/* Update user's data */
-			Usr_UpdateUsrData (&UsrDat);
+			Enr_UpdateUsrData (&UsrDat);
 
 			/* Update e-mail */
 			if (!UsrDat.Email[0])
@@ -214,11 +215,11 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 		       }
 
 		     if (UsrDat.RoleInCurrentCrsDB == Rol_ROLE_STUDENT)	// He/she was already a student in current course
-			Usr_AcceptUsrInCrs (UsrDat.UsrCod);
+			Enr_AcceptUsrInCrs (UsrDat.UsrCod);
 		     else						// He/she not belonged to the current course
 			/* Register user as student in the current course */
-			Usr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
-						     Cns_QUIET,Usr_SET_ACCEPTED_TO_TRUE);
+			Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
+						     Cns_QUIET,Enr_SET_ACCEPTED_TO_TRUE);
 
 		     /* Register user in the selected groups */
 		     if (Gbl.CurrentCrs.Grps.NumGrps)			// If there are groups in current course
@@ -245,15 +246,15 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 
                /* Create user */
                UsrDat.IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
-               Usr_CreateNewUsr (&UsrDat);
+               Enr_CreateNewUsr (&UsrDat);
 
                /* Update e-mail */
 	       if (!Mai_UpdateEmailInDB (&UsrDat,UsrDat.Email))	// Email was already registered and confirmed by another user
 		  UsrDat.Email[0] = '\0';
 
 	       /* Register user as student in the current course */
-	       Usr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
-					    Cns_QUIET,Usr_SET_ACCEPTED_TO_TRUE);
+	       Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
+					    Cns_QUIET,Enr_SET_ACCEPTED_TO_TRUE);
 
 	       /* Register user in the selected groups */
 	       if (Gbl.CurrentCrs.Grps.NumGrps)			// If there are groups in current course

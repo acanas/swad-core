@@ -36,6 +36,7 @@
 #include "swad_action.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_global.h"
@@ -660,7 +661,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       Pho_UpdatePhotoName (UsrDat);
 
       /* Remove the user from the list of users without photo */
-      Usr_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
+      Enr_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
       Gbl.Error = false;
      }

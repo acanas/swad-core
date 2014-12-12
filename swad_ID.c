@@ -31,6 +31,7 @@
 
 #include "swad_bool.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
@@ -557,7 +558,7 @@ void ID_RemoveMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Usr_ShowFormChangeMyAccount ();
+   Enr_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
@@ -672,7 +673,7 @@ void ID_NewMyUsrID (void)
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
-   Usr_ShowFormChangeMyAccount ();
+   Enr_ShowFormChangeMyAccount ();
   }
 
 /*****************************************************************************/
