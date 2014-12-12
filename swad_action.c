@@ -2206,7 +2206,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLogOut		*/{  10,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
    /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
 
-   /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Usr_ChangeMyRole		,Usr_ShowFormsRoleAndLogout	,NULL},
+   /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsRoleAndLogout	,NULL},
 
    /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AfterCreationNewAccount	,NULL},
 

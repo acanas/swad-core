@@ -63,4 +63,24 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+unsigned Rol_GetNumAvailableRoles (void);
+Rol_Role_t Rol_GetMaxRole (unsigned Roles);
+Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
+Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
+Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);
+Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
+Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod);
+unsigned Rol_GetRolesInAllCrss (long UsrCod);
+
+Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
+unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);
+
+void Rol_PutFormToChangeMyRole (bool FormInHead);
+void Rol_ChangeMyRole (void);
+
+void Rol_WriteSelectorRoles (unsigned Roles);
+void Rol_GetSelectedRoles (unsigned *Roles);
+
+void Rol_PutAllRolesRegRemUsrsCrs (void);
+
 #endif

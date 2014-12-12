@@ -102,8 +102,6 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 static bool Enr_CheckIfICanEliminateAccount (bool ItsMe);
 static void Enr_PutLinkToRemoveMyAccount (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
-static void Enr_PutAllRolesRegRemUsrsCrs (void);
-static void Enr_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
@@ -118,6 +116,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
+static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat);
 static void Enr_ReqRemAdmOfDeg (void);
 static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
 
@@ -127,7 +126,6 @@ static void Enr_ReqAddAdmOfDeg (void);
 
 static void Enr_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 static void Enr_FilterUsrDat (struct UsrData *UsrDat);
-static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
 static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat);
@@ -135,10 +133,48 @@ static void Enr_DeleteUsrFromPlatform (struct UsrData *UsrDat,
                                        Cns_QuietOrVerbose_t QuietOrVerbose);
 static void Enr_RemoveUsr (struct UsrData *UsrDat);
 
-static void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
-                                        Rol_Role_t NewRole,
-                                        Cns_QuietOrVerbose_t QuietOrVerbose,
-                                        Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
+/*****************************************************************************/
+/***************** Modify the role of a user in a course *********************/
+/*****************************************************************************/
+
+void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
+                                 Rol_Role_t NewRole,
+                                 Cns_QuietOrVerbose_t QuietOrVerbose)
+  {
+   extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
+   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char Query[256];
+   Rol_Role_t OldRole;
+
+   /***** Change user's role if different *****/
+   OldRole = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   if (NewRole != OldRole)        // The role must be updated
+     {
+      /***** Check if user's role is allowed *****/
+      if (!(NewRole == Rol_ROLE_STUDENT ||
+	    NewRole == Rol_ROLE_TEACHER))
+	 Lay_ShowErrorAndExit ("Wrong role.");
+
+      /***** Update the role of a user in a course *****/
+      sprintf (Query,"UPDATE crs_usr SET Role='%u'"
+		     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	       (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+      DB_QueryUPDATE (Query,"can not modify user's role in course");
+
+      /***** Show info message *****/
+      if (QuietOrVerbose == Cns_VERBOSE)
+	{
+	 sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+		  UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName,
+		  Txt_ROLES_SINGULAR_abc[OldRole][UsrDat->Sex],
+		  Txt_ROLES_SINGULAR_abc[NewRole][UsrDat->Sex]);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	}
+
+      UsrDat->RoleInCurrentCrsDB = NewRole;
+      UsrDat->Roles |= (1 << NewRole);
+     }
+  }
 
 /*****************************************************************************/
 /*********************** Register user in current course *********************/
@@ -203,34 +239,6 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	       UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
-  }
-
-/*****************************************************************************/
-/******************* Register administrator in current degree ****************/
-/*****************************************************************************/
-
-static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y;
-   char Query[512];
-
-   /***** Check if user was and administrator of current degree *****/
-   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))
-      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
-               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
-   else        // User was not administrator of current degree
-     {
-      /***** Insert or replace administrator in current degree *****/
-      sprintf (Query,"REPLACE INTO deg_admin (UsrCod,DegCod)"
-                     " VALUES ('%ld','%ld')",
-               UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-      DB_QueryREPLACE (Query,"can not create administrator of degree");
-
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y,
-               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
-     }
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -950,7 +958,7 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
             /* Role (row[0]) */
-            Role = Usr_ConvertUnsignedStrToRole (row[0]);
+            Role = Rol_ConvertUnsignedStrToRole (row[0]);
             strcpy (SummaryStr,Txt_ROLES_SINGULAR_Abc[Role][UsrDat.Sex]);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
@@ -1212,7 +1220,7 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_2_Select_the_type_of_user_to_register_remove);
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-      Enr_PutAllRolesRegRemUsrsCrs ();
+      Rol_PutAllRolesRegRemUsrsCrs ();
 
    /***** Step 3: Put different actions to register/remove students to/from current course *****/
    fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
@@ -1651,50 +1659,6 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
   }
 
 /*****************************************************************************/
-/*** Select types of user to register/remove users to/from current course ****/
-/*****************************************************************************/
-
-static void Enr_PutAllRolesRegRemUsrsCrs (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-
-   /***** Students or teachers *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul style=\"list-style-type:none; text-align:left;\" class=\"%s\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
-   Enr_PutOneRoleRegRemUsrsCrs (Rol_ROLE_STUDENT,true);
-   Enr_PutOneRoleRegRemUsrsCrs (Rol_ROLE_TEACHER,false);
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
-  }
-
-/*****************************************************************************/
-/*** Select types of user to register/remove users to/from current course ****/
-/*****************************************************************************/
-
-static void Enr_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
-  {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   fprintf (Gbl.F.Out,"<li>"
-	              "<input type=\"radio\" name=\"RegRemRole\" value=\"%u\"",
-            (unsigned) Role);
-   if (Checked)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   switch (Gbl.Usrs.Me.LoggedRole)      // Can I select type of user?
-     {
-      case Rol_ROLE_DEG_ADMIN:
-      case Rol_ROLE_SUPERUSER:                // Yes, I can
-         break;
-      default:                                // No, I can not
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-         break;
-     }
-   fprintf (Gbl.F.Out," />%s</li>",
-            Txt_ROLES_SINGULAR_Abc[Role][Usr_SEX_UNKNOWN]);
-  }
-
-/*****************************************************************************/
 /******* Receive the list of users of the course to register/remove **********/
 /*****************************************************************************/
 
@@ -1748,7 +1712,7 @@ void Enr_ReceiveFormUsrsCrs (void)
    /***** Get the type of user to register / remove *****/
    Par_GetParToText ("RegRemRole",UnsignedStr,1);
    if (UnsignedStr[0])
-      switch ((RegRemRole = Usr_ConvertUnsignedStrToRole (UnsignedStr)))
+      switch ((RegRemRole = Rol_ConvertUnsignedStrToRole (UnsignedStr)))
         {
          case Rol_ROLE_STUDENT:
             break;
@@ -2222,11 +2186,10 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
      {
       if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
-	 Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole,
-	                             Cns_QUIET,Enr_SET_ACCEPTED_TO_FALSE);
+	 Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET);
       else
-	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
-	                              Cns_QUIET,Enr_SET_ACCEPTED_TO_FALSE);
+	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET,
+	                              Enr_SET_ACCEPTED_TO_FALSE);
 
       /***** Register user in the selected groups *****/
       if (Gbl.CurrentCrs.Grps.NumGrps)	// If there are groups in the course
@@ -2456,7 +2419,7 @@ void Enr_SignUpInCrs (void)
      {
       /***** Get new role from record form *****/
       Par_GetParToText ("Role",UnsignedStr,10);
-      RoleFromForm = Usr_ConvertUnsignedStrToRole (UnsignedStr);
+      RoleFromForm = Rol_ConvertUnsignedStrToRole (UnsignedStr);
 
       /* Check if role is correct */
       if (!(RoleFromForm == Rol_ROLE_STUDENT ||
@@ -2556,7 +2519,7 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
             /* Role (row[1]) */
-            DesiredRole = Usr_ConvertUnsignedStrToRole (row[1]);
+            DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
             strcpy (SummaryStr,Txt_ROLES_SINGULAR_Abc[DesiredRole][UsrDat.Sex]);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
@@ -2741,7 +2704,7 @@ void Enr_ShowEnrollmentRequests (void)
                       "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
                       "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Users);
-   Usr_GetSelectedRoles (&Roles);
+   Rol_GetSelectedRoles (&Roles);
    if (!Roles)
       /* Set default roles */
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -2757,7 +2720,7 @@ void Enr_ShowEnrollmentRequests (void)
             Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
             break;
         }
-   Usr_WriteSelectorRoles (Roles);
+   Rol_WriteSelectorRoles (Roles);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
    /* Form end */
@@ -3046,7 +3009,7 @@ void Enr_ShowEnrollmentRequests (void)
             Usr_RestrictLengthAndWriteName (&UsrDat,20);
 
             /***** Requested role (row[3]) *****/
-            DesiredRole = Usr_ConvertUnsignedStrToRole (row[3]);
+            DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
             fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">%s</td>",
                      Txt_ROLES_SINGULAR_abc[DesiredRole][UsrDat.Sex]);
 
@@ -3144,7 +3107,7 @@ Rol_Role_t Enr_GetRequestedRole (long UsrCod)
      {
       /***** Get role *****/
       row = mysql_fetch_row (mysql_res);
-      Role = Usr_ConvertUnsignedStrToRole (row[0]);
+      Role = Rol_ConvertUnsignedStrToRole (row[0]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3430,6 +3393,34 @@ void Enr_AddAdmToDeg (void)
       else
          Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
+  }
+
+/*****************************************************************************/
+/******************* Register administrator in current degree ****************/
+/*****************************************************************************/
+
+static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y;
+   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y;
+   char Query[512];
+
+   /***** Check if user was and administrator of current degree *****/
+   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
+               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
+   else        // User was not administrator of current degree
+     {
+      /***** Insert or replace administrator in current degree *****/
+      sprintf (Query,"REPLACE INTO deg_admin (UsrCod,DegCod)"
+                     " VALUES ('%ld','%ld')",
+               UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
+      DB_QueryREPLACE (Query,"can not create administrator of degree");
+
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y,
+               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
+     }
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3826,11 +3817,10 @@ void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void)
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
 	 if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
-	    Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-			                Cns_VERBOSE,Enr_SET_ACCEPTED_TO_FALSE);
+	    Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 	 else
-	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-					 Cns_VERBOSE,Enr_SET_ACCEPTED_TO_FALSE);
+	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
+	                                 Enr_SET_ACCEPTED_TO_FALSE);
 
 	 /***** Change user's groups *****/
 	 if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
@@ -3899,11 +3889,10 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 
 			/***** Register user in current course in database *****/
 			if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
-			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-					               Cns_VERBOSE,Enr_SET_ACCEPTED_TO_FALSE);
+			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 			else
-			   Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-							Cns_VERBOSE,Enr_SET_ACCEPTED_TO_FALSE);
+			   Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
+			                                Enr_SET_ACCEPTED_TO_FALSE);
 
 			/***** Change user's groups *****/
 			if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -3960,54 +3949,6 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 
    if (Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-  }
-
-/*****************************************************************************/
-/***************** Modify the role of a user in a course *********************/
-/*****************************************************************************/
-
-static void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
-                                        Rol_Role_t NewRole,
-                                        Cns_QuietOrVerbose_t QuietOrVerbose,
-                                        Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
-  {
-   extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char Query[256];
-   Rol_Role_t OldRole;
-
-   /***** Change user's role if different *****/
-   OldRole = Usr_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   if (NewRole != OldRole)        // The role must be updated
-     {
-      /***** Check if user's role is allowed *****/
-      if (!(NewRole == Rol_ROLE_STUDENT ||
-	    NewRole == Rol_ROLE_TEACHER))
-	 Lay_ShowErrorAndExit ("Wrong role.");
-
-      /***** Update the role of a user in a course *****/
-      sprintf (Query,"UPDATE crs_usr SET Role='%u'"
-		     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-	       (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-      DB_QueryUPDATE (Query,"can not modify user's role in course");
-
-      /***** Show info message *****/
-      if (QuietOrVerbose == Cns_VERBOSE)
-	{
-	 sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-		  UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName,
-		  Txt_ROLES_SINGULAR_abc[OldRole][UsrDat->Sex],
-		  Txt_ROLES_SINGULAR_abc[NewRole][UsrDat->Sex]);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-	}
-
-      UsrDat->RoleInCurrentCrsDB = NewRole;
-      UsrDat->Roles |= (1 << NewRole);
-     }
-
-   /***** Set user's acceptation to true in the current course *****/
-   if (KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE)
-      Enr_AcceptUsrInCrs (UsrDat->UsrCod);      // Confirm user enrollment
   }
 
 /*****************************************************************************/

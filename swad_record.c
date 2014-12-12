@@ -2814,7 +2814,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 
    /***** Get role as a parameter from form *****/
    Par_GetParToText ("Role",UnsignedStr,10);
-   Role = Usr_ConvertUnsignedStrToRole (UnsignedStr);
+   Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
 
    /***** Check if I can register a user
           with the received role in current course *****/

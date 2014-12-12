@@ -114,8 +114,6 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
-static unsigned Usr_GetNumAvailableRoles (void);
-static void Usr_PutFormToChangeMyRole (bool FormInHead);
 
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 
@@ -124,7 +122,6 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void);
 static bool Usr_ChkUsrAndGetUsrDataFromSession (void);
 
 static void Usr_SetUsrRoleAndPrefs (void);
-static Rol_Role_t Usr_GetMaxRole (unsigned Roles);
 
 static void Usr_InsertMyLastData (void);
 
@@ -175,51 +172,6 @@ static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
 static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role);
 static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
-
-/*****************************************************************************/
-/********************* Write selector of users' roles ************************/
-/*****************************************************************************/
-
-void Usr_WriteSelectorRoles (unsigned Roles)
-  {
-   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   Rol_Role_t Role;
-
-   for (Role = Rol_ROLE_STUDENT;
-        Role <= Rol_ROLE_TEACHER;
-        Role++)
-     {
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
-               (unsigned) Role);
-      if ((Roles & (1 << Role)))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s<br />",
-               Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
-     }
-  }
-
-/*****************************************************************************/
-/************************* Get selected users' roles *************************/
-/*****************************************************************************/
-
-void Usr_GetSelectedRoles (unsigned *Roles)
-  {
-   char StrRoles[(10+1)*2];
-   const char *Ptr;
-   char UnsignedStr[10+1];
-   Rol_Role_t Role;
-
-   Par_GetParMultiToText ("Roles",StrRoles,(10+1)*2);
-   *Roles = 0;
-   for (Ptr = StrRoles;
-        *Ptr;)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&Role) != 1)
-         Lay_ShowErrorAndExit ("can not get user's role");
-      *Roles |= (1 << Role);
-     }
-  }
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -416,33 +368,6 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/********************** Get role from unsigned string ************************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_ConvertUnsignedStrToRole (const char *UnsignedStr)
-  {
-   unsigned UnsignedNum;
-
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_ROLE_UNKNOWN :
-                                              (Rol_Role_t) UnsignedNum;
-   return Rol_ROLE_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/****** Get roles (several bits can be activated) from unsigned string *******/
-/*****************************************************************************/
-
-unsigned Usr_ConvertUnsignedStrToRoles (const char *UnsignedStr)
-  {
-   unsigned UnsignedNum;
-
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      return UnsignedNum;
-   return 0;
-  }
-
-/*****************************************************************************/
 /************ Get user's data from database giving a user's code *************/
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
@@ -489,8 +414,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    UsrDat->Password[sizeof (UsrDat->Password)-1] = '\0';
 
    /* Get roles */
-   UsrDat->RoleInCurrentCrsDB = Usr_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   UsrDat->Roles = Usr_GetRolesInAllCrss (UsrDat->UsrCod);
+   UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   UsrDat->Roles = Rol_GetRolesInAllCrss (UsrDat->UsrCod);
    if (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_UNKNOWN)
       UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_ROLE_STUDENT)) ?
 	                           Rol_ROLE_GUEST :	// User does not belong to any course
@@ -714,171 +639,6 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
   }
 
 /*****************************************************************************/
-/******************* Get my maximum role in a institution ********************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_GetMyMaxRoleInIns (long InsCod)
-  {
-   unsigned NumMyIns;
-
-   if (InsCod > 0)
-     {
-      /***** Fill the list with the institutions I belong to (if not already filled) *****/
-      Usr_GetMyInstitutions ();
-
-      /***** Check if the institution passed as parameter is any of my institutions *****/
-      for (NumMyIns = 0;
-           NumMyIns < Gbl.Usrs.Me.MyInstitutions.Num;
-           NumMyIns++)
-         if (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod == InsCod)
-            return Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].MaxRole;
-      return Rol_ROLE_GUEST;
-     }
-   return Rol_ROLE_UNKNOWN;   // No degree
-  }
-
-/*****************************************************************************/
-/********************** Get my maximum role in a centre **********************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_GetMyMaxRoleInCtr (long CtrCod)
-  {
-   unsigned NumMyCtr;
-
-   if (CtrCod > 0)
-     {
-      /***** Fill the list with the centres I belong to (if not already filled) *****/
-      Usr_GetMyCentres ();
-
-      /***** Check if the centre passed as parameter is any of my centres *****/
-      for (NumMyCtr = 0;
-           NumMyCtr < Gbl.Usrs.Me.MyCentres.Num;
-           NumMyCtr++)
-         if (Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].CtrCod == CtrCod)
-            return Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].MaxRole;
-      return Rol_ROLE_GUEST;
-     }
-   return Rol_ROLE_UNKNOWN;   // No centre
-  }
-
-/*****************************************************************************/
-/********************** Get my maximum role in a degree **********************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_GetMyMaxRoleInDeg (long DegCod)
-  {
-   unsigned NumMyDeg;
-
-   if (DegCod > 0)
-     {
-      /***** Fill the list with the degrees I belong to (if not already filled) *****/
-      Usr_GetMyDegrees ();
-
-      /***** Check if the degree passed as parameter is any of my degrees *****/
-      for (NumMyDeg = 0;
-           NumMyDeg < Gbl.Usrs.Me.MyDegrees.Num;
-           NumMyDeg++)
-         if (Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].DegCod == DegCod)
-            return Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].MaxRole;
-      return Rol_ROLE_GUEST;
-     }
-   return Rol_ROLE_UNKNOWN;   // No degree
-  }
-
-/*****************************************************************************/
-/*************************** Get my role in a course *************************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_GetMyRoleInCrs (long CrsCod)
-  {
-   unsigned NumMyCrs;
-
-   if (CrsCod > 0)
-     {
-      /***** Fill the list with the courses I belong to (if not already filled) *****/
-      Usr_GetMyCourses ();
-
-      /***** Check if the course passed as parameter is any of my courses *****/
-      for (NumMyCrs = 0;
-           NumMyCrs < Gbl.Usrs.Me.MyCourses.Num;
-           NumMyCrs++)
-         if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == CrsCod)
-            return Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].Role;
-      return Rol_ROLE_GUEST;
-     }
-   return Rol_ROLE_UNKNOWN;   // No course
-  }
-
-/*****************************************************************************/
-/********************** Get role of a user in a course ***********************/
-/*****************************************************************************/
-
-Rol_Role_t Usr_GetRoleInCrs (long CrsCod,long UsrCod)
-  {
-   char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   Rol_Role_t Role;
-
-   if (CrsCod > 0)
-     {
-      /***** Get rol of a user in a course from database.
-             The result of the query will have one row or none *****/
-      sprintf (Query,"SELECT Role FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-               CrsCod,UsrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
-        {
-         row = mysql_fetch_row (mysql_res);
-         Role = Usr_ConvertUnsignedStrToRole (row[0]);
-        }
-      else                // User does not belong to the course
-         Role = Rol_ROLE_UNKNOWN;
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else        // No course
-      Role = Rol_ROLE_UNKNOWN;
-
-   return Role;
-  }
-
-/*****************************************************************************/
-/**************** Get roles of a user in all his/her courses *****************/
-/*****************************************************************************/
-
-unsigned Usr_GetRolesInAllCrss (long UsrCod)
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRole;
-   unsigned NumRoles;
-   Rol_Role_t Role;
-   unsigned Roles = 0;
-
-   /***** Get distinct roles in all the courses of the user from database *****/
-   sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr"
-                  " WHERE UsrCod='%ld'",
-            UsrCod);
-   NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the roles of a user in all his/her courses");
-   for (NumRole = 0;
-        NumRole < NumRoles;
-        NumRole++)
-     {
-      row = mysql_fetch_row (mysql_res);
-      if ((Role = Usr_ConvertUnsignedStrToRole (row[0])) != Rol_ROLE_UNKNOWN)
-         Roles |= (1 << Role);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Roles;
-  }
-
-/*****************************************************************************/
 /********** Build full name using FirstName, Surname1 and Surname2 ***********/
 /*****************************************************************************/
 
@@ -1018,7 +778,7 @@ void Usr_GetMyInstitutions (void)
                   Lay_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
 
                Gbl.Usrs.Me.MyInstitutions.Inss[Gbl.Usrs.Me.MyInstitutions.Num].InsCod  = InsCod;
-               Gbl.Usrs.Me.MyInstitutions.Inss[Gbl.Usrs.Me.MyInstitutions.Num].MaxRole = Usr_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyInstitutions.Inss[Gbl.Usrs.Me.MyInstitutions.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
                Gbl.Usrs.Me.MyInstitutions.Num++;
               }
@@ -1065,7 +825,7 @@ void Usr_GetMyCentres (void)
                   Lay_ShowErrorAndExit ("Maximum number of centres of a user exceeded.");
 
                Gbl.Usrs.Me.MyCentres.Ctrs[Gbl.Usrs.Me.MyCentres.Num].CtrCod = CtrCod;
-               Gbl.Usrs.Me.MyCentres.Ctrs[Gbl.Usrs.Me.MyCentres.Num].MaxRole = Usr_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyCentres.Ctrs[Gbl.Usrs.Me.MyCentres.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
                Gbl.Usrs.Me.MyCentres.Num++;
               }
@@ -1112,7 +872,7 @@ void Usr_GetMyDegrees (void)
                   Lay_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
 
                Gbl.Usrs.Me.MyDegrees.Degs[Gbl.Usrs.Me.MyDegrees.Num].DegCod  = DegCod;
-               Gbl.Usrs.Me.MyDegrees.Degs[Gbl.Usrs.Me.MyDegrees.Num].MaxRole = Usr_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyDegrees.Degs[Gbl.Usrs.Me.MyDegrees.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
                Gbl.Usrs.Me.MyDegrees.Num++;
               }
@@ -1159,7 +919,7 @@ void Usr_GetMyCourses (void)
                   Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
 
                Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].CrsCod = CrsCod;
-               Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].Role   = Usr_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
                Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
                Gbl.Usrs.Me.MyCourses.Num++;
               }
@@ -1678,13 +1438,13 @@ void Usr_WriteLoggedUsrHead (void)
    char UsrFullName[(Usr_MAX_BYTES_NAME+1)*3];
 
    /***** User's type *****/
-   if (Usr_GetNumAvailableRoles () == 1)
+   if (Rol_GetNumAvailableRoles () == 1)
       fprintf (Gbl.F.Out,"<span class=\"%s\">%s:&nbsp;</span>",
                The_ClassUsr[Gbl.Prefs.Theme],
                Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
    else
      {
-      Usr_PutFormToChangeMyRole (true);
+      Rol_PutFormToChangeMyRole (true);
       fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;</span>",
                The_ClassUsr[Gbl.Prefs.Theme]);
      }
@@ -1713,59 +1473,6 @@ void Usr_WriteLoggedUsrHead (void)
       fprintf (Gbl.F.Out,"&nbsp;");
 
    fprintf (Gbl.F.Out,"</span>");
-  }
-
-/*****************************************************************************/
-/****************** Get number of available roles for me *********************/
-/*****************************************************************************/
-
-static unsigned Usr_GetNumAvailableRoles (void)
-  {
-   Rol_Role_t Role;
-   unsigned NumAvailableRoles = 0;
-
-   for (Role = Rol_ROLE_GUEST;
-        Role < Rol_NUM_ROLES;
-        Role++)
-      if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
-         NumAvailableRoles++;
-
-   return NumAvailableRoles;
-  }
-
-/*****************************************************************************/
-/*********************** Put a form to change my role ************************/
-/*****************************************************************************/
-
-static void Usr_PutFormToChangeMyRole (bool FormInHead)
-  {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
-     {
-      90,        // Lay_LAYOUT_DESKTOP
-      90,        // Lay_LAYOUT_MOBILE
-     };
-   Rol_Role_t Role;
-
-   Act_FormStart (ActChgMyRol);
-   fprintf (Gbl.F.Out,"<select name=\"UsrTyp\"");
-   if (FormInHead)
-      fprintf (Gbl.F.Out," style=\"width:%upx;\"",SelectorWidth[Gbl.Prefs.Layout]);
-   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\">",
-            Gbl.FormId);
-   for (Role = Rol_ROLE_GUEST;
-        Role < Rol_NUM_ROLES;
-        Role++)
-     if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
-        {
-         fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-         if (Role == Gbl.Usrs.Me.LoggedRole)
-            fprintf (Gbl.F.Out," selected=\"selected\"");
-         fprintf (Gbl.F.Out,">%s</option>",
-                  Txt_ROLES_SINGULAR_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-        }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
   }
 
 /*****************************************************************************/
@@ -2469,12 +2176,12 @@ static void Usr_SetUsrRoleAndPrefs (void)
       	 Deg_InitCurrentCourse ();
 
 	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Usr_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       	}
      }
 
    /***** Set the user's role I am logged *****/
-   Gbl.Usrs.Me.MaxRole = Usr_GetMaxRole (Gbl.Usrs.Me.UsrDat.Roles);
+   Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole (Gbl.Usrs.Me.UsrDat.Roles);
    Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_ROLE_UNKNOWN) ?	// If no logged role retrieved from session...
                             Gbl.Usrs.Me.MaxRole :				// ...set current logged role to maximum role in database
                             Gbl.Usrs.Me.RoleFromSession;			// Get logged role from session
@@ -2542,19 +2249,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
   }
 
 /*****************************************************************************/
-/************ Get maximum role of a user in all his/her courses **************/
-/*****************************************************************************/
-
-static Rol_Role_t Usr_GetMaxRole (unsigned Roles)
-  {
-   if (Roles & (1 << Rol_ROLE_TEACHER))
-      return Rol_ROLE_TEACHER;
-   if (Roles & (1 << Rol_ROLE_STUDENT))
-      return Rol_ROLE_STUDENT;
-   return Rol_ROLE_GUEST;
-  }
-
-/*****************************************************************************/
 /******** Write warning when degree type does not allow direct login *********/
 /*****************************************************************************/
 /*
@@ -2589,35 +2283,6 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
   }
 
 /*****************************************************************************/
-/****************************** Change my role *******************************/
-/*****************************************************************************/
-
-void Usr_ChangeMyRole (void)
-  {
-   char UnsignedStr[10+1];
-   unsigned UnsignedNum;
-
-   /***** Get parameter with the new logged role ******/
-   Par_GetParToText ("UsrTyp",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-     {
-      /* Check if new role is a correct type *****/
-      if (UnsignedNum >= Rol_NUM_ROLES)
-         return;
-
-      /* Check if new role is allowed for me */
-      if (!(Gbl.Usrs.Me.AvailableRoles & (1 << UnsignedNum)))
-         return;
-
-      /* New role is correct and is allowed for me, so change my logged user type */
-      Gbl.Usrs.Me.LoggedRole = (Rol_Role_t) UnsignedNum;
-
-      /* Update logged role in session */
-      Ses_UpdateSessionDataInDB ();
-     }
-  }
-
-/*****************************************************************************/
 /************** Show forms to change my role and to log out ******************/
 /*****************************************************************************/
 
@@ -2645,11 +2310,11 @@ void Usr_ShowFormsRoleAndLogout (void)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Put a form to change my role *****/
-   if (Usr_GetNumAvailableRoles () > 1)
+   if (Rol_GetNumAvailableRoles () > 1)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">%s: ",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_Role);
-      Usr_PutFormToChangeMyRole (false);
+      Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
      }
   }

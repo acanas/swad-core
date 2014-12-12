@@ -1468,35 +1468,35 @@ void For_SetForumTypeAndRestrictAccess (void)
      {
       case For_FORUM_COURSE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_ROLE_STUDENT);
+                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_ROLE_STUDENT);
          break;
       case For_FORUM_COURSE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_ROLE_TEACHER);
+                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_ROLE_TEACHER);
          break;
       case For_FORUM_DEGREE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_ROLE_STUDENT);
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_ROLE_STUDENT);
          break;
       case For_FORUM_DEGREE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_ROLE_TEACHER);
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_ROLE_TEACHER);
          break;
       case For_FORUM_CENTRE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_ROLE_STUDENT);
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_ROLE_STUDENT);
          break;
       case For_FORUM_CENTRE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_ROLE_TEACHER);
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_ROLE_TEACHER);
          break;
       case For_FORUM_INSTITUTION_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_ROLE_STUDENT);
+                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_ROLE_STUDENT);
          break;
       case For_FORUM_INSTITUTION_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-                         Usr_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_ROLE_TEACHER);
+                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_ROLE_TEACHER);
          break;
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_SWAD_USRS:
@@ -1775,7 +1775,7 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastIte
    if (InsCod > 0)
      {
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-	                     Usr_GetMyMaxRoleInIns (InsCod) >= Rol_ROLE_TEACHER);
+	                     Rol_GetMyMaxRoleInIns (InsCod) >= Rol_ROLE_TEACHER);
 
       /***** Get data of this institution *****/
       Gbl.Forum.Ins.InsCod = InsCod;
@@ -1808,7 +1808,7 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastIte
    if (CtrCod > 0)
      {
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-	                     Usr_GetMyMaxRoleInCtr (CtrCod) >= Rol_ROLE_TEACHER);
+	                     Rol_GetMyMaxRoleInCtr (CtrCod) >= Rol_ROLE_TEACHER);
 
       /***** Get data of this degree *****/
       Gbl.Forum.Ctr.CtrCod = CtrCod;
@@ -1841,7 +1841,7 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,bool IsLastIte
    if (DegCod > 0)
      {
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-	                     Usr_GetMyMaxRoleInDeg (DegCod) >= Rol_ROLE_TEACHER);
+	                     Rol_GetMyMaxRoleInDeg (DegCod) >= Rol_ROLE_TEACHER);
 
       /***** Get data of this degree *****/
       Gbl.Forum.Deg.DegCod = DegCod;
@@ -1874,7 +1874,7 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,bool IsLastIte
    if (CrsCod > 0)
      {
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
-	                     Usr_GetMyRoleInCrs (CrsCod) >= Rol_ROLE_TEACHER);
+	                     Rol_GetMyRoleInCrs (CrsCod) >= Rol_ROLE_TEACHER);
 
       /***** Get data of this course *****/
       Gbl.Forum.Crs.CrsCod = CrsCod;

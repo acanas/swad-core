@@ -1651,7 +1651,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                       "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
             Txt_Users);
-   Usr_WriteSelectorRoles (Svy.Roles);
+   Rol_WriteSelectorRoles (Svy.Roles);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -1879,7 +1879,7 @@ void Svy_RecFormSurvey (void)
    NewSvy.DateTimes[Svy_END_TIME].Time.Second = 59;
 
    /***** Get users who can answer this survey *****/
-   Usr_GetSelectedRoles (&(NewSvy.Roles));
+   Rol_GetSelectedRoles (&(NewSvy.Roles));
 
    /***** Check if title is correct *****/
    if (NewSvy.Title[0])	// If there's a survey title

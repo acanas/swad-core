@@ -190,9 +190,6 @@ struct ListUsrCods
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Usr_WriteSelectorRoles (unsigned Roles);
-void Usr_GetSelectedRoles (unsigned *Roles);
-
 void Usr_InformAboutNumClicksBeforePhoto (void);
 
 void Usr_UsrDataConstructor (struct UsrData *UsrDat);
@@ -203,16 +200,8 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
-Rol_Role_t Usr_ConvertUnsignedStrToRole (const char *UnsignedStr);
-unsigned Usr_ConvertUnsignedStrToRoles (const char *UnsignedStr);
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);
 
-Rol_Role_t Usr_GetMyMaxRoleInIns (long InsCod);
-Rol_Role_t Usr_GetMyMaxRoleInCtr (long CtrCod);
-Rol_Role_t Usr_GetMyMaxRoleInDeg (long DegCod);
-Rol_Role_t Usr_GetMyRoleInCrs (long CrsCod);
-Rol_Role_t Usr_GetRoleInCrs (long CrsCod,long UsrCod);
-unsigned Usr_GetRolesInAllCrss (long UsrCod);
 void Usr_BuildFullName (struct UsrData *UsrDat);
 
 void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars);
@@ -254,7 +243,6 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
 void Usr_ChkUsrAndGetUsrData (void);
 
 void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void);
-void Usr_ChangeMyRole (void);
 void Usr_ShowFormsRoleAndLogout (void);
 
 unsigned Usr_UpdateMyClicksWithoutPhoto (void);

@@ -221,7 +221,7 @@ void Con_GetAndShowLastClicks (void)
 			 "</tr>",
                ClassRow,row[0],
                ClassRow,row[2],
-               ClassRow,Txt_ROLES_SINGULAR_Abc[Usr_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
+               ClassRow,Txt_ROLES_SINGULAR_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
                ClassRow,Deg.ShortName,
 	       ClassRow,row[5]);
      }

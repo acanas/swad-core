@@ -59,6 +59,13 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
+                                 Rol_Role_t NewRole,
+                                 Cns_QuietOrVerbose_t QuietOrVerbose);
+void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
+                                  Cns_QuietOrVerbose_t QuietOrVerbose,
+                                  Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
+
 void Enr_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);
@@ -78,9 +85,7 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
 void Enr_CreateNewUsr (struct UsrData *UsrDat);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_UpdateInstitutionCentreDepartment (void);
-void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
-                                  Cns_QuietOrVerbose_t QuietOrVerbose,
-                                  Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
+
 bool Enr_CreateNewAccountAndLogIn (void);
 
 void Enr_RemoveUsrBriefcase (struct UsrData *UsrDat);

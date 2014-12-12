@@ -352,7 +352,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s: </td>"
                       "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
             Txt_Users);
-   Usr_WriteSelectorRoles (1 << Rol_ROLE_STUDENT |
+   Rol_WriteSelectorRoles (1 << Rol_ROLE_STUDENT |
                            1 << Rol_ROLE_TEACHER);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
@@ -383,7 +383,7 @@ void Ann_ReceiveAnnouncement (void)
                               Str_TO_RIGOROUS_HTML,true);
 
    /* Get users who can view this announcement */
-   Usr_GetSelectedRoles (&Roles);
+   Rol_GetSelectedRoles (&Roles);
 
    /***** Create a new announcement in database *****/
    Ann_CreateAnnouncement (Roles,Subject,Content);

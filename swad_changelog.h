@@ -35,12 +35,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.35 (2014/12/12)"
+#define Log_PLATFORM_VERSION	"SWAD 14.36 (2014/12/12)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.36    :Dic 12, 2014	New module swad_role for user's roles. (170764 lines)
+					1 change necessary in Makefile:
+Add swad_role.o to list of object files
+
 	Version 14.35    :Dic 12, 2014	New MIME type, suggested by Benito Palacios.
 					New module swad_enrollment for enrollment (registration) or removing of users. (170725 lines)
 					1 change necessary in Makefile:
