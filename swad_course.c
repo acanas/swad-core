@@ -904,7 +904,7 @@ static void Crs_EditCourses (void)
 static void Crs_ListCoursesForSeeing (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
@@ -919,7 +919,8 @@ static void Crs_ListCoursesForSeeing (void)
    Crs_StatusTxt_t StatusTxt;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Courses);
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForSeeing ();
 
    /***** List the courses *****/
@@ -1004,7 +1005,7 @@ static void Crs_ListCoursesForSeeing (void)
 
 static void Crs_ListCoursesForEdition (void)
   {
-   extern const char *Txt_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_Remove_course;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
@@ -1023,7 +1024,8 @@ static void Crs_ListCoursesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Courses);
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1298,7 +1300,7 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *Txt_New_course;
+   extern const char *Txt_New_course_of_DEGREE_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
@@ -1319,7 +1321,8 @@ static void Crs_PutFormToCreateCourse (void)
    Crs = &Gbl.Degs.EditingCrs;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_course);
+   sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Disabled icon to remove course *****/

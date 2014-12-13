@@ -5335,6 +5335,27 @@ const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very importan
 	"%u course(s) have been eliminated.";		// Necessita de tradução
 #endif
 
+const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Assignatures de %s";
+#elif L==1
+	"Veranstaltungen der %s";
+#elif L==2
+	"Courses of %s";
+#elif L==3
+	"Asignaturas de %s";
+#elif L==4
+	"Mati&egrave;res de %s";
+#elif L==5
+	"Asignaturas de %s";	// Okoteve traducción
+#elif L==6
+	"Corsi di %s";
+#elif L==7
+	"Kurs&oacute;w %s";
+#elif L==8
+	"Disciplinas de %s";
+#endif
+
 const char *Txt_Create_account =
 #if   L==0
 	"Crea compte";
@@ -23845,25 +23866,25 @@ const char *Txt_New_country =
 	"Novo pa&iacute;s";
 #endif
 
-const char *Txt_New_course =
+const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Nova assignatura";
+	"Nova assignatura de %s";
 #elif L==1
-	"Neue Veranstaltung";
+	"Neue Veranstaltung der %s";
 #elif L==2
-	"New course";
+	"New course of %s";
 #elif L==3
-	"Nueva asignatura";
+	"Nueva asignatura de %s";
 #elif L==4
-	"Nouvelle mati&egrave;re";
+	"Nouvelle mati&egrave;re de %s";
 #elif L==5
-	"Nueva asignatura";	// Okoteve traducción
+	"Nueva asignatura de %s";	// Okoteve traducción
 #elif L==6
-	"Nuovo corso";
+	"Nuovo corso di %s";
 #elif L==7
-	"Nowy kurs";
+	"Nowy kurs %s";
 #elif L==8
-	"Nova disciplina";
+	"Nova disciplina de %s";
 #endif
 
 const char *Txt_New_degree =
@@ -44836,7 +44857,7 @@ const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_o
 	" con el ID (DNI/c&eacute;dula) <strong>%s</strong>."
 	" Si usted ya tiene cuenta en %s,"
 	" inicie sesi&oacute;n y a&ntilde;ada este ID a su cuenta."
-	" Si no tiene cuenta, puede crear una nueva.";	// Necessita traduccio
+	" Si no tiene cuenta, puede crear una nueva.";		// Necessita traduccio
 #elif L==1
 	"There is no user in %s"
 	" with ID <strong>%s</strong>."
