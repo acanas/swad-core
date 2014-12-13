@@ -2617,7 +2617,14 @@ static void Usr_PutFormToSearchCourses (void)
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
-   Act_FormStart (ActSysReqSch);
+   Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
+		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
+		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
+		  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
+		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
+						   ActSysReqSch)))));
+   Sco_PutParamScope (Sco_SCOPE_PLATFORM);
+   Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
    Act_LinkFormSubmit (Txt_Search_courses,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("search",Txt_Search_courses,Txt_Search_courses);
    fprintf (Gbl.F.Out,"</form>");

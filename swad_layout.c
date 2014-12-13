@@ -632,7 +632,7 @@ static void Lay_WritePageTopHeading (void)
 	                                              ActSysSch)))));
       Sco_PutParamScope (Sco_SCOPE_PLATFORM);
       Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_ALL);
-      Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
+      Sch_PutFormToSearchOnHead (Gbl.Prefs.PathTheme);
       fprintf (Gbl.F.Out,"</form>"
 	                 "</td>");
      }
