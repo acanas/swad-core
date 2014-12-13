@@ -95,7 +95,7 @@ const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n t
 // For polish HTML entities, see http://pl.wikipedia.org/wiki/Alfabet_polski
 // Guarani:
 // E with tilde: &#7868;
-// e with tilde: &etilde;
+// e with tilde: &#7869;
 // I with tilde: &#296;
 // i with tilde: &#297;
 
@@ -140,7 +140,7 @@ const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES] =
 	"English",
 	"Espa&ntilde;ol",
 	"Fran&ccedil;ais",
-	"Ava&ntilde;e'&etilde;",
+	"Ava&ntilde;e'&#7869;",
 	"Italiano",
 	"Polski",
 	"Portugu&ecirc;s",
@@ -152,7 +152,7 @@ const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Txt_NUM_LANGUAGES
 	"Do you want to change the language to English?",
 	"&iquest;Desea cambiar el idioma a espa&ntilde;ol?",
 	"Voulez-vous changer la langue au fran&ccedil;ais?",
-	"&iquest;Oipota moambue pe &ntilde;e'&etilde; pe ava&ntilde;e'&etilde;?",
+	"&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
 	"Vuoi cambiare la lingua in italiano?",
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",
@@ -164,7 +164,7 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Txt_NUM_LANGUAGE
 	"Do you want to change your language to English?",
 	"&iquest;Desea cambiar su idioma a espa&ntilde;ol?",
 	"Voulez-vous changer votre langue au fran&ccedil;ais?",
-	"&iquest;Oipota moambue pe &ntilde;e'&etilde; pe ava&ntilde;e'&etilde;?",
+	"&iquest;Oipota moambue pe &ntilde;e'&#7869; pe ava&ntilde;e'&#7869;?",
 	"Vuoi cambiare la tua lingua in italiano?",
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
@@ -176,7 +176,7 @@ const char *Txt_Switch_to_LANGUAGE[Txt_NUM_LANGUAGES] =
 	"Switch to English",
 	"Cambiar a espa&ntilde;ol",
 	"Passer au fran&ccedil;ais",
-	"Moambue pe &ntilde;e'&etilde; ava&ntilde;e'&etilde;",
+	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;",
 	"Passare a italiano",
 	"Prze&lstrok;&aogon;cz na polski",
 	"Mudar para portugu&ecirc;s",
@@ -188,7 +188,7 @@ const char *Txt_Switching_to_LANGUAGE[Txt_NUM_LANGUAGES] =
 	"Switching to English...",
 	"Cambiando a espa&ntilde;ol...",
 	"Passant au fran&ccedil;ais...",
-	"Moambue pe &ntilde;e'&etilde; ava&ntilde;e'&etilde;...",
+	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;...",
 	"Passando a italiano...",
 	"Prze&lstrok;&aogon;cz na polski...",
 	"Mudando para portugu&ecirc;s...",
@@ -7333,7 +7333,7 @@ const char *Txt_Department =
 #elif L==4
 	"D&eacute;partement";
 #elif L==5
-	"Peh&etilde;";
+	"Peh&#7869;";
 #elif L==6
 	"Dipartimento";
 #elif L==7
@@ -7396,7 +7396,7 @@ const char *Txt_Departments =
 #elif L==4
 	"D&eacute;partements";
 #elif L==5
-	"Peh&etilde;";
+	"Peh&#7869;";
 #elif L==6
 	"Dipartimenti";
 #elif L==7
@@ -7482,7 +7482,7 @@ const char *Txt_DEPARTMENTS_ORDER[2] =
 #elif L==4
 	 "D&eacute;partement"
 #elif L==5
-	 "Peh&etilde;"
+	 "Peh&#7869;"
 #elif L==6
 	 "Dipartimento"
 #elif L==7
@@ -9326,7 +9326,7 @@ const char *Txt_Email =
 #elif L==4
 	"Courrier &eacute;lectronique";
 #elif L==5
-	"&Ntilde;e'&etilde;veve";
+	"&Ntilde;e'&#7869;veve";
 #elif L==6
 	"E-mail";
 #elif L==7
@@ -13924,7 +13924,7 @@ const char *Txt_Institution_centre_and_department =
 #elif L==4
 	"&Eacute;tablissement, centre et d&eacute;partement";
 #elif L==5
-	"Mbo'ehao, mbo'ehao, peh&etilde;";
+	"Mbo'ehao, mbo'ehao, peh&#7869;";
 #elif L==6
 	"Istituzione, centro e dipartimento";
 #elif L==7
@@ -14388,7 +14388,7 @@ const char *Txt_Language =
 #elif L==4
 	"Langue";
 #elif L==5
-	"&Ntilde;e'&etilde;";
+	"&Ntilde;e'&#7869;";
 #elif L==6
 	"Lingua";
 #elif L==7
@@ -15077,7 +15077,7 @@ const char *Txt_Log_out =
 #elif L==4
 	"Fermer session";
 #elif L==5
-	"S&etilde;";
+	"S&#7869;";
 #elif L==6
 	"Chiudi sessione";
 #elif L==7
@@ -15976,7 +15976,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"D&eacute;partements"
 #elif L==5
-	"Peh&etilde;"
+	"Peh&#7869;"
 #elif L==6
 	"Dipartimenti"
 #elif L==7
@@ -17139,7 +17139,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Courrier<br />&eacute;lectronique"
 #elif L==5
-	"&Ntilde;e'&etilde;veve"
+	"&Ntilde;e'&#7869;veve"
 #elif L==6
 	"E-mail"
 #elif L==7
@@ -17345,6 +17345,48 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sess&atilde;o"
 #endif
 	,
+	// ActMyCrs
+#if   L==0
+	"Els meus<br />assignatures"
+#elif L==1
+	"Meine<br />Veranstaltungen"
+#elif L==2
+	"My courses"
+#elif L==3
+	"Mis<br />asignaturas"
+#elif L==4
+	"Mes<br />mati&egrave;res"
+#elif L==5
+	"Ch<br />mbo'esyry"
+#elif L==6
+	"Miei corsi"
+#elif L==7
+	"Moje<br />kurs&oacute;w"
+#elif L==8
+	"As minha<br />disciplinas"
+#endif
+	,
+	// ActSeeMyTimTbl
+#if   L==0
+	"Horari"
+#elif L==1
+	"Stundenplan"
+#elif L==2
+	"Timetable"
+#elif L==3
+	"Horario"
+#elif L==4
+	"Horaire"
+#elif L==5
+	"Horario"	// Okoteve traducción
+#elif L==6
+	"Orario"
+#elif L==7
+	"Plan<br />lekcji"
+#elif L==8
+	"Hor&aacute;rio"
+#endif
+	,
 	// ActFrmUsrAcc
 #if   L==0
 	"Compte"
@@ -17511,48 +17553,6 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Preferencje"
 #elif L==8
 	"Prefer&ecirc;ncias"
-#endif
-	,
-	// ActMyCrs
-#if   L==0
-	"Assignatures"
-#elif L==1
-	"Veranstaltungen"
-#elif L==2
-	"Courses"
-#elif L==3
-	"Asignaturas"
-#elif L==4
-	"Mati&egrave;res"
-#elif L==5
-	"Mbo'esyry"
-#elif L==6
-	"Corsi"
-#elif L==7
-	"Kurs&oacute;w"
-#elif L==8
-	"Disciplinas"
-#endif
-	,
-	// ActSeeMyTimTbl
-#if   L==0
-	"Horari"
-#elif L==1
-	"Stundenplan"
-#elif L==2
-	"Timetable"
-#elif L==3
-	"Horario"
-#elif L==4
-	"Horaire"
-#elif L==5
-	"Horario"	// Okoteve traducción
-#elif L==6
-	"Orario"
-#elif L==7
-	"Plan<br />lekcji"
-#elif L==8
-	"Hor&aacute;rio"
 #endif
 	,
 	// ActAdmBrf
@@ -18010,7 +18010,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"D&eacute;partements"
 #elif L==5
-	"Peh&etilde;"
+	"Peh&#7869;"
 #elif L==6
 	"Dipartimenti"
 #elif L==7
@@ -19173,7 +19173,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Courrier &eacute;lectronique"
 #elif L==5
-	"&Ntilde;e'&etilde;veve"
+	"&Ntilde;e'&#7869;veve"
 #elif L==6
 	"E-mail"
 #elif L==7
@@ -19379,6 +19379,48 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sess&atilde;o"
 #endif
 	,
+	// ActMyCrs
+#if   L==0
+	"Els meus assignatures"
+#elif L==1
+	"Meine Veranstaltungen"
+#elif L==2
+	"My courses"
+#elif L==3
+	"Mis asignaturas"
+#elif L==4
+	"Mes mati&egrave;res"
+#elif L==5
+	"Che mbo'esyry"
+#elif L==6
+	"Miei corsi"
+#elif L==7
+	"Moje kurs&oacute;w"
+#elif L==8
+	"As minha disciplinas"
+#endif
+	,
+	// ActSeeMyTimTbl
+#if   L==0
+	"Horari"
+#elif L==1
+	"Stundenplan"
+#elif L==2
+	"Timetable"
+#elif L==3
+	"Horario"
+#elif L==4
+	"Horaire"
+#elif L==5
+	"Horario"	// Okoteve traducción
+#elif L==6
+	"Orario"
+#elif L==7
+	"Plan lekcji"
+#elif L==8
+	"Hor&aacute;rio"
+#endif
+	,
 	// ActFrmUsrAcc
 #if   L==0
 	"Compte"
@@ -19545,48 +19587,6 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Preferencje"
 #elif L==8
 	"Prefer&ecirc;ncias"
-#endif
-	,
-	// ActMyCrs
-#if   L==0
-	"Assignatures"
-#elif L==1
-	"Veranstaltungen"
-#elif L==2
-	"Courses"
-#elif L==3
-	"Asignaturas"
-#elif L==4
-	"Mati&egrave;res"
-#elif L==5
-	"Mbo'esyry"
-#elif L==6
-	"Corsi"
-#elif L==7
-	"Kurs&oacute;w"
-#elif L==8
-	"Disciplinas"
-#endif
-	,
-	// ActSeeMyTimTbl
-#if   L==0
-	"Horari"
-#elif L==1
-	"Stundenplan"
-#elif L==2
-	"Timetable"
-#elif L==3
-	"Horario"
-#elif L==4
-	"Horaire"
-#elif L==5
-	"Horario"	// Okoteve traducción
-#elif L==6
-	"Orario"
-#elif L==7
-	"Plan lekcji"
-#elif L==8
-	"Hor&aacute;rio"
 #endif
 	,
 	// ActAdmBrf
@@ -21470,6 +21470,48 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Role nesta sess&atilde;o"
 #endif
 	,
+	// ActMyCrs
+#if   L==0
+	"Assignatures a les quals pertanyo"
+#elif L==1
+	"Veranstaltungen der ich angeh&ouml;re"
+#elif L==2
+	"Courses to which I belong"
+#elif L==3
+	"Asignaturas a las que pertenezco"
+#elif L==4
+	"Mati&egrave;res &agrave; laquelle je appartiens"
+#elif L==5
+	"Asignaturas a las que pertenezco"	// Okoteve traducción
+#elif L==6
+	"Corsi a cui appartengo"
+#elif L==7
+	"Kursy do kt&oacute;rego nale&zdot;&eogon;"
+#elif L==8
+	"Disciplinas a que perten&ccedil;o"
+#endif
+	,
+	// ActSeeMyTimTbl
+#if   L==0
+	"Horari conjunt de totes les meves assignatures a la plataforma"
+#elif L==1
+	"Stundenplan"
+#elif L==2
+	"My timetable"
+#elif L==3
+	"Horario conjunto de todas mis asignaturas en la plataforma"
+#elif L==4
+	"Horaire mes mati&egrave;res"
+#elif L==5
+	"Horario conjunto de todas mis asignaturas en la plataforma"// Okoteve traducción
+#elif L==6
+	"Orario dei miei corsi"
+#elif L==7
+	"M&oacute;j plan lekcji"
+#elif L==8
+	"Hor&aacute;rio minha disciplinas"
+#endif
+	,
 	// ActFrmUsrAcc
 #if   L==0
 	"Creaci&oacute; o edici&oacute; del meu compte d'usuari"
@@ -21639,48 +21681,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Preferencje"
 #elif L==8
 	"Prefer&ecirc;ncias"
-#endif
-	,
-	// ActMyCrs
-#if   L==0
-	"Canvi a una de les assignatures a les quals pertanyo"
-#elif L==1
-	"Meine Veranstaltungen"
-#elif L==2
-	"My courses"
-#elif L==3
-	"Cambio a una de las asignaturas a las que pertenezco"
-#elif L==4
-	"Mes mati&egrave;res"
-#elif L==5
-	"Cambio a una de las asignaturas a las que pertenezco"// Okoteve traducción
-#elif L==6
-	"Miei corsi"
-#elif L==7
-	"Moje kurs&oacute;w"
-#elif L==8
-	"As minha disciplinas"
-#endif
-	,
-	// ActSeeMyTimTbl
-#if   L==0
-	"Horari conjunt de totes les meves assignatures a la plataforma"
-#elif L==1
-	"Stundenplan"
-#elif L==2
-	"My timetable"
-#elif L==3
-	"Horario conjunto de todas mis asignaturas en la plataforma"
-#elif L==4
-	"Horaire mes mati&egrave;res"
-#elif L==5
-	"Horario conjunto de todas mis asignaturas en la plataforma"// Okoteve traducción
-#elif L==6
-	"Orario dei miei corsi"
-#elif L==7
-	"M&oacute;j plan lekcji"
-#elif L==8
-	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
 	// ActAdmBrf
@@ -37508,7 +37508,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 #elif L==4
 	 "langue"
 #elif L==5
-	 "&ntilde;e'&etilde;"
+	 "&ntilde;e'&#7869;"
 #elif L==6
 	 "lingua"
 #elif L==7
@@ -41188,7 +41188,7 @@ const char *Txt_The_language_has_changed_to_LANGUAGE =
 #elif L==4
 	"La langue a chang&eacute; au fran&ccedil;ais.";
 #elif L==5
-	"Pe &ntilde;e'&etilde; ha moambuepapyre pe ava&ntilde;e'&etilde;.";
+	"Pe &ntilde;e'&#7869; ha moambuepapyre pe ava&ntilde;e'&#7869;.";
 #elif L==6
 	"La lingua &egrave; cambiata a italiano.";
 #elif L==7
@@ -49402,7 +49402,7 @@ const char *Txt_Yes =
 #elif L==4
 	"Oui";
 #elif L==5
-	"He&etilde;";
+	"He&#7869;";
 #elif L==6
 	"S&igrave;";
 #elif L==7
@@ -52552,7 +52552,7 @@ const char *Txt_Your_language_has_changed_to_LANGUAGE =
 #elif L==4
 	"Votre langue a chang&eacute; au fran&ccedil;ais.";
 #elif L==5
-	"Pe &ntilde;e'&etilde; ha moambuepapyre pe ava&ntilde;e'&etilde;.";
+	"Pe &ntilde;e'&#7869; ha moambuepapyre pe ava&ntilde;e'&#7869;.";
 #elif L==6
 	"La tua lingua &egrave; cambiata a italiano.";
 #elif L==7

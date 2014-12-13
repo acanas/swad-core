@@ -35,12 +35,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.37 (2014/12/12)"
+#define Log_PLATFORM_VERSION	"SWAD 14.37.1 (2014/12/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.37.1  :Dic 12, 2014	Fixed bug in HTML entities in swad_text.c (translation).
+					Guests can view option "my courses" on profile tab.
+					Reordering of options in profile tab. (170866 lines)
 	Version 14.37    :Dic 12, 2014	New module swad_account for user's account. (170863 lines)
 					1 change necessary in Makefile:
 Add swad_account.o to list of object files
