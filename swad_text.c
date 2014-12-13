@@ -253,7 +253,7 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 const char *Txt_Course_NO_HTML[Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"Assignatura",
-	"Veranstaltung",
+	"Kurs",
 	"Course",
 	"Asignatura",
 	"Matière",
@@ -1347,9 +1347,9 @@ const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_ =	/
 	" o prefiere ser eliminado de la asignatura?";		// Necessita traduccio
 #elif L==1
 	"Ein Lehrer oder Administrator hat Sie"
-	" im Veranstaltung <strong>%s</strong> eingeschrieben."
+	" im Kurs <strong>%s</strong> eingeschrieben."
 	" M&ouml;chten Sie, dass die Registrierung"
-	" oder bevorzugen Sie, um aus dem Veranstaltung?";
+	" oder bevorzugen Sie, um aus dem Kurs?";
 #elif L==2
 	"A teacher or administrator has enrolled you"
 	" into the course <strong>%s</strong>."
@@ -1475,7 +1475,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #if   L==0
 	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
 #elif L==1
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Veranstaltung";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible for reading and writing by students and teachers of the course";
 #elif L==3
@@ -1496,7 +1496,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_
 #if   L==0
 	"accesible per a lectura i escriptura per estudiants del grup i professors de l'assignatura";
 #elif L==1
-	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Veranstaltung";
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible for reading and writing by students of the group and teachers of the course";
 #elif L==3
@@ -1517,7 +1517,7 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 #if   L==0
 	"accessible per a lectura i escriptura per professors de l'assignatura";
 #elif L==1
-	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte der Veranstaltung";
+	"zum Schreiben zug&auml;nglich f&uuml;r Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible for reading and writing by teachers of the course";
 #elif L==3
@@ -1538,7 +1538,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 #if   L==0
 	"accessible per a lectura per vost&egrave; i els professors de l'assignatura";
 #elif L==1
-	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Veranstaltung";
+	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible for reading and writing by you and the teachers of the course";
 #elif L==3
@@ -1559,7 +1559,7 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #if   L==0
 	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l'assignatura";
 #elif L==1
-	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Veranstaltung";
+	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible only for reading by you and the teachers of the course";
 #elif L==3
@@ -1580,7 +1580,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #if   L==0
 	"accessible nom&eacute;s per a lectura per estudiants i professors de l'assignatura";
 #elif L==1
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Veranstaltung";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible only for reading by students and teachers of the course";
 #elif L==3
@@ -1601,7 +1601,7 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #if   L==0
 	"accesible nom&eacute;s per a lectura per estudiants del grup i professors de l'assignatura";
 #elif L==1
-	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Veranstaltung";
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten der Gruppe und Lehrkr&auml;fte der Kurs";
 #elif L==2
 	"accessible only for reading by students of the group and teachers of the course";
 #elif L==3
@@ -2273,7 +2273,7 @@ const char *Txt_any_course =
 #if   L==0
 	"qualsevol assignatura";
 #elif L==1
-	"alle Veranstaltungen";
+	"alle Kursen";
 #elif L==2
 	"any course";
 #elif L==3
@@ -2843,7 +2843,7 @@ const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
 #if   L==0
 	"Nombre mitj&acute; d'assignatures a las quals pertany cada usuari";
 #elif L==1
-	"Durchschnittliche Anzahl von Veranstaltungen, an denen der Benutzer teilnimmt";
+	"Durchschnittliche Anzahl von Kursen, an denen der Benutzer teilnimmt";
 #elif L==2
 	"Average number of courses to which a user belongs";
 #elif L==3
@@ -2906,7 +2906,7 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #if   L==0
 	"Nombre mitj&agrave; de usuaris que pertanyen a cada assignatura";
 #elif L==1
-	"Durchschnittliche Anzahl der Benutzer, die an einer Veranstaltung teilnehmen";
+	"Durchschnittliche Anzahl der Benutzer, die an einer Kurs teilnehmen";
 #elif L==2
 	"Average number of users belonging to a course";
 #elif L==3
@@ -5088,7 +5088,7 @@ const char *Txt_Course =
 #if   L==0
 	"Assignatura";
 #elif L==1
-	"Veranstaltung";
+	"Kurs";
 #elif L==2
 	"Course";
 #elif L==3
@@ -5109,7 +5109,7 @@ const char *Txt_course =
 #if   L==0
 	"assignatura";
 #elif L==1
-	"Veranstaltung";
+	"Kurs";
 #elif L==2
 	"course";
 #elif L==3
@@ -5255,7 +5255,7 @@ const char *Txt_Course_X_removed =	// Warning: it is very important to include %
 #if   L==0
 	"Asignatura <strong>%s</strong> eliminada.";	// Necessita traduccio
 #elif L==1
-	"Veranstaltung <strong>%s</strong> entfernt.";
+	"Kurs <strong>%s</strong> entfernt.";
 #elif L==2
 	"Course <strong>%s</strong> removed.";
 #elif L==3
@@ -5276,7 +5276,7 @@ const char *Txt_Courses =
 #if   L==0
 	"Assignatures";
 #elif L==1
-	"Veranstaltungen";
+	"Kursen";
 #elif L==2
 	"Courses";
 #elif L==3
@@ -5318,7 +5318,7 @@ const char *Txt_courses =
 #if   L==0
 	"assignatures";
 #elif L==1
-	"Veranstaltungen";
+	"Kursen";
 #elif L==2
 	"courses";
 #elif L==3
@@ -5360,7 +5360,7 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 #if   L==0
 	"Assignatures de %s";
 #elif L==1
-	"Veranstaltungen der %s";
+	"Kursen der %s";
 #elif L==2
 	"Courses of %s";
 #elif L==3
@@ -5507,7 +5507,7 @@ const char *Txt_Create_course =
 #if   L==0
 	"Crear asignatura";	// Necessita traduccio
 #elif L==1
-	"Veranstaltung eingeben";
+	"Kurs eingeben";
 #elif L==2
 	"Create course";
 #elif L==3
@@ -6053,7 +6053,7 @@ const char *Txt_Created_new_course_X =	// Warning: it is very important to inclu
 #if   L==0
 	"Creada nueva asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==1
-	"Neue Veranstaltung <strong>%s</strong> eingegeben.";
+	"Neue Kurs <strong>%s</strong> eingegeben.";
 #elif L==2
 	"Created new course <strong>%s</strong>.";
 #elif L==3
@@ -7115,7 +7115,7 @@ const char *Txt_DEGREE_With_courses =
 #if   L==0
 	"Amb assignatures";
 #elif L==1
-	"Mit Veranstaltungen";
+	"Mit Kursen";
 #elif L==2
 	"With courses";
 #elif L==3
@@ -7157,7 +7157,7 @@ const char *Txt_DEGREE_Without_courses =
 #if   L==0
 	"Sense assignatures";
 #elif L==1
-	"Ohne Veranstaltungen";
+	"Ohne Kursen";
 #elif L==2
 	"Without courses";
 #elif L==3
@@ -7304,7 +7304,7 @@ const char *Txt_Degrees_with_pending_courses =
 #if   L==0
 	"Titulacions amb assignatures pendents d'activar";
 #elif L==1
-	"Studiengang mit anh&auml;ngig Veranstaltungen";
+	"Studiengang mit anh&auml;ngig Kursen";
 #elif L==2
 	"Degrees with pending courses";
 #elif L==3
@@ -8725,7 +8725,7 @@ const char *Txt_Documents_in_my_courses =
 #if   L==0
 	"Documents en les meves assignatures";
 #elif L==1
-	"Dokumente in meinen Veranstaltungen";
+	"Dokumente in meinen Kursen";
 #elif L==2
 	"Documents in my courses";
 #elif L==3
@@ -9849,7 +9849,7 @@ const char *Txt_EXAM_ANNOUNCEMENT_Course =
 #if   L==0
 	"Assignatura";
 #elif L==1
-	"Veranstaltung";
+	"Kurs";
 #elif L==2
 	"Course";
 #elif L==3
@@ -11745,7 +11745,7 @@ const char *Txt_from_this_BR_course =
 #if   L==0
 	"desde esta<br />asignatura";	// Necessita traduccio
 #elif L==1
-	"von dieser<br />Veranstaltung";
+	"von dieser<br />Kurs";
 #elif L==2
 	"from this<br />course";
 #elif L==3
@@ -11976,7 +11976,7 @@ const char *Txt_Go_to_course_and_reply =
 #if   L==0
 	"Ir a asignatura y responder";		// Necessita traduccio
 #elif L==1
-	"Veranstaltung einblenden und antworten";
+	"Kurs einblenden und antworten";
 #elif L==2
 	"Go to course and reply";
 #elif L==3
@@ -11997,7 +11997,7 @@ const char *Txt_Go_to_course_and_reply_again =
 #if   L==0
 	"Ir a asignatura y responder otra vez";		// Necessita traduccio
 #elif L==1
-	"Veranstaltung einblenden und erneut antworten";
+	"Kurs einblenden und erneut antworten";
 #elif L==2
 	"Go to course and reply again";
 #elif L==3
@@ -12851,7 +12851,7 @@ const char *Txt_ID =
 #elif L==1
 	"Ausweis-Nr.";
 #elif L==2
-	"ID";
+	"ID (identity number/passport)";
 #elif L==3
 	"ID (DNI/c&eacute;dula)";
 #elif L==4
@@ -13395,7 +13395,7 @@ const char *Txt_Indicators_of_courses =
 #if   L==0
 	"Indicadors d'assignatures";
 #elif L==1
-	"Anzeigen von Veranstaltungen";
+	"Anzeigen von Kursen";
 #elif L==2
 	"Indicators of courses";
 #elif L==3
@@ -13439,7 +13439,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES] =
 #if   L==0
 	 "Guia docent"
 #elif L==1
-	 "Hinweise zur Veranstaltung"
+	 "Hinweise zur Kurs"
 #elif L==2
 	 "Teaching guide"
 #elif L==3
@@ -15755,7 +15755,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Eliminar assig.<br />antics"
 #elif L==1
-	"Fr&uuml;here<br />Veranstaltungen<br />entfernen"
+	"Fr&uuml;here<br />Kursen<br />entfernen"
 #elif L==2
 	"Eliminate<br />old courses"
 #elif L==3
@@ -16266,7 +16266,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Assignatures"
 #elif L==1
-	"Veranstaltungen"
+	"Kursen"
 #elif L==2
 	"Courses"
 #elif L==3
@@ -16349,7 +16349,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Guia<br />docent"
 #elif L==1
-	"Hinweise zur<br />Veranstaltung"
+	"Hinweise zur<br />Kurs"
 #elif L==2
 	"Teaching<br />guide"
 #elif L==3
@@ -16758,7 +16758,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"La meva fitxa<br />en assignat."
 #elif L==1
-	"Profil bei<br />Veranstaltung"
+	"Profil bei<br />Kurs"
 #elif L==2
 	"My record for<br />this course"
 #elif L==3
@@ -17321,7 +17321,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Indicadors<br />assignatures"
 #elif L==1
-	"Anzeigen<br />Veranstaltungen"
+	"Anzeigen<br />Kursen"
 #elif L==2
 	"Indicators<br />courses"
 #elif L==3
@@ -17342,7 +17342,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Accessos<br />assignatura"
 #elif L==1
-	"Anmeldungen<br />bei Veranstaltung"
+	"Anmeldungen<br />bei Kurs"
 #elif L==2
 	"Visits to<br />course"
 #elif L==3
@@ -17442,7 +17442,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Els meus<br />assignatures"
 #elif L==1
-	"Meine<br />Veranstaltungen"
+	"Meine<br />Kursen"
 #elif L==2
 	"My courses"
 #elif L==3
@@ -17789,7 +17789,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Eliminar assignatures antics"
 #elif L==1
-	"Fr&uuml;here Veranstaltungen entfernen"
+	"Fr&uuml;here Kursen entfernen"
 #elif L==2
 	"Eliminate old courses"
 #elif L==3
@@ -18300,7 +18300,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Assignatures"
 #elif L==1
-	"Veranstaltungen"
+	"Kursen"
 #elif L==2
 	"Courses"
 #elif L==3
@@ -18383,7 +18383,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Guia docent"
 #elif L==1
-	"Hinweise zur Veranstaltung"
+	"Hinweise zur Kurs"
 #elif L==2
 	"Teaching guide"
 #elif L==3
@@ -18792,7 +18792,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"La meva fitxa en assignat."
 #elif L==1
-	"Profil bei Veranstaltung"
+	"Profil bei Kurs"
 #elif L==2
 	"My record for this course"
 #elif L==3
@@ -19355,7 +19355,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Indicadors assignatures"
 #elif L==1
-	"Anzeigen Veranstaltungen"
+	"Anzeigen Kursen"
 #elif L==2
 	"Indicators courses"
 #elif L==3
@@ -19376,7 +19376,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Accessos assignatura"
 #elif L==1
-	"Anmeldungen bei Veranstaltung"
+	"Anmeldungen bei Kurs"
 #elif L==2
 	"Visits to course"
 #elif L==3
@@ -19476,7 +19476,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Els meus assignatures"
 #elif L==1
-	"Meine Veranstaltungen"
+	"Meine Kursen"
 #elif L==2
 	"My courses"
 #elif L==3
@@ -19760,7 +19760,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Cerca d'assignatures, professors i documents"
 #elif L==1
-	"Suche Veranstaltungen, Lehrer und Dokumente"
+	"Suche Kursen, Lehrer und Dokumente"
 #elif L==2
 	"Search subjects, teachers and documents"
 #elif L==3
@@ -19802,7 +19802,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==1
-	"Hochschulen, Lehrinstitute, Studiengang und anh&auml;ngig Veranstaltungen"
+	"Hochschulen, Lehrinstitute, Studiengang und anh&auml;ngig Kursen"
 #elif L==2
 	"Institutions, centres, degrees and pending courses"
 #elif L==3
@@ -19823,7 +19823,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Eliminar assignatures antics"
 #elif L==1
-	"Fr&uuml;here Veranstaltungen entfernen"
+	"Fr&uuml;here Kursen entfernen"
 #elif L==2
 	"Eliminate old courses"
 #elif L==3
@@ -19987,7 +19987,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Cerca d'assignatures, professors i documents"
 #elif L==1
-	"Suche Veranstaltungen, Lehrer und Dokumente"
+	"Suche Kursen, Lehrer und Dokumente"
 #elif L==2
 	"Search subjects, teachers and documents"
 #elif L==3
@@ -20070,7 +20070,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Cerca d'assignatures, professors i documents"
 #elif L==1
-	"Suche Veranstaltungen, Lehrer und Dokumente"
+	"Suche Kursen, Lehrer und Dokumente"
 #elif L==2
 	"Search subjects, teachers and documents"
 #elif L==3
@@ -20213,7 +20213,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Cerca d'assignatures, professors i documents"
 #elif L==1
-	"Suche Veranstaltungen, Lehrer und Dokumente"
+	"Suche Kursen, Lehrer und Dokumente"
 #elif L==2
 	"Search subjects, teachers and documents"
 #elif L==3
@@ -20296,7 +20296,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Cerca d'assignatures, professors i documents"
 #elif L==1
-	"Suche Veranstaltungen, Lehrer und Dokumente"
+	"Suche Kursen, Lehrer und Dokumente"
 #elif L==2
 	"Search subjects, teachers and documents"
 #elif L==3
@@ -20338,7 +20338,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Assignatures d'aquesta titulaci&oacute;"
 #elif L==1
-	"Veranstaltungen in diesem Studiengang"
+	"Kursen in diesem Studiengang"
 #elif L==2
 	"List of ourses of the current degree"
 #elif L==3
@@ -20400,7 +20400,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Informaci&oacute; d'aquesta assignatura"
 #elif L==1
-	"Information dieses Veranstaltung"
+	"Information dieses Kurs"
 #elif L==2
 	"Information on this course"
 #elif L==3
@@ -20421,7 +20421,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Guia docent de l'assignatura"
 #elif L==1
-	"Hinweise zur Veranstaltung"
+	"Hinweise zur Kurs"
 #elif L==2
 	"Teaching guide"
 #elif L==3
@@ -20846,7 +20846,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"La meva fitxa personalitzada per a aquesta assignatura"
 #elif L==1
-	"Profil bei Veranstaltung"
+	"Profil bei Kurs"
 #elif L==2
 	"My record for this course"
 #elif L==3
@@ -21446,7 +21446,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Indicadors d'assignatures per al contracte-programa"
 #elif L==1
-	"Anzeigen von Veranstaltungen f&uuml;r den Vertrag Programm"
+	"Anzeigen von Kursen f&uuml;r den Vertrag Programm"
 #elif L==2
 	"Indicators of courses for the contract program"
 #elif L==3
@@ -21467,7 +21467,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Estad&iacute;stiques d'accessos a aquesta assignatura"
 #elif L==1
-	"Anmeldungen bei Veranstaltung"
+	"Anmeldungen bei Kurs"
 #elif L==2
 	"Visits to course"
 #elif L==3
@@ -21567,7 +21567,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Assignatures a les quals pertanyo"
 #elif L==1
-	"Veranstaltungen der ich angeh&ouml;re"
+	"Kursen der ich angeh&ouml;re"
 #elif L==2
 	"Courses to which I belong"
 #elif L==3
@@ -22331,7 +22331,7 @@ const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to 
 #if   L==0
 	"Modificarme en l'assignatura <strong>%s</strong>";
 #elif L==1
-	"&Auml;ndern Sie mir im Veranstaltung <strong>%s</strong>";
+	"&Auml;ndern Sie mir im Kurs <strong>%s</strong>";
 #elif L==2
 	"Modify me in the course <strong>%s</strong>";
 #elif L==3
@@ -22352,7 +22352,7 @@ const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important t
 #if   L==0
 	"Modificar usuari en l'assignatura <strong>%s</strong>";
 #elif L==1
-	"&Auml;ndern Benutzer im Veranstaltung <strong>%s</strong>";
+	"&Auml;ndern Benutzer im Kurs <strong>%s</strong>";
 #elif L==2
 	"Modify user in the course <strong>%s</strong>";
 #elif L==3
@@ -23690,7 +23690,7 @@ const char *Txt_My_courses =
 #if   L==0
 	"Els meus assignatures";
 #elif L==1
-	"Meine Veranstaltungen";
+	"Meine Kursen";
 #elif L==2
 	"My courses";
 #elif L==3
@@ -23942,7 +23942,7 @@ const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to inc
 #if   L==0
 	"Nova assignatura de %s";
 #elif L==1
-	"Neue Veranstaltung der %s";
+	"Neue Kurs der %s";
 #elif L==2
 	"New course of %s";
 #elif L==3
@@ -24677,7 +24677,7 @@ const char *Txt_No_COURSE_SELECTED =
 #if   L==0
 	"Cap assignatura";
 #elif L==1
-	"Keine Veranstaltung";
+	"Keine Kurs";
 #elif L==2
 	"No course";
 #elif L==3
@@ -26945,7 +26945,7 @@ const char *Txt_Number_of_courses =
 #if   L==0
 	"Nombre d'assignat.";
 #elif L==1
-	"Anzahl der Veranstaltungen";
+	"Anzahl der Kursen";
 #elif L==2
 	"Number of courses";
 #elif L==3
@@ -26966,7 +26966,7 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #if   L==0
 	"Nombre<br />d'assignatures<br />amb activitats";
 #elif L==1
-	"Anzahl der<br />Veranstaltungen<br />mit Aufgaben";
+	"Anzahl der<br />Kursen<br />mit Aufgaben";
 #elif L==2
 	"Number of<br />courses with<br />assignments";
 #elif L==3
@@ -26987,7 +26987,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #if   L==0
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test<br />exportables";
 #elif L==1
-	"Anzahl der<br />Veranstaltungen<br />mit exportierbar<br />Testfragen";
+	"Anzahl der<br />Kursen<br />mit exportierbar<br />Testfragen";
 #elif L==2
 	"Number of<br />courses with<br />exportable<br />test<br />questions";
 #elif L==3
@@ -27008,7 +27008,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #if   L==0
 	"Nombre<br />d'assignatures<br />amb preguntes<br />de test";
 #elif L==1
-	"Anzahl der<br />Veranstaltungen<br />mit Testfragen";
+	"Anzahl der<br />Kursen<br />mit Testfragen";
 #elif L==2
 	"Number of<br />courses<br />with test<br />questions";
 #elif L==3
@@ -27029,7 +27029,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #if   L==0
 	"Nombre<br />d'assignatures<br />amb enquestes";
 #elif L==1
-	"Anzahl der<br />Veranstaltungen<br />mit Umfragen";
+	"Anzahl der<br />Kursen<br />mit Umfragen";
 #elif L==2
 	"Number of<br />courses with<br />surveys";
 #elif L==3
@@ -29737,7 +29737,7 @@ const char *Txt_Register_me_in_the_course_X =	// Warning: it is very important t
 #if   L==0
 	"Inscriureme en l'assignatura <strong>%s</strong>";
 #elif L==1
-	"Anmeldung Sie mir im Veranstaltung <strong>%s</strong>";
+	"Anmeldung Sie mir im Kurs <strong>%s</strong>";
 #elif L==2
 	"Register me in the course <strong>%s</strong>";
 #elif L==3
@@ -29758,7 +29758,7 @@ const char *Txt_Register_user_in_the_course_X =	// Warning: it is very important
 #if   L==0
 	"Inscriure usuari en l'assignatura <strong>%s</strong>";
 #elif L==1
-	"Anmeldung Benutzer im Veranstaltung <strong>%s</strong>";
+	"Anmeldung Benutzer im Kurs <strong>%s</strong>";
 #elif L==2
 	"Register user in the course <strong>%s</strong>";
 #elif L==3
@@ -30040,7 +30040,7 @@ const char *Txt_Remove_course =
 #if   L==0
 	"Eliminar asignatura";	// Necessita traduccio
 #elif L==1
-	"Veranstaltung entfernen";
+	"Kurs entfernen";
 #elif L==2
 	"Remove course";
 #elif L==3
@@ -30427,7 +30427,7 @@ const char *Txt_Remove_me_from_this_course =	// Warning: it is very important to
 #if   L==0
 	"Eliminarme d'aquesta assignatura";
 #elif L==1
-	"Entfernen Sie diesen Veranstaltung";
+	"Entfernen Sie diesen Kurs";
 #elif L==2
 	"Remove me from this course";
 #elif L==3
@@ -30448,7 +30448,7 @@ const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important t
 #if   L==0
 	"Eliminarme de l'assignatura <strong>%s</strong>";
 #elif L==1
-	"Entfernen Sie mir aus dem Veranstaltung <strong>%s</strong>";
+	"Entfernen Sie mir aus dem Kurs <strong>%s</strong>";
 #elif L==2
 	"Remove me from the course <strong>%s</strong>";
 #elif L==3
@@ -30826,7 +30826,7 @@ const char *Txt_Remove_user_from_this_course =
 #if   L==0
 	"Eliminar usuari d'aquesta assignatura";
 #elif L==1
-	"Entfernen Benutzer Sie diesen Veranstaltung";
+	"Entfernen Benutzer Sie diesen Kurs";
 #elif L==2
 	"Remove user from this course";
 #elif L==3
@@ -30898,7 +30898,7 @@ const char *Txt_Remove_user_from_the_course_X =	// Warning: it is very important
 #if   L==0
 	"Eliminar usuari de l'assignatura <strong>%s</strong>";
 #elif L==1
-	"Entfernen Benutzer aus dem Veranstaltung <strong>%s</strong>";
+	"Entfernen Benutzer aus dem Kurs <strong>%s</strong>";
 #elif L==2
 	"Remove user from the course <strong>%s</strong>";
 #elif L==3
@@ -31248,7 +31248,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #if   L==0
 	"convidats (sense assignatures)"
 #elif L==1
-	"Eingeladen (ohne Veranstaltungen)"
+	"Eingeladen (ohne Kursen)"
 #elif L==2
 	"guests (without courses)"
 #elif L==3
@@ -34684,7 +34684,7 @@ const char *Txt_Search_courses =
 #if   L==0
 	"Cercar assignatures";
 #elif L==1
-	"Suchen Veranstaltungen";
+	"Suchen Kursen";
 #elif L==2
 	"Search courses";
 #elif L==3
@@ -36712,7 +36712,7 @@ const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
 #if   L==0
 	 "assignatura"
 #elif L==1
-	 "Veranstaltung"
+	 "Kurs"
 #elif L==2
 	 "course"
 #elif L==3
@@ -37353,7 +37353,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 #if   L==0
 	 "titulaciones y asignaturas"	// Necessita traducció
 #elif L==1
-	 "Studieng&auml;nge und Veranstaltungen"
+	 "Studieng&auml;nge und Kursen"
 #elif L==2
 	 "degrees and courses"
 #elif L==3
@@ -38575,7 +38575,7 @@ const char *Txt_Syllabus_of_the_course =
 #if   L==0
 	"Programa de la asignatura";	// Necessita traduccio
 #elif L==1
-	"Studienplan der Veranstaltung";
+	"Studienplan der Kurs";
 #elif L==2
 	"Syllabus of the course";
 #elif L==3
@@ -38789,7 +38789,7 @@ const char *Txt_TABS_FULL_TXT[Act_NUM_TABS] =
 #if   L==0
 	 "Assignatura"
 #elif L==1
-	 "Veranstaltung"
+	 "Kurs"
 #elif L==2
 	 "Course"
 #elif L==3
@@ -39341,7 +39341,7 @@ const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very 
 #if   L==0
 	"Test n&ordm; %u que realiza usted en esta asignatura";	// Necessita traduccio
 #elif L==1
-	"Der %u. Test, den Sie in dieser Veranstaltung machen";
+	"Der %u. Test, den Sie in dieser Kurs machen";
 #elif L==2
 	"Test No. %u that you make in this course";
 #elif L==3
@@ -40100,7 +40100,7 @@ const char *Txt_The_course_X_already_exists =	// Warning: it is very important t
 #if   L==0
 	"La asignatura <strong>%s</strong> ya existe.";		// Necessita traduccio
 #elif L==1
-	"Die Veranstaltung <strong>%s</strong> wurde bereits eingegeben.";
+	"Die Kurs <strong>%s</strong> wurde bereits eingegeben.";
 #elif L==2
 	"The course <strong>%s</strong> already exists.";
 #elif L==3
@@ -40121,7 +40121,7 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 #if   L==0
 	"La asignatura <strong>%s</strong> ya existe en el curso %s.";	// Necessita traduccio
 #elif L==1
-	"Die Veranstaltung <strong>%s</strong> wurde bereits in Studienjahr %s eingegeben.";
+	"Die Kurs <strong>%s</strong> wurde bereits in Studienjahr %s eingegeben.";
 #elif L==2
 	"The course <strong>%s</strong> already exists in year %s.";
 #elif L==3
@@ -41051,6 +41051,36 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 	"The ID <strong>%s</strong> is not valid.";				// Potrzebujesz tlumaczenie
 #elif L==8
 	"The ID <strong>%s</strong> is not valid.";				// Necessita de tradução
+#endif
+
+const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
+#if   L==0
+	"L'ID s'utilitza per tal de facilitar professors i administradors"
+	" el proc&eacute;s d'inscripci&oacute; dels usuaris en les assignatures.";
+#elif L==1
+	"Die ID wird verwendet, um die Lehrer zu erleichtern und Administratoren"
+	" den Registrierungsprozess von Benutzern in Kursen.";
+#elif L==2
+	"The ID is used in order to facilitate teachers and administrators"
+	" the enrollment process of users in courses.";
+#elif L==3
+	"El ID se utiliza con el fin de facilitar a profesores y administradores"
+	" el proceso de inscripción de los usuarios en las asignaturas.";
+#elif L==4
+	"L'ID est utilis&eacute; afin de faciliter aux enseignants et administrateurs"
+	" le processus d'inscription des utilisateurs dans les mati&egrave;res.";
+#elif L==5
+	"El ID se utiliza con el fin de facilitar a profesores y administradores"
+	" el proceso de inscripción de los usuarios en las asignaturas.";	// Okoteve traducción
+#elif L==6
+	"L'ID &egrave; utilizzato al fine di facilitare gli insegnanti e gli amministratori"
+	" il processo di registrazione degli utenti in corsi.";
+#elif L==7
+	"Identyfikator jest u&zdot;ywany w celu u&lstrok;atwienia nauczycielom i administratorom"
+	" proces rejestracji u&zdot;ytkownik&oacute;w w kursach.";
+#elif L==8
+	"O ID &eacute; usado para facilitar a professores e administradores"
+	" o processo de inscri&ccedil;&atilde;o de usu&aacute;rios em disciplinas.";
 #endif
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -43597,7 +43627,7 @@ const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y =	// Warning: it is
 	" a l'assignatura <strong>%s</strong>.";
 #elif L==1
 	"<strong>%s</strong> hat sich im"
-	" im Veranstaltung <strong>%s</strong> eingeschrieben.";
+	" im Kurs <strong>%s</strong> eingeschrieben.";
 #elif L==2
 	"<strong>%s</strong> has been enrolled"
 	" in the course <strong>%s</strong>.";
@@ -44111,7 +44141,7 @@ const char *Txt_The_whole_course =
 #if   L==0
 	"Toda la asignatura";		// Necessita traduccio
 #elif L==1
-	"Die gesamte Veranstaltung";
+	"Die gesamte Kurs";
 #elif L==2
 	"The whole course";
 #elif L==3
@@ -47121,7 +47151,7 @@ const char *Txt_unknown_course =
 #if   L==0
 	"assignatura desconeguda";
 #elif L==1
-	"Veranstaltung unbekannt";
+	"Kurs unbekannt";
 #elif L==2
 	"unknown course";
 #elif L==3
@@ -48252,7 +48282,7 @@ const char *Txt_View_my_courses =
 #if   L==0
 	"Veure els meus assignatures";
 #elif L==1
-	"Anzeigen meine Veranstaltungen";
+	"Anzeigen meine Kursen";
 #elif L==2
 	"View my courses";
 #elif L==3
@@ -48273,7 +48303,7 @@ const char *Txt_View_my_record_for_this_course =
 #if   L==0
 	"Veure la meva fitxa en aquesta assignatura";
 #elif L==1
-	"Anzeigen profil bei Veranstaltung";
+	"Anzeigen profil bei Kurs";
 #elif L==2
 	"View my record for this course";
 #elif L==3
@@ -48504,7 +48534,7 @@ const char *Txt_Web_page_of_the_course =
 #if   L==0
 	"P&aacute;gina web de la asignatura";	// Necessita traduccio
 #elif L==1
-	"Webseite der Veranstaltung";
+	"Webseite der Kurs";
 #elif L==2
 	"Web page of the course";
 #elif L==3
@@ -48858,7 +48888,7 @@ const char *Txt_With_courses =
 #if   L==0
 	"Amb assignatures";
 #elif L==1
-	"Mit Veranstaltungen";
+	"Mit Kursen";
 #elif L==2
 	"With courses";
 #elif L==3
@@ -49572,7 +49602,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #if   L==0	// Usr_SEX_UNKNOWN
 	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
 #elif L==1
-	   "Sie sind zu keiner Veranstaltung eingeschrieben."
+	   "Sie sind zu keiner Kurs eingeschrieben."
 #elif L==2
 	   "You are not enrolled in any course."
 #elif L==3
@@ -49592,7 +49622,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #if   L==0	// Usr_SEX_FEMALE
 	   "Usted no est&aacute; inscrita en ninguna asignatura."	// Necessita traduccio
 #elif L==1
-	   "Sie sind zu keiner Veranstaltung eingeschrieben."
+	   "Sie sind zu keiner Kurs eingeschrieben."
 #elif L==2
 	   "You are not enrolled in any course."
 #elif L==3
@@ -49612,7 +49642,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #if   L==0	// Usr_SEX_MALE
 	   "Usted no est&aacute; inscrito en ninguna asignatura."	// Necessita traduccio
 #elif L==1
-	   "Sie sind zu keiner Veranstaltung eingeschrieben."
+	   "Sie sind zu keiner Kurs eingeschrieben."
 #elif L==2
 	   "You are not enrolled in any course."
 #elif L==3
@@ -49632,7 +49662,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #if   L==0	// Usr_SEX_ALL
 	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
 #elif L==1
-	   "Sie sind zu keiner Veranstaltung eingeschrieben."
+	   "Sie sind zu keiner Kurs eingeschrieben."
 #elif L==2
 	   "You are not enrolled in any course."
 #elif L==3

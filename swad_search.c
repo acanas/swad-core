@@ -261,7 +261,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"</select>");
 
    /***** String to find *****/
-   Sch_PutFormToSearchOnHead (Gbl.Prefs.IconsURL);
+   Sch_PutFormToSearch (Gbl.Prefs.IconsURL);
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<br />"
@@ -304,7 +304,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
 /*********** Put form to search courses, teachers, documents... **************/
 /*****************************************************************************/
 
-void Sch_PutFormToSearchOnHead (const char *IconURL)
+void Sch_PutFormToSearch (const char *IconURL)
   {
    extern const char *Txt_Search;
 
@@ -330,7 +330,7 @@ void Sch_PutFormToSearchOnHead (const char *IconURL)
 /************* Get parameter "what to search" from search form ***************/
 /*****************************************************************************/
 
-static Sch_WhatToSearch_t Sch_GetParamWhatToSearch (void)
+void Sch_GetParamWhatToSearch (void)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
@@ -338,13 +338,10 @@ static Sch_WhatToSearch_t Sch_GetParamWhatToSearch (void)
    /* Get what to search from form */
    Par_GetParToText ("WhatToSearch",UnsignedStr,10);
 
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      return Sch_SEARCH_ALL;
-
-   if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
-      return (Sch_WhatToSearch_t) UnsignedNum;
-
-   return Sch_SEARCH_ALL;
+   Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
+         Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
   }
 
 /*****************************************************************************/
@@ -364,7 +361,7 @@ static void Sch_GetParamSearch (char *SearchStr,size_t MaxLength)
 void Sch_GetParamsSearch (void)
   {
    /***** What to search? *****/
-   Gbl.Search.WhatToSearch = Sch_GetParamWhatToSearch ();
+   Sch_GetParamWhatToSearch ();
 
    /***** Get search string *****/
    Sch_GetParamSearch (Gbl.Search.Str,sizeof (Gbl.Search.Str) - 1);

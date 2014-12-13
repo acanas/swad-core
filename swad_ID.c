@@ -438,6 +438,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_If_there_are_multiple_versions_of_the_ID_;
+   extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
 
    /***** List existing user's IDs *****/
@@ -538,8 +539,11 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
 
    /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" colspan=\"2\" class=\"DAT\">"
-		      "%s"
+   fprintf (Gbl.F.Out,"<td align=\"center\" colspan=\"2\" class=\"DAT\">");
+   if (ItsMe)
+      fprintf (Gbl.F.Out,"%s ",
+               Txt_The_ID_is_used_in_order_to_facilitate_);
+   fprintf (Gbl.F.Out,"%s"
 		      "</td>"
 		      "</tr>",
             Txt_If_there_are_multiple_versions_of_the_ID_);
