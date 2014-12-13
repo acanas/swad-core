@@ -127,7 +127,7 @@ void Crs_RenameCourseFull (void);
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);
 
-void Usr_PutFormToSelectMyCourses (void);
+void Crs_PutFormToSelectMyCourses (void);
 void Crs_PutParamCrsCod (long CrsCod);
 
 void Crs_ReqSelectOneOfMyCourses (void);

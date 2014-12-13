@@ -91,7 +91,7 @@ void Sch_ReqSysSearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -109,7 +109,7 @@ void Sch_ReqCtySearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -127,7 +127,7 @@ void Sch_ReqInsSearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -145,7 +145,7 @@ void Sch_ReqCtrSearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -163,7 +163,7 @@ void Sch_ReqDegSearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -181,7 +181,7 @@ void Sch_ReqCrsSearch (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">");
-      Usr_PutFormToSelectMyCourses ();
+      Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
 

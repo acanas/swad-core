@@ -3845,6 +3845,27 @@ const char *Txt_CENTRES_HELP_ORDER[2] =
 #endif
 	};
 
+const char *Txt_Centres_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Centres de %s";
+#elif L==1
+	"Lehrinstitute von %s";
+#elif L==2
+	"Centres of %s";
+#elif L==3
+	"Centros de %s";
+#elif L==4
+	"Centres de %s";
+#elif L==5
+	"Centros de %s";	// Okoteve traducción
+#elif L==6
+	"Centri di %s";
+#elif L==7
+	"Centra %s";
+#elif L==8
+	"Centros de %s";
+#endif
+
 const char *Txt_CENTRES_ORDER[2] =
    {
 #if   L==0
@@ -7256,6 +7277,27 @@ const char *Txt_degrees =
 	"stopnie";
 #elif L==8
 	"titula&ccedil;oes";
+#endif
+
+const char *Txt_Degrees_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Titulacions de %s";
+#elif L==1
+	"Studiengang von %s";
+#elif L==2
+	"Degrees of %s";
+#elif L==3
+	"Titulaciones de %s";
+#elif L==4
+	"&Eacute;tudes de %s";
+#elif L==5
+	"Titulaciones de %s";	// Okoteve traducción
+#elif L==6
+	"Lauree di %s";
+#elif L==7
+	"Stopnie %s";
+#elif L==8
+	"Titula&ccedil;oes de %s";
 #endif
 
 const char *Txt_Degrees_with_pending_courses =
@@ -14207,6 +14249,27 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[2] =
 #endif
 	};
 
+const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Institucions de %s";
+#elif L==1
+	"Hochschulen von %s";
+#elif L==2
+	"Institutions of %s";
+#elif L==3
+	"Instituciones de %s";
+#elif L==4
+	"&Eacute;tablissements de %s";
+#elif L==5
+	"Instituciones de %s";	// Okoteve traducción
+#elif L==6
+	"Istituzioni di %s";
+#elif L==7
+	"Instytucje %s";
+#elif L==8
+	"Institu&ccedil;&otilde;es de %s";
+#endif
+
 const char *Txt_INSTITUTIONS_ORDER[2] =
    {
 #if   L==0
@@ -14333,28 +14396,37 @@ const char *Txt_IP =		// Internet Protocol address
 #elif L==8
 	"IP";
 #endif
-
+/*
 const char *Txt_X_is_busy_at_the_moment_Try_again_in_a_few_seconds =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"%s est&aacute; ocupado en este momento. Vuelva a intentarlo dentro de unos segundos.";	// Necessita traduccio
+	"%s est&aacute; ocupado en este momento."
+        " Vuelva a intentarlo dentro de unos segundos.";	// Necessita traduccio
 #elif L==1
-	"%s ist im Moment besch&auml;ftigt. Wieder in ein paar Sekunden noch einmal.";
+	"%s ist im Moment besch&auml;ftigt."
+	" Wieder in ein paar Sekunden noch einmal.";
 #elif L==2
-	"%s is busy at the moment. Try again in a few seconds.";
+	"%s is busy at the moment."
+	" Try again in a few seconds.";
 #elif L==3
-	"%s est&aacute; ocupado en este momento. Vuelva a intentarlo dentro de unos segundos.";
+	"%s est&aacute; ocupado en este momento."
+	" Vuelva a intentarlo dentro de unos segundos.";
 #elif L==4
-	"%s est occup&eacute; en ce moment. Essayez &agrave; nouveau dans quelques secondes.";
+	"%s est occup&eacute; en ce moment."
+	" Essayez &agrave; nouveau dans quelques secondes.";
 #elif L==5
-	"%s est&aacute; ocupado en este momento. Vuelva a intentarlo dentro de unos segundos.";	// Okoteve traducción
+	"%s est&aacute; ocupado en este momento."
+	" Vuelva a intentarlo dentro de unos segundos.";	// Okoteve traducción
 #elif L==6
-	"%s &egrave; occupato in questo momento. Riprova tra pochi secondi.";
+	"%s &egrave; occupato in questo momento."
+	" Riprova tra pochi secondi.";
 #elif L==7
-	"%s jest zajety. Spr&oacute;buj ponownie za kilka sekund.";
+	"%s jest zajety."
+	" Spr&oacute;buj ponownie za kilka sekund.";
 #elif L==8
-	"%s est&aacute; ocupado no momento. Tente novamente em alguns segundos.";
+	"%s est&aacute; ocupado no momento."
+	" Tente novamente em alguns segundos.";
 #endif
-
+*/
 const char *Txt_It_is_mandatory_to_choose_a_group =
 #if   L==0
 	"Elegir grupo es obligatorio";		// Necessita traduccio
@@ -23824,25 +23896,25 @@ const char *Txt_New_banner =
 	"Novo banner";
 #endif
 
-const char *Txt_New_centre =
+const char *Txt_New_centre_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Nuevo centro";	// Necessita traduccio
+	"Nou centre de %s";
 #elif L==1
-	"Neues Lehrinstitut";
+	"Neues Lehrinstitut von %s";
 #elif L==2
-	"New centre";
+	"New centre of %s";
 #elif L==3
-	"Nuevo centro";
+	"Nuevo centro de %s";
 #elif L==4
-	"Nouveau centre";
+	"Nouveau centre de %s";
 #elif L==5
-	"Nuevo centro";	// Okoteve traducción
+	"Nuevo centro de %s";	// Okoteve traducción
 #elif L==6
-	"Nuovo centro";
+	"Nuovo centro di %s";
 #elif L==7
-	"Nowe centrum";
+	"Nowe centrum %s";
 #elif L==8
-	"Novo centro";
+	"Novo centro de %s";
 #endif
 
 const char *Txt_New_country =
@@ -23887,25 +23959,25 @@ const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to inc
 	"Nova disciplina de %s";
 #endif
 
-const char *Txt_New_degree =
+const char *Txt_New_degree_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Nueva titulaci&oacute;n";	// Necessita traduccio
+	"Nova titulaci&oacute; de %s";
 #elif L==1
-	"Neuer Studiengang";
+	"Neuer Studiengang von %s";
 #elif L==2
-	"New degree";
+	"New degree of %s";
 #elif L==3
-	"Nueva titulaci&oacute;n";
+	"Nueva titulaci&oacute;n de %s";
 #elif L==4
-	"Nouvel &eacute;tude";
+	"Nouvel &eacute;tude de %s";
 #elif L==5
-	"Nueva titulaci&oacute;n";	// Okoteve traducción
+	"Nueva titulaci&oacute;n de %s";	// Okoteve traducción
 #elif L==6
-	"Nuova laurea";
+	"Nuova laurea di %s";
 #elif L==7
-	"Nowy stopien";
+	"Nowy stopien %s";
 #elif L==8
-	"Nova titula&ccedil;&atilde;o";
+	"Nova titula&ccedil;&atilde;o de %s";
 #endif
 
 const char *Txt_New_department =
@@ -24034,25 +24106,25 @@ const char *Txt_New_holiday =
 	"Nova f&eacute;ria";
 #endif
 
-const char *Txt_New_institution =
+const char *Txt_New_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Nueva instituci&oacute;n";	// Necessita traduccio
+	"Nova instituci&oacute;n de %s";
 #elif L==1
-	"Neue Hochschule";
+	"Neue Hochschule von %s";
 #elif L==2
-	"New institution";
+	"New institution of %s";
 #elif L==3
-	"Nueva instituci&oacute;n";
+	"Nueva instituci&oacute;n de %s";
 #elif L==4
-	"Nouvel &eacute;tablissement";
+	"Nouvel &eacute;tablissement de %s";
 #elif L==5
-	"Nueva instituci&oacute;n";	// Okoteve traducción
+	"Nueva instituci&oacute;n de %s";	// Okoteve traducción
 #elif L==6
-	"Nuova istituzione";
+	"Nuova istituzione di %s";
 #elif L==7
-	"Nowa instytucja";
+	"Nowa instytucja %s";
 #elif L==8
-	"Nova institu&ccedil;&atilde;o";
+	"Nova institu&ccedil;&atilde;o de %s";
 #endif
 
 const char *Txt_New_link =

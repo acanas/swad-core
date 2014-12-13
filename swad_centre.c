@@ -444,6 +444,25 @@ static void Ctr_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
+/********* Put a link (form) to view centres of current institution **********/
+/*****************************************************************************/
+// Gbl.CurrentIns.Ins.InsCod must be > 0
+
+void Ctr_PutLinkToViewCentresOfCurrentIns (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Centres_of_INSTITUTION_X;
+
+   /***** Put form to view centres of current institution *****/
+   Act_FormStart (ActSeeCtr);
+   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.ShortName);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("ctr",Gbl.Title,Gbl.Title);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /*************** Show the centres of the current institution *****************/
 /*****************************************************************************/
 
@@ -492,11 +511,13 @@ static void Ctr_ListCentres (void)
 
 static void Ctr_ListCentresForSeeing (void)
   {
-   extern const char *Txt_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
    unsigned NumCtr;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Centres);
+   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
    /***** Write all the centres and their nuber of teachers *****/
@@ -1011,7 +1032,7 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
 
 static void Ctr_ListCentresForEdition (void)
   {
-   extern const char *Txt_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
    extern const char *Txt_Remove_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -1029,7 +1050,9 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Centres);
+   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -1820,7 +1843,7 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 static void Ctr_PutFormToCreateCentre (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_New_centre;
+   extern const char *Txt_New_centre_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    extern const char *Txt_Create_centre;
@@ -1838,7 +1861,9 @@ static void Ctr_PutFormToCreateCentre (void)
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_centre);
+   sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();

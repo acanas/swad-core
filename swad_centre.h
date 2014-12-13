@@ -90,6 +90,7 @@ void Ctr_SeeCtrWithPendingDegs (void);
 void Ctr_ShowConfiguration (void);
 void Ctr_PrintConfiguration (void);
 
+void Ctr_PutLinkToViewCentresOfCurrentIns (void);
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCentres (void);
 void Ctr_GetListCentres (long InsCod);

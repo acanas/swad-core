@@ -114,6 +114,7 @@ void Deg_InitCurrentCourse (void);
 void Deg_WriteSelectorDegTypes (void);
 void Deg_SeeDegTypes (void);
 void Deg_ReqEditDegreeTypes (void);
+void Deg_PutLinkToViewDegreesOfCurrentCtr (void);
 void Deg_ShowDegsOfCurrentCtr (void);
 
 unsigned Deg_ConvStrToYear (const char *StrYear);

@@ -390,6 +390,25 @@ static void Ins_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
+/********* Put a link (form) to view institutions of current country *********/
+/*****************************************************************************/
+// Gbl.CurrentCty.Cty.CtyCod must be > 0
+
+void Ins_PutLinkToViewInstitutionsOfCurrentCty (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_of_COUNTRY_X;
+
+   /***** Put form to view institutions of current country *****/
+   Act_FormStart (ActSeeIns);
+   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
+            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("ins",Gbl.Title,Gbl.Title);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /**************** List the institutions of the current country ***************/
 /*****************************************************************************/
 
@@ -424,11 +443,13 @@ void Ins_ShowInssOfCurrentCty (void)
 
 static void Ins_ListInstitutionsForSeeing (void)
   {
-   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_of_COUNTRY_X;
    unsigned NumIns;
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Institutions);
+   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
+            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
    /***** Write all the institutions and their nuber of users *****/
@@ -964,7 +985,7 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
-   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_Remove_institution;
    extern const char *Txt_Another_country;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
@@ -984,7 +1005,9 @@ static void Ins_ListInstitutionsForEdition (void)
    Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Institutions);
+   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
+            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -1598,7 +1621,7 @@ void Ins_ChangeInsStatus (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *Txt_New_institution;
+   extern const char *Txt_New_institution_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    extern const char *Txt_Create_institution;
    struct Institution *Ins;
@@ -1618,7 +1641,9 @@ static void Ins_PutFormToCreateInstitution (void)
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_institution);
+   sprintf (Gbl.Title,Txt_New_institution_of_COUNTRY_X,
+            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();

@@ -904,6 +904,25 @@ void Deg_ReqEditDegreeTypes (void)
   }
 
 /*****************************************************************************/
+/*********** Put a link (form) to view degrees of current centre *************/
+/*****************************************************************************/
+// Gbl.CurrentCtr.Ctr.CtrCod must be > 0
+
+void Deg_PutLinkToViewDegreesOfCurrentCtr (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Degrees_of_CENTRE_X;
+
+   /***** Put form to view degrees of current centre *****/
+   Act_FormStart (ActSeeDeg);
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.ShortName);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("deg",Gbl.Title,Gbl.Title);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /************* Show the degrees belonging to the current centre **************/
 /*****************************************************************************/
 
@@ -1113,11 +1132,13 @@ static void Deg_ListDegreeTypesForEdition (void)
 
 static void Deg_ListDegreesForSeeing (void)
   {
-   extern const char *Txt_Degrees;
+   extern const char *Txt_Degrees_of_CENTRE_X;
    unsigned NumDeg;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees);
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Deg_PutHeadDegreesForSeeing ();
 
    /***** List the degrees *****/
@@ -1243,7 +1264,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
 static void Deg_ListDegreesForEdition (void)
   {
-   extern const char *Txt_Degrees;
+   extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_Remove_degree;
    extern const char *Txt_DEGREE_With_year_for_optional_courses;
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
@@ -1263,7 +1284,9 @@ static void Deg_ListDegreesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees);
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -1651,7 +1674,7 @@ static void Deg_PutFormToCreateDegType (void)
 
 static void Deg_PutFormToCreateDegree (void)
   {
-   extern const char *Txt_New_degree;
+   extern const char *Txt_New_degree_of_CENTRE_X;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
@@ -1671,7 +1694,9 @@ static void Deg_PutFormToCreateDegree (void)
    Deg = &Gbl.Degs.EditingDeg;
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_degree);
+   sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.ShortName);
+   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();

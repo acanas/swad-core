@@ -75,6 +75,7 @@ static void Crs_PutFormToConfigLogIn (bool IsForm);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
+static void Crs_PutLinkToViewCoursesOfCurrentDeg (void);
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
@@ -94,7 +95,7 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 static void Crs_EmptyCourseCompletely (long CrsCod);
 static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutLinkToGoToCrs (struct Course *Crs);
-static void Usr_PutFormToSearchCourses (void);
+static void Crs_PutLinkToSearchCourses (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetParamOtherCrsCod (void);
@@ -648,6 +649,25 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
   }
 
 /*****************************************************************************/
+/************ Put a link (form) to view courses of current degree ************/
+/*****************************************************************************/
+// Gbl.CurrentDeg.Deg.DegCod must be > 0
+
+static void Crs_PutLinkToViewCoursesOfCurrentDeg (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Courses_of_DEGREE_X;
+
+   /***** Put form to view courses of current degree *****/
+   Act_FormStart (ActSeeCrs);
+   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
+            Gbl.CurrentDeg.Deg.ShortName);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("hierarchy",Gbl.Title,Gbl.Title);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /************************** Show courses of a degree *************************/
 /*****************************************************************************/
 
@@ -919,7 +939,8 @@ static void Crs_ListCoursesForSeeing (void)
    Crs_StatusTxt_t StatusTxt;
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
+            Gbl.CurrentDeg.Deg.ShortName);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForSeeing ();
 
@@ -1024,7 +1045,8 @@ static void Crs_ListCoursesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
+            Gbl.CurrentDeg.Deg.ShortName);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
@@ -1321,7 +1343,8 @@ static void Crs_PutFormToCreateCourse (void)
    Crs = &Gbl.Degs.EditingCrs;
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
+            Gbl.CurrentDeg.Deg.ShortName);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
@@ -2597,7 +2620,17 @@ void Crs_ReqSelectOneOfMyCourses (void)
 
    /***** Search / select more courses *****/
    fprintf (Gbl.F.Out,"<div align=\"center\">");
-   Usr_PutFormToSearchCourses ();
+   Crs_PutLinkToSearchCourses ();
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+      Crs_PutLinkToViewCoursesOfCurrentDeg ();
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+      Deg_PutLinkToViewDegreesOfCurrentCtr ();
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)
+      Ctr_PutLinkToViewCentresOfCurrentIns ();
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+      Ins_PutLinkToViewInstitutionsOfCurrentCty ();
+   else
+      Cty_PutLinkToViewCountries ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Select one of my courses *****/
@@ -2614,7 +2647,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
 /******************* Put a link (form) to search courses *********************/
 /*****************************************************************************/
 
-static void Usr_PutFormToSearchCourses (void)
+static void Crs_PutLinkToSearchCourses (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Search_courses;
@@ -2634,10 +2667,10 @@ static void Usr_PutFormToSearchCourses (void)
   }
 
 /*****************************************************************************/
-/**** Put a link (form) to remove all the students in the current course *****/
+/****************** Put a link (form) to select my courses *******************/
 /*****************************************************************************/
 
-void Usr_PutFormToSelectMyCourses (void)
+void Crs_PutFormToSelectMyCourses (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_My_courses;
