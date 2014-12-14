@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.38.1 (2014/12/13)"
+#define Log_PLATFORM_VERSION	"SWAD 14.38.2 (2014/12/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.38.2  :Dic 14, 2014	Changes in search. (171124 lines)
 	Version 14.38.1  :Dic 13, 2014	Changes in ID messages.
 					Changes in search. (171118 lines)
 	Version 14.38    :Dic 13, 2014	Link in "my courses" to courses, degrees, centres, institutions or countries. (171083 lines)

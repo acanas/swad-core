@@ -631,7 +631,6 @@ static void Lay_WritePageTopHeading (void)
 	             (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
 	                                              ActSysSch)))));
       Sco_PutParamScope (Sco_SCOPE_PLATFORM);
-      Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_ALL);
       Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
       fprintf (Gbl.F.Out,"</form>"
 	                 "</td>");

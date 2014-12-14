@@ -96,6 +96,7 @@ void Sch_ReqSysSearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_PLATFORM);
   }
 
@@ -114,6 +115,7 @@ void Sch_ReqCtySearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_COUNTRY);
   }
 
@@ -132,6 +134,7 @@ void Sch_ReqInsSearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INSTITUTION);
   }
 
@@ -150,6 +153,7 @@ void Sch_ReqCtrSearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CENTRE);
   }
 
@@ -168,6 +172,7 @@ void Sch_ReqDegSearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEGREE);
   }
 
@@ -186,6 +191,7 @@ void Sch_ReqCrsSearch (void)
      }
 
    /***** Search courses, teachers, documents... *****/
+   Sch_GetParamWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_COURSE);
   }
 
@@ -335,10 +341,10 @@ void Sch_GetParamWhatToSearch (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
-   /* Get what to search from form */
+   /***** Get what to search from form *****/
    Par_GetParToText ("WhatToSearch",UnsignedStr,10);
 
-   Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;
+   // If parameter WhatToSearch is not present, use parameter from session
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
          Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
