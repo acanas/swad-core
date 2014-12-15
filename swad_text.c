@@ -17501,48 +17501,6 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conta"
 #endif
 	,
-	// ActReqSndNewPwd
-#if   L==0
-	"Nova<br />contrasenya"
-#elif L==1
-	"Neues<br />Passwort"
-#elif L==2
-	"New<br />password"
-#elif L==3
-	"Nueva<br />contrase&ntilde;a"
-#elif L==4
-	"Nouveau<br />mot de passe"
-#elif L==5
-	"Nueva<br />contrase&ntilde;a"	// Okoteve traducción
-#elif L==6
-	"Nuova<br />password"
-#elif L==7
-	"Nowe<br />has&lstrok;o"
-#elif L==8
-	"Nova<br />senha"
-#endif
-	,
-	// ActFrmChgMyPwd
-#if   L==0
-	"Contrasenya"
-#elif L==1
-	"Passwort"
-#elif L==2
-	"Password"
-#elif L==3
-	"Contrase&ntilde;a"
-#elif L==4
-	"Mot<br />de passe"
-#elif L==5
-	"Tera&ntilde;emi"
-#elif L==6
-	"Password"
-#elif L==7
-	"Has&lstrok;o"
-#elif L==8
-	"Senha"
-#endif
-	,
 	// ActReqEdiRecCom
 #if   L==0
 	"Fitxa"
@@ -17690,6 +17648,8 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es<br />freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	},
@@ -19535,48 +19495,6 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conta"
 #endif
 	,
-	// ActReqSndNewPwd
-#if   L==0
-	"Nova contrasenya"
-#elif L==1
-	"Neues Passwort"
-#elif L==2
-	"New password"
-#elif L==3
-	"Nueva contrase&ntilde;a"
-#elif L==4
-	"Nouveau mot de passe"
-#elif L==5
-	"Nueva contrase&ntilde;a"	// Okoteve traducción
-#elif L==6
-	"Nuova password"
-#elif L==7
-	"Nowe has&lstrok;o"
-#elif L==8
-	"Nova senha"
-#endif
-	,
-	// ActFrmChgMyPwd
-#if   L==0
-	"Contrasenya"
-#elif L==1
-	"Passwort"
-#elif L==2
-	"Password"
-#elif L==3
-	"Contrase&ntilde;a"
-#elif L==4
-	"Mot de passe"
-#elif L==5
-	"Tera&ntilde;emi"
-#elif L==6
-	"Password"
-#elif L==7
-	"Has&lstrok;o"
-#elif L==8
-	"Senha"
-#endif
-	,
 	// ActReqEdiRecCom
 #if   L==0
 	"Fitxa"
@@ -19724,6 +19642,8 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	}
@@ -21626,51 +21546,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Criar ou editar minha conta de usu&aacute;rio"
 #endif
 	,
-	// ActReqSndNewPwd
-#if   L==0
-	"Enviament d'una nova clau d'inscripci&oacute;"
-	" a la meva adre&ccedil;a de correu electr&ograve;nic"
-#elif L==1
-	"Neues Passwort"
-#elif L==2
-	"New password"
-#elif L==3
-	"Env&iacute;o de una nueva contrase&ntilde;a de acceso"
-	" a mi direcci&oacute;n de correo electr&oacute;nico"
-#elif L==4
-	"Nouveau mot de passe"
-#elif L==5
-	"Env&iacute;o de una nueva contrase&ntilde;a de acceso"
-	" a mi direcci&oacute;n de correo electr&oacute;nico"// Okoteve traducción
-#elif L==6
-	"Nuova password"
-#elif L==7
-	"Nowe has&lstrok;o"
-#elif L==8
-	"Nova senha"
-#endif
-	,
-	// ActFrmChgMyPwd
-#if   L==0
-	"Canvi de la meva contrasenya d'acc&eacute;s"
-#elif L==1
-	"Passwort"
-#elif L==2
-	"Password"
-#elif L==3
-	"Cambio de mi contrase&ntilde;a de acceso"
-#elif L==4
-	"Mot de passe"
-#elif L==5
-	"Cambio de mi contrase&ntilde;a de acceso"// Okoteve traducción
-#elif L==6
-	"Password"
-#elif L==7
-	"Has&lstrok;o"
-#elif L==8
-	"Senha"
-#endif
-	,
 	// ActReqEdiRecCom
 #if   L==0
 	"Dades personals, comuns per a totes les assignatures"
@@ -21818,6 +21693,8 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	}
