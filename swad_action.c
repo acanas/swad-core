@@ -967,34 +967,34 @@ Profile:
 	830. ActSeeMyTimTbl		Show the timetable of all courses of the logged user
 	831. ActFrmUsrAcc		Show form to the creation or change of user's account
 	832. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-	833. ActReqMyPho		Show form to send my photo
-	834. ActReqEdiMyIns		Request the edition of my institution, centre and department
-	835. ActReqEdiMyNet		Request the edition of my social networks
-	836. ActEdiPrf			Show forms to edit preferences
-	837. ActAdmBrf			Show the briefcase of private archives
-	838. ActMFUAct			Show most frequently used actions
+	833. ActReqEdiMyIns		Request the edition of my institution, centre and department
+	834. ActReqEdiMyNet		Request the edition of my social networks
+	835. ActEdiPrf			Show forms to edit preferences
+	836. ActAdmBrf			Show the briefcase of private archives
+	837. ActMFUAct			Show most frequently used actions
 
-	839. ActAutUsrInt		Authentify user internally (directly from the platform)
-	840. ActAutUsrExt		Authentify user externally (remotely from an external site)
-	841. ActAutUsrChgLan		Change language to my language just after authentication
-	842. ActLogOut			Close session
-	843  ActAnnSee			Mark announcement as seen
-	844. ActChgMyRol		Change type of logged user
+	838. ActAutUsrInt		Authentify user internally (directly from the platform)
+	839. ActAutUsrExt		Authentify user externally (remotely from an external site)
+	840. ActAutUsrChgLan		Change language to my language just after authentication
+	841. ActLogOut			Close session
+	842  ActAnnSee			Mark announcement as seen
+	843. ActChgMyRol		Change type of logged user
 
-	845. ActCreUsrAcc		Create new user account
-	846. ActRemIDMe			Remove one of my user's IDs
-	847. ActNewIDMe			Create a new user's ID for me
-	848. ActRemOldNic		Remove one of my old nicknames
-	849. ActChgNic			Change my nickname
-	850. ActRemOldMai		Remove one of my old e-mails
-	851. ActChgMai			Change my e-mail address
-	852. ActCnfMai			Confirm e-mail address
-	853. ActReqSndNewPwd		Show form to send a new password via e-mail
-	854. ActSndNewPwd		Send a new password via e-mail
-	855. ActFrmChgMyPwd		Show form to the change of the password
-	856. ActChgPwd			Change the password
-	857. ActChgMyData		Update my personal data
+	844. ActCreUsrAcc		Create new user account
+	845. ActRemIDMe			Remove one of my user's IDs
+	846. ActNewIDMe			Create a new user's ID for me
+	847. ActRemOldNic		Remove one of my old nicknames
+	848. ActChgNic			Change my nickname
+	849. ActRemOldMai		Remove one of my old e-mails
+	850. ActChgMai			Change my e-mail address
+	851. ActCnfMai			Confirm e-mail address
+	852. ActReqSndNewPwd		Show form to send a new password via e-mail
+	853. ActSndNewPwd		Send a new password via e-mail
+	854. ActFrmChgMyPwd		Show form to the change of the password
+	855. ActChgPwd			Change the password
+	856. ActChgMyData		Update my personal data
 
+	857. ActReqMyPho		Show form to send my photo
 	858. ActDetMyPho		Receive my photo and detect faces on it
 	859. ActUpdMyPho		Update my photo
 	860. ActRemMyPho		Remove my photo
@@ -1188,7 +1188,6 @@ const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 
 		{ActFrmUsrAcc		,false},
 		{ActReqEdiRecCom	,false},
-		{ActReqMyPho		,false},
 		{ActReqEdiMyIns		,false},
 		{ActReqEdiMyNet		,false},
 		{ActEdiPrf		,true },
@@ -2189,12 +2188,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeMyTimTbl	*/{ 408, 2,TabPrf,ActSeeMyTimTbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock"		},
    /* ActFrmUsrAcc	*/{  36, 3,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba"		},
    /* ActReqEdiRecCom	*/{ 285, 4,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card"			},
-   /* ActReqMyPho	*/{  30, 5,TabPrf,ActReqMyPho		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqMyPhoto			,"photo"		},
-   /* ActReqEdiMyIns	*/{1165, 6,TabPrf,ActReqEdiMyIns	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,"institution"		},
-   /* ActReqEdiMyNet	*/{1172, 7,TabPrf,ActReqEdiMyNet	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_ShowFormMyWebsAndSocialNets,"earth"		},
-   /* ActEdiPrf		*/{ 673, 8,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_EditPrefs			,"heart"		},
-   /* ActAdmBrf		*/{  23, 9,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive"		},
-   /* ActMFUAct		*/{ 993,10,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Act_ShowMyMFUActions		,"star"			},
+   /* ActReqEdiMyIns	*/{1165, 5,TabPrf,ActReqEdiMyIns	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,"institution"		},
+   /* ActReqEdiMyNet	*/{1172, 6,TabPrf,ActReqEdiMyNet	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_ShowFormMyWebsAndSocialNets,"earth"		},
+   /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_EditPrefs			,"heart"		},
+   /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive"		},
+   /* ActMFUAct		*/{ 993, 9,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Act_ShowMyMFUActions		,"star"			},
 
    // Actions not in menu:
    /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
@@ -2217,16 +2215,17 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMai		*/{1088,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_UpdateEmail		,NULL},
    /* ActCnfMai		*/{1091,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ConfirmEmail		,NULL},
 
-   /* ActReqSndNewPwd	*/{ 665, 4,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,NULL},
+   /* ActReqSndNewPwd	*/{ 665,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,NULL},
    /* ActSndNewPwd	*/{ 633,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
-   /* ActFrmChgMyPwd	*/{  34, 5,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
+   /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
    /* ActChgPwd		*/{  35,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
 
    /* ActChgMyData	*/{ 298,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
 
-   /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqMyPho		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
-   /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqMyPho		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
-   /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqMyPho		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
+   /* ActReqMyPho	*/{  30,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqMyPhoto			,NULL},
+   /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
+   /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
+   /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
 
    /* ActChgCtyMyIns	*/{1166,-1,TabPrf,ActReqEdiMyIns	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChgCountryOfMyInstitution	,NULL},
    /* ActChgMyIns	*/{1167,-1,TabPrf,ActReqEdiMyIns	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyInstitution	,NULL},

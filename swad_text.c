@@ -17522,27 +17522,6 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqMyPho
-#if   L==0
-	"Foto"
-#elif L==1
-	"Foto"
-#elif L==2
-	"Photo"
-#elif L==3
-	"Foto"
-#elif L==4
-	"Photo"
-#elif L==5
-	"Ta'anga"
-#elif L==6
-	"Foto"
-#elif L==7
-	"Zdj&eogon;cie"
-#elif L==8
-	"Foto"
-#endif
-	,
 	// ActReqEdiMyIns
 #if   L==0
 	"Instituci&oacute;"
@@ -17648,6 +17627,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es<br />freq&uuml;entes"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19516,27 +19496,6 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqMyPho
-#if   L==0
-	"Foto"
-#elif L==1
-	"Foto"
-#elif L==2
-	"Photo"
-#elif L==3
-	"Foto"
-#elif L==4
-	"Photo"
-#elif L==5
-	"Ta'anga"
-#elif L==6
-	"Foto"
-#elif L==7
-	"Zdj&eogon;cie"
-#elif L==8
-	"Foto"
-#endif
-	,
 	// ActReqEdiMyIns
 #if   L==0
 	"Instituci&oacute;"
@@ -19642,6 +19601,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es freq&uuml;entes"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -21567,27 +21527,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqMyPho
-#if   L==0
-	"La meva fotografia personal"
-#elif L==1
-	"Foto"
-#elif L==2
-	"Photo"
-#elif L==3
-	"Mi fotograf&iacute;a personal"
-#elif L==4
-	"Photo"
-#elif L==5
-	"Mi fotograf&iacute;a personal"	// Okoteve traducción
-#elif L==6
-	"Foto"
-#elif L==7
-	"Zdj&eogon;cie"
-#elif L==8
-	"Foto"
-#endif
-	,
 	// ActReqEdiMyIns
 #if   L==0
 	"Instituci&oacute;"
@@ -21693,6 +21632,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
