@@ -6798,8 +6798,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
    /***** Write message in case of the user can not view the photos of others *****/
    if (!ICanSeePhotos && RoleInClassPhoto == Rol_ROLE_STUDENT &&
-       (ClassPhotoType == Usr_CLASS_PHOTO_SEE ||
-        ClassPhotoType == Usr_CLASS_PHOTO_SEL))
+       ClassPhotoType != Usr_CLASS_PHOTO_PRN)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"%d\" align=\"center\" class=\"MSJ_AVISO\">(",

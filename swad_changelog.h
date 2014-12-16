@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.38.4 (2014/12/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.38.5 (2014/12/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 
 /*
+	Version 14.38.5  :Dic 16, 2014	User's institution option is integrated in record card option. (170819 lines)
 	Version 14.38.4  :Dic 16, 2014	User's photo option is integrated in record card option. (170941 lines)
 	Version 14.38.3  :Dic 16, 2014	Lost password option is integrated in session option.
 					User's password option is integrated in account option. (171001 lines)

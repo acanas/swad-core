@@ -17522,48 +17522,6 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqEdiMyIns
-#if   L==0
-	"Instituci&oacute;"
-#elif L==1
-	"Hochschule"
-#elif L==2
-	"Institution"
-#elif L==3
-	"Instituci&oacute;n"
-#elif L==4
-	"&Eacute;tablissement"
-#elif L==5
-	"Mbo'ehao"
-#elif L==6
-	"Istituzione"
-#elif L==7
-	"Instytucji"
-#elif L==8
-	"Institu&ccedil;&atilde;o"
-#endif
-	,
-	// ActReqEdiMyNet
-#if   L==0
-	"Webs / xarxes"
-#elif L==1
-	"Webs / Netzwerke"
-#elif L==2
-	"Webs / networks"
-#elif L==3
-	"Webs / redes"
-#elif L==4
-	"Webs / r&eacute;seaux"
-#elif L==5
-	"Webs / redes"	// Okoteve traducción
-#elif L==6
-	"Webs / reti"
-#elif L==7
-	"Webs / sieci"
-#elif L==8
-	"Webs / redes"
-#endif
-	,
 	// ActEdiPrf
 #if   L==0
 	"Prefer&egrave;ncies"
@@ -17627,6 +17585,8 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es<br />freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19496,48 +19456,6 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqEdiMyIns
-#if   L==0
-	"Instituci&oacute;"
-#elif L==1
-	"Hochschule"
-#elif L==2
-	"Institution"
-#elif L==3
-	"Instituci&oacute;n"
-#elif L==4
-	"&Eacute;tablissement"
-#elif L==5
-	"Mbo'ehao"
-#elif L==6
-	"Istituzione"
-#elif L==7
-	"Instytucji"
-#elif L==8
-	"Institu&ccedil;&atilde;o"
-#endif
-	,
-	// ActReqEdiMyNet
-#if   L==0
-	"Webs / xarxes socials"
-#elif L==1
-	"Webs / Soziale Netzwerke"
-#elif L==2
-	"Webs / social networks"
-#elif L==3
-	"Webs / redes sociales"
-#elif L==4
-	"Webs / r&eacute;seaux sociaux"
-#elif L==5
-	"Webs / redes sociales"	// Okoteve traducción
-#elif L==6
-	"Webs / reti sociali"
-#elif L==7
-	"Webs / sieci spo&lstrok;eczne"
-#elif L==8
-	"Webs / redes sociais"
-#endif
-	,
 	// ActEdiPrf
 #if   L==0
 	"Prefer&egrave;ncies"
@@ -19601,6 +19519,8 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -21527,48 +21447,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActReqEdiMyIns
-#if   L==0
-	"Instituci&oacute;"
-#elif L==1
-	"Hochschule"
-#elif L==2
-	"Institution"
-#elif L==3
-	"Instituci&oacute;n a la que pertenezco"
-#elif L==4
-	"&Eacute;tablissement"
-#elif L==5
-	"Mbo'ehao"
-#elif L==6
-	"Istituzione"
-#elif L==7
-	"Instytucji"
-#elif L==8
-	"Institu&ccedil;&atilde;o"
-#endif
-	,
-	// ActReqEdiMyNet
-#if   L==0
-	"Webs / xarxes socials"
-#elif L==1
-	"Webs / Soziale Netzwerke"
-#elif L==2
-	"My webs and profiles in social networks"
-#elif L==3
-	"Mis webs y perfiles en redes sociales"
-#elif L==4
-	"Webs / r&eacute;seaux sociaux"
-#elif L==5
-	"Mis webs y perfiles en redes sociales"	// Okoteve traducción
-#elif L==6
-	"Webs / reti sociali"
-#elif L==7
-	"Webs / sieci spo&lstrok;eczne"
-#elif L==8
-	"Webs / redes sociais"
-#endif
-	,
 	// ActEdiPrf
 #if   L==0
 	"Les meves prefer&egrave;ncies (idioma, colors, notificacions ...)"
@@ -21632,6 +21510,8 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
