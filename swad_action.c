@@ -915,18 +915,18 @@ Messages:
 	781. ActDisPstForGenTch		Disable a message of forum of teachers general
 	782. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
 	783. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
-	784. ActLstBanUsr		List banned users
-	785. ActRcvMsgUsr		Sent/Receive a message of a user
-	786. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
-	787. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
-	788. ActDelAllSntMsg		Remove todos the messages sent to other users
-	789. ActDelAllRcvMsg		Remove todos the messages received from other users
-	790. ActDelSntMsg		Remove a message sent to other users
-	791. ActDelRcvMsg		Remove a message received from other user
-	792. ActExpSntMsg		See (expand) sent message
-	793. ActExpRcvMsg		See (expand) received message
-	794. ActConSntMsg		Hide (contract) sent message
-	795. ActConRcvMsg		Hide (contract) received message
+	784. ActRcvMsgUsr		Sent/Receive a message of a user
+	785. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
+	786. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
+	787. ActDelAllSntMsg		Remove todos the messages sent to other users
+	788. ActDelAllRcvMsg		Remove todos the messages received from other users
+	789. ActDelSntMsg		Remove a message sent to other users
+	790. ActDelRcvMsg		Remove a message received from other user
+	791. ActExpSntMsg		See (expand) sent message
+	792. ActExpRcvMsg		See (expand) received message
+	793. ActConSntMsg		Hide (contract) sent message
+	794. ActConRcvMsg		Hide (contract) received message
+	785. ActLstBanUsr		List banned users
 	786. ActBanUsrMsg		Ban the sender of a message when showing received messages
 	797. ActUnbUsrMsg		Unban the sender of a message when showing received messages
 	798. ActUnbUsrLst		Unban a user when listing banned users
@@ -2125,7 +2125,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDisPstForSWAUsr*/{ 625,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
    /* ActDisPstForSWATch*/{ 635,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
 
-   /* ActLstBanUsr	*/{1017,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListBannedUsrs		,NULL},
    /* ActRcvMsgUsr	*/{  27,-1,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_RecMsgFromUsr		,NULL},
    /* ActReqDelAllSntMsg*/{ 604,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ReqDelAllSntMsgs		,NULL},
    /* ActReqDelAllRcvMsg*/{ 593,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ReqDelAllRecMsgs		,NULL},
@@ -2137,9 +2136,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActExpRcvMsg	*/{ 663,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ExpRecMsg			,NULL},
    /* ActConSntMsg	*/{1020,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ConSntMsg			,NULL},
    /* ActConRcvMsg	*/{1019,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ConRecMsg			,NULL},
+
+   /* ActLstBanUsr	*/{1017,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListBannedUsrs		,NULL},
    /* ActBanUsrMsg	*/{1015,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_BanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrMsg	*/{1016,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenShowingMsgs	,NULL},
-   /* ActUnbUsrLst	*/{1018,-1,TabMsg,ActLstBanUsr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenListingUsrs	,NULL},
+   /* ActUnbUsrLst	*/{1018,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenListingUsrs	,NULL},
 
    /* ActCht		*/{  52,-1,TabMsg,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_NEW_WINDOW ,Cht_OpenChatWindow		,NULL				,NULL},
 
