@@ -62,8 +62,6 @@ void Msg_FormMsgUsrs (void);
 void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply);
 void Msg_RecMsgFromUsr (void);
 
-void Msg_ShowSntMsgs (void);
-void Msg_ShowRecMsgs (void);
 void Msg_ReqDelAllRecMsgs (void);
 void Msg_ReqDelAllSntMsgs (void);
 void Msg_DelAllRecMsgs (void);
@@ -84,6 +82,9 @@ long Msg_InsertNewMsg (long CrsCod,long UsrCod,const char *Subject,const char *C
 
 void Msg_DelAllRecAndSntMsgsUsr (long UsrCod);
 void Msg_MoveUnusedMsgsContentToDeleted (void);
+
+void Msg_ShowSntMsgs (void);
+void Msg_ShowRecMsgs (void);
 
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod);
 unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus);

@@ -17199,27 +17199,6 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	// ActLstBanUsr
-#if   L==0
-	"Blocats"
-#elif L==1
-	"Verboten"
-#elif L==2
-	"Banned"
-#elif L==3
-	"Bloqueados"
-#elif L==4
-	"Bloqu&eacute;s"
-#elif L==5
-	"Bloqueados"	// Okoteve traducción
-#elif L==6
-	"Vietati"
-#elif L==7
-	"Zakazane"
-#elif L==8
-	"Bloqueados"
-#endif
-	,
 	// ActMaiStd
 #if   L==0
 	"Correu<br />electr&ograve;nic"
@@ -17241,6 +17220,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19133,27 +19113,6 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	// ActLstBanUsr
-#if   L==0
-	"Blocats"
-#elif L==1
-	"Verboten"
-#elif L==2
-	"Banned"
-#elif L==3
-	"Bloqueados"
-#elif L==4
-	"Bloqu&eacute;s"
-#elif L==5
-	"Bloqueados"	// Okoteve traducción
-#elif L==6
-	"Vietati"
-#elif L==7
-	"Zakazane"
-#elif L==8
-	"Bloqueados"
-#endif
-	,
 	// ActMaiStd
 #if   L==0
 	"Correu electr&ograve;nic"
@@ -19175,6 +19134,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -21112,27 +21072,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas"
 #endif
 	,
-	// ActLstBanUsr
-#if   L==0
-	"Llista d'usuaris que no poden enviar missatges a vost&egrave;"
-#elif L==1
-	"Liste der Benutzer, die keine Nachrichten senden Sie k&ouml;nnen"
-#elif L==2
-	"List of users who can not send messages to you"
-#elif L==3
-	"Lista de usuarios que no pueden enviarle mensajes"
-#elif L==4
-	"Liste d'utilisateurs qui ne peuvent pas envoyer de messages &agrave; vous"
-#elif L==5
-	"Lista de usuarios que no pueden enviarle mensajes"// Okoteve traducción
-#elif L==6
-	"Elenco degli utenti che non possono inviare messaggi a voi"
-#elif L==7
-	"Zakazane nadawc&oacute;w"
-#elif L==8
-	"Lista de usu&aacute;rios que n&atilde;o podem enviar mensagens para voc&ecirc;"
-#endif
-	,
 	// ActMaiStd
 #if   L==0
 	"Creaci&oacute; d'un missatge de correu electr&ograve;nic"
@@ -21160,6 +21099,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

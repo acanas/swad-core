@@ -69,6 +69,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 static void Msg_PutFormMsgUsrs (const char *Content);
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages);
+static void Msg_PutLinkToViewBannedUsers(void);
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery);
 static void Msg_ShowFormToShowOnlyUnreadMessages (void);
@@ -694,26 +695,6 @@ void Msg_RecMsgFromUsr (void)
                (unsigned) NumErrors);
       Lay_ShowAlert (Lay_ERROR,Gbl.Message);
      }
-  }
-
-/*****************************************************************************/
-/********************* Show messages sent to other users *********************/
-/*****************************************************************************/
-
-void Msg_ShowSntMsgs (void)
-  {
-   /***** Show the sent messages *****/
-   Msg_ShowSentOrReceivedMessages (Msg_MESSAGES_SENT);
-  }
-
-/*****************************************************************************/
-/******************* Show messages received from other users *****************/
-/*****************************************************************************/
-
-void Msg_ShowRecMsgs (void)
-  {
-   /***** Show the received messages *****/
-   Msg_ShowSentOrReceivedMessages (Msg_MESSAGES_RECEIVED);
   }
 
 /*****************************************************************************/
@@ -1462,6 +1443,31 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
   }
 
 /*****************************************************************************/
+/********************* Show messages sent to other users *********************/
+/*****************************************************************************/
+
+void Msg_ShowSntMsgs (void)
+  {
+   /***** Show the sent messages *****/
+   Msg_ShowSentOrReceivedMessages (Msg_MESSAGES_SENT);
+  }
+
+/*****************************************************************************/
+/******************* Show messages received from other users *****************/
+/*****************************************************************************/
+
+void Msg_ShowRecMsgs (void)
+  {
+   /***** Link to view banned users *****/
+   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+   Msg_PutLinkToViewBannedUsers ();
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Show the received messages *****/
+   Msg_ShowSentOrReceivedMessages (Msg_MESSAGES_RECEIVED);
+  }
+
+/*****************************************************************************/
 /************************ Show sent or received messages *********************/
 /*****************************************************************************/
 
@@ -1593,6 +1599,21 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****************** Put a link (form) to view banned users *******************/
+/*****************************************************************************/
+
+static void Msg_PutLinkToViewBannedUsers(void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Banned_users;
+
+   Act_FormStart (ActLstBanUsr);
+   Act_LinkFormSubmit (Txt_Banned_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("stop",Txt_Banned_users,Txt_Banned_users);
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/
