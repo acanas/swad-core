@@ -69,6 +69,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 static void Msg_PutFormMsgUsrs (const char *Content);
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages);
+static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery);
@@ -1459,9 +1460,12 @@ void Msg_ShowSntMsgs (void)
 void Msg_ShowRecMsgs (void)
   {
    /***** Link to view banned users *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
-   Msg_PutLinkToViewBannedUsers ();
-   fprintf (Gbl.F.Out,"</div>");
+   if (Msg_GetNumUsrsBannedByMe ())
+     {
+      fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+      Msg_PutLinkToViewBannedUsers ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Show the received messages *****/
    Msg_ShowSentOrReceivedMessages (Msg_MESSAGES_RECEIVED);
@@ -1599,6 +1603,20 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Get number of user I have banned **********************/
+/*****************************************************************************/
+
+static unsigned long Msg_GetNumUsrsBannedByMe (void)
+  {
+   char Query[128];
+
+   /***** Get number of users I have banned *****/
+   sprintf (Query,"SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod='%ld'",
+            Gbl.Usrs.Me.UsrDat.UsrCod);
+   return DB_QueryCOUNT (Query,"can not get number of users you have banned");
   }
 
 /*****************************************************************************/
@@ -3311,14 +3329,14 @@ static void Msg_UnbanSender (void)
   }
 
 /*****************************************************************************/
-/************************ Unban a sender of a message ************************/
+/**************** Chech if a user is banned by another user ******************/
 /*****************************************************************************/
 
 static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
    char Query[256];
 
-   /***** Get if the message code is in table of sent messages not deleted *****/
+   /***** Get if FromUsrCod is banned by ToUsrCod *****/
    sprintf (Query,"SELECT COUNT(*) FROM msg_banned"
                   " WHERE FromUsrCod='%ld' AND ToUsrCod='%ld'",
             FromUsrCod,ToUsrCod);
