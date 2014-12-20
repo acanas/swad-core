@@ -2225,8 +2225,6 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void)
 
 static void Brw_FormToChangeZone (void)
   {
-   extern const char *Txt_Course;
-   extern const char *Txt_Group;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
@@ -2284,10 +2282,10 @@ static void Brw_FormToChangeZone (void)
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-                      "%s %s"
+                      "%s"
                       "</li>",
             Gbl.FormId,
-            Txt_Course,Gbl.CurrentCrs.Crs.FullName);
+            Gbl.CurrentCrs.Crs.FullName);
 
    /***** List my groups for unique selection *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -2315,10 +2313,10 @@ static void Brw_FormToChangeZone (void)
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-			    "%s %s %s"
+			    "%s %s"
 			    "</li>",
 		  Gbl.FormId,
-                  Txt_Group,GrpDat.GrpTypName,GrpDat.GrpName);
+                  GrpDat.GrpTypName,GrpDat.GrpName);
         }
 
       /***** Free memory with the list of groups I belong to *****/
