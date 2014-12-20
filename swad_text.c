@@ -52228,27 +52228,6 @@ const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y =	// Warning: it 
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_Your_browser_does_not_support_iframes =
-#if   L==0
-	"Su navegador no admite <em>iframes</em>.";		// Necessita traduccio
-#elif L==1
-	"Your browser does not support <em>iframes</em>.";	// Need Übersetzung
-#elif L==2
-	"Your browser does not support <em>iframes</em>.";
-#elif L==3
-	"Su navegador no admite <em>iframes</em>.";
-#elif L==4
-	"Your browser does not support <em>iframes</em>.";	// Besoin de traduction
-#elif L==5
-	"Su navegador no admite <em>iframes</em>.";		// Okoteve traducción
-#elif L==6
-	"Il tuo browser non supporta <em>iframes</em>.";
-#elif L==7
-	"Your browser does not support <em>iframes</em>.";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Your browser does not support <em>iframes</em>.";	// Necessita de tradução
-#endif
-
 const char *Txt_Your_comment_has_been_updated =
 #if   L==0
 	"El seu comentari ha estat actualitzat.";

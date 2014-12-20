@@ -291,7 +291,6 @@ static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead);
 static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType);
 static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType);
 static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL);
-static bool Inf_CheckIfBrowserSupportIFrame (void);
 static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType);
 
 /*****************************************************************************/
@@ -697,7 +696,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/*********** Check if exists and show central iframe with a page *************/
+/**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
 
 static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
@@ -808,7 +807,7 @@ int Inf_WritePageIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
   }
 
 /*****************************************************************************/
-/*********** Check if exists and show central iframe with a URL **************/
+/**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
 
 static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType)
@@ -855,7 +854,7 @@ void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_B
   }
 
 /*****************************************************************************/
-/*********************** Show central iframe with a page *********************/
+/*************** Show link to a internal or external a page ******************/
 /*****************************************************************************/
 
 static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
@@ -863,56 +862,23 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_Your_browser_does_not_support_iframes;
 
-   /***** Link for view in a new window *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   /***** Start of frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+
+   /***** Link to view in a new window *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td align=\"center\">"
 		      "<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-            URL,The_ClassFormul[Gbl.Prefs.Theme]);
+	    URL,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("fullscreen",
-	            Txt_View_in_a_new_window,
-	            Txt_View_in_a_new_window);
-   fprintf (Gbl.F.Out,"</div>");
+		    Txt_View_in_a_new_window,
+		    Txt_View_in_a_new_window);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
-   if (Inf_CheckIfBrowserSupportIFrame ())
-     {
-      /***** Start of frame *****/
-      Lay_StartRoundFrameTable10 ("100%",0,Txt_INFO_TITLE[InfoType]);
-
-      /***** iframe with the page *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\">"
-			 "<iframe onload=\"iFrameHeight();\" src=\"%s\""
-			 " id=\"iframe_central\" name=\"iframe_central\""
-			 " style=\"width:100%%; height:480px;\">"
-			 "%s"
-			 "</iframe>"
-			 "</td>"
-                         "</tr>",
-               URL,Txt_Your_browser_does_not_support_iframes);
-
-      /***** End of frame *****/
-      Lay_EndRoundFrameTable10 ();
-     }
-  }
-
-/*****************************************************************************/
-/*************************** Browse support iframe ***************************/
-/*****************************************************************************/
-
-#define MAX_LENGTH_HTTP_USER_AGENT 1024
-
-static bool Inf_CheckIfBrowserSupportIFrame (void)
-  {
-   char HTTPUserAgent[MAX_LENGTH_HTTP_USER_AGENT+1];
-
-   strncpy (HTTPUserAgent,getenv ("HTTP_USER_AGENT"),MAX_LENGTH_HTTP_USER_AGENT);
-   HTTPUserAgent[MAX_LENGTH_HTTP_USER_AGENT] = '\0';
-
-   if (strstr (HTTPUserAgent,"MSIE 5"))
-      return false;
-
-   return true;
+   /***** End of frame *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

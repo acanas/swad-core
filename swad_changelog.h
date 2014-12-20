@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.38.9 (2014/12/20)"
+#define Log_PLATFORM_VERSION	"SWAD 14.39 (2014/12/20)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.39    :Dic 20, 2014	iframes removed from course info. (170746 lines)
 	Version 14.38.9  :Dic 20, 2014	The words "Course" and "Group" are removed from selection of course and groups in Documents and Shared files. (? lines)
 	Version 14.38.8  :Dic 18, 2014	Fixed bug in banned users. (170793 lines)
 	Version 14.38.7  :Dic 17, 2014	Link to banned users is shown only if user has banned one or more users. (170792 lines)
