@@ -222,9 +222,8 @@ void Sta_ExitIfTooFast (void)
       /***** Write header to standard output to avoid timeout *****/
       // Two \r\n are necessary
       fprintf (stdout,"Content-type: text/html; charset=ISO-8859-1\r\n\r\n"
-		      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-		      " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-		      "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"%s\">"
+                      "<!DOCTYPE html>\n"
+                      "<html lang=\"%s\">\n"
 		      "<head>"
 		      "<title>%s</title>"
 		      "</head>"

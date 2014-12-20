@@ -195,12 +195,11 @@ void Lay_WriteStartOfPage (void)
    /***** Write header to standard output to avoid timeout *****/
    // Two \r\n are necessary
    fprintf (stdout,"Content-type: text/html; charset=ISO-8859-1\r\n\r\n"
-                   "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-	           " \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n");
+                   "<!DOCTYPE html>\n");
 
    /***** Write start of XHTML code *****/
-   // It is necessary to comment the line AddDefaultCharset UTF8 in httpd.conf to enable meta tag
-   fprintf (Gbl.F.Out,"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"%s\">\n"
+   // WARNING: It is necessary to comment the line AddDefaultCharset UTF8 in httpd.conf to enable meta tag
+   fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=iso-8859-1\" />\n",
             Txt_STR_LANG_ID[Gbl.Prefs.Language]);
@@ -270,7 +269,7 @@ void Lay_WriteStartOfPage (void)
 
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">"
-                         "<img id=\"zoomImg\" src=\"%s/_.gif\" alt=\"\" class=\"IMG_USR\" /><br />"
+                         "<img id=\"zoomImg\" src=\"%s/_.gif\" alt=\"\" class=\"IMG_USR\" />"
                          "<div id=\"zoomTxt\" align=\"center\"></div>"
                          "</div>",
 	       Gbl.Prefs.IconsURL);
@@ -288,8 +287,8 @@ void Lay_WriteStartOfPage (void)
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" align=\"center\" valign=\"top\">"
-		      "<div id=\"CENTRAL_ZONE\" style=\"background-color:%s;valign:top;vertical-align:top;\">"
-		      "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\" style=\"valign:top;vertical-align:top;\">"
+		      "<div id=\"CENTRAL_ZONE\" style=\"background-color:%s;vertical-align:top;\">"
+		      "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\" style=\"vertical-align:top;\">"
 		      "<tr>",
 	    ColspanCentralPart,
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
@@ -349,11 +348,9 @@ void Lay_WriteStartOfPage (void)
       if (Gbl.Now.Date.Month == 1 &&
 	  Gbl.Now.Date.Day == 1)
         {
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"ASG_TITLE\">"
-                            " <br /> <br /> <br />");
+         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"ASG_TITLE\" style=\"margin:50px;\">");
          fprintf (Gbl.F.Out,Txt_NEW_YEAR_GREETING,Gbl.Now.Date.Year);
-         fprintf (Gbl.F.Out,"<br /> <br /> <br /> "
-                            "</div>");
+         fprintf (Gbl.F.Out,"</div>");
         }
 
    /* Write message indicating number of clicks allowed before sending my photo */
@@ -923,7 +920,7 @@ static void Lay_DrawTabsDeskTop (void)
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
-			       "<br />%s"
+			       "<div>%s</div>"
 			       "</a>"
 			       "</form>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
@@ -937,7 +934,7 @@ static void Lay_DrawTabsDeskTop (void)
 			       "<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
-			       "<span class=\"%s\"><br />%s</span>",
+			       "<div class=\"%s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
 		     Lay_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
@@ -995,7 +992,7 @@ static void Lay_DrawTabsMobile (void)
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON64x64\" style=\"margin:4px;\" />"
-			       "<br />%s"
+			       "<div>%s</div>"
 			       "</a>"
 			       "</form>"
 			       "</div>",
@@ -1010,7 +1007,7 @@ static void Lay_DrawTabsMobile (void)
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON64x64\" style=\"margin:4px;\" />"
-			       "<span class=\"%s\"><br />%s</span>"
+			       "<div class=\"%s\">%s</div>"
 			       "</div>",
 		     Gbl.Prefs.PathIconSet,
 		     Cfg_ICON_ACTION_64x64,
@@ -1240,7 +1237,7 @@ static void Lay_WriteMenuThisTabMobile (void)
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
 	                    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON64x64\" style=\"margin:4px;\" />"
-			    "<br />%s"
+			    "<div>%s</div>"
                             "</a>"
                             "</form>"
                             "</div>"
@@ -1335,13 +1332,13 @@ static void Lay_WriteTitleAction (void)
 	    Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].Icon);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s &gt; %s</span>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
 	    Txt_TABS_FULL_TXT[Act_Actions[Gbl.CurrentAct].Tab],
 	    Act_GetTitleAction (Gbl.CurrentAct));
 
    /***** Subtitle *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\"><br />%s</span>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
 	    The_ClassSubtitleAction[Gbl.Prefs.Theme],
 	    Act_GetSubtitleAction (Gbl.CurrentAct));
 
@@ -1738,26 +1735,29 @@ void Lay_WritePageFooter (void)
       case Lay_LAYOUT_DESKTOP:
 	 Lay_WriteFootFromHTMLFile ();
 
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"FOOT\" style=\"padding-bottom:10px;\"><br />");
+         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"FOOT\" style=\"padding-bottom:10px;\">");
 
          /***** Institution and centre hosting the platform *****/
          fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
-                            "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" /><br />"
-                            "%s"
-                            "</a><br />",
+                            "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" />"
+                            "<div>%s</div>"
+                            "</a>",
                   Cfg_ABOUT_URL,
                   Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
                   Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
                   Cfg_ABOUT_NAME,
                   Cfg_ABOUT_NAME);
 
-         fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">%s:</a> "
-                            "<a href=\"mailto:%s\" class=\"FOOT\" target=\"_blank\">%s</a><br />",
+         fprintf (Gbl.F.Out,"<div>"
+                            "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">%s:</a> "
+                            "<a href=\"mailto:%s\" class=\"FOOT\" target=\"_blank\">%s</a>"
+                            "</div>",
                   Cfg_HELP_WEB,Txt_Questions_and_problems,
                   Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
 
          /***** About *****/
-         fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">",
+         fprintf (Gbl.F.Out,"<div>"
+                            "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">",
                   Cfg_ABOUT_SWAD_URL);
          fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
          fprintf (Gbl.F.Out,"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -1765,7 +1765,8 @@ void Lay_WritePageFooter (void)
          /***** Write time to generate and send page *****/
          Sta_WriteTimeToGenerateAndSendPage ();
 
-         fprintf (Gbl.F.Out,"</div>");
+         fprintf (Gbl.F.Out,"</div>"
+                            "</div>");
          break;
       case Lay_LAYOUT_MOBILE:
       default:

@@ -680,7 +680,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	       Deg_MAX_LENGTH_FULL_NAME);
       FullName[Deg_MAX_LENGTH_FULL_NAME] = '\0';
       Str_LimitLengthHTMLStr (FullName,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
-      fprintf (Gbl.F.Out,"<span class=\"%s\"><br />%s</span>",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
 	       The_ClassCourse[Gbl.Prefs.Theme],FullName);
      }
   }

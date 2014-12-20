@@ -473,7 +473,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
            }
          else
            {
-            fprintf (Gbl.F.Out,"<span class=\"%s\"",ClassForDay);
+            fprintf (Gbl.F.Out,"<div class=\"%s\"",ClassForDay);
             if (!PrintView && TextForDay)
 	       fprintf (Gbl.F.Out," title=\"%s\"",TextForDay);
 	    fprintf (Gbl.F.Out,">");
@@ -489,7 +489,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
         	               "</table>"
         	               "</form>");
          else
-            fprintf (Gbl.F.Out,"</span>");
+            fprintf (Gbl.F.Out,"</div>");
 
 	 fprintf (Gbl.F.Out,"</td>");
 

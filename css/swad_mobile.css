@@ -96,11 +96,11 @@ p			{margin:0px;}
 	padding:8px;
 	background-color:#FAF098;
 
-	background-image:linear-gradient(bottom, #FAF098 0%, #FEED95 85%, #EED86C 100%);
-	background-image:-o-linear-gradient(bottom, #FAF098 0%, #FEED95 85%, #EED86C 100%);
-	background-image:-moz-linear-gradient(bottom, #FAF098 0%, #FEED95 85%, #EED86C 100%);
-	background-image:-webkit-linear-gradient(bottom, #FAF098 0%, #FEED95 85%, #EED86C 100%);
-	background-image:-ms-linear-gradient(bottom, #FAF098 0%, #FEED95 85%, #EED86C 100%);
+	background-image:linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);
+	background-image:-o-linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);
+	background-image:-moz-linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);
+	background-image:-webkit-linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);
+	background-image:-ms-linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);
 	background-image:-webkit-gradient(
 		linear,
 		left bottom,
