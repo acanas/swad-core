@@ -779,7 +779,7 @@ void Mai_WriteMenuWithMailDomains (void)
             Txt_Mail_domains_allowed_for_notifications);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"120\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\" width=\"120\">"
                       "<tr>"
                       "<td align=\"left\" width=\"4\"><img src=\"%s/ewbw1_4x4.gif\" width=\"4\" height=\"4\" alt=\"\" /></td>"
                       "<td align=\"left\" style=\"background-image: url('%s/mbw1_1x4.gif'); background-repeat: repeat-x;\"></td>"

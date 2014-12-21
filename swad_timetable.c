@@ -779,7 +779,7 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\""
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\""
                       " style=\"min-width:520px;\">");
 
    /***** Top row used for column adjustement *****/

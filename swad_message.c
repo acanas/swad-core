@@ -1574,7 +1574,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       Lay_StartRoundFrameTable10 ("100%",0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"center\" width=\"100%%\">"
-	                 "<table cellspacing=\"0\" cellpadding=\"2\" width=\"100%%\">");
+	                 "<table cellpadding=\"2\" width=\"100%%\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -2209,7 +2209,8 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    extern const char *Txt_MSG_Message;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\"><table cellspacing=\"0\" cellpadding=\"0\">");
+   fprintf (Gbl.F.Out,"<div align=\"center\">"
+                      "<table cellpadding=\"0\">");
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2224,14 +2225,17 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td align=\"right\" class=\"%s\">%s:&nbsp;</td>"
-                      "<td align=\"left\"><input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" /></td>"
+                      "<td align=\"left\">"
+                      "<input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message,
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** Table end *****/
-   fprintf (Gbl.F.Out,"</table></div>");
+   fprintf (Gbl.F.Out,"</table>"
+                      "</div>");
   }
 
 /*****************************************************************************/
@@ -2485,7 +2489,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    /***** Put an icon with message status *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\" valign=\"top\" width=\"16\" class=\"%s\">"
-                      "<table cellspacing=\"0\" cellpadding=\"0\" width=\"16\">"
+                      "<table cellpadding=\"0\" width=\"16\">"
                       "<tr>"
                       "<td align=\"center\" valign=\"top\" width=\"16\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
@@ -2535,7 +2539,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"left\" valign=\"top\" rowspan=\"3\" colspan=\"3\">"
-                         "<table cellspacing=\"0\" cellpadding=\"2\">");
+                         "<table cellpadding=\"2\">");
 
       /***** Write course origin of message *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2854,7 +2858,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    char PhotoURL[PATH_MAX+1];
 
    /***** Put an icon to show if user has read the message *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
 	              "<tr>"
                       "<td align=\"left\" valign=\"middle\" width=\"16\">"
                       "<img src=\"%s/%s16x16.gif\""
@@ -2959,7 +2963,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
    if (NumRecipientsTotal)
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
 
       /***** How many recipients will be shown? *****/
       if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)

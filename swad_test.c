@@ -1102,7 +1102,7 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_ShowFormAnswerTypes ();
 
       /***** Starting and ending dates in the search *****/
-      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"2\">");
+      fprintf (Gbl.F.Out,"<table cellpadding=\"2\">");
       Dat_WriteFormIniEndDates ();
       fprintf (Gbl.F.Out,"</table>");
 
@@ -1593,7 +1593,7 @@ static void Tst_ShowFormConfigTst (void)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"right\" class=\"%s\">%s:</td>"
                       "<td align=\"left\">"
-                      "<table cellspacing=\"2\" cellpadding=\"0\">",
+                      "<table cellpadding=\"0\" style=\"border-spacing:2px;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_No_of_questions);
 
@@ -2663,7 +2663,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"2\">");
+         fprintf (Gbl.F.Out,"<table cellpadding=\"2\">");
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -2886,7 +2886,7 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\"><tr>");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\"><tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -2943,7 +2943,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    char ParamName[3+6+1];
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
@@ -3103,7 +3103,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
         }
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"<td align=\"left\"></td>"
@@ -3293,7 +3293,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3340,7 +3340,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\">"
-                         "<table cellspacing=\"0\" cellpadding=\"0\">");
+                         "<table cellpadding=\"0\">");
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
@@ -3436,7 +3436,7 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3551,7 +3551,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3711,7 +3711,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
@@ -4104,7 +4104,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Write the tags *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\"><table cellspacing=\"0\" cellpadding=\"0\">",
+                      "<td align=\"left\" valign=\"top\">"
+                      "<table cellpadding=\"0\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Tags);
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
@@ -4246,7 +4247,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table cellspacing=\"0\" cellpadding=\"0\">"
+                      "<table cellpadding=\"0\">"
                       "<tr>"
 	              "<td align=\"left\" valign=\"top\" class=\"%s\">"
                       "<input type=\"radio\" name=\"AnsTF\" value=\"T\"",
@@ -4287,7 +4288,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
 	              "<td align=\"left\" valign=\"top\">"
-	              "<table cellspacing=\"0\" cellpadding=\"0\">"
+	              "<table cellpadding=\"0\">"
                       "<tr>"
 	              "<td></td>"
 	              "<td align=\"left\" class=\"%s\">%s</td>"
@@ -5737,7 +5738,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
          fprintf (Gbl.F.Out,"<div align=\"center\">"
-                            "<table cellspacing=\"4\" cellpadding=\"0\">"
+                            "<table cellpadding=\"0\" style=\"border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" align=\"left\">");
 
@@ -5786,7 +5787,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
 
    /***** Starting and ending dates in the search *****/
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table cellspacing=\"0\" cellpadding=\"2\">");
+	              "<table cellpadding=\"2\">");
    Dat_WriteFormIniEndDates ();
    fprintf (Gbl.F.Out,"</table>"
 	              "</div>");

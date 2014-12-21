@@ -252,7 +252,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   fprintf (Gbl.F.Out,"<body bgcolor=\"white\"");
+   fprintf (Gbl.F.Out,"<body");
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow != Act_MAIN_WINDOW)
      {
       fprintf (Gbl.F.Out,">\n");
@@ -266,12 +266,12 @@ void Lay_WriteStartOfPage (void)
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/_.gif\" alt=\"\" class=\"IMG_USR\" />"
-                         "<div id=\"zoomTxt\" align=\"center\"></div>"
+                         "<div id=\"zoomTxt\" style=\"text-align:center;\"></div>"
                          "</div>",
 	       Gbl.Prefs.IconsURL);
 
    /***** Header of layout *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\" width=\"100%%\">");
 
    Lay_WritePageTopHeading ();
 
@@ -284,7 +284,7 @@ void Lay_WriteStartOfPage (void)
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" align=\"center\" valign=\"top\">"
 		      "<div id=\"CENTRAL_ZONE\" style=\"background-color:%s;vertical-align:top;\">"
-		      "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\" style=\"vertical-align:top;\">"
+		      "<table cellpadding=\"0\" width=\"100%%\" style=\"vertical-align:top;\">"
 		      "<tr>",
 	    ColspanCentralPart,
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
@@ -604,7 +604,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_FULL_NAME);
    fprintf (Gbl.F.Out,"</td>");
    fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
-                      "<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\">"
+                      "<table width=\"100%%\" cellpadding=\"0\">"
                       "<tr>");
    /***** 1st. row, 2nd. column: search, and logged user / language selection *****/
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
@@ -955,7 +955,7 @@ static void Lay_DrawTabsMobile (void)
    bool ICanViewTab;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\" width=\"100%%\">");
 
    /***** Loop to write all tabs. Each row holds a tab *****/
    for (NumTabVisible = 0, NumTab = (Act_Tab_t) 1;
@@ -971,7 +971,7 @@ static void Lay_DrawTabsMobile (void)
 
 	 /* Icon at top and text at bottom */
 	 fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" width=\"25%%\">"
-			    "<table cellspacing=\"0\" cellpadding=\"0\">"
+			    "<table cellpadding=\"0\">"
 			    "<tr>"
 			    "<td align=\"center\" valign=\"top\">");
 	 if (ICanViewTab)
@@ -1201,7 +1201,7 @@ static void Lay_WriteMenuThisTabMobile (void)
    const char *Title;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\" width=\"100%%\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = NumOptVisible = 0;
@@ -1345,10 +1345,10 @@ static void Lay_ShowLeftColumn (void)
   {
    struct Act_ListMFUActions ListMFUActions;
 
-   fprintf (Gbl.F.Out,"<table width=\"128\" cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table width=\"128\" cellpadding=\"0\">"
                       "<tr>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table width=\"128\" cellspacing=\"4\" cellpadding=\"0\">");
+                      "<table width=\"128\" cellpadding=\"0\" style=\"border-spacing:4px;\">");
 
    /***** Most frequently used actions *****/
    if (Gbl.Usrs.Me.Logged)
@@ -1400,11 +1400,11 @@ static void Lay_ShowRightColumn (void)
    Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_RIGHT_COLUMN;
 
    /***** Connected users *****/
-   fprintf (Gbl.F.Out,"<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table width=\"100%%\" cellpadding=\"0\">"
                       "<tr>"
                       "<td align=\"right\" valign=\"top\""
                       " style=\"background-image: url('%s/head_base_background_1x56.gif'); background-repeat: repeat-x;\">"
-                      "<table width=\"100%%\" cellspacing=\"4\" cellpadding=\"0\" style=\"padding-top:56px;\">",
+                      "<table width=\"100%%\" cellpadding=\"0\" style=\"padding-top:56px; border-spacing:4px;\">",
             Gbl.Prefs.PathTheme);
 
    /***** Banners *****/
@@ -1524,7 +1524,7 @@ void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const ch
    if (Title)
       fprintf (Gbl.F.Out,"<div align=\"center\" class=\"TIT_TBL_10\">%s</div>",
 	       Title);
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"%u\" class=\"TABLE10\">",
+   fprintf (Gbl.F.Out,"<table cellpadding=\"%u\" class=\"TABLE10\">",
 	    CellPadding);
   }
 
@@ -1536,7 +1536,7 @@ void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
       fprintf (Gbl.F.Out," style=\"width:%s\"",
                Width);
    fprintf (Gbl.F.Out,">"
-                      "<table cellspacing=\"0\" cellpadding=\"%u\" class=\"TABLE10\">",
+                      "<table cellpadding=\"%u\" class=\"TABLE10\">",
 	    CellPadding);
   }
 
@@ -1810,7 +1810,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    /***** Table start *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td align=\"center\" colspan=\"%u\">"
-                      "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\""
+                      "<table cellpadding=\"0\" width=\"100%%\""
                       " style=\"padding:10px;\">"
                       "<tr>",
             NumColumns);
@@ -1890,7 +1890,7 @@ void Lay_PutIconsToSelectLayout (void)
    extern const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS];
    Lay_Layout_t Layout;
 
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"1\"><tr>");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"1\"><tr>");
    for (Layout = (Lay_Layout_t) 0;
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)

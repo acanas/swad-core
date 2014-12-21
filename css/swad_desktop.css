@@ -34,7 +34,12 @@ body
 input			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:10pt;}
 select			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:10pt;}
 textarea		{font-size:8pt;}
-table			{border-width:0px; border-style:none;}
+table
+	{
+	border-width:0px;
+	border-style:none;
+	border-spacing:0px;
+	}
 img			{border-width:0px; border-style:none;}
 form			{margin:0px; display:inline;}
 p			{margin:0px;}

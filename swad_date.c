@@ -266,7 +266,7 @@ void Dat_DrawCalendar (void)
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\">"
-	              "<table cellspacing=\"5\" cellpadding=\"0\">");
+	              "<table cellpadding=\"0\" style=\"border-spacing:5px;\">");
    for (Row = 0;
 	Row < 4;
 	Row++)
@@ -354,7 +354,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
    /***** Start of month *****/
    fprintf (Gbl.F.Out,"<div class=\"MONTH_CONTAINER\">"
 		      "<div class=\"MONTH\">%s %u</div>"
-		      "<table cellspacing=\"0\" cellpadding=\"0\" class=\"MONTH_TABLE_DAYS\">",
+		      "<table cellpadding=\"0\" class=\"MONTH_TABLE_DAYS\">",
 	    Txt_MONTHS_CAPS[RealMonth-1],RealYear);
 
    /***** Month head: first letter for each day of week *****/
@@ -465,7 +465,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
 	 if (PutLinkToEvents && ThisDayHasEvent)
            {
             Act_FormStart (ActSeeExaAnn);
-            fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%%\">"
+            fprintf (Gbl.F.Out,"<table cellpadding=\"0\" width=\"100%%\">"
                                "<tr>"
                                "<td align=\"center\" class=\"%s\">",
                      ClassForDay);
@@ -632,9 +632,10 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    extern const char *Txt_MONTHS_SMALL[12];
 
    /***** Day *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
                       "<tr>"
-                      "<td align=\"left\"><select id=\"%s\" name=\"%s\"",
+                      "<td align=\"left\">"
+                      "<select id=\"%s\" name=\"%s\"",
             NameSelectDay,NameSelectDay);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
@@ -656,7 +657,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
      }
 
    /***** Month *****/
-   fprintf (Gbl.F.Out,"</select></td><td align=\"left\">"
+   fprintf (Gbl.F.Out,"</select>"
+                      "</td>"
+                      "<td align=\"left\">"
                       "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
@@ -677,7 +680,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
      }
 
    /***** Year *****/
-   fprintf (Gbl.F.Out,"</select></td><td align=\"left\">"
+   fprintf (Gbl.F.Out,"</select>"
+                      "</td>"
+                      "<td align=\"left\">"
                       "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
@@ -714,7 +719,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
    unsigned Hour,Minute;
 
    /***** Hour *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
                       "<tr>"
                       "<td align=\"left\">"
                       "<select name=\"%s\"",

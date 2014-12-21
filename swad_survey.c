@@ -702,7 +702,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"4\"><tr>");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"4\"><tr>");
 
    /***** Put form to remove survey *****/
    fprintf (Gbl.F.Out,"<td align=\"left\">");
@@ -1610,7 +1610,7 @@ void Svy_RequestCreatOrEditSvy (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                          "<td align=\"left\" valign=\"top\">"
-                         "<table cellspacing=\"0\" cellpadding=\"2\">"
+                         "<table cellpadding=\"2\">"
                          "<tr>"
                          "<td align=\"left\" valign=\"top\">",
                Dates[StartOrEndTime]);
@@ -2459,7 +2459,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table cellspacing=\"0\" cellpadding=\"2\">");
+                      "<table cellpadding=\"2\">");
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -2922,7 +2922,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\" class=\"DAT\">");
    Lay_WriteTitle (Txt_Survey_questions);
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"4\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"4\">");
 
    if (NumQsts)
      {
@@ -3107,7 +3107,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"4\"  width=\"100%%\">");
+   fprintf (Gbl.F.Out,"<table cellpadding=\"4\"  width=\"100%%\">");
    for (NumAns = 0;
 	NumAns < NumAnswers;
 	NumAns++)

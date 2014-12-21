@@ -266,7 +266,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Send work? */
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" align=\"center\" valign=\"top\""
 	              " bgcolor=\"%s\">"
-	              "<table cellspacing=\"2\" cellpadding=\"0\">"
+	              "<table cellpadding=\"0\" style=\"border-spacing:2px;\">"
 	              "<tr>"
 	              "<td align=\"center\" valign=\"top\" class=\"%s\">"
                       "<img src=\"%s/%s16x16.gif\""
@@ -395,7 +395,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
    if (Asg->SendWork == Asg_SEND_WORK)
      {
       /***** Folder icon *****/
-      fprintf (Gbl.F.Out,"<table cellspacing=\"2\" cellpadding=\"0\">"
+      fprintf (Gbl.F.Out,"<table cellpadding=\"0\" style=\"border-spacing:2px;\">"
 	                 "<tr>"
                          "<td class=\"BT\">");
       if (Asg->Open &&
@@ -484,7 +484,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"4\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"4\">"
 	              "<tr>");
 
    /***** Put form to remove assignment *****/
@@ -1152,7 +1152,7 @@ void Asg_RequestCreatOrEditAsg (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                          "<td align=\"left\" valign=\"top\">"
-                         "<table cellspacing=\"0\" cellpadding=\"2\">"
+                         "<table cellpadding=\"2\">"
                          "<tr>"
                          "<td align=\"left\" valign=\"top\">",
                Dates[StartOrEndTime]);

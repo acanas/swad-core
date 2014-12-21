@@ -740,7 +740,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
       fprintf (Gbl.F.Out,"<tr>" \
 			 "<td align=\"center\" width=\"120\" class=\"INS_LNK\">" \
 			 "<div id=\"institutional_links\">" \
-			 "<table cellspacing=\"0\" cellpadding=\"0\" width=\"110\">");
+			 "<table cellpadding=\"0\" width=\"110\">");
 
       /***** Write all the links *****/
       for (NumLnk = 0;

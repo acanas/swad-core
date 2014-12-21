@@ -92,7 +92,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Start form */
    Act_FormStart (ActReqStaCrs);
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table cellspacing=\"0\" cellpadding=\"2\">");
+	              "<table cellpadding=\"2\">");
 
    /* Compute stats for anywhere, centre, degree or course? */
    fprintf (Gbl.F.Out,"<tr>"
@@ -495,7 +495,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    struct Ind_IndicatorsCrs Indicators;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table bgcolor=\"#4D88A1\" cellspacing=\"1\" cellpadding=\"1\">");
+   fprintf (Gbl.F.Out,"<table bgcolor=\"#4D88A1\" cellpadding=\"1\" style=\"border-spacing:1px;\">");
 
    /***** Write table heading *****/
    switch (IndicatorsLayout)

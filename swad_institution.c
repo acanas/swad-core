@@ -1172,7 +1172,7 @@ static void Ins_ListInstitutionsForEdition (void)
       UsrDat.UsrCod = Ins->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-			 "<table width=\"100\" cellspacing=\"0\" cellpadding=\"2\">"
+			 "<table width=\"100\" cellpadding=\"2\">"
 			 "<tr>");
       Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
@@ -1705,7 +1705,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Centre requester *****/
    fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-		      "<table width=\"100\" cellspacing=\"0\" cellpadding=\"2\">"
+		      "<table width=\"100\" cellpadding=\"2\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"

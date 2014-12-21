@@ -858,7 +858,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    /* Write thread title */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" valign=\"top\">"
-	              "<table cellspacing=\"0\" cellpadding=\"0\">"
+	              "<table cellpadding=\"0\">"
 	              "<tr>");
    IsLastItemInLevel[2] = true;
    Msg_IndentDependingOnLevel (2,IsLastItemInLevel);
@@ -929,7 +929,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"center\" width=\"100%%\">"
-	                 "<table cellspacing=\"0\" cellpadding=\"2\" width=\"100%%\">");
+	                 "<table cellpadding=\"2\" width=\"100%%\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1119,7 +1119,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Write author or destinatary, and form to reply (in case of received post) *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "<td align=\"left\" width=\"120\" colspan=\"2\" valign=\"top\">"
-                      "<table width=\"120\" cellspacing=\"0\" cellpadding=\"2\">");
+                      "<table width=\"120\" cellpadding=\"2\">");
 
    /* Write author */
    fprintf (Gbl.F.Out,"<tr>");
@@ -2045,7 +2045,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" valign=\"top\">"
-	              "<table cellspacing=\"0\" cellpadding=\"0\">"
+	              "<table cellpadding=\"0\">"
 	              "<tr>");
 
    /***** Indent forum title *****/

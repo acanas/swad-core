@@ -468,7 +468,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    extern const char *Txt_Edit;
 
    /***** Put form to remove attendance event *****/
-   fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"4\">"
+   fprintf (Gbl.F.Out,"<table cellpadding=\"4\">"
 	              "<tr>"
                       "<td align=\"left\">");
    Act_FormStart (ActReqRemAtt);
@@ -1104,7 +1104,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                          "<td align=\"left\" valign=\"top\">"
-                         "<table cellspacing=\"0\" cellpadding=\"2\">"
+                         "<table cellpadding=\"2\">"
                          "<tr>"
                          "<td align=\"left\" valign=\"top\">",
                Dates[StartOrEndTime]);

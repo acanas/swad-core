@@ -1398,7 +1398,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">"
-	                 "<table cellspacing=\"0\" cellpadding=\"2\">");
+	                 "<table cellpadding=\"2\">");
 
       /***** Put a selector for the type of average *****/
       Pho_PutSelectorForTypeOfAvg ();
@@ -1874,7 +1874,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    if (SeeOrPrint == Pho_DEGREES_SEE)
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
    else
-      fprintf (Gbl.F.Out,"<table cellspacing=\"0\" cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

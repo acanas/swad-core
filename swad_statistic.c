@@ -395,7 +395,7 @@ void Sta_AskSeeCrsAccesses (void)
          /***** Draw two class photographs with the users: one for teachers of the course and another one for students *****/
          /* Start the table */
          fprintf (Gbl.F.Out,"<div align=\"center\">"
-                            "<table cellspacing=\"4\" cellpadding=\"0\">"
+                            "<table cellpadding=\"0\" style=\"border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" align=\"left\">");
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
@@ -510,7 +510,7 @@ void Sta_AskSeeGblAccesses (void)
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table cellspacing=\"0\" cellpadding=\"2\">");
+	              "<table cellpadding=\"2\">");
 
    /***** Start and end dates for the search *****/
    Dat_WriteFormIniEndDates ();
@@ -1442,7 +1442,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" colspan=\"7\">"
-                      "<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"2\">"
+                      "<table width=\"100%%\" cellpadding=\"2\">"
                       "<tr>");
 
    /* Put link to jump to previous page (older clicks) */
@@ -2136,7 +2136,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
    unsigned Interval,NumColor,R,G,B;
 
    /***** Write numbers from 0 to MaxPagesGenerated *****/
-   fprintf (Gbl.F.Out,"<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table width=\"100%%\" cellpadding=\"0\">"
                       "<tr>"
 	              "<td align=\"left\" valign=\"bottom\" width=\"%u\" colspan=\"%u\" class=\"LOG\">0</td>",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,(GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
