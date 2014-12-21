@@ -1456,11 +1456,9 @@ void Usr_WriteLoggedUsrHead (void)
                      ShowPhoto ? PhotoURL :
                 	         NULL,
                      15,20,true);
-   fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;</span>",
-            The_ClassUsr[Gbl.Prefs.Theme]);
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">",
+   fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
             The_ClassUsr[Gbl.Prefs.Theme]);
 
    /* Name */
@@ -1470,8 +1468,6 @@ void Usr_WriteLoggedUsrHead (void)
       Str_LimitLengthHTMLStr (UsrFullName,NumCharsName[Gbl.Prefs.Layout]);
       fprintf (Gbl.F.Out,"%s",UsrFullName);
      }
-   else
-      fprintf (Gbl.F.Out,"&nbsp;");
 
    fprintf (Gbl.F.Out,"</span>");
   }

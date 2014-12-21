@@ -2181,14 +2181,11 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumP
 	Hour++)
      {
       Sta_SetColor (ColorType,NumPagesGenerated[Hour],MaxPagesGenerated,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u\" bgcolor=\"#%02X%02X%02X\">"
-                         "<span class=\"LOG\" title=\"",
+      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u\" bgcolor=\"#%02X%02X%02X\" class=\"LOG\" title=\"",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
       Sta_WriteFloatNum (NumPagesGenerated[Hour]);
-      fprintf (Gbl.F.Out,"\"><img src=\"%s/tr20x14.gif\" width=\"%u\" height=\"14\" alt=\"",
-               Gbl.Prefs.IconsURL,GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
-      Sta_WriteFloatNum (NumPagesGenerated[Hour]);
-      fprintf (Gbl.F.Out,"\" /></span></td>");
+      fprintf (Gbl.F.Out,"\">"
+                         "</td>");
      }
   }
 
@@ -2565,7 +2562,7 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
 
 #define NUM_MINUTES_PER_DAY		(60*24)			// 1440 minutes in a day
 #define WIDTH_SEMIDIVISION_GRAPHIC	24
-#define NUM_DIVISIONS_X		10
+#define NUM_DIVISIONS_X			10
 
 static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
@@ -2628,20 +2625,20 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       else
 	 Format = "%f";
 
-      /***** Rótulos of the X axis *****/
+      /***** X axis tags *****/
       Sta_WriteLabelsXAxisAccMin (IncX,Format);
 
-      /***** Eje Y and graphic *****/
+      /***** Y axis and graphic *****/
       for (i = 0;
 	   i < NUM_MINUTES_PER_DAY;
 	   i++)
 	 Sta_WriteAccessMinute (i,NumClicksPerMin[i],MaxX);
 
-      /***** Eje X *****/
+      /***** X axis *****/
       /* First division (left) */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"left\" width=\"%u\">"
-	                 "<img src=\"%s/ejexizq24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" />"
+	                 "<img src=\"%s/ejexizq24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" style=\"display:block;\" />"
 	                 "</td>",
 	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
       /* All the intermediate divisions */
@@ -2649,12 +2646,12 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	   i < NUM_DIVISIONS_X*2;
 	   i++)
 	 fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u\">"
-	                    "<img src=\"%s/ejex24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" />"
+	                    "<img src=\"%s/ejex24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" style=\"display:block;\" />"
 	                    "</td>",
 		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u\">"
-	                 "<img src=\"%s/tr24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" />"
+	                 "<img src=\"%s/tr24x1.gif\" width=\"%u\" height=\"1\" alt=\"\" style=\"display:block;\" />"
 	                 "</td>"
 	                 "</tr>",
 	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
@@ -2721,7 +2718,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    /***** Draw bar with anchura proporcional al number of clicks *****/
    if (NumPagesGenerated != 0.0)
       if ((BarWidth = (unsigned) (((NumPagesGenerated * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\" width=\"%u\" height=\"1\" alt=\"\" />",
+	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\" width=\"%u\" height=\"1\" alt=\"\" style=\"display:block;\" />",
                   Gbl.Prefs.IconsURL,
                   (Minute % 60) == 0 ? 'g' :
                 	               'b',
@@ -3164,23 +3161,21 @@ static void Sta_WriteDegree (long DegCod)
    extern const char *Txt_Clicks_without_degree_selected;
    struct Degree Deg;
 
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\">");
+   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"LOG\" title=\"");
    if (DegCod >= 0)
      {
       Deg.DegCod = DegCod;
       Deg_GetDataOfDegreeByCod (&Deg);
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"LOG\" target=\"_blank\">",
+      fprintf (Gbl.F.Out,"%s\">"
+                         "<a href=\"%s\" class=\"LOG\" target=\"_blank\">",
                Deg.WWW,Deg.FullName);
       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:top;");
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
                Deg.ShortName);
      }
    else
-      fprintf (Gbl.F.Out,"<span title=\"%s\" class=\"LOG\">"
-                         "<img src=\"%s/tr16x16.gif\" alt=\"%s\""
-                         " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
-                         "&nbsp;-&nbsp;</span>",
-               Txt_Clicks_without_degree_selected,Gbl.Prefs.IconsURL,
+      fprintf (Gbl.F.Out,"%s\">"
+                         "&nbsp;-&nbsp;",
                Txt_Clicks_without_degree_selected);
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -3193,7 +3188,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
   {
    unsigned BarWidth;
 
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\">");
+   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"LOG\">");
    if (NumPagesGenerated != 0.0)
      {
       /* Draw bar with a with proportional to the number of clicks */
@@ -3201,7 +3196,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
       if (BarWidth == 0)
          BarWidth = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" width=\"%u\" height=\"14\" style=\"vertical-align:top;\" alt=\"\" />"
-                         "<span class=\"LOG\">&nbsp;",
+                         "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
       /* Write the number of clicks */
@@ -3211,8 +3206,8 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
      }
    else
       /* Write the number of clicks */
-      fprintf (Gbl.F.Out,"<span class=\"LOG\">0&nbsp;(0");
-   fprintf (Gbl.F.Out,"%%)&nbsp;</span>"
+      fprintf (Gbl.F.Out,"0&nbsp;(0");
+   fprintf (Gbl.F.Out,"%%)&nbsp;"
 	              "</td>"
 	              "</tr>");
   }

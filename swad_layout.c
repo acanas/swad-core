@@ -593,16 +593,16 @@ static void Lay_WritePageTopHeading (void)
         },
      };
 
-   fprintf (Gbl.F.Out,"<tr style=\"background-image: url('%s/head_row1_1x48.gif'); background-repeat: repeat-x;\">",
+   fprintf (Gbl.F.Out,"<tr style=\"background-image:url('%s/head_row1_1x48.gif'); background-repeat:repeat-x;\">",
             Gbl.Prefs.PathTheme);
 
    /***** 1st. row, 1st. column: logo *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" width=\"%u\">",
+   fprintf (Gbl.F.Out,"<td align=\"center\" width=\"%u\">",
             LogoLayout[Gbl.Prefs.Layout].Width + 16);
 
    /* Left logo */
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" />"
+	              "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" style=\"display:block;\" />"
                       "</a>",
             Cfg_HTTP_SwAD_HOME_PAGE,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
@@ -610,11 +610,9 @@ static void Lay_WritePageTopHeading (void)
             LogoLayout[Gbl.Prefs.Layout].Height,
             Cfg_PLATFORM_FULL_NAME);
    fprintf (Gbl.F.Out,"</td>");
-
    fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
                       "<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\">"
                       "<tr>");
-
    /***** 1st. row, 2nd. column: search, and logged user / language selection *****/
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {

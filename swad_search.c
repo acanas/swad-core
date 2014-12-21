@@ -321,7 +321,7 @@ void Sch_PutFormToSearch (const char *IconURL)
    if (!Gbl.Search.Str[0])
       fprintf (Gbl.F.Out," placeholder=\"%s...\"",
 	       Txt_Search);
-   fprintf (Gbl.F.Out," />");
+   fprintf (Gbl.F.Out," style=\"margin:0;\" />");
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/search16x16.gif\""

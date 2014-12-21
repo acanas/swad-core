@@ -353,7 +353,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
    /***** Start of month *****/
    fprintf (Gbl.F.Out,"<div class=\"MONTH_CONTAINER\">"
-		      "<span class=\"MONTH\">%s %u<br /></span>"
+		      "<div class=\"MONTH\">%s %u</div>"
 		      "<table cellspacing=\"0\" cellpadding=\"0\" class=\"MONTH_TABLE_DAYS\">",
 	    Txt_MONTHS_CAPS[RealMonth-1],RealYear);
 

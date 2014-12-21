@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.39.1 (2014/12/20)"
+#define Log_PLATFORM_VERSION	"SWAD 14.39.2 (2014/12/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-	Version 14.39.1  :Dic 20, 2014	Change from XHTML 1.0 Transitional to HTML5. (? lines)
+	Version 14.39.2  :Dic 21, 2014	Changes in layout and graphics. (170739 lines)
+	Version 14.39.1  :Dic 20, 2014	Change from XHTML 1.0 Transitional to HTML5. (170747 lines)
 	Version 14.39    :Dic 20, 2014	iframes removed from course info. (170746 lines)
 	Version 14.38.9  :Dic 20, 2014	The words "Course" and "Group" are removed from selection of course and groups in Documents and Shared files. (? lines)
 	Version 14.38.8  :Dic 18, 2014	Fixed bug in banned users. (170793 lines)

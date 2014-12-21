@@ -270,7 +270,7 @@ void Prf_PutSelectorToSelectLanguage (void)
      };
 
    Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx;\""
+   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx;margin:0;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
