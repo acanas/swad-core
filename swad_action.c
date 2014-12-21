@@ -4138,7 +4138,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    fprintf (Gbl.F.Out," %s</a></form>",Txt_Frequent_actions);
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
-	              "<table cellpadding=\"0\" width=\"120\">");
+	              "<table width=\"120\">");
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;
@@ -4203,7 +4203,7 @@ void Act_UpdateMFUActions (void)
    if (Act_Actions[Gbl.CurrentAct].SuperAction == ActMFUAct)
       return;
 
-   setlocale (LC_NUMERIC,"en_US.iso88591");	// To get the decimal point
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To get the decimal point
 
    /***** Get current score *****/
    sprintf (Query,"SELECT Score FROM actions_MFU"
@@ -4242,5 +4242,5 @@ void Act_UpdateMFUActions (void)
             Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].ActCod);
    DB_QueryUPDATE (Query,"can not update most frequently used actions");
 
-   setlocale (LC_NUMERIC,"es_ES.iso88591");
+   setlocale (LC_NUMERIC,"es_ES.utf8");
   }

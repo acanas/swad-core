@@ -1641,7 +1641,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
    fprintf (Gbl.F.Out,"<p class=\"TIT_TBL\">%s</p>"
-                      "<table cellpadding=\"2\">"
+                      "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 		      "<th></th>"
 		      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"

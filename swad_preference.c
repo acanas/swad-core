@@ -377,7 +377,8 @@ void Prf_PutIconsToSelectSideCols (void)
    unsigned SideCols;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
-   fprintf (Gbl.F.Out,"<table cellpadding=\"1\"><tr>");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
+                      "<tr>");
    for (SideCols = 0;
 	SideCols <= 3;
 	SideCols++)
@@ -396,7 +397,8 @@ void Prf_PutIconsToSelectSideCols (void)
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
      }
-   fprintf (Gbl.F.Out,"</tr></table>");
+   fprintf (Gbl.F.Out,"</tr>"
+                      "</table>");
   }
 
 /*****************************************************************************/
@@ -579,7 +581,7 @@ static void Prf_PutFormPublicPhoto (void)
 
    /***** Start form *****/
    Act_FormStart (ActChgPubPho);
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\" style=\"border-spacing:2px;\">"
+   fprintf (Gbl.F.Out,"<table style=\"border-spacing:2px;\">"
                       "<tr>");
 
    /***** Checkbox to select between public or private photo *****/

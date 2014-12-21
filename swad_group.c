@@ -1205,7 +1205,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">");
       Act_FormStart (ActChgTimGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<table cellpadding=\"2\">"
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td width=\"16\" align=\"left\" valign=\"middle\">"
                          "<img src=\"%s/%s16x16.gif\" title=\"%s\""
@@ -2044,7 +2044,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Open time *****/
    fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
-	              "<table cellpadding=\"2\">"
+	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
                       "<td align=\"left\" valign=\"middle\">"
                       "<img src=\"%s/%s16x16.gif\" alt=\"\" title=\"%s\""
@@ -4116,7 +4116,7 @@ void Grp_ShowSelectorWhichGrps (void)
    extern const char *Txt_Show_WHICH_groups[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<table cellpadding=\"2\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
 	              "<tr>");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;

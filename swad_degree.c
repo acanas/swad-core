@@ -434,7 +434,7 @@ void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
 
    /***** Start of table *****/
    fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">"
-                      "<table cellpadding=\"2\">");
+                      "<table class=\"CELLS_PAD_2\">");
 
    /***** Write a 1st selector
           with all the countries *****/
@@ -1542,7 +1542,7 @@ static void Deg_ListDegreesForEdition (void)
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-			 "<table width=\"100\" cellpadding=\"2\">"
+			 "<table width=\"100\" class=\"CELLS_PAD_2\">"
 			 "<tr>");
       Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
@@ -1806,7 +1806,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree requester *****/
    fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-		      "<table width=\"100\" cellpadding=\"2\">"
+		      "<table width=\"100\" class=\"CELLS_PAD_2\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"

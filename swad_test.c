@@ -1015,7 +1015,7 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
    char Query[512];
 
    /***** Update number of clicks and score of the question *****/
-   setlocale (LC_NUMERIC,"en_US.iso88591");	// To print the floating point as a dot
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
    if (AnswerIsNotBlank)
       sprintf (Query,"UPDATE tst_questions"
 	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,Score=Score+(%lf)"
@@ -1026,7 +1026,7 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 	             " SET NumHits=NumHits+1"
                      " WHERE QstCod='%ld'",
                QstCod);
-   setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
    DB_QueryUPDATE (Query,"can not update the score of a question");
   }
 
@@ -1102,7 +1102,7 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_ShowFormAnswerTypes ();
 
       /***** Starting and ending dates in the search *****/
-      fprintf (Gbl.F.Out,"<table cellpadding=\"2\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
       Dat_WriteFormIniEndDates ();
       fprintf (Gbl.F.Out,"</table>");
 
@@ -1593,7 +1593,7 @@ static void Tst_ShowFormConfigTst (void)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"right\" class=\"%s\">%s:</td>"
                       "<td align=\"left\">"
-                      "<table cellpadding=\"0\" style=\"border-spacing:2px;\">",
+                      "<table style=\"border-spacing:2px;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_No_of_questions);
 
@@ -2529,10 +2529,10 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
       /* Get the acumulated score of the question (row[8]) */
-      setlocale (LC_NUMERIC,"en_US.iso88591");	// To get decimal point
+      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
       if (sscanf (row[8],"%lf",&TotalScoreThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong score of a question.");
-      setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
       /* Write number of times this question has been answered */
       fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%lu</td>",
@@ -2663,7 +2663,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         fprintf (Gbl.F.Out,"<table cellpadding=\"2\">");
+         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -2886,7 +2886,8 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\"><tr>");
+   fprintf (Gbl.F.Out,"<table>"
+                      "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -2943,7 +2944,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    char ParamName[3+6+1];
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
+   fprintf (Gbl.F.Out,"<table>");
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
@@ -3103,7 +3104,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
         }
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table>"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"<td align=\"left\"></td>"
@@ -3293,7 +3294,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table>"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3340,7 +3341,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\">"
-                         "<table cellpadding=\"0\">");
+                         "<table>");
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
@@ -3436,7 +3437,7 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table>"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3551,7 +3552,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table>"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3711,7 +3712,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table>");
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
@@ -4105,7 +4106,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table cellpadding=\"0\">",
+                      "<table>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Tags);
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
@@ -4247,7 +4248,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table cellpadding=\"0\">"
+                      "<table>"
                       "<tr>"
 	              "<td align=\"left\" valign=\"top\" class=\"%s\">"
                       "<input type=\"radio\" name=\"AnsTF\" value=\"T\"",
@@ -4288,7 +4289,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
 	              "<td align=\"left\" valign=\"top\">"
-	              "<table cellpadding=\"0\">"
+	              "<table>"
                       "<tr>"
 	              "<td></td>"
 	              "<td align=\"left\" class=\"%s\">%s</td>"
@@ -4833,13 +4834,13 @@ double Tst_GetFloatAnsFromStr (char *Str)
    Str_ConvertStrFloatCommaToStrFloatPoint (Str);
 
    /***** The string is "scanned" in floating point (it must have a point, not a colon as decimal separator) *****/
-   setlocale (LC_NUMERIC,"en_US.iso88591");	// To get decimal point
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
    if (sscanf (Str,"%lg",&DoubleNum) != 1)	// If the string does not hold a valid floating point number...
      {
       DoubleNum = 0.0;	// ...the number is reset to 0
       Str[0] = '\0';	// ...and the string is reset to ""
      }
-   setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
    return DoubleNum;
   }
@@ -5152,7 +5153,7 @@ static void Tst_InsertAnswersIntoDB (void)
          DB_QueryINSERT (Query,"can not create answer");
          break;
       case Tst_ANS_FLOAT:
-         setlocale (LC_NUMERIC,"en_US.iso88591");	// To print the floating point as a dot
+         setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
    	 for (i = 0;
    	      i < 2;
    	      i++)
@@ -5163,7 +5164,7 @@ static void Tst_InsertAnswersIntoDB (void)
                      Gbl.Test.Answer.FloatingPoint[i]);
             DB_QueryINSERT (Query,"can not create answer");
            }
-         setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+         setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
          break;
       case Tst_ANS_TRUE_FALSE:
          sprintf (Query,"INSERT INTO tst_answers (QstCod,AnsInd,Answer,Feedback,Correct)"
@@ -5437,10 +5438,10 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
       if (sscanf (row[1],"%lu",&(Stats->NumHits)) != 1)
          Lay_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
 
-      setlocale (LC_NUMERIC,"en_US.iso88591");	// To get decimal point
+      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
       if (sscanf (row[2],"%lf",&(Stats->TotalScore)) != 1)
          Lay_ShowErrorAndExit ("Error when getting total score in test questions.");
-      setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
      }
    else
      {
@@ -5738,7 +5739,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
          fprintf (Gbl.F.Out,"<div align=\"center\">"
-                            "<table cellpadding=\"0\" style=\"border-spacing:4px;\">"
+                            "<table style=\"border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" align=\"left\">");
 
@@ -5787,7 +5788,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
 
    /***** Starting and ending dates in the search *****/
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table cellpadding=\"2\">");
+	              "<table class=\"CELLS_PAD_2\">");
    Dat_WriteFormIniEndDates ();
    fprintf (Gbl.F.Out,"</table>"
 	              "</div>");
@@ -5826,13 +5827,13 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
    char Query[256];
 
    /***** Update score in test exam *****/
-   setlocale (LC_NUMERIC,"en_US.iso88591");	// To print the floating point as a dot
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
    sprintf (Query,"UPDATE tst_exams"
 	          " SET NumQstsNotBlank='%u',Score='%lf'"
 	          " WHERE TstCod='%ld'",
             NumQstsNotBlank,Score,
             TstCod);
-   setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
    DB_QueryUPDATE (Query,"can not update result of test exam");
   }
 
@@ -6040,7 +6041,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
             NumQstsNotBlankInThisExam = 0;
 
          /* Get score (row[5]) */
-         setlocale (LC_NUMERIC,"en_US.iso88591");	// To get decimal point
+         setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
          if (sscanf (row[5],"%lf",&ScoreInThisExam) == 1)
            {
             if (Gbl.Test.AllowTeachers)
@@ -6048,7 +6049,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
            }
          else
             ScoreInThisExam = 0.0;
-         setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+         setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
          /* Write number of questions */
 	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
@@ -6544,10 +6545,10 @@ static void Tst_GetExamDataByTstCod (long TstCod,char *TstTime,unsigned *NumQsts
 	 *NumQstsNotBlank = 0;
 
       /* Get score (row[5]) */
-      setlocale (LC_NUMERIC,"en_US.iso88591");	// To get decimal point
+      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
       if (sscanf (row[5],"%lf",Score) != 1)
 	 *Score = 0.0;
-      setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
      }
 
    /***** Free structure that stores the query result *****/
@@ -6570,7 +6571,7 @@ static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,dou
    Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrAnswersOneQst[NumQst],Answers);
 
    /***** Insert question and user's answers into database *****/
-   setlocale (LC_NUMERIC,"en_US.iso88591");	// To print the floating point as a dot
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
    sprintf (Query,"INSERT INTO tst_exam_questions"
 		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		  " VALUES ('%ld','%ld','%u','%lf','%s','%s')",
@@ -6579,7 +6580,7 @@ static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,dou
 	    Score,
 	    Indexes,
 	    Answers);
-   setlocale (LC_NUMERIC,"es_ES.iso88591");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
    DB_QueryINSERT (Query,"can not insert a question of an exam");
   }
 

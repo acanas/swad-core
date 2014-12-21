@@ -146,7 +146,7 @@ void Syl_EditSyllabus (void)
       Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"left\">"
-	                 "<table cellpadding=\"1\" width=\"100%%\">");
+	                 "<table width=\"100%%\" class=\"CELLS_PAD_1\">");
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus (InfoType);

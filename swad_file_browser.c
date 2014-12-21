@@ -3542,7 +3542,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start of the column */
    fprintf (Gbl.F.Out,"<td align=\"left\" width=\"99%%\" bgcolor=\"%s\" valign=\"top\" class=\"NO_BR\">"
-                      "<table cellpadding=\"0\"><tr>",
+                      "<table>"
+                      "<tr>",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /* Indent depending on level */
@@ -3909,7 +3910,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
    extern const char *Txt_Contract_FOLDER_X;
 
    fprintf (Gbl.F.Out,"<td align=\"left\">"
-	              "<table cellpadding=\"0\">"
+	              "<table>"
 	              "<tr>");
    Brw_IndentDependingOnLevel (Level);
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
@@ -4548,7 +4549,7 @@ static void Brw_WriteDatesAssignment (void)
 
    if (Gbl.FileBrowser.Asg.AsgCod > 0)
      {
-      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+      fprintf (Gbl.F.Out,"<table>"
 	                 "<tr>");
 
       /***** Write start date *****/
@@ -7509,7 +7510,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Start table *****/
-	 fprintf (Gbl.F.Out,"<table cellpadding=\"2\">");
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"

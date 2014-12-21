@@ -1028,7 +1028,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    if (Gbl.Test.NumTags)
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table>");
       for (NumTag = 0;
 	   NumTag < Gbl.Test.NumTags;
 	   NumTag++)
@@ -1089,7 +1089,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
+         fprintf (Gbl.F.Out,"<table>");
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)

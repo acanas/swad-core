@@ -277,7 +277,7 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" valign=\"top\">"
-                      "<table cellpadding=\"0\">"
+                      "<table>"
                       "<tr>");
    Msg_IndentDependingOnLevel (Level,IsLastItemInLevel);
 

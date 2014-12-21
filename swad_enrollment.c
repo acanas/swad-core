@@ -1917,7 +1917,7 @@ void Enr_ShowEnrollmentRequests (void)
    /* Start form */
    Act_FormStart (ActSeeSignUpReq);
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-                      "<table cellpadding=\"0\" style=\"border-spacing:4px;\">");
+                      "<table style=\"border-spacing:4px;\">");
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"

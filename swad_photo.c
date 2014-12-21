@@ -676,7 +676,7 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
 
    /***** Show the three images resulting of the processing *****/
-   fprintf (Gbl.F.Out,"<table border=\"0\" width=\"100%%\" cellpadding=\"0\"><tr>");
+   fprintf (Gbl.F.Out,"<table width=\"100%%\"><tr>");
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
@@ -1398,7 +1398,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       fprintf (Gbl.F.Out,"<div align=\"center\">"
-	                 "<table cellpadding=\"2\">");
+	                 "<table class=\"CELLS_PAD_2\">");
 
       /***** Put a selector for the type of average *****/
       Pho_PutSelectorForTypeOfAvg ();
@@ -1874,7 +1874,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    if (SeeOrPrint == Pho_DEGREES_SEE)
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
    else
-      fprintf (Gbl.F.Out,"<table cellpadding=\"0\">");
+      fprintf (Gbl.F.Out,"<table>");
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

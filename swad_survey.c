@@ -27,7 +27,6 @@
 
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <locale.h>		// For setlocale, LC_NUMERIC...
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -702,7 +701,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<table cellpadding=\"4\"><tr>");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">"
+                      "<tr>");
 
    /***** Put form to remove survey *****/
    fprintf (Gbl.F.Out,"<td align=\"left\">");
@@ -770,7 +770,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
             Txt_Edit,
             Txt_Edit);
 
-   fprintf (Gbl.F.Out,"</tr></table>");
+   fprintf (Gbl.F.Out,"</tr>"
+                      "</table>");
   }
 
 /*****************************************************************************/
@@ -1610,7 +1611,7 @@ void Svy_RequestCreatOrEditSvy (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
                          "<td align=\"left\" valign=\"top\">"
-                         "<table cellpadding=\"2\">"
+                         "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td align=\"left\" valign=\"top\">",
                Dates[StartOrEndTime]);
@@ -2459,7 +2460,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\"></td>"
                       "<td align=\"left\" valign=\"top\">"
-                      "<table cellpadding=\"2\">");
+                      "<table class=\"CELLS_PAD_2\">");
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -2922,7 +2923,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\" class=\"DAT\">");
    Lay_WriteTitle (Txt_Survey_questions);
-   fprintf (Gbl.F.Out,"<table cellpadding=\"4\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">");
 
    if (NumQsts)
      {
@@ -3107,7 +3108,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"4\"  width=\"100%%\">");
+   fprintf (Gbl.F.Out,"<table width=\"100%%\" class=\"CELLS_PAD_4\">");
    for (NumAns = 0;
 	NumAns < NumAnswers;
 	NumAns++)

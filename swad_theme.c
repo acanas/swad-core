@@ -232,7 +232,7 @@ void The_PutIconsToSelectTheme (void)
   {
    The_Theme_t Theme;
 
-   fprintf (Gbl.F.Out,"<table cellpadding=\"1\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
 	              "<tr>");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;

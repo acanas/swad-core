@@ -532,7 +532,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Lay_StartRoundFrameTable10Shadow (NULL,0);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td align=\"center\">"
-                      "<table cellpadding=\"2\">");
+                      "<table class=\"CELLS_PAD_2\">");
 
    /***** Link to download the file *****/
    fprintf (Gbl.F.Out,"<tr>"

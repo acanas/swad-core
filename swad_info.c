@@ -1041,7 +1041,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** File *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\">"
+   fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
                       "<td align=\"right\" class=\"%s\">%s:</td>"
                       "<td align=\"left\">"
@@ -1074,7 +1074,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Link *****/
-   fprintf (Gbl.F.Out,"<table cellpadding=\"0\"><tr>"
+   fprintf (Gbl.F.Out,"<table>"
+                      "<tr>"
                       "<td align=\"right\" class=\"%s\">%s:</td>"
                       "<td align=\"left\">"
                       "<input type=\"text\" name=\"InfoSrcURL\" size=\"50\" maxlength=\"256\" value=\"",

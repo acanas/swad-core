@@ -780,10 +780,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    Lay_StartRoundFrameTable10 ("500px",0,NULL);
    fprintf (Gbl.F.Out,"<tr>" \
 	              "<td align=\"center\">" \
-                      "<table cellpadding=\"20\" width=\"100%%\">" \
-                      "<tr>" \
-                      "<td align=\"center\">" \
-                      "<table cellpadding=\"0\" width=\"100%%\" style=\"border-spacing:3px;\">");
+                      "<table width=\"100%%\" style=\"padding:20px; border-spacing:3px;\">");
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>" \
@@ -1185,9 +1182,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</table>" \
-	              "</td>" \
-	              "</tr>" \
-	              "</table>" \
 	              "</td>" \
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();

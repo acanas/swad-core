@@ -40,6 +40,14 @@ table
 	border-style:none;
 	border-spacing:0px;
 	}
+table th
+	{
+	padding:0px;
+	}
+table td
+	{
+	padding:0px;
+	}
 img			{border-width:0px; border-style:none;}
 form			{margin:0px; display:inline;}
 p			{margin:0px;}
@@ -291,6 +299,14 @@ p			{margin:0px;}
 	font-size:20pt;
 	font-weight:bold;
 	}
+.CELLS_PAD_1 th {padding:1px;}
+.CELLS_PAD_1 td {padding:1px;}
+.CELLS_PAD_2 th {padding:2px;}
+.CELLS_PAD_2 td {padding:2px;}
+.CELLS_PAD_4 th {padding:4px;}
+.CELLS_PAD_4 td {padding:4px;}
+.CELLS_PAD_8 th {padding:8px;}
+.CELLS_PAD_8 td {padding:8px;}
 
 /*********************************** Title ***********************************/
 .TIT	{

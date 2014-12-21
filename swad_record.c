@@ -1498,7 +1498,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" colspan=\"2\" valign=\"top\">"
-	              "<table cellpadding=\"0\" width=\"100%%\">"
+	              "<table width=\"100%%\">"
                       "<tr>"
                       "<td align=\"left\" width=\"%u\">",
             Rec_DEGREE_LOGO_SIZE);
@@ -2108,7 +2108,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" width=\"%u\" valign=\"middle\" colspan=\"2\">"
-	              "<table cellpadding=\"2\">"
+	              "<table class=\"CELLS_PAD_2\">"
 	              "<tr>"
 	              "<td align=\"center\" width=\"%u\" valign=\"middle\">",
 	    Cols1and2Width,

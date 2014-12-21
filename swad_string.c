@@ -622,10 +622,10 @@ float Str_GetFloatNumFromStr (const char *Str)
 
    if (Str)
      {
-      setlocale (LC_NUMERIC,"en_US.iso88591");	// To get the decimal point
+      setlocale (LC_NUMERIC,"en_US.utf8");	// To get the decimal point
       if (sscanf (Str,"%f",&Num) != 1)
          Lay_ShowErrorAndExit ("Bad floating point format.");
-      setlocale (LC_NUMERIC,"es_ES.iso88591");
+      setlocale (LC_NUMERIC,"es_ES.utf8");
      }
    else // Str == NULL
       Num = 0.0;

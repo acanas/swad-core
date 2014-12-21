@@ -84,7 +84,7 @@ void Gbl_InitializeGlobals (void)
    char UniqueNamePlain[Cns_MAX_LENGTH_IP+1+10+1+10+1];
    Txt_Language_t Lan;
 
-   setlocale (LC_ALL,"es_ES.iso88591");
+   setlocale (LC_ALL,"es_ES.utf8");
 
    gettimeofday (&Gbl.tvStart, &Gbl.tz);
    Dat_GetTimeStartExecution ();
