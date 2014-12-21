@@ -174,7 +174,7 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.CurrentAct == ActRefCon ||
        Gbl.CurrentAct == ActRefLstClk)	// Don't generate a full HTML page, only refresh connected users
      {
-      fprintf (Gbl.F.Out,"Content-Type: text/html; charset=ISO-8859-1\r\n");
+      fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n");
       fprintf (Gbl.F.Out,"Cache-Control: max-age=0, no-cache, must-revalidate\r\n\r\n");
 
       Gbl.Layout.WritingHTMLStart = false;
@@ -194,14 +194,14 @@ void Lay_WriteStartOfPage (void)
 
    /***** Write header to standard output to avoid timeout *****/
    // Two \r\n are necessary
-   fprintf (stdout,"Content-type: text/html; charset=ISO-8859-1\r\n\r\n"
+   fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n\r\n"
                    "<!DOCTYPE html>\n");
 
-   /***** Write start of XHTML code *****/
+   /***** Write start of HTML code *****/
    // WARNING: It is necessary to comment the line AddDefaultCharset UTF8 in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
-                      "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=iso-8859-1\" />\n",
+                      "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n",
             Txt_STR_LANG_ID[Gbl.Prefs.Language]);
 
    /* Title */
@@ -245,10 +245,6 @@ void Lay_WriteStartOfPage (void)
        Gbl.Usrs.Me.Logged &&							// I am just logged
        Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
       Lay_WriteRedirectionToMyLanguage ();
-
-   /* Soft transition between pages (avoid white screen) for Microsoft Internet Explorer */
-   if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
-      fprintf (Gbl.F.Out,"<meta http-equiv=\"Page-Exit\" content=\"blendTrans(Duration=0)\" />\n");
 
    /* Write initial scripts depending on the action */
    Lay_WriteScripts ();
@@ -458,9 +454,9 @@ static void Lay_WriteScripts (void)
        Gbl.CurrentAct == ActFrmCreMrkGrp ||	// Brw_FILE_BRW_ADMIN_MARKS_GRP
        Gbl.CurrentAct == ActFrmCreBrf)		// Brw_FILE_BRW_BRIEFCASE_USR
      {
-      // Use charset="ISO-8859-1" to force error messages in ISO-8859-1 (default is UTF-8)
+      // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/dropzone/dropzone.js\""
-	                 " charset=\"ISO-8859-1\">"
+	                 " charset=\"windows-1252\">"
 			 "</script>\n",
 	       Cfg_HTTPS_URL_SWAD_PUBLIC);
       Lay_WriteScriptCustomDropzone ();
@@ -488,8 +484,7 @@ static void Lay_WriteScriptInit (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " language=\"JavaScript\">\n");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
@@ -530,8 +525,7 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptConnectedUsrs (void)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-                      " language=\"JavaScript\">\n");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"ActCod=%ld\";\n",
             Act_Actions[ActRefCon].ActCod);
@@ -552,8 +546,7 @@ static void Lay_WriteScriptConnectedUsrs (void)
 
 static void Lay_WriteScriptCustomDropzone (void)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-                      " language=\"JavaScript\">\n");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    // "myAwesomeDropzone" is the camelized version of the HTML element's ID
    // Add a line "forceFallback: true,\n" to test classic upload
@@ -1589,7 +1582,7 @@ void Lay_ShowErrorAndExit (const char *Message)
      {
       rewind (Gbl.F.Out);
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
-      Fil_CloseAndRemoveFileForXHTMLOutput ();
+      Fil_CloseAndRemoveFileForHTMLOutput ();
      }
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request

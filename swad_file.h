@@ -44,7 +44,7 @@
 // Global files
 struct Files
   {
-   FILE *Out;		// File with the XHTML output of this CGI
+   FILE *Out;		// File with the HTML output of this CGI
    FILE *Tmp;		// Temporary file to save stdin
    FILE *XML;		// XML file for syllabus, for directory tree
   };
@@ -53,8 +53,8 @@ struct Files
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Fil_CreateFileForXHTMLOutput (void);
-void Fil_CloseAndRemoveFileForXHTMLOutput (void);
+void Fil_CreateFileForHTMLOutput (void);
+void Fil_CloseAndRemoveFileForHTMLOutput (void);
 bool Fil_ReadStdinIntoTmpFile (void);
 void Fil_EndOfReadingStdin (void);
 void Fil_StartReceptionOfFile (char *SrcFileName,char *MIMEType);

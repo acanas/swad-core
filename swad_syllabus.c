@@ -104,7 +104,7 @@ static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void);
 static void Syl_LoadToMemory (Inf_InfoType_t InfoType);
 static void Syl_ShowSyllabus (Inf_InfoType_t InfoType);
 static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem);
-static void Syl_WriteSyllabusIntoXHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileXHTMLTmp);
+static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileHTMLTmp);
 static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text,const char *Color);
 
 /*****************************************************************************/
@@ -624,18 +624,18 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
   }
 
 /*****************************************************************************/
-/************** Write the syllabus into a temporary XHTML file ***************/
+/************** Write the syllabus into a temporary HTML file ****************/
 /*****************************************************************************/
 // This function is called only from web service
 
-int Syl_WriteSyllabusIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer)
+int Syl_WriteSyllabusIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
   {
-   char FileNameXHTMLTmp[PATH_MAX+1];
-   FILE *FileXHTMLTmp;
+   char FileNameHTMLTmp[PATH_MAX+1];
+   FILE *FileHTMLTmp;
    size_t Length;
 
    /***** Initialize buffer *****/
-   *XHTMLBuffer = NULL;
+   *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
    Syl_LoadToMemory (InfoType);
@@ -643,11 +643,11 @@ int Syl_WriteSyllabusIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer
    if (LstItemsSyllabus.NumItems)
      {
       /***** Create a unique name for the file *****/
-      sprintf (FileNameXHTMLTmp,"%s/%s/%s_syllabus.html",
+      sprintf (FileNameHTMLTmp,"%s/%s/%s_syllabus.html",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
-      if ((FileXHTMLTmp = fopen (FileNameXHTMLTmp,"w+b")) == NULL)
+      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
 	{
          Syl_FreeListItemsSyllabus ();
          return soap_receiver_fault (Gbl.soap,
@@ -655,18 +655,18 @@ int Syl_WriteSyllabusIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer
                                      "Can not create temporary file");
 	}
 
-      /***** Write syllabus in XHTML into a temporary file *****/
-      Syl_WriteSyllabusIntoXHTMLTmpFile (InfoType,FileXHTMLTmp);
+      /***** Write syllabus in HTML into a temporary file *****/
+      Syl_WriteSyllabusIntoHTMLTmpFile (InfoType,FileHTMLTmp);
 
       /***** Write syllabus from list of items in memory to text buffer *****/
       /* Compute length of file */
-      Length = (size_t) ftell (FileXHTMLTmp);
+      Length = (size_t) ftell (FileHTMLTmp);
 
       /* Allocate memory for buffer */
-      if ((*XHTMLBuffer = (char *) malloc (Length+1)) == NULL)
+      if ((*HTMLBuffer = (char *) malloc (Length+1)) == NULL)
 	{
-	 fclose (FileXHTMLTmp);
-	 unlink (FileNameXHTMLTmp);
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
          Syl_FreeListItemsSyllabus ();
          return soap_receiver_fault (Gbl.soap,
                                      "Syllabus can not be copied into buffer",
@@ -674,21 +674,21 @@ int Syl_WriteSyllabusIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer
 	}
 
       /* Copy file content into buffer */
-      fseek (FileXHTMLTmp,0L,SEEK_SET);
-      if (fread ((void *) *XHTMLBuffer,sizeof (char),Length,FileXHTMLTmp) != Length)
+      fseek (FileHTMLTmp,0L,SEEK_SET);
+      if (fread ((void *) *HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
-	 fclose (FileXHTMLTmp);
-	 unlink (FileNameXHTMLTmp);
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
          Syl_FreeListItemsSyllabus ();
          return soap_receiver_fault (Gbl.soap,
                                      "Syllabus can not be copied into buffer",
                                      "Error reading file into buffer");
 	}
-      (*XHTMLBuffer)[Length] = '\0';
+      (*HTMLBuffer)[Length] = '\0';
 
       /***** Close and remove temporary file *****/
-      fclose (FileXHTMLTmp);
-      unlink (FileNameXHTMLTmp);
+      fclose (FileHTMLTmp);
+      unlink (FileNameHTMLTmp);
      }
 
    /***** Free list of items *****/
@@ -698,23 +698,21 @@ int Syl_WriteSyllabusIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer
   }
 
 /*****************************************************************************/
-/************** Write the syllabus into a temporary XHTML file ***************/
+/************** Write the syllabus into a temporary HTML file ****************/
 /*****************************************************************************/
 
-static void Syl_WriteSyllabusIntoXHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileXHTMLTmp)
+static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileHTMLTmp)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    unsigned NumItem;
    int i;
 
-   /***** Write start of XHTML code *****/
-   fprintf (FileXHTMLTmp,"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n"
-                         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
-                         " \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
-                         "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"%s\">\n"
+   /***** Write start of HTML code *****/
+   fprintf (FileHTMLTmp,"<!DOCTYPE html>\n"
+                         "<html lang=\"%s\">\n"
                          "<head>\n"
-                         "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=iso-8859-1\" />\n"
+                         "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
                          "<title>%s</title>\n"
                          "</head>\n"
                          "<body>\n"
@@ -723,13 +721,13 @@ static void Syl_WriteSyllabusIntoXHTMLTmpFile (Inf_InfoType_t InfoType,FILE *Fil
             Txt_INFO_TITLE[InfoType]);			// Page title
 
    /***** Set width of columns of the table *****/
-   fprintf (FileXHTMLTmp,"<colgroup>\n");
+   fprintf (FileHTMLTmp,"<colgroup>\n");
    for (i = 1;
 	i <= LstItemsSyllabus.NumLevels;
 	i++)
-      fprintf (FileXHTMLTmp,"<col width=\"%d\" />\n",
+      fprintf (FileHTMLTmp,"<col width=\"%d\" />\n",
 	       i * Syl_WIDTH_NUM_SYLLABUS);
-   fprintf (FileXHTMLTmp,"<col width=\"*\" />\n"
+   fprintf (FileHTMLTmp,"<col width=\"*\" />\n"
 			 "</colgroup>\n");
 
    /***** Write all items of the current syllabus into text buffer *****/
@@ -738,26 +736,26 @@ static void Syl_WriteSyllabusIntoXHTMLTmpFile (Inf_InfoType_t InfoType,FILE *Fil
 	NumItem++)
      {
       /***** Start the row *****/
-      fprintf (FileXHTMLTmp,"<tr>");
+      fprintf (FileHTMLTmp,"<tr>");
 
       /***** Indent depending on the level *****/
       if (LstItemsSyllabus.Lst[NumItem].Level > 1)
-	 fprintf (FileXHTMLTmp,"<td align=\"left\" colspan=\"%d\"></td>",
+	 fprintf (FileHTMLTmp,"<td align=\"left\" colspan=\"%d\"></td>",
 		  LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileXHTMLTmp,"<td width=\"%d\" align=\"right\" valign=\"top\" class=\"%s\">",
+      fprintf (FileHTMLTmp,"<td width=\"%d\" align=\"right\" valign=\"top\" class=\"%s\">",
 	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS,
 	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level]);
       if (LstItemsSyllabus.Lst[NumItem].Level == 1)
-	 fprintf (FileXHTMLTmp,"&nbsp;");
-      Syl_WriteNumItem (NULL,FileXHTMLTmp,
+	 fprintf (FileHTMLTmp,"&nbsp;");
+      Syl_WriteNumItem (NULL,FileHTMLTmp,
 			LstItemsSyllabus.Lst[NumItem].Level,
 			LstItemsSyllabus.Lst[NumItem].CodItem);
-      fprintf (FileXHTMLTmp,"&nbsp;</td>");
+      fprintf (FileHTMLTmp,"&nbsp;</td>");
 
       /***** Text of the item *****/
-      fprintf (FileXHTMLTmp,"<td align=\"left\" colspan=\"%d\" valign=\"top\" class=\"%s\">"
+      fprintf (FileHTMLTmp,"<td align=\"left\" colspan=\"%d\" valign=\"top\" class=\"%s\">"
 			    "%s"
 			    "</td>",
 	       LstItemsSyllabus.NumLevels - LstItemsSyllabus.Lst[NumItem].Level + 1,
@@ -765,10 +763,10 @@ static void Syl_WriteSyllabusIntoXHTMLTmpFile (Inf_InfoType_t InfoType,FILE *Fil
 	       LstItemsSyllabus.Lst[NumItem].Text);
 
       /***** End of the row *****/
-      fprintf (FileXHTMLTmp,"</tr>\n");
+      fprintf (FileHTMLTmp,"</tr>\n");
      }
 
-   fprintf (FileXHTMLTmp,"</table>\n"
+   fprintf (FileHTMLTmp,"</table>\n"
 			 "</html>\n"
 			 "</body>\n");
   }

@@ -74,7 +74,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
       Lay_ShowErrorAndExit ("Can not create RSS file.");
 
    /***** Write RSS header *****/
-   fprintf (FileRSS,"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
+   fprintf (FileRSS,"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
    fprintf (FileRSS,"<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n");
 
    /***** Write channel header *****/

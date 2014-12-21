@@ -67,26 +67,26 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/******* Create XHTML output file for the web page sent by this CGI **********/
+/******** Create HTML output file for the web page sent by this CGI **********/
 /*****************************************************************************/
 
-void Fil_CreateFileForXHTMLOutput (void)
+void Fil_CreateFileForHTMLOutput (void)
   {
-   char PathXHTMLOutputPriv[PATH_MAX+1];
+   char PathHTMLOutputPriv[PATH_MAX+1];
 
-   /***** Check if exists the directory for XHTML output. If not exists, create it *****/
-   sprintf (PathXHTMLOutputPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
-   Fil_CreateDirIfNotExists (PathXHTMLOutputPriv);
+   /***** Check if exists the directory for HTML output. If not exists, create it *****/
+   sprintf (PathHTMLOutputPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
+   Fil_CreateDirIfNotExists (PathHTMLOutputPriv);
 
    /***** Remove old files *****/
-   Fil_RemoveOldTmpFiles (PathXHTMLOutputPriv,Cfg_TIME_TO_DELETE_XHTML_OUTPUT,false);
+   Fil_RemoveOldTmpFiles (PathHTMLOutputPriv,Cfg_TIME_TO_DELETE_HTML_OUTPUT,false);
 
    /***** Create a unique name for the file *****/
-   sprintf (Gbl.XHTMLOutput.FileName,"%s/%s.html",
-            PathXHTMLOutputPriv,Gbl.UniqueNameEncrypted);
+   sprintf (Gbl.HTMLOutput.FileName,"%s/%s.html",
+            PathHTMLOutputPriv,Gbl.UniqueNameEncrypted);
 
    /***** Open file for writing and reading *****/
-   if ((Gbl.F.Out = fopen (Gbl.XHTMLOutput.FileName,"w+t")) == NULL)
+   if ((Gbl.F.Out = fopen (Gbl.HTMLOutput.FileName,"w+t")) == NULL)
      {
       Gbl.F.Out = stdout;
       Lay_ShowErrorAndExit ("Can not create output file.");
@@ -94,15 +94,15 @@ void Fil_CreateFileForXHTMLOutput (void)
   }
 
 /*****************************************************************************/
-/***************** Close and remove the XHTML output file ********************/
+/****************** Close and remove the HTML output file ********************/
 /*****************************************************************************/
 
-void Fil_CloseAndRemoveFileForXHTMLOutput (void)
+void Fil_CloseAndRemoveFileForHTMLOutput (void)
   {
    if (Gbl.F.Out)
      {
       fclose (Gbl.F.Out);
-      unlink (Gbl.XHTMLOutput.FileName);
+      unlink (Gbl.HTMLOutput.FileName);
      }
    Gbl.F.Out = stdout;
   }
@@ -153,7 +153,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
       Gbl.Layout.HTMLEndWritten   = true;
 
       /* Start HTTP response */
-      fprintf (stdout,"Content-type: text/plain; charset=ISO-8859-1\n");
+      fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
       /* Status code and message */
       fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"

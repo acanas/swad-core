@@ -1215,7 +1215,7 @@ int swad__getCourseInfo (struct soap *soap,
 	   {
 	    case Inf_LECTURES:		// Syllabus (lectures)
 	    case Inf_PRACTICALS:	// Syllabys (practicals)
-	       Result = Syl_WriteSyllabusIntoXHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
+	       Result = Syl_WriteSyllabusIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1223,7 +1223,7 @@ int swad__getCourseInfo (struct soap *soap,
 	 break;
       case Inf_INFO_SRC_PLAIN_TEXT:	// Plain text
       case Inf_INFO_SRC_RICH_TEXT:	// Rich text (not yet available)
-	 Result = Inf_WritePlainTextIntoXHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
+	 Result = Inf_WritePlainTextIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_PAGE:		// Web page hosted in SWAD server
 	 Result = Inf_WritePageIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
@@ -3642,7 +3642,7 @@ int swad__getDirectoryTree (struct soap *soap,
    Brw_InitializeFileBrowser ();
    Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
 
-   /* Check if exists the directory for XHTML output. If not exists, create it */
+   /* Check if exists the directory for HTML output. If not exists, create it */
    sprintf (PathXMLPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
    Fil_CreateDirIfNotExists (PathXMLPriv);
 

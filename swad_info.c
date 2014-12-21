@@ -344,11 +344,11 @@ void Inf_ShowInfo (void)
                if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
         	 {
                   char QueryDebug[512*1024];
-        	  char *XHTMLBuffer;
-                  Syl_WriteSyllabusIntoXHTMLBuffer (InfoType,&XHTMLBuffer);
-                  sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'%s')",XHTMLBuffer);
+        	  char *HTMLBuffer;
+                  Syl_WriteSyllabusIntoHTMLBuffer (InfoType,&HTMLBuffer);
+                  sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'%s')",HTMLBuffer);
                   DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
-                  free ((void *) XHTMLBuffer);
+                  free ((void *) HTMLBuffer);
         	 }
                */
 
@@ -738,7 +738,7 @@ static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
   }
 
 /*****************************************************************************/
-/************* Check if exists and write page into XHTML buffer **************/
+/************* Check if exists and write page into HTML buffer ***************/
 /*****************************************************************************/
 // This function is called only from web service
 
@@ -1566,21 +1566,21 @@ static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType)
   }
 
 /*****************************************************************************/
-/************* Check if exists and write page into XHTML buffer **************/
+/************* Check if exists and write page into HTML buffer ***************/
 /*****************************************************************************/
 // This function is called only from web service
 
-int Inf_WritePlainTextIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer)
+int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
-   char FileNameXHTMLTmp[PATH_MAX+1];
-   FILE *FileXHTMLTmp;
+   char FileNameHTMLTmp[PATH_MAX+1];
+   FILE *FileHTMLTmp;
    size_t Length;
 
    /***** Initialize buffer *****/
-   *XHTMLBuffer = NULL;
+   *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (InfoType,Txt,Cns_MAX_BYTES_LONG_TEXT);
@@ -1588,22 +1588,20 @@ int Inf_WritePlainTextIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffe
    if (Txt[0])
      {
       /***** Create a unique name for the file *****/
-      sprintf (FileNameXHTMLTmp,"%s/%s/%s_info.html",
+      sprintf (FileNameHTMLTmp,"%s/%s/%s_info.html",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
-      if ((FileXHTMLTmp = fopen (FileNameXHTMLTmp,"w+b")) == NULL)
+      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
          return soap_receiver_fault (Gbl.soap,
                                      "Plain text can not be copied into buffer",
                                      "Can not create temporary file");
 
-      /***** Write start of XHTML code *****/
-      fprintf (FileXHTMLTmp,"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n"
-			    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
-			    " \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
-			    "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"%s\">\n"
+      /***** Write start of HTML code *****/
+      fprintf (FileHTMLTmp,"<!DOCTYPE html>\n"
+			    "<html lang=\"%s\">\n"
 			    "<head>\n"
-			    "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=iso-8859-1\" />\n"
+			    "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
 			    "<title>%s</title>\n"
 			    "</head>\n"
 			    "<body>\n",
@@ -1611,7 +1609,7 @@ int Inf_WritePlainTextIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffe
 	       Txt_INFO_TITLE[InfoType]);		// Page title
 
       /***** Write plain text into text buffer *****/
-      fprintf (FileXHTMLTmp,"<tr>"
+      fprintf (FileHTMLTmp,"<tr>"
 		            "<td align=\"left\">"
 		            "<p align=\"justify\" class=\"DAT\">");
 
@@ -1621,41 +1619,41 @@ int Inf_WritePlainTextIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffe
       Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /* Write text */
-      fprintf (FileXHTMLTmp,"%s",Txt);
+      fprintf (FileHTMLTmp,"%s",Txt);
 
       /***** Write end of page into file *****/
-      fprintf (FileXHTMLTmp,"</p>\n"
+      fprintf (FileHTMLTmp,"</p>\n"
 			    "</html>\n"
 			    "</body>\n");
 
       /***** Compute length of file *****/
-      Length = (size_t) ftell (FileXHTMLTmp);
+      Length = (size_t) ftell (FileHTMLTmp);
 
       /***** Allocate memory for buffer *****/
-      if ((*XHTMLBuffer = (char *) malloc (Length+1)) == NULL)
+      if ((*HTMLBuffer = (char *) malloc (Length+1)) == NULL)
 	{
-	 fclose (FileXHTMLTmp);
-	 unlink (FileNameXHTMLTmp);
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
          return soap_receiver_fault (Gbl.soap,
                                      "Plain text can not be copied into buffer",
                                      "Not enough memory for buffer");
 	}
 
       /***** Copy file content into buffer *****/
-      fseek (FileXHTMLTmp,0L,SEEK_SET);
-      if (fread ((void *) *XHTMLBuffer,sizeof (char),Length,FileXHTMLTmp) != Length)
+      fseek (FileHTMLTmp,0L,SEEK_SET);
+      if (fread ((void *) *HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
-	 fclose (FileXHTMLTmp);
-	 unlink (FileNameXHTMLTmp);
+	 fclose (FileHTMLTmp);
+	 unlink (FileNameHTMLTmp);
          return soap_receiver_fault (Gbl.soap,
                                      "Plain text can not be copied into buffer",
                                      "Error reading file into buffer");
 	}
-      (*XHTMLBuffer)[Length] = '\0';
+      (*HTMLBuffer)[Length] = '\0';
 
       /***** Close and remove temporary file *****/
-      fclose (FileXHTMLTmp);
-      unlink (FileNameXHTMLTmp);
+      fclose (FileHTMLTmp);
+      unlink (FileNameHTMLTmp);
      }
 
    return SOAP_OK;

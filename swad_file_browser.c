@@ -6803,8 +6803,7 @@ void Brw_RcvFileInFileBrwDropzone (void)
    Gbl.Layout.HTMLEndWritten   = true;
 
    /* Start HTTP response */
-   // Use charset iso-8859-1
-   fprintf (stdout,"Content-type: text/plain; charset=ISO-8859-1\n");
+   fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
    /* Status code and message */
    if (UploadSucessful)
@@ -8063,7 +8062,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 	       FileName);
      }
 
-   Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In XHTML, URL must have no spaces
+   Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
   }
 
 /*****************************************************************************/

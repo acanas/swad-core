@@ -162,7 +162,7 @@ struct Globals
    struct
      {
       char FileName[PATH_MAX+1];
-     } XHTMLOutput;
+     } HTMLOutput;
    struct
      {
       unsigned Num;		// Number of institutions

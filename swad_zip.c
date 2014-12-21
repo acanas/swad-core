@@ -189,7 +189,7 @@ void ZIP_CreateZIPAsgWrk (void)
                Cfg_FOLDER_FILE_BROWSER_TMP,
                Gbl.FileBrowser.TmpPubDir,
                FileNameZIP);
-      Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In XHTML, URL must have no spaces
+      Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
       /****** Link to download file *****/
       ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,0);
@@ -400,7 +400,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 		  Cfg_FOLDER_FILE_BROWSER_TMP,
 		  Gbl.FileBrowser.TmpPubDir,
 		  FileNameZIP);
-	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In XHTML, URL must have no spaces
+	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
 	 /****** Link to download file *****/
 	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);

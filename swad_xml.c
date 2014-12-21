@@ -68,7 +68,7 @@ void XML_WriteStartFile (FILE *FileTgt,const char *Type,bool Credits)
   {
    extern const char *Txt_NEW_LINE;
 
-   fprintf (FileTgt,"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>%s"
+   fprintf (FileTgt,"<?xml version=\"1.0\" encoding=\"windows-1252\"?>%s"
                     "<%s>%s",
             Txt_NEW_LINE,
             Type,Txt_NEW_LINE);

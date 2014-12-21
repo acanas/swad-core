@@ -613,7 +613,7 @@ void Mrk_ShowMyMarks (void)
             Lay_ShowErrorAndExit ("Can not open file with my marks.");
 
          /* Start HTML output */
-         fprintf (Gbl.F.Out,"Content-type: text/html; charset=ISO-8859-1\r\n\r\n"); // Two \r\n aree necessary
+         fprintf (Gbl.F.Out,"Content-type: text/html; charset=windows-1252\r\n\r\n"); // Two \r\n aree necessary
          Gbl.Layout.HTMLStartWritten = true;
 
          /* Copy HTML to output file */

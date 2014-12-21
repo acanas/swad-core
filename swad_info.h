@@ -91,7 +91,7 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,const char *InfoTxt);
 void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,char *InfoTxt,size_t MaxLength);
 bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType);
-int Inf_WritePlainTextIntoXHTMLBuffer (Inf_InfoType_t InfoType,char **XHTMLBuffer);
+int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer);
 void Inf_EditPlainTxtInfo (void);
 void Inf_EditRichTxtInfo (void);
 void Inf_RecAndChangePlainTxtInfo (void);

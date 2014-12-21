@@ -72,9 +72,9 @@ int main (int argc, char *argv[])
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
 /*
-   fprintf (stdout,"Content-type: text/html; charset=ISO-8859-1\r\n"
+   fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n"
                    "Status: 503 Service Temporarily Unavailable\r\n\r\n"
-                   "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">"
+                   "<html lang=\"es\">"
                    "<head><title>%s</title></head>"
                    "<body><br /><br /><br /><br />"
                    "<h1 align=\"center\">%s est&aacute; parado por mantenimiento</h1>"
@@ -113,8 +113,8 @@ int main (int argc, char *argv[])
 	 // ...because uploading files using Dropzone.js will trigger error
 	 // Sta_ExitIfTooFast ();
 
-	 /***** Create file for XHTML output *****/
-	 Fil_CreateFileForXHTMLOutput ();
+	 /***** Create file for HTML output *****/
+	 Fil_CreateFileForHTMLOutput ();
 
 	 /***** Remove old (expired) sessions *****/
 	 Ses_RemoveExpiredSessions ();
@@ -141,7 +141,7 @@ int main (int argc, char *argv[])
       if (Act_Actions[Gbl.CurrentAct].FunctionPriori != NULL)
 	 Act_Actions[Gbl.CurrentAct].FunctionPriori ();
 
-      /***** Start writing XHTML output *****/
+      /***** Start writing HTML output *****/
       Lay_WriteStartOfPage ();
 
       /***** Make a processing or other depending on the action *****/

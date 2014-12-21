@@ -202,7 +202,7 @@ const char *Txt_Switching_to_LANGUAGE[Txt_NUM_LANGUAGES] =
 		     #   #  ###       #   #   #   #   # #####
 ******************************************************************************/
 /**** Don't use HTML entities like &oacute; when variable ends in NO_HTML ****/
-/****                Charset must be ISO-8859-1 in this file              ****/
+/****              Charset must be windows-1252 in this file              ****/
 /*****************************************************************************/
 
 const char *Txt_Country_NO_HTML =
@@ -13107,81 +13107,6 @@ const char *Txt_If_you_send_this_message_you_will_appear_as_its_author =
 	"jesli wyslesz te wiadomosc, pojawi sie jako jego autor";
 #elif L==8
 	"se voc&ecirc; enviar esta mensagem, voc&ecirc; vai aparecer como o seu autor";
-#endif
-
-const char *Txt_If_you_want_to_create_a_web_page_for_direct_access_to_the_course_X_ =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Si desea crear una p&aacute;gina web"
-	" que le permita acceder directamente a la asignatura <strong>%s</strong>,"
-	" puede copiar todo el c&oacute;digo XHTML siguiente"
-	" en un archivo nuevo y guardarlo"
-	" con la extensi&oacute;n &quot;.htm&quot; o &quot;.html&quot;.<br /><br />"
-	"Si s&oacute;lo desea insertar un enlace en una p&aacute;gina web existente,"
-	" copie las l&iacute;neas indicadas abajo en el lugar deseado del archivo HTML.";	// Necessita traduccio
-#elif L==1
-	"If you want to create a web page"
-	" for direct access to the course <strong>%s</strong>,"
-	" you can copy all of the following XHTML code"
-	" into a new file and save it"
-	" with &quot;.htm&quot; or &quot;.html&quot; extension.<br /><br />"
-	"If you only want to insert a link in an existing web page,"
-	" copy the lines indicated below in the desired place inside the HTML file.";		// Need Übersetzung
-#elif L==2
-	"If you want to create a web page"
-	" for direct access to the course <strong>%s</strong>,"
-	" you can copy all of the following XHTML code"
-	" into a new file and save it"
-	" with &quot;.htm&quot; or &quot;.html&quot; extension.<br /><br />"
-	"If you only want to insert a link in an existing web page,"
-	" copy the lines indicated below in the desired place inside the HTML file.";
-#elif L==3
-	"Si desea crear una p&aacute;gina web"
-	" que le permita acceder directamente a la asignatura <strong>%s</strong>,"
-	" puede copiar todo el c&oacute;digo XHTML siguiente"
-	" en un archivo nuevo y guardarlo"
-	" con la extensi&oacute;n &quot;.htm&quot; o &quot;.html&quot;.<br /><br />"
-	"Si s&oacute;lo desea insertar un enlace en una p&aacute;gina web existente,"
-	" copie las l&iacute;neas indicadas abajo en el lugar deseado del archivo HTML.";
-#elif L==4
-	"If you want to create a web page"
-	" for direct access to the course <strong>%s</strong>,"
-	" you can copy all of the following XHTML code"
-	" into a new file and save it"
-	" with &quot;.htm&quot; or &quot;.html&quot; extension.<br /><br />"
-	"If you only want to insert a link in an existing web page,"
-	" copy the lines indicated below in the desired place inside the HTML file.";		// Besoin de traduction
-#elif L==5
-	"Si desea crear una p&aacute;gina web"
-	" que le permita acceder directamente a la asignatura <strong>%s</strong>,"
-	" puede copiar todo el c&oacute;digo XHTML siguiente"
-	" en un archivo nuevo y guardarlo"
-	" con la extensi&oacute;n &quot;.htm&quot; o &quot;.html&quot;.<br /><br />"
-	"Si s&oacute;lo desea insertar un enlace en una p&aacute;gina web existente,"
-	" copie las l&iacute;neas indicadas abajo en el lugar deseado del archivo HTML.";	// Okoteve traducción
-#elif L==6
-	"Se vuoi creare una pagina web"
-	" per accedere direttamente al corso <strong>%s</strong>,"
-	" puoi copiare tutto il seguente codice HTML"
-	" in un file e salvarlo"
-	" con &quot;.htm&quot; o &quot;.html&quot; estensione.<br /><br />"
-	"Se vuoi solo inserire un link in una pagina web esistente,"
-	" copia le linee indicate sotto nel posto desiderato all'interno del file HTML.";
-#elif L==7
-	"Jesli chcesz stworzyc strone www"
-	" do bezposredniego dostepu do kursu <strong>%s</strong>,"
-	" mozna skopiowac wszystkie nastepujacy kod XHTML"
-	" do nowego pliku i zapisac go"
-	" z &quot;.htm&quot; or &quot;.html&quot; rozszerzenie.<br /><br />"
-	"Jesli chcesz tylko wstawic link w istniejacej stronie internetowej."
-	" kopii w spos&oacute;b wskazany ponizej w wybranym miejscu w pliku HTML.";
-#elif L==8
-	"If you want to create a web page"
-	" for direct access to the course <strong>%s</strong>,"
-	" you can copy all of the following XHTML code"
-	" into a new file and save it"
-	" with &quot;.htm&quot; or &quot;.html&quot; extension.<br /><br />"
-	"If you only want to insert a link in an existing web page,"
-	" copy the lines indicated below in the desired place inside the HTML file.";	// Necessita de tradução
 #endif
 
 const char *Txt_Image =

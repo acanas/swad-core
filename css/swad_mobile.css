@@ -26,7 +26,11 @@ A:link			{text-decoration:none;}
 A:visited		{text-decoration:none;}
 A:active		{text-decoration:none;}
 A:hover			{text-decoration:underline;}
-body			{margin:0px;}
+body
+	{
+	margin:0px;
+	background-color:white;
+	}
 input			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:16pt;}
 select			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:16pt;}
 textarea		{font-size:12pt;}

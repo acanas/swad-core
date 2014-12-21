@@ -221,7 +221,7 @@ void Sta_ExitIfTooFast (void)
      {
       /***** Write header to standard output to avoid timeout *****/
       // Two \r\n are necessary
-      fprintf (stdout,"Content-type: text/html; charset=ISO-8859-1\r\n\r\n"
+      fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n\r\n"
                       "<!DOCTYPE html>\n"
                       "<html lang=\"%s\">\n"
 		      "<head>"

@@ -484,7 +484,7 @@ void Cht_OpenChatWindow (void)
       Lay_ShowErrorAndExit ("Can not open chat.");
 
    /***** Start writing the index.html file to the output *****/
-   fprintf (Gbl.F.Out,"Content-type: text/html; charset=ISO-8859-1\n\n");	// Two carriage returns at the end of the line are mandatory!
+   fprintf (Gbl.F.Out,"Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
 
    Gbl.Layout.HTMLStartWritten = true;
 

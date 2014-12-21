@@ -346,7 +346,7 @@
 /* Folder for users, inside private swad directory */
 #define Cfg_FOLDER_USR 				"usr"			// Created automatically the first time it is accessed
 
-/* Folder for temporary XHTML output of this CGI, inside private swad directory */
+/* Folder for temporary HTML output of this CGI, inside private swad directory */
 #define Cfg_FOLDER_OUT 				"out"			// Created automatically the first time it is accessed
 
 /* Folder for temporary public links to file zones, used when displaying file browsers, inside public swad directory */
@@ -461,7 +461,7 @@
 
 #define Cfg_TIME_TO_DELETE_Svc_KEY			((time_t)(     7UL*24UL*60UL*60UL))	// After these seconds, a web service key is removed
 
-#define Cfg_TIME_TO_DELETE_XHTML_OUTPUT			((time_t)(              30UL*60UL))	// Remove the XHTML output files older than these seconds
+#define Cfg_TIME_TO_DELETE_HTML_OUTPUT			((time_t)(              30UL*60UL))	// Remove the HTML output files older than these seconds
 
 #define Cfg_TIME_TO_ABORT_FILE_UPLOAD			((time_t)(              55UL*60UL))	// After these seconds uploading data, abort upload.
 
