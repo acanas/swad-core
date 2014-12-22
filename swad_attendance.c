@@ -254,7 +254,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    /***** Start date/time *****/
    fprintf (Gbl.F.Out,"<tr>"  \
-	              "<td align=\"left\" valign=\"top\" class=\"%s\"",
+	              "<td class=\"%s\""
+	              " style=\"text-align:left; vertical-align:top;\"",
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
                           (Att->Open ? "DATE_GREEN" :
@@ -269,14 +270,18 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 	    Att->DateTimes[Att_START_TIME].Time.Minute);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\"  valign=\"top\" class=\"%s\"",
+   fprintf (Gbl.F.Out,"<td class=\"%s\""
+	              " style=\"text-align:left; vertical-align:top;",
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
                           (Att->Open ? "DATE_GREEN" :
                         	       "DATE_RED"));
    if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">%02u/%02u/%02u<br />%02u:%02u h</td>",
+      fprintf (Gbl.F.Out," background-color:%s;",
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"\">"
+	              "%02u/%02u/%02u<br />%02u:%02u h"
+	              "</td>",
             Att->DateTimes[Att_END_TIME  ].Date.Day,
             Att->DateTimes[Att_END_TIME  ].Date.Month,
             Att->DateTimes[Att_END_TIME  ].Date.Year % 100,
@@ -284,10 +289,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 	    Att->DateTimes[Att_END_TIME  ].Time.Minute);
 
    /***** Attendance event title *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\"");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;");
    if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," background-color:%s;",
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view attendance event */
    Act_FormStart (ActSeeOneAtt);
@@ -299,16 +305,21 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
             Att->Title);
 
    /***** Number of students in this event *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" class=\"DAT_N\"");
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N\""
+	              " style=\"text-align:right; vertical-align:top;");
    if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">%u</td>"
+      fprintf (Gbl.F.Out," background-color:%s;",
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"\">"
+	              "%u"
+	              "</td>"
 	              "</tr>",
             Att->NumStdsTotal);
 
    /***** Write second row of data of this attendance event *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+	              "<td colspan=\"2\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /* Author of the attendance event */
@@ -331,7 +342,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" align=\"left\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"2\""
+	              " style=\"text-align:left; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -470,7 +482,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    /***** Put form to remove attendance event *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">"
 	              "<tr>"
-                      "<td align=\"left\">");
+                      "<td style=\"text-align:left;\">");
    Act_FormStart (ActReqRemAtt);
    Att_PutParamAttCod (AttCod);
    Att_PutHiddenParamAttOrderType ();
@@ -485,7 +497,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
             Txt_Remove);
 
    /***** Put form to hide/show attendance event *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (Hidden ? ActShoAtt :
 	                   ActHidAtt);
    Att_PutParamAttCod (AttCod);
@@ -508,7 +520,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 	              "</td>");
 
    /***** Put form to edit attendance event *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActEdiOneAtt);
    Att_PutParamAttCod (AttCod);
    Att_PutHiddenParamAttOrderType ();
@@ -1088,8 +1100,11 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<input type=\"text\" name=\"Title\" size=\"80\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -1102,11 +1117,14 @@ void Att_RequestCreatOrEditAttEvent (void)
 	StartOrEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                         "<td align=\"left\" valign=\"top\">"
+	                 "<td class=\"TIT_TBL\""
+	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td style=\"text-align:left; vertical-align:top;\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td align=\"left\" valign=\"top\">",
+                         "<td style=\"text-align:left; vertical-align:top;\">",
                Dates[StartOrEndTime]);
 
       /* Date */
@@ -1118,7 +1136,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                          false,false);
 
       fprintf (Gbl.F.Out,"</td>"
-                         "<td align=\"left\" valign=\"top\">");
+                         "<td style=\"text-align:left; vertical-align:top;\">");
 
       /* Time */
       Dat_WriteFormHourMinute (NameSelectHour  [StartOrEndTime],
@@ -1133,8 +1151,11 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Visibility of comments *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<select name=\"CommentTchVisible\">",
             Txt_Teachers_comment);
 
@@ -1156,8 +1177,11 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event description *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"5\">",
             Txt_Description);
    if (!ItsANewAttEvent)
@@ -1200,14 +1224,18 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                         "<td align=\"left\" valign=\"top\">",
+	                 "<td class=\"TIT_TBL\""
+	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"7\" align=\"left\" valign=\"middle\" class=\"DAT\">"
+	                 "<td colspan=\"7\" class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -2009,7 +2037,8 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    /***** Icon to show if the user is already registered *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%d",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\"><img src=\"%s/%s16x16.gif\""
+   fprintf (Gbl.F.Out,"\">"
+	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
@@ -2019,26 +2048,31 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
         	      Txt_Absent);
 
    /***** Checkbox to select user *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:top; background-color:%s;\">"
 	              "<input type=\"checkbox\" name=\"UsrCodStd\" value=\"%s\"",
 	    BgColor,UsrDat->EncryptedUsrCod);
    if (Present)	// This student has attended to the event?
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)	// A student can not change his attendance
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /></td>");
+   fprintf (Gbl.F.Out," />"
+	              "</td>");
 
    /***** Write number of student in the list *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">%u</td>",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%u"
+	              "</td>",
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
+            BgColor,
             NumStd);
 
    /***** Show student's photo *****/
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	                 " background-color:%s;\">",
 	       BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
@@ -2049,18 +2083,20 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
      }
 
    /***** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL");
+        	               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">%s",
-	    BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">%s",
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 		               "DAT_SMALL",
+	    BgColor,
 	    UsrDat->Surname1);
    if (UsrDat->Surname2[0])
      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
@@ -2068,7 +2104,8 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	    UsrDat->FirstName);
 
    /***** Student's comment: write form or text */
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
 	    BgColor);
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT && Att->Open)	// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
@@ -2082,7 +2119,8 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Teacher's comment: write form, text or nothing */
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
 	    BgColor);
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)	// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
@@ -2940,7 +2978,8 @@ static void Att_ListEventsToSelect (void)
 
       /* Write a row for this event */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"center\" bgcolor=\"%s\" class=\"DAT\">"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:center; background-color:%s;\">"
 			 "<input type=\"checkbox\" name=\"AttCods\" value=\"%ld\"",
 	       BgColor,
 	       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
@@ -2948,9 +2987,18 @@ static void Att_ListEventsToSelect (void)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
-			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
-			 "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">%02u/%02u/%04u %02u:%02u h %s</td>"
-			 "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:right; background-color:%s;\">"
+			 "%u:"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; background-color:%s;\">"
+			 "%02u/%02u/%04u %02u:%02u h %s"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:right; background-color:%s;\">"
+			 "%u"
+			 "</td>"
 			 "</tr>",
 	       BgColor,
 	       NumAttEvent + 1,
@@ -2971,7 +3019,8 @@ static void Att_ListEventsToSelect (void)
    if (Gbl.CurrentAct == ActSeeLstAttStd)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"center\" colspan=\"4\" class=\"DAT\">");
+			 "<td colspan=\"4\" class=\"DAT\""
+			 " style=\"text-align:center;\">");
       Act_LinkFormSubmit (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("recycle",Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
@@ -3023,8 +3072,12 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 
    /***** Last row with the total of students present in each event *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"%u\" align=\"right\" class=\"DAT_N\""
-		      " style=\"border-style:solid none none none;border-width:1px;\">%s:</td>",
+		      "<td colspan=\"%u\" class=\"DAT_N\""
+		      " style=\"text-align:right;"
+		      " border-style:solid none none none;"
+		      " border-width:1px;\">"
+		      "%s:"
+		      "</td>",
 	    Gbl.Usrs.Listing.WithPhotos ? 4 :
 					  3,
 	    Txt_Number_of_students);
@@ -3033,13 +3086,21 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 	NumAttEvent++)
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT_N\""
-			    " style=\"border-style:solid none none none;border-width:1px;\">%u</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT_N\""
+			    " style=\"text-align:center;"
+			    " border-style:solid none none none;"
+			    " border-width:1px;\">"
+			    "%u"
+			    "</td>",
 		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
 	 Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
 	}
-   fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT_N\""
-		      " style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N\""
+		      " style=\"text-align:right;"
+		      " border-style:solid none none none;"
+		      " border-width:1px;\">"
+		      "%u"
+		      "</td>"
 		      "</tr>",
 	    Total);
 
@@ -3104,16 +3165,21 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 
    /***** Write number of student in the list *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%u</td>",
-            BgColor,
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle; background-color:%s;\">"
+	              "%u"
+	              "</td>",
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
+            BgColor,
             NumStd + 1);
 
    /***** Show student's photo *****/
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" width=\"18\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"width:18px; text-align:left;"
+	                 " vertical-align:middle; background-color:%s;\">",
+	       BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -3124,18 +3190,21 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
      }
 
    /***** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle; background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL");
+        	               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%s",
-	    BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle; background-color:%s;\">"
+	              "%s",
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 		               "DAT_SMALL",
+	    BgColor,
 	    UsrDat->Surname1);
    if (UsrDat->Surname2[0])
      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
@@ -3168,9 +3237,13 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	}
 
    /***** Last column with the number of times this user is present *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"DAT_N\">%u</td>"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:middle; background-color:%s;\">"
+	              "%u"
+	              "</td>"
                       "</tr>",
-	    BgColor,NumTimesPresent);
+	    BgColor,
+	    NumTimesPresent);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -3233,14 +3306,18 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 
    /***** Write number of student in the list *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"right\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">%u:</td>",
-	    BgColor,
+		      "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle; background-color:%s;\">"
+	              "%u:"
+	              "</td>",
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 			       "DAT_SMALL",
+	    BgColor,
 	    NumStd + 1);
 
    /***** Show student's photo *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" bgcolor=\"%s\" width=\"18\">",
+   fprintf (Gbl.F.Out,"<td style=\"width:18px; text-align:left;"
+	              " vertical-align:middle; background-color:%s;\">",
             BgColor);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,
@@ -3251,10 +3328,11 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">"
                       "<table>"
                       "<tr>"
-                      "<td align=\"left\" valign=\"middle\" class=\"%s\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:left; vertical-align:middle;\">",
             BgColor,
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 			       "DAT_SMALL");
@@ -3262,7 +3340,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"%s\">%s",
+   fprintf (Gbl.F.Out,"<td class=\"%s\""
+	              " style=\"text-align:left; vertical-align:middle;\">%s",
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 			       "DAT_SMALL",
 	    UsrDat->Surname1);
@@ -3290,9 +3369,13 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 
 	 /***** Write a row for this event *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-		            "<td bgcolor=\"%s\"></td>"
-			    "<td align=\"right\" bgcolor=\"%s\" class=\"DAT\">%u:</td>"
-			    "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">"
+		            "<td style=\"background-color:%s;\"></td>"
+			    "<td class=\"DAT\""
+			    " style=\"text-align:right; background-color:%s;\">"
+			    "%u:"
+			    "</td>"
+			    "<td class=\"DAT\""
+			    " style=\"text-align:left; background-color:%s;\">"
 	                    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
 	                    " %02u/%02u/%04u %02u:%02u h %s</td>"
@@ -3318,9 +3401,10 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	     CommentTch[0])
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td bgcolor=\"%s\"></td>"
-			       "<td bgcolor=\"%s\"></td>"
-			       "<td align=\"left\" bgcolor=\"%s\" class=\"DAT\">"
+			       "<td style=\"background-color:%s;\"></td>"
+			       "<td style=\"background-color:%s;\"></td>"
+			       "<td class=\"DAT\" style=\"text-align:left;"
+			       " background-color:%s;\">"
 	                       "<dl>",
 	             BgColor,
 	             BgColor,

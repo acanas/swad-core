@@ -1361,7 +1361,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Institutional code of the course *****/
    fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
-                      "<input type=\"text\" name=\"InsCrsCod\" size=\%u\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"InsCrsCod\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,

@@ -325,19 +325,25 @@ void Ann_ShowFormAnnouncement (void)
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
-	              "<td align=\"left\"></td>"
-	              "<td align=\"left\" class=\"%s\">%s</td>"
+	              "<td></td>"
+	              "<td class=\"%s\" style=\"text-align:left;\">%s</td>"
 	              "</tr>"
                       "<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
-                      "<textarea name=\"Subject\" cols=\"75\" rows=\"2\"></textarea>"
+	              "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+	              "%s: "
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
+                      "<textarea name=\"Subject\" cols=\"75\" rows=\"2\">"
+                      "</textarea>"
 	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
-                      "<textarea name=\"Content\" cols=\"75\" rows=\"20\"></textarea>"
+                      "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+                      "%s: "
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
+                      "<textarea name=\"Content\" cols=\"75\" rows=\"20\">"
+                      "</textarea>"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -349,8 +355,12 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** Users' roles who can view the announcement *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s: </td>"
-                      "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
+	              "<td class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s: "
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:left; vertical-align:middle;\">",
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_ROLE_STUDENT |
                            1 << Rol_ROLE_TEACHER);

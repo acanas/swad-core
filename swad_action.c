@@ -4095,7 +4095,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
         {
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" valign=\"middle\" style=\"padding-left:2px;\">");
+                            "<td style=\"text-align:left; vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,The_ClassFormulNB[Gbl.Prefs.Theme]);
 
@@ -4150,13 +4150,16 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" width=\"4\""
-                            " style=\"background-image: url('%s/mbw2_4x1.gif'); background-repeat: repeat-y;\"></td>",
+                            "<td style=\"width:4px; text-align:left;"
+                            " background-image: url('%s/mbw2_4x1.gif');"
+                            " background-repeat: repeat-y;\">"
+                            "</td>",
                   Gbl.Prefs.IconsURL);
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" valign=\"middle\" width=\"110\" style=\"padding-left:2px;\">");
+                            "<td style=\"widtg:110px; text-align:left;"
+                            " vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,"MFU_ACT");
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" vspace=\"1\" alt=\"%s\""

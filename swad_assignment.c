@@ -229,7 +229,10 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /***** Write first row of data of this assignment *****/
    /* Start date/time */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" valign=\"top\" class=\"%s\" bgcolor=\"%s\">%02u/%02u/%02u<br />%02u:%02u h</td>",
+	              "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%02u/%02u/%02u<br />%02u:%02u h"
+	              "</td>",
             Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
         	                     "DATE_RED_LIGHT") :
                          (Asg.Open ? "DATE_GREEN" :
@@ -242,7 +245,10 @@ static void Asg_ShowOneAssignment (long AsgCod)
 	    Asg.DateTimes[Asg_START_TIME].Time.Minute);
 
    /* End date/time */
-   fprintf (Gbl.F.Out,"<td align=\"left\"  valign=\"top\" class=\"%s\" bgcolor=\"%s\">%02u/%02u/%02u<br />%02u:%02u h</td>",
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%02u/%02u/%02u<br />%02u:%02u h"
+	              "</td>",
             Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
         	                     "DATE_RED_LIGHT") :
                          (Asg.Open ? "DATE_GREEN" :
@@ -255,7 +261,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
 	    Asg.DateTimes[Asg_END_TIME].Time.Minute);
 
    /* Assignment title */
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">"
                       "<p class=\"%s\">%s</p>",
             Gbl.ColorRows[Gbl.RowEvenOdd],
             Asg.Hidden ? "ASG_TITLE_LIGHT" :
@@ -264,20 +271,15 @@ static void Asg_ShowOneAssignment (long AsgCod)
    fprintf (Gbl.F.Out,"</td>");
 
    /* Send work? */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" align=\"center\" valign=\"top\""
-	              " bgcolor=\"%s\">"
-	              "<table style=\"border-spacing:2px;\">"
-	              "<tr>"
-	              "<td align=\"center\" valign=\"top\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s\" style=\"text-align:center;"
+	              " vertical-align:top; background-color:%s;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "<br />%s</td>"
-                      "</tr>"
-                      "</table>"
+                      "<br />%s"
                       "</td>",
-            Gbl.ColorRows[Gbl.RowEvenOdd],
             (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
         	                              "DAT",
+            Gbl.ColorRows[Gbl.RowEvenOdd],
             Gbl.Prefs.IconsURL,
             (Asg.SendWork == Asg_SEND_WORK) ? "file_on" :
         	                              "file_off",
@@ -287,7 +289,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
         	                              Txt_No);
 
    /* Assignment folder */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    Asg_WriteAssignmentFolder (&Asg);
    fprintf (Gbl.F.Out,"</td>"
@@ -295,7 +298,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
    /***** Write second row of data of this assignment *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+	              "<td colspan=\"2\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /* Author of the assignment */
@@ -318,7 +322,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -420,7 +424,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
 
       /***** Folder name *****/
       fprintf (Gbl.F.Out,"</td>"
-                         "<td align=\"left\" class=\"DAT\">%s</td>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">%s</td>"
                          "</tr>"
                          "</table>",
                Asg->Folder);
@@ -488,7 +492,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	              "<tr>");
 
    /***** Put form to remove assignment *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActReqRemAsg);
    Asg_PutParamAsgCod (AsgCod);
    Asg_PutHiddenParamAsgOrderType ();
@@ -503,7 +507,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
             Txt_Remove);
 
    /***** Put form to hide/show assignment *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (Hidden ? ActShoAsg :
 	                   ActHidAsg);
    Asg_PutParamAsgCod (AsgCod);
@@ -526,7 +530,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	              "</td>");
 
    /***** Put form to edit assignment *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActEdiOneAsg);
    Asg_PutParamAsgCod (AsgCod);
    Asg_PutHiddenParamAsgOrderType ();
@@ -1136,8 +1140,11 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<input type=\"text\" name=\"Title\" size=\"80\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -1150,11 +1157,14 @@ void Asg_RequestCreatOrEditAsg (void)
 	StartOrEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                         "<td align=\"left\" valign=\"top\">"
+	                 "<td class=\"TIT_TBL\""
+	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td style=\"text-align:left; vertical-align:top;\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td align=\"left\" valign=\"top\">",
+                         "<td style=\"text-align:left; vertical-align:top;\">",
                Dates[StartOrEndTime]);
 
       /* Date */
@@ -1166,7 +1176,7 @@ void Asg_RequestCreatOrEditAsg (void)
                          false,false);
 
       fprintf (Gbl.F.Out,"</td>"
-                         "<td align=\"left\" valign=\"top\">");
+                         "<td style=\"text-align:left; vertical-align:top;\">");
 
       /* Time */
       Dat_WriteFormHourMinute (NameSelectHour  [StartOrEndTime],
@@ -1183,8 +1193,12 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Send work? *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"middle\" class=\"TIT_TBL\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:middle;\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:middle;\">"
                       "%s: "
                       "<input type=\"text\" name=\"Folder\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
@@ -1195,8 +1209,11 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Assignment text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"TIT_TBL\""
+	              " style=\"text-align:right; vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
             Txt_Description);
    if (!ItsANewAssignment)
@@ -1239,14 +1256,18 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s:</td>"
-                         "<td align=\"left\" valign=\"top\">",
+	                 "<td class=\"TIT_TBL\""
+	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"7\" align=\"left\" valign=\"middle\" class=\"DAT\">"
+	                 "<td colspan=\"7\" class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");

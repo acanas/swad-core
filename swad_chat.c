@@ -116,7 +116,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Chat_rooms);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" class=\"%s\">",
+	              "<td class=\"%s\" style=\"text-align:left;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Title of top level *****/
@@ -232,8 +232,14 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       Lay_WriteTitle (Txt_Rooms_with_users);
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"center\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>"
-                         "<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s</td>"
+	                 "<td class=\"TIT_TBL\""
+	                 " style=\"text-align:center; background-color:%s;\">"
+	                 "%s&nbsp;"
+	                 "</td>"
+                         "<td class=\"TIT_TBL\""
+                         " style=\"text-align:left; background-color:%s;\">"
+                         "%s"
+                         "</td>"
                          "</tr>",
                VERY_LIGHT_BLUE,Txt_CHAT_Room_code,
                VERY_LIGHT_BLUE,Txt_No_of_users);
@@ -246,8 +252,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" class=\"DAT\">%s</td>"
-                            "<td align=\"right\" class=\"DAT\">%s</td>"
+                            "<td class=\"DAT\" style=\"text-align:left;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"DAT\" style=\"text-align:right;\">"
+                            "%s"
+                            "</td>"
                             "</tr>",
                   row[0],row[1]);
         }
@@ -276,12 +286,12 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
    sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" valign=\"top\">"
+	              "<td style=\"text-align:left; vertical-align:top;\">"
                       "<table>"
                       "<tr>");
    Msg_IndentDependingOnLevel (Level,IsLastItemInLevel);
 
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">");
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
    Act_LinkFormSubmit (RoomFullName,(NumUsrsInRoom > 0) ? The_ClassFormulB[Gbl.Prefs.Theme] :

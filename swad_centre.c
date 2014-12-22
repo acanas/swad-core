@@ -163,7 +163,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          /* Centre logo */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td align=\"center\" valign=\"middle\" class=\"DAT\" bgcolor=\"%s\">"
+	                    "<td class=\"DAT\" style=\"text-align:center;"
+	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
          Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:top;");
@@ -171,19 +172,24 @@ void Ctr_SeeCtrWithPendingDegs (void)
                             "</td>");
 
          /* Centre full name */
-         fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\" bgcolor=\"%s\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+	                    " vertical-align:middle; background-color:%s;\">",
                   BgColor);
          Act_FormGoToStart (ActSeeDeg);
          Ctr_PutParamCtrCod (Ctr.CtrCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Ctr.FullName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s</a>"
+         fprintf (Gbl.F.Out,"%s"
+                            "</a>"
                             "</form>"
                             "</td>",
 	          Ctr.FullName);
 
          /* Number of pending degrees (row[1]) */
-         fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" class=\"DAT\" bgcolor=\"%s\">%s</td>"
+         fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
+	                    " vertical-align:middle; background-color:%s;\">"
+	                    "%s"
+	                    "</td>"
 	                    "</tr>",
                   BgColor,row[1]);
 
@@ -267,7 +273,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" align=\"center\" class=\"TITLE_LOCATION\">");
+	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\""
+	                 " style=\"text-align:center;\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -290,7 +297,8 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /* Photo image */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" align=\"center\" class=\"DAT_SMALL\">");
+			    "<td colspan=\"2\" class=\"DAT_SMALL\""
+			    " style=\"text-align:center;\">");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 		     Gbl.CurrentCtr.Ctr.WWW);
@@ -310,7 +318,8 @@ static void Ctr_Configuration (bool PrintView)
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td align=\"center\" colspan=\"2\">");
+			       "<td colspan=\"2\""
+			       " style=\"text-align:center;\">");
 	    Act_FormStart (ActChgCtrPhoAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"javascript:document.getElementById('%s').submit();\">",
@@ -324,7 +333,9 @@ static void Ctr_Configuration (bool PrintView)
 	   }
 	 else if (PhotoAttribution)
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td align=\"center\" colspan=\"2\" class=\"ATTRIBUTION\">%s"
+			       "<td colspan=\"2\" class=\"ATTRIBUTION\""
+			       " style=\"text-align:center;\">"
+			       "%s"
 			       "</td>"
 			       "</tr>",
 		     PhotoAttribution);
@@ -335,8 +346,12 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			 "<td align=\"left\" valign=\"middle\" class=\"DAT_N\">",
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:middle;\">"
+	                 "%s:"
+	                 "</td>"
+			 "<td class=\"DAT_N\""
+			 " style=\"text-align:left; vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (PutLink)
@@ -350,8 +365,14 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			 "<td align=\"left\" valign=\"middle\" class=\"DAT\">%s</td>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "%s"
+			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_Short_Name,
@@ -361,8 +382,12 @@ static void Ctr_Configuration (bool PrintView)
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\">",
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td style=\"text-align:left;"
+			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_Logo);
 	 Act_FormStart (ActChgCtrLog);
@@ -377,9 +402,15 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Link to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			 "<td align=\"left\" valign=\"middle\" class=\"DAT\">"
-			 "<a href=\"%s/?CtrCod=%ld\" class=\"DAT\" target=\"_blank\">%s/?CtrCod=%ld</a>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "<a href=\"%s/?CtrCod=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/?CtrCod=%ld"
+			 "</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
@@ -391,8 +422,12 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:left;"
+			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkToCentre (200);
@@ -403,8 +438,14 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" class=\"DAT\">%u</td>"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:left;"
+			    " vertical-align:middle;\">"
+			    "%u"
+			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_Degrees,
@@ -412,8 +453,14 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" class=\"DAT\">%u</td>"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:left;"
+			    " vertical-align:middle;\">"
+			    "%u"
+			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_Courses,
@@ -421,8 +468,14 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" class=\"DAT\">%u</td>"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:left;"
+			    " vertical-align:middle;\">"
+			    "%u"
+			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],
@@ -430,8 +483,14 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" class=\"DAT\">%u</td>"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:left;"
+			    " vertical-align:middle;\">"
+			    "%u"
+			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
@@ -555,28 +614,35 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Number of centre in this list *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"right\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">"
+		      "<td class=\"%s\" style=\"text-align:right;"
+		      " vertical-align:middle; background-color:%s;\">"
                       "%u"
                       "</td>",
 	    TxtClass,BgColor,
             NumCtr);
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
+		      " vertical-align:middle; background-color:%s;\">"
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-	    TxtClass,BgColor,Ctr->WWW,Ctr->FullName);
+	    TxtClass,BgColor,
+	    Ctr->WWW,Ctr->FullName);
    Ctr_DrawCentreLogo (Ctr->Logo,Ctr->ShortName,16,"vertical-align:top;");
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
    /***** Place *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">%s</td>",
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+		      " vertical-align:middle; background-color:%s;\">"
+		      "%s"
+		      "</td>",
 	    TxtClass,BgColor,
 	    Plc.PlcCod > 0 ? Plc.ShortName :
 			     Txt_Another_place);
 
    /***** Centre name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+		      " vertical-align:middle; background-color:%s;\">",
 	    TxtClass,BgColor);
    Act_FormGoToStart (ActSeeDeg);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
@@ -588,18 +654,30 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    Ctr->FullName);
 
    /***** Number of teachers *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">%u</td>",
-	    TxtClass,BgColor,Ctr->NumTchs);
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+		      " vertical-align:middle; background-color:%s;\">"
+		      "%u"
+		      "</td>",
+	    TxtClass,BgColor,
+	    Ctr->NumTchs);
 
    /***** Number of degrees *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">%u</td>",
-	    TxtClass,BgColor,Ctr->NumDegs);
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+		      " vertical-align:middle; background-color:%s;\">"
+		      "%u"
+		      "</td>",
+	    TxtClass,BgColor,
+	    Ctr->NumDegs);
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"%s\" bgcolor=\"%s\">%s</td>"
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+		      " vertical-align:middle; background-color:%s;\">"
+		      "%s"
+		      "</td>"
 		      "</tr>",
-	    TxtClass,BgColor,Txt_CENTRE_STATUS[StatusTxt]);
+	    TxtClass,BgColor,
+	    Txt_CENTRE_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1090,17 +1168,21 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre code */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%ld&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
                Ctr->CtrCod);
 
       /* Institution logo */
-      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"20\" title=\"%s\">",
+      fprintf (Gbl.F.Out,"<td title=\"%s\""
+	                 " style=\"width:20px; text-align:left;\">",
                Ctr->FullName);
       Ctr_DrawCentreLogo (Ctr->Logo,Ctr->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)	// I can select institution
 	{
 	 Act_FormStart (ActChgCtrIns);
@@ -1124,7 +1206,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgCtrPlc);
@@ -1156,7 +1239,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre short name */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActRenCtrSho);
@@ -1172,7 +1256,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre full name */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActRenCtrFul);
@@ -1188,7 +1273,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre WWW */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgCtrWWW);
@@ -1211,16 +1297,20 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of teachers */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%u</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%u"
+	                 "</td>",
                Ctr->NumTchs);
 
       /* Number of degrees */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%u</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%u"
+	                 "</td>",
                Ctr->NumDegs);
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left; vertical-align:middle;\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
@@ -1245,7 +1335,8 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
+      fprintf (Gbl.F.Out,"<td style=\"width:100px;"
+	                 " text-align:left; vertical-align:top;\">"
 			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 			 "<tr>");
       Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
@@ -1732,15 +1823,15 @@ void Ctr_ReqPhoto (void)
    Act_FormStart (ActRecCtrPho);
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"right\" class=\"%s\">"
+                      "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"
                       "</td>"
-                      "<td align=\"left\">"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td colspan=\"2\" align=\"center\">"
+                      "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
                       "</td>"
                       "</tr>"
@@ -1877,15 +1968,15 @@ static void Ctr_PutFormToCreateCentre (void)
 	    Gbl.Prefs.IconsURL);
 
    /***** Centre code *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\"></td>");
+   fprintf (Gbl.F.Out,"<td></td>");
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" width=\"20\">");
+   fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
    Ctr_DrawCentreLogo (NULL,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<select name=\"OthInsCod\" style=\"width:50px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
@@ -1896,7 +1987,7 @@ static void Ctr_PutFormToCreateCentre (void)
 	    Gbl.CurrentIns.Ins.ShortName);
 
    /***** Place *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<select name=\"PlcCod\" style=\"width:50px;\">"
                       "<option value=\"0\"");
    if (Ctr->PlcCod == 0)
@@ -1914,35 +2005,43 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>");
 
    /***** Centre short name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName);
 
    /***** Centre full name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName);
 
    /***** Centre WWW *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ctr->WWW);
 
    /***** Number of teachers *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">0</td>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	              "0"
+	              "</td>");
 
    /***** Number of degrees *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">0</td>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	              "0"
+	              "</td>");
 
    /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">%s</td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	              " style=\"text-align:left; vertical-align:middle;\">"
+	              "%s"
+	              "</td>",
             Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
+   fprintf (Gbl.F.Out,"<td style=\"width:100px;"
+	              " text-align:left; vertical-align:top;\">"
 		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
@@ -1953,7 +2052,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"centre\" colspan=\"12\">"
+	              "<td colspan=\"12\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
 	              "</td>"
 	              "</tr>",
@@ -2343,7 +2442,8 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 
       /* Number of centres found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"center\" class=\"TIT_TBL\" colspan=\"7\">");
+			 "<td colspan=\"7\" class=\"TIT_TBL\""
+			 " style=\"text-align:center;\">");
       if (NumCtrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_centre);
       else

@@ -125,10 +125,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">"
+	              "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s: "
                       "</td>"
-	              "<td align=\"left\">"
+	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewNick\""
                       " size=\"16\" maxlength=\"%u\" value=\"@%s\" />"
                       "</td>"
@@ -140,10 +140,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** E-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">"
+	              "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s: "
                       "</td>"
-	              "<td align=\"left\">"
+	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewEmail\""
                       " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
@@ -158,7 +158,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Send button and form end *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" align=\"center\">"
+	              "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
                       "</td>"
 	              "</tr>",
@@ -249,7 +249,7 @@ static void Acc_PrintAccountSeparator (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" align=\"center\" valign=\"middle\">"
+		      "<td colspan=\"2\" style=\"text-align:center; vertical-align:middle;\">"
 		      "<hr class=\"%s\" />"
 		      "</td>"
 		      "</tr>",

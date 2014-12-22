@@ -428,8 +428,8 @@ void Gbl_InitializeGlobals (void)
 
    /* To alternate colors where listing rows */
    Gbl.RowEvenOdd = 0;
-   Gbl.ColorRows[0] = "F4F2EA";	// Darker
-   Gbl.ColorRows[1] = "FBFAF7";	// Lighter
+   Gbl.ColorRows[0] = "#F4F2EA";	// Darker
+   Gbl.ColorRows[1] = "#FBFAF7";	// Lighter
 
    /* Related to imported data from external site */
    Gbl.Imported.ExternalUsrId[0] = '\0';
