@@ -465,7 +465,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
 	 if (PutLinkToEvents && ThisDayHasEvent)
            {
             Act_FormStart (ActSeeExaAnn);
-            fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+            fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                                "<tr>"
                                "<td align=\"center\" class=\"%s\">",
                      ClassForDay);

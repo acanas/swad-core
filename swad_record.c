@@ -1498,7 +1498,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" colspan=\"2\" valign=\"top\">"
-	              "<table width=\"100%%\">"
+	              "<table style=\"width:100%%;\">"
                       "<tr>"
                       "<td align=\"left\" width=\"%u\">",
             Rec_DEGREE_LOGO_SIZE);

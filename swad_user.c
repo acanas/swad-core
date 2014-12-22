@@ -5071,7 +5071,7 @@ void Usr_ListAllDataGsts (void)
 
       /***** Start table with list of guests *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                          "<tr>");
 
       /* Columns for the data */
@@ -5203,7 +5203,7 @@ void Usr_ListAllDataStds (void)
             Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
       /***** Start table with list of students *****/
-      fprintf (Gbl.F.Out,"<table width=\"100%%\">");
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
@@ -5431,7 +5431,7 @@ void Usr_ListAllDataTchs (void)
 
       /***** Start table with list of teachers *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                          "<tr>");
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 	                                           1);

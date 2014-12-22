@@ -251,7 +251,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\" style=\"width:110px;\">"
-                      "<table width=\"110\">");
+                      "<table style=\"width:110px;\">");
 
    /***** Write total number of sessions *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -398,7 +398,7 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
 	 break;
       case Con_SHOW_ON_RIGHT_COLUMN:
          fprintf (Gbl.F.Out,"<div class=\"CONNECTED\" style=\"width:110px;\">"
-                            "<table width=\"110\">");
+                            "<table style=\"width:110px;\">");
          break;
      }
 

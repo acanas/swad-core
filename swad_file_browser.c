@@ -6325,7 +6325,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
    /* Folder */
-   fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
                       "<td width=\"30%%\" align=\"right\" class=\"%s\">%s:<br /></td>"
                       "<td align=\"left\" width=\"70%%\">"
@@ -6568,7 +6568,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
    /* URL */
-   fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
                       "<td width=\"30%%\" align=\"right\" class=\"%s\">%s:<br /></td>"
                       "<td align=\"left\" width=\"70%%\">"

@@ -1574,7 +1574,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       Lay_StartRoundFrameTable10 ("100%",0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"center\" width=\"100%%\">"
-	                 "<table width=\"100%%\" class=\"CELLS_PAD_2\">");
+	                 "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -2489,7 +2489,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    /***** Put an icon with message status *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"center\" valign=\"top\" width=\"16\" class=\"%s\">"
-                      "<table width=\"16\">"
+                      "<table style=\"width:16px;\">"
                       "<tr>"
                       "<td align=\"center\" valign=\"top\" width=\"16\">"
                       "<img src=\"%s/msg-%s16x16.gif\""

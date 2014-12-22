@@ -1246,7 +1246,7 @@ static void Ctr_ListCentresForEdition (void)
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-			 "<table width=\"100\" class=\"CELLS_PAD_2\">"
+			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 			 "<tr>");
       Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
@@ -1943,7 +1943,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre requester *****/
    fprintf (Gbl.F.Out,"<td align=\"left\" width=\"100\" valign=\"top\">"
-		      "<table width=\"100\" class=\"CELLS_PAD_2\">"
+		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"

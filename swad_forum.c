@@ -929,7 +929,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td align=\"center\" width=\"100%%\">"
-	                 "<table width=\"100%%\" class=\"CELLS_PAD_2\">");
+	                 "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1119,7 +1119,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Write author or destinatary, and form to reply (in case of received post) *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "<td align=\"left\" width=\"120\" colspan=\"2\" valign=\"top\">"
-                      "<table width=\"120\" class=\"CELLS_PAD_2\">");
+                      "<table class=\"CELLS_PAD_2\" style=\"width:120px;\">");
 
    /* Write author */
    fprintf (Gbl.F.Out,"<tr>");
@@ -3452,7 +3452,8 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    For_PutAllHiddenParamsForum ();
 
    fprintf (Gbl.F.Out,"<div align=\"center\">"
-	              "<table><tr>"
+	              "<table>"
+                      "<tr>"
 	              "<td align=\"left\"></td>"
                       "<td align=\"left\"><span class=\"%s\">%s</span>"
                       "<span class=\"DAT\"> (%s)</span></td>",

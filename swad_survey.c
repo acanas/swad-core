@@ -3108,7 +3108,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
-   fprintf (Gbl.F.Out,"<table width=\"100%%\" class=\"CELLS_PAD_4\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"width:100%%;\">");
    for (NumAns = 0;
 	NumAns < NumAnswers;
 	NumAns++)

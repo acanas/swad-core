@@ -935,7 +935,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table><tr>"
+   fprintf (Gbl.F.Out,"<table>"
+                      "<tr>"
                       "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
                       "<th colspan=\"2\" align=\"right\" class=\"TIT_TBL\">%s</th>"
                       "</tr>",
@@ -956,9 +957,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                       "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%s</td>"
                       "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
                       "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">(%.1f%%)</td>"
-                      "</tr>",
+                      "</tr>"
+                      "</table>",
             Txt_Total,NumCrss,100.0);
-   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

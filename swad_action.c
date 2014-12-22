@@ -4138,7 +4138,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    fprintf (Gbl.F.Out," %s</a></form>",Txt_Frequent_actions);
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
-	              "<table width=\"120\">");
+	              "<table style=\"width:120px;\">");
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;

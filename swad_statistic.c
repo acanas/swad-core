@@ -1441,7 +1441,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td align=\"left\" colspan=\"7\">"
-                      "<table width=\"100%%\" class=\"CELLS_PAD_2\">"
+                      "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">"
                       "<tr>");
 
    /* Put link to jump to previous page (older clicks) */
@@ -2135,7 +2135,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
    unsigned Interval,NumColor,R,G,B;
 
    /***** Write numbers from 0 to MaxPagesGenerated *****/
-   fprintf (Gbl.F.Out,"<table width=\"100%%\">"
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
 	              "<td align=\"left\" valign=\"bottom\" width=\"%u\" colspan=\"%u\" class=\"LOG\">0</td>",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,(GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);

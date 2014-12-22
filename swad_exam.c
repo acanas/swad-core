@@ -780,7 +780,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    Lay_StartRoundFrameTable10 ("500px",0,NULL);
    fprintf (Gbl.F.Out,"<tr>" \
 	              "<td align=\"center\">" \
-                      "<table width=\"100%%\" style=\"padding:20px; border-spacing:3px;\">");
+                      "<table style=\"width:100%%; padding:20px; border-spacing:3px;\">");
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>" \

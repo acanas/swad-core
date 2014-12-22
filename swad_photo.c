@@ -676,7 +676,8 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
 
    /***** Show the three images resulting of the processing *****/
-   fprintf (Gbl.F.Out,"<table width=\"100%%\"><tr>");
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
+                      "<tr>");
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
