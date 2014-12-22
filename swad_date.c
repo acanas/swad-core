@@ -265,7 +265,7 @@ void Dat_DrawCalendar (void)
 
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\">"
+	              "<td style=\"text-align:center;\">"
 	              "<table style=\"border-spacing:5px;\">");
    for (Row = 0;
 	Row < 4;
@@ -276,7 +276,8 @@ void Dat_DrawCalendar (void)
 	   Col < 4;
 	   Col++)
 	{
-	 fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" width=\"120\">");
+	 fprintf (Gbl.F.Out,"<td style=\"width:120px;"
+	                    " text-align:center; vertical-align:top;\">");
 	 Dat_DrawMonth (Year,Month,true,!PrintView,(Gbl.CurrentAct == ActPrnCal));
 	 fprintf (Gbl.F.Out,"</td>");
 	 if (++Month == 13)
@@ -362,7 +363,9 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
    for (DayOfWeek = 0;
 	DayOfWeek < 7;
 	DayOfWeek++)
-      fprintf (Gbl.F.Out,"<td align=\"center\" class=\"%s\">%c</td>",
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">"
+	                 "%c"
+	                 "</td>",
                (DayOfWeek == 6) ? "DAY_NO_WRK_HEAD" :
         	                  "DAY_WRK_HEAD",
                Txt_DAYS_CAPS[DayOfWeek][0]);
@@ -455,7 +458,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
                  }
 
          /***** Write the box with the day *****/
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"%s\">",
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
                   IsToday ? (ThisDayHasEvent ? "TODAY_EVENT" :
                 	                       "TODAY") :
                             (ThisDayHasEvent ? "DAY_EVENT" :
@@ -467,7 +470,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
             Act_FormStart (ActSeeExaAnn);
             fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                                "<tr>"
-                               "<td align=\"center\" class=\"%s\">",
+                               "<td class=\"%s\" style=\"text-align:center;\">",
                      ClassForDay);
             Act_LinkFormSubmit (Gbl.Title,ClassForDay);
            }
@@ -574,10 +577,12 @@ void Dat_WriteFormIniEndDates (void)
    extern const char *Txt_Today;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"%s\">%s:</td>",
+                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "%s:"
+                      "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Start_date);
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"StartDay","StartMonth","StartYear",
                       &(Gbl.DateRange.DateIni),
                       false,false);
@@ -585,10 +590,12 @@ void Dat_WriteFormIniEndDates (void)
                       "</tr>");
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"%s\">%s:</td>",
+                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "%s:"
+                      "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_End_date);
-   fprintf (Gbl.F.Out,"<td align=\"left\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",
                       &(Gbl.DateRange.DateEnd),
                       false,false);
@@ -597,9 +604,11 @@ void Dat_WriteFormIniEndDates (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
-                      "<td align=\"left\" valign=\"middle\">"
-                      "<input type=\"button\" name=\"Yesterday\" value=\"%s\" onclick=\"setDateTo(this,%u,%u,%u)\" />"
-                      "<input type=\"button\" name=\"Today\" value=\"%s\" onclick=\"setDateTo(this,%u,%u,%u)\" />"
+                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
+                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
+                      "<input type=\"button\" name=\"Today\" value=\"%s\""
+                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
                       "</td>"
                       "</tr>",
             Txt_Yesterday,
@@ -634,7 +643,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Day *****/
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"left\">"
+                      "<td style=\"text-align:left;\">"
                       "<select id=\"%s\" name=\"%s\"",
             NameSelectDay,NameSelectDay);
    if (SubmitFormOnChange)
@@ -659,8 +668,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Month *****/
    fprintf (Gbl.F.Out,"</select>"
                       "</td>"
-                      "<td align=\"left\">"
-                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
+                      "<td style=\"text-align:left;\">"
+                      "<select id=\"%s\" name=\"%s\""
+                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
@@ -682,7 +692,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Year *****/
    fprintf (Gbl.F.Out,"</select>"
                       "</td>"
-                      "<td align=\"left\">"
+                      "<td style=\"text-align:left;\">"
                       "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
@@ -721,7 +731,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"left\">"
+                      "<td style=\"text-align:left;\">"
                       "<select name=\"%s\"",
             NameSelectHour);
    if (SubmitFormOnChange)
@@ -741,8 +751,9 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
      }
 
    /***** Minute *****/
-   fprintf (Gbl.F.Out,"</select></td>"
-                      "<td align=\"left\">"
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<select name=\"%s\"",
 	    NameSelectMinute);
    if (SubmitFormOnChange)
