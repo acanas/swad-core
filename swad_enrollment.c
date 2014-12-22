@@ -682,8 +682,11 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    /***** Start of text area *****/
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s: "
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<textarea name=\"UsrsIDs\" cols=\"50\" rows=\"10\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
@@ -1921,8 +1924,11 @@ void Enr_ShowEnrollmentRequests (void)
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"middle\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
 	               1 << Sco_SCOPE_COUNTRY     |
@@ -1938,8 +1944,12 @@ void Enr_ShowEnrollmentRequests (void)
 
    /* Users' roles in listing */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Users);
    Rol_GetSelectedRoles (&Roles);
    if (!Roles)
@@ -2209,31 +2219,38 @@ void Enr_ShowEnrollmentRequests (void)
            {
             /***** Number *****/
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td align=\"right\" valign=\"top\" class=\"DAT\">%u</td>",
+                               "<td class=\"DAT\" style=\"text-align:right;"
+                               " vertical-align:top;\">"
+                               "%u"
+                               "</td>",
                      NumRequests - NumReq);
 
             /***** Link to course *****/
             Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+        	               " vertical-align:top;\">");
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"DAT");
-            fprintf (Gbl.F.Out,"%s &gt; %s</a>"
+            fprintf (Gbl.F.Out,"%s &gt; %s"
+        	               "</a>"
         	               "</form>"
         	               "</td>",
                      Deg.ShortName,Crs.ShortName);
 
             /***** Number of teachers in the course *****/
-            fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" class=\"DAT\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
+        	               " vertical-align:top;\">"
                                "%u"
                                "</td>",
                      Crs.NumTchs);
 
             /***** User photo *****/
-            fprintf (Gbl.F.Out,"<td width=\"18\" align=\"center\" valign=\"top\" class=\"DAT\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:18px;"
+        	               " text-align:center; vertical-align:top;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,
                               ShowPhoto ? PhotoURL :
@@ -2242,32 +2259,40 @@ void Enr_ShowEnrollmentRequests (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /***** User name *****/
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+        	               " vertical-align:top;\">");
             Usr_RestrictLengthAndWriteName (&UsrDat,20);
 
             /***** Requested role (row[3]) *****/
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">%s</td>",
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+        	               " vertical-align:top;\">"
+        	               "%s"
+        	               "</td>",
                      Txt_ROLES_SINGULAR_abc[DesiredRole][UsrDat.Sex]);
 
             /***** Request time (row[4]) *****/
             Msg_WriteMsgDate (row[4],"DAT");
 
             /***** Button to confirm the request *****/
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+        	               " vertical-align:top;\">");
             Act_FormStart (ActReqMdfUsr);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutSendButton (Txt_Register);
-            fprintf (Gbl.F.Out,"</form></td>");
+            fprintf (Gbl.F.Out,"</form>"
+        	               "</td>");
 
             /***** Button to reject the request *****/
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+        	               " vertical-align:top;\">");
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutSendButton (Txt_Reject);
-            fprintf (Gbl.F.Out,"</form></td>"
+            fprintf (Gbl.F.Out,"</form>"
+        	               "</td>"
                                "</tr>");
 
             /***** Mark possible notification as seen *****/
