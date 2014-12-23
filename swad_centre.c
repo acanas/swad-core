@@ -2087,7 +2087,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">");
+      fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeCtr);
