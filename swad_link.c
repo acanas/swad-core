@@ -94,9 +94,10 @@ void Lnk_SeeLinks (void)
 	   NumLnk++)
 	 /* Write data of this link */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"left\" class=\"INS_LNK\">"
+			    "<td class=\"INS_LNK\" style=\"text-align:left;\">"
 			    "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\">"
-			    "%s</a>"
+			    "%s"
+			    "</a>"
 			    "</td>"
 			    "</tr>",
 		  Gbl.Links.Lst[NumLnk].WWW,
@@ -308,39 +309,44 @@ static void Lnk_ListLinksForEdition (void)
                Txt_Remove_link);
 
       /* Link code */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%ld&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
                Lnk->LnkCod);
 
       /* Link short name */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\"" \
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />" \
-                         "</form>" \
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                         "</form>"
                          "</td>",
                Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName,
                Gbl.FormId);
 
       /* Link full name */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\"" \
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />" \
-                         "</form>" \
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                         "</form>"
                          "</td>",
                Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName,
                Gbl.FormId);
 
       /* Link WWW */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\"" \
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />" \
-                         "</form>" \
-                         "</td>" \
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                         "</form>"
+                         "</td>"
                          "</tr>",
                Cns_MAX_LENGTH_WWW,Lnk->WWW,
                Gbl.FormId);
@@ -590,34 +596,34 @@ static void Lnk_PutFormToCreateLink (void)
    Lnk_PutHeadLinks ();
 
    /***** Link code *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"BM\"></td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"BM\"></td>"
                       "<td></td>");
 
    /***** Link short name *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">" \
-                      "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />" \
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+                      "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName);
 
    /***** Link full name *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">" \
-                      "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />" \
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+                      "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName);
 
    /***** Link WWW *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">" \
-                      "<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\" />" \
-                      "</td>" \
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+                      "<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Lnk->WWW);
 
    /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td align=\"center\" colspan=\"5\">" \
-                      "<input type=\"submit\" value=\"%s\" />" \
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"5\" style=\"text-align:center;\">"
+                      "<input type=\"submit\" value=\"%s\" />"
+	              "</td>"
 	              "</tr>",
             Txt_Create_link);
 
@@ -639,12 +645,20 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_Full_Name;
    extern const char *Txt_WWW;
 
-   fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"BM\"></td>" \
-                      "<td align=\"right\" class=\"TIT_TBL\">%s</td>" \
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>" \
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>" \
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"BM\"></td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
                       "</tr>",
             Txt_Code,
             Txt_Short_Name,
@@ -712,7 +726,7 @@ static void Lnk_CreateLink (struct Link *Lnk)
    char Query[1024];
 
    /***** Create a new link *****/
-   sprintf (Query,"INSERT INTO links (ShortName,FullName,WWW)" \
+   sprintf (Query,"INSERT INTO links (ShortName,FullName,WWW)"
                   " VALUES ('%s','%s','%s')",
             Lnk->ShortName,Lnk->FullName,Lnk->WWW);
    DB_QueryINSERT (Query,"can not create institutional link");
@@ -737,9 +751,10 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    if (Gbl.Links.Num)
      {
       /***** Header *****/
-      fprintf (Gbl.F.Out,"<tr>" \
-			 "<td align=\"center\" width=\"120\" class=\"INS_LNK\">" \
-			 "<div id=\"institutional_links\">" \
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"INS_LNK\" style=\"width:120px;"
+			 " text-align:center;\">"
+			 "<div id=\"institutional_links\">"
 			 "<table style=\"width:110px;\">");
 
       /***** Write all the links *****/
@@ -747,19 +762,21 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 	   NumLnk < Gbl.Links.Num;
 	   NumLnk++)
 	 /* Write data of this link */
-	 fprintf (Gbl.F.Out,"<tr>" \
-			    "<td width=\"110\" align=\"left\">" \
-			    "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\">%s</a>" \
-			    "</td>" \
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td style=\"width:110px; text-align:left;\">"
+			    "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\">"
+			    "%s"
+			    "</a>"
+			    "</td>"
 			    "</tr>",
 		  Gbl.Links.Lst[NumLnk].WWW,
 		  Gbl.Links.Lst[NumLnk].FullName,
 		  Gbl.Links.Lst[NumLnk].ShortName);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>" \
-			 "</div>" \
-			 "</td>" \
+      fprintf (Gbl.F.Out,"</table>"
+			 "</div>"
+			 "</td>"
 			 "</tr>");
      }
 

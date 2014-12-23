@@ -109,8 +109,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
    struct MarksProperties Marks;
 
    if (FileType == Brw_IS_FOLDER)
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\"></td>"
-                         "<td align=\"right\" valign=\"top\" bgcolor=\"%s\"></td>",
+      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
+                         "<td style=\"background-color:%s;\"></td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],
                Gbl.ColorRows[Gbl.RowEvenOdd]);
    else	// File or link
@@ -119,9 +119,10 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd],
-               The_ClassFormulNB[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;\">",
+               The_ClassFormulNB[Gbl.Prefs.Theme],
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
@@ -145,8 +146,10 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
 	                 "</td>");
 
       /***** Write the number of rows of footer *****/
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd],The_ClassFormulNB[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;\">",
+               The_ClassFormulNB[Gbl.Prefs.Theme],
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
