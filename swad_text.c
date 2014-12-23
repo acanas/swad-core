@@ -11741,25 +11741,25 @@ const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	//
 	"From now on the number of editing lines of the field <strong>%s</strong> is <strong>%u</strong>.";	// Necessita de tradução
 #endif
 
-const char *Txt_from_this_BR_course =
+const char *Txt_from_this_course =
 #if   L==0
-	"desde esta<br />asignatura";	// Necessita traduccio
+	"desde esta asignatura";	// Necessita traduccio
 #elif L==1
-	"von dieser<br />Kurs";
+	"von dieser Kurs";
 #elif L==2
-	"from this<br />course";
+	"from this course";
 #elif L==3
-	"desde esta<br />asignatura";
+	"desde esta asignatura";
 #elif L==4
-	"de cette<br />mati&egrave;re";
+	"de cette mati&egrave;re";
 #elif L==5
-	"desde esta<br />asignatura";	// Okoteve traducción
+	"desde esta asignatura";	// Okoteve traducción
 #elif L==6
-	"da questo<br />corso";
+	"da questo corso";
 #elif L==7
-	"z tego<br />kursu";
+	"z tego kursu";
 #elif L==8
-	"desta<br />disciplina";
+	"desta disciplina";
 #endif
 
 const char *Txt_From_this_time_you_can_receive_messages_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -28054,23 +28054,23 @@ const char *Txt_PLACES_ORDER[2] =
 #endif
 	 ,
 #if   L==0
-	 "Nombre de<br />titulacions"
+	 "Titulacions"
 #elif L==1
-	 "Anzahl der<br />Studieng&auml;nge"
+	 "Studieng&auml;nge"
 #elif L==2
-	 "No. of<br />degrees"
+	 "Degrees"
 #elif L==3
-	 "N&ordm; de<br />titulaciones"
+	 "Titulaciones"
 #elif L==4
-	 "Nombre<br />d'&eacute;tudes"
+	 "&Eacute;tudes"
 #elif L==5
-	 "N&ordm; de<br />titulaciones"	// Okoteve traducción
+	 "Titulaciones"	// Okoteve traducción
 #elif L==6
-	 "Numero di<br />lauree"
+	 "Lauree"
 #elif L==7
-	 "Numery of<br />stopni"
+	 "Stopni"
 #elif L==8
-	 "N&ordm; de<br />titula&ccedil;oes"
+	 "Titula&ccedil;oes"
 #endif
 	};
 

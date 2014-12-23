@@ -591,7 +591,8 @@ static void Lay_WritePageTopHeading (void)
         },
      };
 
-   fprintf (Gbl.F.Out,"<tr style=\"background-image:url('%s/head_row1_1x48.gif'); background-repeat:repeat-x;\">",
+   fprintf (Gbl.F.Out,"<tr style=\"background-image:url('%s/head_row1_1x48.gif');"
+	              " background-repeat:repeat-x;\">",
             Gbl.Prefs.PathTheme);
 
    /***** 1st. row, 1st. column: logo *****/
@@ -656,7 +657,9 @@ static void Lay_WritePageTopHeading (void)
                       "</tr>");
 
    /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<tr style=\"height:64px; background-image: url('%s/head_row2_1x64.gif'); background-repeat: repeat-x;\">",
+   fprintf (Gbl.F.Out,"<tr style=\"height:64px;"
+	              " background-image:url('%s/head_row2_1x64.gif');"
+	              " background-repeat:repeat-x;\">",
             Gbl.Prefs.PathTheme);
 
    switch (Gbl.Prefs.Layout)
@@ -670,7 +673,8 @@ static void Lay_WritePageTopHeading (void)
          fprintf (Gbl.F.Out,"</td>");	// End of first column
 
          /***** 2nd. row, 2nd. column: degree and course *****/
-         fprintf (Gbl.F.Out,"<td style=\"height:64px; text-align:center; vertical-align:top;\">"
+         fprintf (Gbl.F.Out,"<td style=\"height:64px;"
+                            " text-align:center; vertical-align:top;\">"
                             "<div align=\"center\" style=\"padding-top:4px;\">");
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
@@ -692,8 +696,8 @@ static void Lay_WritePageTopHeading (void)
       case Lay_LAYOUT_MOBILE:
          fprintf (Gbl.F.Out,"<td colspan=\"3\" style=\"height:32px;"
                             " text-align:center; vertical-align:middle;"
-                            " background-image: url('%s/head_row2_1x64.gif');"
-                            " background-repeat: repeat-x;\">",
+                            " background-image:url('%s/head_row2_1x64.gif');"
+                            " background-repeat:repeat-x;\">",
                   Gbl.Prefs.PathTheme);
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
@@ -714,8 +718,8 @@ static void Lay_WritePageTopHeading (void)
          if (Gbl.Prefs.SideCols & 2)	// Left column visible
             fprintf (Gbl.F.Out,"<td style=\"width:128px;"
         	               " text-align:center; vertical-align:top;"
-                               " background-image: url('%s/head_base_background_1x56.gif');"
-                               " background-repeat: repeat-x;\">"
+                               " background-image:url('%s/head_base_background_1x56.gif');"
+                               " background-repeat:repeat-x;\">"
                                "</td>",
             Gbl.Prefs.PathTheme);
 
@@ -1419,9 +1423,9 @@ static void Lay_ShowRightColumn (void)
    /***** Connected users *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td style=\"text-align:right; vertical-align:top;\""
-                      " background-image: url('%s/head_base_background_1x56.gif');"
-                      " background-repeat: repeat-x;\">"
+                      "<td style=\"text-align:right; vertical-align:top;"
+                      " background-image:url('%s/head_base_background_1x56.gif');"
+                      " background-repeat:repeat-x;\">"
                       "<table style=\"width:100%%; padding-top:56px;"
                       " border-spacing:4px;\">",
             Gbl.Prefs.PathTheme);

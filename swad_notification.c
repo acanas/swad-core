@@ -398,7 +398,8 @@ void Ntf_ShowMyNotifications (void)
          /***** Write row for this notification *****/
 	 /* Write event icon */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td valign=\"top\" align=\"left\" width=\"20\" class=\"%s\">",
+                            "<td class=\"%s\" style=\"width:20px;"
+                            " text-align:left; vertical-align:top;\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -420,7 +421,8 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write event type */
-         fprintf (Gbl.F.Out,"<td valign=\"top\" align=\"left\" class=\"%s\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+                            " vertical-align:top;\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -439,7 +441,9 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgAuthor (&UsrDat,80,11,ClassAuthorBg,true,NULL);
 
          /* Write location */
-         fprintf (Gbl.F.Out,"<td valign=\"top\" align=\"left\" class=\"%s\">",ClassBackground);
+         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+                            " vertical-align:top;\">",
+                  ClassBackground);
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
@@ -493,7 +497,10 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgDate (DateTime,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
-         fprintf (Gbl.F.Out,"<td valign=\"top\" align=\"left\" class=\"%s\">%s</td>"  \
+         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+                            " vertical-align:top;\">"
+                            "%s"
+                            "</td>"  \
                             "</tr>",
                   ClassBackground,Txt_NOTIFICATION_STATUS[StatusTxt]);
 
@@ -505,7 +512,9 @@ void Ntf_ShowMyNotifications (void)
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD,false);
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
-                               "<td valign=\"top\" align=\"left\" colspan=\"5\" class=\"DAT\" style=\"padding-bottom:10px;\">"
+                               "<td colspan=\"5\" class=\"DAT\""
+                               " style=\"text-align:left; vertical-align:top;"
+                               " padding-bottom:10px;\">"
                                "%s"
                                "</td>"
                                "</tr>",
@@ -1636,7 +1645,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\">");
+	              "<td style=\"text-align:center;\">");
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
@@ -1657,21 +1666,25 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" class=\"%s\">%s:</td>"
-	                 "<td align=\"center\">"
+	                 "<td class=\"%s\" style=\"text-align:right;\">"
+	                 "%s:"
+	                 "</td>"
+	                 "<td style=\"text-align:center;\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                The_ClassFormul[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," /></td>"
-	                 "<td align=\"center\">"
+      fprintf (Gbl.F.Out," />"
+	                 "</td>"
+	                 "<td style=\"text-align:center;\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," /></td>"
+      fprintf (Gbl.F.Out," />"
+	                 "</td>"
 	                 "</tr>");
      }
 

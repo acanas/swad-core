@@ -28,7 +28,7 @@ A:active		{text-decoration:none;}
 A:hover			{text-decoration:underline;}
 body
 	{
-	margin:0px;
+	margin:0;
 	background-color:white;
 	}
 input			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:10pt;}
@@ -36,25 +36,25 @@ select			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans
 textarea		{font-size:8pt;}
 table
 	{
-	border-width:0px;
+	border-width:0;
 	border-style:none;
-	border-spacing:0px;
+	border-spacing:0;
 	}
 table th
 	{
-	padding:0px;
+	padding:0;
 	}
 table td
 	{
-	padding:0px;
+	padding:0;
 	}
-img			{border-width:0px; border-style:none;}
-form			{margin:0px; display:inline;}
-p			{margin:0px;}
-hr.WHITE_SEPARA		{height:0px; border-top:0px; border-bottom:#707070 dotted 1px;}
-hr.GREY_SEPARA		{height:0px; border-top:0px; border-bottom:#707070 dotted 1px;}
-hr.BLUE_SEPARA		{height:0px; border-top:0px; border-bottom:#4D88A1 dotted 1px;}
-hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
+img			{border-width:0; border-style:none;}
+form			{margin:0; display:inline;}
+p			{margin:0;}
+hr.WHITE_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
+hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
+hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
+hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /****************** Title of current action in main block ********************/
 #action_title
@@ -64,7 +64,7 @@ hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
 	clear:both;
 	margin:0 auto;
 	background-repeat:no-repeat;
-	background-position:10px 0px;
+	background-position:10px 0;
 	padding:10px 10px 10px 84px;
 	overflow:hidden;
 	}
@@ -177,9 +177,9 @@ hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
 		color-stop(1, #EED86C)
 	);
 
-	-moz-box-shadow:0px 6px 8px -4px rgba(125, 113, 0, 0.8);
-	-webkit-box-shadow:0px 6px 8px -4px rgba(125, 113, 0, 0.8);
-	box-shadow:0px 6px 8px -4px rgba(125, 113, 0, 0.8);
+	-moz-box-shadow:0 6px 8px -4px rgba(125, 113, 0, 0.8);
+	-webkit-box-shadow:0 6px 8px -4px rgba(125, 113, 0, 0.8);
+	box-shadow:0 6px 8px -4px rgba(125, 113, 0, 0.8);
 
 	text-align:left;
 	overflow:hidden;
@@ -255,13 +255,13 @@ hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
 	{
 	float:left;
 	width:86px;height:61px;
-	margin:1px 1px 0px 1px;
-	padding:0px 1px 0 1px;
+	margin:1px 1px 0 1px;
+	padding:0 1px 0 1px;
 	border-radius:6px 6px 0 0;
 	-moz-border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-moz-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-webkit-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-webkit-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;
@@ -274,9 +274,9 @@ hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
 	padding:1px 1px 0 1px;
 	border-radius:6px 6px 0 0;
 	-moz-border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-moz-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-webkit-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-webkit-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;
@@ -369,9 +369,9 @@ hr.YELLOW_SEPARA	{height:0px; border-top:0px; border-bottom:#BD4815 dotted 1px;}
 	padding:10px 0;
 	border-radius:6px;
 	-moz-border-radius:6px;
-	box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-moz-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
-	-webkit-box-shadow:inset -2px -2px 1px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	-webkit-box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
 	overflow:hidden;
 	vertical-align:top;
@@ -639,8 +639,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 #menu
 	{
 	list-style-type:none;
-	padding:0px;
-	margin:0px;
+	padding:0;
+	margin:0;
 	}
 .MENU_OPTION
 	{
@@ -718,10 +718,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LST_HID		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-size:9pt; white-space:nowrap;}
 .LST_REC		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:9pt; white-space:nowrap;}
 .LST_REC_HID		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-size:9pt; white-space:nowrap;}
-.LST_EDIT		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-weight:bold; font-size:9pt; height:16px; padding-top:0px; padding-bottom:0px; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_HID		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-weight:bold; font-size:9pt; height:16px; padding-top:0px; padding-bottom:0px; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-weight:bold; font-size:9pt; height:16px; padding-top:0px; padding-bottom:0px; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC_HID	{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-weight:bold; font-size:9pt; height:16px; padding-top:0px; padding-bottom:0px; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_HID		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC_HID	{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
 .USR_ID			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:14pt; font-weight:bold;}
 
@@ -751,7 +751,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSJ_AVISO		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#632921; font-size:10pt;}
 .TIT_TBL		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:10pt;}
 .TIT_CLASSPHOTO		{font-family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#606060; font-size:11pt;}
-.CLASSPHOTO		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#606060; font-size:8pt; line-height:100%; letter-spacing:0px; white-space:nowrap;}
+.CLASSPHOTO		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#606060; font-size:8pt; line-height:100%; letter-spacing:0; white-space:nowrap;}
 
 .GRP_TITLE		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:12pt; font-weight:bold;}
 
@@ -782,7 +782,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EDI		{font-family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#404040; font-size:10pt;}
 .TEST_EDI_LIGHT		{font-family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#A0A0A0; font-size:10pt;}
 
-.HOR			{font-family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#345C6C; font-size:8pt; line-height:110%; letter-spacing:0px;}
+.HOR			{font-family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#345C6C; font-size:8pt; line-height:110%; letter-spacing:0;}
 .FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
 .FREE1			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
 .FREE2			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
@@ -794,7 +794,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .USR_LIST_TYPE_OFF	{border:solid 1px; border-color:#FFFFFF;}
 .USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
 
-.LAYOUT_OFF		{border:solid; border-width:0px;}
+.LAYOUT_OFF		{border:solid; border-width:0;}
 .LAYOUT_ON		{border:solid; border-width:1px; border-color:#80E000;}
 
 .LOG			{font-family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#606060; font-size:9pt;}

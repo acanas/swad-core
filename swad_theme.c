@@ -238,13 +238,13 @@ void The_PutIconsToSelectTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" class=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
                Theme == Gbl.Prefs.Theme ? "LAYOUT_ON" :
         	                          "LAYOUT_OFF");
       Act_FormStart (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/theme_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:32px;height:20px;\" />"
+	                 " alt=\"%s\" title=\"%s\" style=\"display:block; width:32px; height:20px;\" />"
                          "</form>"
                          "</td>",
                Gbl.Prefs.IconsURL,

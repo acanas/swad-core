@@ -253,15 +253,15 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
      }
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"right\" class=\"%s\">"
+                      "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"
                       "</td>"
-                      "<td align=\"left\">"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td colspan=\"2\" align=\"center\">"
+                      "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
                       "</td>"
                       "</tr>"
@@ -681,9 +681,11 @@ static void Pho_UpdatePhoto2 (void)
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" width=\"33%%\" class=\"DAT\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:33%%;"
+	                 " text-align:center; vertical-align:top;\">"
                          "<img src=\"%s/%s/%s/%s_paso%u.jpg\" width=\"%u\" height=\"%u\" />"
-                         "<br />%s</td>",
+                         "<br />%s"
+                         "</td>",
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
                Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
@@ -1450,8 +1452,11 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-	              "<td align=\"left\" valign=\"middle\">",
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Average_type);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
@@ -1517,8 +1522,11 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_HowComputePhotoSize_t PhoSi;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-	              "<td align=\"left\" valign=\"middle\">",
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
@@ -1584,8 +1592,11 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_HowOrderDegrees_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-	              "<td align=\"left\" valign=\"middle\">",
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
@@ -1831,7 +1842,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
            }
 
          /***** Show average photo of students belonging to this degree *****/
-         fprintf (Gbl.F.Out,"<td align=\"center\">");
+         fprintf (Gbl.F.Out,"<td style=\"text-align:center;\">");
          Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1879,14 +1890,22 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s&nbsp;</td>",
+                      "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                      " vertical-align:top;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                      " vertical-align:top;\">"
+                      "%s&nbsp;"
+                      "</td>",
             Txt_No_INDEX,
             Txt_Degree);
    for (Sex = (Usr_Sex_t) 0;
 	Sex < Usr_NUM_SEXS;
 	Sex++)
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:center; vertical-align:top;\">"
+	                 "%s&nbsp;"
+	                 "</td>",
                Txt_SEX_PLURAL_Abc[Sex]);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -1915,11 +1934,15 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       /***** Show logo and name of this degree *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"right\" class=\"DAT\" bgcolor=\"%s\">%u&nbsp;</td>",
+                         "<td class=\"DAT\" style=\"text-align:right;"
+                         " background-color:%s;\">"
+                         "%u&nbsp;"
+                         "</td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],++NumDegsNotEmpty);
 
       /***** Show logo and name of this degree *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" class=\"DAT\" bgcolor=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+                         " background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (SeeOrPrint == Pho_DEGREES_SEE)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
@@ -1937,7 +1960,9 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
         {
          /***** Show average photo of students belonging to this degree *****/
          Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-         fprintf (Gbl.F.Out,"<td align=\"center\" bgcolor=\"%s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
+         fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+                            " background-color:%s;\">",
+                  Gbl.ColorRows[Gbl.RowEvenOdd]);
          if (Gbl.Usrs.Listing.WithPhotos)
             Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
          else

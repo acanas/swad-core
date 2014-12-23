@@ -100,12 +100,17 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
-	              "<td align=\"left\"></td>"
-	              "<td align=\"left\" class=\"%s\">%s</td>"
+	              "<td></td>"
+	              "<td class=\"%s\" style=\"text-align:left;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
+                      "<td class=\"%s\" style=\"text-align:right;"
+                      " vertical-align:top;\">"
+                      "%s: "
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<textarea name=\"Content\" cols=\"30\" rows=\"10\"></textarea>"
                       "</td>"
                       "</tr>"
@@ -386,7 +391,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 40);
             Lay_StartRoundFrameTable10 (StrWidth,2,Txt_All_notices);
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td align=\"center\">");
+        	               "<td style=\"text-align:center;\">");
 	   }
 	 else
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);

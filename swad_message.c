@@ -2513,10 +2513,11 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 	              " text-align:center; vertical-align:top;\">"
                       "<table style=\"width:16px;\">"
                       "<tr>"
-                      "<td style=\"width:16px;"
+                      "<td style=\"width:16px; padding:0;"
                       " text-align:center; vertical-align:top;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
-                      " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"\" title=\"%s\" class=\"ICON16x16\""
+                      " style=\"display:block;\" />"
                       "</td>"
                       "</tr>",
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
@@ -2802,7 +2803,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
 
 bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
-   extern const char *Txt_from_this_BR_course;
+   extern const char *Txt_from_this_course;
    extern const char *Txt_Go_to_X;
    extern const char *Txt_no_course_of_origin;
    struct Course Crs;
@@ -2819,8 +2820,8 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)))	// Message sent from current course
-             fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">(%s)</span>",
-                      Txt_from_this_BR_course);
+             fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(%s)</div>",
+                      Txt_from_this_course);
          else	// Message sent from another course
            {
             /* Write course, including link */
@@ -3153,7 +3154,7 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
   {
    extern const char *Txt_Delete_message;
 
-   fprintf (Gbl.F.Out,"<td style=\"width:18px;"
+   fprintf (Gbl.F.Out,"<td style=\"width:18px; padding:0;"
 	              " text-align:center; vertical-align:top;\">");
    Act_FormStart (TypeOfMessages == Msg_MESSAGES_RECEIVED ? ActDelRcvMsg :
 	                                                    ActDelSntMsg);
@@ -3161,7 +3162,7 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" style=\"display:block;\" />"
 	              "</form>"
 	              "</td>",
             Gbl.Prefs.IconsURL,

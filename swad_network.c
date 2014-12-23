@@ -224,12 +224,12 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" class=\"%s\">"
+			 "<td class=\"%s\" style=\"text-align:left;\">"
 			 "<img src=\"%s/%s16x16.gif\""
 			 " style=\"width:16px;height:16px;margin-right:10px;vertical-align:middle;\""
 			 " alt=\"\" title=\"%s\" />"
 			 "%s:</td>"
-			 "<td align=\"left\" width=\"%u\">",
+			 "<td style=\"width:%u; text-align:left;\">",
 	       ClassForm,
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
@@ -420,13 +420,17 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    Lay_ShowErrorAndExit ("Error when getting number of files.");
 
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"left\" class=\"DAT\">"
+			    "<td class=\"DAT\" style=\"text-align:left;\">"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " style=\"width:16px;height:16px;margin:0 2px;vertical-align:middle;\""
 			    " alt=\"\" title=\"%s\" />"
 			    "%s</td>"
-			    "<td align=\"right\" class=\"DAT\">%u</td>"
-			    "<td align=\"right\" class=\"DAT\">%.2f%%</td>"
+			    "<td class=\"DAT\" style=\"text-align:right;\">"
+			    "%u"
+			    "</td>"
+			    "<td class=\"DAT\" style=\"text-align:right;\">"
+			    "%.2f%%"
+			    "</td>"
 			    "</tr>",
 		  Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[Web],
 		  Net_TitleWebsAndSocialNetworks[Web],

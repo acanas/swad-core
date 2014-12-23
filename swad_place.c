@@ -103,7 +103,8 @@ void Plc_SeePlaces (void)
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"TIT_TBL\">");
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
+	                    " style=\"text-align:left;\">");
 	 Act_FormStart (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL");
@@ -125,9 +126,13 @@ void Plc_SeePlaces (void)
 	{
 	 /* Write data of this place */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"left\" class=\"DAT\">%s</td>",
+			    "<td class=\"DAT\" style=\"text-align:left;\">"
+			    "%s"
+			    "</td>",
 		  Gbl.Plcs.Lst[NumPlc].FullName);
-	 fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">&nbsp;%u&nbsp;</td>"
+	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                    "&nbsp;%u&nbsp;"
+	                    "</td>"
 			    "</tr>",
 		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
 	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
@@ -135,22 +140,32 @@ void Plc_SeePlaces (void)
 
       /***** Separation row *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" class=\"DAT\" colspan=\"2\">&nbsp;</td>"
+			 "<td colspan=\"2\" class=\"DAT\">"
+			 "&nbsp;"
+			 "</td>"
 			 "</tr>");
 
       /***** Write centres with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" class=\"DAT\">%s</td>"
-			 "<td align=\"right\" class=\"DAT\">&nbsp;%u&nbsp;</td>"
+			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "%s"
+			 "</td>"
+			 "<td class=\"DAT\" style=\"text-align:right;\">"
+			 "&nbsp;%u&nbsp;"
+			 "</td>"
 			 "</tr>",
 	       Txt_Other_places,NumCtrsInOtherPlcs);
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
       /***** Write centres with no place *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" class=\"DAT\">%s</td>"
-			 "<td align=\"right\" class=\"DAT\">&nbsp;%u&nbsp;</td>"
+			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "%s"
+			 "</td>"
+			 "<td class=\"DAT\" style=\"text-align:right;\">"
+			 "&nbsp;%u&nbsp;"
+			 "</td>"
 			 "</tr>",
 	       Txt_Place_unspecified,
 	       Ctr_GetNumCtrsTotal () - NumCtrsWithPlc);
@@ -431,11 +446,14 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place code */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%ld&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
                Plc->PlcCod);
 
       /* Place short name */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -445,7 +463,8 @@ static void Plc_ListPlacesForEdition (void)
                Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.FormId);
 
       /* Place full name */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -455,7 +474,9 @@ static void Plc_ListPlacesForEdition (void)
                Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.FormId);
 
       /* Number of centres */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">&nbsp;%u&nbsp;</td>"
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "&nbsp;%u&nbsp;"
+	                 "</td>"
 	                 "</tr>",
                Plc->NumCtrs);
      }
@@ -669,21 +690,25 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
                       "</tr>",
             Txt_Short_Name,
             Txt_Full_Name);
 
    /***** Place short name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"center\" valign=\"middle\">"
+                      "<td style=\"text-align:center; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName);
 
    /***** Place full name *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
@@ -692,7 +717,7 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" colspan=\"2\">"
+	              "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
 	              "</td>"
 	              "</tr>",
@@ -718,10 +743,18 @@ static void Plc_PutHeadPlaces (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
-                      "<td align=\"right\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"right\" class=\"TIT_TBL\">%s</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</td>"
                       "</tr>",
             Txt_Code,
             Txt_Short_Name,

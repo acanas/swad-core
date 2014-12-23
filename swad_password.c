@@ -661,8 +661,10 @@ void Pwd_ShowFormChgPwd (void)
 
    if (IHaveAPasswordInDB) // If I have a password in database...
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"right\" class=\"%s\">%s: </td>"
-                         "<td align=\"left\">"
+	                 "<td class=\"%s\" style=\"text-align:right;\">"
+	                 "%s: "
+	                 "</td>"
+                         "<td style=\"text-align:left;\">"
                          "<input type=\"password\" name=\"UsrPwd\" size=\"%u\" maxlength=\"%u\" />"
                          "</td>"
                          "</tr>",
@@ -673,7 +675,7 @@ void Pwd_ShowFormChgPwd (void)
 
    /***** Send button and end form *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" align=\"center\">"
+		      "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
 		      "</td>"
 		      "</tr>",
@@ -693,14 +695,18 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_Retype_new_password;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
+	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "%s: "
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"password\" name=\"Paswd1\" size=\"%u\" maxlength=\"%u\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td align=\"right\" class=\"%s\">%s: </td>"
-                      "<td align=\"left\">"
+                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "%s: "
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"password\" name=\"Paswd2\" size=\"%u\" maxlength=\"%u\" />"
                       "</td>"
                       "</tr>",
@@ -740,7 +746,7 @@ void Pwd_ShowFormOthPwd (void)
 	 /* Show user's record */
 	 fprintf (Gbl.F.Out,"<table>"
 			    "<tr>"
-			    "<td colspan=\"2\" align=\"center\">");
+			    "<td colspan=\"2\" style=\"text-align:center;\">");
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");

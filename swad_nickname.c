@@ -210,15 +210,23 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick == 1)
 	 /* The first nickname is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"middle\" width=\"40%%\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"middle\" width=\"60%%\">",
+			    "<td class=\"%s\" style=\"width:40%%;"
+			    " text-align:right; vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td style=\"width:60%%;"
+			    " text-align:left; vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_nickname);
       else	// NumNick >= 2
 	{
 	 if (NumNick == 2)
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td align=\"right\" valign=\"top\" width=\"40%%\" class=\"%s\">%s:</td>"
-			       "<td align=\"left\" valign=\"top\" width=\"60%%\">",
+			       "<td class=\"%s\" style=\"width:40%%;"
+			       " text-align:right; vertical-align:top;\">"
+			       "%s:"
+			       "</td>"
+			       "<td style=\"width:60%%;"
+			       " text-align:left; vertical-align:top;\">",
 		     The_ClassFormul[Gbl.Prefs.Theme],Txt_Other_nicknames);
 	 else	// NumNick >= 3
 	    fprintf (Gbl.F.Out,"<br />");
@@ -268,8 +276,12 @@ void Nck_ShowFormChangeUsrNickname (void)
 
    /***** Form to enter new nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"middle\" width=\"40%%\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"middle\" width=\"60%%\">",
+                      "<td class=\"%s\" style=\"width:40%%;"
+                      " text-align:right; vertical-align:middle;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"width:60%%;"
+                      " text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname

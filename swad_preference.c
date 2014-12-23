@@ -73,10 +73,12 @@ void Prf_EditPrefs (void)
    /***** Language selection *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"center\">",
+                      "<td style=\"text-align:center;\">",
             Txt_Language);
    Prf_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>"
@@ -86,10 +88,12 @@ void Prf_EditPrefs (void)
    /***** Layout selection *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"center\">",
+                      "<td style=\"text-align:center;\">",
             Txt_Layout);
    Lay_PutIconsToSelectLayout ();
    fprintf (Gbl.F.Out,"</td>"
@@ -99,10 +103,12 @@ void Prf_EditPrefs (void)
    /***** Theme selection *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"center\">",
+                      "<td style=\"text-align:center;\">",
             Txt_Theme_SKIN);
    The_PutIconsToSelectTheme ();
    fprintf (Gbl.F.Out,"</td>"
@@ -112,10 +118,12 @@ void Prf_EditPrefs (void)
    /***** Side columns selection *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"center\">",
+                      "<td style=\"text-align:center;\">",
             Txt_Columns);
    Prf_PutIconsToSelectSideCols ();
    fprintf (Gbl.F.Out,"</td>"
@@ -125,10 +133,12 @@ void Prf_EditPrefs (void)
    /***** Icons selection *****/
    Lay_StartRoundFrameTable10 (NULL,0,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	              "%s"
+	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td align=\"center\">",
+                      "<td style=\"text-align:center;\">",
             Txt_Icons);
    Ico_PutIconsToSelectIconSet ();
    fprintf (Gbl.F.Out,"</td>"
@@ -140,7 +150,7 @@ void Prf_EditPrefs (void)
       /***** Public / private photo *****/
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"center\">");
+	                 "<td style=\"text-align:center;\">");
       Prf_PutFormPublicPhoto ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -383,13 +393,13 @@ void Prf_PutIconsToSelectSideCols (void)
 	SideCols <= 3;
 	SideCols++)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" class=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
                SideCols == Gbl.Prefs.SideCols ? "LAYOUT_ON" :
         	                                "LAYOUT_OFF");
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:32px;height:20px;\" />"
+	                 " alt=\"%s\" title=\"%s\" style=\"display:block; width:32px; height:20px;\" />"
 	                 "</form>"
 	                 "</td>",
                Gbl.Prefs.IconsURL,
@@ -585,14 +595,16 @@ static void Prf_PutFormPublicPhoto (void)
                       "<tr>");
 
    /***** Checkbox to select between public or private photo *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:right;\">"
                       "<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
    if (Gbl.Usrs.Me.UsrDat.PublicPhoto)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />"
                       "</td>",
             Gbl.FormId);
-   fprintf (Gbl.F.Out,"<td align=\"left\" class=\"%s\">%s</td>",
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+	              "%s"
+	              "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_photo);
 
    /***** End form *****/
