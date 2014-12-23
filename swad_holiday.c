@@ -102,7 +102,7 @@ void Hld_SeeHolidays (void)
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"TIT_TBL\">");
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:center;\">");
 	 Act_FormStart (ActSeeHld);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL");
@@ -115,8 +115,12 @@ void Hld_SeeHolidays (void)
 			    "</form>"
 			    "</td>");
 	}
-      fprintf (Gbl.F.Out,"<td align=\"center\" class=\"TIT_TBL\">&nbsp;%s&nbsp;</td>"
-			 "<td align=\"center\" class=\"TIT_TBL\">%s</td>"
+      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+	                 "&nbsp;%s&nbsp;"
+	                 "</td>"
+			 "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+			 "%s"
+			 "</td>"
 			 "</tr>",
 	       Txt_End_date,
 	       Txt_Holiday);
@@ -128,14 +132,19 @@ void Hld_SeeHolidays (void)
 	{
 	 /* Write data of this holiday */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"left\" class=\"DAT\">%s</td>",
+			    "<td class=\"DAT\" style=\"text-align:left;\">"
+			    "%s"
+			    "</td>",
 		  Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 						     Gbl.Hlds.Lst[NumHld].PlaceFullName);
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT\">&nbsp;%02u/%02u/%04u</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;\">"
+	                    "&nbsp;%02u/%02u/%04u"
+	                    "</td>",
 		  Gbl.Hlds.Lst[NumHld].StartDate.Day,
 		  Gbl.Hlds.Lst[NumHld].StartDate.Month,
 		  Gbl.Hlds.Lst[NumHld].StartDate.Year);
-	 fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT\">&nbsp;");
+	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;\">"
+	                    "&nbsp;");
 	 switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	   {
 	    case Hld_HOLIDAY:
@@ -149,7 +158,9 @@ void Hld_SeeHolidays (void)
 	       break;
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td align=\"left\" class=\"DAT\">&nbsp;%s</td>"
+			    "<td class=\"DAT\" style=\"text-align:center;\">"
+			    "&nbsp;%s"
+			    "</td>"
 			    "</tr>",
 		  Gbl.Hlds.Lst[NumHld].Name);
 	}
@@ -489,11 +500,14 @@ static void Hld_ListHolidaysForEdition (void)
                Txt_Remove_holiday);
 
       /* Holiday code */
-      fprintf (Gbl.F.Out,"<td align=\"right\" class=\"DAT\">%ld&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
                Hld->HldCod);
 
       /* Holiday place */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:50px;\""
@@ -516,7 +530,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "</td>");
 
       /* Holiday type */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:50px;\""
@@ -535,7 +550,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "</td>");
 
       /* Holiday date / Non school period start date */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgHldStrDat);
       Hld_PutParamHldCod (Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,
@@ -547,7 +563,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "</td>");
 
       /* Non school period end date */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgHldEndDat);
       Hld_PutParamHldCod (Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,
@@ -559,7 +576,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "</td>");
 
       /* Holiday name */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"20\" maxlength=\"%u\" value=\"%s\""
@@ -905,11 +923,21 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
                       "</tr>",
             Txt_Place,
             Txt_Type,
@@ -919,7 +947,7 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday place *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"center\" valign=\"middle\">"
+                      "<td style=\"text-align:center; vertical-align:middle;\">"
                       "<select name=\"PlcCod\" style=\"width:50px;\">"
                       "<option value=\"-1\"");
    if (Hld->PlcCod <= 0)
@@ -937,7 +965,7 @@ static void Hld_PutFormToCreateHoliday (void)
 	              "</td>");
 
    /***** Holiday type *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
                       "<select name=\"HldTyp\" style=\"width:50px;\">");
    for (HolidayType = (Hld_HolidayType_t) 0;
 	HolidayType < Hld_NUM_TYPES_HOLIDAY;
@@ -951,7 +979,8 @@ static void Hld_PutFormToCreateHoliday (void)
 	              "</td>");
 
    /***** Holiday date / Non school period start date *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	              " vertical-align:middle;\">");
    Dat_WriteFormDate (Gbl.Now.Date.Year-1,
 	              Gbl.Now.Date.Year+1,
 	              "StartDay","StartMonth","StartYear",
@@ -960,7 +989,8 @@ static void Hld_PutFormToCreateHoliday (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Non school period end date *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	              " vertical-align:middle;\">");
    Dat_WriteFormDate (Gbl.Now.Date.Year-1,
 	              Gbl.Now.Date.Year+1,
 	              "EndDay","EndMonth","EndYear",
@@ -969,7 +999,7 @@ static void Hld_PutFormToCreateHoliday (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Holiday name *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"Name\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
@@ -978,7 +1008,7 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" colspan=\"5\">"
+	              "<td colspan=\"5\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
 	              "</td>"
 	              "</tr>",
@@ -1006,12 +1036,24 @@ static void Hld_PutHeadHolidays (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
-                      "<td align=\"right\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
-                      "<td align=\"left\" class=\"TIT_TBL\">%s</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
                       "</tr>",
             Txt_Code,
             Txt_Place,

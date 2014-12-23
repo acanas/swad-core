@@ -74,7 +74,7 @@ void Ico_PutIconsToSelectIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" class=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
                IconSet == Gbl.Prefs.IconSet ? "LAYOUT_ON" :
         	                              "LAYOUT_OFF");
       Act_FormStart (ActChgIco);

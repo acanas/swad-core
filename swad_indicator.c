@@ -96,8 +96,11 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for anywhere, centre, degree or course? */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"middle\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
 	               1 << Sco_SCOPE_COUNTRY     |
@@ -113,8 +116,12 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for a type of degree */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:left; vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Types_of_degree);
    Deg_WriteSelectorDegTypes ();
    fprintf (Gbl.F.Out," (");
@@ -125,8 +132,11 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">",
+                      "<td class=\"%s\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (-1L);
    fprintf (Gbl.F.Out,"</td>"
@@ -135,8 +145,10 @@ void Ind_ReqIndicatorsCourses (void)
    /* Show only courses with a numer of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+                      "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<select name=\"Indicators\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_No_of_indicators);
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
@@ -169,7 +181,7 @@ void Ind_ReqIndicatorsCourses (void)
       /* Start table */
       Lay_StartRoundFrameTable10 (NULL,0,Txt_Indicators_of_courses);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"center\">");
+	                 "<td style=\"text-align:center;\">");
 
       /* Show table */
       Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
@@ -495,42 +507,114 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    struct Ind_IndicatorsCrs Indicators;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table bgcolor=\"#4D88A1\" class=\"CELLS_PAD_1\" style=\"border-spacing:1px;\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\" style=\"border-spacing:1px;"
+	              " margin-left:auto; margin-right:auto;"
+	              " background-color:#4D88A1;\">");
 
    /***** Write table heading *****/
    switch (IndicatorsLayout)
      {
       case Ind_INDICATORS_BRIEF:
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\" colspan=\"11\">%s</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td colspan=\"11\" class=\"TIT_TBL\""
+                            " style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" rowspan=\"2\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"2\">(A) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"2\">(B) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"2\">(C) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"2\">(D) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"2\">(E) %s</td>"
+                            "<td rowspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(A) %s"
+                            "</td>"
+                            "<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(B) %s"
+                            "</td>"
+                            "<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(C) %s"
+                            "</td>"
+                            "<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(D) %s"
+                            "</td>"
+                            "<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(E) %s"
+                            "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
                             "</tr>",
                   Gbl.ColorRows[0],Txt_Degree,
                   Gbl.ColorRows[0],Txt_Course,
@@ -562,50 +646,165 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
          break;
       case Ind_INDICATORS_FULL:
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\" rowspan=\"3\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\" colspan=\"24\">%s</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td rowspan=\"3\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td colspan=\"24\" class=\"TIT_TBL\""
+                            " style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" rowspan=\"2\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"5\">(A) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"5\">(B) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"5\">(C) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"4\">(D) %s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" valign=\"top\" class=\"TIT_TBL\" colspan=\"4\">(E) %s</td>"
+                            "<td rowspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td colspan=\"5\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(A) %s"
+                            "</td>"
+                            "<td colspan=\"5\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(B) %s"
+                            "</td>"
+                            "<td colspan=\"5\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(C) %s"
+                            "</td>"
+                            "<td colspan=\"4\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(D) %s"
+                            "</td>"
+                            "<td colspan=\"4\" class=\"TIT_TBL\""
+                            " style=\"text-align:center; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "(E) %s"
+                            "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:left;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:left;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:left;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"right\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:right;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
 
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"center\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\">%s</td>"
-                            "<td bgcolor=\"%s\" align=\"left\" class=\"TIT_TBL\">%s</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:center;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:left;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL\" style=\"text-align:left;"
+                            " background-color:%s;\">"
+                            "%s"
+                            "</td>"
                             "</tr>",
                   Gbl.ColorRows[0],Txt_Degree,
                   Gbl.ColorRows[0],Txt_Course,
@@ -682,84 +881,132 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
            {
             case Ind_INDICATORS_BRIEF:
                fprintf (Gbl.F.Out,"<tr>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"DAT_SMALL\"><a href=\"%s/?CrsCod=%ld&amp;ActCod=%ld\" target=\"_blank\">%s/?CrsCod=%ld&amp;ActCod=%ld</a></td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"DAT_SMALL\""
+                                  " style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "<a href=\"%s/?CrsCod=%ld&amp;ActCod=%ld\" target=\"_blank\">"
+                                  "%s/?CrsCod=%ld&amp;ActCod=%ld"
+                                  "</a>"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
                                   "</tr>",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[0],
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[1],
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[3],
                         Gbl.ColorRows[Gbl.RowEvenOdd],Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
                                                       Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CountIndicators,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsSyllabus ? Txt_YES :
                                                      "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsSyllabus ? "" :
                                                      Txt_NO,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreAssignments ? Txt_YES :
                                                          "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreAssignments ? "" :
                                                          Txt_NO,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsOnlineTutoring ? Txt_YES :
                                                            "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED"  ,
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsOnlineTutoring ? "" :
                                                            Txt_NO,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreMaterials ? Txt_YES :
                                                        "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED"  ,
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreMaterials ? "" :
                                                        Txt_NO,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsAssessment ? Txt_YES :
                                                        "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED"  ,
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsAssessment ? "" :
                                                        Txt_NO);
                break;
@@ -769,162 +1016,254 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                NumTchs = Usr_GetNumUsrsInCrs (Rol_ROLE_TEACHER,CrsCod);
 
                fprintf (Gbl.F.Out,"<tr>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"DAT_SMALL\"><a href=\"%s/?CrsCod=%ld&amp;ActCod=%ld\" target=\"_blank\">%s/?CrsCod=%ld&amp;ActCod=%ld</a></td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"DAT_SMALL\""
+                                  " style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "<a href=\"%s/?CrsCod=%ld&amp;ActCod=%ld\" target=\"_blank\">"
+                                  "%s/?CrsCod=%ld&amp;ActCod=%ld"
+                                  "</a></td>"
 
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%lu</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%lu</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%lu"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%lu"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%u</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%u"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%lu</td>"
-                                  "<td bgcolor=\"%s\" align=\"right\" class=\"%s\">%lu</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%lu"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:right;"
+                                  " background-color:%s;\">"
+                                  "%lu"
+                                  "</td>"
 
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"center\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
-                                  "<td bgcolor=\"%s\" align=\"left\" class=\"%s\">%s</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:center;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s\" style=\"text-align:left;"
+                                  " background-color:%s;\">"
+                                  "%s"
+                                  "</td>"
                                   "</tr>",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[0],
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[1],
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         row[3],
                         Gbl.ColorRows[Gbl.RowEvenOdd],Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
                                                       Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         NumTchs != 0 ? "DAT_SMALL_GREEN" :
                                        "DAT_SMALL_RED",
-                        NumTchs,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        NumTchs,
                         NumStds != 0 ? "DAT_SMALL_GREEN" :
                                        "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         NumStds,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.CountIndicators,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsSyllabus ? Txt_YES :
                                                      "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsSyllabus ? "" :
                                                      Txt_NO,
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         (Indicators.SyllabusLecSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
                                                                            "DAT_SMALL_RED",
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc],
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc],
                         (Indicators.SyllabusPraSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
                                                                            "DAT_SMALL_RED",
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc],
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc],
                         (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
                                                                              "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc],
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreAssignments ? Txt_YES :
                                                          "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreAssignments ? "" :
                                                          Txt_NO,
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
                                                            "DAT_SMALL_RED",
-                        Indicators.NumAssignments,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Indicators.NumAssignments,
                         (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
                                                                 "DAT_SMALL_RED",
-                        Indicators.NumFilesAssignments,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Indicators.NumFilesAssignments,
                         (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
                                                           "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.NumFilesWorks,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsOnlineTutoring ? Txt_YES :
                                                            "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsOnlineTutoring ? "" :
                                                            Txt_NO,
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
                                                        "DAT_SMALL_RED",
-                        Indicators.NumThreads,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Indicators.NumThreads,
                         (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
                                                      "DAT_SMALL_RED",
-                        Indicators.NumPosts,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Indicators.NumPosts,
                         (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
                                                               "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.NumMsgsSentByTchs,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreMaterials ? Txt_YES :
                                                        "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereAreMaterials ? "" :
                                                        Txt_NO,
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         (Indicators.NumFilesInDownloadZones != 0) ? "DAT_SMALL_GREEN" :
                                                                     "DAT_SMALL_RED",
-                        Indicators.NumFilesInDownloadZones,
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Indicators.NumFilesInDownloadZones,
                         (Indicators.NumFilesInCommonZones != 0) ? "DAT_SMALL_GREEN" :
                                                                   "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.NumFilesInCommonZones,
 
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_GREEN",
+                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsAssessment ? Txt_YES :
                                                        "",
-                        Gbl.ColorRows[Gbl.RowEvenOdd],"DAT_SMALL_RED",
+                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
                         Indicators.ThereIsAssessment ? "" :
                                                        Txt_NO,
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         (Indicators.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
                                                                           "DAT_SMALL_RED",
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc],
                         Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc],
                         (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
                                                                              "DAT_SMALL_RED",
+                        Gbl.ColorRows[Gbl.RowEvenOdd],
                         Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
                break;
               }
@@ -935,7 +1274,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin-left:auto; margin-right:auto;\">"
                       "<tr>"
                       "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
                       "<th colspan=\"2\" align=\"right\" class=\"TIT_TBL\">%s</th>"
@@ -946,17 +1285,32 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">(%.1f%%)</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "(%.1f%%)"
+                         "</td>"
                          "</tr>",
                Ind,NumCrssWithIndicatorYes[Ind],
                NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
         	         0.0);
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%s</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">(%.1f%%)</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;"
+                      " border-style:solid none none none; border-width:1px;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;"
+                      " border-style:solid none none none; border-width:1px;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;"
+                      " border-style:solid none none none; border-width:1px;\">"
+                      "(%.1f%%)"
+                      "</td>"
                       "</tr>"
                       "</table>",
             Txt_Total,NumCrss,100.0);

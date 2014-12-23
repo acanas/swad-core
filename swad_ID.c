@@ -406,7 +406,7 @@ void ID_ShowFormOthIDs (void)
 	 fprintf (Gbl.F.Out,"<div align=\"center\">"
 	                    "<table>"
 			    "<tr>"
-			    "<td colspan=\"2\" align=\"center\">");
+			    "<td colspan=\"2\" style=\"text-align:center;\">");
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -448,8 +448,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       if (NumID == 0)
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"right\" valign=\"top\" width=\"40%%\" class=\"%s\">%s:</td>"
-			    "<td align=\"left\" valign=\"top\" width=\"60%%\">",
+			    "<td class=\"%s\" style=\"width:40%%;"
+			    " text-align:right; vertical-align:top;\">"
+			    "%s:"
+			    "</td>"
+			    "<td style=\"width:60%%;"
+			    " text-align:left; vertical-align:top;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -513,8 +517,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"middle\" width=\"40%%\" class=\"%s\">%s:</td>"
-			 "<td align=\"left\" valign=\"middle\" width=\"60%%\">",
+			 "<td class=\"%s\" style=\"width:40%%;"
+			 " text-align:right; vertical-align:middle;\">"
+			 "%s:"
+			 "</td>"
+			 "<td style=\"width:60%%;"
+			 " text-align:left; vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
@@ -539,7 +547,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
 
    /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" colspan=\"2\" class=\"DAT\">");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\""
+	              " style=\"text-align:center;\">");
    if (ItsMe)
       fprintf (Gbl.F.Out,"%s ",
                Txt_The_ID_is_used_in_order_to_facilitate_);

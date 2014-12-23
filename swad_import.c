@@ -539,13 +539,17 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
          fprintf (Gbl.F.Out,"<tr>");
          if (ItsAFormToRegRemStds)
             /* Put checkbox to select the group */
-            fprintf (Gbl.F.Out,"<td rowspan=\"2\" align=\"left\" valign=\"top\">"
+            fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"text-align:left;"
+        	               " vertical-align:top;\">"
                                "<input type=\"checkbox\" name=\"ImpGrpCod\" value=\"%ld_%s\" />"
                                "</td>",
                      GrpCod,ExternalCrsCod);
 
          /* Write degree, course and group */
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s<br />%s %s<br />%s %s (%s)</td>" \
+         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"TIT_TBL\""
+                            " style=\"text-align:left; vertical-align:top;\">"
+                            "%s<br />%s %s<br />%s %s (%s)"
+                            "</td>" \
                             "</tr>",
                   row[2],
                   ExternalCrsCod,row[3],
@@ -553,8 +557,12 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
 
          /* Write students */
          fprintf (Gbl.F.Out,"<tr>" \
-                            "<td align=\"left\" valign=\"top\" class=\"DAT\">%u %s%s</td>" \
-                            "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+                            "<td class=\"DAT\""
+                            " style=\"text-align:left; vertical-align:top;\">"
+                            "%u %s%s"
+                            "</td>" \
+                            "<td class=\"DAT\""
+                            " style=\"text-align:left; vertical-align:top;\">",
                   NumStds,Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
                   NumStds ? ":" :
                 	    "");

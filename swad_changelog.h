@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.40.3 (2014/12/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.40.4 (2014/12/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.40.4  :Dic 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172112 lines)
 	Version 14.40.3  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171698 lines)
 	Version 14.40.2  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171588 lines)
 	Version 14.40.1  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator.
