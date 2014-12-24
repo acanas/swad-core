@@ -212,7 +212,8 @@ void Rec_ListFieldsRecordsForEdition (void)
                Txt_Remove_record_field);
 
       /* Name of the field */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActRenFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
@@ -225,7 +226,8 @@ void Rec_ListFieldsRecordsForEdition (void)
                Gbl.FormId);
 
       /* Number of lines in the form */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgRowFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\" size=\"2\""
@@ -237,7 +239,8 @@ void Rec_ListFieldsRecordsForEdition (void)
                Gbl.FormId);
 
       /* Visibility of a field */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">");
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
+	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgVisFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
@@ -279,7 +282,10 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Message *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" colspan=\"4\" class=\"%s\">%s:</td>"
+	              "<td colspan=\"4\" class=\"%s\""
+	              " style=\"text-align:left;\">"
+	              "%s:"
+	              "</td>"
 	              "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_New_record_field);
 
@@ -295,20 +301,20 @@ void Rec_ShowFormCreateRecordField (void)
             Gbl.Prefs.IconsURL);
 
    /***** Field name *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" name=\"FieldName\""
                       " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Rec_MAX_LENGTH_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
 
    /***** Number of lines in form ******/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
 	              "<input type=\"text\" name=\"NumLines\" size=\"2\" maxlength=\"2\" value=\"%u\" />"
 	              "</td>",
             Gbl.CurrentCrs.Records.Field.NumLines);
 
    /***** Visibility to students *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\">"
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
 	              "<select name=\"Visibility\">");
    for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
@@ -1133,7 +1139,7 @@ void Rec_ListRecordOneTchCrs (void)
 	 /* Office hours */
 	 Lay_StartRoundFrameTable10 (NULL,0,Txt_Office_hours);
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td align=\"center\">");
+			    "<td style=\"text-align:center;\">");
 	 TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -1227,7 +1233,7 @@ void Rec_ListRecordsTchsCrs (void)
               {
 	       Lay_StartRoundFrameTable10 (NULL,0,Txt_Office_hours);
 	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td align=\"center\">");
+				  "<td style=\"text-align:center;\">");
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);
 	       fprintf (Gbl.F.Out,"</td>"
 				  "</tr>");
@@ -1497,16 +1503,17 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" colspan=\"2\" valign=\"top\">"
+	              "<td colspan=\"2\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
 	              "<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td align=\"left\" width=\"%u\">",
+                      "<td style=\"width:%u; text-align:left;\">",
             Rec_DEGREE_LOGO_SIZE);
    Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.Logo,
                        Gbl.CurrentDeg.Deg.ShortName,
                        Rec_DEGREE_LOGO_SIZE,NULL);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td align=\"center\" class=\"%s\">"
+                      "<td class=\"%s\" style=\"text-align:center;\">"
                       "%s<br />%s<br />%s"
                       "</td>"
                       "</tr>"
@@ -1532,10 +1539,13 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" width=\"%u\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">%s:",
-                  Col1Width,Gbl.ColorRows[Gbl.RowEvenOdd],
+                            "<td class=\"%s\" style=\"width:%u;"
+                            " text-align:left; vertical-align:top;"
+                            " background-color:%s;\">"
+                            "%s:",
                   ICanEdit ? The_ClassFormul[Gbl.Prefs.Theme] :
                 	     "DAT_REC_SMALL",
+                  Col1Width,Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_RECORD_LIST)
             fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
@@ -1552,8 +1562,10 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
             ThisFieldHasText = false;
 
          /***** Write form, text, or nothing depending on the user's role and the visibility of the field... */
-         fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-                  Col2Width,Gbl.ColorRows[Gbl.RowEvenOdd],ClassData);
+         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%u;"
+                            " text-align:left; vertical-align:top;"
+                            " background-color:%s;\">",
+                  ClassData,Col2Width,Gbl.ColorRows[Gbl.RowEvenOdd]);
          if (ICanEdit)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
@@ -2107,10 +2119,12 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" width=\"%u\" valign=\"middle\" colspan=\"2\">"
+	              "<td colspan=\"2\" style=\"width:%u;"
+                      " text-align:left; vertical-align:middle;\">"
 	              "<table class=\"CELLS_PAD_2\">"
 	              "<tr>"
-	              "<td align=\"center\" width=\"%u\" valign=\"middle\">",
+	              "<td style=\"width:%u;"
+                      " text-align:center; vertical-align:middle;\">",
 	    Cols1and2Width,
 	    Rec_INSTITUTION_LOGO_SIZE + 8);
    if (UsrDat->InsCod > 0)
@@ -2119,17 +2133,20 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
       Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,Rec_INSTITUTION_LOGO_SIZE,NULL);
       fprintf (Gbl.F.Out,"</td>"
-                         "<td align=\"left\" valign=\"middle\" class=\"%s\">%s",
+                         "<td class=\"%s\" style=\"text-align:left;"
+                         " vertical-align:middle;\">"
+                         "%s",
                ClassHead,Ins.FullName);
      }
    else
       fprintf (Gbl.F.Out,"</td>"
-                         "<td width=\"%u\">",
+                         "<td style=\"width:%u;\">",
                Col2Width);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
                       "<tr>"
-	              "<td width=\"%u\" align=\"center\" valign=\"top\">",
+	              "<td style=\"width:%u;"
+                      " text-align:center; vertical-align:top;\">",
 	    Rec_INSTITUTION_LOGO_SIZE + 8);
 
    /***** Button to admin user *****/
@@ -2170,8 +2187,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Full name *****/
    fprintf (Gbl.F.Out,"</td>"
-	              "<td align=\"left\" valign=\"middle\""
-	              " class=\"HEAD_REC_BIG\">"
+	              "<td class=\"HEAD_REC_BIG\" style=\"text-align:left;"
+	              " vertical-align:middle;\">"
 	              "%s<br />%s<br />%s<br />&nbsp;"
 	              "</td>"
 	              "</tr>"
@@ -2186,10 +2203,11 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   fprintf (Gbl.F.Out,"<td rowspan=\"3\" width=\"%u\" align=\"center\" valign=\"top\" class=\"%s\">",
-	    Col3Width,
+   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"%s\" style=\"width:%u;"
+                      " text-align:center; vertical-align:top;\">",
             TypeOfView == Rec_FORM_MY_COMMON_RECORD ? ClassForm :
-        	                                      ClassData);
+        	                                      ClassData,
+	    Col3Width);
    Pho_ShowUsrPhoto (UsrDat,
                      ShowPhoto ? PhotoURL :
                 	         NULL,
@@ -2216,9 +2234,12 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" width=\"%u\" class=\"HEAD_REC_BIG\">",
-            Col1Width,ClassForm,
+	              "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"HEAD_REC_BIG\""
+                      " style=\"width:%u; text-align:left;\">",
+            ClassForm,Col1Width,
             Txt_Nickname,
             Col2Width);
    if (UsrDat->Nickname[0])
@@ -2252,10 +2273,12 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's e-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\">",
-            Col1Width,ClassForm,Txt_Email,
-            Col2Width,ClassData);
+	              "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"%s\" style=\"width:%u; text-align:left;\">",
+            ClassForm,Col1Width,Txt_Email,
+            ClassData,Col2Width);
    if (UsrDat->Email[0])
      {
       if (ShowEmail)
@@ -2274,15 +2297,18 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's ID *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-		      "<td align=\"left\" width=\"%u\" class=\"%s\">",
-	    Col1Width,ClassForm,Txt_ID,
-	    Col2Width,ClassData);
+		      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"%s\" style=\"width:%u; text-align:left;\">",
+	    ClassForm,Col1Width,Txt_ID,
+	    ClassData,Col2Width);
    ID_WriteUsrIDs (UsrDat,ShowID);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's web and social networks *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" align=\"center\" valign=\"middle\" width=\"%u\">",
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"width:%u;"
+	              " text-align:center; vertical-align:middle;\">",
             Col3Width);
    Net_ShowWebsAndSocialNets (UsrDat->UsrCod);
    fprintf (Gbl.F.Out,"</td>"
@@ -2292,15 +2318,17 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    if (RoleForm)
      {
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\">",
-               Col1Width,ClassForm);
+                         "<td class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
          fprintf (Gbl.F.Out,"%s*",Txt_Sex);
       else
          fprintf (Gbl.F.Out,"%s",Txt_Role);
       fprintf (Gbl.F.Out,":</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\">",
-               Col2Width,ClassData);
+                         "<td class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassData,Col2Width);
       switch (TypeOfView)
         {
          case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
@@ -2414,26 +2442,32 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      }
    else	// RoleForm == false
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\">%s</td>"
+                         "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+                         "%s:"
+                         "</td>"
+                         "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+                         "%s"
+                         "</td>"
                          "</tr>",
-               Col1Width,ClassForm,
+               ClassForm,Col1Width,
                TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
                                                           Txt_Role,
-               Col2Width,ClassData,
+               ClassData,Col2Width,
                TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
                                                           Txt_ROLES_SINGULAR_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
 
    /***** Name *****/
    /* Surname 1 */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\">%s",
-            Col1Width,ClassForm,Txt_Surname_1);
+                      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+                      "%s",
+            ClassForm,Col1Width,Txt_Surname_1);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-            Cols2and3Width,ClassData);
+                      "<td colspan=\"2\" class=\"%s\""
+                      " style=\"width:%u; text-align:left;\">",
+            ClassData,Cols2and3Width);
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 	                 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
@@ -2445,11 +2479,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /* Surname 2 */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-            Col1Width,ClassForm,
+                      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+                      "%s:"
+                      "</td>"
+                      "<td colspan=\"2\" class=\"%s\""
+                      " style=\"width:%u; text-align:left;\">",
+            ClassForm,Col1Width,
             Txt_Surname_2,
-            Cols2and3Width,ClassData);
+            ClassData,Cols2and3Width);
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
 	                 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
@@ -2462,13 +2499,15 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /* First name */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\">%s",
-            Col1Width,ClassForm,Txt_First_name);
+                      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+                      "%s",
+            ClassForm,Col1Width,Txt_First_name);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
-                      "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-            Cols2and3Width,ClassData);
+                      "<td class=\"%s\" colspan=\"2\""
+                      " style=\"width:%u; text-align:left;\">",
+            ClassData,Cols2and3Width);
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
 	                 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
@@ -2490,13 +2529,16 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      {
       /* Country */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\">%s",
-	       Col1Width,ClassForm,Txt_Country);
+			 "<td class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">"
+			 "%s",
+	       ClassForm,Col1Width,Txt_Country);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	 fprintf (Gbl.F.Out,"*");
       fprintf (Gbl.F.Out,":</td>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-	       Cols2and3Width,ClassData);
+			 "<td colspan=\"2\" class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">",
+	       ClassData,Cols2and3Width);
       if (ShowData)
 	{
 	 if (DataForm)
@@ -2538,10 +2580,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Origin place */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Place_of_origin,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Place_of_origin,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2556,10 +2602,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Date of birth */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Date_of_birth,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Date_of_birth,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2576,10 +2626,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Local address */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Local_address,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Local_address,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2594,10 +2648,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Local phone */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Phone,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Phone,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2612,10 +2670,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Family address */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Family_address,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Family_address,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2630,10 +2692,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Family phone */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Phone,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Phone,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2648,10 +2714,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Common comments for all the courses */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" valign=\"top\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" valign=\"top\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_USER_comments,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\" style=\"width:%u;"
+	                 " text-align:left; vertical-align:top;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\" style=\"width:%u;"
+                         " text-align:left; vertical-align:top;\">",
+               ClassForm,Col1Width,Txt_USER_comments,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2682,10 +2752,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      {
       /* Institution */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-	       Col1Width,ClassForm,Txt_Institution,
-	       Cols2and3Width,ClassData);
+			 "<td class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">"
+			 "%s:"
+			 "</td>"
+			 "<td colspan=\"2\" class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">",
+	       ClassForm,Col1Width,Txt_Institution,
+	       ClassData,Cols2and3Width);
       if (ShowData)
 	{
 	 if (UsrDat->InsCod > 0)
@@ -2703,10 +2777,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Centre */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Centre,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Centre,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (UsrDat->Tch.CtrCod > 0)
@@ -2726,10 +2804,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Department */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Department,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Department,
+               ClassData,Cols2and3Width);
       if (ShowData)
         {
          if (UsrDat->Tch.DptCod > 0)
@@ -2749,10 +2831,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Office */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Office,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td colspan=\"2\" class=\"%s\""
+                         " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Office,
+               ClassData,Cols2and3Width);
       if (ShowData)
          fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
       fprintf (Gbl.F.Out,"</td>"
@@ -2760,10 +2846,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Phone */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\" colspan=\"2\">",
-               Col1Width,ClassForm,Txt_Phone,
-               Cols2and3Width,ClassData);
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+	                 "<td colspan=\"2\" class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">",
+               ClassForm,Col1Width,Txt_Phone,
+               ClassData,Cols2and3Width);
       if (ShowData)
          fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
       fprintf (Gbl.F.Out,"</td>"
@@ -2992,10 +3082,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"left\" width=\"%u\" class=\"%s\">%s"
-                      ":</td>"
-		      "<td align=\"left\" width=\"%u\">",
-            COL1_WIDTH,ClassForm,Txt_Country_of_institution,
+		      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+		      "%s:</td>"
+		      "<td style=\"width:%u; text-align:left;\">",
+            ClassForm,COL1_WIDTH,Txt_Country_of_institution,
             COL2_WIDTH);
 
    /* If list of countries is empty, try to get it */
@@ -3032,10 +3122,11 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"left\" width=\"%u\" class=\"%s\">%s"
-                      ":</td>"
-		      "<td align=\"left\" width=\"%u\">",
-            COL1_WIDTH,ClassForm,Txt_Institution,
+		      "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+		      "%s:"
+		      "</td>"
+		      "<td style=\"width:%u; text-align:left;\">",
+            ClassForm,COL1_WIDTH,Txt_Institution,
 	    COL2_WIDTH);
 
    /* Get list of institutions in this country */
@@ -3077,10 +3168,12 @@ void Rec_ShowFormMyInsCtrDpt (void)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\">%s"
-			 ":</td>"
-			 "<td align=\"left\" width=\"%u\">",
-	       COL1_WIDTH,ClassForm,Txt_Centre,
+			 "<td class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">"
+			 "%s:"
+			 "</td>"
+			 "<td style=\"width:%u; text-align:left;\">",
+	       ClassForm,COL1_WIDTH,Txt_Centre,
 	       COL2_WIDTH);
 
       /* Get list of centres in this institution */
@@ -3120,10 +3213,12 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"left\" width=\"%u\" class=\"%s\">%s"
-			 ":</td>"
-			 "<td align=\"left\" width=\"%u\">",
-	       COL1_WIDTH,ClassForm,Txt_Department,
+			 "<td class=\"%s\""
+			 " style=\"width:%u; text-align:left;\">"
+			 "%s:"
+			 "</td>"
+			 "<td style=\"width:%u; text-align:left;\">",
+	       ClassForm,COL1_WIDTH,Txt_Department,
 	       COL2_WIDTH);
 
       /* Get list of departments in this institution */
@@ -3163,9 +3258,12 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Office *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-                         "<td align=\"left\" width=\"%u\">",
-               COL1_WIDTH,ClassForm,Txt_Office,
+	                 "<td class=\"%s\""
+	                 " style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td style=\"width:%u; text-align:left;\">",
+               ClassForm,COL1_WIDTH,Txt_Office,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOff);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
@@ -3180,9 +3278,11 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" width=\"%u\" class=\"%s\">%s:</td>"
-	                 "<td align=\"left\" width=\"%u\">",
-               COL1_WIDTH,ClassForm,Txt_Phone,
+	                 "<td class=\"%s\" style=\"width:%u; text-align:left;\">"
+	                 "%s:"
+	                 "</td>"
+	                 "<td style=\"width:%u; text-align:left;\">",
+               ClassForm,COL1_WIDTH,Txt_Phone,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""

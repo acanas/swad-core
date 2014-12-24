@@ -2827,17 +2827,17 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">(");
+            fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(");
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"MSG_AUT");
-            fprintf (Gbl.F.Out,"%s</a>)</span>"
+            fprintf (Gbl.F.Out,"%s</a>)</div>"
         	               "</form>",
         	     Crs.ShortName);
            }
 	}
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
-      fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">(%s)</span>",
+      fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(%s)</div>",
                Txt_no_course_of_origin);
 
    return FromThisCrs;
