@@ -2701,7 +2701,8 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
    if (NumPagesGenerated > 0.0)
      {
       fprintf (Gbl.F.Out,"%u%%<br />",
-	       (unsigned) (((NumPagesGenerated * 100.0) / TotalPagesGenerated) + 0.5));
+	       (unsigned) (((NumPagesGenerated * 100.0) /
+		            TotalPagesGenerated) + 0.5));
       Sta_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"<br />");
       AltoBarra = (unsigned) (((NumPagesGenerated * 400.0) / MaxPagesGenerated) + 0.5);
@@ -3460,7 +3461,8 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
       /* Write the number of clicks */
       Sta_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
-               (unsigned) (((NumPagesGenerated * 100.0) / TotalPagesGenerated) + 0.5));
+               (unsigned) (((NumPagesGenerated * 100.0) /
+        	            TotalPagesGenerated) + 0.5));
      }
    else
       /* Write the number of clicks */
@@ -4451,7 +4453,8 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
    struct Sta_SizeOfFileZones SizeOfFileZones;
    char *ClassData = (FileZone == Brw_FILE_BRW_UNKNOWN) ? "DAT_N" :
 	                                                  "DAT";
-   char *StyleTableCell = (FileZone == Brw_FILE_BRW_UNKNOWN) ? " style=\"border-style:solid none none none;border-width:1px;\"" :
+   char *StyleTableCell = (FileZone == Brw_FILE_BRW_UNKNOWN) ? " border-style:solid none none none;"
+	                                                       " border-width:1px;" :
 	                                                       "";
 
    Sta_GetSizeOfFileZoneFromDB (Gbl.Scope.Current,FileZone,&SizeOfFileZones);
@@ -4465,10 +4468,12 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
      {
       sprintf (StrNumCrss,"%d",SizeOfFileZones.NumCrss);
       sprintf (StrNumFoldersPerCrs,"%.1f",
-               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFolders / (double) SizeOfFileZones.NumCrss :
+               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFolders /
+        	                         (double) SizeOfFileZones.NumCrss :
         	                         0.0);
       sprintf (StrNumFilesPerCrs,"%.1f",
-               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFiles / (double) SizeOfFileZones.NumCrss :
+               SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFiles /
+        	                         (double) SizeOfFileZones.NumCrss :
         	                         0.0);
      }
    if (SizeOfFileZones.NumUsrs == -1)
@@ -4481,32 +4486,34 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
      {
       sprintf (StrNumUsrs,"%d",SizeOfFileZones.NumUsrs);
       sprintf (StrNumFoldersPerUsr,"%.1f",
-               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFolders / (double) SizeOfFileZones.NumUsrs :
+               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFolders /
+        	                         (double) SizeOfFileZones.NumUsrs :
         	                         0.0);
       sprintf (StrNumFilesPerUsr,"%.1f",
-               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFiles / (double) SizeOfFileZones.NumUsrs :
+               SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFiles /
+        	                         (double) SizeOfFileZones.NumUsrs :
         	                         0.0);
      }
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:left; %s\">"
                       "%s"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
                       "%s"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
                       "%s"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
                       "%u"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
                       "%lu"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
                       "%lu"
                       "</td>"
-                      "<td align=\"right\" class=\"%s\"%s>",
+                      "<td class=\"%s\" style=\"text-align:right; %s\">",
             ClassData,StyleTableCell,NameOfFileZones,
             ClassData,StyleTableCell,StrNumCrss,
             ClassData,StyleTableCell,StrNumUsrs,
@@ -4516,28 +4523,38 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
             ClassData,StyleTableCell);
    Str_WriteSizeInBytesFull ((double) SizeOfFileZones.Size);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td align=\"right\" class=\"%s\"%s>%s</td>"
-                      "<td align=\"right\" class=\"%s\"%s>%s</td>"
-                      "<td align=\"right\" class=\"%s\"%s>",
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">",
             ClassData,StyleTableCell,StrNumFoldersPerCrs,
             ClassData,StyleTableCell,StrNumFilesPerCrs,
             ClassData,StyleTableCell);
    if (SizeOfFileZones.NumCrss == -1)
       fprintf (Gbl.F.Out,"-");
    else
-      Str_WriteSizeInBytesFull (SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.Size / (double) SizeOfFileZones.NumCrss :
+      Str_WriteSizeInBytesFull (SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.Size /
+	                                                  (double) SizeOfFileZones.NumCrss :
 	                                                  0.0);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td align=\"right\" class=\"%s\"%s>%s</td>"
-                      "<td align=\"right\" class=\"%s\"%s>%s</td>"
-                      "<td align=\"right\" class=\"%s\"%s>",
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\" style=\"text-align:right; %s\">",
             ClassData,StyleTableCell,StrNumFoldersPerUsr,
             ClassData,StyleTableCell,StrNumFilesPerUsr,
             ClassData,StyleTableCell);
    if (SizeOfFileZones.NumUsrs == -1)
       fprintf (Gbl.F.Out,"-");
    else
-      Str_WriteSizeInBytesFull (SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.Size / (double) SizeOfFileZones.NumUsrs :
+      Str_WriteSizeInBytesFull (SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.Size /
+	                                                  (double) SizeOfFileZones.NumUsrs :
 	                                                  0.0);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -4792,9 +4809,15 @@ static void Sta_ShowOERs (void)
       Sta_GetNumberOfOERFromDB (Gbl.Scope.Current,License,NumFiles);
 
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" class=\"DAT\">%s</td>"
-                         "<td align=\"right\" class=\"DAT\">%lu</td>"
-                         "<td align=\"right\" class=\"DAT\">%lu</td>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%lu"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%lu"
+                         "</td>"
                          "</tr>",
                Txt_LICENSES[License],
                NumFiles[0],
@@ -4936,10 +4959,18 @@ static void Sta_ShowAssignmentsStats (void)
 
    /***** Write number of assignments *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             NumAssignments,
             NumCoursesWithAssignments,
@@ -4969,6 +5000,8 @@ static void Sta_ShowTestsStats (void)
    extern const char *Txt_Total;
    Tst_AnswerType_t AnsType;
    struct Tst_Stats Stats;
+   char *StyleTableCell = " border-style:solid none none none;"
+	                  " border-width:1px;";
 
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -5005,20 +5038,39 @@ static void Sta_ShowTestsStats (void)
 
       /***** Write number of assignments *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" class=\"DAT\">%s</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%u (%.1f%%)</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                         "<td align=\"right\" class=\"DAT\">%lu</td>"
-                         "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                         "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                         "<td align=\"right\" class=\"DAT\">%.2f</td>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u (%.1f%%)"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%.2f"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%lu"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%.2f"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%.2f"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%.2f"
+                         "</td>"
                          "</tr>",
                Txt_TST_STR_ANSWER_TYPES[AnsType],
                Stats.NumCoursesWithQuestions,
                Stats.NumCoursesWithPluggableQuestions,
-               Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 / (float) Stats.NumCoursesWithQuestions :
+               Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+        	                               (float) Stats.NumCoursesWithQuestions :
         	                               0.0,
                Stats.NumQsts,
                Stats.AvgQstsPerCourse,
@@ -5034,27 +5086,46 @@ static void Sta_ShowTestsStats (void)
 
    /***** Write number of assignments *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%s</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u (%.1f%%)</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%lu</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:left; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u (%.1f%%)"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%lu"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%.2f"
+                      "</td>"
                       "</tr>",
-            Txt_Total,
-            Stats.NumCoursesWithQuestions,
-            Stats.NumCoursesWithPluggableQuestions,
-            Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 / (float) Stats.NumCoursesWithQuestions :
+            StyleTableCell,Txt_Total,
+            StyleTableCell,Stats.NumCoursesWithQuestions,
+            StyleTableCell,Stats.NumCoursesWithPluggableQuestions,
+            Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+        	                            (float) Stats.NumCoursesWithQuestions :
         	                            0.0,
-            Stats.NumQsts,
-            Stats.AvgQstsPerCourse,
-            Stats.NumHits,
-            Stats.AvgHitsPerCourse,
-            Stats.AvgHitsPerQuestion,
-            Stats.AvgScorePerQuestion);
+            StyleTableCell,Stats.NumQsts,
+            StyleTableCell,Stats.AvgQstsPerCourse,
+            StyleTableCell,Stats.NumHits,
+            StyleTableCell,Stats.AvgHitsPerCourse,
+            StyleTableCell,Stats.AvgHitsPerQuestion,
+            StyleTableCell,Stats.AvgScorePerQuestion);
 
    /***** End table *****/
    Lay_EndRoundFrameTable10 ();
@@ -5111,11 +5182,21 @@ static void Sta_ShowNoticesStats (void)
 
    /***** Write number of notices *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             NumNotices[Not_ACTIVE_NOTICE],
             NumNotices[Not_OBSOLETE_NOTICE],
@@ -5171,18 +5252,38 @@ static void Sta_ShowMsgsStats (void)
 
    /***** Write number of messages *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"DAT\">%s</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">-</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "-"
+                      "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td align=\"left\" class=\"DAT\">%s</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Txt_MSGS_Sent,
             NumMsgsSentNotDeleted,
@@ -5422,17 +5523,42 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" valign=\"top\" width=\"16\">"
+                      "<td style=\"width:16px;"
+                      " text-align:left; vertical-align:top;\">"
                       "<img src=\"%s/%s\" alt=\"\" class=\"ICON16x16\" />"
                       "</td>"
-                      "<td align=\"left\" valign=\"top\" class=\"DAT\">%s%s</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT\">%.2f</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s%s"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%.2f"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,Icon,
             ForumName1,ForumName2,
@@ -5450,6 +5576,8 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
    float NumThrsPerForum;
    float NumPostsPerThread;
    float NumPostsPerForum;
+   char *StyleTableCell = " border-style:solid none none none;"
+	                  " border-width:1px;";
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
    NumThrsPerForum  = (StatsForum->NumForums ? (float) StatsForum->NumThreads / (float) StatsForum->NumForums :
@@ -5461,20 +5589,42 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" valign=\"top\" width=\"16\" style=\"border-style:solid none none none;border-width:1px;\">"
+                      "<td width=\"16\" style=\"width:16px; %s\">"
                       "</td>"
-                      "<td align=\"left\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%s</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
-                      "<td align=\"right\" valign=\"top\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%.2f</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:left; vertical-align:top; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "%.2f"
+                      "</td>"
                       "</tr>",
-            Txt_Total,
-            StatsForum->NumForums,StatsForum->NumThreads,StatsForum->NumPosts,StatsForum->NumUsrsToBeNotifiedByEMail,
-            NumThrsPerForum,NumPostsPerThread,NumPostsPerForum);
+            StyleTableCell,
+            StyleTableCell,Txt_Total,
+            StyleTableCell,StatsForum->NumForums,
+            StyleTableCell,StatsForum->NumThreads,
+            StyleTableCell,StatsForum->NumPosts,
+            StyleTableCell,StatsForum->NumUsrsToBeNotifiedByEMail,
+            StyleTableCell,NumThrsPerForum,
+            StyleTableCell,NumPostsPerThread,
+            StyleTableCell,NumPostsPerForum);
   }
 
 /*****************************************************************************/
@@ -5522,11 +5672,21 @@ static void Sta_ShowSurveysStats (void)
 
    /***** Write number of surveys *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" class=\"DAT\">%u</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             NumSurveys,
             NumCoursesWithSurveys,
@@ -5636,12 +5796,19 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 	Lan < Txt_NUM_LANGUAGES;
 	Lan++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" class=\"DAT\">%s</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
                          "</tr>",
                Txt_STR_LANG_NAME[Lan],NumUsrs[Lan],
-               NumUsrsTotal ? 100.0 * (float) NumUsrs[Lan] / (float) NumUsrsTotal :
+               NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
+        	              (float) NumUsrsTotal :
         	              0);
 
    Lay_EndRoundFrameTable10 ();
@@ -5741,15 +5908,20 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"center\">"
+                         "<td style=\"text-align:center;\">"
                          "<img src=\"%s/%s32x32.gif\" alt=\"%s\" class=\"ICON32x32\" />"
                          "</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,Lay_LayoutIcons[Layout],Txt_LAYOUT_NAMES[Layout],
                NumUsrs[Layout],
-               NumUsrsTotal ? 100.0 * (float) NumUsrs[Layout] / (float) NumUsrsTotal :
+               NumUsrsTotal ? (float) NumUsrs[Layout] * 100.0 /
+        	              (float) NumUsrsTotal :
         	              0);
 
    Lay_EndRoundFrameTable10 ();
@@ -5849,15 +6021,21 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"center\">"
-                         "<img src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\" width=\"32\" height=\"20\" />"
+                         "<td style=\"text-align:center;\">"
+                         "<img src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
+                         " style=\"width:32px; height:20px;\" />"
                          "</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],The_ThemeNames[Theme],
                NumUsrs[Theme],
-               NumUsrsTotal ? 100.0 * (float) NumUsrs[Theme] / (float) NumUsrsTotal :
+               NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
+        	              (float) NumUsrsTotal :
         	              0);
 
    Lay_EndRoundFrameTable10 ();
@@ -5954,15 +6132,21 @@ static void Sta_GetAndShowNumUsrsPerColumns (void)
 	SideCols <= 3;
 	SideCols++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"center\">"
-                         "<img src=\"%s/layout%u%u_32x20.gif\" alt=\"%s\" width=\"32\" height=\"20\" />"
+                         "<td style=\"text-align:center;\">"
+                         "<img src=\"%s/layout%u%u_32x20.gif\" alt=\"%s\""
+                         " style=\"width:32px; height:20px;\" />"
                          "</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                NumUsrs[SideCols],
-               NumUsrsTotal ? 100.0 * (float) NumUsrs[SideCols] / (float) NumUsrsTotal :
+               NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
+        	              (float) NumUsrsTotal :
         	              0);
 
    Lay_EndRoundFrameTable10 ();
@@ -6061,11 +6245,16 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\">"
-                         "<img src=\"%s/%s/%s/%s/heart32x32.gif\" alt=\"%s\" width=\"32\" height=\"32\" />"
+                         "<td style=\"text-align:left;\">"
+                         "<img src=\"%s/%s/%s/%s/heart32x32.gif\" alt=\"%s\""
+                         " style=\"wisth:32px; height:32px;\" />"
                          "</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
@@ -6073,7 +6262,8 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                Cfg_ICON_ACTION_32x32,
                Ico_IconSetNames[IconSet],
                NumUsrs[IconSet],
-               NumUsrsTotal ? 100.0 * (float) NumUsrs[IconSet] / (float) NumUsrsTotal :
+               NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
+        	              (float) NumUsrsTotal :
         	              0);
 
    Lay_EndRoundFrameTable10 ();
@@ -6103,6 +6293,8 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    unsigned NumEvents[Ntf_NUM_NOTIFY_EVENTS];
    unsigned NumMailsTotal = 0;
    unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
+   char *StyleTableCell = " border-style:solid none none none;"
+	                  " border-width:1px;";
 
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
@@ -6308,33 +6500,55 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td align=\"left\" class=\"DAT\">%s</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%5.2f%%</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
-                         "<td align=\"right\" class=\"DAT\">%u</td>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
                          "</tr>",
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                NumUsrs[NotifyEvent],
-               NumUsrsTotalInPlatform ? 100.0 * (float) NumUsrs[NotifyEvent] / (float) NumUsrsTotalInPlatform :
+               NumUsrsTotalInPlatform ? (float) NumUsrs[NotifyEvent] * 100.0 /
+        	                        (float) NumUsrsTotalInPlatform :
         	                        0.0,
                NumEvents[NotifyEvent],
                NumMails[NotifyEvent]);
 
    /***** Write total number of users who want to be notified by e-mail on some event *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%s</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%5.2f%%</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
-                      "<td align=\"right\" class=\"DAT_N\" style=\"border-style:solid none none none;border-width:1px;\">%u</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:left; %s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%5.2f%%"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
-            Txt_Total,
-            NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
-            NumUsrsTotalInPlatform ? 100.0 * (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent / (float) NumUsrsTotalInPlatform :
-        	                     0.0,
-            NumEventsTotal,
-            NumMailsTotal);
+            StyleTableCell,Txt_Total,
+            StyleTableCell,NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
+            StyleTableCell,NumUsrsTotalInPlatform ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+        	                                    (float) NumUsrsTotalInPlatform :
+        	                                    0.0,
+            StyleTableCell,NumEventsTotal,
+            StyleTableCell,NumMailsTotal);
 
    Lay_EndRoundFrameTable10 ();
   }
