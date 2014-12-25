@@ -145,7 +145,7 @@ void Syl_EditSyllabus (void)
       /***** Start of table *****/
       Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\">"
+	                 "<td style=\"text-align:left;\">"
 	                 "<table class=\"CELLS_PAD_1\" style=\"width:100%%;\">");
 
       /***** Write the current syllabus *****/
@@ -466,7 +466,8 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
      {
       if (NewItem)
-         fprintf (Gbl.F.Out,"<td align=\"left\" colspan=\"5\" bgcolor=\"%s\"></td>",
+         fprintf (Gbl.F.Out,"<td colspan=\"5\" style=\"background-color:%s;\">"
+                            "</td>",
 	          Gbl.ColorRows[Gbl.RowEvenOdd]);
       else
 	{
@@ -597,23 +598,26 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
      {
       /***** Indent depending on the level *****/
       if (Level > 1)
-	 fprintf (Gbl.F.Out,"<td align=\"left\" colspan=\"%d\" bgcolor=\"%s\"></td>",
+	 fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"background-color:%s;\">"
+	                    "</td>",
                   Level - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Code of the item *****/
-      fprintf (Gbl.F.Out,"<td width=\"%d\" align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-               Level*Syl_WIDTH_NUM_SYLLABUS,Gbl.ColorRows[Gbl.RowEvenOdd],StyleSyllabus[Level]);
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%dpx; text-align:right; vertical-align:top; background-color:%s;\">",
+               StyleSyllabus[Level],
+               Level * Syl_WIDTH_NUM_SYLLABUS,Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
       fprintf (Gbl.F.Out,"%s&nbsp;</td>",StrItemCod);
 
       /***** Text of the item *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" colspan=\"%d\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">"
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s\""
+	                 " style=\"text-align:left; vertical-align:top; background-color:%s;\">"
                          "%s"
                          "</td>",
                LstItemsSyllabus.NumLevels - Level + 1,
-               Gbl.ColorRows[Gbl.RowEvenOdd],
                StyleSyllabus[Level],
+               Gbl.ColorRows[Gbl.RowEvenOdd],
                Text);
      }
 
@@ -740,13 +744,14 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 
       /***** Indent depending on the level *****/
       if (LstItemsSyllabus.Lst[NumItem].Level > 1)
-	 fprintf (FileHTMLTmp,"<td align=\"left\" colspan=\"%d\"></td>",
+	 fprintf (FileHTMLTmp,"<td colspan=\"%d\"></td>",
 		  LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td width=\"%d\" align=\"right\" valign=\"top\" class=\"%s\">",
-	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS,
-	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level]);
+      fprintf (FileHTMLTmp,"<td class=\"%s\" style=\"width:%dpx;"
+	                   " text-align:right; vertical-align:top;\">",
+	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level],
+	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
       if (LstItemsSyllabus.Lst[NumItem].Level == 1)
 	 fprintf (FileHTMLTmp,"&nbsp;");
       Syl_WriteNumItem (NULL,FileHTMLTmp,
@@ -755,7 +760,8 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
       fprintf (FileHTMLTmp,"&nbsp;</td>");
 
       /***** Text of the item *****/
-      fprintf (FileHTMLTmp,"<td align=\"left\" colspan=\"%d\" valign=\"top\" class=\"%s\">"
+      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s\""
+	                   " style=\"text-align:left; vertical-align:top;\">"
 			    "%s"
 			    "</td>",
 	       LstItemsSyllabus.NumLevels - LstItemsSyllabus.Lst[NumItem].Level + 1,
@@ -784,17 +790,21 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
 
    /***** Indent depending on the level *****/
    if (Level > 1)
-      fprintf (Gbl.F.Out,"<td align=\"left\" colspan=\"%d\" bgcolor=\"%s\"></td>",
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"background-color:%s;\">"
+	                 "</td>",
                Level - 1,BgColor);
 
    /***** Write the code of the item *****/
    if (NewItem)	// If the item is new (not stored in the file) ==> it has not a number
-      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%d\" bgcolor=\"%s\"></td>",
-               Level*Syl_WIDTH_NUM_SYLLABUS,BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"width:%dpx; background-color:%s;\">"
+	                 "</td>",
+               Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
    else
      {
-      fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%d\" valign=\"middle\" bgcolor=\"%s\" class=\"%s\">",
-               Level*Syl_WIDTH_NUM_SYLLABUS,BgColor,StyleSyllabus[Level]);
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%dpx; text-align:left;"
+	                 " vertical-align:middle; background-color:%s;\">",
+               StyleSyllabus[Level],
+               Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
       Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
@@ -802,7 +812,8 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
      }
 
    /***** Text of the item *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" colspan=\"%d\" valign=\"middle\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"text-align:left;"
+	              " vertical-align:middle; background-color:%s;\">",
             LstItemsSyllabus.NumLevels - Level + 1,BgColor);
    Act_FormStart (NewItem ? (InfoType == Inf_LECTURES ? ActInsIteSylLec :
 	                                                ActInsIteSylPra) :
