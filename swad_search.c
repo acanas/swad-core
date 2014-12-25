@@ -234,7 +234,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Act_FormStart (Action);
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Search);
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"center\">");
+		      "<td style=\"text-align:center;\">");
 
    /***** Scope (whole platform, current centre, current degree or current course) *****/
    fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">%s: ",
