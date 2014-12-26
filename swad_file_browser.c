@@ -9446,10 +9446,18 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
-			 "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-			 "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-			 "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-			 "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
 			 "</tr>",
 	       Txt_Degree,
 	       Txt_Course,

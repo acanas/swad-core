@@ -152,7 +152,8 @@ static void Asg_ShowAllAssignments (void)
 	   Order <= Asg_ORDER_BY_END_DATE;
 	   Order++)
         {
-         fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">");
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
+                            " style=\"text-align:left;\">");
          Act_FormStart (ActSeeAsg);
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -167,9 +168,15 @@ static void Asg_ShowAllAssignments (void)
                             "</form>"
                             "</th>");
         }
-      fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+	                 "%s"
+	                 "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "%s"
+                         "</th>"
 	                 "</tr>",
                Txt_Assignment,
                Txt_Upload_files_QUESTION,

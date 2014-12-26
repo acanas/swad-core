@@ -178,11 +178,26 @@ void Con_GetAndShowLastClicks (void)
 
    /* Print table row */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"70\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"60\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"100\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"150\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"220\">%s</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"width:70px; text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"width:60px; text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"width:100px; text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"width:150px; text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"width:220px; text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
                Txt_Click,
                Txt_Hour,

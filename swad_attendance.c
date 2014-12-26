@@ -182,7 +182,7 @@ static void Att_ShowAllAttEvents (void)
 	   Order <= Att_ORDER_BY_END_DATE;
 	   Order++)
         {
-         fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">");
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">");
          Act_FormStart (ActSeeAtt);
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -197,8 +197,12 @@ static void Att_ShowAllAttEvents (void)
                             "</form>"
                             "</th>");
         }
-      fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-	                 "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+	                 "%s"
+	                 "</th>"
+	                 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+	                 "%s"
+	                 "</th>"
 	                 "</tr>",
                Txt_Event,
                Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
@@ -1906,14 +1910,21 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /* Header */
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th align=\"left\" class=\"TIT_TBL\"></th>"
-		      "<th align=\"left\" class=\"TIT_TBL\"></th>"
-		      "<th align=\"left\" class=\"TIT_TBL\"></th>");
+		      "<th></th>"
+		      "<th></th>"
+		      "<th></th>");
    if (Gbl.Usrs.Listing.WithPhotos)
-      fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\" width=\"18\"></th>");
-   fprintf (Gbl.F.Out,"<th align=\"left\" colspan=\"2\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+      fprintf (Gbl.F.Out,"<th style=\"width:18px;\"></th>");
+   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL\""
+	              " style=\"text-align:left;\">"
+	              "%s"
+	              "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+		      "%s"
+		      "</th>"
 		      "</tr>",
 	    Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
 	    Txt_Student_comment,
@@ -1970,14 +1981,21 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       /* Header */
       Lay_StartRoundFrameTable10 (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th align=\"left\" class=\"TIT_TBL\"></th>"
-                         "<th align=\"left\" class=\"TIT_TBL\"></th>"
-                         "<th align=\"left\" class=\"TIT_TBL\"></th>");
+                         "<th></th>"
+                         "<th></th>"
+                         "<th></th>");
       if (Gbl.Usrs.Listing.WithPhotos)
-         fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\" width=\"18\"></th>");
-      fprintf (Gbl.F.Out,"<th align=\"left\" colspan=\"2\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+         fprintf (Gbl.F.Out,"<th style=\"width:18px;\"></th>");
+      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL\""
+	                 " style=\"text-align:left;\">"
+	                 "%s"
+	                 "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
                Txt_Student_comment,
@@ -2962,8 +2980,13 @@ static void Att_ListEventsToSelect (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" align=\"left\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+		      "<th colspan=\"2\" class=\"TIT_TBL\""
+		      " style=\"text-align:left;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+		      "%s"
+		      "</th>"
 		      "</tr>",
 	    Txt_Event,
 	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
@@ -3125,7 +3148,10 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    unsigned NumAttEvent;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" colspan=\"%u\" class=\"TIT_TBL\">%s</th>",
+                      "<th colspan=\"%u\" class=\"TIT_TBL\""
+                      " style=\"text-align:left;\">"
+                      "%s"
+                      "</th>",
             Gbl.Usrs.Listing.WithPhotos ? 4 :
         	                          3,
             Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
@@ -3138,13 +3164,17 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 /***** Get data of this attendance event *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
 
-	 fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">"
-			    "<span class=\"TIT_TBL\" title=\"%s\">%u</span>"
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" title=\"%s\""
+	                    " style=\"text-align:center;\">"
+			    "%u"
 			    "</th>",
-		  Gbl.AttEvents.Lst[NumAttEvent].Title,NumAttEvent+1);
+		  Gbl.AttEvents.Lst[NumAttEvent].Title,
+		  NumAttEvent + 1);
 	}
 
-   fprintf (Gbl.F.Out,"<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+	              "%s"
+	              "</th>"
                       "</tr>",
             Txt_Attendance);
   }

@@ -187,9 +187,13 @@ void Deg_SeeDegWithPendingCrss (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees_with_pending_courses);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th class=\"TIT_TBL\"></th>"
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                         "<th></th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_Degree,
                Txt_Courses_ABBREVIATION);
@@ -1485,7 +1489,8 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree type */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT\""
+	                 " style=\"text-align:left; vertical-align:middle;\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegTyp);
@@ -1740,8 +1745,12 @@ static void Deg_PutFormToCreateDegType (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th lass=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Type_of_BR_degree,
             Txt_Direct_authentication);
@@ -1959,9 +1968,15 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Type_of_BR_degree,
             Txt_Direct_authentication,
@@ -1981,10 +1996,18 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Type_of_BR_degree,
@@ -2010,13 +2033,27 @@ static void Deg_PutHeadDegreesForSeeing (void)
                       "<th class=\"BM\"></th>"
                       "<th></th>"
                       "<th></th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Degree,
             Txt_Type_of_BR_degree,
@@ -2048,19 +2085,43 @@ static void Deg_PutHeadDegreesForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"20\">&nbsp;</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th style=\"width:20px;\"></th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Centre,

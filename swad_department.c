@@ -884,10 +884,18 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Institution,
             Txt_Short_Name,

@@ -118,9 +118,13 @@ void Cty_SeeCtyWithPendingInss (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Countries_with_pending_institutions);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th class=\"TIT_TBL\"></th>"
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                         "<th></th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_Country,
                Txt_Institutions_ABBREVIATION);
@@ -544,7 +548,7 @@ void Cty_ListCountries2 (void)
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th align=\"%s\" class=\"TIT_TBL\">",
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:%s;\">",
 	       Order == Cty_ORDER_BY_COUNTRY ? "left" :
 		                               "right");
       Act_FormStart (ActSeeCty);
@@ -559,9 +563,15 @@ void Cty_ListCountries2 (void)
                          "</form>"
                          "</th>");
      }
-   fprintf (Gbl.F.Out,"<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
@@ -1763,13 +1773,25 @@ static void Cty_PutHeadCountries (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "<th></th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Numeric_BR_code_BR_ISO_3166_1,
             Txt_Alphabetic_BR_code_BR_ISO_3166_1,

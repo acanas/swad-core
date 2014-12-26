@@ -934,7 +934,7 @@ static void Lay_DrawTabsDeskTop (void)
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
 				NumTab == Gbl.CurrentTab ? The_ClassTabOn[Gbl.Prefs.Theme] :
 							   The_ClassTabOff[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s32x32.gif\""
+	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
 			       "<div>%s</div>"

@@ -1274,10 +1274,16 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin-left:auto; margin-right:auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	              " style=\"margin-left:auto; margin-right:auto;\">"
                       "<tr>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th colspan=\"2\" align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th colspan=\"2\" class=\"TIT_TBL\""
+                      " style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_of_indicators,
             Txt_Courses);
