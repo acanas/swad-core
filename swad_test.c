@@ -532,8 +532,9 @@ static void Tst_ShowTstTotalMark (double TotalScore)
 
    /***** Write total mark ****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" align=\"center\" class=\"DAT\">%s: "
-		      "<span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
+		      "<td colspan=\"3\" class=\"DAT\""
+		      " style=\"text-align:center;\">"
+		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
 		      "</td>"
 		      "</tr>",
 	    Txt_Score,
@@ -717,7 +718,8 @@ static void Tst_WriteTestHead (unsigned NumTst)
 
    /***** Header row *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"3\" align=\"center\" class=\"TST_TIT\">"
+	              "<td colspan=\"3\" class=\"TST_TIT\""
+	              " style=\"text-align:center;\">"
                       "<strong>%s</strong>",
             Gbl.CurrentAct == ActSeeTst ? Txt_Test :
                                           Txt_Test_result);
@@ -885,9 +887,15 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%u.&nbsp;</td>"
-	                    "<td bgcolor=\"%s\"></td>"
-	                    "<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%s</td>"
+	                    "<td class=\"DAT_LIGHT\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">"
+	                    "%u.&nbsp;"
+	                    "</td>"
+	                    "<td style=\"background-color:%s;\"></td>"
+	                    "<td class=\"DAT_LIGHT\" style=\"text-align:left;"
+	                    " vertical-align:top; background-color:%s;\">"
+	                    "%s"
+	                    "</td>"
 	                    "</tr>",
                   Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
                   Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -920,18 +928,25 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
 
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\">%u.&nbsp;</td>",
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%u.&nbsp;"
+	              "</td>",
             Gbl.ColorRows[Gbl.RowEvenOdd],
             NumQst + 1);
 
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%s&nbsp;</td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%s&nbsp;"
+	              "</td>",
             Gbl.ColorRows[Gbl.RowEvenOdd],
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[5]) *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    Tst_WriteQstStem (row[4],"TEST_EXA");
    if (Gbl.CurrentAct == ActSeeTst)
@@ -1371,7 +1386,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
    fprintf (Gbl.F.Out,"<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle;\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllTags)
@@ -1392,7 +1408,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
       if (!ShowOnlyEnabledTags)
         {
          TagHidden = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-         fprintf (Gbl.F.Out,"<td align=\"left\">"
+         fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">"
                             "<img src=\"%s/",
                   Gbl.Prefs.IconsURL);
          if (TagHidden)
@@ -1404,7 +1420,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
          fprintf (Gbl.F.Out,"\" class=\"ICON16x16\" />"
                             "</td>");
         }
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" class=\"DAT\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+	                 " vertical-align:middle;\">"
 	                 "<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
 	       row[1]);
       if (Gbl.Test.TagsList)
@@ -1457,7 +1474,10 @@ static void Tst_ShowFormEditTags (void)
 
       /***** Header of table with title *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"center\" colspan=\"2\" class=\"%s\">%s</td>"
+	                 "<td colspan=\"2\" class=\"%s\""
+	                 " style=\"text-align:center;\">"
+	                 "%s"
+	                 "</td>"
 	                 "</tr>",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_Tags);
 
@@ -1479,7 +1499,7 @@ static void Tst_ShowFormEditTags (void)
             Tst_PutIconDisable (TagCod,row[1]);
 
          /* Form to rename this tag */
-         fprintf (Gbl.F.Out,"<td align=\"left\">");
+         fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
          Act_FormStart (ActRenTag);
          Par_PutHiddenParamString ("OldTagTxt",row[1]);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
@@ -1572,8 +1592,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Tests are visible from plugins? *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">%s:</td>"
-	              "<td align=\"left\" valign=\"top\">",
+	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Plugins);
    for (Pluggable = Tst_PLUGGABLE_NO;
 	Pluggable <= Tst_PLUGGABLE_YES;
@@ -1591,16 +1613,20 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Number of questions *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\">"
+	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<table style=\"border-spacing:2px;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_No_of_questions);
 
    /* Minimum number of questions in a test exam */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"DAT\">%s</td>"
-                      "<td align=\"left\">"
+	              "<td class=\"DAT\" style=\"text-align:right;\">"
+	              "%s"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NumQstMin\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>",
@@ -1608,8 +1634,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /* Default number of questions in a test exam */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"DAT\">%s</td>"
-                      "<td align=\"left\">"
+	              "<td class=\"DAT\" style=\"text-align:right;\">"
+	              "%s"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NumQstDef\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>",
@@ -1617,8 +1645,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /* Maximum number of questions in a test exam */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"DAT\">%s</td>"
-                      "<td align=\"left\">"
+	              "<td class=\"DAT\" style=\"text-align:right;\">"
+	              "%s"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NumQstMax\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>"
@@ -1629,8 +1659,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Minimum time between test exams per question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\">"
+	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"MinTimeNxtTstPerQst\" size=\"7\" maxlength=\"7\" value=\"%lu\" />"
                       "</td>"
                       "</tr>",
@@ -1640,8 +1672,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Feedback to students *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" class=\"%s\">%s:</td>"
-	              "<td align=\"left\" valign=\"top\">",
+	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Feedback_to_students);
    for (FeedbTyp = (Tst_Feedback_t) 0;
 	FeedbTyp < Tst_NUM_TYPES_FEEDBACK;
@@ -1964,7 +1998,8 @@ static void Tst_ShowFormAnswerTypes (void)
 
    /***** Select all types of answers *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" valign=\"middle\" class=\"%s\">"
+	              "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle;\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllAnsTypes)
@@ -1981,7 +2016,8 @@ static void Tst_ShowFormAnswerTypes (void)
 	AnsType++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" valign=\"middle\" class=\"DAT\">"
+	                 "<td class=\"DAT\" style=\"text-align:left;"
+	                 " vertical-align:middle;\">"
                          "<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       Ptr = Gbl.Test.ListAnsTypes;
@@ -2462,15 +2498,22 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                Txt_Edit_question);
 
       /* Write number of question */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%lu&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">"
+	                 "%lu&nbsp;"
+	                 "</td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],NumRow + 1);
 
       /* Write question code */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%ld&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">"
+	                 "%ld&nbsp;"
+	                 "</td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],QstCod);
 
       /* Write the date (row[1] has the date in format YYYYMMDDHHMMSS) */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       Dat_WriteDate (row[1]);
       fprintf (Gbl.F.Out,"<br />");
@@ -2478,19 +2521,24 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question tags */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	                 " background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       Tst_GetAndWriteTagsQst (QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%s&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">"
+	                 "%s&nbsp;"
+	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
                Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
       /* Write if shuffle is enabled (row[3]) */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
@@ -2513,7 +2561,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the stem (row[4]), the feedback (row[5]) and the answers */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	                 " background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       Tst_WriteQstStem (row[4],"TEST_EDI");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
@@ -2535,11 +2584,15 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
       /* Write number of times this question has been answered */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%lu</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">"
+	                 "%lu"
+	                 "</td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],NumHitsThisQst);
 
       /* Write average score */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (NumHitsThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
@@ -2549,12 +2602,16 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of times this question has been answered (not blank) */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">%lu</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">"
+	                 "%lu"
+	                 "</td>",
                Gbl.ColorRows[Gbl.RowEvenOdd],
                NumHitsNotBlankThisQst);
 
       /* Write average score (not blank) */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
+	                 " vertical-align:top; background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (NumHitsNotBlankThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
@@ -2704,11 +2761,16 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"DAT_SMALL\">%c)&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\""
+        	               " style=\"text-align:left;"
+        	               " vertical-align:top;\">"
+        	               "%c)&nbsp;"
+        	               "</td>",
                      'a' + (char) NumOpt);
 
             /* Write the text of the answer */
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST_EDI\">"
+            fprintf (Gbl.F.Out,"<td class=\"TEST_EDI\" style=\"text-align:left;"
+	                       " vertical-align:top;\">"
         	               "<p align=\"justify\">"
         	               "<tt>%s</tt>"
         	               "</p>"
@@ -2716,7 +2778,9 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
                      Answer);
 
             /* Write the text of the feedback */
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST_EDI_LIGHT\">");
+            fprintf (Gbl.F.Out,"<td class=\"TEST_EDI_LIGHT\""
+        	               " style=\"text-align:left;"
+        	               " vertical-align:top;\">");
             if (LengthFeedback)
 	       fprintf (Gbl.F.Out,"<p align=\"justify\">"
 		                  "<tt>%s</tt>"
@@ -2893,7 +2957,7 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"%s\">",
+	              "<td class=\"%s\" style=\"text-align:center;\">",
             (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
              Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
             (AnsTF == row[1][0] ? "ANS_OK" :
@@ -2903,7 +2967,7 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" class=\"ANS\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS\" style=\"text-align:center;\">");
    if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
@@ -2979,7 +3043,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
 
       /***** Write selectors and letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" valign=\"top\">");
+	                 "<td style=\"text-align:left; vertical-align:top;\">");
       sprintf (ParamName,"Ind%06u",NumQst);
       Par_PutHiddenParamUnsigned (ParamName,Index);
       fprintf (Gbl.F.Out,"<input type=\"");
@@ -2989,11 +3053,15 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
          fprintf (Gbl.F.Out,"checkbox\"");
       fprintf (Gbl.F.Out," name=\"Ans%06u\" value=\"%u\" /> </td>",NumQst,Index);
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST\">%c)&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"TEST\" style=\"text-align:left;"
+	                 " vertical-align:top;\">"
+	                 "%c)&nbsp;"
+	                 "</td>",
                'a' + (char) NumOpt);
 
       /***** Write the option text *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST_EXA\">"
+      fprintf (Gbl.F.Out,"<td class=\"TEST_EXA\" style=\"text-align:left;"
+	                 " vertical-align:top;\">"
 	                 "<p align=\"justify\">"
 	                 "<tt>%s</tt>"
 	                 "</p>"
@@ -3107,8 +3175,8 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
-   fprintf (Gbl.F.Out,"<td align=\"left\"></td>"
-	              "<td align=\"left\"></td>"
+   fprintf (Gbl.F.Out,"<td></td>"
+	              "<td></td>"
 	              "</tr>");
 
    /***** Write answers (one row per answer) *****/
@@ -3118,7 +3186,8 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       /* Draw icon depending on user's answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"center\" valign=\"top\">");
+	                 "<td style=\"text-align:center;"
+	                 " vertical-align:top;\">");
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
@@ -3132,7 +3201,8 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Draw icon that indicates whether the answer is correct */
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" class=\"ANS\">");
+      fprintf (Gbl.F.Out,"<td class=\"ANS\" style=\"text-align:center;"
+	                 " vertical-align:top;\">");
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
           Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
         {
@@ -3147,11 +3217,14 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Answer letter (a, b, c,...) */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST\">%c)&nbsp;</td>",
+      fprintf (Gbl.F.Out,"<td class=\"TEST\" style=\"text-align:left;"
+	                 " vertical-align:top;\">"
+	                 "%c)&nbsp;"
+	                 "</td>",
                'a' + (char) NumOpt);
 
       /* Answer text and feedback */
-      fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\">"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;\">"
 	                 "<p align=\"justify\" class=\"TEST_EXA\">"
 	                 "<tt>%s</tt>"
 	                 "</p>",
@@ -3301,8 +3374,8 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" valign=\"top\"");
-   if (Gbl.Test.StrAnswersOneQst[NumQst][0])		// If user has answered the question
+	              "<td style=\"text-align:center; vertical-align:top;\"");
+   if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       /* Filter the user answer */
       strcpy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst]);
@@ -3324,7 +3397,8 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
             break;
            }
         }
-      fprintf (Gbl.F.Out," class=\"%s\">&nbsp;%s&nbsp;",
+      fprintf (Gbl.F.Out," class=\"%s\">"
+	                 "&nbsp;%s&nbsp;",
                (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
                 Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
                 (Correct ? "ANS_OK" :
@@ -3332,27 +3406,34 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
                 "ANS",
                Gbl.Test.StrAnswersOneQst[NumQst]);
      }
-   else							// If user has omitted the answer
-      fprintf (Gbl.F.Out," class=\"ANS\">&nbsp;");
+   else						// If user has omitted the answer
+      fprintf (Gbl.F.Out," class=\"ANS\">"
+	                 "&nbsp;");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answers *****/
    if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\">"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:top;\">"
                          "<table>");
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
         {
          /* Answer letter (a, b, c,...) */
-         fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"TEST\">%c)&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"TEST\" style=\"text-align:left;"
+	                    " vertical-align:top;\">"
+                            "%c)&nbsp;"
+                            "</td>",
                   'a' + (char) NumOpt);
 
          /* Answer text and feedback */
-         fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\">"
-                            "<p align=\"justify\" class=\"ANS\">%s</p>",
+         fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
+                            " vertical-align:top;\">"
+                            "<p align=\"justify\" class=\"ANS\">"
+                            "%s"
+                            "</p>",
                   Gbl.Test.Answer.Options[NumOpt].Text);
 	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
@@ -3367,7 +3448,9 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"</table>");
      }
    else
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" class=\"ANS\">?");
+      fprintf (Gbl.F.Out,"<td class=\"ANS\" style=\"text-align:center;"
+	                 " vertical-align:top;\">"
+	                 "?");
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -3444,11 +3527,12 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\"");
+	              "<td style=\"text-align:center;\"");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])		// If user has answered the question
      {
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
-         fprintf (Gbl.F.Out," class=\"%s\">&nbsp;%ld&nbsp;",
+         fprintf (Gbl.F.Out," class=\"%s\">"
+                            "&nbsp;%ld&nbsp;",
                   (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
@@ -3458,7 +3542,8 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       else
         {
          Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
-         fprintf (Gbl.F.Out," class=\"ANS\">?");
+         fprintf (Gbl.F.Out," class=\"ANS\">"
+                            "?");
         }
      }
    else							// If user has omitted the answer
@@ -3466,7 +3551,7 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" class=\"ANS\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS\" style=\"text-align:center;\">");
    if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"&nbsp;%ld&nbsp;",IntAnswerCorr);
@@ -3559,7 +3644,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** Write the user answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\"");
+	              "<td style=\"text-align:center;\"");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
@@ -3580,7 +3665,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the correct answer *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" class=\"ANS\">");
+   fprintf (Gbl.F.Out,"<td class=\"ANS\" style=\"text-align:center;\">");
    if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"&nbsp;[%lg; %lg]&nbsp;",FloatAnsCorr[0],FloatAnsCorr[1]);
@@ -3634,8 +3719,12 @@ static void Tst_WriteHeadUserCorrect (void)
    extern const char *Txt_User;
    extern const char *Txt_TST_Correct_ANSWER;
 
-   fprintf (Gbl.F.Out,"<td align=\"center\" class=\"DAT_SMALL\">&nbsp;%s&nbsp;</td>"
-                      "<td align=\"center\" class=\"DAT_SMALL\">&nbsp;%s&nbsp;</td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;\">"
+	              "&nbsp;%s&nbsp;"
+	              "</td>"
+                      "<td class=\"DAT_SMALL\" style=\"text-align:center;\">"
+                      "&nbsp;%s&nbsp;"
+                      "</td>",
             Txt_User,Txt_TST_Correct_ANSWER);
   }
 
@@ -3648,7 +3737,8 @@ static void Tst_WriteScoreStart (unsigned ColSpan)
    extern const char *Txt_Score;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" colspan=\"%u\" class=\"DAT_SMALL\">"
+	              "<td colspan=\"%u\" class=\"DAT_SMALL\""
+	              " style=\"text-align:left;\">"
 	              "%s: <span class=\"",
             ColSpan,Txt_Score);
   }
@@ -3719,8 +3809,14 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
         {
          row = mysql_fetch_row (mysql_res);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" valign=\"top\" class=\"DAT_SMALL\">&nbsp;&#8226;&nbsp;</td>"
-                            "<td align=\"left\" valign=\"top\" class=\"DAT_SMALL\">%s</td>"
+                            "<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	                    " vertical-align:top;\">"
+                            "&nbsp;&#8226;&nbsp;"
+                            "</td>"
+                            "<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	                    " vertical-align:top;\">"
+                            "%s"
+                            "</td>"
                             "</tr>",
                   row[0]);
         }
@@ -4104,8 +4200,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Write the tags *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+                      "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<table>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Tags);
    for (NumTag = 0;
@@ -4115,7 +4214,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       fprintf (Gbl.F.Out,"<tr>");
 
       /***** Write the tags already existing in a selector *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\">"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">"
 	                 "<select id=\"SelDesc%u\" name=\"SelDesc%u\""
 	                 " style=\"width:230px;\" onchange=\"changeTxtTag('%u')\">",
                NumTag,NumTag,NumTag);
@@ -4146,8 +4245,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                Txt_new_tag);
 
       /***** Input of a new tag *****/
-      fprintf (Gbl.F.Out,"<td align=\"right\">"
-                         "<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\" size=\"36\" maxlength=\"%u\" value=\"%s\" onchange=\"changeSelTag('%u')\" />"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:right;\">"
+                         "<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\" size=\"36\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
 	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.TagText[NumTag],NumTag);
 
@@ -4162,8 +4262,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Stem\" cols=\"70\" rows=\"8\">"
                       "%s"
                       "</textarea>"
@@ -4175,8 +4278,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Feedback\" cols=\"70\" rows=\"8\">"
                       "%s"
                       "</textarea>"
@@ -4194,8 +4300,12 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Type of answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\" class=\"%s\">",
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"%s\" style=\"text-align:left;"
+                      " vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Type,
             The_ClassFormul[Gbl.Prefs.Theme]);
@@ -4216,8 +4326,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Answers *****/
    /* Integer answer */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"top\" class=\"%s\">%s:</td>"
-                      "<td align=\"left\" valign=\"top\" class=\"%s\">%s: "
+                      "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
+                      "%s: "
                       "<input type=\"text\" name=\"AnsInt\" size=\"11\" maxlength=\"11\" value=\"%ld\"",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Answers,
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Integer_number,
@@ -4229,8 +4344,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /* Floating point answer */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\"></td>"
-                      "<td align=\"left\" valign=\"top\" class=\"%s\">%s "
+	              "<td></td>"
+                      "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
+                      "%s "
                       "<input type=\"text\" name=\"AnsFloatMin\" size=\"11\" maxlength=\"%u\" value=\"%lg\"",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Real_number_between_A_and_B_1,
             Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[0]);
@@ -4246,11 +4363,12 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /* T/F answer */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\"></td>"
-                      "<td align=\"left\" valign=\"top\">"
+	              "<td></td>"
+                      "<td style=\"text-align:left; vertical-align:top;\">"
                       "<table>"
                       "<tr>"
-	              "<td align=\"left\" valign=\"top\" class=\"%s\">"
+	              "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
                       "<input type=\"radio\" name=\"AnsTF\" value=\"T\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Test.Answer.TF == 'T')
@@ -4272,8 +4390,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /* Questions can be shuffled? */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\"></td>"
-                      "<td align=\"left\" valign=\"top\" class=\"%s\">"
+	              "<td></td>"
+                      "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Shuffle)
@@ -4287,13 +4406,17 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /* Simple or multiple choice answers */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\"></td>"
-	              "<td align=\"left\" valign=\"top\">"
+	              "<td></td>"
+	              "<td style=\"text-align:left; vertical-align:top;\">"
 	              "<table>"
                       "<tr>"
 	              "<td></td>"
-	              "<td align=\"left\" class=\"%s\">%s</td>"
-	              "<td align=\"left\" class=\"%s\">%s</td>"
+	              "<td class=\"%s\" style=\"text-align:left;\">"
+	              "%s"
+	              "</td>"
+	              "<td class=\"%s\" style=\"text-align:left;\">"
+	              "%s"
+	              "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Answer,
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Feedback);
@@ -4306,7 +4429,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
      {
       /* Selectors and label with the letter of the answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td align=\"left\" valign=\"top\" class=\"%s\">"
+	                 "<td class=\"%s\" style=\"text-align:left;"
+	                 " vertical-align:top;\">"
 	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       NumOpt);
@@ -4325,7 +4449,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                'a' + (char) NumOpt);
 
       /* Answer text */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\">"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:right; vertical-align:top;\">"
 	                 "<textarea name=\"AnsStr%u\" cols=\"30\" rows=\"5\"",
 	       NumOpt);
       if (OptionsDisabled)
@@ -4337,7 +4461,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	                 "</td>");
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\">"
+      fprintf (Gbl.F.Out,"<td style=\"text-align:right; vertical-align:top;\">"
 	                 "<textarea name=\"FbStr%u\" cols=\"30\" rows=\"5\"",
 	       NumOpt);
       if (OptionsDisabled)
@@ -5741,7 +5865,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          fprintf (Gbl.F.Out,"<div align=\"center\">"
                             "<table style=\"border-spacing:4px;\">"
                             "<tr>"
-                            "<td colspan=\"2\" align=\"left\">");
+                            "<td colspan=\"2\" style=\"text-align:left;\">");
 
          /***** Put list of users to select some of them *****/
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
@@ -6015,8 +6139,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
             fprintf (Gbl.F.Out,"<tr>");
 
          /* Write date and time (row[2] holds date and time in YYYYMMDDHHMMSS format) */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Dat_WriteDate (row[2]);
 	 fprintf (Gbl.F.Out,"&nbsp;");
 	 Dat_WriteHourMinute (&row[2][8]);
@@ -6052,29 +6177,33 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
          setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
          /* Write number of questions */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewExam)
 	    fprintf (Gbl.F.Out,"%u",NumQstsInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write number of questions not blank */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewExam)
 	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Write score */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write average score per question */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\"  bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisExam ? ScoreInThisExam / (double) NumQstsInThisExam :
@@ -6082,8 +6211,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write score over Tst_SCORE_MAX */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\"  bgcolor=\"%s\" class=\"%s\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],ClassDat);
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">",
+	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisExam ? ScoreInThisExam * Tst_SCORE_MAX / (double) NumQstsInThisExam :
@@ -6091,7 +6221,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Link to show this exam */
-	 fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\">",
+	 fprintf (Gbl.F.Out,"<td style=\"text-align:right; vertical-align:top;"
+	                    " background-color:%s;\">",
 		  Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanViewExam)
 	   {
@@ -6117,39 +6248,50 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	                                        Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">%s: %u"
+			 "<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+			 " border-style:solid none none none;"
+			 " border-width:1px;\">"
+			 "%s: %u"
 			 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
 	       Txt_Visible_exams,NumExamsVisibleByTchs);
 
       /* Write total number of questions */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+	                 " border-style:solid none none none;"
+			 " border-width:1px;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQsts);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total number of questions not blank */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+			 " border-style:solid none none none;"
+			 " border-width:1px;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total score */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+			 " border-style:solid none none none;"
+			 " border-width:1px;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllExams);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write average score per question */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+			 " border-style:solid none none none;"
+			 " border-width:1px;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
@@ -6158,8 +6300,10 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write score over Tst_SCORE_MAX */
-      fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_N\""
-			 " style=\"border-style:solid none none none; border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:right;"
+	                 " vertical-align:top; background-color:%s;"
+			 " border-style:solid none none none;"
+			 " border-width:1px;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
@@ -6168,18 +6312,18 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Last cell */
-      fprintf (Gbl.F.Out,"<td bgcolor=\"%s\"></td>"
+      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
 			 "</tr>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
      }
    else
-      fprintf (Gbl.F.Out,"<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
-	                 "<td bgcolor=\"%s\"></td>"
+      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
+	                 "<td style=\"background-color:%s;\"></td>"
 	                 "</tr>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -6208,7 +6352,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    fprintf (Gbl.F.Out,"<td ");
    if (NumExams)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out,"align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out," style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,
@@ -6221,7 +6366,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    fprintf (Gbl.F.Out,"<td ");
    if (NumExams)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out,"align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out," style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
@@ -6331,10 +6477,12 @@ void Tst_ShowOneTestExam (void)
    /* User */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-	              "<td align=\"right\" valign=\"top\" class=\"DAT_N\">"
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
                       "%s:"
                       "</td>"
-	              "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+	              "<td class=\"DAT\" style=\"text-align:left;"
+	              " vertical-align:top;\">",
             Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,true);
    fprintf (Gbl.F.Out," %s",
@@ -6357,10 +6505,12 @@ void Tst_ShowOneTestExam (void)
    /* Exam date */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-	              "<td align=\"right\" valign=\"top\" class=\"DAT_N\">"
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
                       "%s:"
                       "</td>"
-	              "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+	              "<td class=\"DAT\" style=\"text-align:left;"
+	              " vertical-align:top;\">",
             Txt_Date);
    Dat_WriteDate (TstTime);
    fprintf (Gbl.F.Out,"&nbsp;");
@@ -6371,10 +6521,12 @@ void Tst_ShowOneTestExam (void)
    /* Number of questions */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-	              "<td align=\"right\" valign=\"top\" class=\"DAT_N\">"
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
                       "%s:"
                       "</td>"
-	              "<td align=\"left\" valign=\"top\" class=\"DAT\">"
+	              "<td class=\"DAT\" style=\"text-align:left;"
+	              " vertical-align:top;\">"
 	              "%u (%u %s)"
                       "</td>"
 	              "</tr>",
@@ -6384,10 +6536,12 @@ void Tst_ShowOneTestExam (void)
    /* Score */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-	              "<td align=\"right\" valign=\"top\" class=\"DAT_N\">"
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
                       "%s:"
                       "</td>"
-	              "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+	              "<td class=\"DAT\" style=\"text-align:left;"
+	              " vertical-align:top;\">",
             Txt_Score);
    if (ICanViewScore)
       fprintf (Gbl.F.Out,"%.2lf (%.2lf",
@@ -6403,10 +6557,12 @@ void Tst_ShowOneTestExam (void)
    /* Tags present in this exam */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-	              "<td align=\"right\" valign=\"top\" class=\"DAT_N\">"
+	              "<td class=\"DAT_N\" style=\"text-align:right;"
+	              " vertical-align:top;\">"
                       "%s:"
                       "</td>"
-	              "<td align=\"left\" valign=\"top\" class=\"DAT\">",
+	              "<td class=\"DAT\" style=\"text-align:left;"
+	              " vertical-align:top;\">",
             Txt_Tags);
    Tst_ShowTstTagsPresentInAnExam (TstCod);
    fprintf (Gbl.F.Out,"</td>"
@@ -6470,9 +6626,17 @@ static void Tst_ShowExamTstResult (const char *TstTime)
 	 if (ThisQuestionHasBeenEdited)
 	    /***** Question has been edited *****/
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%u.&nbsp;</td>"
-			       "<td bgcolor=\"%s\"></td>"
-			       "<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%s</td>"
+			       "<td class=\"DAT_LIGHT\""
+			       " style=\"text-align:right; vertical-align:top;"
+			       " background-color:%s;\">"
+			       "%u.&nbsp;"
+			       "</td>"
+			       "<td style=\"background-color:%s;\"></td>"
+			       "<td class=\"DAT_LIGHT\""
+			       " style=\"text-align:left; vertical-align:top;"
+			       " background-color:%s;\">"
+			       "%s"
+			       "</td>"
 			       "</tr>",
 		     Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
 		     Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -6492,9 +6656,15 @@ static void Tst_ShowExamTstResult (const char *TstTime)
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td align=\"right\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%u.&nbsp;</td>"
-	                    "<td bgcolor=\"%s\"></td>"
-	                    "<td align=\"left\" valign=\"top\" bgcolor=\"%s\" class=\"DAT_LIGHT\">%s</td>"
+	                    "<td class=\"DAT_LIGHT\" style=\"text-align:right;"
+	                    " vertical-align:top; background-color:%s;\">"
+	                    "%u.&nbsp;"
+	                    "</td>"
+	                    "<td style=\"background-color:%s;\"></td>"
+	                    "<td class=\"DAT_LIGHT\" style=\"text-align:left;"
+	                    " vertical-align:top; background-color:%s;\">"
+	                    "%s"
+	                    "</td>"
 	                    "</tr>",
                   Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
                   Gbl.ColorRows[Gbl.RowEvenOdd],

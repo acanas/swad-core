@@ -140,13 +140,15 @@ void TsI_ShowFormImportQstsFromXML (void)
    Act_FormStart (ActImpTstQst);
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td align=\"right\" class=\"%s\">%s:<br /></td>"
-                      "<td align=\"left\">"
+                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
 	              "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
 	              "</td>"
                       "</tr>"
                       "<tr>"
-	              "<td colspan=\"2\" align=\"center\">"
+	              "<td colspan=\"2\" style=\"text-align:right;\">"
 	              "<input type=\"submit\" value=\"%s\" accept=\"text/xml\" />"
 	              "</td>"
 	              "</tr>"
@@ -1004,7 +1006,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Put icon to indicate that a question does not exist in database *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" valign=\"top\" class=\"BT%d\">"
+	              "<td class=\"BT%d\" style=\"text-align:center;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
                       "</td>",
@@ -1016,14 +1018,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	             Txt_New_question);
 
    /***** Write number of question *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd],ClassData);
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
+	              " vertical-align:top; background-color:%s;\">",
+            ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (!QuestionExists)
       fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question tags *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (Gbl.Test.NumTags)
      {
@@ -1033,8 +1037,14 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	   NumTag < Gbl.Test.NumTags;
 	   NumTag++)
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td align=\"left\" valign=\"top\" class=\"%s\">&nbsp;&#8226;&nbsp;</td>"
-                            "<td align=\"left\" valign=\"top\" class=\"%s\">%s</td>"
+                            "<td class=\"%s\" style=\"text-align:left;"
+	                    " vertical-align:top;\">"
+                            "&nbsp;&#8226;&nbsp;"
+                            "</td>"
+                            "<td class=\"%s\" style=\"text-align:left;"
+	                    " vertical-align:top;\">"
+                            "%s"
+                            "</td>"
                             "</tr>",
                   ClassData,
                   ClassData,Gbl.Test.TagText[NumTag]);
@@ -1047,12 +1057,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question type *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\" class=\"%s\">%s&nbsp;</td>",
-	    Gbl.ColorRows[Gbl.RowEvenOdd],ClassData,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
+	              " vertical-align:top; background-color:%s;\">"
+	              "%s&nbsp;"
+	              "</td>",
+	    ClassData,Gbl.ColorRows[Gbl.RowEvenOdd],
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write if shuffle is enabled *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:top;"
+	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
@@ -1067,7 +1081,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the stem and the answers *****/
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" bgcolor=\"%s\">",
+   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
+	              " background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    Tst_WriteQstStem (Stem,ClassStem);
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
@@ -1133,11 +1148,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\" class=\"%s\">%c)&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	                       " vertical-align:top;\">"
+        	               "%c)&nbsp;"
+        	               "</td>",
                      ClassData,'a' + (char) NumOpt);
 
             /* Write the text and the feedback of the answer */
-            fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"top\">"
+            fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
+        	               " vertical-align:top;\">"
         	               "<p class=\"%s\">"
         	               "<tt>%s</tt>"
         	               "</p>",
