@@ -248,7 +248,7 @@ void TT_ShowClassTimeTable (void)
    /***** Put buttons *****/
    if (PutEditButton || PutEditOfficeHours || PrintView)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       if (PutEditButton)
 	{
@@ -321,7 +321,7 @@ void TT_EditCrsTimeTable (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeCrsTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
@@ -353,7 +353,7 @@ void TT_ShowMyTutTimeTable (void)
    extern const char *Txt_Office_hours;
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeMyTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);

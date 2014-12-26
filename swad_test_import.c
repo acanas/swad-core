@@ -131,7 +131,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_Upload_file;
    extern const char *Txt_XML_file;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Write help message *****/
    Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import);
@@ -492,7 +492,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
    /***** Print XML tree *****/
    Lay_WriteTitle (Txt_XML_file_content);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<textarea cols=\"60\" rows=\"4\">");
    XML_PrintTree (RootElem);
    fprintf (Gbl.F.Out,"</textarea>"

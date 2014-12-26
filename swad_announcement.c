@@ -74,7 +74,7 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Put link (form) to create a new announcement *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
@@ -169,7 +169,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Show the announcements *****/
    if (NumAnnouncements)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       for (NumAnn = 0;
 	   NumAnn < NumAnnouncements;
@@ -214,7 +214,8 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
    bool RolesSelected;
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\" style=\"width:400px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\""
+	              " style=\"width:400px;\">");
 
    /***** Write the content of the announcement *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_SUBJECT\">%s</div>",
@@ -225,7 +226,8 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
             Content);
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\" style=\"margin:10px;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\""
+	              " style=\"text-align:center; margin:10px;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
 
    if (ShowAllAnnouncements)
@@ -318,7 +320,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    Act_FormStart (ActRcvAnn);
 

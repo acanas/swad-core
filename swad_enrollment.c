@@ -238,7 +238,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
    /***** Form to request user's ID, @nickname or e-mail address *****/
    Act_FormStart (NextAction);
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
                       "%s: "
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
                       " size=\"20\" maxlength=\"%u\" />"
@@ -269,7 +269,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Send button to accept register in the current course *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActAccEnrCrs);
    Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
@@ -443,7 +443,7 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *Txt_Step_5_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Put link to remove all the students in the current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -457,14 +457,16 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
    Act_FormStart (ActRcvFrmMdfUsrCrs);
 
    /***** Step 1: List of students to be enrolled / removed *****/
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_1_Provide_a_list_of_users);
 
    /* Option a: get students from official lists */
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Option_a_Import_students_from_the_official_lists);
    if (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] == '\0')
@@ -476,31 +478,35 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
      }
 
    /* Option b: get students' IDs from pasted text */
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Option_b_Type_or_paste_a_list_of_users);
    Lay_ShowAlert (Lay_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
 
    /***** Step 2: Select type of user to register/remove to/from current course *****/
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_2_Select_the_type_of_user_to_register_remove);
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
       Rol_PutAllRolesRegRemUsrsCrs ();
 
    /***** Step 3: Put different actions to register/remove students to/from current course *****/
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_3_Select_the_desired_action);
    Enr_PutActionsRegRemSeveralUsrs ();
 
    /***** Step 4: Select groups in which register / remove students *****/
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_4_Optionally_select_groups);
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -520,8 +526,9 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
      }
 
    /***** Step 5: Button to register / remove students *****/
-   fprintf (Gbl.F.Out,"<div align=\"left\" class=\"%s\">"
-                      "<br />%s<br />&nbsp;</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+                      "<br />%s<br />&nbsp;"
+                      "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_5_Confirm_the_enrollment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
@@ -562,7 +569,7 @@ void Enr_AskRemoveOldUsrs (void)
    unsigned Months;
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemOldUsr);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -1919,7 +1926,7 @@ void Enr_ShowEnrollmentRequests (void)
    /***** Selection of scope and roles *****/
    /* Start form */
    Act_FormStart (ActSeeSignUpReq);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<table style=\"border-spacing:4px;\">");
 
    /* Scope (whole platform, current centre, current degree or current course) */
@@ -2568,7 +2575,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    extern const char *Txt_Confirm;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
 
    /***** Buttons for edition *****/
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
@@ -2826,7 +2833,7 @@ static void Enr_ReqAddAdmOfDeg (void)
 
                Act_FormStart (ActNewAdm);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-               fprintf (Gbl.F.Out,"<div align=\"center\">"
+               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
         	                  "<input type=\"submit\" value=\"%s\" />"
         	                  "</div>"
         	                  "</form>",
@@ -3062,7 +3069,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
 
       Rec_ShowCommonRecordUnmodifiable (UsrDat);
 
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Act_FormStart (ActRemUsrCrs);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
@@ -3159,7 +3166,7 @@ static void Enr_AskIfRemAdmFromDeg (bool ItsMe)
 
       Act_FormStart (ActRemAdm);
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<input type=\"submit\" value=\"%s\" />"
 	                 "</div>"
 	                 "</form>",

@@ -232,7 +232,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    extern const char *Txt_Update_students_according_to_selected_groups;
    unsigned NumGrpTyp;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Start form to update the students listed
           depending on the groups selected *****/
@@ -3268,7 +3268,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemGrpTyp);
    Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    Lay_PutSendButton (Txt_Remove_type_of_group);
@@ -3307,7 +3307,7 @@ static void Grp_AskConfirmRemGrp (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemGrp);
    Grp_PutParamGrpCod (GrpDat.GrpCod);
    Lay_PutSendButton (Txt_Remove_group);

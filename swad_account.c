@@ -110,15 +110,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_Create_account;
 
    /***** Link to log in *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
    Act_FormStart (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("login",Txt_Log_in,Txt_Log_in);
    fprintf (Gbl.F.Out,"</form>"
 	              "</div>");
 
-   /***** Form to enter the ID of the new user *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   /***** Form to enter some data of the new user *****/
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActCreUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
@@ -193,7 +193,7 @@ void Acc_ShowFormChangeMyAccount (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_ID);
 
    /***** Put links to change my password and to remove my account*****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Pwd_PutLinkToChangeUsrPassword (&Gbl.Usrs.Me.UsrDat);
    if (Acc_CheckIfICanEliminateAccount (true))	// ItsMe = true
       Acc_PutLinkToRemoveMyAccount ();
@@ -616,7 +616,7 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
       /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();
 
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<input type=\"submit\" value=\"%s\" />"
 	                 "</div>"
 	                 "</form>",

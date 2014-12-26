@@ -237,7 +237,7 @@ static void Ins_Configuration (bool PrintView)
       /***** Link to print view *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
 	 Lay_PutLinkToPrintView2 ();
 	 fprintf (Gbl.F.Out,"</div>");

@@ -225,7 +225,8 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+	              "%s:&nbsp;"
                       "<input type=\"text\" name=\"UsrId\" size=\"8\" maxlength=\"%u\" value=\"%s\" />"
                       "</div>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
@@ -739,7 +740,7 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Start form */
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Act_FormStart (ActChgPwdOthUsr);
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
@@ -830,7 +831,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin:10px;\" >"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin:10px;\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "<span class=\"%s\">%s</span><br />"
 		      "<span class=\"%s\">%s: </span>"

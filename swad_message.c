@@ -215,7 +215,7 @@ void Msg_ListEMails (void)
          Lay_EndRoundFrameTable10 ();
 
          /***** Icon to open the client e-mail program *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\">"
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\" title=\"%s\" class=\"%s\">",
                   Gbl.Usrs.Me.UsrDat.Email,
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
@@ -310,7 +310,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
         }
 
       /* Start table */
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<table>"
 	                 "<tr>"
 	                 "<td class=\"%s\" style=\"text-align:right;"
@@ -762,7 +762,8 @@ void Msg_ReqDelAllRecMsgs (void)
 
    Act_FormStart (ActDelAllRcvMsg);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" />"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
 	              "</div>"
 	              "</form>",
             Txt_Delete_messages_received);
@@ -798,7 +799,10 @@ void Msg_ReqDelAllSntMsgs (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    Act_FormStart (ActDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div></form>",
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>"
+	              "</form>",
             Txt_Delete_messages_sent);
   }
 
@@ -1476,7 +1480,8 @@ void Msg_ShowRecMsgs (void)
    /***** Link to view banned users *****/
    if (Msg_GetNumUsrsBannedByMe ())
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+	                 " margin-bottom:10px;\">");
       Msg_PutLinkToViewBannedUsers ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -1538,7 +1543,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
    NumMsgs = (unsigned) NumRows;
 
    /* Write number of messages and number of new messages */
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"TIT\">");
+   fprintf (Gbl.F.Out,"<div class=\"TIT\" style=\"text-align:center;\">");
    Msg_WriteNumMsgs (NumMsgs,NumUnreadMsgs);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2062,7 +2067,7 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    char StrFilterContent[256+Msg_MAX_LENGTH_FILTER_CONTENT+1];
 
    /***** Put link to request deletion of all sent or received messages *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg : ActReqDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
 
@@ -2188,7 +2193,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    unsigned NumOriginCrs;
 
    /***** Course selection *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
@@ -2224,7 +2229,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    extern const char *Txt_MSG_Message;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<table>");
 
    /***** Authors/recipients of the message *****/
@@ -2269,7 +2274,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
    extern const char *Txt_Show_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
                       "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
@@ -2820,24 +2825,30 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)))	// Message sent from current course
-             fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(%s)</div>",
+             fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+        	                "(%s)"
+        	                "</div>",
                       Txt_from_this_course);
          else	// Message sent from another course
            {
             /* Write course, including link */
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(");
+            fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+        	               "(");
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"MSG_AUT");
-            fprintf (Gbl.F.Out,"%s</a>)</div>"
+            fprintf (Gbl.F.Out,"%s</a>)"
+        	               "</div>"
         	               "</form>",
         	     Crs.ShortName);
            }
 	}
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
-      fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">(%s)</div>",
+      fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+	                 "(%s)"
+	                 "</div>",
                Txt_no_course_of_origin);
 
    return FromThisCrs;

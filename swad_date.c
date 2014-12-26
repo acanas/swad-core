@@ -249,7 +249,7 @@ void Dat_DrawCalendar (void)
    if (!PrintView)
      {
       /* Link to print view */
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Lay_PutLinkToPrintView1 (ActPrnCal);
       Lay_PutLinkToPrintView2 ();
       fprintf (Gbl.F.Out,"</div>");
@@ -354,7 +354,9 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
    /***** Start of month *****/
    fprintf (Gbl.F.Out,"<div class=\"MONTH_CONTAINER\">"
-		      "<div class=\"MONTH\">%s %u</div>"
+		      "<div class=\"MONTH\">"
+		      "%s %u"
+		      "</div>"
 		      "<table class=\"MONTH_TABLE_DAYS\">",
 	    Txt_MONTHS_CAPS[RealMonth-1],RealYear);
 

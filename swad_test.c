@@ -254,7 +254,7 @@ void Tst_ShowFormAskTst (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Tst_PutFormToEdit ();
       Tst_PutFormToConfigure ();
       fprintf (Gbl.F.Out,"</div>");
@@ -267,7 +267,7 @@ void Tst_ShowFormAskTst (void)
       if (Tst_CheckIfNextTstAllowed ())
         {
          Act_FormStart (ActSeeTst);
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
          /***** Selection of tags *****/
          Tst_ShowFormSelTags (NumRows,mysql_res,true);
@@ -276,7 +276,8 @@ void Tst_ShowFormAskTst (void)
          Tst_ShowFormAnswerTypes ();
 
          /***** Number of questions to generate ****/
-         fprintf (Gbl.F.Out,"<div class=\"%s\">%s: "
+         fprintf (Gbl.F.Out,"<div class=\"%s\">"
+                            "%s: "
                             "<input type=\"text\" name=\"NumQst\" size=\"3\" maxlength=\"3\" value=\"%u\"",
                   The_ClassFormul[Gbl.Prefs.Theme],Txt_No_of_questions,
                   Gbl.Test.Config.Def);
@@ -386,7 +387,8 @@ void Tst_ShowNewTestExam (void)
             Tst_WriteTestFoot ();
 
 	    /* Exam will be saved? */
-	    fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">"
+	    fprintf (Gbl.F.Out,"<div class=\"%s\""
+		               " style=\"text-align:center;\">"
 			       "<input type=\"checkbox\" name=\"Save\" value=\"Y\"",
 		     The_ClassFormul[Gbl.Prefs.Theme]);
 	    if (Gbl.Test.AllowTeachers)
@@ -1090,7 +1092,7 @@ void Tst_ShowFormAskEditTsts (void)
    unsigned long NumRows;
 
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
    Tst_PutFormToConfigure ();		// Put form to go to test configuration
@@ -1108,7 +1110,7 @@ void Tst_ShowFormAskEditTsts (void)
       Act_FormStart (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /***** Selection of tags *****/
       Tst_ShowFormSelTags (NumRows,mysql_res,false);
@@ -1469,7 +1471,7 @@ static void Tst_ShowFormEditTags (void)
    else
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
       /***** Header of table with title *****/
@@ -2054,7 +2056,7 @@ void Tst_ListQuestionsToEdit (void)
       if ((NumRows = Tst_GetQuestionsForEdit (&mysql_res)) != 0)		// Query database
         {
 	 /***** Buttons for edition *****/
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
 	 if (Gbl.Test.XML.CreateXML)
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file for exporting questions and put a link to download it
@@ -2332,7 +2334,7 @@ static void Tst_ListOneQstToEdit (void)
    if (Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res))
      {
       /***** Button to create a new question *****/
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
       fprintf (Gbl.F.Out,"</div>");
 
@@ -4193,7 +4195,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.QstCod != -1)	// If the question already has assigned a code
       Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
 
-   fprintf (Gbl.F.Out,"<div align=\"center\"><table>");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<table>");
 
    /***** Get tags already existing for questions in current course *****/
    NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res);
@@ -5862,7 +5865,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          /***** Form start *****/
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
-         fprintf (Gbl.F.Out,"<div align=\"center\">"
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                             "<table style=\"border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" style=\"text-align:left;\">");
@@ -5911,7 +5914,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<table class=\"CELLS_PAD_2\">");
    Dat_WriteFormIniEndDates ();
    fprintf (Gbl.F.Out,"</table>"

@@ -194,7 +194,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
                   Pho_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
          Lay_ShowAlert (Lay_WARNING,Message);
 
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);
 	 fprintf (Gbl.F.Out,"</div>");
         }
@@ -1236,7 +1236,7 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_I_forgot_my_password;
 
    /***** Link to create a new account *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
    Act_FormStart (ActFrmUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
@@ -1257,7 +1257,7 @@ void Usr_WriteFormLogin (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form start *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActAutUsrInt);
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Log_in);
 
@@ -1327,7 +1327,7 @@ void Usr_WelcomeUsr (void)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
-	 fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin:10px;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin:10px;\">");
 
          /***** User's first name *****/
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])
@@ -2295,7 +2295,7 @@ void Usr_ShowFormsRoleAndLogout (void)
    extern const char *Txt_Role;
 
    /***** Link to log out *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
    Act_FormStart (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("logout",Txt_Log_out,Txt_Log_out);
@@ -2311,7 +2311,8 @@ void Usr_ShowFormsRoleAndLogout (void)
    /***** Put a form to change my role *****/
    if (Rol_GetNumAvailableRoles () > 1)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">%s: ",
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+	                 "%s: ",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_Role);
       Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
@@ -4155,7 +4156,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Show warning *****/
    sprintf (Gbl.Message,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
@@ -5721,7 +5722,7 @@ void Usr_ListDataAdms (void)
    Sco_GetScope ();
 
    /***** Form to select range of administrators *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
    Act_FormStart (ActLstAdm);
@@ -5736,7 +5737,7 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstAdms.NumUsrs)
      {
       /****** See the photos? *****/
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Act_FormStart (ActLstAdm);
       Sco_PutParamScope (Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
@@ -6149,7 +6150,7 @@ void Usr_SeeGuests (void)
       case Rol_ROLE_INS_ADMIN:
       case Rol_ROLE_SUPERUSER:
          /***** Form to select range of guests *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+         fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
                   The_ClassFormul[Gbl.Prefs.Theme]);
          Act_FormStart (ActLstInv);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
@@ -6181,14 +6182,14 @@ void Usr_SeeGuests (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div align=\"center\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnInvPho);
 	       Lay_PutLinkToPrintView2 ();
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
-	       fprintf (Gbl.F.Out,"<div align=\"center\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	       Act_FormStart (ActLstInvAll);
 	       Usr_PutParamListWithPhotos ();
 	       Usr_PutExtraParamsUsrList (ActLstInvAll);
@@ -6200,7 +6201,7 @@ void Usr_SeeGuests (void)
            }
 
          /***** Draw a class photo with students of the course *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
          /* Form start */
 	 Act_FormStart (ActSeeRecSevInv);
@@ -6263,7 +6264,8 @@ void Usr_SeeStudents (void)
        (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||	// My role in current course is teacher...
         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))	// ...or superuser
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+	                 " margin-bottom:10px;\">");
 
       /***** Link to list official students *****/
       Usr_PutLinkToListOfficialStudents ();
@@ -6293,7 +6295,7 @@ void Usr_SeeStudents (void)
       case Rol_ROLE_DEG_ADMIN:
       case Rol_ROLE_SUPERUSER:
          /***** Form to select range of students *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+         fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
                   The_ClassFormul[Gbl.Prefs.Theme]);
          Act_FormStart (ActLstStd);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
@@ -6329,7 +6331,7 @@ void Usr_SeeStudents (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div align=\"center\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnStdPho);
 	       Grp_PutParamsCodGrps ();
 	       Lay_PutLinkToPrintView2 ();
@@ -6339,7 +6341,7 @@ void Usr_SeeStudents (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div align=\"center\">");
+		  fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 		  Act_FormStart (ActLstStdAll);
 		  Grp_PutParamsCodGrps ();
 		  Usr_PutParamListWithPhotos ();
@@ -6353,7 +6355,7 @@ void Usr_SeeStudents (void)
            }
 
          /***** Draw a class photo with students of the course *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
          /* Form start */
          if (ICanViewRecords)
@@ -6447,7 +6449,7 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_COURSE);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (ActLstTch);
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
@@ -6472,7 +6474,7 @@ void Usr_SeeTeachers (void)
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_CLASS_PHOTO:
-               fprintf (Gbl.F.Out,"<div align=\"center\">");
+               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnTchPho);
 	       Sco_PutParamScope (Gbl.Scope.Current);
 	       Lay_PutLinkToPrintView2 ();
@@ -6482,7 +6484,7 @@ void Usr_SeeTeachers (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div align=\"center\">");
+		  fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 		  Act_FormStart (ActLstTchAll);
 		  Sco_PutParamScope (Gbl.Scope.Current);
 		  Usr_PutParamListWithPhotos ();
@@ -6495,7 +6497,7 @@ void Usr_SeeTeachers (void)
            }
 
          /***** Draw a class photo with teachers of the course *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
          /* Form start */
          if (ICanViewRecords)

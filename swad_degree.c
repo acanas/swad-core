@@ -294,7 +294,7 @@ static void Deg_Configuration (bool PrintView)
       if (!PrintView)
 	{
 	  /* Link to print view */
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Lay_PutLinkToPrintView1 (ActPrnDegInf);
 	 Lay_PutLinkToPrintView2 ();
 	 fprintf (Gbl.F.Out,"</div>");
@@ -483,7 +483,7 @@ void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
    extern const char *Txt_Degree;
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">"
                       "<table class=\"CELLS_PAD_2\">");
 
    /***** Write a 1st selector
@@ -738,7 +738,9 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	       Deg_MAX_LENGTH_FULL_NAME);
       FullName[Deg_MAX_LENGTH_FULL_NAME] = '\0';
       Str_LimitLengthHTMLStr (FullName,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
-      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	                 "%s"
+	                 "</div>",
 	       The_ClassCourse[Gbl.Prefs.Theme],FullName);
      }
   }

@@ -90,7 +90,7 @@ void Sch_ReqSysSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -109,7 +109,7 @@ void Sch_ReqCtySearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -128,7 +128,7 @@ void Sch_ReqInsSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -147,7 +147,7 @@ void Sch_ReqCtrSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -166,7 +166,7 @@ void Sch_ReqDegSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -185,7 +185,7 @@ void Sch_ReqCrsSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -230,14 +230,15 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sch_WhatToSearch_t WhatToSearch;
 
    /***** Form start *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (Action);
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Search);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td style=\"text-align:center;\">");
 
    /***** Scope (whole platform, current centre, current degree or current course) *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
 	               1 << Sco_SCOPE_COUNTRY     |

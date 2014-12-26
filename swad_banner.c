@@ -125,7 +125,7 @@ static void Ban_PutFormToEditBanners (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActEdiBan);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);

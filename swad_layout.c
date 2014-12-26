@@ -266,7 +266,8 @@ void Lay_WriteStartOfPage (void)
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/_.gif\" alt=\"\" class=\"IMG_USR\" />"
-                         "<div id=\"zoomTxt\" style=\"text-align:center;\"></div>"
+                         "<div id=\"zoomTxt\" style=\"text-align:center;\">"
+                         "</div>"
                          "</div>",
 	       Gbl.Prefs.IconsURL);
 
@@ -284,7 +285,8 @@ void Lay_WriteStartOfPage (void)
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"text-align:center;"
 	              " vertical-align:top;\">"
-		      "<div id=\"CENTRAL_ZONE\" style=\"background-color:%s;vertical-align:top;\">"
+		      "<div id=\"CENTRAL_ZONE\""
+		      " style=\"vertical-align:top; background-color:%s;\">"
 		      "<table style=\"width:100%%; vertical-align:top;\">"
 		      "<tr>",
 	    ColspanCentralPart,
@@ -348,7 +350,8 @@ void Lay_WriteStartOfPage (void)
       if (Gbl.Now.Date.Month == 1 &&
 	  Gbl.Now.Date.Day == 1)
         {
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"ASG_TITLE\" style=\"margin:50px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"ASG_TITLE\""
+                            " style=\"text-align:center; margin:50px;\">");
          fprintf (Gbl.F.Out,Txt_NEW_YEAR_GREETING,Gbl.Now.Date.Year);
          fprintf (Gbl.F.Out,"</div>");
         }
@@ -675,7 +678,7 @@ static void Lay_WritePageTopHeading (void)
          /***** 2nd. row, 2nd. column: degree and course *****/
          fprintf (Gbl.F.Out,"<td style=\"height:64px;"
                             " text-align:center; vertical-align:top;\">"
-                            "<div align=\"center\" style=\"padding-top:4px;\">");
+                            "<div style=\"text-align:center; padding-top:4px;\">");
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
          Deg_WriteBigNameCtyInsCtrDegCrs ();
@@ -1492,7 +1495,7 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
@@ -1519,7 +1522,7 @@ void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
 
 void Lay_PutSendButton (const char *TextSendButton)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
                       "</div>",
             TextSendButton);
@@ -1531,7 +1534,10 @@ void Lay_PutSendButton (const char *TextSendButton)
 
 void Lay_WriteTitle (const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"TIT\">%s</div>",Title);
+   fprintf (Gbl.F.Out,"<div class=\"TIT\">"
+	              "%s"
+	              "</div>",
+	    Title);
   }
 
 /*****************************************************************************/
@@ -1541,14 +1547,17 @@ void Lay_WriteTitle (const char *Title)
 
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<div class=\"FRAME10\"");
    if (Width)
       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
    if (Title)
-      fprintf (Gbl.F.Out,"<div align=\"center\" class=\"TIT_TBL_10\">%s</div>",
+      fprintf (Gbl.F.Out,"<div class=\"TIT_TBL_10\""
+	                 " style=\"text-align:center;\">"
+	                 "%s"
+	                 "</div>",
 	       Title);
 
    fprintf (Gbl.F.Out,"<table class=\"TABLE10");
@@ -1561,7 +1570,7 @@ void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const ch
 
 void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<div class=\"FRAME10_SHADOW\"");
    if (Width)
       fprintf (Gbl.F.Out," style=\"width:%s\"",
@@ -1673,8 +1682,9 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
       Lay_WriteStartOfPage ();
 
    if (Message)
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
-	                 "<div class=\"ALERT\" style=\"background-image:url('%s/%s16x16.gif');\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	                 "<div class=\"ALERT\""
+	                 " style=\"background-image:url('%s/%s16x16.gif');\">"
                          "%s"
 			 "</div>"
 			 "</div>",
@@ -1759,7 +1769,8 @@ void Lay_WritePageFooter (void)
       case Lay_LAYOUT_DESKTOP:
 	 Lay_WriteFootFromHTMLFile ();
 
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"FOOT\" style=\"padding-bottom:10px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"FOOT\" style=\"text-align:center;"
+                            " padding-bottom:10px;\">");
 
          /***** Institution and centre hosting the platform *****/
          fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"

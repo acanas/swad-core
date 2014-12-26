@@ -443,7 +443,7 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
       case Rol_ROLE_TEACHER:
       case Rol_ROLE_DEG_ADMIN:
       case Rol_ROLE_SUPERUSER:
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Act_FormStart (ActEdiExaAnn);
          Act_LinkFormSubmit (Txt_New_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("new",Txt_New_announcement_of_exam,Txt_New_announcement_of_exam);
@@ -756,7 +756,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
      {
       case Exa_NORMAL_VIEW:
          /***** Link to print view *****/
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Lay_PutLinkToPrintView1 (ActPrnExaAnn);
          Par_PutHiddenParamLong ("ExaCod",ExaCod);
          Lay_PutLinkToPrintView2 ();

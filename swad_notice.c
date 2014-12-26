@@ -95,7 +95,7 @@ void Not_ShowFormNotice (void)
 
    Msg_WriteLinkToNetiquette ();
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    Act_FormStart (ActRcvNot);
    fprintf (Gbl.F.Out,"<table>"
@@ -315,7 +315,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
                          Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
                         );
 
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       if (ICanEditNotices)
 	{
@@ -407,7 +407,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
 
 	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div align=\"center\">"
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 			    "<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
@@ -568,7 +568,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             Content);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       /* Form to view full notice */
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
@@ -594,7 +594,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write form to delete this notice *****/
    if (ICanEditNotices)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
                The_ClassFormul[Gbl.Prefs.Theme]);
 
       /* Form to delete notice */

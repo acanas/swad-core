@@ -393,7 +393,7 @@ void Sta_AskSeeCrsAccesses (void)
 
          /***** Draw two class photographs with the users: one for teachers of the course and another one for students *****/
          /* Start the table */
-         fprintf (Gbl.F.Out,"<div align=\"center\">"
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                             "<table style=\"border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" style=\"text-align:left;\">");
@@ -513,7 +513,7 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<table class=\"CELLS_PAD_2\">");
 
    /***** Start and end dates for the search *****/
@@ -3562,11 +3562,12 @@ void Sta_ReqUseOfPlatform (void)
    Sta_UseStatType_t UseStatType;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
 	               1 << Sco_SCOPE_COUNTRY     |

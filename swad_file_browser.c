@@ -2061,7 +2061,7 @@ void Brw_AskEditWorksCrs (void)
         {
          /***** Draw class photos to select users *****/
          /* Form start */
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
@@ -2987,7 +2987,7 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
    extern const char *Txt_View_as_a_student;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (Action);
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
@@ -3022,7 +3022,8 @@ static void Brw_WriteFormFullTree (void)
    extern const char *Txt_Show_all_files;
 
    /***** Start form depending on type of tree *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\" style=\"vertical-align:middle;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\""
+	              " style=\"text-align:center; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -4715,7 +4716,7 @@ void Brw_AskRemFileFromTree (void)
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                          "<input type=\"submit\" value=\"%s\" />"
                          "</div>"
                          "</form>",
@@ -4869,7 +4870,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
             Gbl.FileBrowser.FilFolLnkName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
                       "</div>"
                       "</form>",
@@ -5073,7 +5074,8 @@ static void Brw_WriteCurrentClipboard (void)
       Crs_GetDataOfCourseByCod (&Crs);
      }
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"DAT\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"text-align:center;\">"
+	              "%s: ",
             Txt_Copy_source);
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
      {

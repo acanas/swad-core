@@ -3500,7 +3500,7 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<table>"
                       "<tr>"
 	              "<td></td>"
@@ -3759,7 +3759,7 @@ void For_ReqDelThr (void)
    Act_FormStart (For_ActionsDelThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
    For_PutHiddenParamThrCod (ThrCod);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
                       "</div>",
             Txt_Remove_thread);

@@ -255,7 +255,7 @@ static void Ctr_Configuration (bool PrintView)
       /***** Links to print view and upload photo *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
 	  /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
@@ -1811,7 +1811,7 @@ void Ctr_ReqPhoto (void)
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y,

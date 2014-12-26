@@ -76,7 +76,7 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Connected_users;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Put form to update connected users *****/
    Act_FormStart (ActLstCon);
@@ -131,9 +131,9 @@ void Con_ShowLastClicks (void)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td>");
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" id=\"lastclicks\">");	// Used for AJAX based refresh
+   fprintf (Gbl.F.Out,"<div id=\"lastclicks\" style=\"text-align:center;\">");	// Used for AJAX based refresh
    Con_GetAndShowLastClicks ();
-   fprintf (Gbl.F.Out,"</div>");					// Used for AJAX based refresh
+   fprintf (Gbl.F.Out,"</div>");						// Used for AJAX based refresh
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -251,7 +251,8 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
-	              " style=\"width:110px; margin-left:auto; margin-right:auto; \">"
+	              " style=\"width:110px;"
+	              " margin-left:auto; margin-right:auto; \">"
                       "<table style=\"width:110px;\">");
 
    /***** Write total number of sessions *****/
@@ -963,7 +964,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	              " vertical-align:middle; background-color:%s;\">",
             Font,Color);
 
-   fprintf (Gbl.F.Out,"<div id=\"hm%u\">",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
+   fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
+            Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Hours   =  Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds / (60*60);
    Minutes = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds / 60) % 60;
    Seconds =  Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds % 60;

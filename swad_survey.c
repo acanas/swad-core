@@ -274,7 +274,7 @@ static bool Svy_CheckIfICanCreateSvy (void)
 
 static void Svy_PutFormToSelectWhichGroupsToShow (void)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeAllSvy);
    Svy_PutHiddenParamSvyOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -693,7 +693,7 @@ static void Svy_PutFormToCreateNewSvy (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_survey;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActFrmNewSvy);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
@@ -1266,7 +1266,9 @@ void Svy_AskRemSurvey (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div>"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>"
                       "</form>",
             Txt_Remove_survey);
 
@@ -1367,7 +1369,10 @@ void Svy_AskResetSurvey (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_reset_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div></form>",
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>"
+	              "</form>",
             Txt_Reset_survey);
 
    /***** Show surveys again *****/
@@ -2443,7 +2448,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Show message *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code

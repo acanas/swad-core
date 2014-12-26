@@ -232,7 +232,7 @@ static void Cty_Configuration (bool PrintView)
       /***** Link to print view *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div align=\"center\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Lay_PutLinkToPrintView1 (ActPrnCtyInf);
 	 Lay_PutLinkToPrintView2 ();
 	 fprintf (Gbl.F.Out,"</div>");
@@ -725,7 +725,9 @@ void Cty_ListCountries2 (void)
 
    /***** Div for Google Geochart *****/
    if (Gbl.CurrentAct == ActSeeCty)
-      fprintf (Gbl.F.Out,"<div align=\"center\" id='chart_div' style=\"margin-top:10px;\"></div>");
+      fprintf (Gbl.F.Out,"<div id='chart_div'"
+	                 " style=\"text-align:center; margin-top:10px;\">"
+	                 "</div>");
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();

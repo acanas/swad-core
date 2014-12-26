@@ -402,7 +402,7 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (Inf_ActionsEditInfo[InfoType]);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
@@ -419,7 +419,8 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Force_students_to_read_this_information;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\" style=\"vertical-align:middle;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\""
+	              " style=\"text-align:center; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (Inf_ActionsChangeForceReadInfo[InfoType]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
@@ -444,7 +445,7 @@ static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
    extern const char *Txt_I_have_read_this_information;
    bool IHaveRead = Inf_CheckIfIHaveReadInfo (InfoType);
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (Inf_ActionsIHaveReadInfo[InfoType]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
@@ -536,7 +537,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Write every information I must read *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<table>"
 	              "<tr>"
 	              "<td style=\"text-align:left;\">"

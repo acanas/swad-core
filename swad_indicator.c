@@ -91,7 +91,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Form to update indicators *****/
    /* Start form */
    Act_FormStart (ActReqStaCrs);
-   fprintf (Gbl.F.Out,"<div align=\"center\">"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<table class=\"CELLS_PAD_2\">");
 
    /* Compute stats for anywhere, centre, degree or course? */
@@ -442,7 +442,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    extern const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Show warning *****/
    sprintf (Gbl.Message,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,

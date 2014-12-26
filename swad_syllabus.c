@@ -163,8 +163,9 @@ void Syl_EditSyllabus (void)
       Lay_EndRoundFrameTable10 ();
 
       if (!Gbl.CurrentCrs.Syllabus.EditionIsActive)
-         fprintf (Gbl.F.Out,"<div align=\"center\" class=\"DAT_SMALL\"><br />"
-                            "%s</div>",
+         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\""
+                            " style=\"text-align:center;\">"
+                            "<br />%s</div>",
                   Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_);
      }
    else

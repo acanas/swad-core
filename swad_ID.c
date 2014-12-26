@@ -403,7 +403,7 @@ void ID_ShowFormOthIDs (void)
 
 	 /***** Form to change IDs *****/
 	 /* Show user's record */
-	 fprintf (Gbl.F.Out,"<div align=\"center\">"
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                    "<table>"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");

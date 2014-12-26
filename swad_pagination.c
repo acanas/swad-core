@@ -100,7 +100,7 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Pag_WriteLinksToPages (WhatPaginate,ThrCod,Pagination,true,NULL,"TIT",false);
    fprintf (Gbl.F.Out,"</div>");
   }

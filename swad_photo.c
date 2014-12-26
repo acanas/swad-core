@@ -178,7 +178,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_Remove_photo;
 
    /***** Link for changing / uploading the photo *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Act_FormStart (ActRemMyPho);
    else							// Not me
@@ -231,7 +231,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    extern const char *Txt_Upload_photo;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Write message about photo presence or ausence *****/
    if (PhotoExists)	// User has photo
@@ -591,7 +591,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    /***** Show map photo *****/
    sprintf (FileNamePhotoMap,"%s/%s/%s/%s_map.jpg",
             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"TIT\">"
+   fprintf (Gbl.F.Out,"<div class=\"TIT\" style=\"text-align:center;\">"
                       "<img src=\"%s/%s/%s/%s_map.jpg\" usemap=\"#faces_map\" />"
                       "</div>",
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
@@ -1400,7 +1400,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">"
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<table class=\"CELLS_PAD_2\">");
 
       /***** Put a selector for the type of average *****/
@@ -1656,7 +1656,7 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 
 static void Pho_PutLinkToPrintViewOfDegreeStats (void)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Lay_PutLinkToPrintView1 (ActPrnPhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1693,7 +1693,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Start div and table *****/
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /***** Start form *****/
       Act_FormStart (ActCalPhoDeg);

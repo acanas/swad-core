@@ -136,7 +136,7 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_URL+1];
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"width:144px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"width:144px; text-align:center;\">");
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
@@ -157,7 +157,8 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
 	 URL[Cns_MAX_BYTES_URL] = '\0';
 
 	 /***** Write link and icon *****/
-         fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+         fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+                            " style=\"display:inline;\" >"
                             "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		            "<img src=\"%s/%s16x16.gif\""
 		            " style=\"width:16px;height:16px;margin:0 1px;\" alt=\"%s\" />"

@@ -4135,7 +4135,10 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    /***** Start table *****/
    Act_FormStart (ActMFUAct);
    Act_LinkFormSubmit (Txt_Frequent_actions,"MFU_ACT");
-   fprintf (Gbl.F.Out," %s</a></form>",Txt_Frequent_actions);
+   fprintf (Gbl.F.Out," %s"
+	              "</a>"
+	              "</form>",
+	    Txt_Frequent_actions);
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
 	              "<table style=\"width:120px;\">");

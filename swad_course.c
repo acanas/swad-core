@@ -109,7 +109,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
    Crs_Configuration (false);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -181,7 +181,7 @@ static void Crs_Configuration (bool PrintView)
 	}
 
        /* Link to print view */
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Lay_PutLinkToPrintView1 (ActPrnCrsInf);
       Lay_PutLinkToPrintView2 ();
       fprintf (Gbl.F.Out,"</div>");
@@ -2709,7 +2709,7 @@ static void Crs_PutLinkToGoToCrs (struct Course *Crs)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Go_to_X;
 
-   fprintf (Gbl.F.Out,"<div align=\"center\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (Crs->CrsCod);
@@ -2730,7 +2730,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
    extern const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS];
 
    /***** Search / select more courses *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Crs_PutLinkToSearchCourses ();
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       Crs_PutLinkToViewCoursesOfCurrentDeg ();
@@ -3137,7 +3137,7 @@ void Crs_AskRemoveOldCrss (void)
    unsigned i;
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemOldCrs);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassFormul[Gbl.Prefs.Theme],

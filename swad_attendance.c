@@ -117,7 +117,7 @@ void Att_SeeAttEvents (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Put other options *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /* Put link (form) to create a bew attendance event */
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -229,7 +229,7 @@ static void Att_ShowAllAttEvents (void)
 
 static void Att_PutFormToSelectWhichGroupsToShow (void)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeAtt);
    Att_PutHiddenParamAttOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -889,7 +889,10 @@ void Att_AskRemAttEvent (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
             Att.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div></form>",
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>"
+	              "</form>",
             Txt_Remove_event);
 
    /***** Show attendance events again *****/
@@ -2627,7 +2630,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
 
          /***** Draw a class photo with students of the course *****/
          /* Form start */
-         fprintf (Gbl.F.Out,"<div align=\"center\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Act_FormStart (ActSeeLstAttStd);
          Grp_PutParamsCodGrps ();
 
@@ -2895,7 +2898,7 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
    extern const char *Txt_Print_view;
 
    /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActPrnLstAttStd);
    if (ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
@@ -2918,7 +2921,7 @@ static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeLstAttStd);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();

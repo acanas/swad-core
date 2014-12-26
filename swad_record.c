@@ -571,7 +571,9 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    /***** Button to confirm removing *****/
    Act_FormStart (ActRemFie);
    Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.Field.FieldCod);
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div>",
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>",
             Txt_Remove_record_field);
    fprintf (Gbl.F.Out,"</form>");
   }
@@ -904,7 +906,7 @@ void Rec_ListRecordsInvs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevInv)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevInv);
@@ -928,7 +930,8 @@ void Rec_ListRecordsInvs (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
-	 fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+	                    " margin-bottom:10px;");
 	 if (Gbl.CurrentAct == ActPrnRecSevInv &&
 	     NumUsrs != 0 &&
 	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -969,7 +972,7 @@ void Rec_ListRecordOneStdCrs (void)
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Link to edit record fields *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
@@ -988,7 +991,8 @@ void Rec_ListRecordOneStdCrs (void)
 	{
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+	                    " margin-bottom:10px;\">");
 
 	 /* Common record */
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1038,7 +1042,7 @@ void Rec_ListRecordsStdsCrs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevStd)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /* Link to edit record fields */
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
@@ -1066,7 +1070,8 @@ void Rec_ListRecordsStdsCrs (void)
            {
             UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
 
-            fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;");
+            fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+        	               " margin-bottom:10px;");
             if (Gbl.CurrentAct == ActPrnRecSevStd &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1111,7 +1116,7 @@ void Rec_ListRecordOneTchCrs (void)
    /***** Get the selected teacher *****/
    Usr_GetParamOtherUsrCodEncrypted ();
 
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Show office hours? *****/
    Rec_WriteFormShowOfficeHours (true,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
@@ -1131,7 +1136,8 @@ void Rec_ListRecordOneTchCrs (void)
 	{
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+	                    " margin-bottom:10px;\">");
 
 	 /* Common record */
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1187,7 +1193,7 @@ void Rec_ListRecordsTchsCrs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevTch)
      {
-      fprintf (Gbl.F.Out,"<div align=\"center\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /* Show office hours? */
       Rec_WriteFormShowOfficeHours (ShowOfficeHours,Gbl.Usrs.Select.All);
@@ -1218,7 +1224,8 @@ void Rec_ListRecordsTchsCrs (void)
            {
             UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
 
-            fprintf (Gbl.F.Out,"<div align=\"center\" style=\"margin-bottom:10px;");
+            fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+        	               " margin-bottom:10px;");
             if (Gbl.CurrentAct == ActPrnRecSevTch &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1351,7 +1358,7 @@ static bool Rec_GetParamShowOfficeHours (void)
 
 void Rec_ShowFormMyCrsRecord (void)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Show record common to all courses *****/
    /* Button for edition */
@@ -1770,7 +1777,7 @@ void Rec_ShowOtherCrsRecordUpdated (void)
 static void Rec_ShowCrsRecordAfterUpdate (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   {
    /***** Show user's record *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowCrsRecord (TypeOfView,UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1823,7 +1830,7 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSignUp);
    Rec_ShowCommonRecord (Rec_FORM_SIGN_UP,&Gbl.Usrs.Me.UsrDat);
    Lay_PutSendButton (Txt_Sign_up);
@@ -1851,7 +1858,7 @@ void Rec_ShowFormMyCommRecord (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_country_nationality);
 
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_PutLinkToMyCrsRecord ();				// Put link (form) to my record in this course
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
@@ -1911,7 +1918,7 @@ void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
    extern const char *Txt_Register;
 
    /***** Show the form *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowCommonRecord (Rec_FORM_NEW_RECORD_OTHER_NEW_USR,UsrDat);
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
@@ -1934,7 +1941,7 @@ void Rec_ShowMyCommonRecordUpd (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record for checking *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowCommonRecord (Rec_MY_COMMON_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1950,7 +1957,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
    UsrDat->Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat->UsrCod);
 
    /***** Show user's record *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowCommonRecord (Rec_OTHER_USR_COMMON_RECORD_CHECK,UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }

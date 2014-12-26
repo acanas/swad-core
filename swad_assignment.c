@@ -201,7 +201,7 @@ static void Asg_ShowAllAssignments (void)
 
 static void Asg_PutFormToSelectWhichGroupsToShow (void)
   {
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeAsg);
    Asg_PutHiddenParamAsgOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -466,7 +466,7 @@ static void Asg_PutFormToCreateNewAsg (void)
    extern const char *Txt_New_assignment;
 
    /***** Put form to create a new assignment *****/
-   fprintf (Gbl.F.Out,"<div align=\"center\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActFrmNewAsg);
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
@@ -925,7 +925,8 @@ void Asg_AskRemAssignment (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div align=\"center\"><input type=\"submit\" value=\"%s\" /></div>"
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	              "<input type=\"submit\" value=\"%s\" /></div>"
 	              "</form>",
             Txt_Remove_assignment);
 
