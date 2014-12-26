@@ -301,11 +301,23 @@ void Ntf_ShowMyNotifications (void)
       /***** Table start *****/
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Notifications);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th colspan=\"2\" align=\"left\" class=\"TIT_TBL\">%s</th>"  \
-                         "<th colspan=\"2\" align=\"left\" class=\"TIT_TBL\">%s</th>"  \
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"  \
-                         "<th align=\"center\" class=\"TIT_TBL\">%s</th>"  \
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"  \
+                         "<th colspan=\"2\" class=\"TIT_TBL\""
+                         " style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th colspan=\"2\" class=\"TIT_TBL\""
+                         " style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_Event,
                Txt_MSG_From,
@@ -1654,8 +1666,12 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                       "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 		      "<th></th>"
-		      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+		      "%s"
+		      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
 	              "</tr>",
             Txt_Notifications,
 	    Txt_Create_BR_notification,

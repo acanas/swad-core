@@ -2408,13 +2408,31 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" colspan=\"2\"></th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>",
+                      "<th colspan=\"2\"></th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>",
             Txt_No_INDEX,
             Txt_Code,
             Txt_Date,
@@ -2429,7 +2447,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	Order < (Tst_QuestionsOrder_t) Tst_NUM_TYPES_ORDER_QST;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
+	                 " style=\"text-align:left; vertical-align:top;\">");
       if (NumRows > 1)
         {
          Act_FormStart (ActLstTstQst);
@@ -6029,13 +6048,34 @@ static void Tst_ShowHeaderTestResults (void)
    extern const char *Txt_out_of_PART_OF_A_SCORE;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-		      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s<br />%s<br />%u</th>"
+		      "<th colspan=\"2\" class=\"TIT_TBL\""
+		      " style=\"text-align:center; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s<br />%s<br />%u"
+		      "</th>"
 		      "<th></th>"
 		      "</tr>",
 	    Txt_User,

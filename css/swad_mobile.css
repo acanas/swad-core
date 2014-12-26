@@ -4,12 +4,12 @@
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
-    Copyright (C) 1999-2012 Antonio Cañas-Vargas
-    & Daniel J. Calandria-Hernández,
-    University of Granada (SPAIN) (acanas@ugr.es)
 
-    This program is free software:you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    This file is part of SWAD core.
+    Copyright (C) 1999-2014 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -455,19 +455,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 /**************************** Icon highlighting ******************************/
 .ICON_HIDDEN
 	{
-	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=20);
 	-moz-opacity:0.2;
 	opacity:0.2;
 	}
 .ICON_HIGHLIGHT
 	{
-	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);
 	-moz-opacity:0.8;
 	opacity:0.8;
 	}
 .ICON_HIGHLIGHT:hover
 	{
-	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100);
 	-moz-opacity:1;
 	opacity:1;
 	}

@@ -351,10 +351,16 @@ static void Rec_WriteHeadingRecordFields (void)
    extern const char *Txt_Visible_by_BR_the_student;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\"></th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
+                      "<th></th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Field_BR_name,
             Txt_No_of_BR_lines,

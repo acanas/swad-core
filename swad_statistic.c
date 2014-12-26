@@ -1532,13 +1532,34 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" valign=\"top\" width=\"10%%\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"width:10%%;"
+                      " text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_User_ID,
@@ -3726,14 +3747,28 @@ static void Sta_WriteHeadDegsCrssInSWAD (void)
    extern const char *Txt_With_students;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\"></th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th></th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Total,
             Txt_With_institutions,
@@ -4332,10 +4367,18 @@ static void Sta_ShowUsersStats (void)
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Users,
             Txt_No_of_users,
@@ -4410,19 +4453,45 @@ static void Sta_WriteStatsExpTreesTableHead (void)
    extern const char *Txt_usr;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s/<br />%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s/<br />%s"
+                      "</th>"
                       "</tr>",
             Txt_File_zones,
             Txt_Number_of_courses,
@@ -4795,9 +4864,15 @@ static void Sta_ShowOERs (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_License,
             Txt_No_of_private_files,
@@ -4948,10 +5023,18 @@ static void Sta_ShowAssignmentsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Number_of_BR_assignments,
             Txt_Number_of_BR_courses_with_BR_assignments,
@@ -5009,15 +5092,33 @@ static void Sta_ShowTestsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Type_of_BR_answers,
             Txt_Number_of_BR_courses_BR_with_test_BR_questions,
@@ -5169,11 +5270,21 @@ static void Sta_ShowNoticesStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_NOTICE_Active_BR_notices,
             Txt_NOTICE_Obsolete_BR_notices,
@@ -5239,11 +5350,21 @@ static void Sta_ShowMsgsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Messages,
             Txt_MSGS_Not_deleted,
@@ -5327,18 +5448,43 @@ static void Sta_ShowForumStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" valign=\"top\" width=\"16\">"
+                      "<th style=\"width:16px;"
+                      " text-align:left; vertical-align:top;\">"
                       "<img src=\"%s/forum16x16.gif\""
                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
                       "</th>"
-                      "<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:right; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Forums,
@@ -5659,11 +5805,21 @@ static void Sta_ShowSurveysStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Number_of_BR_surveys,
             Txt_Number_of_BR_courses_with_BR_surveys,
@@ -5719,9 +5875,15 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Language,
             Txt_No_of_users,
@@ -5835,9 +5997,15 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Layout,
             Txt_No_of_users,
@@ -5948,9 +6116,15 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Theme_SKIN,
             Txt_No_of_users,
@@ -6061,9 +6235,15 @@ static void Sta_GetAndShowNumUsrsPerColumns (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Columns,
             Txt_No_of_users,
@@ -6173,9 +6353,15 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Icons,
             Txt_No_of_users,
@@ -6301,11 +6487,21 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Event,
             Txt_No_of_users,

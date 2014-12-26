@@ -947,12 +947,27 @@ static void TsI_WriteHeadingListImportedQst (void)
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\"></th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"center\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" valign=\"top\" class=\"TIT_TBL\">%s</th>"
+                      "<th></th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:center; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\""
+                      " style=\"text-align:left; vertical-align:top;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_Tags,

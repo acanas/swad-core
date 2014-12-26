@@ -129,9 +129,13 @@ void Ins_SeeInsWithPendingCtrs (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Institutions_with_pending_centres);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th class=\"TIT_TBL\"></th>"
-                         "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
+                         "<th></th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_Institution,
                Txt_Centres_ABBREVIATION);
@@ -639,12 +643,12 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th width=\"20\" class=\"TIT_TBL\">&nbsp;</th>");
+                      "<th style=\"width:20px;\"></th>");
    for (Order = Ins_ORDER_BY_INSTITUTION;
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th align=\"left\" class=\"TIT_TBL\">");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeIns);
@@ -663,12 +667,24 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+	              "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
@@ -1856,17 +1872,35 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th align=\"center\" class=\"TIT_TBL\">&nbsp;</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\" width=\"20\">&nbsp;</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"right\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
-                      "<th align=\"left\" class=\"TIT_TBL\">%s</th>"
+                      "<th></th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th style=\"width:20px;\"></th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Country,

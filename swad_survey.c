@@ -207,7 +207,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	   Order <= Svy_ORDER_BY_END_DATE;
 	   Order++)
         {
-         fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">");
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:center;\">");
          Act_FormStart (ActSeeAllSvy);
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -222,8 +222,12 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                             "</form>"
                             "</th>");
         }
-      fprintf (Gbl.F.Out,"<th align=\"center\" class=\"TIT_TBL\">%s</th>"
-                         "<th align=\"center\" class=\"TIT_TBL\">%s</th>"
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+	                 "%s"
+	                 "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "%s"
+                         "</th>"
                          "</tr>",
                Txt_Survey,
                Txt_Status);
