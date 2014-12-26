@@ -4167,24 +4167,24 @@ void Grp_ShowSelectorWhichGrps (void)
    extern const char *Txt_Show_WHICH_groups[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
-	              "<tr>");
+   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
+                      " padding:0; margin:0;\">");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<li class=\"DAT\""
+	                 " style=\"display:inline; vertical-align:middle;\">"
                          "<input type=\"radio\" name=\"WhichGrps\" value=\"%u\"",
                (unsigned) WhichGrps);
       if (WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-                         " %s</td>",
+                         " %s"
+                         "</li>",
                Gbl.FormId,Txt_Show_WHICH_groups[WhichGrps]);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</ul>");
   }
 
 /*****************************************************************************/

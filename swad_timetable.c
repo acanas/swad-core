@@ -136,7 +136,8 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_All_groups;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\" class=\"TIT_CLASSPHOTO\">");
+	              "<td class=\"TIT_CLASSPHOTO\""
+	              " style=\"text-align:center;\">");
    switch (Gbl.CurrentCrs.Grps.WhichGrps)
      {
       case Grp_ONLY_MY_GROUPS:
@@ -288,7 +289,7 @@ void TT_ShowClassTimeTable (void)
      {
       /***** Select whether show only my groups or all groups *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"center\">");
+			 "<td style=\"text-align:center;\">");
       Act_FormStart (Gbl.CurrentAct);
       Grp_ShowSelectorWhichGrps ();
       fprintf (Gbl.F.Out,"</form>"
@@ -301,7 +302,7 @@ void TT_ShowClassTimeTable (void)
 
    /***** Show the time table *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\">");
+	              "<td style=\"text-align:center;\">");
    TT_ShowTimeTable (TimeTableType,Gbl.Usrs.Me.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -332,7 +333,7 @@ void TT_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\">");
+	              "<td style=\"text-align:center;\">");
    TT_ShowTimeTable (TT_COURSE_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -362,7 +363,7 @@ void TT_ShowMyTutTimeTable (void)
    /***** Time table *****/
    Lay_StartRoundFrameTable10 ("98%",0,Txt_Office_hours);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"center\">");
+	              "<td style=\"text-align:center;\">");
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -786,12 +787,18 @@ static void TT_DrawTimeTable (void)
 
    /***** Row with day names *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"right\" valign=\"middle\" rowspan=\"2\" width=\"%u%%\" class=\"HOR\">%u:00</td>",
+	              "<td rowspan=\"2\" class=\"HOR\" style=\"width:%u%%;"
+	              " text-align:right; vertical-align:middle;\">"
+	              "%u:00"
+	              "</td>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR);
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
-   fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" rowspan=\"2\" width=\"%u%%\" class=\"HOR\">%u:00</td>"
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"HOR\" style=\"width:%u%%;"
+	              " text-align:left; vertical-align:middle;\">"
+	              "%u:00"
+	              "</td>"
 	              "</tr>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR);
 
@@ -809,7 +816,11 @@ static void TT_DrawTimeTable (void)
 
       /* Hour */
       if (Hour % 2)
-         fprintf (Gbl.F.Out,"<td align=\"right\" valign=\"middle\" rowspan=\"2\" width=\"%u%%\" class=\"HOR\">%2u:00</td>",
+         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"HOR\""
+                            " style=\"width:%u%%;"
+	                    " text-align:right; vertical-align:middle;\">"
+                            "%2u:00"
+                            "</td>",
                   TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR + (Hour+1)/2);
 
       /* Empty column used to adjust height */
@@ -864,7 +875,11 @@ static void TT_DrawTimeTable (void)
 
       /* Hour */
       if (Hour % 2)
-         fprintf (Gbl.F.Out,"<td align=\"left\" valign=\"middle\" rowspan=\"2\" width=\"%u%%\" class=\"HOR\">%2u:00</td>",
+         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"HOR\""
+                            " style=\"width:%u%%;"
+	                    " text-align:left; vertical-align:middle;\">"
+                            "%2u:00"
+                            "</td>",
                   TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR + (Hour+1)/2);
 
       fprintf (Gbl.F.Out,"</tr>");
@@ -898,7 +913,10 @@ static void TT_TimeTableDrawAdjustRow (void)
    unsigned Minicolumn;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" width=\"%u%%\" class=\"HOR\">&nbsp;</td>",
+                      "<td class=\"HOR\" style=\"width:%u%%;"
+                      " text-align:left;\">"
+                      "&nbsp;"
+                      "</td>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    TT_DrawCellAlignTimeTable ();
    for (Day = 0;
@@ -907,10 +925,16 @@ static void TT_TimeTableDrawAdjustRow (void)
       for (Minicolumn = 0;
 	   Minicolumn < TT_NUM_MINICOLUMNS_PER_DAY;
 	   Minicolumn++)
-         fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u%%\" class=\"HOR\">&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"HOR\" style=\"width:%u%%;"
+	                    " text-align:left;\">"
+                            "&nbsp;"
+                            "</td>",
                   TT_PERCENT_WIDTH_OF_A_MINICOLUMN);
    TT_DrawCellAlignTimeTable ();
-   fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u%%\" class=\"HOR\">&nbsp;</td>"
+   fprintf (Gbl.F.Out,"<td class=\"HOR\" style=\"width:%u%%;"
+	              " text-align:left;\">"
+	              "&nbsp;"
+	              "</td>"
 	              "</tr>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
   }
@@ -927,8 +951,12 @@ static void TT_TimeTableDrawDaysCells (void)
    for (Day = 0;
 	Day < TT_DAYS;
 	Day++)
-      fprintf (Gbl.F.Out,"<td align=\"center\" width=\"%u%%\" colspan=\"%u\" class=\"HOR\">%s</td>",
-               TT_PERCENT_WIDTH_OF_A_DAY,TT_NUM_MINICOLUMNS_PER_DAY,Txt_DAYS_CAPS[Day]);
+      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"HOR\" style=\"width:%u%%;"
+	                 " text-align:center;\">"
+	                 "%s"
+	                 "</td>",
+               TT_NUM_MINICOLUMNS_PER_DAY,TT_PERCENT_WIDTH_OF_A_DAY,
+               Txt_DAYS_CAPS[Day]);
   }
 
 /*****************************************************************************/
@@ -992,7 +1020,10 @@ static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour)
 
 static void TT_DrawCellAlignTimeTable (void)
   {
-   fprintf (Gbl.F.Out,"<td align=\"left\" width=\"%u%%\" class=\"HOR\">&nbsp;</td>",
+   fprintf (Gbl.F.Out,"<td class=\"HOR\" style=\"width:%u%%;"
+	              " text-align:left;\">"
+	              "&nbsp;"
+	              "</td>",
             TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN);
   }
 
@@ -1080,11 +1111,12 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
      }
 
    /***** Cell start *****/
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" rowspan=\"%u\" colspan=\"%u\" class=\"%s",
+   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" colspan=\"%u\" class=\"%s",
             RowSpan,ColSpan,TimeTableClasses[ClassType]);
    if (ClassType == TT_NO_CLASS)
       fprintf (Gbl.F.Out,"%u",Hour % 4);
-   fprintf (Gbl.F.Out,"\">");
+   fprintf (Gbl.F.Out,"\" style=\"text-align:center;"
+	              " vertical-align:middle;\">");
 
    /***** Form to modify this cell *****/
    if (TimeTableView == TT_CRS_EDIT)

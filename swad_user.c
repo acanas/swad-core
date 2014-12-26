@@ -1263,22 +1263,24 @@ void Usr_WriteFormLogin (void)
 
    /***** User's ID/nickname and password *****/
    fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"right\" valign=\"middle\" class=\"%s\">"
-			    "%s:"
-			 "</td>"
-			 "<td align=\"left\" valign=\"middle\">"
-			    "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
-			    " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
-			 "</td>"
+                      "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
+                      " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>"
 		      "</tr>"
 		      "<tr>"
-			 "<td align=\"right\" valign=\"middle\" class=\"%s\">"
-			    "%s:"
-			 "</td>"
-			 "<td align=\"left\" valign=\"middle\">"
-			    "<input type=\"password\" name=\"UsrPwd\""
-			    " size=\"16\" maxlength=\"%u\" />"
-			 "</td>"
+		      "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td style=\"text-align:left; vertical-align:middle;\">"
+		      "<input type=\"password\" name=\"UsrPwd\""
+		      " size=\"16\" maxlength=\"%u\" />"
+		      "</td>"
 		      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
@@ -1290,7 +1292,7 @@ void Usr_WriteFormLogin (void)
 
    /***** Send button and form end *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" align=\"center\">"
+	              "<td colspan=\"2\" style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
                       "</td>"
 	              "</tr>",
@@ -2430,7 +2432,9 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
    BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
-   fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" bgcolor=\"%s\">",BgColor);
+   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;"
+	              " background-color:%s;\">",
+            BgColor);
    Usr_PutCheckboxToSelectUser (Rol_ROLE_GUEST,UsrDat->EncryptedUsrCod,false);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -2443,13 +2447,17 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL);
 
    /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" bgcolor=\"%s\" class=\"DAT_SMALL\">&nbsp;%u&nbsp;</td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:right;"
+	              " background-color:%s;\">"
+	              "&nbsp;%u&nbsp;"
+	              "</td>",
             BgColor,NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2463,10 +2471,11 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_RestrictLengthMainData (true,UsrDat,MailLink);
 
    /****** Write user's IDs ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL");
+                               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER));
    fprintf (Gbl.F.Out,"</td>");
 
@@ -2515,7 +2524,9 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
 	                         Gbl.ColorRows[Gbl.RowEvenOdd];
    if (PutCheckboxToSelectUsr)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;"
+	                 " background-color:%s;\">",
+               BgColor);
       Usr_PutCheckboxToSelectUser (Rol_ROLE_STUDENT,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2537,16 +2548,20 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
                                Txt_Enrollment_not_confirmed);
 
    /***** Write number of student in the list *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" bgcolor=\"%s\" class=\"%s\">&nbsp;%u&nbsp;</td>",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
+	              " background-color:%s;\">"
+	              "&nbsp;%u&nbsp;"
+	              "</td>",
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
+            BgColor,
             NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2560,10 +2575,11 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL");
+                               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER));
    fprintf (Gbl.F.Out,"</td>");
 
@@ -2603,7 +2619,8 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show guest's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2614,7 +2631,8 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
      }
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"DAT_SMALL\">",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             BgColor);
    ID_WriteUsrIDs (UsrDat,true);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
@@ -2707,7 +2725,8 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2718,10 +2737,11 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      }
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL");
+        	               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
@@ -2830,7 +2850,9 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
 	                         Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
    if (PutCheckboxToSelectUsr)
      {
-      fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"middle\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;"
+	                 " background-color:%s;\">",
+               BgColor);
       Usr_PutCheckboxToSelectUser (Rol_ROLE_TEACHER,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2841,7 +2863,8 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       fprintf (Gbl.F.Out,"BM_SEL");
    else
       fprintf (Gbl.F.Out,"BM%d",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\"><img src=\"%s/%s16x16.gif\""
+   fprintf (Gbl.F.Out,"\">"
+	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
@@ -2851,13 +2874,17 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
                                Txt_Enrollment_not_confirmed);
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" bgcolor=\"%s\" class=\"DAT_SMALL_N\">&nbsp;%u&nbsp;</td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N\" style=\"text-align:right;"
+	              " background-color:%s;\">"
+	              "&nbsp;%u&nbsp;"
+	              "</td>",
             BgColor,NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2871,10 +2898,11 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL");
+                               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,ID_ICanSeeTeacherID (UsrDat));
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,"</td>");
@@ -2916,7 +2944,8 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -2927,10 +2956,11 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
      }
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL");
+                               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,ID_ICanSeeTeacherID (UsrDat));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
@@ -2989,12 +3019,17 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td align=\"right\" bgcolor=\"%s\" class=\"DAT_SMALL_N\">&nbsp;%u&nbsp;</td>",BgColor,NumUsr);
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N\" style=\"text-align:right;"
+	              " background-color:%s;\">"
+	              "&nbsp;%u&nbsp;"
+	              "</td>",
+            BgColor,NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show administrator's photo *****/
-      fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
+               BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,
                         ShowPhoto ? PhotoURL :
@@ -3008,10 +3043,11 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_RestrictLengthMainData (true,UsrDat,MailLink);
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",
-            BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL");
+                               "DAT_SMALL",
+            BgColor);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
@@ -3089,11 +3125,13 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *
 
 static void Usr_WriteUsrData (const char *BgColor,const char *Data,const char *Link,bool NonBreak,bool Accepted)
   {
-   fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"%s\">",BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " background-color:%s;\">",
             Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
         	                   "DAT_SMALL_N") :
                        (NonBreak ? "DAT_SMALL_NOBR" :
-                	           "DAT_SMALL"));
+                	           "DAT_SMALL"),
+            BgColor);
    if (Link != NULL)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Link);
    fprintf (Gbl.F.Out,"%s",Data);
@@ -4528,7 +4566,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    /***** 1st row *****/
    /* Put a button to select USR_CLASS_ROOM */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" valign=\"middle\" class=\"%s\">",
+	              "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle;\">",
             Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "USR_LIST_TYPE_ON" :
         	                                      "USR_LIST_TYPE_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_CLASS_PHOTO);
@@ -4547,7 +4586,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    /***** 2nd row *****/
    /* Put a button to select Usr_LIST */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" valign=\"middle\" class=\"%s\">",
+	              "<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:middle;\">",
             Gbl.Usrs.Me.ListType == Usr_LIST ? "USR_LIST_TYPE_ON" :
         	                               "USR_LIST_TYPE_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST);
@@ -4675,7 +4715,8 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
    Usr_Sex_t Sex;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td align=\"left\" colspan=\"%u\" bgcolor=\"%s\" class=\"TIT_TBL\">",
+	              "<td colspan=\"%u\" class=\"TIT_TBL\""
+	              " style=\"text-align:left; background-color:%s;\">",
             Usr_GetColumnsForSelectUsrs (),VERY_LIGHT_BLUE);
    if (Role == Rol_ROLE_STUDENT)
      {
@@ -4817,7 +4858,10 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">&nbsp;</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+	                    "&nbsp;"
+	                    "</td>",
 		  VERY_LIGHT_BLUE);
 
       /* Columns for the data */
@@ -4825,7 +4869,10 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td aclass=\"TIT_TBL\" style=\"text-align:left;"
+	                       " background-color:%s;\">"
+        	               "%s&nbsp;"
+        	               "</td>",
                      VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -4885,7 +4932,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"%u\" align=\"center\" class=\"TIT\">",
+                            "<td colspan=\"%u\" class=\"TIT\""
+                            " style=\"text-align:center;\">",
                   1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
          Grp_WriteNamesOfSelectedGrps ();
          fprintf (Gbl.F.Out,"</td>"
@@ -4898,7 +4946,10 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">&nbsp;</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+	                    "&nbsp;"
+	                    "</td>",
 		  VERY_LIGHT_BLUE);
 
       /* Columns for the data */
@@ -4906,7 +4957,10 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                       " background-color:%s;\">"
+        	               "%s&nbsp;"
+        	               "</td>",
                      VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -4967,7 +5021,10 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">&nbsp;</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+	                    "&nbsp;"
+	                    "</td>",
 		  VERY_LIGHT_BLUE);
 
       /* Columns for the data */
@@ -4975,7 +5032,10 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                       " background-color:%s;\">"
+        	               "%s&nbsp;"
+        	               "</td>",
                      VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -5079,7 +5139,10 @@ void Usr_ListAllDataGsts (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+                            "%s&nbsp;"
+                            "</td>",
                   VERY_LIGHT_BLUE,FieldNames[NumCol]);
 
       /* End row */
@@ -5207,7 +5270,8 @@ void Usr_ListAllDataStds (void)
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td colspan=\"%u\" align=\"center\" class=\"TIT\">",
+	                    "<td colspan=\"%u\" class=\"TIT\""
+	                    " style=\"text-align:center;\">",
                   NumColumnsTotal);
          Grp_WriteNamesOfSelectedGrps ();
          fprintf (Gbl.F.Out,"</td>"
@@ -5223,7 +5287,10 @@ void Usr_ListAllDataStds (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+                            "%s&nbsp;"
+                            "</td>",
                   VERY_LIGHT_BLUE,FieldNames[NumCol]);
 
       /* 2. Columns for the groups */
@@ -5234,7 +5301,11 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
                  NumGrpTyp++)
                if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
-                  fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s %s&nbsp;</td>",
+                  fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
+                	             " style=\"text-align:left;"
+	                             " background-color:%s;\">"
+                	             "%s %s&nbsp;"
+                	             "</td>",
                            VERY_LIGHT_BLUE,Txt_Group,
                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 
@@ -5244,7 +5315,11 @@ void Usr_ListAllDataStds (void)
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
+        	                  " style=\"text-align:left;"
+	                          " background-color:%s;\">"
+        	                  "%s&nbsp;"
+        	                  "</td>",
                         VERY_LIGHT_BLUE,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
             /* 4. Visibility type for the record fields that depend on the course, in other row */
             fprintf (Gbl.F.Out,"</tr><tr>");
@@ -5252,12 +5327,18 @@ void Usr_ListAllDataStds (void)
                  NumCol < NumColumnsCardAndGroups;
                  NumCol++)
                if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want it in listing
-                  fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\"></td>",LIGHTEST_BLUE);
+                  fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>",
+                           LIGHTEST_BLUE);
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">(%s)&nbsp;</td>",
-                        LIGHTEST_BLUE,Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
+               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
+        	                  " style=\"text-align:left;"
+	                          " background-color:%s;\">"
+        	                  "(%s)&nbsp;"
+        	                  "</td>",
+                        LIGHTEST_BLUE,
+                        Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
            }
         }
 
@@ -5319,14 +5400,20 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    /***** Heading row with column names *****/
    /* Start row and first column used for selection */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">&nbsp;</td>",
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;"
+	              " background-color:%s;\">"
+                      "&nbsp;"
+                      "</td>",
             VERY_LIGHT_BLUE);
    /* Columns for the data */
    for (NumCol = 0;
         NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-         fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+                            "%s&nbsp;"
+                            "</td>",
                   VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
    /* End row */
    fprintf (Gbl.F.Out,"</tr>");
@@ -5437,7 +5524,10 @@ void Usr_ListAllDataTchs (void)
 	                                           1);
            NumCol < NumColumns;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
+                            "%s&nbsp;"
+                            "</td>",
                   VERY_LIGHT_BLUE,FieldNames[NumCol]);
 
       /* End row */
@@ -5507,7 +5597,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
       /* Number of users found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td align=\"center\" class=\"TIT_TBL\" colspan=\"%u\">",
+			 "<td colspan=\"%u\" class=\"TIT_TBL\""
+			 " style=\"text-align:center;\">",
 	       Usr_NUM_MAIN_FIELDS_DATA_USR);
       if (NumUsrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",
@@ -5525,7 +5616,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                    " background-color:%s;\">"
                             "%s&nbsp;"
                             "</td>",
                   VERY_LIGHT_BLUE,
@@ -5556,8 +5648,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
             if (Role != Rol_ROLE_GUEST)
               {
 	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td align=\"left\" colspan=\"3\"></td>"
-				  "<td align=\"left\" colspan=\"%u\">",
+				  "<td colspan=\"3\"></td>"
+				  "<td colspan=\"%u\">",
 			Usr_NUM_MAIN_FIELDS_DATA_USR-3);
 	       Lay_StartRoundFrameTable10 (NULL,2,NULL);
 	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
@@ -5664,7 +5756,10 @@ void Usr_ListDataAdms (void)
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td align=\"left\" bgcolor=\"%s\" class=\"TIT_TBL\">%s&nbsp;</td>",
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
+	                       " background-color:%s;\">"
+        	               "%s&nbsp;"
+        	               "</td>",
                      VERY_LIGHT_BLUE,FieldNames[NumCol]);
 
       /* End row */
@@ -6705,16 +6800,18 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
 
          /***** Begin user's cell *****/
-         fprintf (Gbl.F.Out,"<td align=\"center\" valign=\"bottom\" class=\"CLASSPHOTO\"");
+         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO\""
+                            " style=\"text-align:center;"
+                            " vertical-align:bottom;");
          if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
              UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
            {
             UsrIsTheMsgSender = true;
-            fprintf (Gbl.F.Out," bgcolor=\"%s\"",LIGHT_GREEN);
+            fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
            }
          else
             UsrIsTheMsgSender = false;
-         fprintf (Gbl.F.Out,">");
+         fprintf (Gbl.F.Out,"\">");
 
          /***** Checkbox to select this user *****/
          if (PutCheckBoxToSelectUsr)
@@ -6797,7 +6894,9 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
        ClassPhotoType != Usr_CLASS_PHOTO_PRN)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"%d\" align=\"center\" class=\"MSJ_AVISO\">(",
+	                 "<td colspan=\"%d\" class=\"MSJ_AVISO\""
+	                 " style=\"text-align:center;\">"
+	                 "(",
                Gbl.Usrs.ClassPhoto.Cols);
       if (Gbl.Usrs.Me.MyPhotoExists)
         {
@@ -6925,10 +7024,22 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
 
    /***** Write the total number of users *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"right\" valign=\"bottom\" class=\"DAT\">%s</td>"
-                      "<td align=\"right\" valign=\"bottom\" class=\"DAT\">%u</td>"
-                      "<td align=\"right\" valign=\"bottom\" class=\"DAT\">%.2f</td>"
-                      "<td align=\"right\" valign=\"bottom\" class=\"DAT\">%.2f</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;"
+                      " vertical-align:bottom;\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;"
+                      " vertical-align:bottom;\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;"
+                      " vertical-align:bottom;\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"DAT\" style=\"text-align:right;"
+                      " vertical-align:bottom;\">"
+                      "%.2f"
+                      "</td>"
                       "</tr>",
             Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             NumUsrs,

@@ -531,7 +531,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    /***** Start frame *****/
    Lay_StartRoundFrameTable10Shadow (NULL,0);
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"center\">"
+		      "<td style=\"text-align:center;\">"
                       "<table class=\"CELLS_PAD_2\">");
 
    /***** Link to download the file *****/
@@ -556,8 +556,12 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Filename *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-		      "<td align=\"left\" valign=\"middle\" class=\"DAT\">"
+		      "<td class=\"%s\" style=\"text-align:right;"
+		      " vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\" style=\"text-align:left;"
+		      " vertical-align:middle;\">"
 		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
 		      "</td>"
 		      "</tr>",
@@ -566,8 +570,12 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Write the file size *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td align=\"right\" valign=\"middle\" class=\"%s\">%s:</td>"
-		      "<td align=\"left\" valign=\"middle\" class=\"DAT\">",
+		      "<td class=\"%s\" style=\"text-align:right;"
+		      " vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\" style=\"text-align:left;"
+		      " vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],Txt_File_size);
    Str_WriteSizeInBytesFull ((double) FileSize);
    if (UncompressedSize)
