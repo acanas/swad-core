@@ -289,7 +289,7 @@ void TT_ShowClassTimeTable (void)
      {
       /***** Select whether show only my groups or all groups *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td style=\"text-align:center;\">");
+			 "<td>");
       Act_FormStart (Gbl.CurrentAct);
       Grp_ShowSelectorWhichGrps ();
       fprintf (Gbl.F.Out,"</form>"

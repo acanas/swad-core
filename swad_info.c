@@ -307,6 +307,16 @@ void Inf_ShowInfo (void)
    /***** Get info source from database *****/
    Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,&InfoSrc,&MustBeRead);
 
+   switch (InfoType)
+     {
+      case Inf_LECTURES:
+      case Inf_PRACTICALS:
+         Syl_PutFormWhichSyllabus ();
+         break;
+      default:
+	 break;
+     }
+
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_STUDENT:

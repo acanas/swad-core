@@ -108,6 +108,40 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text,const char *Color);
 
 /*****************************************************************************/
+/************************ Write form to select syllabus **********************/
+/*****************************************************************************/
+
+void Syl_PutFormWhichSyllabus (void)
+  {
+   extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
+   Syl_WhichSyllabus_t WhichSyllabus;
+
+   /***** Form to select which forums I want to see
+          (all my forums or only the forums of current institution/degree/course) *****/
+   Act_FormStart (ActSeeSylLec);
+   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
+                      " padding:0; margin:10px auto;\">");
+
+   for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
+	WhichSyllabus < For_NUM_WHICH_FORUMS;
+	WhichSyllabus++)
+     {
+      fprintf (Gbl.F.Out,"<li class=\"DAT\""
+	                 " style=\"display:inline; vertical-align:middle;\">"
+                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
+               (unsigned) WhichSyllabus);
+      if (WhichSyllabus == Gbl.CurrentCrs.Syllabus.WhichSyllabus)
+         fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+	                 "%s"
+                         "</li>",
+               Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
+     }
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</form>");
+  }
+
+/*****************************************************************************/
 /************** Get parameter item number in program edition *****************/
 /*****************************************************************************/
 

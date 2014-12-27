@@ -442,6 +442,7 @@ struct Globals
 	 char PathDir[PATH_MAX+1];
 	 unsigned NumItem;
 	 bool EditionIsActive;
+	 Syl_WhichSyllabus_t WhichSyllabus;
 	} Syllabus;
       struct
         {

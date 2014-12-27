@@ -81,6 +81,7 @@
 #include "swad_record.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
+#include "swad_syllabus.h"
 #include "swad_test.h"
 #include "swad_text.h"
 #include "swad_timetable.h"
@@ -4411,27 +4412,6 @@ const char *Txt_Comments =
 	"Komentarze";
 #elif L==8
 	"Coment&aacute;rios";
-#endif
-
-const char *Txt_Student_comment =
-#if   L==0
-	"Comentari de l'estudiant";
-#elif L==1
-	"Student-Kommentar";
-#elif L==2
-	"Student's comment";
-#elif L==3
-	"Comentario del estudiante";
-#elif L==4
-	"Commentaire de l'&eacute;tudiant";
-#elif L==5
-	"Comentario del estudiante";	// Okoteve traducción
-#elif L==6
-	"Commento di student";
-#elif L==7
-	"Komentarz studenta";
-#elif L==8
-	"Coment&aacute;rio do estudante";
 #endif
 
 const char *Txt_Teachers_comment =
@@ -35514,43 +35494,43 @@ const char *Txt_Show_right_column =
 const char *Txt_Show_WHICH_groups[2] =
    {
 #if   L==0
-	 "Mostrar nom&eacute;s els meus grups"
+	 "Nom&eacute;s els meus grups"
 #elif L==1
-	 "Zeige nur meine Gruppen"
+	 "Nur meine Gruppen"
 #elif L==2
-	 "Show only my groups"
+	 "Only my groups"
 #elif L==3
-	 "Mostrar s&oacute;lo mis grupos"
+	 "S&oacute;lo mis grupos"
 #elif L==4
-	 "Afficher uniquement mes groupes"
+	 "Uniquement mes groupes"
 #elif L==5
-	 "Mostrar s&oacute;lo mis grupos"	// Okoteve traducción
+	 "S&oacute;lo mis grupos"	// Okoteve traducción
 #elif L==6
-	 "Mostra solo i miei gruppi"
+	 "Solo i miei gruppi"
 #elif L==7
-	 "Show only my groups"			// Potrzebujesz tlumaczenie
+	 "Only my groups"			// Potrzebujesz tlumaczenie
 #elif L==8
-	 "Mostrar apenas os meus grupos"
+	 "Apenas os meus grupos"
 #endif
 	 ,
 #if   L==0
-	 "Mostrar tots els grups"
+	 "Tots els grups"
 #elif L==1
-	 "Zeige alle Gruppen"
+	 "Alle Gruppen"
 #elif L==2
-	 "Show all groups"
+	 "All groups"
 #elif L==3
-	 "Mostrar todos los grupos"
+	 "Todos los grupos"
 #elif L==4
-	 "Afficher tous les groupes"
+	 "Tous les groupes"
 #elif L==5
-	 "Mostrar todos los grupos"	// Okoteve traducción
+	 "Todos los grupos"	// Okoteve traducción
 #elif L==6
-	 "Mostra tutti i gruppi"
+	 "Tutti i gruppi"
 #elif L==7
-	 "Show all groups"		// Potrzebujesz tlumaczenie
+	 "All groups"		// Potrzebujesz tlumaczenie
 #elif L==8
-	 "Mostrar todos os grupos"
+	 "Todos os grupos"
 #endif
 	};
 
@@ -37400,6 +37380,27 @@ const char *Txt_Status =
 	"Status";
 #endif
 
+const char *Txt_Stay_connected_with_SWADroid =
+#if   L==0
+	"Seguiu connectat/da amb <strong>SWADroid</strong>.";
+#elif L==1
+	"Stay connected with <strong>SWADroid</strong>.";		// Need Übersetzung
+#elif L==2
+	"Stay connected with <strong>SWADroid</strong>.";
+#elif L==3
+	"Siga conectado/a con <strong>SWADroid</strong>.";
+#elif L==4
+	"Stay connected with <strong>SWADroid</strong>.";		// Besoin de traduction
+#elif L==5
+	"Siga conectado/a con <strong>SWADroid</strong>.";		// Okoteve traducción
+#elif L==6
+	"Resta in contatto con <strong>SWADroid</strong>.";
+#elif L==7
+	"Stay connected with <strong>SWADroid</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Stay connected with <strong>SWADroid</strong>.";		// Necessita de tradução
+#endif
+
 const char *Txt_Stem =		// Stem of a test question
 #if   L==0
 	"Enunciat";
@@ -37524,6 +37525,27 @@ const char *Txt_Step_5_Confirm_the_enrollment_removing =
 	"Step 5: Confirm the enrollment / removing";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"Step 5: Confirm the enrollment / removing";			// Necessita de tradução
+#endif
+
+const char *Txt_Student_comment =
+#if   L==0
+	"Comentari de l'estudiant";
+#elif L==1
+	"Student-Kommentar";
+#elif L==2
+	"Student's comment";
+#elif L==3
+	"Comentario del estudiante";
+#elif L==4
+	"Commentaire de l'&eacute;tudiant";
+#elif L==5
+	"Comentario del estudiante";	// Okoteve traducción
+#elif L==6
+	"Commento di student";
+#elif L==7
+	"Komentarz studenta";
+#elif L==8
+	"Coment&aacute;rio do estudante";
 #endif
 
 const char *Txt_Students_ABBREVIATION =	// Abbreviation of "Students"
@@ -38174,6 +38196,52 @@ const char *Txt_Syllabus_of_the_course =
 #elif L==8
 	"Programa da disciplina";
 #endif
+
+extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
+	 {
+	 // Lectures
+#if   L==0
+	 "Teoria"
+#elif L==1
+	 "Vorlesung"
+#elif L==2
+	 "Lectures"
+#elif L==3
+	 "Teor&iacute;a"
+#elif L==4
+	 "Th&eacute;orie"
+#elif L==5
+	 "Teor&iacute;a"		// Okoteve traducción
+#elif L==6
+	 "Teoria"
+#elif L==7
+	 "Wyklady"
+#elif L==8
+	 "Teoria"
+#endif
+	 ,
+	 // Practicals
+#if   L==0
+	 "Pr&agrave;ct."
+#elif L==1
+	 "&Uuml;bung"
+#elif L==2
+	 "Practicals"
+#elif L==3
+	 "Pr&aacute;ct."
+#elif L==4
+	 "Pratique"
+#elif L==5
+	 "Pr&aacute;ct."		// Okoteve traducción
+#elif L==6
+	 "Pratica"
+#elif L==7
+	 "praktyki"
+#elif L==8
+	 "Pr&aacute;ct."
+#endif
+	 ,
+	 };
 
 const char *Txt_System =
 #if   L==0
@@ -50488,27 +50556,6 @@ const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y =	/
 #elif L==8
 	"You can send a file with an image in <em>jpg</em> format"
 	" and size %u&times;%u pixels.";			// Necessita de tradução
-#endif
-
-const char *Txt_Stay_connected_with_SWADroid =
-#if   L==0
-	"Seguiu connectat/da amb <strong>SWADroid</strong>.";
-#elif L==1
-	"Stay connected with <strong>SWADroid</strong>.";		// Need Übersetzung
-#elif L==2
-	"Stay connected with <strong>SWADroid</strong>.";
-#elif L==3
-	"Siga conectado/a con <strong>SWADroid</strong>.";
-#elif L==4
-	"Stay connected with <strong>SWADroid</strong>.";		// Besoin de traduction
-#elif L==5
-	"Siga conectado/a con <strong>SWADroid</strong>.";		// Okoteve traducción
-#elif L==6
-	"Resta in contatto con <strong>SWADroid</strong>.";
-#elif L==7
-	"Stay connected with <strong>SWADroid</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Stay connected with <strong>SWADroid</strong>.";		// Necessita de tradução
 #endif
 
 const char *Txt_You_dont_have_permission_to_access_to_this_forum =

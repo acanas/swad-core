@@ -1675,32 +1675,38 @@ void For_ShowForumList (void)
 
 static void For_PutFormWhichForums (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_FORUM_WHICH_FORUM[2];
+   extern const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS];
    For_WhichForums_t WhichForums;
 
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:center;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+		      "<td>");
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
+   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
+                      " padding:0; margin:10px auto;\">");
+
    for (WhichForums = (For_WhichForums_t) 0;
 	WhichForums < For_NUM_WHICH_FORUMS;
 	WhichForums++)
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<li class=\"DAT\""
+	                 " style=\"display:inline; vertical-align:middle;\">"
+                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
                (unsigned) WhichForums);
       if (WhichForums == Gbl.Forum.WhichForums)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />%s",
+      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+	                 "%s"
+                         "</li>",
                Gbl.FormId,Txt_FORUM_WHICH_FORUM[WhichForums]);
      }
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</form>"
+                      "</td>"
+                      "</tr>");
   }
 
 /*****************************************************************************/
