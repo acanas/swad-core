@@ -130,7 +130,7 @@ void Gbl_InitializeGlobals (void)
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
    Gbl.Prefs.Language = Txt_Current_CGI_SWAD_Language;
-   Gbl.Prefs.SideCols = 3;			// Show both side columns, left and right
+   Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;	// Show both side columns, left and right
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,
 	    Cfg_ICON_FOLDER_THEMES,

@@ -693,7 +693,9 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_password;
+   extern const char *Txt_Password;
    extern const char *Txt_Retype_new_password;
+   extern const char *Txt_Retype_password;
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"text-align:right;\">"
@@ -712,10 +714,12 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_New_password,
+            Gbl.Usrs.Me.Logged? Txt_New_password :		// Changing my password
+        	                Txt_Password,			// Creating new account
             Pwd_INPUT_LENGTH_PLAIN_PASSWORD,Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Retype_new_password,
+            Gbl.Usrs.Me.Logged ? Txt_Retype_new_password :	// Changing my password
+        	                 Txt_Retype_password,		// Creating new account
             Pwd_INPUT_LENGTH_PLAIN_PASSWORD,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
   }
 

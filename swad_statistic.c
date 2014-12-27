@@ -6251,14 +6251,15 @@ static void Sta_GetAndShowNumUsrsPerColumns (void)
 
    /***** For each language... *****/
    for (SideCols = 0;
-	SideCols <= 3;
+	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
       /***** Get the number of users who have chosen this layout of columns from database *****/
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_PLATFORM:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",SideCols);
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",
+                     SideCols);
             break;
 	 case Sco_SCOPE_INSTITUTION:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -6310,7 +6311,7 @@ static void Sta_GetAndShowNumUsrsPerColumns (void)
 
    /***** Write number of users who have chosen this layout of columns *****/
    for (SideCols = 0;
-	SideCols <= 3;
+	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:center;\">"
@@ -6324,7 +6325,8 @@ static void Sta_GetAndShowNumUsrsPerColumns (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
+               Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,
+               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                NumUsrs[SideCols],
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :

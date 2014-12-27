@@ -206,11 +206,11 @@ void Prf_GetPrefsFromIP (void)
 	 /* Get if user wants to show side columns (row[3]) */
 	 if (sscanf (row[3],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
-	    if (Gbl.Prefs.SideCols > 3)
-	       Gbl.Prefs.SideCols = 3;	// Show both side columns
+	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
+	       Gbl.Prefs.SideCols = Lay_SHOW_BOTH_COLUMNS;	// Show both side columns
 	   }
 	 else
-	    Gbl.Prefs.SideCols = 3;	// Show both side columns
+	    Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 	}
      }
   }
@@ -390,7 +390,7 @@ void Prf_PutIconsToSelectSideCols (void)
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
                       "<tr>");
    for (SideCols = 0;
-	SideCols <= 3;
+	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
       fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
@@ -420,7 +420,7 @@ void Prf_PutLeftIconToHideShowCols (void)
    extern const char *Txt_Hide_left_column;
    extern const char *Txt_Show_left_column;
 
-   if (Gbl.Prefs.SideCols & 2)
+   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)
      {
       Act_FormStart (ActHidLftCol);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_left_8x800.gif\""
@@ -450,7 +450,7 @@ void Prf_PutRigthIconToHideShowCols (void)
    extern const char *Txt_Hide_right_column;
    extern const char *Txt_Show_right_column;
 
-   if (Gbl.Prefs.SideCols & 1)
+   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)
      {
       Act_FormStart (ActHidRgtCol);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_right_8x800.gif\""
@@ -494,7 +494,7 @@ void Prf_ChangeSideCols (void)
 
 void Prf_HideLeftCol (void)
   {
-   Gbl.Prefs.SideCols &= 1;	//  And with 01 to hide left column
+   Gbl.Prefs.SideCols &= ~Lay_SHOW_LEFT_COLUMN;	//  And with 1...101 to hide left column
    if (Gbl.Usrs.Me.Logged)
       Prf_UpdateSideColsOnUsrDataTable ();
 
@@ -508,7 +508,7 @@ void Prf_HideLeftCol (void)
 
 void Prf_HideRightCol (void)
   {
-   Gbl.Prefs.SideCols &= 2;	//  And with 10 to hide right column
+   Gbl.Prefs.SideCols &= ~Lay_SHOW_RIGHT_COLUMN;	//  And with 1...110 to hide right column
    if (Gbl.Usrs.Me.Logged)
       Prf_UpdateSideColsOnUsrDataTable ();
 
@@ -522,7 +522,7 @@ void Prf_HideRightCol (void)
 
 void Prf_ShowLeftCol (void)
   {
-   Gbl.Prefs.SideCols |= 2;	// Or with 10 to show left column
+   Gbl.Prefs.SideCols |= Lay_SHOW_LEFT_COLUMN;	// Or with 10 to show left column
    if (Gbl.Usrs.Me.Logged)
       Prf_UpdateSideColsOnUsrDataTable ();
 
@@ -536,7 +536,7 @@ void Prf_ShowLeftCol (void)
 
 void Prf_ShowRightCol (void)
   {
-   Gbl.Prefs.SideCols |= 1;	// Or with 01 to show right column
+   Gbl.Prefs.SideCols |= Lay_SHOW_RIGHT_COLUMN;	// Or with 01 to show right column
    if (Gbl.Usrs.Me.Logged)
       Prf_UpdateSideColsOnUsrDataTable ();
 
@@ -569,13 +569,13 @@ unsigned Prf_GetParamSideCols (void)
    Par_GetParToText ("SideCols",UnsignedStr,10);
 
    if (!UnsignedStr[0])
-      return 3;
+      return Cfg_DEFAULT_COLUMNS;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      return 3;
+      return Cfg_DEFAULT_COLUMNS;
 
    if (UnsignedNum > 3)
-      return 3;
+      return Cfg_DEFAULT_COLUMNS;
 
    return UnsignedNum;
   }

@@ -439,7 +439,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 		  "'%u','%s','%s','%s','%c',"
 		  "'%ld',"
 		  "'%s','%s','%s','%s','%s','%04u-%02u-%02u','%s',"
-		  "'3','-1','0')",
+		  "'%u','-1','0')",
 	    UsrDat->EncryptedUsrCod,
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
@@ -456,7 +456,8 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    UsrDat->OriginPlace,
 	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
 	    UsrDat->Comments ? UsrDat->Comments :
-		               "");
+		               "",
+            Lay_SHOW_BOTH_COLUMNS);
    UsrDat->UsrCod = DB_QueryINSERTandReturnCode (Query,"can not create user");
 
    /* Insert user's IDs as confirmed */

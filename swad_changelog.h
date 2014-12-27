@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.44 (2014/12/27)"
+#define Log_PLATFORM_VERSION	"SWAD 14.44.1 (2014/12/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.44.1  :Dic 27, 2014	Changes in layout columns. (174251 lines)
 	Version 14.44    :Dic 27, 2014	Removed vendor-specific properties in CSS. (174230 lines)
 	Version 14.43.1  :Dic 27, 2014	Fixed bugs in HTML and CSS. (174319 lines)
 	Version 14.43    :Dic 27, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (174314 lines)

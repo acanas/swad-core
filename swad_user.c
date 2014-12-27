@@ -266,7 +266,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
    UsrDat->Prefs.Layout = Lay_LAYOUT_DEFAULT;
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-   UsrDat->Prefs.SideCols = 3;
+   UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.EmailNtfEvents = 0;        // By default, don't notify anything
   }
@@ -497,11 +497,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Get if user wants to show side columns */
    if (sscanf (row[26],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
-      if (UsrDat->Prefs.SideCols > 3)
-         UsrDat->Prefs.SideCols = 3;	// Show both side columns
+      if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
+         UsrDat->Prefs.SideCols = Lay_SHOW_BOTH_COLUMNS;	// Show both side columns
      }
    else
-      UsrDat->Prefs.SideCols = 3;	// Show both side columns
+      UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified by e-mail */
    if (sscanf (row[27],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)

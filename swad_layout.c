@@ -121,23 +121,6 @@ static void Lay_ShowRightColumn (void);
 static void Lay_WriteFootFromHTMLFile (void);
 
 /*****************************************************************************/
-/*************** Print a SHA512 ciphered text in hexadecimal *****************/
-/*****************************************************************************/
-/*
-void Lay_PrintDigest512 (unsigned char digest512[512/8])
-  {
-   unsigned i;
-   char Borrame[(512/8)*2+1];
-
-   for (i=0; i<(512/8); i++)
-     {
-      sprintf (&Borrame[i*2  ],"%01x",digest512[i] >> 4);
-      sprintf (&Borrame[i*2+1],"%01x",digest512[i] & 0x0F);
-     }
-   Lay_ShowAlert (Lay_INFO,Borrame);
-  }
-*/
-/*****************************************************************************/
 /*********************** Write the start of the page *************************/
 /*****************************************************************************/
 
@@ -166,7 +149,7 @@ void Lay_WriteStartOfPage (void)
    /***** Compute connected users *****/
    if (Gbl.CurrentAct == ActLstCon ||
        (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-        (Gbl.Prefs.SideCols & 1) &&
+        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
         Gbl.CurrentCrs.Crs.CrsCod >= 0))	// Right column visible && There is a course selected
       Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
@@ -278,9 +261,9 @@ void Lay_WriteStartOfPage (void)
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {
-      if (Gbl.Prefs.SideCols == 3)	// 11: both side columns visible, left and right
+      if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)	// 11: both side columns visible, left and right
 	 ColspanCentralPart = 1;
-      else if (Gbl.Prefs.SideCols != 0)	// 10 or 01: only one side column visible, left or right
+      else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"text-align:center;"
@@ -508,7 +491,7 @@ static void Lay_WriteScriptInit (void)
      }
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-       (Gbl.Prefs.SideCols & 1))	// Right column visible
+       (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
       Con_WriteScriptClockConnected ();
 
    // Put the focus on login form
@@ -718,7 +701,7 @@ static void Lay_WritePageTopHeading (void)
      {
       case Lay_LAYOUT_DESKTOP:
          /***** 3rd. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & 2)	// Left column visible
+         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
             fprintf (Gbl.F.Out,"<td style=\"width:128px;"
         	               " text-align:center; vertical-align:top;"
                                " background-image:url('%s/head_base_background_1x56.gif');"
@@ -730,7 +713,7 @@ static void Lay_WritePageTopHeading (void)
          Lay_DrawTabs ();
 
          /***** 3rd. row, 3rd. column *****/
-         if (Gbl.Prefs.SideCols & 1)	// Right column visible
+         if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
            {
             fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"width:128px;"
         	               " text-align:center; vertical-align:top;\">");
@@ -742,7 +725,7 @@ static void Lay_WritePageTopHeading (void)
                             "<tr>");
 
          /***** 4th. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & 2)	// Left column visible
+         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
            {
             fprintf (Gbl.F.Out,"<td style=\"width:128px; text-align:center;"
         	               " vertical-align:top;\">");
@@ -857,9 +840,9 @@ static void Lay_DrawTabs (void)
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {
-      if (Gbl.Prefs.SideCols == 3)	// 11: both side columns visible, left and right
+      if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)	// 11: both side columns visible, left and right
 	 ColspanCentralPart = 1;
-      else if (Gbl.Prefs.SideCols != 0)	// 10 or 01: only one side column visible, left or right
+      else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"height:56px;"
@@ -1700,7 +1683,7 @@ void Lay_RefreshNotifsAndConnected (void)
   {
    unsigned NumUsr;
    bool ShowConnected = (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-                         (Gbl.Prefs.SideCols & 1) &&
+                         (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
                          Gbl.CurrentCrs.Crs.CrsCod > 0);	// Right column visible && There is a course selected
 
    // Sometimes, someone must do this work, so who best than processes that refresh via AJAX?

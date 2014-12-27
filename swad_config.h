@@ -71,7 +71,9 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
+
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
@@ -116,7 +118,9 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_COLUMNS			Lay_BOTH_COUMNS_HIDDEN
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
+
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
@@ -178,7 +182,9 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmLogIn
+
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	"PRADO"
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
@@ -230,7 +236,9 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
+#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmLogIn
+
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
 #define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""

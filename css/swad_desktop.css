@@ -59,7 +59,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /****************** Title of current action in main block ********************/
 #action_title
 	{
-	width:50%;
+	width:380px;
 	min-height:54px;
 	clear:both;
 	margin:0 auto;
