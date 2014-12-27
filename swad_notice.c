@@ -93,12 +93,8 @@ void Not_ShowFormNotice (void)
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   Msg_WriteLinkToNetiquette ();
-
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
    Act_FormStart (ActRcvNot);
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	              "<tr>"
 	              "<td></td>"
 	              "<td class=\"%s\" style=\"text-align:left;\">"
@@ -120,8 +116,7 @@ void Not_ShowFormNotice (void)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
    Lay_PutSendButton (Txt_Create_notice);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

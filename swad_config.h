@@ -272,7 +272,7 @@
 #define Cfg_HOW_TO_COLLABORATE_URL	"http://swad.ugr.es/wiki/index.php/Colaborar"
 
 /* Link to nettiquete rules for messages */
-#define Cfg_NETTIQUETE			"http://swad.ugr.es/wiki/index.php/Netiquette"
+// #define Cfg_NETTIQUETE			"http://swad.ugr.es/wiki/index.php/Netiquette"
 
 /* Link to download Java: keep updated! */
 #define Cfg_JAVA_URL			"http://www.java.com/es/download/"

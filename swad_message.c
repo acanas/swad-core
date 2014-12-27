@@ -333,12 +333,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                 "</tr>");
 
       /***** Subject and content *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" style=\"text-align:center;\">");
-      Msg_WriteLinkToNetiquette ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
       fprintf (Gbl.F.Out,"</table>");
@@ -3253,7 +3247,7 @@ static long Msg_GetParamMsgCod (void)
 /*****************************************************************************/
 /*********************** Write a link to netiquette rules ********************/
 /*****************************************************************************/
-
+/*
 void Msg_WriteLinkToNetiquette (void)
   {
    extern const char *Txt_Mandatory_rules_to_compose_messages;
@@ -3263,7 +3257,7 @@ void Msg_WriteLinkToNetiquette (void)
             Cfg_NETTIQUETE,Txt_Mandatory_rules_to_compose_messages);
    Lay_WriteTitle (Title);
   }
-
+*/
 /*****************************************************************************/
 /***************** Put a form to ban the sender of a message *****************/
 /*****************************************************************************/

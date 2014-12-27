@@ -107,7 +107,7 @@ void Dpt_SeeDepts (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
-	                    " style=\"text-align:center;\">");
+	                    " style=\"text-align:left;\">");
 	 Act_FormStart (ActSeeDpt);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL");

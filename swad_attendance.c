@@ -182,7 +182,8 @@ static void Att_ShowAllAttEvents (void)
 	   Order <= Att_ORDER_BY_END_DATE;
 	   Order++)
         {
-         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">");
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
+                            " style=\"text-align:left;\">");
          Act_FormStart (ActSeeAtt);
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);

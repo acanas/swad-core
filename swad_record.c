@@ -475,9 +475,12 @@ unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
    char Query[512];
 
    /***** Get fields of cards of current course from database *****/
-   sprintf (Query,"SELECT FieldCod,FieldName,Visibility FROM crs_record_fields"
-                  " WHERE CrsCod='%ld' ORDER BY FieldName",Gbl.CurrentCrs.Crs.CrsCod);
-   return DB_QuerySELECT (Query,mysql_res,"can not get fields of cards of a course");
+   sprintf (Query,"SELECT FieldCod,FieldName,Visibility"
+	          " FROM crs_record_fields"
+                  " WHERE CrsCod='%ld' ORDER BY FieldName",
+            Gbl.CurrentCrs.Crs.CrsCod);
+   return DB_QuerySELECT (Query,mysql_res,
+                          "can not get fields of cards of a course");
   }
 
 /*****************************************************************************/
@@ -499,7 +502,7 @@ void Rec_CreateRecordField (void)
             (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
    DB_QueryINSERT (Query,"can not create field of record");
 
-   /***** Write mensaje of éxito *****/
+   /***** Write message of success *****/
    sprintf (Gbl.Message,Txt_Created_new_record_field_X,
             Gbl.CurrentCrs.Records.Field.Name);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);

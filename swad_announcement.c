@@ -320,12 +320,10 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
    Act_FormStart (ActRcvAnn);
 
    /***** Message subject and body *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	              "<tr>"
 	              "<td></td>"
 	              "<td class=\"%s\" style=\"text-align:left;\">%s</td>"
@@ -371,8 +369,7 @@ void Ann_ShowFormAnnouncement (void)
                       "</table>");
 
    Lay_PutSendButton (Txt_Create_announcement);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

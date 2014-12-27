@@ -15396,7 +15396,7 @@ const char *Txt_Mandatory_enrollment =		// (to a type of group)
 #elif L==8
 	"Inscri&ccedil;&atilde;o obrigat&oacute;ria?";
 #endif
-
+/*
 const char *Txt_Mandatory_rules_to_compose_messages =
 #if   L==0
 	"Normas obligatorias al redactar mensajes (netiquette)";	// Necessita traduccio
@@ -15417,7 +15417,7 @@ const char *Txt_Mandatory_rules_to_compose_messages =
 #elif L==8
 	"Regras obrigat&oacute;rias para compor mensagens (netiquette)";
 #endif
-
+*/
 const char *Txt_Mark_all_notifications_as_read =
 #if   L==0
 	"Marca totes les notificacions com llegides";
@@ -16778,23 +16778,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeAtt
 #if   L==0
-	"Control<br />d'assist&egrave;ncia"
+	"Assist&egrave;ncia"
 #elif L==1
-	"Kontrolle der<br />Anwesenheit"
+	"Anwesenheit"
 #elif L==2
-	"Control of<br />attendance"
+	"Attendance"
 #elif L==3
-	"Control de<br />asistencia"
+	"Asistencia"
 #elif L==4
-	"Contr&ocirc;le de<br />pr&eacute;sence"
+	"Pr&eacute;sence"
 #elif L==5
-	"Control de<br />asistencia"	// Okoteve traducción
+	"Asistencia"	// Okoteve traducción
 #elif L==6
-	"Controllo di<br />frequenza"
+	"Frequenza"
 #elif L==7
-	"Kontrola<br />frekwencji"
+	"Frekwencji"
 #elif L==8
-	"Lista de<br />presen&ccedil;a"
+	"Presen&ccedil;a"
 #endif
 	,
 	// ActLstTch
@@ -18692,23 +18692,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeAtt
 #if   L==0
-	"Control d'assist&egrave;ncia"
+	"Assist&egrave;ncia"
 #elif L==1
-	"Kontrolle der Anwesenheit"
+	"Anwesenheit"
 #elif L==2
-	"Control of attendance"
+	"Attendance"
 #elif L==3
-	"Control de asistencia"
+	"Asistencia"
 #elif L==4
-	"Contr&ocirc;le de pr&eacute;sence"
+	"Pr&eacute;sence"
 #elif L==5
-	"Control de asistencia"	// Okoteve traducción
+	"Asistencia"	// Okoteve traducción
 #elif L==6
-	"Controllo di frequenza"
+	"Frequenza"
 #elif L==7
-	"Kontrola frekwencji"
+	"Frekwencji"
 #elif L==8
-	"Lista de presen&ccedil;a"
+	"Presen&ccedil;a"
 #endif
 	,
 	// ActLstTch

@@ -999,7 +999,6 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    extern const char *Txt_Post_X_allowed_Click_to_ban_it;
    extern const char *Txt_Post_X_banned_Click_to_unban_it;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
-   extern const char *Txt_Mandatory_rules_to_compose_messages;
    struct UsrData UsrDat;
    char CreatTime[4+2+2+2+2+2+1];	// Creation time of a post in YYYYMMDDHHMMSS format
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
@@ -1151,11 +1150,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
      }
    else
-     {
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-      fprintf (Gbl.F.Out,"(<a href=\"%s\" target=\"_blank\">%s</a>)",
-               Cfg_NETTIQUETE,Txt_Mandatory_rules_to_compose_messages);
-     }
    fprintf (Gbl.F.Out,"</tt>"
 	              "<br />&nbsp;"
 	              "</td>"
@@ -3500,8 +3495,7 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
 	              "<td></td>"
                       "<td style=\"text-align:left;\">"
@@ -3511,12 +3505,6 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
             IsReply ? Txt_New_message :
         	      Txt_New_thread,
             Txt_If_you_send_this_message_you_will_appear_as_its_author);
-
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Msg_WriteLinkToNetiquette ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\""
@@ -3542,8 +3530,7 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
                       "</textarea>"
                       "</td>"
                       "</tr>"
-                      "</table>"
-                      "</div>",
+                      "</table>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 

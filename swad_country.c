@@ -548,9 +548,7 @@ void Cty_ListCountries2 (void)
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:%s;\">",
-	       Order == Cty_ORDER_BY_COUNTRY ? "left" :
-		                               "right");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">");
       Act_FormStart (ActSeeCty);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL");

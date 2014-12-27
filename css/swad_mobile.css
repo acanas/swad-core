@@ -107,7 +107,7 @@ p			{margin:0;}
 
 .NOTICE_CONTAINER
 	{
-	margin:8px 0 8px 0;
+	margin:8px auto;
 	padding:8px;
 	background-color:#FAF098;
 	background-image:linear-gradient(#EED86C 0%, #FEED95 15%, #FAF098 100%);

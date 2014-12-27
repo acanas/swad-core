@@ -487,8 +487,8 @@ void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
    extern const char *Txt_Degree;
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">"
-                      "<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	              " style=\"margin:0 auto 10px auto;\">");
 
    /***** Write a 1st selector
           with all the countries *****/
@@ -551,8 +551,7 @@ void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
      }
 
    /***** End of table *****/
-   fprintf (Gbl.F.Out,"</table>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

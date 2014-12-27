@@ -110,7 +110,7 @@ void Msg_IndentDependingOnLevel (int Level,bool IsLastItemInLevel[]);
 
 void Msg_PutHiddenParamMsgCod (long MsgCod);
 
-void Msg_WriteLinkToNetiquette (void);
+// void Msg_WriteLinkToNetiquette (void);
 
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);
