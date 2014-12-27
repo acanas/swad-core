@@ -457,7 +457,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
-            Lay_SHOW_BOTH_COLUMNS);
+            Cfg_DEFAULT_COLUMNS);
    UsrDat->UsrCod = DB_QueryINSERTandReturnCode (Query,"can not create user");
 
    /* Insert user's IDs as confirmed */

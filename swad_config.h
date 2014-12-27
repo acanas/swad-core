@@ -34,6 +34,12 @@
 //#define WWW_CEVUNA_UNA_PY	// Comment this line if not applicable
 
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_layout.h"
+
+/*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
@@ -118,7 +124,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_DEFAULT_COLUMNS			Lay_BOTH_COUMNS_HIDDEN
+#define Cfg_DEFAULT_COLUMNS			Lay_HIDE_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI

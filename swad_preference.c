@@ -207,7 +207,7 @@ void Prf_GetPrefsFromIP (void)
 	 if (sscanf (row[3],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
 	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
-	       Gbl.Prefs.SideCols = Lay_SHOW_BOTH_COLUMNS;	// Show both side columns
+	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 	   }
 	 else
 	    Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;

@@ -490,9 +490,13 @@ void Rec_CreateRecordField (void)
    char Query[1024];
 
    /***** Create the new field *****/
-   sprintf (Query,"INSERT INTO crs_record_fields (CrsCod,FieldName,NumLines,Visibility) VALUES ('%ld','%s','%u','%u')",
+   sprintf (Query,"INSERT INTO crs_record_fields"
+	          " (CrsCod,FieldName,NumLines,Visibility)"
+	          " VALUES ('%ld','%s','%u','%u')",
             Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Records.Field.NumLines,(unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
+            Gbl.CurrentCrs.Records.Field.Name,
+            Gbl.CurrentCrs.Records.Field.NumLines,
+            (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
    DB_QueryINSERT (Query,"can not create field of record");
 
    /***** Write mensaje of éxito *****/
@@ -1698,7 +1702,9 @@ void Rec_UpdateCrsRecord (long UsrCod)
 	    /***** Insert text field of record course *****/
 	    sprintf (Query,"INSERT INTO crs_records (FieldCod,UsrCod,Txt)"
 		           " VALUES ('%ld','%ld','%s')",
-		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
+		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
+		     UsrCod,
+		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
 	    DB_QueryINSERT (Query,"can not create field of record");
 	   }
        }

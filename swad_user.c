@@ -498,7 +498,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    if (sscanf (row[26],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
-         UsrDat->Prefs.SideCols = Lay_SHOW_BOTH_COLUMNS;	// Show both side columns
+         UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
      }
    else
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
