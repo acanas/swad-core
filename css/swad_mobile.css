@@ -31,8 +31,8 @@ body
 	margin:0;
 	background-color:white;
 	}
-input			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:16pt;}
-select			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; font-size:16pt;}
+input			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; font-size:16pt;}
+select			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; font-size:16pt;}
 textarea		{font-size:12pt;}
 table
 	{
@@ -62,7 +62,7 @@ p			{margin:0;}
 	padding:4px;
 	border-radius:4px;
 	-moz-border-radius:4px;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:9pt;
 	color:#398000;
 	overflow:hidden;
@@ -91,15 +91,15 @@ p			{margin:0;}
 	border-width:1px 0 0 0;
 	border-color:#DDECF1;
 	}
-.MONTH			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:8pt; white-space:nowrap;}
-.DAY_WRK_HEAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:8pt;}
-.DAY_NO_WRK_HEAD	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:8pt;}
-.DAY_WRK		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#202020; font-size:8pt;}
-.DAY_NO_WORK		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#C04080; font-size:8pt;}
-.DAY_HLD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:8pt;}
-.DAY_WRK_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#E0E0E0; font-size:8pt;}
-.DAY_NO_WORK_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFE0FF; font-size:8pt;}
-.DAY_HLD_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFE0E0; font-size:8pt;}
+.MONTH			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:8pt; white-space:nowrap;}
+.DAY_WRK_HEAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:8pt;}
+.DAY_NO_WRK_HEAD	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:8pt;}
+.DAY_WRK		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#202020; font-size:8pt;}
+.DAY_NO_WORK		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#C04080; font-size:8pt;}
+.DAY_HLD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:8pt;}
+.DAY_WRK_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#E0E0E0; font-size:8pt;}
+.DAY_NO_WORK_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFE0FF; font-size:8pt;}
+.DAY_HLD_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFE0E0; font-size:8pt;}
 .DAY			{border:solid 1px; border-color:#FFFFFF;}
 .TODAY			{border:solid 1px; border-color:#50B800;}
 .DAY_EVENT		{border:solid 1px; border-color:#FFFFFF; background-color:#FFF080;}
@@ -137,14 +137,14 @@ p			{margin:0;}
 .NOTICE_DATE
 	{
 	float:right;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:10pt;
 	color:#404040;
 	overflow:hidden;
 	}
 .NOTICE_SUBJECT
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:12pt;
 	font-weight:bold;
 	color:#404040;
@@ -155,14 +155,14 @@ p			{margin:0;}
 .NOTICE_TEXT
 	{
 	clear:both;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:10pt;
 	color:#000080;
 	overflow:hidden;
 	}
 .NOTICE_AUTHOR
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#404040;
 	font-size:10pt;
 	overflow:hidden;
@@ -179,14 +179,14 @@ p			{margin:0;}
 	padding:4px;
 	border-radius:4px;
 	-moz-border-radius:4px;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:9pt;
 	color:#4D88A1;
 	overflow:hidden;
 	}
 .INS_LNK
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:9pt;
 	color:#4D88A1;
 	}
@@ -241,7 +241,7 @@ p			{margin:0;}
 	box-shadow:1px 1px 1px #CCC;
 	-moz-box-shadow:1px 1px 1px #CCC;
 	-webkit-box-shadow:1px 1px 1px #CCC;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:16pt;
 	color:#632921;
 	text-align:justify;
@@ -294,7 +294,7 @@ p			{margin:0;}
 .TIT_TBL_10
 	{
 	margin:0 10px 10px 10px;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#808080;
 	font-size:20pt;
 	font-weight:bold;
@@ -311,7 +311,7 @@ p			{margin:0;}
 /*********************************** Title ***********************************/
 .TIT	{
 	margin:16px auto 0 auto;
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:16pt;
 	font-weight:bold; 
 	color:#94745C;
@@ -321,7 +321,7 @@ p			{margin:0;}
 /********** Title of country, institution, centre, degree, course ************/
 .TITLE_LOCATION
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:20pt;
 	font-weight:bold;
 	color:#808080;
@@ -370,7 +370,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 /**************** Attribution (author and license) of images *****************/
 .ATTRIBUTION
 	{
-	font-family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif;
+	font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif;
 	color:#A0A0A0;
 	font-size:7pt;
 	max-width:400px;
@@ -412,7 +412,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .ZOOM_TXT
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#202020;
 	font-size:10pt;
 	}
@@ -422,35 +422,35 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BG_MSG_BLUE		{background-image:url('/swad/icon/blue1x36.gif'); background-repeat:repeat-x;}
 .BG_MSG_GREEN		{background-image:url('/swad/icon/green1x36.gif'); background-repeat:repeat-x;}
 
-.WHITE_DEGREE		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#707070; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.GREY_DEGREE		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFB42E; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.BLUE_DEGREE		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFE880; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_DEGREE		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFC040; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.WHITE_DEGREE		{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#707070; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.GREY_DEGREE		{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFB42E; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.BLUE_DEGREE		{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFE880; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_DEGREE		{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFC040; font-size:14pt; font-weight:bold; white-space:nowrap;}
 
-.WHITE_COURSE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:14pt; white-space:nowrap;}
-.GREY_COURSE		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#F7F6F5; font-size:14pt; white-space:nowrap;}
-.BLUE_COURSE		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
-.YELLOW_COURSE		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
+.WHITE_COURSE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:14pt; white-space:nowrap;}
+.GREY_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#F7F6F5; font-size:14pt; white-space:nowrap;}
+.BLUE_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
+.YELLOW_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
 
-.WHITE_HEAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#E0E0E0; font-size:16pt; white-space:nowrap;}
-.GREY_HEAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#E0E0E0; font-size:16pt; white-space:nowrap;}
-.BLUE_HEAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFFFFF; font-size:16pt; white-space:nowrap;}
-.YELLOW_HEAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#B3B0B3; font-size:16pt; white-space:nowrap;}
+.WHITE_HEAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#E0E0E0; font-size:16pt; white-space:nowrap;}
+.GREY_HEAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#E0E0E0; font-size:16pt; white-space:nowrap;}
+.BLUE_HEAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFFFFF; font-size:16pt; white-space:nowrap;}
+.YELLOW_HEAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#B3B0B3; font-size:16pt; white-space:nowrap;}
 
-.WHITE_USR		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
-.GREY_USR		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
-.BLUE_USR		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FFFFFF; font-size:16pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_USR		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#B3B0B3; font-size:16pt; font-weight:bold; white-space:nowrap;}
+.WHITE_USR		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
+.GREY_USR		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
+.BLUE_USR		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FFFFFF; font-size:16pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_USR		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#B3B0B3; font-size:16pt; font-weight:bold; white-space:nowrap;}
 
-.WHITE_CONNECTED	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#398000; font-size:10pt;}
-.GREY_CONNECTED		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#398000; font-size:10pt;}
-.BLUE_CONNECTED		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#398000; font-size:10pt;}
-.YELLOW_CONNECTED	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#398000; font-size:10pt;}
+.WHITE_CONNECTED	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#398000; font-size:10pt;}
+.GREY_CONNECTED		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#398000; font-size:10pt;}
+.BLUE_CONNECTED		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#398000; font-size:10pt;}
+.YELLOW_CONNECTED	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#398000; font-size:10pt;}
 
-.WHITE_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#505050; font-size:16pt;}
-.GREY_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#505050; font-size:16pt;}
-.BLUE_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt;}
-.YELLOW_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:16pt;}
+.WHITE_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#505050; font-size:16pt;}
+.GREY_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#505050; font-size:16pt;}
+.BLUE_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt;}
+.YELLOW_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:16pt;}
 
 /**************************** Icon highlighting ******************************/
 .ICON_HIDDEN
@@ -472,7 +472,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 /********************************* Tabs **************************************/
 .WHITE_TAB_ON
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#4D88A1;
 	font-size:20pt;
 	font-weight:bold;
@@ -481,7 +481,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .GREY_TAB_ON
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#606060;
 	font-size:20pt;
 	font-weight:bold;
@@ -490,7 +490,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .BLUE_TAB_ON
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#4D88A1;
 	font-size:20pt;
 	font-weight:bold;
@@ -499,7 +499,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .YELLOW_TAB_ON
 	{
-	font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif;
+	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#BD4815;
 	font-size:20pt;
 	font-weight:bold;
@@ -507,110 +507,112 @@ a:hover img.CENTRE_PHOTO_SHOW
 	white-space:nowrap;
 	}
 
-.WHITE_MENU_OFF		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#707070; font-size:20pt; line-height:110%;}
-.GREY_MENU_OFF		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#707070; font-size:20pt; line-height:110%;}
-.BLUE_MENU_OFF		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:20pt; line-height:110%;}
-.YELLOW_MENU_OFF	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:20pt; line-height:110%;}
+.WHITE_MENU_OFF		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#707070; font-size:20pt; line-height:110%;}
+.GREY_MENU_OFF		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#707070; font-size:20pt; line-height:110%;}
+.BLUE_MENU_OFF		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:20pt; line-height:110%;}
+.YELLOW_MENU_OFF	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:20pt; line-height:110%;}
 
-.WHITE_MENU_ON		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:20pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#606060; font-size:20pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:20pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:20pt; font-weight:bold; line-height:110%;}
+.WHITE_MENU_ON		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:20pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#606060; font-size:20pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:20pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:20pt; font-weight:bold; line-height:110%;}
 
-.WHITE_FORMUL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt;}
-.GREY_FORMUL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt;}
-.BLUE_FORMUL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt;}
-.YELLOW_FORMUL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:16pt;}
+.WHITE_FORMUL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt;}
+.GREY_FORMUL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt;}
+.BLUE_FORMUL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt;}
+.YELLOW_FORMUL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:16pt;}
 
-.WHITE_FORMUL_NB	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.GREY_FORMUL_NB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.BLUE_FORMUL_NB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.YELLOW_FORMUL_NB	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:16pt; white-space:nowrap;}
+.WHITE_FORMUL_NB	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.GREY_FORMUL_NB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.BLUE_FORMUL_NB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.YELLOW_FORMUL_NB	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:16pt; white-space:nowrap;}
 
-.WHITE_FORMULB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
-.GREY_FORMULB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
-.BLUE_FORMULB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
-.YELLOW_FORMULB		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF4301; font-size:16pt; font-weight:bold;}
+.WHITE_FORMULB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
+.GREY_FORMULB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
+.BLUE_FORMULB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
+.YELLOW_FORMULB		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF4301; font-size:16pt; font-weight:bold;}
 
-.FILENAME		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:18pt; font-weight:bold;}
+.FILENAME		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:18pt; font-weight:bold;}
 
-.BROWSER_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#94745C; font-size:16pt; font-weight:bold;}
-.BROWSER_TITLE_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#D5C6BB; font-size:16pt; font-weight:bold;}
-.BROWSER_SUBTITLE	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#94745C; font-size:14pt;}
+.BROWSER_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#94745C; font-size:16pt; font-weight:bold;}
+.BROWSER_TITLE_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#D5C6BB; font-size:16pt; font-weight:bold;}
+.BROWSER_SUBTITLE	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#94745C; font-size:14pt;}
 
-.T1			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:16pt;}
-.T2			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:14pt;}
-.T3			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:12pt;}
+.T1			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:16pt;}
+.T2			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:14pt;}
+.T3			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:12pt;}
 
-.LST			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
-.LST_HID		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-size:12pt; white-space:nowrap;}
-.LST_REC		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:12pt; white-space:nowrap;}
-.LST_REC_HID		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-size:12pt; white-space:nowrap;}
-.LST_EDIT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_HID		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC_HID	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.LST_HID		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#A0A0A0; font-size:12pt; white-space:nowrap;}
+.LST_REC		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:12pt; white-space:nowrap;}
+.LST_REC_HID		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#89BE87; font-size:12pt; white-space:nowrap;}
+.LST_EDIT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_HID		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#A0A0A0; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC_HID	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#89BE87; font-weight:bold; font-size:9pt; height:16px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
-.USR_ID			{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:16pt; font-weight:bold;}
+.USR_ID			{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:16pt; font-weight:bold;}
 
-.DAT			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#707070; font-size:16pt;}
-.DAT_GREEN		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:16pt;}
-.DAT_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#A0A0A0; font-size:16pt;}
-.DAT_NOBR		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#707070; font-size:16pt; white-space:nowrap;}
-.DAT_N			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:16pt;}
-.DAT_NOBR_N		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:16pt; white-space:nowrap;}
+.DAT			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#707070; font-size:16pt;}
+.DAT_GREEN		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:16pt;}
+.DAT_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#A0A0A0; font-size:16pt;}
+.DAT_NOBR		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#707070; font-size:16pt; white-space:nowrap;}
+.DAT_N			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:16pt;}
+.DAT_NOBR_N		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:16pt; white-space:nowrap;}
 
-.DAT_SMALL		{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#707070; font-size:14pt;}
-.DAT_SMALL_LIGHT	{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#A0A0A0; font-size:14pt;}
-.DAT_SMALL_NOBR		{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#707070; font-size:14pt; white-space:nowrap;}
-.DAT_SMALL_N		{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#404040; font-size:14pt;}
-.DAT_SMALL_NOBR_N	{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#404040; font-size:14pt; white-space:nowrap;}
-.DAT_SMALL_RED		{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#FF0000; font-size:14pt;}
-.DAT_SMALL_GREEN	{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#008000; font-size:14pt;}
-.DAT_SMALL_BLUE		{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#0080FF; font-size:14pt;}
-.DAT_SMALL_YELLOW	{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#C0C000; font-size:14pt;}
+.DAT_SMALL		{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:14pt;}
+.DAT_SMALL_LIGHT	{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#A0A0A0; font-size:14pt;}
+.DAT_SMALL_NOBR		{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:14pt; white-space:nowrap;}
+.DAT_SMALL_N		{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#404040; font-size:14pt;}
+.DAT_SMALL_NOBR_N	{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#404040; font-size:14pt; white-space:nowrap;}
 
-.HEAD_REC		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#808080; font-size:16pt;}
-.HEAD_REC_SMALL		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#808080; font-size:12pt;}
-.HEAD_REC_BIG		{font-family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#808080; font-size:20pt; font-weight:bold;}
-.DAT_REC		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:14pt; line-height:110%;}
-.DAT_REC_SMALL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#808080; font-size:14pt; line-height:110%;}
-.DAT_REC_SMALL_BOLD	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#202020; font-size:14pt; line-height:110%;}
-.MSJ_AVISO		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#632921; font-size:12pt;}
-.TIT_TBL		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:14pt;}
-.TIT_CLASSPHOTO		{font-Family:Georgia, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#606060; font-size:11pt;}
-.CLASSPHOTO		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#606060; font-size:11pt; line-height:100%; letter-spacing:0; white-space:nowrap;}
+.DAT_SMALL_GREY		{text-align:left; font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:14pt;}
+.DAT_SMALL_RED		{text-align:left; font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:14pt;}
+.DAT_SMALL_GREEN	{text-align:left; font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#008000; font-size:14pt;}
+.DAT_SMALL_BLUE		{text-align:left; font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#0080FF; font-size:14pt;}
+.DAT_SMALL_YELLOW	{text-align:left; font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#C0C000; font-size:14pt;}
 
-.GRP_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
+.HEAD_REC		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:16pt;}
+.HEAD_REC_SMALL		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:12pt;}
+.HEAD_REC_BIG		{font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#808080; font-size:20pt; font-weight:bold;}
+.DAT_REC		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:14pt; line-height:110%;}
+.DAT_REC_SMALL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#808080; font-size:14pt; line-height:110%;}
+.DAT_REC_SMALL_BOLD	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#202020; font-size:14pt; line-height:110%;}
+.MSJ_AVISO		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#632921; font-size:12pt;}
+.TIT_TBL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:14pt;}
+.TIT_CLASSPHOTO		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#606060; font-size:11pt;}
+.CLASSPHOTO		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#606060; font-size:11pt; line-height:100%; letter-spacing:0; white-space:nowrap;}
 
-.ASG_TITLE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
-.ASG_TITLE_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:16pt; font-weight:bold;}
-.ASG_GRP		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:12pt;}
-.ASG_GRP_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:12pt;}
-.DATE_GREEN		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:14pt;}
-.DATE_GREEN_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-size:14pt;}
-.DATE_RED		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:14pt;}
-.DATE_RED_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#F98A8A; font-size:14pt;}
+.GRP_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
 
-.ASG_LST_DATE_GREEN	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:12pt; white-space:nowrap;}
-.ASG_LST_DATE_RED	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:12pt; white-space:nowrap;}
+.ASG_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
+.ASG_TITLE_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:16pt; font-weight:bold;}
+.ASG_GRP		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:12pt;}
+.ASG_GRP_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:12pt;}
+.DATE_GREEN		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:14pt;}
+.DATE_GREEN_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#89BE87; font-size:14pt;}
+.DATE_RED		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:14pt;}
+.DATE_RED_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#F98A8A; font-size:14pt;}
 
-.STATUS_GREEN		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:14pt;}
-.STATUS_GREEN_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#89BE87; font-size:14pt;}
-.STATUS_RED		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:14pt;}
-.STATUS_RED_LIGHT	{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#F98A8A; font-size:14pt;}
+.ASG_LST_DATE_GREEN	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:12pt; white-space:nowrap;}
+.ASG_LST_DATE_RED	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:12pt; white-space:nowrap;}
 
-.ANS			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:16pt; font-weight:bold;}
-.ANS_OK			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#008000; font-size:16pt; font-weight:bold;}
-.ANS_BAD		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#FF0000; font-size:16pt; font-weight:bold;}
-.TST_TIT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:20pt;}
-.TEST			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#404040; font-size:14pt;}
-.TEST_EXA		{font-Family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#404040; font-size:14pt;}
-.TEST_EXA_LIGHT		{font-Family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#A0A0A0; font-size:14pt;}
-.TEST_EDI		{font-Family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#404040; font-size:14pt;}
-.TEST_EDI_LIGHT		{font-Family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#A0A0A0; font-size:14pt;}
+.STATUS_GREEN		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:14pt;}
+.STATUS_GREEN_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#89BE87; font-size:14pt;}
+.STATUS_RED		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:14pt;}
+.STATUS_RED_LIGHT	{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#F98A8A; font-size:14pt;}
 
-.HOR			{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#345C6C; font-size:12pt; line-height:110%; letter-spacing:0;}
+.ANS			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:16pt; font-weight:bold;}
+.ANS_OK			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#008000; font-size:16pt; font-weight:bold;}
+.ANS_BAD		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#FF0000; font-size:16pt; font-weight:bold;}
+.TST_TIT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:20pt;}
+.TEST			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#404040; font-size:14pt;}
+.TEST_EXA		{font-Family:Courier New, "DejaVu LGC Sans" Mono, "Bitstream Vera Sans" Mono, monospace; color:#404040; font-size:14pt;}
+.TEST_EXA_LIGHT		{font-Family:Courier New, "DejaVu LGC Sans" Mono, "Bitstream Vera Sans" Mono, monospace; color:#A0A0A0; font-size:14pt;}
+.TEST_EDI		{font-Family:Courier New, "DejaVu LGC Sans" Mono, "Bitstream Vera Sans" Mono, monospace; color:#404040; font-size:14pt;}
+.TEST_EDI_LIGHT		{font-Family:Courier New, "DejaVu LGC Sans" Mono, "Bitstream Vera Sans" Mono, monospace; color:#A0A0A0; font-size:14pt;}
+
+.HOR			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#345C6C; font-size:12pt; line-height:110%; letter-spacing:0;}
 .FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
 .FREE1			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
 .FREE2			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
@@ -619,7 +621,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PRAC			{background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
 .TUTO			{background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
-.CUR_TIME		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#BAD2DA; font-size:12pt; font-weight:bold;}
+.CUR_TIME		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#BAD2DA; font-size:12pt; font-weight:bold;}
 
 .USR_LIST_TYPE_OFF	{border:solid 1px; border-color:#FFFFFF;}
 .USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
@@ -627,26 +629,26 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LAYOUT_OFF		{border:solid; border-width:0;}
 .LAYOUT_ON		{border:solid; border-width:1px; border-color:#80E000;}
 
-.LOG			{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#606060; font-size:9pt;}
-.LOG_R			{font-Family:Arial Narrow, Nimbus Sans L, DejaVu LGC Sans Condensed, sans-serif; color:#FF0000; font-size:9pt;}
+.LOG			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#606060; font-size:9pt;}
+.LOG_R			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:9pt;}
 
-.MSG_TXT		{font-Family:Courier New, DejaVu LGC Sans Mono, Bitstream Vera Sans Mono, monospace; color:#404040; font-size:10pt;}
+.MSG_TXT		{font-Family:Courier New, "DejaVu LGC Sans" Mono, "Bitstream Vera Sans" Mono, monospace; color:#404040; font-size:10pt;}
 
-.MSG_TIT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:10pt;}
-.MSG_TIT_NEW		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:10pt; font-weight:bold;}
-.MSG_TIT_REM		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:10pt;}
-.MSG_TIT_BG		{background-image:url('/swad/icon/blue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:10pt;}
-.MSG_TIT_BG_NEW		{background-image:url('/swad/icon/green1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:10pt; font-weight:bold;}
-.MSG_TIT_BG_REM		{background-image:url('/swad/icon/lightblue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:10pt;}
+.MSG_TIT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:10pt;}
+.MSG_TIT_NEW		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:10pt; font-weight:bold;}
+.MSG_TIT_REM		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:10pt;}
+.MSG_TIT_BG		{background-image:url('/swad/icon/blue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:10pt;}
+.MSG_TIT_BG_NEW		{background-image:url('/swad/icon/green1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:10pt; font-weight:bold;}
+.MSG_TIT_BG_REM		{background-image:url('/swad/icon/lightblue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:10pt;}
 
-.MSG_AUT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt;}
-.MSG_AUT_LIGHT		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:9pt;}
-.MSG_AUT_NEW		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
-.MSG_AUT_BG		{background-image:url('/swad/icon/blue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt;}
-.MSG_AUT_BG_NEW		{background-image:url('/swad/icon/green1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
-.MSG_AUT_BG_REM		{background-image:url('/swad/icon/lightblue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#AFC4CC; font-size:9pt;}
-.MSG_DATE		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt;}
-.MSG_DATE_NEW		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
+.MSG_AUT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt;}
+.MSG_AUT_LIGHT		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:9pt;}
+.MSG_AUT_NEW		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
+.MSG_AUT_BG		{background-image:url('/swad/icon/blue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt;}
+.MSG_AUT_BG_NEW		{background-image:url('/swad/icon/green1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
+.MSG_AUT_BG_REM		{background-image:url('/swad/icon/lightblue1x36.gif'); background-repeat:repeat-x; font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#AFC4CC; font-size:9pt;}
+.MSG_DATE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt;}
+.MSG_DATE_NEW		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:9pt; font-weight:bold;}
 .BT			{width:16px; text-align:left; vertical-align:top;}
 .BT0			{width:16px; text-align:left; vertical-align:top; background-color:#F4F2EA;}
 .BT1			{width:16px; text-align:left; vertical-align:top; background-color:#FBFAF7;}
@@ -655,12 +657,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BM0			{width:16px; text-align:left; vertical-align:middle; background-color:#F4F2EA;}
 .BM1			{width:16px; text-align:left; vertical-align:middle; background-color:#FBFAF7;}
 
-.CONV_TIT		{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#404040; font-weight:bold; font-size:14pt;}
-.CONV_TIT_IMPR		{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#202020; font-weight:bold; font-size:14pt;}
-.CONV_NEG		{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#404040; font-weight:bold; font-size:11pt; white-space:nowrap;}
-.CONV_NEG_IMPR		{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#202020; font-weight:bold; font-size:11pt; white-space:nowrap;}
-.CONV			{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#404040; font-size:11pt;}
-.CONV_IMPR		{font-Family:Garamond, DejaVu LGC Serif, Bitstream Vera Serif, serif; color:#202020; font-size:11pt;}
+.CONV_TIT		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-weight:bold; font-size:14pt;}
+.CONV_TIT_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-weight:bold; font-size:14pt;}
+.CONV_NEG		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-weight:bold; font-size:11pt; white-space:nowrap;}
+.CONV_NEG_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-weight:bold; font-size:11pt; white-space:nowrap;}
+.CONV			{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-size:11pt;}
+.CONV_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-size:11pt;}
 
-.CON			{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}
-.CON_CRS		{font-Family:Arial, Nimbus Sans L, DejaVu LGC Sans, Bitstream Vera Sans, sans-serif; color:#398000; font-size:9pt; line-height:110%; white-space:nowrap;}
+.CON			{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}
+.CON_CRS		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#398000; font-size:9pt; line-height:110%; white-space:nowrap;}

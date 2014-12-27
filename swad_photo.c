@@ -1400,8 +1400,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	                 "<table class=\"CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
       /***** Put a selector for the type of average *****/
       Pho_PutSelectorForTypeOfAvg ();
@@ -1412,8 +1411,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Put a selector for the order of degrees *****/
       Pho_PutSelectorForHowOrderDegrees ();
 
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Form to select type of list used to display degree photos *****/
       Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);

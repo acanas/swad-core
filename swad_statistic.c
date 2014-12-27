@@ -393,8 +393,7 @@ void Sta_AskSeeCrsAccesses (void)
 
          /***** Draw two class photographs with the users: one for teachers of the course and another one for students *****/
          /* Start the table */
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                            "<table style=\"border-spacing:4px;\">"
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" style=\"text-align:left;\">");
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
@@ -479,7 +478,8 @@ void Sta_AskSeeCrsAccesses (void)
          Sta_PutSeeAccessesButton ();
 
          /***** Form end *****/
-         fprintf (Gbl.F.Out,"</table></div></form>");
+         fprintf (Gbl.F.Out,"</table>"
+                            "</form>");
 
          /* Free the memory used by the list of users */
          Usr_FreeListsEncryptedUsrCods ();
@@ -513,8 +513,7 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    /***** Start and end dates for the search *****/
    Dat_WriteFormIniEndDates ();
@@ -597,7 +596,8 @@ void Sta_AskSeeGblAccesses (void)
    Sta_PutSeeAccessesButton ();
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</table></div></form>");
+   fprintf (Gbl.F.Out,"</table>"
+                      "</form>");
   }
 
 /*****************************************************************************/

@@ -310,8 +310,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
         }
 
       /* Start table */
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	                 "<table>"
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	                 "<tr>"
 	                 "<td class=\"%s\" style=\"text-align:right;"
 	                 " vertical-align:top;\">"
@@ -342,8 +341,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Send and undo buttons *****/
       Lay_PutSendButton (Txt_Send_message);
@@ -2214,7 +2212,8 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShortName);
      }
-   fprintf (Gbl.F.Out,"</select></div>");
+   fprintf (Gbl.F.Out,"</select>"
+	              "</div>");
   }
 
 /*****************************************************************************/
@@ -2229,8 +2228,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    extern const char *Txt_MSG_Message;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<table>");
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2260,8 +2258,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** Table end *****/
-   fprintf (Gbl.F.Out,"</table>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

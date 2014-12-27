@@ -4074,6 +4074,7 @@ void Act_ShowMyMFUActions (void)
 void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *The_ClassFormulNB[The_NUM_THEMES];
+   extern const char *Txt_Frequent_actions;
    extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
    extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
@@ -4082,7 +4083,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
    char ActionStr[128];
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Frequent_actions);
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;

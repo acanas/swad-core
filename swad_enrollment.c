@@ -687,7 +687,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Start of text area *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s\""
                       " style=\"text-align:right; vertical-align:top;\">"
@@ -1926,8 +1926,7 @@ void Enr_ShowEnrollmentRequests (void)
    /***** Selection of scope and roles *****/
    /* Start form */
    Act_FormStart (ActSeeSignUpReq);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<table style=\"border-spacing:4px;\">");
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:4px;\">");
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
@@ -1978,8 +1977,7 @@ void Enr_ShowEnrollmentRequests (void)
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
    /* Form end */
-   fprintf (Gbl.F.Out,"</table>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</table>");
    Lay_PutSendButton (Txt_Update);
    fprintf (Gbl.F.Out,"</form>");
 

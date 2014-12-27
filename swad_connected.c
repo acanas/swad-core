@@ -220,7 +220,7 @@ void Con_GetAndShowLastClicks (void)
                   ActCod == Act_Actions[ActAutUsrExt].ActCod) ? "DAT_SMALL_GREEN" :
                  (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED" :
                  (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE" :
-                                                                "DAT_SMALL";
+                                                                "DAT_SMALL_GREY";
 
       /* Get degree code (row[4]) */
       Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -228,11 +228,21 @@ void Con_GetAndShowLastClicks (void)
 
       /* Print table row */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\">%s</td>"
-                         "<td class=\"%s\">%s</td>"
-                         "<td class=\"%s\">%s</td>"
-                         "<td class=\"%s\">%s</td>"
-                         "<td class=\"%s\">%s</td>"
+                         "<td class=\"%s\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"
+                         "</td>"
 			 "</tr>",
                ClassRow,row[0],
                ClassRow,row[2],

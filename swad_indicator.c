@@ -91,8 +91,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Form to update indicators *****/
    /* Start form */
    Act_FormStart (ActReqStaCrs);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    /* Compute stats for anywhere, centre, degree or course? */
    fprintf (Gbl.F.Out,"<tr>"
@@ -168,8 +167,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Form end */
    fprintf (Gbl.F.Out,"</td>"
-	              "</table>"
-	              "</div>");
+	              "</table>");
    Lay_PutSendButton (Txt_Update_indicators);
    fprintf (Gbl.F.Out,"</form>");
 
