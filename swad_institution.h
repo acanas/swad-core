@@ -97,7 +97,7 @@ void Ins_SeeInsWithPendingCtrs (void);
 void Ins_ShowConfiguration (void);
 void Ins_PrintConfiguration (void);
 
-void Ins_PutLinkToViewInstitutionsOfCurrentCty (void);
+// void Ins_PutLinkToViewInstitutionsOfCurrentCty (void);
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);

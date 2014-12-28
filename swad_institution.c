@@ -463,13 +463,13 @@ static void Ins_Configuration (bool PrintView)
 /********* Put a link (form) to view institutions of current country *********/
 /*****************************************************************************/
 // Gbl.CurrentCty.Cty.CtyCod must be > 0
-
+/*
 void Ins_PutLinkToViewInstitutionsOfCurrentCty (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_of_COUNTRY_X;
 
-   /***** Put form to view institutions of current country *****/
+   ***** Put form to view institutions of current country *****
    Act_FormStart (ActSeeIns);
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
@@ -477,7 +477,7 @@ void Ins_PutLinkToViewInstitutionsOfCurrentCty (void)
    Lay_PutSendIcon ("ins",Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</form>");
   }
-
+*/
 /*****************************************************************************/
 /**************** List the institutions of the current country ***************/
 /*****************************************************************************/

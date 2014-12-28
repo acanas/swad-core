@@ -75,7 +75,7 @@ static void Crs_PutFormToConfigLogIn (bool IsForm);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
-static void Crs_PutLinkToViewCoursesOfCurrentDeg (void);
+// static void Crs_PutLinkToViewCoursesOfCurrentDeg (void);
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
@@ -538,74 +538,312 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_My_courses;
+   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
    extern const char *Txt_Go_to_X;
-   unsigned NumMyCrs;
+   struct Country Cty;
+   struct Institution Ins;
+   struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
-   char CourseFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];	// Full name of course
+   bool IsLastItemInLevel[1+5];
+   MYSQL_RES *mysql_resCty;
+   MYSQL_RES *mysql_resIns;
+   MYSQL_RES *mysql_resCtr;
+   MYSQL_RES *mysql_resDeg;
+   MYSQL_RES *mysql_resCrs;
+   MYSQL_ROW row;
+   unsigned NumCty,NumCtys;
+   unsigned NumIns,NumInss;
+   unsigned NumCtr,NumCtrs;
+   unsigned NumDeg,NumDegs;
+   unsigned NumCrs,NumCrss;
    char PathRelRSSFile[PATH_MAX+1];
 
-   /***** Start form *****/
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char Icon[512];
+
+   /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_My_courses);
+
+   /***** Write link to country *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:left;\">"
-                      "<ul style=\"list-style-type:none;"
-                      " padding:0; margin:0;\">");
+	              "<td class=\"%s\""
+		      " style=\"text-align:left; vertical-align:middle;\">",
+	    The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_FormGoToStart (ActMnu);
+   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
+   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[TabSys],
+		       The_ClassFormul[Gbl.Prefs.Theme]);
+   /* Country map */
+   fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\" alt=\"%s\" title=\"%s\""
+		      " style=\"width:16px; height:16px;\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_TABS_FULL_TXT[TabSys],
+	    Txt_TABS_FULL_TXT[TabSys]);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TABS_FULL_TXT[TabSys]);
+   fprintf (Gbl.F.Out,"</a>"
+		      "</form>"
+		      "</td>"
+		      "</tr>");
 
-   /***** Write an option for each of my courses *****/
-   for (NumMyCrs = 0;
-	NumMyCrs < Gbl.Usrs.Me.MyCourses.Num;
-	NumMyCrs++)
+   /***** Get my countries *****/
+   NumCtys = Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
+   for (NumCty = 0;
+	NumCty < NumCtys;
+	NumCty++)
      {
-      /* Get data of this course */
-      Crs.CrsCod = Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
-      Deg.DegCod = Crs.DegCod;
-      Deg_GetDataOfDegreeByCod (&Deg);
+      /***** Get next institution *****/
+      row = mysql_fetch_row (mysql_resCty);
 
-      strcpy (CourseFullName,Crs.FullName);
-      Str_LimitLengthHTMLStr (CourseFullName,Crs_MAX_LENGTH_FULL_NAME_COURSE_ON_LIST_OF_MY_COURSES);
+      /***** Get data of this institution *****/
+      Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
+      if (!Cty_GetDataOfCountryByCod (&Cty))
+	 Lay_ShowErrorAndExit ("Country not found.");
 
-      /* Start list entry */
-      fprintf (Gbl.F.Out,"<li");
-      if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out," class=\"%s\">",The_ClassFormul[Gbl.Prefs.Theme]);
+      /***** Start row *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td style=\"text-align:left; vertical-align:top;\">"
+			 "<table>"
+			 "<tr>");
 
-      /* Put form to go to one of my courses */
-      Act_FormGoToStart (ActSeeCrsInf);
-      Crs_PutParamCrsCod (Crs.CrsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
-      Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" alt=\"%s\""
-	                 " class=\"ICON16x16\""
-	                 " style=\"vertical-align:middle;\" />"
-                         " %s &gt; %s</a>"
-                         "</form>",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,Deg.Logo,Deg.ShortName,
-               Deg.ShortName,CourseFullName);
+      /***** Indent country *****/
+      IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
+      Msg_IndentDependingOnLevel (1,IsLastItemInLevel);
 
-      /* Write link to RSS file */
-      sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-      if (!Fil_CheckIfPathExists (PathRelRSSFile))
-         RSS_UpdateRSSFileForACrs (&Crs);
-      fprintf (Gbl.F.Out," <a href=\"");
-      RSS_WriteRSSLink (Gbl.F.Out,Crs.CrsCod);
-      fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-	                 "<img src=\"%s/rss16x16.gif\" alt=\"RSS\""
-	                 " class=\"ICON16x16\""
-	                 " style=\"vertical-align:middle;\" />"
-	                 "</a>",
-               Gbl.Prefs.IconsURL);
+      /***** Write link to country *****/
+      fprintf (Gbl.F.Out,"<td class=\"%s\""
+			 " style=\"text-align:left; vertical-align:middle;\">",
+	       The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_FormStart (ActSeeCtyInf);
+      Cty_PutParamCtyCod (Cty.CtyCod);
+      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
+			  The_ClassFormul[Gbl.Prefs.Theme]);
+      /* Country map */
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" alt=\"%s\" title=\"%s\""
+	                 " style=\"width:16px; height:16px;\" />",
+	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
+	       Cty.Alpha2,
+	       Cty.Alpha2,
+	       Cty.Alpha2,
+	       Cty.Name[Gbl.Prefs.Language]);
+      fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
+      fprintf (Gbl.F.Out,"</a>"
+			 "</form>"
+			 "</td>"
+			 "</tr>"
+			 "</table>"
+			 "</td>"
+			 "</tr>");
 
-      /* End list entry */
-      fprintf (Gbl.F.Out,"</li>");
+      /***** Get my institutions in this country *****/
+      NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Cty.CtyCod,&mysql_resIns);
+      for (NumIns = 0;
+	   NumIns < NumInss;
+	   NumIns++)
+	{
+	 /***** Get next institution *****/
+	 row = mysql_fetch_row (mysql_resIns);
+
+	 /***** Get data of this institution *****/
+	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
+	    Lay_ShowErrorAndExit ("Institution not found.");
+
+	 /***** Start row *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td style=\"text-align:left; vertical-align:top;\">"
+			    "<table>"
+			    "<tr>");
+
+	 /***** Indent institution *****/
+	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
+	 Msg_IndentDependingOnLevel (2,IsLastItemInLevel);
+
+	 /***** Write link to institution *****/
+	 fprintf (Gbl.F.Out,"<td class=\"%s\""
+			    " style=\"text-align:left; vertical-align:middle;\">",
+		  The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_FormStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Ins.InsCod);
+	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
+	                     The_ClassFormul[Gbl.Prefs.Theme]);
+	 Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,"vertical-align:top;");
+	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
+	 fprintf (Gbl.F.Out,"</a>"
+			    "</form>"
+			    "</td>"
+			    "</tr>"
+			    "</table>"
+			    "</td>"
+			    "</tr>");
+
+	 /***** Get my centres in this institution *****/
+	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Ins.InsCod,&mysql_resCtr);
+	 for (NumCtr = 0;
+	      NumCtr < NumCtrs;
+	      NumCtr++)
+	   {
+	    /***** Get next centre *****/
+	    row = mysql_fetch_row (mysql_resCtr);
+
+	    /***** Get data of this centre *****/
+	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	       Lay_ShowErrorAndExit ("Centre not found.");
+
+	    /***** Start row *****/
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td style=\"text-align:left; vertical-align:top;\">"
+			       "<table>"
+			       "<tr>");
+
+	    /***** Indent centre *****/
+	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
+	    Msg_IndentDependingOnLevel (3,IsLastItemInLevel);
+
+	    /***** Write link to centre *****/
+	    fprintf (Gbl.F.Out,"<td class=\"%s\""
+			       " style=\"text-align:left; vertical-align:middle;\">",
+		     The_ClassFormul[Gbl.Prefs.Theme]);
+	    Act_FormStart (ActSeeCtrInf);
+	    Ctr_PutParamCtrCod (Ctr.CtrCod);
+	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
+	                        The_ClassFormul[Gbl.Prefs.Theme]);
+	    Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:top;");
+	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
+	    fprintf (Gbl.F.Out,"</a>"
+			       "</form>"
+			       "</td>"
+			       "</tr>"
+			       "</table>"
+			       "</td>"
+			       "</tr>");
+
+	    /***** Get my degrees in this centre *****/
+	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Ctr.CtrCod,&mysql_resDeg);
+	    for (NumDeg = 0;
+		 NumDeg < NumDegs;
+		 NumDeg++)
+	      {
+	       /***** Get next degree *****/
+	       row = mysql_fetch_row (mysql_resDeg);
+
+	       /***** Get data of this degree *****/
+	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
+	       if (!Deg_GetDataOfDegreeByCod (&Deg))
+		  Lay_ShowErrorAndExit ("Degree not found.");
+
+	       /***** Start row *****/
+	       fprintf (Gbl.F.Out,"<tr>"
+				  "<td style=\"text-align:left; vertical-align:top;\">"
+				  "<table>"
+				  "<tr>");
+
+	       /***** Indent degree *****/
+	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
+	       Msg_IndentDependingOnLevel (4,IsLastItemInLevel);
+
+	       /***** Write link to degree *****/
+	       fprintf (Gbl.F.Out,"<td class=\"%s\""
+				  " style=\"text-align:left; vertical-align:middle;\">",
+			The_ClassFormul[Gbl.Prefs.Theme]);
+	       Act_FormStart (ActSeeDegInf);
+	       Deg_PutParamDegCod (Deg.DegCod);
+	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
+	                           The_ClassFormul[Gbl.Prefs.Theme]);
+	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:top;");
+	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	       fprintf (Gbl.F.Out,"</a>"
+				  "</form>"
+				  "</td>"
+				  "</tr>"
+				  "</table>"
+				  "</td>"
+				  "</tr>");
+
+	       /***** Get my courses in this degree *****/
+	       NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_resCrs);
+	       for (NumCrs = 0;
+		    NumCrs < NumCrss;
+		    NumCrs++)
+		 {
+		  /***** Get next course *****/
+		  row = mysql_fetch_row (mysql_resCrs);
+
+		  /***** Get data of this course *****/
+		  Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+		  if (!Crs_GetDataOfCourseByCod (&Crs))
+		     Lay_ShowErrorAndExit ("Course not found.");
+
+		  /***** Start row *****/
+		  fprintf (Gbl.F.Out,"<tr>"
+				     "<td style=\"text-align:left; vertical-align:top;\">"
+				     "<table>"
+				     "<tr>");
+
+		  /***** Indent course *****/
+		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
+		  Msg_IndentDependingOnLevel (5,IsLastItemInLevel);
+
+		  /***** Write link to course *****/
+		  fprintf (Gbl.F.Out,"<td class=\"%s\""
+				     " style=\"text-align:left; vertical-align:middle;\">",
+			   The_ClassFormul[Gbl.Prefs.Theme]);
+		  Act_FormStart (ActSeeCrsInf);
+		  Crs_PutParamCrsCod (Crs.CrsCod);
+		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
+		  Act_LinkFormSubmit (Gbl.Title,
+		                      The_ClassFormul[Gbl.Prefs.Theme]);
+		  sprintf (Icon,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
+				" class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+			   Gbl.Prefs.IconsURL,
+			   Crs.ShortName);
+		  fprintf (Gbl.F.Out,"%s",Icon);
+		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
+
+		  /***** Write link to RSS file *****/
+		  sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
+			   Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+		  if (!Fil_CheckIfPathExists (PathRelRSSFile))
+		     RSS_UpdateRSSFileForACrs (&Crs);
+		  fprintf (Gbl.F.Out," <a href=\"");
+		  RSS_WriteRSSLink (Gbl.F.Out,Crs.CrsCod);
+		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
+				     "<img src=\"%s/rss16x16.gif\" alt=\"RSS\""
+				     " class=\"ICON16x16\""
+				     " style=\"vertical-align:middle;\" />"
+				     "</a>",
+			   Gbl.Prefs.IconsURL);
+
+		  fprintf (Gbl.F.Out,"</a>"
+				     "</form>"
+				     "</td>"
+				     "</tr>"
+				     "</table>"
+				     "</td>"
+				     "</tr>");
+		 }
+
+	       /* Free structure that stores the query result */
+	       DB_FreeMySQLResult (&mysql_resCrs);
+	      }
+
+	    /* Free structure that stores the query result */
+	    DB_FreeMySQLResult (&mysql_resDeg);
+	   }
+
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_resCtr);
+	}
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_resIns);
      }
 
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</td>"
-	              "</tr>");
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_resCty);
+
+   /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
   }
 
@@ -711,13 +949,13 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /************ Put a link (form) to view courses of current degree ************/
 /*****************************************************************************/
 // Gbl.CurrentDeg.Deg.DegCod must be > 0
-
+/*
 static void Crs_PutLinkToViewCoursesOfCurrentDeg (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Courses_of_DEGREE_X;
 
-   /***** Put form to view courses of current degree *****/
+   ***** Put form to view courses of current degree *****
    Act_FormStart (ActSeeCrs);
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
@@ -725,7 +963,7 @@ static void Crs_PutLinkToViewCoursesOfCurrentDeg (void)
    Lay_PutSendIcon ("hierarchy",Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</form>");
   }
-
+*/
 /*****************************************************************************/
 /************************** Show courses of a degree *************************/
 /*****************************************************************************/
@@ -2768,6 +3006,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
    /***** Search / select more courses *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Crs_PutLinkToSearchCourses ();
+   /*
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       Crs_PutLinkToViewCoursesOfCurrentDeg ();
    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
@@ -2778,6 +3017,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
       Ins_PutLinkToViewInstitutionsOfCurrentCty ();
    else
       Cty_PutLinkToViewCountries ();
+   */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Select one of my courses *****/

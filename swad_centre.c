@@ -510,13 +510,13 @@ static void Ctr_Configuration (bool PrintView)
 /********* Put a link (form) to view centres of current institution **********/
 /*****************************************************************************/
 // Gbl.CurrentIns.Ins.InsCod must be > 0
-
+/*
 void Ctr_PutLinkToViewCentresOfCurrentIns (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Centres_of_INSTITUTION_X;
 
-   /***** Put form to view centres of current institution *****/
+   ***** Put form to view centres of current institution *****
    Act_FormStart (ActSeeCtr);
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.ShortName);
@@ -524,7 +524,7 @@ void Ctr_PutLinkToViewCentresOfCurrentIns (void)
    Lay_PutSendIcon ("ctr",Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</form>");
   }
-
+*/
 /*****************************************************************************/
 /*************** Show the centres of the current institution *****************/
 /*****************************************************************************/

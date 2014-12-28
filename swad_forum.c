@@ -1648,7 +1648,7 @@ void For_ShowForumList (void)
             For_WriteLinksToInsForums (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod,(NumMyIns == Gbl.Usrs.Me.MyInstitutions.Num-1),IsLastItemInLevel);
 
             /* Get my centres in this institution from database */
-            if ((NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Forum.Ins.InsCod,&mysql_resCtr)) > 0) // Degrees found in this institution
+            if ((NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Forum.Ins.InsCod,&mysql_resCtr)) > 0) // Centres found in this institution
                for (NumCtr = 0;
         	    NumCtr < NumCtrs;
         	    NumCtr++)
@@ -1861,7 +1861,7 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastIte
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
 	                     Rol_GetMyMaxRoleInCtr (CtrCod) >= Rol_ROLE_TEACHER);
 
-      /***** Get data of this degree *****/
+      /***** Get data of this centre *****/
       Gbl.Forum.Ctr.CtrCod = CtrCod;
       if (!Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr))
          Lay_ShowErrorAndExit ("Centre not found.");

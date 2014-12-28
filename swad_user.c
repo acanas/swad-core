@@ -764,7 +764,7 @@ void Usr_GetMyInstitutions (void)
       Gbl.Usrs.Me.MyInstitutions.Num = 0;
 
       /***** Get my institutions from database *****/
-      if ((NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res)) > 0) // Institutions found
+      if ((NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Institutions found
          for (NumIns = 0;
               NumIns < NumInss;
               NumIns++)
@@ -783,7 +783,7 @@ void Usr_GetMyInstitutions (void)
 
                Gbl.Usrs.Me.MyInstitutions.Num++;
               }
-   }
+           }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1070,25 +1070,63 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/************** Get the institutions of a user from database *****************/
+/**************** Get the countries of a user from database ******************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned long Usr_GetInssFromUsr (long UsrCod,MYSQL_RES **mysql_res)
+unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
   {
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    char Query[512];
 
    /***** Get the institutions a user belongs to from database *****/
-   sprintf (Query,"SELECT institutions.InsCod,MAX(crs_usr.Role)"
-                  " FROM crs_usr,courses,degrees,centres,institutions"
+   sprintf (Query,"SELECT countries.CtyCod,MAX(crs_usr.Role)"
+                  " FROM crs_usr,courses,degrees,centres,institutions,countries"
                   " WHERE crs_usr.UsrCod='%ld'"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
                   " AND centres.InsCod=institutions.InsCod"
-                  " GROUP BY institutions.InsCod"
-                  " ORDER BY institutions.ShortName",
-            UsrCod);
+                  " AND institutions.CtyCod=countries.CtyCod"
+                  " GROUP BY countries.CtyCod"
+                  " ORDER BY countries.Name_%s",
+            UsrCod,Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+   return (unsigned) DB_QuerySELECT (Query,mysql_res,"can not get the countries a user belongs to");
+  }
+
+/*****************************************************************************/
+/************** Get the institutions of a user from database *****************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
+  {
+   char Query[512];
+
+   /***** Get the institutions a user belongs to from database *****/
+   if (CtyCod > 0)
+      sprintf (Query,"SELECT institutions.InsCod,MAX(crs_usr.Role)"
+		     " FROM crs_usr,courses,degrees,centres,institutions"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod=degrees.DegCod"
+		     " AND degrees.CtrCod=centres.CtrCod"
+		     " AND centres.InsCod=institutions.InsCod"
+		     " AND institutions.CtyCod='%ld'"
+		     " GROUP BY institutions.InsCod"
+		     " ORDER BY institutions.ShortName",
+	       UsrCod,CtyCod);
+   else
+      sprintf (Query,"SELECT institutions.InsCod,MAX(crs_usr.Role)"
+		     " FROM crs_usr,courses,degrees,centres,institutions"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod=degrees.DegCod"
+		     " AND degrees.CtrCod=centres.CtrCod"
+		     " AND centres.InsCod=institutions.InsCod"
+		     " GROUP BY institutions.InsCod"
+		     " ORDER BY institutions.ShortName",
+	       UsrCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get the institutions a user belongs to");
   }
 

@@ -630,7 +630,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
 
-   /***** Form to go to the country *****/
+   /***** Form to go to the system *****/
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[TabSys],
@@ -970,13 +970,13 @@ void Deg_ReqEditDegreeTypes (void)
 /*********** Put a link (form) to view degrees of current centre *************/
 /*****************************************************************************/
 // Gbl.CurrentCtr.Ctr.CtrCod must be > 0
-
+/*
 void Deg_PutLinkToViewDegreesOfCurrentCtr (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Degrees_of_CENTRE_X;
 
-   /***** Put form to view degrees of current centre *****/
+   ***** Put form to view degrees of current centre *****
    Act_FormStart (ActSeeDeg);
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
@@ -984,7 +984,7 @@ void Deg_PutLinkToViewDegreesOfCurrentCtr (void)
    Lay_PutSendIcon ("deg",Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</form>");
   }
-
+*/
 /*****************************************************************************/
 /************* Show the degrees belonging to the current centre **************/
 /*****************************************************************************/
