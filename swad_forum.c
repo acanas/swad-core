@@ -259,6 +259,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
+static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
@@ -2122,11 +2123,12 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    /***** Write total number of threads and posts in this forum *****/
    if (ShowNumOfPosts)
      {
-      NumPosts = For_GetNumPstsInForum (ForumType);
-      For_WriteNumThrsAndPsts (NumThrs,NumThrsWithNewPosts,NumPosts);
+      if ((NumPosts = For_GetNumPstsInForum (ForumType)))
+         For_WriteNumThrsAndPsts (NumThrs,NumThrsWithNewPosts,NumPosts);
      }
    else
-      For_WriteNumberOfThrs (NumThrs,NumThrsWithNewPosts);
+      if (NumThrs)
+         For_WriteNumberOfThrs (NumThrs,NumThrsWithNewPosts);
 
    fprintf (Gbl.F.Out,"</a>"
 	              "</form>"
@@ -2486,7 +2488,7 @@ static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts
 /*************** Get and write total number of threads and posts *************/
 /*****************************************************************************/
 
-void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts)
+static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts)
   {
    extern const char *Txt_thread;
    extern const char *Txt_threads;

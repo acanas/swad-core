@@ -129,7 +129,6 @@ void For_SetForumName (For_ForumType_t ForumType,
                        char *ForumName,Txt_Language_t Language,bool UseHTMLEntities);
 unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned NumThreads);
 void For_ShowForumThrs (void);
-void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
                                       long InsCod,long CtrCod,long DegCod,long CrsCod);
 unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
