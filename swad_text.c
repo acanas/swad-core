@@ -16271,46 +16271,25 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia<br />de ensino"
 #endif
 	,
-	// ActSeeSylLec
+	// ActSeeSyl
 #if   L==0
-	"Programa<br />teoria"
+	"Programa"
 #elif L==1
-	"Studienplan<br />(Vorlesungen)"
+	"Studienplan"
 #elif L==2
-	"Syllabus<br />(lectures)"
+	"Syllabus"
 #elif L==3
-	"Programa<br />teor&iacute;a"
+	"Programa"
 #elif L==4
-	"Plan<br />th&eacute;orie"
+	"Plan"
 #elif L==5
-	"Programa<br />teor&iacute;a"	// Okoteve traducción
+	"Programa"	// Okoteve traducción
 #elif L==6
-	"Programma<br />teoria"
+	"Programma"
 #elif L==7
-	"Program<br />(wyklady)"
+	"Program"
 #elif L==8
-	"Programa<br />teoria"
-#endif
-	,
-	// ActSeeSylPra
-#if   L==0
-	"Programa<br />pr&agrave;ctiques"
-#elif L==1
-	"Studienplan<br />(&Uuml;bungen)"
-#elif L==2
-	"Syllabus<br />(practicals)"
-#elif L==3
-	"Programa<br />pr&aacute;cticas"
-#elif L==4
-	"Plan<br />pratique"
-#elif L==5
-	"Programa<br />pr&aacute;cticas"	// Okoteve traducción
-#elif L==6
-	"Programma<br />pratica"
-#elif L==7
-	"Program<br />(praktyczny)"
-#elif L==8
-	"Programa<br />pr&aacute;tica"
+	"Programa"
 #endif
 	,
 	// ActSeeDoc
@@ -16460,6 +16439,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18185,46 +18165,25 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia de ensino"
 #endif
 	,
-	// ActSeeSylLec
+	// ActSeeSyl
 #if   L==0
-	"Programa teoria"
+	"Programa"
 #elif L==1
-	"Studienplan (Vorlesungen)"
+	"Studienplan"
 #elif L==2
-	"Syllabus (lectures)"
+	"Syllabus"
 #elif L==3
-	"Programa teor&iacute;a"
+	"Programa"
 #elif L==4
-	"Plan th&eacute;orie"
+	"Plan"
 #elif L==5
-	"Programa teor&iacute;a"	// Okoteve traducción
+	"Programa"	// Okoteve traducción
 #elif L==6
-	"Programma teoria"
+	"Programma"
 #elif L==7
-	"Syllabus (wyklady)"
+	"Syllabus"
 #elif L==8
-	"Programa teoria"
-#endif
-	,
-	// ActSeeSylPra
-#if   L==0
-	"Programa pr&agrave;ctiques"
-#elif L==1
-	"Studienplan (&Uuml;bungen)"
-#elif L==2
-	"Syllabus (practicals)"
-#elif L==3
-	"Programa pr&aacute;cticas"
-#elif L==4
-	"Plan pratique"
-#elif L==5
-	"Programa pr&aacute;cticas"	// Okoteve traducción
-#elif L==6
-	"Programma pratica"
-#elif L==7
-	"Syllabus (practicals)"
-#elif L==8
-	"Programa pr&aacute;tica"
+	"Programa"
 #endif
 	,
 	// ActSeeDoc
@@ -18374,6 +18333,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20103,46 +20063,25 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia de ensino"
 #endif
 	,
-	// ActSeeSylLec
+	// ActSeeSyl
 #if   L==0
-	"Programa de teoria de l'assignatura"
+	"Programa de l'assignatura"
 #elif L==1
-	"Studienplan (Vorlesungen)"
+	"Studienplan"
 #elif L==2
-	"Syllabus (lectures)"
+	"Syllabus"
 #elif L==3
-	"Programa de teor&iacute;a de la asignatura"
+	"Programa de la asignatura"
 #elif L==4
-	"Plan th&eacute;orie"
+	"Plan"
 #elif L==5
-	"Programa de teor&iacute;a de la asignatura"// Okoteve traducción
+	"Programa de la asignatura"// Okoteve traducción
 #elif L==6
-	"Programma teoria"
+	"Programma"
 #elif L==7
-	"Syllabus (wyklady)"
+	"Syllabus"
 #elif L==8
-	"Programa teoria"
-#endif
-	,
-	// ActSeeSylPra
-#if   L==0
-	"Programa de pr&agrave;ctiques de l'assignatura"
-#elif L==1
-	"Studienplan (&Uuml;bungen)"
-#elif L==2
-	"Syllabus (practicals)"
-#elif L==3
-	"Programa de pr&aacute;cticas de la asignatura"
-#elif L==4
-	"Plan pratique"
-#elif L==5
-	"Programa de pr&aacute;cticas de la asignatura"	// Okoteve traducción
-#elif L==6
-	"Programma pratica"
-#elif L==7
-	"Syllabus (practicals)"
-#elif L==8
-	"Programa pr&aacute;tica"
+	"Programa"
 #endif
 	,
 	// ActSeeDoc
@@ -20299,6 +20238,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -38197,7 +38137,7 @@ const char *Txt_Syllabus_of_the_course =
 	"Programa da disciplina";
 #endif
 
-extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
+const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 	 {
 	 // Lectures
 #if   L==0
@@ -38222,23 +38162,23 @@ extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 	 ,
 	 // Practicals
 #if   L==0
-	 "Pr&agrave;ct."
+	 "Pr&agrave;ctiques"
 #elif L==1
 	 "&Uuml;bung"
 #elif L==2
 	 "Practicals"
 #elif L==3
-	 "Pr&aacute;ct."
+	 "Pr&aacute;cticas"
 #elif L==4
 	 "Pratique"
 #elif L==5
-	 "Pr&aacute;ct."		// Okoteve traducción
+	 "Pr&aacute;cticas"		// Okoteve traducción
 #elif L==6
 	 "Pratica"
 #elif L==7
-	 "praktyki"
+	 "Praktyki"
 #elif L==8
-	 "Pr&aacute;ct."
+	 "Pr&aacute;tica"
 #endif
 	 ,
 	 };

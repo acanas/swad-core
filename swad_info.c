@@ -547,8 +547,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Write every information I must read *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	              "<tr>"
 	              "<td style=\"text-align:left;\">"
 	              "<ul>");
@@ -560,7 +559,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
          fprintf (Gbl.F.Out,"<li>");
          Act_FormStart (Inf_ActionsSeeInfo[InfoType]);
          Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),The_ClassFormul[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s</a>"
+         fprintf (Gbl.F.Out,"%s"
+                            "</a>"
                             "</form>"
                             "</li>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
@@ -568,8 +568,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</td>"
 	              "</tr>"
-	              "</table>"
-	              "</div>");
+	              "</table>");
   }
 
 /*****************************************************************************/
@@ -1159,6 +1158,10 @@ Inf_InfoType_t Inf_AsignInfoType (void)
       case ActRcvPlaTxtTchGui:
       case ActRcvRchTxtTchGui:
          return Inf_TEACHING_GUIDE;
+      case ActSeeSyl:
+	 Syl_GetParamWhichSyllabus ();
+	 return (Gbl.CurrentCrs.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+	                                                                 Inf_PRACTICALS);
       case ActSeeSylLec:
       case ActEdiSylLec:
       case ActChgFrcReaSylLec:
@@ -1171,6 +1174,7 @@ Inf_InfoType_t Inf_AsignInfoType (void)
       case ActRchTxtEdiSylLec:
       case ActRcvPlaTxtSylLec:
       case ActRcvRchTxtSylLec:
+	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_LECTURES;
          return Inf_LECTURES;
       case ActSeeSylPra:
       case ActEdiSylPra:
@@ -1184,6 +1188,7 @@ Inf_InfoType_t Inf_AsignInfoType (void)
       case ActRchTxtEdiSylPra:
       case ActRcvPlaTxtSylPra:
       case ActRcvRchTxtSylPra:
+	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_PRACTICALS;
          return Inf_PRACTICALS;
       case ActSeeBib:
       case ActEdiBib:
@@ -1315,7 +1320,8 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t *In
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   sprintf (Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src WHERE CrsCod='%ld' AND InfoType='%s'",
+   sprintf (Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
+	          " WHERE CrsCod='%ld' AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info source");
 

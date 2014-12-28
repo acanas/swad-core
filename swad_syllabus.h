@@ -37,6 +37,7 @@ typedef enum
    Syl_LECTURES		= 0,
    Syl_PRACTICALS	= 1,
   } Syl_WhichSyllabus_t;	// Which syllabus I want to see
+#define Syl_DEFAULT_WHICH_SYLLABUS Syl_LECTURES
 
 typedef enum
   {
@@ -64,6 +65,7 @@ struct MoveSubtrees
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Syl_GetParamWhichSyllabus (void);
 void Syl_PutFormWhichSyllabus (void);
 
 void Syl_GetParamItemNumber (void);

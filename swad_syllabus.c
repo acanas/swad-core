@@ -108,6 +108,23 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text,const char *Color);
 
 /*****************************************************************************/
+/******************** Get parameter to select a syllabus *********************/
+/*****************************************************************************/
+
+void Syl_GetParamWhichSyllabus (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+
+   /***** Get which syllabus I want to see *****/
+   Par_GetParToText ("WhichSyllabus",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      Gbl.CurrentCrs.Syllabus.WhichSyllabus = (Syl_WhichSyllabus_t) UnsignedNum;
+   else
+      Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
+  }
+
+/*****************************************************************************/
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
@@ -118,7 +135,8 @@ void Syl_PutFormWhichSyllabus (void)
 
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
-   Act_FormStart (ActSeeSylLec);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center\">");
+   Act_FormStart (ActSeeSyl);
    fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
                       " padding:0; margin:10px auto;\">");
 
@@ -128,7 +146,7 @@ void Syl_PutFormWhichSyllabus (void)
      {
       fprintf (Gbl.F.Out,"<li class=\"DAT\""
 	                 " style=\"display:inline; vertical-align:middle;\">"
-                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
+                         "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.CurrentCrs.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -138,7 +156,8 @@ void Syl_PutFormWhichSyllabus (void)
                Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
    fprintf (Gbl.F.Out,"</ul>"
-	              "</form>");
+	              "</form>"
+	              "</div>");
   }
 
 /*****************************************************************************/
@@ -223,8 +242,12 @@ static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void)
    /***** Set the type of syllabus (lectures or practicals) *****/
    switch (Gbl.CurrentAct)
      {
+      case ActSeeSyl:
+	 InfoType = (Gbl.CurrentCrs.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+	                                                                     Inf_PRACTICALS);
+	 break;
       case ActSeeSylLec:
-      case ActEditorSylLec:
+      case ActEdiSylLec:
       case ActDelItmSylLec:
       case ActUp_IteSylLec:
       case ActDwnIteSylLec:
@@ -232,11 +255,21 @@ static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void)
       case ActLftIteSylLec:
       case ActInsIteSylLec:
       case ActModIteSylLec:
-      case ActEdiSylLec:
+      case ActChgFrcReaSylLec:
+      case ActChgHavReaSylLec:
+      case ActSelInfSrcSylLec:
+      case ActRcvURLSylLec:
+      case ActRcvPagSylLec:
+      case ActEditorSylLec:
+      case ActPlaTxtEdiSylLec:
+      case ActRchTxtEdiSylLec:
+      case ActRcvPlaTxtSylLec:
+      case ActRcvRchTxtSylLec:
+	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_LECTURES;
 	 InfoType = Inf_LECTURES;
 	 break;
       case ActSeeSylPra:
-      case ActEditorSylPra:
+      case ActEdiSylPra:
       case ActDelItmSylPra:
       case ActUp_IteSylPra:
       case ActDwnIteSylPra:
@@ -244,7 +277,17 @@ static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void)
       case ActLftIteSylPra:
       case ActInsIteSylPra:
       case ActModIteSylPra:
-      case ActEdiSylPra:
+      case ActChgFrcReaSylPra:
+      case ActChgHavReaSylPra:
+      case ActSelInfSrcSylPra:
+      case ActRcvURLSylPra:
+      case ActRcvPagSylPra:
+      case ActEditorSylPra:
+      case ActPlaTxtEdiSylPra:
+      case ActRchTxtEdiSylPra:
+      case ActRcvPlaTxtSylPra:
+      case ActRcvRchTxtSylPra:
+	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_PRACTICALS;
 	 InfoType = Inf_PRACTICALS;
          break;
       default:
