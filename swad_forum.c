@@ -339,7 +339,9 @@ bool For_GetIfForumPstExists (long PstCod)
    char Query[512];
 
    /***** Get if a forum post exists from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE PstCod='%ld'",PstCod);
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post"
+	          " WHERE PstCod='%ld'",
+	    PstCod);
    return (DB_QueryCOUNT (Query,"can not check if a post of a forum already existed") != 0);	// Post exists if it appears in table of forum posts
   }
 
@@ -353,7 +355,8 @@ bool For_GetIfPstIsEnabled (long PstCod)
 
    /***** Get if post is disabled from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_disabled_post"
-                  " WHERE PstCod='%ld'",PstCod);
+                  " WHERE PstCod='%ld'",
+            PstCod);
    return (DB_QueryCOUNT (Query,"can not check if a post of a forum is disabled") == 0);	// Post is enabled if it does not appear in table of disabled posts
   }
 
@@ -367,7 +370,8 @@ void For_DeletePstFromDisabledPstTable (long PstCod)
 
    /***** Remove post from disabled posts table *****/
    sprintf (Query,"DELETE FROM forum_disabled_post"
-                  " WHERE PstCod='%ld'",PstCod);
+                  " WHERE PstCod='%ld'",
+            PstCod);
    DB_QueryDELETE (Query,"can not unban a post of a forum");
   }
 
@@ -380,7 +384,8 @@ void For_InsertPstIntoBannedPstTable (long PstCod)
    char Query[512];
 
    /***** Remove post from banned posts table *****/
-   sprintf (Query,"REPLACE INTO forum_disabled_post (PstCod,UsrCod,DisableTime)"
+   sprintf (Query,"REPLACE INTO forum_disabled_post"
+	          " (PstCod,UsrCod,DisableTime)"
                   " VALUES ('%ld','%ld',NOW())",
             PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not ban a post of a forum");
@@ -395,7 +400,8 @@ long For_InsertForumPst (long ThrCod,long UsrCod,const char *Subject,const char 
    char Query[256+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_LONG_TEXT];
 
    /***** Insert forum post in the database *****/
-   sprintf (Query,"INSERT INTO forum_post (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,Subject,Content)"
+   sprintf (Query,"INSERT INTO forum_post"
+	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,Subject,Content)"
                   " VALUES ('%ld','%ld',NOW(),NOW(),'0','%s','%s')",
             ThrCod,UsrCod,Subject,Content);
    return DB_QueryINSERTandReturnCode (Query,"can not create a new post in a forum");
@@ -420,7 +426,8 @@ bool For_RemoveForumPst (long PstCod)
      }
 
    /***** Delete post from forum post table *****/
-   sprintf (Query,"DELETE FROM forum_post WHERE PstCod='%ld'",PstCod);
+   sprintf (Query,"DELETE FROM forum_post WHERE PstCod='%ld'",
+            PstCod);
    DB_QueryDELETE (Query,"can not remove a post from a forum");
 
    /***** Delete the post from the table of disabled forum posts *****/
@@ -448,7 +455,8 @@ unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
    sprintf (Query,"SELECT COUNT(PstCod),ThrCod FROM forum_post"
                   " WHERE ThrCod IN"
                   " (SELECT ThrCod FROM forum_post"
-                  " WHERE PstCod='%ld') GROUP BY ThrCod;",PstCod);
+                  " WHERE PstCod='%ld') GROUP BY ThrCod;",
+            PstCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get number of posts in a thread of a forum");
 
    row = mysql_fetch_row (mysql_res);
@@ -473,29 +481,40 @@ long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
    /***** Insert new thread in the database *****/
    switch (ForumType)
      {
-      case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
-      case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
-         sprintf (Query,"INSERT INTO forum_thread (ForumType,Location,FirstPstCod,LastPstCod)"
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM_SWAD_USRS:
+      case For_FORUM_SWAD_TCHS:
+         sprintf (Query,"INSERT INTO forum_thread"
+                        " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','-1','%ld','%ld')",
                   (unsigned) ForumType,FirstPstCod,FirstPstCod);
          break;
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
-         sprintf (Query,"INSERT INTO forum_thread (ForumType,Location,FirstPstCod,LastPstCod)"
+      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTITUTION_TCHS:
+         sprintf (Query,"INSERT INTO forum_thread"
+                        " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Ins.InsCod,FirstPstCod,FirstPstCod);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (Query,"INSERT INTO forum_thread (ForumType,Location,FirstPstCod,LastPstCod)"
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+         sprintf (Query,"INSERT INTO forum_thread"
+                        " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Ctr.CtrCod,FirstPstCod,FirstPstCod);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (Query,"INSERT INTO forum_thread (ForumType,Location,FirstPstCod,LastPstCod)"
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+         sprintf (Query,"INSERT INTO forum_thread"
+                        " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Deg.DegCod,FirstPstCod,FirstPstCod);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (Query,"INSERT INTO forum_thread (ForumType,Location,FirstPstCod,LastPstCod)"
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
+         sprintf (Query,"INSERT INTO forum_thread"
+                        " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Crs.CrsCod,FirstPstCod,FirstPstCod);
          break;
@@ -518,7 +537,8 @@ void For_RemoveThreadOnly (long ThrCod)
    For_RemoveThrCodFromThrClipboard (ThrCod);
 
    /***** Delete thread from forum thread table *****/
-   sprintf (Query,"DELETE FROM forum_thread WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"DELETE FROM forum_thread WHERE ThrCod='%ld'",
+            ThrCod);
    DB_QueryDELETE (Query,"can not remove a thread from a forum");
   }
 
@@ -531,13 +551,16 @@ void For_RemoveThreadAndItsPsts (long ThrCod)
    char Query[512];
 
    /***** Delete banned posts in thread *****/
-   sprintf (Query,"DELETE forum_disabled_post FROM forum_post,forum_disabled_post"
-                  " WHERE forum_post.ThrCod='%ld' AND forum_post.PstCod=forum_disabled_post.PstCod",
+   sprintf (Query,"DELETE forum_disabled_post"
+	          " FROM forum_post,forum_disabled_post"
+                  " WHERE forum_post.ThrCod='%ld'"
+                  " AND forum_post.PstCod=forum_disabled_post.PstCod",
             ThrCod);
    DB_QueryDELETE (Query,"can not unban the posts of a thread of a forum");
 
    /***** Delete thread posts *****/
-   sprintf (Query,"DELETE FROM forum_post WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"DELETE FROM forum_post WHERE ThrCod='%ld'",
+            ThrCod);
    DB_QueryDELETE (Query,"can not remove the posts of a thread of a forum");
 
    /***** Delete thread from forum thread table *****/
@@ -556,7 +579,9 @@ void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
 
    /***** Get subject of a thread from database *****/
    sprintf (Query,"SELECT forum_post.Subject FROM forum_thread,forum_post"
-                  " WHERE forum_thread.ThrCod='%ld' AND forum_thread.FirstPstCod=forum_post.PstCod",ThrCod);
+                  " WHERE forum_thread.ThrCod='%ld'"
+                  " AND forum_thread.FirstPstCod=forum_post.PstCod",
+            ThrCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a thread of a forum");
 
    /***** Write the subject of the thread *****/
@@ -686,7 +711,8 @@ unsigned For_GetNumOfReadersOfThr (long ThrCod)
    char Query[512];
 
    /***** Get number of distinct readers of a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod='%ld'",
+            ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of readers of a thread of a forum");
   }
 
@@ -787,10 +813,11 @@ void For_GetThrReadTime (long ThrCod,char *ReadTime)
 
 void For_DeleteThrFromReadThrs (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a thread *****/
-   sprintf (Query,"DELETE FROM forum_thr_read WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"DELETE FROM forum_thr_read WHERE ThrCod='%ld'",
+            ThrCod);
    DB_QueryDELETE (Query,"can not remove the status of reading of a thread of a forum");
   }
 
@@ -800,10 +827,11 @@ void For_DeleteThrFromReadThrs (long ThrCod)
 
 void For_RemoveUsrFromReadThrs (long UsrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a user *****/
-   sprintf (Query,"DELETE FROM forum_thr_read WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM forum_thr_read WHERE UsrCod='%ld'",
+            UsrCod);
    DB_QueryDELETE (Query,"can not remove the status of reading by a user of all the threads of a forum");
   }
 
@@ -873,8 +901,10 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteThrSubject (ThrCod);
 
    /***** Get posts of a thread from database *****/
-   sprintf (Query,"SELECT PstCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S') FROM forum_post"
-                  " WHERE ThrCod='%ld' ORDER BY PstCod",ThrCod);
+   sprintf (Query,"SELECT PstCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S')"
+	          " FROM forum_post"
+                  " WHERE ThrCod='%ld' ORDER BY PstCod",
+            ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get posts of a thread");
 
    NumPsts = (unsigned) NumRows;
@@ -1262,19 +1292,23 @@ void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
    /***** Get number of posts from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTITUTION_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ins.InsCod);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ctr.CtrCod);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Deg.DegCod);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Crs.CrsCod);
          break;
@@ -1283,7 +1317,9 @@ void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_post,forum_thread"
-                  " WHERE forum_post.UsrCod='%ld' AND forum_post.ThrCod=forum_thread.ThrCod AND forum_thread.ForumType='%u'%s",
+                  " WHERE forum_post.UsrCod='%ld'"
+                  " AND forum_post.ThrCod=forum_thread.ThrCod"
+                  " AND forum_thread.ForumType='%u'%s",
             UsrCod,(unsigned) ForumType,SubQuery);
    NumPsts = (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts of a user in a forum");
 
@@ -1298,7 +1334,7 @@ void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
   }
 
 /*****************************************************************************/
-/************ Put all the hidden parameters related to forums ***************/
+/************ Put all the hidden parameters related to forums ****************/
 /*****************************************************************************/
 
 void For_PutAllHiddenParamsForum (void)
@@ -1309,7 +1345,7 @@ void For_PutAllHiddenParamsForum (void)
   }
 
 /*****************************************************************************/
-/*********** Put a hidden parameter with which forum I want to see **********/
+/*********** Put a hidden parameter with which forum I want to see ***********/
 /*****************************************************************************/
 
 static void For_PutParamWhichForum (void)
@@ -1318,7 +1354,7 @@ static void For_PutParamWhichForum (void)
   }
 
 /*****************************************************************************/
-/******** Put a hidden parameter with the order criterium for forums ********/
+/******** Put a hidden parameter with the order criterium for forums *********/
 /*****************************************************************************/
 
 static void For_PutParamForumOrder (void)
@@ -1327,8 +1363,8 @@ static void For_PutParamForumOrder (void)
   }
 
 /*****************************************************************************/
-/************** Put hidden parameters related to             ****************/
-/************** forum institution, centre, degree and course ****************/
+/************** Put hidden parameters related to             *****************/
+/************** forum institution, centre, degree and course *****************/
 /*****************************************************************************/
 
 static void For_PutParamsForumInsDegCrs (void)
@@ -2155,24 +2191,34 @@ unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned Nu
    /***** Get last time I read this forum from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTITUTION_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ins.InsCod);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ctr.CtrCod);
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ctr.CtrCod);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Deg.DegCod);
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Deg.DegCod);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Crs.CrsCod);
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Crs.CrsCod);
          break;
       default:
          SubQuery[0] = '\0';
          break;
      }
-   sprintf (Query,"SELECT MAX(forum_thr_read.ReadTime) FROM forum_thr_read,forum_thread"
-                  " WHERE forum_thr_read.UsrCod='%ld' AND forum_thr_read.ThrCod=forum_thread.ThrCod"
+   sprintf (Query,"SELECT MAX(forum_thr_read.ReadTime)"
+	          " FROM forum_thr_read,forum_thread"
+                  " WHERE forum_thr_read.UsrCod='%ld'"
+                  " AND forum_thr_read.ThrCod=forum_thread.ThrCod"
                   " AND forum_thread.ForumType='%u'%s",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) ForumType,SubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the date of reading of a forum");
@@ -2199,27 +2245,38 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
    char SubQuery[256];
    char Query[2048];
 
-   /***** Get number of threads with a last message modify time > specified time from database *****/
+   /***** Get number of threads with a last message modify time
+          > specified time from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTITUTION_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ins.InsCod);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ctr.CtrCod);
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ctr.CtrCod);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Deg.DegCod);
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Deg.DegCod);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Crs.CrsCod);
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Crs.CrsCod);
          break;
       default:
          SubQuery[0] = '\0';
          break;
      }
-   sprintf (Query,"SELECT COUNT(*) FROM forum_thread,forum_post WHERE forum_thread.ForumType='%u'%s"
-                  " AND forum_thread.LastPstCod=forum_post.PstCod AND forum_post.ModifTime>'%s'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_thread,forum_post"
+	          " WHERE forum_thread.ForumType='%u'%s"
+                  " AND forum_thread.LastPstCod=forum_post.PstCod"
+                  " AND forum_post.ModifTime>'%s'",
                   (unsigned) ForumType,SubQuery,Time);
    return (unsigned) DB_QueryCOUNT (Query,"can not check if there are new posts in a forum");
   }
