@@ -106,8 +106,6 @@ void Msg_WriteListUsrsDstMsg (long MsgCod);
 void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground);
 void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks,bool ChangeBRToRet);
 
-void Msg_IndentDependingOnLevel (int Level,bool IsLastItemInLevel[]);
-
 void Msg_PutHiddenParamMsgCod (long MsgCod);
 
 // void Msg_WriteLinkToNetiquette (void);

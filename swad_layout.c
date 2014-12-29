@@ -582,18 +582,20 @@ static void Lay_WritePageTopHeading (void)
             Gbl.Prefs.PathTheme);
 
    /***** 1st. row, 1st. column: logo *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:%upx;\">",
+   fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:center;\">",
             LogoLayout[Gbl.Prefs.Layout].Width + 16);
 
    /* Left logo */
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" style=\"display:block; margin-left:auto; margin-right:auto;\" />"
+	              "<img src=\"%s/%s\" alt=\"%s\""
+	              " style=\"width:%upx; height:%upx;"
+	              " margin:0 auto; vertical-align:middle;\" />"
                       "</a>",
             Cfg_HTTP_SwAD_HOME_PAGE,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
+            Cfg_PLATFORM_FULL_NAME,
             LogoLayout[Gbl.Prefs.Layout].Width,
-            LogoLayout[Gbl.Prefs.Layout].Height,
-            Cfg_PLATFORM_FULL_NAME);
+            LogoLayout[Gbl.Prefs.Layout].Height);
    fprintf (Gbl.F.Out,"</td>");
    fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
                       "<table style=\"width:100%%;\">"
@@ -2034,4 +2036,33 @@ void Lay_AdvertisementMobile (void)
       /***** End table *****/
       Lay_EndRoundFrameTable10 ();
      }
+  }
+
+/*****************************************************************************/
+/*********************** Indent forum or chat title **************************/
+/*****************************************************************************/
+// IsLastItemInLevel[] is a vector with at least 1+Level booleans
+
+void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
+  {
+   unsigned i;
+
+   /***** Indent (from 1 to Level-1) *****/
+   for (i = 1;
+	i < Level;
+	i++)
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\" alt=\"\""
+			 " style=\"width:20px; height:20px;"
+			 " vertical-align:middle;\" />",
+		  Gbl.Prefs.IconsURL,
+		  IsLastItemInLevel[i] ? "tr" :
+		                         "subleft");
+
+   /***** Level *****/
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\" alt=\"\""
+		      " style=\"width:20px; height:20px;"
+		      " vertical-align:middle;\" />",
+	    Gbl.Prefs.IconsURL,
+	    IsLastItemInLevel[Level] ? "subend" :
+				       "submid");
   }

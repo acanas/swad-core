@@ -2767,7 +2767,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%u;"
+      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%upx;"
 	                 " text-align:left; vertical-align:top;",
                Style,WidthOfNameColumn);
       if (BgColor)
@@ -2781,7 +2781,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
      {
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" class=\"F18x24\" />"
 	                 "</td>"
-                         "<td class=\"%s\" style=\"width:%u; text-align:left;",
+                         "<td class=\"%s\" style=\"width:%upx; text-align:left;",
                Style,Gbl.Prefs.IconsURL,WidthOfNameColumn);
       if (BgColor)
          fprintf (Gbl.F.Out," background-color:%s;",BgColor);
@@ -3164,7 +3164,8 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" style=\"display:block;\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+	              " style=\"display:block;\" />"
 	              "</form>"
 	              "</td>",
             Gbl.Prefs.IconsURL,
@@ -3187,35 +3188,6 @@ void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks
       Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Gbl.F.Out,Content);
    else
       fprintf (Gbl.F.Out,"%s",Content);
-  }
-
-/*****************************************************************************/
-/*********************** Indent forum or chat title **************************/
-/*****************************************************************************/
-
-void Msg_IndentDependingOnLevel (int Level,bool IsLastItemInLevel[])
-  {
-   int i;
-
-   for (i = 1;
-	i < Level;
-	i++)
-      fprintf (Gbl.F.Out,"<td style=\"width:20px; vertical-align:top;\">"
-	                 "<img src=\"%s/%s20x20.gif\""
-	                 " width=\"20\" height=\"20\" alt=\"\""
-	                 " style=\"vertical-align:top;\" />"
-	                 "</td>",
-               Gbl.Prefs.IconsURL,
-               IsLastItemInLevel[i] ? "tr" :
-        	                      "subleft");
-   fprintf (Gbl.F.Out,"<td style=\"width:20px; vertical-align:top;\">"
-	              "<img src=\"%s/%s20x20.gif\""
-	              " width=\"20\" height=\"20\" alt=\"\""
-	              " style=\"vertical-align:top;\" />"
-	              "</td>",
-            Gbl.Prefs.IconsURL,
-            IsLastItemInLevel[Level] ? "subend" :
-        	                       "submid");
   }
 
 /*****************************************************************************/

@@ -230,7 +230,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 " style=\"width:16px;height:16px;margin-right:10px;vertical-align:middle;\""
 			 " alt=\"\" title=\"%s\" />"
 			 "%s:</td>"
-			 "<td style=\"width:%u; text-align:left;\">",
+			 "<td style=\"width:%upx; text-align:left;\">",
 	       ClassForm,
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],

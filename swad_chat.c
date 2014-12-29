@@ -116,19 +116,20 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Chat_rooms);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:left;\">",
+	              "<td class=\"%s\" style=\"height:20px;"
+                      " text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Title of top level *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
-	              " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
+	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
                       " %s</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
    sprintf (Icon,"<img src=\"%s/chat16x16.gif\""
-	         " class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+	         " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
             Gbl.Prefs.IconsURL);
 
    IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_STUDENT &&
@@ -165,7 +166,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       /* Link to the room of this degree */
       IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegrees.Num-1);
       sprintf (Icon,"<img src=\"%s/%s/%s16x16.gif\""
-	            " class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+	            " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,Deg.Logo);
       sprintf (ThisRoomCode,"DEG_%ld",Deg.DegCod);
       sprintf (ThisRoomShortName,"%s",Deg.ShortName);
@@ -190,7 +191,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                /* Link to the room of this course */
                IsLastItemInLevel[2] = (NumRow == NumRows-1);
                sprintf (Icon,"<img src=\"%s/dot16x16.gif\""
-        	             " class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+        	             " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
                         Gbl.Prefs.IconsURL);
                sprintf (ThisRoomCode,"CRS_%ld",Crs.CrsCod);
                sprintf (ThisRoomShortName,"%s",Crs.ShortName);
@@ -281,21 +282,21 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_connected_PLURAL;
    extern const char *Txt_connected_SINGULAR;
+   const char *Style;
    int NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
 
    sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
+   Style = (NumUsrsInRoom > 0 ? The_ClassFormulB[Gbl.Prefs.Theme] :
+	                        The_ClassFormul[Gbl.Prefs.Theme]);
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<table>"
-                      "<tr>");
-   Msg_IndentDependingOnLevel (Level,IsLastItemInLevel);
-
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">");
+	              "<td class=\"%s\" style=\"height:20px;"
+	              " text-align:left; vertical-align:middle;\">",
+	    Style);
+   Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
-   Act_LinkFormSubmit (RoomFullName,(NumUsrsInRoom > 0) ? The_ClassFormulB[Gbl.Prefs.Theme] :
-                                                          The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (RoomFullName,Style);
    fprintf (Gbl.F.Out,"%s&nbsp;%s",Icon,RoomFullName);
    if (NumUsrsInRoom > 1)
       fprintf (Gbl.F.Out," [%d %s]",
@@ -305,9 +306,6 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
                Txt_connected_SINGULAR);
    fprintf (Gbl.F.Out,"</a>"
 	              "</form>"
-	              "</td>"
-	              "</tr>"
-	              "</table>"
 	              "</td>"
 	              "</tr>");
   }

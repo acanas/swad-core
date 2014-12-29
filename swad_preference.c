@@ -399,7 +399,8 @@ void Prf_PutIconsToSelectSideCols (void)
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"display:block; width:32px; height:20px;\" />"
+	                 " alt=\"%s\" title=\"%s\""
+	                 " style=\"display:block; width:32px; height:20px;\" />"
 	                 "</form>"
 	                 "</td>",
                Gbl.Prefs.IconsURL,

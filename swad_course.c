@@ -557,10 +557,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumCtr,NumCtrs;
    unsigned NumDeg,NumDegs;
    unsigned NumCrs,NumCrss;
-   char PathRelRSSFile[PATH_MAX+1];
-
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
-   char Icon[512];
+   char PathRelRSSFile[PATH_MAX+1];
 
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_My_courses);
@@ -568,7 +566,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    /***** Write link to country *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\""
-		      " style=\"text-align:left; vertical-align:middle;\">",
+		      " style=\"height:20px; text-align:left;"
+		      " vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
@@ -576,7 +575,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		       The_ClassFormul[Gbl.Prefs.Theme]);
    /* Country map */
    fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\" alt=\"%s\" title=\"%s\""
-		      " style=\"width:16px; height:16px;\" />",
+		      " style=\"width:16px; height:16px;"
+		      " vertical-align:middle;\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_TABS_FULL_TXT[TabSys],
 	    Txt_TABS_FULL_TXT[TabSys]);
@@ -600,27 +600,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       if (!Cty_GetDataOfCountryByCod (&Cty))
 	 Lay_ShowErrorAndExit ("Country not found.");
 
-      /***** Start row *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td style=\"text-align:left; vertical-align:top;\">"
-			 "<table>"
-			 "<tr>");
-
-      /***** Indent country *****/
-      IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
-      Msg_IndentDependingOnLevel (1,IsLastItemInLevel);
-
       /***** Write link to country *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\""
-			 " style=\"text-align:left; vertical-align:middle;\">",
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"%s\""
+			 " style=\"height:20px; text-align:left;"
+			 " vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme]);
+      IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
+      Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Act_FormStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Cty.CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
 			  The_ClassFormul[Gbl.Prefs.Theme]);
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" alt=\"%s\" title=\"%s\""
-	                 " style=\"width:16px; height:16px;\" />",
+	                 " style=\"width:16px; height:16px;"
+	                 " vertical-align:middle;\" />",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -629,9 +624,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       fprintf (Gbl.F.Out,"</a>"
 			 "</form>"
-			 "</td>"
-			 "</tr>"
-			 "</table>"
 			 "</td>"
 			 "</tr>");
 
@@ -649,31 +641,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
-	 /***** Start row *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"text-align:left; vertical-align:top;\">"
-			    "<table>"
-			    "<tr>");
-
-	 /***** Indent institution *****/
-	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
-	 Msg_IndentDependingOnLevel (2,IsLastItemInLevel);
-
 	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<td class=\"%s\""
-			    " style=\"text-align:left; vertical-align:middle;\">",
+	 fprintf (Gbl.F.Out,"<tr>"
+	                    "<td class=\"%s\""
+			    " style=\"height:20px; text-align:left;"
+			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme]);
+	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
+	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	 Act_FormStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassFormul[Gbl.Prefs.Theme]);
-	 Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,"vertical-align:top;");
+	 Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,"vertical-align:middle;");
 	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
 	 fprintf (Gbl.F.Out,"</a>"
 			    "</form>"
-			    "</td>"
-			    "</tr>"
-			    "</table>"
 			    "</td>"
 			    "</tr>");
 
@@ -691,31 +674,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    if (!Ctr_GetDataOfCentreByCod (&Ctr))
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
-	    /***** Start row *****/
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td style=\"text-align:left; vertical-align:top;\">"
-			       "<table>"
-			       "<tr>");
-
-	    /***** Indent centre *****/
-	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
-	    Msg_IndentDependingOnLevel (3,IsLastItemInLevel);
-
 	    /***** Write link to centre *****/
-	    fprintf (Gbl.F.Out,"<td class=\"%s\""
-			       " style=\"text-align:left; vertical-align:middle;\">",
+	    fprintf (Gbl.F.Out,"<tr>"
+		               "<td class=\"%s\""
+			       " style=\"height:20px; text-align:left;"
+			       " vertical-align:middle;\">",
 		     The_ClassFormul[Gbl.Prefs.Theme]);
+	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
+	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 	    Act_FormStart (ActSeeCtrInf);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassFormul[Gbl.Prefs.Theme]);
-	    Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:top;");
+	    Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:middle;");
 	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
 	    fprintf (Gbl.F.Out,"</a>"
 			       "</form>"
-			       "</td>"
-			       "</tr>"
-			       "</table>"
 			       "</td>"
 			       "</tr>");
 
@@ -733,31 +707,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       if (!Deg_GetDataOfDegreeByCod (&Deg))
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
-	       /***** Start row *****/
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td style=\"text-align:left; vertical-align:top;\">"
-				  "<table>"
-				  "<tr>");
-
-	       /***** Indent degree *****/
-	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
-	       Msg_IndentDependingOnLevel (4,IsLastItemInLevel);
-
 	       /***** Write link to degree *****/
-	       fprintf (Gbl.F.Out,"<td class=\"%s\""
-				  " style=\"text-align:left; vertical-align:middle;\">",
+	       fprintf (Gbl.F.Out,"<tr>"
+	                          "<td class=\"%s\""
+				  " style=\"height:20px; text-align:left;"
+				  " vertical-align:middle;\">",
 			The_ClassFormul[Gbl.Prefs.Theme]);
+	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
+	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 	       Act_FormStart (ActSeeDegInf);
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
-	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:top;");
+	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:middle;");
 	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
 	       fprintf (Gbl.F.Out,"</a>"
 				  "</form>"
-				  "</td>"
-				  "</tr>"
-				  "</table>"
 				  "</td>"
 				  "</tr>");
 
@@ -775,31 +740,27 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  if (!Crs_GetDataOfCourseByCod (&Crs))
 		     Lay_ShowErrorAndExit ("Course not found.");
 
-		  /***** Start row *****/
-		  fprintf (Gbl.F.Out,"<tr>"
-				     "<td style=\"text-align:left; vertical-align:top;\">"
-				     "<table>"
-				     "<tr>");
-
-		  /***** Indent course *****/
-		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
-		  Msg_IndentDependingOnLevel (5,IsLastItemInLevel);
-
 		  /***** Write link to course *****/
-		  fprintf (Gbl.F.Out,"<td class=\"%s\""
-				     " style=\"text-align:left; vertical-align:middle;\">",
+		  fprintf (Gbl.F.Out,"<tr>"
+			             "<td class=\"%s\""
+				     " style=\"height:20px; text-align:left;"
+				     " vertical-align:middle;\">",
 			   The_ClassFormul[Gbl.Prefs.Theme]);
+		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
+		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 		  Act_FormStart (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      The_ClassFormul[Gbl.Prefs.Theme]);
-		  sprintf (Icon,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
-				" class=\"ICON16x16\" style=\"vertical-align:top;\" />",
-			   Gbl.Prefs.IconsURL,
-			   Crs.ShortName);
-		  fprintf (Gbl.F.Out,"%s",Icon);
-		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
+		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
+			             " class=\"ICON16x16\""
+			             " style=\"vertical-align:middle;\" />"
+				     "&nbsp;%s"
+		                     "</a>"
+		                     "</form>",
+		           Gbl.Prefs.IconsURL,Crs.ShortName,
+		           Crs.FullName);
 
 		  /***** Write link to RSS file *****/
 		  sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
@@ -815,12 +776,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				     "</a>",
 			   Gbl.Prefs.IconsURL);
 
-		  fprintf (Gbl.F.Out,"</a>"
-				     "</form>"
-				     "</td>"
-				     "</tr>"
-				     "</table>"
-				     "</td>"
+		  fprintf (Gbl.F.Out,"</td>"
 				     "</tr>");
 		 }
 

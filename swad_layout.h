@@ -114,4 +114,6 @@ void Lay_PutLinkToPrintView2 (void);
 
 void Lay_AdvertisementMobile (void);
 
+void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);
+
 #endif

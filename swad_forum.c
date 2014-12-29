@@ -886,15 +886,13 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    /* Write thread title */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:left; vertical-align:top;\">"
-	              "<table>"
-	              "<tr>");
+	              "<td class=\"TIT\" style=\"height:20px;"
+	              " text-align:left; vertical-align:middle;\">");
    IsLastItemInLevel[2] = true;
-   Msg_IndentDependingOnLevel (2,IsLastItemInLevel);
+   Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 
-   fprintf (Gbl.F.Out,"<td class=\"TIT\" style=\"text-align:left;\">"
-                      "<img src=\"%s/%s16x16.gif\" alt=\"\""
-                      " class=\"ICON16x16\" style=\"vertical-align:top;\" /> ",
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\" alt=\"\""
+                      " class=\"ICON16x16\" style=\"vertical-align:middle;\" /> ",
             Gbl.Prefs.IconsURL,
             Thr.NumUnreadPosts ? "msg-unread" :
         	                 "msg-open");
@@ -914,9 +912,6 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    Msg_WriteNumMsgs (NumPsts,0);
 
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>"
-	              "</td>"
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
 
@@ -1756,14 +1751,15 @@ void For_WriteLinkToTopLevelOfForums (void)
    extern const char *Txt_Forums;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:left;\">",
+	              "<td class=\"%s\" style=\"height:20px;"
+	              " text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
    Act_LinkFormSubmit (Txt_Forums,The_ClassFormul[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
+	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
                       "&nbsp;%s"
                       "</a>"
                       "</form>"
@@ -1968,14 +1964,14 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
          sprintf (Icon,"<img src=\"%s/forum16x16.gif\" alt=\"%s\""
-                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName);
          break;
       case For_FORUM_SWAD_USRS:
       case For_FORUM_SWAD_TCHS:
          sprintf (Icon,"<img src=\"%s/swad16x16.gif\""
-                       " class=\"ICON16x16\" style=\"vertical-align:top;\" alt=\"%s\" />",
+                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" alt=\"%s\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName);
          break;
@@ -1989,7 +1985,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
          sprintf (Icon,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
-                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />",
+                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName);
          break;
@@ -2095,18 +2091,16 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:left; vertical-align:top;\">"
-	              "<table>"
-	              "<tr>");
+	              "<td class=\"%s\" style=\"height:20px;"
+	              " text-align:left; vertical-align:middle;\">",
+	    Style);
 
    /***** Indent forum title *****/
-   Msg_IndentDependingOnLevel (Level,IsLastItemInLevel);
+   Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
 
    /***** Write paste button used to move a thread in clipboard to this forum *****/
    if (Gbl.Forum.ThreadToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
      {
-      fprintf (Gbl.F.Out,"<td style=\"width:16px; text-align:center;\">");
-
       /* Check if thread to move is yet in current forum */
       if (For_CheckIfThrBelongsToForum (Gbl.Forum.ThreadToMove,ForumType))
          fprintf (Gbl.F.Out,"<img src=\"%s/paste_off16x16.gif\""
@@ -2125,14 +2119,9 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
                   Txt_Paste_thread,
                   Txt_Paste_thread);
         }
-
-      fprintf (Gbl.F.Out,"</td>");
      }
 
    /***** Write link to forum *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\""
-	              " style=\"text-align:left; vertical-align:middle;\">",
-            Style);
    Act_FormStart (NextAct);
    For_PutAllHiddenParamsForum ();
    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[NextAct].ActCod,ActTxt),Style);
@@ -2140,15 +2129,15 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
      {
       case For_FORUM_INSTITUTION_USRS:
       case For_FORUM_INSTITUTION_TCHS:
-         Ins_DrawInstitutionLogo (Gbl.Forum.Ins.Logo,ForumName,16,"vertical-align:top;");
+         Ins_DrawInstitutionLogo (Gbl.Forum.Ins.Logo,ForumName,16,"vertical-align:middle;");
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Ctr_DrawCentreLogo (Gbl.Forum.Ctr.Logo,ForumName,16,"vertical-align:top;");
+         Ctr_DrawCentreLogo (Gbl.Forum.Ctr.Logo,ForumName,16,"vertical-align:middle;");
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Deg_DrawDegreeLogo (Gbl.Forum.Deg.Logo,ForumName,16,"vertical-align:top;");
+         Deg_DrawDegreeLogo (Gbl.Forum.Deg.Logo,ForumName,16,"vertical-align:middle;");
          break;
       default:
          fprintf (Gbl.F.Out,"%s",Icon);
@@ -2168,9 +2157,6 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 
    fprintf (Gbl.F.Out,"</a>"
 	              "</form>"
-	              "</td>"
-	              "</tr>"
-	              "</table>"
 	              "</td>"
 	              "</tr>");
   }
