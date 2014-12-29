@@ -100,7 +100,9 @@ void Ban_SeeBanners (void)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT\" style=\"text-align:left;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s\" width=\"120\" height=\"40\" alt=\"%s\" /></a>"
+                         "<img src=\"%s/%s/%s\" alt=\"%s\""
+                         " style=\"width:120px; height:40px;\"/>"
+                         "</a>"
                          "</td>"
                          "</tr>",
                Gbl.Banners.Lst[NumBan].WWW,
@@ -920,7 +922,8 @@ void Ban_WriteMenuWithBanners (void)
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
 			 " title=\"%s\">"
-                         "<img src=\"%s/%s/%s\" width=\"120\" height=\"40\" alt=\"%s\" />"
+                         "<img src=\"%s/%s/%s\" alt=\"%s\""
+                         " style=\"width:120px; height:40px;\" />"
                          "</a>"
                          "</form>"
                          "</td>"

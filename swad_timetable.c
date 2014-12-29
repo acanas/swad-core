@@ -1130,7 +1130,8 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
       case TT_CRS_SHOW:
       case TT_TUT_SHOW:
 	 if (HourType == TT_FREE_HOUR) // If cell is empty...
-	    fprintf (Gbl.F.Out,"<img src=\"%s/tr1x16.gif\" width=\"1\" height=\"16\" />",
+	    fprintf (Gbl.F.Out,"<img src=\"%s/tr1x16.gif\""
+		               " style=\"width:1px; height:16px;\" />",
                      Gbl.Prefs.IconsURL);
 	 else
 	   {

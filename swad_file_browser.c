@@ -4313,7 +4313,8 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
 	          Size,Size);
      }
-   fprintf (Gbl.F.Out," width=\"%u\" height=\"%u\" style=\"vertical-align:middle;\" />",
+   fprintf (Gbl.F.Out," style=\"width:%upx; height:%upx;"
+	              " vertical-align:middle;\" />",
 	    Size,Size);
   }
 

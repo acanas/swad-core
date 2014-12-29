@@ -335,7 +335,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
-   fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
                       "%s<br />&nbsp;</p>"
                       "</td>"
                       "</tr>",

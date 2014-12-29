@@ -227,8 +227,10 @@ void Sta_ExitIfTooFast (void)
 		      "<title>%s</title>"
 		      "</head>"
 		      "<body>"
-		      "<h1 align=\"center\">%s</h1>"
-		      "<h2 align=\"center\"><a href=\"javascript:window.history.back();\">&larr; %s</a></h2>"
+		      "<h1 style=\"text-align:center;\">%s</h1>"
+		      "<h2 style=\"text-align:center;\">"
+		      "<a href=\"javascript:window.history.back();\">&larr; %s</a>"
+		      "</h2>"
 		      "</body>"
 		      "</html>",
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
@@ -1292,7 +1294,7 @@ static bool Sta_SeeAccesses (void)
                  }
                Lay_WriteTitle (Gbl.Message);
                Sta_WriteSelectedRangeOfDates (NumDays);
-               fprintf (Gbl.F.Out,"<p class=\"DAT\" align=\"center\">");
+               fprintf (Gbl.F.Out,"<p class=\"DAT\" style=\"text-align:center;\">");
                if (Gbl.Stat.Role == Sta_ME)
                   fprintf (Gbl.F.Out,"%s: %s",
                            Txt_User,
@@ -1305,7 +1307,7 @@ static bool Sta_SeeAccesses (void)
                break;
            }
 
-         fprintf (Gbl.F.Out,"<p class=\"DAT\" align=\"center\">%s: %s</p>",
+         fprintf (Gbl.F.Out,"<p class=\"DAT\"style=\"text-align:center;\">%s: %s</p>",
                   Txt_Action,
                   Act_GetActionTextFromDB (Act_Actions[Gbl.Stat.NumAction].ActCod,ActTxt));
 
@@ -1808,7 +1810,10 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	                 " vertical-align:top; background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (BarWidth)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" width=\"%u\" height=\"14\" style=\"vertical-align:top;\" alt=\"\" />&nbsp;",
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" alt=\"\""
+	                    " style=\"width:%upx; height:14px;"
+	                    " vertical-align:top;\" />"
+	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
 		  UsrDat.RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? 'c' :
 			                                          'v',
@@ -2729,7 +2734,8 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
       AltoBarra = (unsigned) (((NumPagesGenerated * 400.0) / MaxPagesGenerated) + 0.5);
       if (AltoBarra == 0)
          AltoBarra = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\" width=\"8\" height=\"%u\" alt=\"\" /><br />",
+      fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\" alt=\"\""
+	                 " style=\"width:8px; height:%upx;\" /><br />",
 	       Gbl.Prefs.IconsURL,AltoBarra);
      }
    else
@@ -3475,7 +3481,9 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
       BarWidth = (unsigned) (((NumPagesGenerated * (float) MaxBarWidth) / MaxPagesGenerated) + 0.5);
       if (BarWidth == 0)
          BarWidth = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" width=\"%u\" height=\"14\" style=\"vertical-align:top;\" alt=\"\" />"
+      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" alt=\"\""
+	                 " style=\"width:%upx; height:14px;"
+	                 " vertical-align:top;\" />"
                          "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
@@ -3524,7 +3532,7 @@ static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
    char StrDatesRange[1024];
 
    sprintf (StrDateIni,"%02u/%02u/%04u",Gbl.DateRange.DateIni.Day,Gbl.DateRange.DateIni.Month,Gbl.DateRange.DateIni.Year);
-   fprintf (Gbl.F.Out,"<p class=\"DAT\" align=\"center\">");
+   fprintf (Gbl.F.Out,"<p class=\"DAT\" style=\"text-align:center;\">");
    if (NumDays == 1)
       fprintf (Gbl.F.Out,"%s: %s (%s)",Txt_Date,StrDateIni,Txt_one_day);
    else
@@ -3859,7 +3867,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 
    /***** Write number of countries *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td align=\"left\" class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -5736,7 +5744,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td width=\"16\" style=\"width:16px; %s\">"
+                      "<td style=\"width:16px; %s\">"
                       "</td>"
                       "<td class=\"DAT_N\" style=\"text-align:left; vertical-align:top; %s\">"
                       "%s"

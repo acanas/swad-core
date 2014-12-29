@@ -683,7 +683,8 @@ static void Pho_UpdatePhoto2 (void)
         NumPhoto++)
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:33%%;"
 	                 " text-align:center; vertical-align:top;\">"
-                         "<img src=\"%s/%s/%s/%s_paso%u.jpg\" width=\"%u\" height=\"%u\" />"
+                         "<img src=\"%s/%s/%s/%s_paso%u.jpg\""
+                         " style=\"width:%upx; height:%upx;\" />"
                          "<br />%s"
                          "</td>",
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
@@ -985,7 +986,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    else if (Width ==  15 && Height ==  20)
       fprintf (Gbl.F.Out,"\" class=\"F15x20\"");
    else if (Width ==  18 && Height ==  24)
-      fprintf (Gbl.F.Out,"\" class=\"F18x24\" width=\"18\" height=\"24\"");        // Here width and height are written explicitely in order to allow copy-paste to Excel
+      fprintf (Gbl.F.Out,"\" class=\"F18x24\" style=\"width:18px; height:24px;\"");        // Here width and height are written explicitely in order to allow copy-paste to Excel
    else if (Width ==  24 && Height ==  32)
       fprintf (Gbl.F.Out,"\" class=\"F24x32\"");
    else if (Width ==  36 && Height ==  48)
@@ -999,7 +1000,9 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    else if (Width == 150 && Height == 200)
       fprintf (Gbl.F.Out,"\" class=\"F150x200\"");
    else
-      fprintf (Gbl.F.Out,"\" width=\"%d\" height=\"%d\" align=\"middle\"",Width,Height);
+      fprintf (Gbl.F.Out,"\" style=\"width:%dpx; height:%dpx;"
+	                 " vertical-align:middle;\"",
+	       Width,Height);
    if (Zoom && PhotoURL &&
        (Width  != Pho_PHOTO_REAL_WIDTH ||
         Height != Pho_PHOTO_REAL_HEIGHT))
@@ -2123,10 +2126,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
                   Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
                   Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
                   Deg->DegCod,Usr_StringsSexDB[Sex]);
-         fprintf (Gbl.F.Out,"%s\" width=\"%u\" height=\"%u\"",PhotoURL,PhotoWidth,PhotoHeight);
+         fprintf (Gbl.F.Out,"%s\" style=\"width:%upx; height:%upx;\"",
+                  PhotoURL,PhotoWidth,PhotoHeight);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
-            sprintf (PhotoCaption,"%s<br />%d&nbsp;%s&nbsp;(%s)<br />%d&nbsp;%s&nbsp;(%d%%)<br />%02u/%02u/%04u",
+            sprintf (PhotoCaption,"%s<br />"
+        	                  "%d&nbsp;%s&nbsp;(%s)<br />"
+        	                  "%d&nbsp;%s&nbsp;(%d%%)<br />"
+        	                  "%02u/%02u/%04u",
                      Deg->ShortName,
                      NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
                      NumStdsWithPhoto,Txt_photos,
@@ -2138,11 +2145,13 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
            }
         }
       else
-         fprintf (Gbl.F.Out,"%s/usr_bl.jpg\" width=\"%u\" height=\"%u\"",
+         fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
+                            " style=\"width:%upx; height:%upx;\"",
                   Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
      }
    else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\" width=\"%u\" height=\"%u\"",
+      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
+	                 " style=\"width:%upx; height:%upx;\"",
 	       Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
    fprintf (Gbl.F.Out," alt=\"%s\" />",Deg->FullName);
    if (SeeOrPrint == Pho_DEGREES_PRINT)

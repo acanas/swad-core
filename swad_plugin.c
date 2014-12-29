@@ -121,7 +121,8 @@ void Plg_ListPlugins (void)
                          "<td class=\"DAT\" style=\"width:32px;"
                          " text-align:left;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s24x24.gif\" width=\"24\" height=\"24\" alt=\"%s\" />"
+                         "<img src=\"%s/%s/%s24x24.gif\" alt=\"%s\""
+                         " style=\"width:24px; height:24px;\" />"
                          "</a>"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:left;\">"
@@ -386,9 +387,11 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin logo */
       fprintf (Gbl.F.Out,"<td style=\"width:28px; text-align:center;\">"
-                         "<img src=\"%s/%s/%s24x24.gif\" width=\"24\" height=\"24\" alt=\"%s\" />"
+                         "<img src=\"%s/%s/%s24x24.gif\" alt=\"%s\""
+                         " style=\"width:24px; height:24px;\" />"
                          "</td>",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,Gbl.Plugins.Lst[NumPlg].Logo,Gbl.Plugins.Lst[NumPlg].Name);
+               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,
+               Gbl.Plugins.Lst[NumPlg].Logo,Gbl.Plugins.Lst[NumPlg].Name);
 
       /* Plugin name */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"

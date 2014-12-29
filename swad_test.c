@@ -982,7 +982,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 	             StemRigorousHTML,StemLength,false);
 
    /***** Write the stem *****/
-   fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
 	              "<tt>%s</tt>"
 	              "</p>",
 	    ClassStem,StemRigorousHTML);
@@ -1013,7 +1013,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
 	 /***** Write the feedback *****/
-	 fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"%s\">"
+	 fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
 			    "<tt>%s</tt>"
 			    "</p>",
 		  ClassFeedback,FeedbackRigorousHTML);
@@ -2792,7 +2792,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             /* Write the text of the answer */
             fprintf (Gbl.F.Out,"<td class=\"TEST_EDI\" style=\"text-align:left;"
 	                       " vertical-align:top;\">"
-        	               "<p align=\"justify\">"
+        	               "<p style=\"text-align:justify;\">"
         	               "<tt>%s</tt>"
         	               "</p>"
         	               "</td>",
@@ -2803,7 +2803,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               " style=\"text-align:left;"
         	               " vertical-align:top;\">");
             if (LengthFeedback)
-	       fprintf (Gbl.F.Out,"<p align=\"justify\">"
+	       fprintf (Gbl.F.Out,"<p style=\"text-align:justify;\">"
 		                  "<tt>%s</tt>"
 		                  "</p>",
 			Feedback);
@@ -3083,7 +3083,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"TEST_EXA\" style=\"text-align:left;"
 	                 " vertical-align:top;\">"
-	                 "<p align=\"justify\">"
+	                 "<p style=\"text-align:justify;\">"
 	                 "<tt>%s</tt>"
 	                 "</p>"
 	                 "</td>"
@@ -3246,14 +3246,14 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /* Answer text and feedback */
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;\">"
-	                 "<p align=\"justify\" class=\"TEST_EXA\">"
+	                 "<p class=\"TEST_EXA\" style=\"text-align:justify;\">"
 	                 "<tt>%s</tt>"
 	                 "</p>",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
-	       fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"TEST_EXA_LIGHT\">"
+	       fprintf (Gbl.F.Out,"<p class=\"TEST_EXA_LIGHT\" style=\"text-align:justify;\">"
 				  "<tt>%s</tt>"
 				  "</p>",
 			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
@@ -3452,14 +3452,15 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
          /* Answer text and feedback */
          fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
                             " vertical-align:top;\">"
-                            "<p align=\"justify\" class=\"ANS\">"
+                            "<p class=\"ANS\" style=\"text-align:justify;\">"
                             "%s"
                             "</p>",
                   Gbl.Test.Answer.Options[NumOpt].Text);
 	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
-		  fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"TEST_EXA_LIGHT\">"
+		  fprintf (Gbl.F.Out,"<p class=\"TEST_EXA_LIGHT\""
+			             " style=\"text-align:justify;\">"
 				     "<tt>%s</tt>"
 				     "</p>",
 			   Gbl.Test.Answer.Options[NumOpt].Feedback);

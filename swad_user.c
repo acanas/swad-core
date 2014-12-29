@@ -1376,8 +1376,8 @@ void Usr_WelcomeUsr (void)
                if ((CongratulateMyBirthday = Usr_CheckIfMyBirthdayHasNotBeenCongratulated ()))
                  {
                   Usr_InsertMyBirthday ();
-                  fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
-                                     " alt=\"\" width=\"128\" height=\"128\" />",
+                  fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\" alt=\"\""
+                	             " style=\"width:128px; height:128px;\" />",
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128);
                   sprintf (Gbl.Message,Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
                            Gbl.Usrs.Me.UsrDat.FirstName);

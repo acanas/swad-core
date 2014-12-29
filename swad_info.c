@@ -1577,7 +1577,7 @@ static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:left;\">"
-                         "<p align=\"justify\" class=\"DAT\">");
+                         "<p class=\"DAT\" style=\"text-align:justify;\">");
 
       /***** Convert to respectful HTML and insert links *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1643,7 +1643,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
       /***** Write plain text into text buffer *****/
       fprintf (FileHTMLTmp,"<tr>"
 		            "<td style=\"text-align:left;\">"
-		            "<p align=\"justify\" class=\"DAT\">");
+		            "<p class=\"DAT\" style=\"text-align:justify;\">");
 
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

@@ -512,7 +512,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<p align=\"justify\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
                       "<br />%s<br />&nbsp;</p></td>"
                       "</tr>",
             Svy.Status.Visible ? "DAT" :
@@ -3158,7 +3158,7 @@ static void Svy_WriteQstStem (const char *Stem,const char *TextStyle)
    /* Write the stem */
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">"
-                      "<p align=\"justify\">"
+                      "<p style=\"text-align:justify;\">"
                       "<tt>%s</tt>"
                       "</p>",
 	    TextStyle,Gbl.ColorRows[Gbl.RowEvenOdd],HeadingRigorousHTML);
@@ -3269,7 +3269,10 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	                       (float) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
-   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\" width=\"%u\" height=\"16\" style=\"vertical-align:top;\" alt=\"\" />&nbsp;",
+   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\" alt=\"\""
+	              " style=\"width:%upx; height:16px;"
+	              " vertical-align:top;\" />"
+	              "&nbsp;",
       Gbl.Prefs.IconsURL,BarWidth);
 
    /***** Write the number of users *****/

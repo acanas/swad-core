@@ -1454,8 +1454,8 @@ static void Lay_ShowRightColumn (void)
 			 "<td style=\"text-align:center;\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
-			 "<img src=\"%s/SWADroid120x200.png\""
-			 " width=\"120\" height=\"200\" alt=\"SWADroid\" />"
+			 "<img src=\"%s/SWADroid120x200.png\" alt=\"SWADroid\""
+			 " style=\"width:120px; height:200px;\" />"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
@@ -1759,13 +1759,14 @@ void Lay_WritePageFooter (void)
 
          /***** Institution and centre hosting the platform *****/
          fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
-                            "<img src=\"%s/%s\" width=\"%u\" height=\"%u\" alt=\"%s\" />"
+                            "<img src=\"%s/%s\" alt=\"%s\""
+                            " style=\"width:%upx; height:%upx;\" />"
                             "<div>%s</div>"
                             "</a>",
                   Cfg_ABOUT_URL,
                   Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
-                  Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
                   Cfg_ABOUT_NAME,
+                  Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
                   Cfg_ABOUT_NAME);
 
          fprintf (Gbl.F.Out,"<div>"
@@ -2025,8 +2026,8 @@ void Lay_AdvertisementMobile (void)
 	                 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"
-                         "<img src=\"%s/SWADroid200x300.png\""
-                         " width=\"200\" height=\"300\" alt=\"SWADroid\" />"
+                         "<img src=\"%s/SWADroid200x300.png\" alt=\"SWADroid\""
+                         " style=\"width:200px; height:300px;\" />"
                          "</a>"
 	                 "</td>"
 	                 "</tr>",

@@ -1806,8 +1806,10 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if (NumNewNtfs)
      {
       /***** Blinking icon *****/
-      fprintf (Gbl.F.Out,"<br /><img src=\"%s/mail13x10.gif\""
-                         " width=\"13\" height=\"10\" align=\"bottom\" /> ",
+      fprintf (Gbl.F.Out,"<br />"
+	                 "<img src=\"%s/mail13x10.gif\""
+	                 " style=\"width:13px; height:10px;"
+	                 " vertical-align:bottom;\" /> ",
                Gbl.Prefs.IconsURL);
 
       /***** Number of new notifications *****/
