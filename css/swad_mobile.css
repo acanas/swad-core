@@ -535,7 +535,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSJ_AVISO		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#632921; font-size:12pt;}
 .TIT_TBL		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:14pt;}
 .TIT_CLASSPHOTO		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#606060; font-size:11pt;}
-.CLASSPHOTO		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#606060; font-size:11pt; line-height:100%; letter-spacing:0; white-space:nowrap;}
+.CLASSPHOTO		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#606060; font-size:11pt; line-height:100%; white-space:nowrap;}
 
 .GRP_TITLE		{font-Family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif; color:#4D88A1; font-size:16pt; font-weight:bold;}
 

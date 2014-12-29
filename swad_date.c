@@ -266,7 +266,7 @@ void Dat_DrawCalendar (void)
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center;\">"
-	              "<table style=\"border-spacing:5px;\">");
+	              "<table style=\"margin:0 auto; border-spacing:5px;\">");
    for (Row = 0;
 	Row < 4;
 	Row++)

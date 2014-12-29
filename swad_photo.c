@@ -1732,7 +1732,9 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
         }
 
       /***** End selector, form, table and div *****/
-      fprintf (Gbl.F.Out,"</select></form></div>");
+      fprintf (Gbl.F.Out,"</select>"
+	                 "</form>"
+	                 "</div>");
 
       /***** Free list of all the degrees *****/
       Deg_FreeListAllDegs ();
@@ -1805,9 +1807,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Degrees);
 
-   /***** Class photo start *****/
-   Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,SeeOrPrint == Pho_DEGREES_PRINT,true,-1L,-1L,-1L);
-
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
@@ -1843,7 +1842,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
            }
 
          /***** Show average photo of students belonging to this degree *****/
-         fprintf (Gbl.F.Out,"<td style=\"text-align:center;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO\""
+                            " style=\"text-align:center;\">");
          Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
          fprintf (Gbl.F.Out,"</td>");
 

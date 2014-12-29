@@ -5886,7 +5886,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                            "<table style=\"border-spacing:4px;\">"
+                            "<table style=\"margin:0 auto; border-spacing:4px;\">"
                             "<tr>"
                             "<td colspan=\"2\" style=\"text-align:left;\">");
 
