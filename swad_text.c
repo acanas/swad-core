@@ -12245,28 +12245,7 @@ const char *Txt_Guided_academic_assignments =
 #elif L==8
 	"Atividades acad&eacute;micas guided";
 #endif
-/*
-const char *Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found =	// Warning: it is very important to include three %u in the following sentences
-#if   L==0
-	"Se han detectado %u fila(s) de cabecera, %u fila(s) de estudiantes y %u fila(s) de pie.";	// Necessita traduccio
-#elif L==1
-	"%u header row(s), %u student row(s) and %u footer row(s) found.";				// Need Übersetzung
-#elif L==2
-	"%u header row(s), %u student row(s) and %u footer row(s) found.";
-#elif L==3
-	"Se han detectado %u fila(s) de cabecera, %u fila(s) de estudiantes y %u fila(s) de pie.";
-#elif L==4
-	"%u header row(s), %u student row(s) and %u footer row(s) found.";				// Besoin de traduction
-#elif L==5
-	"Se han detectado %u fila(s) de cabecera, %u fila(s) de estudiantes y %u fila(s) de pie.";	// Okoteve traducción
-#elif L==6
-	"Si &egrave;/sono individuata/e %u riga/righe di intestazione, %u righe di studenti e %u righe a pi&egrave; di pagina.";
-#elif L==7
-	"%u wiersz nagl&oacute;wka(s) %u wierszu studenta i wierszu stopki(s) znaleziono.";
-#elif L==8
-	"%u header row(s), %u student row(s) and %u footer row(s) found.";				// Necessita de tradução
-#endif
-*/
+
 const char *Txt_Help_on_the_file_browser =
 #if   L==0
 	"Ajuda sobre el explorador de fitxers";
@@ -14301,37 +14280,7 @@ const char *Txt_IP =		// Internet Protocol address
 #elif L==8
 	"IP";
 #endif
-/*
-const char *Txt_X_is_busy_at_the_moment_Try_again_in_a_few_seconds =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"%s est&aacute; ocupado en este momento."
-        " Vuelva a intentarlo dentro de unos segundos.";	// Necessita traduccio
-#elif L==1
-	"%s ist im Moment besch&auml;ftigt."
-	" Wieder in ein paar Sekunden noch einmal.";
-#elif L==2
-	"%s is busy at the moment."
-	" Try again in a few seconds.";
-#elif L==3
-	"%s est&aacute; ocupado en este momento."
-	" Vuelva a intentarlo dentro de unos segundos.";
-#elif L==4
-	"%s est occup&eacute; en ce moment."
-	" Essayez &agrave; nouveau dans quelques secondes.";
-#elif L==5
-	"%s est&aacute; ocupado en este momento."
-	" Vuelva a intentarlo dentro de unos segundos.";	// Okoteve traducción
-#elif L==6
-	"%s &egrave; occupato in questo momento."
-	" Riprova tra pochi secondi.";
-#elif L==7
-	"%s jest zajety."
-	" Spr&oacute;buj ponownie za kilka sekund.";
-#elif L==8
-	"%s est&aacute; ocupado no momento."
-	" Tente novamente em alguns segundos.";
-#endif
-*/
+
 const char *Txt_It_is_mandatory_to_choose_a_group =
 #if   L==0
 	"Elegir grupo es obligatorio";		// Necessita traduccio
@@ -15376,28 +15325,7 @@ const char *Txt_Mandatory_enrollment =		// (to a type of group)
 #elif L==8
 	"Inscri&ccedil;&atilde;o obrigat&oacute;ria?";
 #endif
-/*
-const char *Txt_Mandatory_rules_to_compose_messages =
-#if   L==0
-	"Normas obligatorias al redactar mensajes (netiquette)";	// Necessita traduccio
-#elif L==1
-	"Verbindliche Regeln zum Verfassen von Nachrichten (Netiquette)";
-#elif L==2
-	"Mandatory rules to compose messages (netiquette)";
-#elif L==3
-	"Normas obligatorias al redactar mensajes (netiquette)";
-#elif L==4
-	"R&wgrave;gles imp&eacute;ratives de composer des messages (netiquette)";
-#elif L==5
-	"Normas obligatorias al redactar mensajes (netiquette)";	// Okoteve traducción
-#elif L==6
-	"Norme obbligatorie per comporre messaggi (netiquette)";
-#elif L==7
-	"Przepisy bezwzglednie obowiazujace do redagowania wiadomosci (netykieta)";
-#elif L==8
-	"Regras obrigat&oacute;rias para compor mensagens (netiquette)";
-#endif
-*/
+
 const char *Txt_Mark_all_notifications_as_read =
 #if   L==0
 	"Marca totes les notificacions com llegides";

@@ -473,22 +473,6 @@ static void Cty_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/******************** Put a link (form) to view countries ********************/
-/*****************************************************************************/
-/*
-void Cty_PutLinkToViewCountries (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Countries;
-
-   ***** Put form to view institutions of current country *****
-   Act_FormStart (ActSeeCty);
-   Act_LinkFormSubmit (Txt_Countries,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("earth",Txt_Countries,Txt_Countries);
-   fprintf (Gbl.F.Out,"</form>");
-  }
-*/
-/*****************************************************************************/
 /*************************** List all the countries **************************/
 /*****************************************************************************/
 

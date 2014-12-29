@@ -75,7 +75,6 @@ void Cty_SeeCtyWithPendingInss (void);
 void Cty_ShowConfiguration (void);
 void Cty_PrintConfiguration (void);
 
-// void Cty_PutLinkToViewCountries (void);
 void Cty_ListCountries (void);
 void Cty_ListCountries1 (void);
 void Cty_ListCountries2 (void);

@@ -75,7 +75,6 @@ static void Crs_PutFormToConfigLogIn (bool IsForm);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
-// static void Crs_PutLinkToViewCoursesOfCurrentDeg (void);
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
@@ -919,25 +918,6 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of courses with users");
   }
 
-/*****************************************************************************/
-/************ Put a link (form) to view courses of current degree ************/
-/*****************************************************************************/
-// Gbl.CurrentDeg.Deg.DegCod must be > 0
-/*
-static void Crs_PutLinkToViewCoursesOfCurrentDeg (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Courses_of_DEGREE_X;
-
-   ***** Put form to view courses of current degree *****
-   Act_FormStart (ActSeeCrs);
-   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShortName);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("hierarchy",Gbl.Title,Gbl.Title);
-   fprintf (Gbl.F.Out,"</form>");
-  }
-*/
 /*****************************************************************************/
 /************************** Show courses of a degree *************************/
 /*****************************************************************************/
@@ -2980,18 +2960,6 @@ void Crs_ReqSelectOneOfMyCourses (void)
    /***** Search / select more courses *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Crs_PutLinkToSearchCourses ();
-   /*
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
-      Crs_PutLinkToViewCoursesOfCurrentDeg ();
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-      Deg_PutLinkToViewDegreesOfCurrentCtr ();
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)
-      Ctr_PutLinkToViewCentresOfCurrentIns ();
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-      Ins_PutLinkToViewInstitutionsOfCurrentCty ();
-   else
-      Cty_PutLinkToViewCountries ();
-   */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Select one of my courses *****/

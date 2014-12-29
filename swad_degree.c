@@ -967,25 +967,6 @@ void Deg_ReqEditDegreeTypes (void)
   }
 
 /*****************************************************************************/
-/*********** Put a link (form) to view degrees of current centre *************/
-/*****************************************************************************/
-// Gbl.CurrentCtr.Ctr.CtrCod must be > 0
-/*
-void Deg_PutLinkToViewDegreesOfCurrentCtr (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Degrees_of_CENTRE_X;
-
-   ***** Put form to view degrees of current centre *****
-   Act_FormStart (ActSeeDeg);
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShortName);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("deg",Gbl.Title,Gbl.Title);
-   fprintf (Gbl.F.Out,"</form>");
-  }
-*/
-/*****************************************************************************/
 /************* Show the degrees belonging to the current centre **************/
 /*****************************************************************************/
 
