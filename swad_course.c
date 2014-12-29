@@ -533,6 +533,8 @@ void Crs_ChangeCourseConfig (void)
 /************************ Write menu with my courses *************************/
 /*****************************************************************************/
 
+#define Crs_MAX_BYTES_TXT_LINK 60
+
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
@@ -544,6 +546,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
+   char InsFullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
+   char CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
+   char DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
+   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
    bool IsLastItemInLevel[1+5];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
@@ -662,7 +668,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
 	 if (Highlight)
 	    fprintf (Gbl.F.Out,"<strong>");
-	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
+	 strcpy (InsFullName,Ins.FullName);
+         Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",InsFullName);
 	 if (Highlight)
 	    fprintf (Gbl.F.Out,"</strong>");
 	 fprintf (Gbl.F.Out,"</a>"
@@ -697,7 +705,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
 	    if (Highlight)
 	       fprintf (Gbl.F.Out,"<strong>");
-	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
+	    strcpy (CtrFullName,Ctr.FullName);
+            Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
+	    fprintf (Gbl.F.Out,"&nbsp;%s",CtrFullName);
 	    if (Highlight)
 	       fprintf (Gbl.F.Out,"</strong>");
 	    fprintf (Gbl.F.Out,"</a>"
@@ -732,7 +742,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
 	       if (Highlight)
 		  fprintf (Gbl.F.Out,"<strong>");
-	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	       strcpy (DegFullName,Deg.FullName);
+               Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
+	       fprintf (Gbl.F.Out,"&nbsp;%s",DegFullName);
 	       if (Highlight)
 		  fprintf (Gbl.F.Out,"</strong>");
 	       fprintf (Gbl.F.Out,"</a>"
@@ -770,7 +782,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
 		  if (Highlight)
 		     fprintf (Gbl.F.Out,"<strong>");
-		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
+	          strcpy (CrsFullName,Crs.FullName);
+                  Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
+		  fprintf (Gbl.F.Out,"&nbsp;%s",CrsFullName);
 		  if (Highlight)
 		     fprintf (Gbl.F.Out,"</strong>");
 		  fprintf (Gbl.F.Out,"</a>"
