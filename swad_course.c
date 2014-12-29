@@ -546,6 +546,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    struct Degree Deg;
    struct Course Crs;
    bool IsLastItemInLevel[1+5];
+   bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
    MYSQL_RES *mysql_resIns;
    MYSQL_RES *mysql_resCtr;
@@ -562,29 +563,35 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_My_courses);
-
-   /***** Write link to country *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\""
-		      " style=\"height:20px; text-align:left;"
-		      " vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+                      "<td>"
+                      "<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " padding:0; margin:0;"
+                      " text-align:left; vertical-align:middle;\">",
+            The_ClassFormul[Gbl.Prefs.Theme]);
+
+   /***** Write link to platform *****/
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[TabSys],
 		       The_ClassFormul[Gbl.Prefs.Theme]);
-   /* Country map */
    fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\" alt=\"%s\" title=\"%s\""
 		      " style=\"width:16px; height:16px;"
 		      " vertical-align:middle;\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_TABS_FULL_TXT[TabSys],
 	    Txt_TABS_FULL_TXT[TabSys]);
+   Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
+   if (Highlight)
+      fprintf (Gbl.F.Out,"<strong>");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TABS_FULL_TXT[TabSys]);
+   if (Highlight)
+      fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>"
 		      "</form>"
-		      "</td>"
-		      "</tr>");
+		      "</li>");
 
    /***** Get my countries *****/
    NumCtys = Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
@@ -601,11 +608,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_ShowErrorAndExit ("Country not found.");
 
       /***** Write link to country *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-			 " style=\"height:20px; text-align:left;"
-			 " vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Act_FormStart (ActSeeCtyInf);
@@ -621,14 +624,20 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Name[Gbl.Prefs.Language]);
+      Highlight = (Gbl.CurrentIns.Ins.InsCod <= 0 &&
+	           Gbl.CurrentCty.Cty.CtyCod == Cty.CtyCod);
+      if (Highlight)
+         fprintf (Gbl.F.Out,"<strong>");
       fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
+      if (Highlight)
+         fprintf (Gbl.F.Out,"</strong>");
       fprintf (Gbl.F.Out,"</a>"
 			 "</form>"
-			 "</td>"
-			 "</tr>");
+			 "</li>");
 
       /***** Get my institutions in this country *****/
-      NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Cty.CtyCod,&mysql_resIns);
+      NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                               Cty.CtyCod,&mysql_resIns);
       for (NumIns = 0;
 	   NumIns < NumInss;
 	   NumIns++)
@@ -642,11 +651,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"%s\""
-			    " style=\"height:20px; text-align:left;"
-			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	 Act_FormStart (ActSeeInsInf);
@@ -654,14 +659,20 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassFormul[Gbl.Prefs.Theme]);
 	 Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,"vertical-align:middle;");
+	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
+	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
+	 if (Highlight)
+	    fprintf (Gbl.F.Out,"<strong>");
 	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
+	 if (Highlight)
+	    fprintf (Gbl.F.Out,"</strong>");
 	 fprintf (Gbl.F.Out,"</a>"
 			    "</form>"
-			    "</td>"
-			    "</tr>");
+			    "</li>");
 
 	 /***** Get my centres in this institution *****/
-	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Ins.InsCod,&mysql_resCtr);
+	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                          Ins.InsCod,&mysql_resCtr);
 	 for (NumCtr = 0;
 	      NumCtr < NumCtrs;
 	      NumCtr++)
@@ -675,11 +686,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/
-	    fprintf (Gbl.F.Out,"<tr>"
-		               "<td class=\"%s\""
-			       " style=\"height:20px; text-align:left;"
-			       " vertical-align:middle;\">",
-		     The_ClassFormul[Gbl.Prefs.Theme]);
+	    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 	    Act_FormStart (ActSeeCtrInf);
@@ -687,14 +694,20 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassFormul[Gbl.Prefs.Theme]);
 	    Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:middle;");
+	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
+			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
+	    if (Highlight)
+	       fprintf (Gbl.F.Out,"<strong>");
 	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
+	    if (Highlight)
+	       fprintf (Gbl.F.Out,"</strong>");
 	    fprintf (Gbl.F.Out,"</a>"
 			       "</form>"
-			       "</td>"
-			       "</tr>");
+			       "</li>");
 
 	    /***** Get my degrees in this centre *****/
-	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Ctr.CtrCod,&mysql_resDeg);
+	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                             Ctr.CtrCod,&mysql_resDeg);
 	    for (NumDeg = 0;
 		 NumDeg < NumDegs;
 		 NumDeg++)
@@ -708,11 +721,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
-	       fprintf (Gbl.F.Out,"<tr>"
-	                          "<td class=\"%s\""
-				  " style=\"height:20px; text-align:left;"
-				  " vertical-align:middle;\">",
-			The_ClassFormul[Gbl.Prefs.Theme]);
+	       fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 	       Act_FormStart (ActSeeDegInf);
@@ -720,14 +729,20 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
 	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:middle;");
+	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
+			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
+	       if (Highlight)
+		  fprintf (Gbl.F.Out,"<strong>");
 	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	       if (Highlight)
+		  fprintf (Gbl.F.Out,"</strong>");
 	       fprintf (Gbl.F.Out,"</a>"
 				  "</form>"
-				  "</td>"
-				  "</tr>");
+				  "</li>");
 
 	       /***** Get my courses in this degree *****/
-	       NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_resCrs);
+	       NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                                Deg.DegCod,&mysql_resCrs);
 	       for (NumCrs = 0;
 		    NumCrs < NumCrss;
 		    NumCrs++)
@@ -741,11 +756,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
-		  fprintf (Gbl.F.Out,"<tr>"
-			             "<td class=\"%s\""
-				     " style=\"height:20px; text-align:left;"
-				     " vertical-align:middle;\">",
-			   The_ClassFormul[Gbl.Prefs.Theme]);
+		  fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 		  Act_FormStart (ActSeeCrsInf);
@@ -755,12 +766,16 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		                      The_ClassFormul[Gbl.Prefs.Theme]);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
 			             " class=\"ICON16x16\""
-			             " style=\"vertical-align:middle;\" />"
-				     "&nbsp;%s"
-		                     "</a>"
-		                     "</form>",
-		           Gbl.Prefs.IconsURL,Crs.ShortName,
-		           Crs.FullName);
+			             " style=\"vertical-align:middle;\" />",
+		           Gbl.Prefs.IconsURL,Crs.ShortName);
+		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
+		  if (Highlight)
+		     fprintf (Gbl.F.Out,"<strong>");
+		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
+		  if (Highlight)
+		     fprintf (Gbl.F.Out,"</strong>");
+		  fprintf (Gbl.F.Out,"</a>"
+		                     "</form>");
 
 		  /***** Write link to RSS file *****/
 		  sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
@@ -776,8 +791,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				     "</a>",
 			   Gbl.Prefs.IconsURL);
 
-		  fprintf (Gbl.F.Out,"</td>"
-				     "</tr>");
+		  fprintf (Gbl.F.Out,"</li>");
 		 }
 
 	       /* Free structure that stores the query result */
@@ -800,6 +814,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    DB_FreeMySQLResult (&mysql_resCty);
 
    /***** End frame *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>"
+	              "</td>"
+                      "</tr>");
    Lay_EndRoundFrameTable10 ();
   }
 

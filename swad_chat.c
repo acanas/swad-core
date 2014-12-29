@@ -60,6 +60,7 @@ extern struct Globals Gbl;
 
 static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS]);
+static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
 
 /*****************************************************************************/
 /****************** List available whiteboard/chat rooms *********************/
@@ -116,15 +117,19 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Table start *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Chat_rooms);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"height:20px;"
+                      "<td>"
+                      "<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " padding:0; margin:0;"
                       " text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Title of top level *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">"
+                      "<img src=\"%s/chat16x16.gif\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
-                      " %s</td>"
-                      "</tr>",
+                      " %s"
+                      "</li>",
             Gbl.Prefs.IconsURL,Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
@@ -205,6 +210,10 @@ void Cht_ShowListOfAvailableChatRooms (void)
      }
 
    /***** End table *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>"
+	              "</td>"
+                      "</tr>");
    Lay_EndRoundFrameTable10 ();
   }
 
@@ -279,24 +288,19 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS])
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_connected_PLURAL;
    extern const char *Txt_connected_SINGULAR;
-   const char *Style;
-   int NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
+   unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
 
    sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
-   Style = (NumUsrsInRoom > 0 ? The_ClassFormulB[Gbl.Prefs.Theme] :
-	                        The_ClassFormul[Gbl.Prefs.Theme]);
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"height:20px;"
-	              " text-align:left; vertical-align:middle;\">",
-	    Style);
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
-   Act_LinkFormSubmit (RoomFullName,Style);
+   Act_LinkFormSubmit (RoomFullName,The_ClassFormul[Gbl.Prefs.Theme]);
+   if (NumUsrsInRoom)
+      fprintf (Gbl.F.Out,"<strong>");
    fprintf (Gbl.F.Out,"%s&nbsp;%s",Icon,RoomFullName);
    if (NumUsrsInRoom > 1)
       fprintf (Gbl.F.Out," [%d %s]",
@@ -304,10 +308,11 @@ static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const cha
    else if (NumUsrsInRoom == 1)
       fprintf (Gbl.F.Out," [1 %s]",
                Txt_connected_SINGULAR);
+   if (NumUsrsInRoom)
+      fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>"
 	              "</form>"
-	              "</td>"
-	              "</tr>");
+	              "</li>");
   }
 
 /*****************************************************************************/
@@ -325,27 +330,23 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShort
 /*************** Get number of users connected to a chat room ****************/
 /*****************************************************************************/
 
-int Cht_GetNumUsrsInChatRoom (const char *RoomCode)
+static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   int NumUsrs = -1;	// -1 ==> room is not in database. We can not know the number of usrs connected
+   unsigned NumUsrs = 0;
 
    /***** Get number of users connected to chat rooms from database *****/
-   sprintf (Query,"SELECT NumUsrs FROM chat WHERE RoomCode='%s'",RoomCode);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of users connected to a chat room");
-
-   /***** Check number of rows of the result *****/
-   if (NumRows == 1)
+   sprintf (Query,"SELECT NumUsrs FROM chat WHERE RoomCode='%s'",
+            RoomCode);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of users connected to a chat room"))
      {
       /* Get number of users connected to the chat room */
       row = mysql_fetch_row (mysql_res);
       if (row[0])
-         if (sscanf (row[0],"%d",&NumUsrs) == 1)
-            if (NumUsrs < 0)
-	       NumUsrs = -1;
+         if (sscanf (row[0],"%u",&NumUsrs) != 1)
+            NumUsrs = 0;
      }
 
    /***** Free structure that stores the query result *****/

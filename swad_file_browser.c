@@ -2273,7 +2273,8 @@ static void Brw_FormToChangeZone (void)
      }
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none; padding-top:0; margin-top:0; text-align:left;\">");
+   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
+	              " padding-top:0; margin-top:0; text-align:left;\">");
 
    /***** Select the complete course, not a group *****/
    fprintf (Gbl.F.Out,"<li class=\"%s\">"

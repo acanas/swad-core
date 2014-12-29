@@ -741,7 +741,8 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul style=\"list-style-type:none; text-align:left;\" class=\"%s\">",
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " text-align:left;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
@@ -866,7 +867,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul style=\"list-style-type:none; text-align:left;\" class=\"%s\">",
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " text-align:left;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/

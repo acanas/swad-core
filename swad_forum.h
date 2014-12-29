@@ -116,11 +116,9 @@ void For_RemoveUsrFromReadThrs (long UsrCod);
 
 void For_GetNotifForumPst (char *SummaryStr,char **ContentStr,long PstCod,unsigned MaxChars,bool GetContent);
 
-void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 void For_PutAllHiddenParamsForum (void);
 void For_SetForumTypeAndRestrictAccess (void);
 void For_ShowForumList (void);
-void For_WriteLinkToTopLevelOfForums (void);
 void For_SetForumName (For_ForumType_t ForumType,
                        struct Institution *Ins,
                        struct Centre *Ctr,

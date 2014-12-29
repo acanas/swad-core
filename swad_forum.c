@@ -243,6 +243,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject);
 static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
 static void For_PutFormWhichForums (void);
+static void For_WriteLinkToTopLevelOfForums (void);
 static void For_PutParamsForumInsDegCrs (void);
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
 static void For_WriteLinksToPlatformForums (bool IsLastForum,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
@@ -265,6 +266,7 @@ static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,bool LastPst,char *LastSubject,bool NewPst,bool ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,char *CreatTime,char *Subject, char *Content);
+static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 
 /*****************************************************************************/
 /****************************** Enable a forum post **************************/
@@ -841,6 +843,8 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Forums;
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
    char Query[1024];
@@ -872,12 +876,19 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_GetThrReadTime (ThrCod,ReadTime);
 
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>"
+                      "<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " padding:0; margin:0;"
+                      " text-align:left; vertical-align:middle;\">",
+            The_ClassFormul[Gbl.Prefs.Theme]);
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -885,9 +896,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteLinkToAForum (Gbl.Forum.ForumType,true,1,IsLastItemInLevel);
 
    /* Write thread title */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT\" style=\"height:20px;"
-	              " text-align:left; vertical-align:middle;\">");
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    IsLastItemInLevel[2] = true;
    Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 
@@ -911,8 +920,11 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    fprintf (Gbl.F.Out," ");
    Msg_WriteNumMsgs (NumPsts,0);
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</li>"
+	              "</ul>"
+	              "</div>"
+	              "</td>"
+                      "</tr>");
    Lay_EndRoundFrameTable10 ();
 
    LastSubject[0] = '\0';
@@ -1271,7 +1283,7 @@ void For_GetNotifForumPst (char *SummaryStr,char **ContentStr,long PstCod,unsign
 /*************** Write number of posts in a forum of an user *****************/
 /*****************************************************************************/
 
-void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
+static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
   {
    extern const char *Txt_post;
    extern const char *Txt_posts;
@@ -1556,6 +1568,7 @@ void For_SetForumTypeAndRestrictAccess (void)
 
 void For_ShowForumList (void)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Forums;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);	// If I have permission to move threads...
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
@@ -1588,6 +1601,13 @@ void For_ShowForumList (void)
    For_PutFormWhichForums ();
 
    /***** Write a link to top level of forums *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>"
+                      "<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " padding:0; margin:0;"
+                      " text-align:left; vertical-align:middle;\">",
+            The_ClassFormul[Gbl.Prefs.Theme]);
    For_WriteLinkToTopLevelOfForums ();
 
    /***** Links to global forums *****/
@@ -1698,6 +1718,10 @@ void For_ShowForumList (void)
      }
 
    /***** End table *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>"
+	              "</td>"
+                      "</tr>");
    Lay_EndRoundFrameTable10 ();
   }
 
@@ -1745,15 +1769,12 @@ static void For_PutFormWhichForums (void)
 /**************** Write title and link to top level of forums ****************/
 /*****************************************************************************/
 
-void For_WriteLinkToTopLevelOfForums (void)
+static void For_WriteLinkToTopLevelOfForums (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Forums;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"height:20px;"
-	              " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
    Act_LinkFormSubmit (Txt_Forums,The_ClassFormul[Gbl.Prefs.Theme]);
@@ -1763,8 +1784,7 @@ void For_WriteLinkToTopLevelOfForums (void)
                       "&nbsp;%s"
                       "</a>"
                       "</form>"
-                      "</td>"
-                      "</tr>",
+                      "</li>",
             Gbl.Prefs.IconsURL,
             Txt_Forums,
             Txt_Forums,
@@ -2090,10 +2110,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 	                          The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"height:20px;"
-	              " text-align:left; vertical-align:middle;\">",
-	    Style);
+   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
 
    /***** Indent forum title *****/
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
@@ -2157,8 +2174,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 
    fprintf (Gbl.F.Out,"</a>"
 	              "</form>"
-	              "</td>"
-	              "</tr>");
+	              "</li>");
   }
 
 /*****************************************************************************/
@@ -2320,6 +2336,8 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
 void For_ShowForumThrs (void)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Forums;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
    extern const char *Txt_FORUM_THREAD_ORDER[2];
@@ -2355,17 +2373,25 @@ void For_ShowForumThrs (void)
    /***** Get threads of a forum from database *****/
    switch (Gbl.Forum.ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTITUTION_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ins.InsCod);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ctr.CtrCod);
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Ctr.CtrCod);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Deg.DegCod);
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Deg.DegCod);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Crs.CrsCod);
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
+         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+                  Gbl.Forum.Crs.CrsCod);
          break;
       default:
       	 SubQuery[0] = '\0';
@@ -2414,12 +2440,19 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>"
+                      "<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"%s\" style=\"list-style-type:none;"
+                      " padding:0; margin:0;"
+                      " text-align:left; vertical-align:middle;\">",
+            The_ClassFormul[Gbl.Prefs.Theme]);
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -2427,6 +2460,10 @@ void For_ShowForumThrs (void)
    For_WriteLinkToAForum (Gbl.Forum.ForumType,true,1,IsLastItemInLevel);
 
    /* End table */
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>"
+	              "</td>"
+                      "</tr>");
    Lay_EndRoundFrameTable10 ();
 
    /***** List the threads *****/
