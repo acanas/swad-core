@@ -47929,6 +47929,27 @@ const char *Txt_Visible_survey =
 	"Inqu&eacute;rito vis&iacute;vel";
 #endif
 
+const char *Txt_Visits_to_course =
+#if   L==0
+	"Accessos assignatura";
+#elif L==1
+	"Anmeldungen bei Kurs";
+#elif L==2
+	"Visits to course";
+#elif L==3
+	"Accesos asignatura";
+#elif L==4
+	"Visites mati&egrave;re";
+#elif L==5
+	"Accesos asignatura";	// Okoteve traducción
+#elif L==6
+	"Accessi al corso";
+#elif L==7
+	"Wizyty w trakcie";
+#elif L==8
+	"Visitas disciplina";
+#endif
+
 const char *Txt_Web_page =
 #if   L==0
 	"P&agrave;gina web";

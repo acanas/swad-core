@@ -87,6 +87,8 @@ struct Sta_StatsForum
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Sta_PutFormToRequestAccessesCrs (void);
+
 static void Sta_PutSeeAccessesButton (void);
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
@@ -351,6 +353,21 @@ void Sta_RemoveOldEntriesRecentLog (void)
   }
 
 /*****************************************************************************/
+/*************** Write a form to go to result of users' tests ****************/
+/*****************************************************************************/
+
+static void Sta_PutFormToRequestAccessesCrs (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Visits_to_course;
+
+   Act_FormStart (ActReqAccCrs);
+   Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("stats",Txt_Visits_to_course,Txt_Visits_to_course);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /******************** Show a form to make a query of clicks ******************/
 /*****************************************************************************/
 
@@ -512,6 +529,16 @@ void Sta_AskSeeGblAccesses (void)
    extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
    Sta_Role_t RoleStat;
    Sta_ClicksStatType_t ClicksStatType;
+
+   /***** Put form to go to test edition and configuration *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
+       (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
+        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+     {
+      fprintf (Gbl.F.Out,"<div style=\"padding-bottom:10px; text-align:center;\">");
+      Sta_PutFormToRequestAccessesCrs ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);
