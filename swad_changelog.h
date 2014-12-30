@@ -35,104 +35,105 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.47.7 (2014/12/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.48 (2014/12/30)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-	Version 14.47.7  :Dic 30, 2014	Changes in CSS font families. (174554 lines)
-	Version 14.47.6  :Dic 30, 2014	Changes in HTML and CSS. (174551 lines)
-	Version 14.47.5  :Dic 29, 2014	Restricted length of links in user's courses. (174549 lines)
-	Version 14.47.4  :Dic 29, 2014	Changes in HTML and CSS. (174535 lines)
-	Version 14.47.3  :Dic 29, 2014	Removed old code not used. (174499 lines)
-	Version 14.47.2  :Dic 29, 2014	Changes in listing of chat rooms, forums and user's courses. (174677 lines)
-	Version 14.47.1  :Dic 29, 2014	Changes in listing of chat rooms, forums and user's courses.
+	Version 14.48    :Dec 30, 2014	Changes in layout and CSS. (174502 lines)
+	Version 14.47.7  :Dec 30, 2014	Changes in CSS font families. (174554 lines)
+	Version 14.47.6  :Dec 30, 2014	Changes in HTML and CSS. (174551 lines)
+	Version 14.47.5  :Dec 29, 2014	Restricted length of links in user's courses. (174549 lines)
+	Version 14.47.4  :Dec 29, 2014	Changes in HTML and CSS. (174535 lines)
+	Version 14.47.3  :Dec 29, 2014	Removed old code not used. (174499 lines)
+	Version 14.47.2  :Dec 29, 2014	Changes in listing of chat rooms, forums and user's courses. (174677 lines)
+	Version 14.47.1  :Dec 29, 2014	Changes in listing of chat rooms, forums and user's courses.
 	                                Fixed bugs in CSS. (174619 lines)
-	Version 14.47    :Dic 29, 2014	Changes in listing of user's courses. (174659 lines)
-	Version 14.46.2  :Dic 28, 2014	Code refactoring in forums. (174400 lines)
-	Version 14.46.1  :Dic 28, 2014	Changes in listing of forums. (174342 lines)
-	Version 14.46    :Dic 28, 2014	Course syllabus are shown in one unique option. (174340 lines)
+	Version 14.47    :Dec 29, 2014	Changes in listing of user's courses. (174659 lines)
+	Version 14.46.2  :Dec 28, 2014	Code refactoring in forums. (174400 lines)
+	Version 14.46.1  :Dec 28, 2014	Changes in listing of forums. (174342 lines)
+	Version 14.46    :Dec 28, 2014	Course syllabus are shown in one unique option. (174340 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver programa');
 
-	Version 14.45    :Dic 27, 2014	Course syllabus are shown in one unique option (unfinished). (174346 lines)
-	Version 14.44.3  :Dic 27, 2014	Fixed bugs in layout. (174246 lines)
-	Version 14.44.2  :Dic 27, 2014	Fixed bugs in layout columns. (174262 lines)
-	Version 14.44.1  :Dic 27, 2014	Changes in layout columns. (174251 lines)
-	Version 14.44    :Dic 27, 2014	Removed vendor-specific properties in CSS. (174230 lines)
-	Version 14.43.1  :Dic 27, 2014	Fixed bugs in HTML and CSS. (174319 lines)
-	Version 14.43    :Dic 27, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (174314 lines)
-	Version 14.42.1  :Dic 26, 2014	Fixed bug in HTML of tabs.
+	Version 14.45    :Dec 27, 2014	Course syllabus are shown in one unique option (unfinished). (174346 lines)
+	Version 14.44.3  :Dec 27, 2014	Fixed bugs in layout. (174246 lines)
+	Version 14.44.2  :Dec 27, 2014	Fixed bugs in layout columns. (174262 lines)
+	Version 14.44.1  :Dec 27, 2014	Changes in layout columns. (174251 lines)
+	Version 14.44    :Dec 27, 2014	Removed vendor-specific properties in CSS. (174230 lines)
+	Version 14.43.1  :Dec 27, 2014	Fixed bugs in HTML and CSS. (174319 lines)
+	Version 14.43    :Dec 27, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (174314 lines)
+	Version 14.42.1  :Dec 26, 2014	Fixed bug in HTML of tabs.
 					Changes in foot.html to validate HTML5 in W3C validator.
 					Changes in HTML and CSS to validate HTML5 in W3C validator. (173987 lines)
-	Version 14.42    :Dic 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173703 lines)
-	Version 14.41    :Dic 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173630 lines)
-	Version 14.40.12 :Dic 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173478 lines)
-	Version 14.40.11 :Dic 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173288 lines)
-	Version 14.40.10 :Dic 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173201 lines)
-	Version 14.40.9  :Dic 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172986 lines)
-	Version 14.40.8  :Dic 24, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172653 lines)
-	Version 14.40.7  :Dic 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172552 lines)
-	Version 14.40.6  :Dic 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172400 lines)
-	Version 14.40.5  :Dic 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172269 lines)
-	Version 14.40.4  :Dic 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172112 lines)
-	Version 14.40.3  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171698 lines)
-	Version 14.40.2  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171588 lines)
-	Version 14.40.1  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator.
+	Version 14.42    :Dec 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173703 lines)
+	Version 14.41    :Dec 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173630 lines)
+	Version 14.40.12 :Dec 26, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173478 lines)
+	Version 14.40.11 :Dec 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173288 lines)
+	Version 14.40.10 :Dec 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (173201 lines)
+	Version 14.40.9  :Dec 25, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172986 lines)
+	Version 14.40.8  :Dec 24, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172653 lines)
+	Version 14.40.7  :Dec 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172552 lines)
+	Version 14.40.6  :Dec 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172400 lines)
+	Version 14.40.5  :Dec 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172269 lines)
+	Version 14.40.4  :Dec 23, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (172112 lines)
+	Version 14.40.3  :Dec 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171698 lines)
+	Version 14.40.2  :Dec 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171588 lines)
+	Version 14.40.1  :Dec 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator.
 					Fixed problem in edition of departaments. (171417 lines)
-	Version 14.40    :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171118 lines)
-	Version 14.39.6  :Dic 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (? lines)
-	Version 14.39.5  :Dic 21, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (170725 lines)
-	Version 14.39.4  :Dic 21, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (170688 lines)
-	Version 14.39.3  :Dic 21, 2014	Changes to validate HTML5 in W3C validator.
+	Version 14.40    :Dec 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (171118 lines)
+	Version 14.39.6  :Dec 22, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (? lines)
+	Version 14.39.5  :Dec 21, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (170725 lines)
+	Version 14.39.4  :Dec 21, 2014	Changes in HTML and CSS to validate HTML5 in W3C validator. (170688 lines)
+	Version 14.39.3  :Dec 21, 2014	Changes to validate HTML5 in W3C validator.
 					Charset is changed from ISO-8859-1 to windows-1252. (170664 lines)
-	Version 14.39.2  :Dic 21, 2014	Changes in layout and graphics. (170739 lines)
-	Version 14.39.1  :Dic 20, 2014	Change from XHTML 1.0 Transitional to HTML5. (170747 lines)
-	Version 14.39    :Dic 20, 2014	iframes removed from course info. (170746 lines)
-	Version 14.38.9  :Dic 20, 2014	The words "Course" and "Group" are removed from selection of course and groups in Documents and Shared files. (? lines)
-	Version 14.38.8  :Dic 18, 2014	Fixed bug in banned users. (170793 lines)
-	Version 14.38.7  :Dic 17, 2014	Link to banned users is shown only if user has banned one or more users. (170792 lines)
-	Version 14.38.6  :Dic 17, 2014	Banned users option is integrated in received messages option. (170776 lines)
-	Version 14.38.5  :Dic 16, 2014	User's institution option is integrated in record card option. (170819 lines)
-	Version 14.38.4  :Dic 16, 2014	User's photo option is integrated in record card option. (170941 lines)
-	Version 14.38.3  :Dic 16, 2014	Lost password option is integrated in session option.
+	Version 14.39.2  :Dec 21, 2014	Changes in layout and graphics. (170739 lines)
+	Version 14.39.1  :Dec 20, 2014	Change from XHTML 1.0 Transitional to HTML5. (170747 lines)
+	Version 14.39    :Dec 20, 2014	iframes removed from course info. (170746 lines)
+	Version 14.38.9  :Dec 20, 2014	The words "Course" and "Group" are removed from selection of course and groups in Documents and Shared files. (? lines)
+	Version 14.38.8  :Dec 18, 2014	Fixed bug in banned users. (170793 lines)
+	Version 14.38.7  :Dec 17, 2014	Link to banned users is shown only if user has banned one or more users. (170792 lines)
+	Version 14.38.6  :Dec 17, 2014	Banned users option is integrated in received messages option. (170776 lines)
+	Version 14.38.5  :Dec 16, 2014	User's institution option is integrated in record card option. (170819 lines)
+	Version 14.38.4  :Dec 16, 2014	User's photo option is integrated in record card option. (170941 lines)
+	Version 14.38.3  :Dec 16, 2014	Lost password option is integrated in session option.
 					User's password option is integrated in account option. (171001 lines)
-	Version 14.38.2  :Dic 14, 2014	Changes in search. (171124 lines)
-	Version 14.38.1  :Dic 13, 2014	Changes in ID messages.
+	Version 14.38.2  :Dec 14, 2014	Changes in search. (171124 lines)
+	Version 14.38.1  :Dec 13, 2014	Changes in ID messages.
 					Changes in search. (171118 lines)
-	Version 14.38    :Dic 13, 2014	Link in "my courses" to courses, degrees, centres, institutions or countries. (171083 lines)
-	Version 14.37.3  :Dic 13, 2014	The title of list of courses in current degree now contains the short name of the degree. (170898 lines)
-	Version 14.37.2  :Dic 13, 2014	Changes in search of courses link in "my courses". (170874 lines)
-	Version 14.37.1  :Dic 13, 2014	Fixed bug in HTML entities in swad_text.c (translation).
+	Version 14.38    :Dec 13, 2014	Link in "my courses" to courses, degrees, centres, institutions or countries. (171083 lines)
+	Version 14.37.3  :Dec 13, 2014	The title of list of courses in current degree now contains the short name of the degree. (170898 lines)
+	Version 14.37.2  :Dec 13, 2014	Changes in search of courses link in "my courses". (170874 lines)
+	Version 14.37.1  :Dec 13, 2014	Fixed bug in HTML entities in swad_text.c (translation).
 					Guests can view option "my courses" on profile tab.
 					Reordering of options in profile tab. (170866 lines)
-	Version 14.37    :Dic 12, 2014	New module swad_account for user's account. (170863 lines)
+	Version 14.37    :Dec 12, 2014	New module swad_account for user's account. (170863 lines)
 					1 change necessary in Makefile:
 Add swad_account.o to list of object files
 
-	Version 14.36    :Dic 12, 2014	New module swad_role for user's roles. (170764 lines)
+	Version 14.36    :Dec 12, 2014	New module swad_role for user's roles. (170764 lines)
 					1 change necessary in Makefile:
 Add swad_role.o to list of object files
 
-	Version 14.35    :Dic 12, 2014	New MIME type, suggested by Benito Palacios.
+	Version 14.35    :Dec 12, 2014	New MIME type, suggested by Benito Palacios.
 					New module swad_enrollment for enrollment (registration) or removing of users. (170725 lines)
 					1 change necessary in Makefile:
 Add swad_enrollment.o to list of object files
 
-	Version 14.34.4  :Dic 08, 2014	Some messages translated. (170623 lines)
-	Version 14.34.3  :Dic 08, 2014	Tables are printed with rounded corners. (170602 lines)
-	Version 14.34.2  :Dic 08, 2014	Button to show more details on list of attendances. (170728 lines)
-	Version 14.34.1  :Dic 08, 2014	Translation of a message when refreshing list of attendances. (170710 lines)
-	Version 14.34    :Dic 08, 2014	Teachers can refresh list of attendances after selecting events. (170688 lines)
-	Version 14.33    :Dic 07, 2014	A teacher can select attendance events in list of attendances. (170595 lines)
-	Version 14.32.1  :Dic 06, 2014	Added new social network. (170518 lines)
+	Version 14.34.4  :Dec 08, 2014	Some messages translated. (170623 lines)
+	Version 14.34.3  :Dec 08, 2014	Tables are printed with rounded corners. (170602 lines)
+	Version 14.34.2  :Dec 08, 2014	Button to show more details on list of attendances. (170728 lines)
+	Version 14.34.1  :Dec 08, 2014	Translation of a message when refreshing list of attendances. (170710 lines)
+	Version 14.34    :Dec 08, 2014	Teachers can refresh list of attendances after selecting events. (170688 lines)
+	Version 14.33    :Dec 07, 2014	A teacher can select attendance events in list of attendances. (170595 lines)
+	Version 14.32.1  :Dec 06, 2014	Added new social network. (170518 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','delicious','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
 
-        Version 14.32    :Dic 06, 2014	Changes in listing of attendance. (170509 lines)
-        Version 14.31.1  :Dic 05, 2014	Comments are shown in list of attendances when several students are listed. (170450 lines)
-        Version 14.31    :Dic 04, 2014	Comments are shown in list of attendances when one unique student is listed. (170353 lines)
-        Version 14.30.2  :Dic 03, 2014	Changes in sign up.
+        Version 14.32    :Dec 06, 2014	Changes in listing of attendance. (170509 lines)
+        Version 14.31.1  :Dec 05, 2014	Comments are shown in list of attendances when several students are listed. (170450 lines)
+        Version 14.31    :Dec 04, 2014	Comments are shown in list of attendances when one unique student is listed. (170353 lines)
+        Version 14.30.2  :Dec 03, 2014	Changes in sign up.
 					Fixed bug when deleting user's IDs. (170252 lines)
         Version 14.30.1  :Nov 30, 2014	Internal course code is shown in course configuration. (170275 lines)
         Version 14.30    :Nov 29, 2014	Database password and email password are moved from executable files to configuration files. (170248 lines)
@@ -1616,38 +1617,38 @@ ALTER TABLE tst_answers ADD COLUMN Feedback TEXT NOT NULL AFTER Answer;
 					Changes in order of options of enrollment tab. (143920 lines)
 	Version 12.32.4 :Jan 29, 2013	Fixed bug in calendar. (143918 lines)
 	Version 12.32.3 :Jan 15, 2013	New file extension allowed, requested by Javier Mateos: .dmg (Disk Image in Masc OS). (143896 lines)
-	Version 12.32.2 :Dic 30, 2012	Changed DNI to UsrID in tables log and log_recent. (143896 lines)
+	Version 12.32.2 :Dec 30, 2012	Changed DNI to UsrID in tables log and log_recent. (143896 lines)
 					2 changes necessary in database (it could take a long time, even several hours):
 ALTER TABLE log_recent CHANGE DNI UsrID CHAR(16) NOT NULL;
 ALTER TABLE log CHANGE DNI UsrID CHAR(16) NOT NULL;
 
-	Version 12.32.2 :Dic 29, 2012	Several messages translated to french. (143895 lines)
-	Version 12.32.1 :Dic 29, 2012	Changed DNI to UsrID in tables usr_data and imported_students. (144051 lines)
+	Version 12.32.2 :Dec 29, 2012	Several messages translated to french. (143895 lines)
+	Version 12.32.1 :Dec 29, 2012	Changed DNI to UsrID in tables usr_data and imported_students. (144051 lines)
 					2 changes necessary in database:
 ALTER TABLE imported_students CHANGE DNI UsrID CHAR(16) NOT NULL;
 ALTER TABLE usr_data CHANGE DNI UsrID CHAR(16) NOT NULL;
 
-	Version 12.32   :Dic 29, 2012	Changes in rules to accept users' IDs and nicknames. (144043 lines)
-	Version 12.31   :Dic 29, 2012	Nicknames must be entered with '@'. (144088 lines)
-	Version 12.30   :Dic 28, 2012	Code refactoring related to user's ID. (144171 lines)
-	Version 12.29.5 :Dic 28, 2012	Several messages translated (0 messages to be translated) and other minor changes. (144127 lines)
-	Version 12.29.4 :Dic 27, 2012	Removed old nickname check. (143975 lines)
-	Version 12.29.3 :Dic 26, 2012	Several messages translated (3 messages to be translated). (144033 lines)
-	Version 12.29.2 :Dic 23, 2012	Notices are drawn without tables, and with different widths. (143997 lines)
-	Version 12.29.1 :Dic 22, 2012	Notices are drawn using CSS3 instead of images. (143998 lines)
+	Version 12.32   :Dec 29, 2012	Changes in rules to accept users' IDs and nicknames. (144043 lines)
+	Version 12.31   :Dec 29, 2012	Nicknames must be entered with '@'. (144088 lines)
+	Version 12.30   :Dec 28, 2012	Code refactoring related to user's ID. (144171 lines)
+	Version 12.29.5 :Dec 28, 2012	Several messages translated (0 messages to be translated) and other minor changes. (144127 lines)
+	Version 12.29.4 :Dec 27, 2012	Removed old nickname check. (143975 lines)
+	Version 12.29.3 :Dec 26, 2012	Several messages translated (3 messages to be translated). (144033 lines)
+	Version 12.29.2 :Dec 23, 2012	Notices are drawn without tables, and with different widths. (143997 lines)
+	Version 12.29.1 :Dec 22, 2012	Notices are drawn using CSS3 instead of images. (143998 lines)
 					1 update necessary:
 Remove directory with icons for notices.
 Example:
 rm -Rf /var/www/html/swad/icon/notice/
 
-	Version 12.29   :Dic 18, 2012	Changes in actions related to see or admin documents. (144043 lines)
+	Version 12.29   :Dec 18, 2012	Changes in actions related to see or admin documents. (144043 lines)
 					4 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1078','es','N','Ver documentos');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1079','es','N','Ver calificaciones');
 UPDATE actions SET Txt='Ver o administrar documentos' WHERE ActCod='0';
 UPDATE actions SET Txt='Ver o administrar calificaciones' WHERE ActCod='17';
 
-	Version 12.28.4 :Dic 18, 2012	Old action to admin docs is removed. (144004 lines)
+	Version 12.28.4 :Dec 18, 2012	Old action to admin docs is removed. (144004 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1062';
 					1 update necessary:
@@ -1655,28 +1656,28 @@ Copy new icon visible16x16.gif from swad source directory to icons public direct
 Example:
 cp /home/<user>/swad/swad/icon/visible16x16.gif /var/www/html/swad/icon/
 
-	Version 12.28.3 :Dic 16, 2012	Changes in CSS related to user's photo. (143946 lines)
-	Version 12.28.2 :Dic 16, 2012	Fixed bugs in web service related to file browser. (143874 lines)
-	Version 12.28.1 :Dic 16, 2012	Abort if click is too fast.
+	Version 12.28.3 :Dec 16, 2012	Changes in CSS related to user's photo. (143946 lines)
+	Version 12.28.2 :Dec 16, 2012	Fixed bugs in web service related to file browser. (143874 lines)
+	Version 12.28.1 :Dec 16, 2012	Abort if click is too fast.
 					Changes in redirection to language. (143857 lines)
-	Version 12.28   :Dic 16, 2012	Change language after user authentication. (143831 lines)
+	Version 12.28   :Dec 16, 2012	Change language after user authentication. (143831 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1077','es','N','Cambiar de idioma tras autenticar');
 
-	Version 12.27.10:Dic 12, 2012	Small change in design of iframe for course info. (? lines)
-	Version 12.27.9 :Dic 11, 2012	Rounded rectangles for months now use CSS instead of tables. (143811 lines)
-	Version 12.27.8 :Dic 11, 2012	Fixed bugs in attendance events. (143800 lines)
-	Version 12.27.7 :Dic 11, 2012	Rectangles 2D without shadow now use CSS instead of tables. (143800 lines)
-	Version 12.27.6 :Dic 10, 2012	Rectangles 3D with shadow now use CSS instead of tables. (143793 lines)
-	Version 12.27.5 :Dic 10, 2012	Action title now use CSS instead of tables. (143770 lines)
-	Version 12.27.4 :Dic 10, 2012	Changes in CSS of alerts. (143739 lines)
-	Version 12.27.3 :Dic 10, 2012	Alerts now use CSS instead of tables. (143789 lines)
-	Version 12.27.2 :Dic 09, 2012	Several messages translated (5 messages to be translated).
+	Version 12.27.10:Dec 12, 2012	Small change in design of iframe for course info. (? lines)
+	Version 12.27.9 :Dec 11, 2012	Rounded rectangles for months now use CSS instead of tables. (143811 lines)
+	Version 12.27.8 :Dec 11, 2012	Fixed bugs in attendance events. (143800 lines)
+	Version 12.27.7 :Dec 11, 2012	Rectangles 2D without shadow now use CSS instead of tables. (143800 lines)
+	Version 12.27.6 :Dec 10, 2012	Rectangles 3D with shadow now use CSS instead of tables. (143793 lines)
+	Version 12.27.5 :Dec 10, 2012	Action title now use CSS instead of tables. (143770 lines)
+	Version 12.27.4 :Dec 10, 2012	Changes in CSS of alerts. (143739 lines)
+	Version 12.27.3 :Dec 10, 2012	Alerts now use CSS instead of tables. (143789 lines)
+	Version 12.27.2 :Dec 09, 2012	Several messages translated (5 messages to be translated).
 					Optimizations on attendance. (143714 lines)
-	Version 12.27.1 :Dic 09, 2012	Optimizations on file browser and web service. (143662 lines)
-	Version 12.27   :Dic 05, 2012	Changes in web service getFile function. (143748 lines)
-	Version 12.26   :Dic 04, 2012	Changes in web service getFile function. (143643 lines)
-	Version 12.25   :Dic 02, 2012	Changes in buffers related to TEXT and LONGTEXT database fields.
+	Version 12.27.1 :Dec 09, 2012	Optimizations on file browser and web service. (143662 lines)
+	Version 12.27   :Dec 05, 2012	Changes in web service getFile function. (143748 lines)
+	Version 12.26   :Dec 04, 2012	Changes in web service getFile function. (143643 lines)
+	Version 12.25   :Dec 02, 2012	Changes in buffers related to TEXT and LONGTEXT database fields.
 					Refactoring of code in every module. (143471 lines)
 	Version 12.24.5 :Nov 30, 2012	Changes in space used for buffer related to TEXT and LONGTEXT database fields. (142652 lines)
 					2 changes necessary in database:
@@ -2164,30 +2165,30 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 11.29.3 :Jan 10, 2012	Changes in notification of new file of marks. (124589 lines)
 	Version 11.29.2 :Jan 09, 2012	Several functions moved from swad_file_browser to swad_mark. (? lines)
 	Version 11.29.1 :Jan 03, 2012	Fixed bug in notifications of new messages. Reported by Guía Carmona Tienda. (124516 lines)
-	Version 11.29   :Dic 30, 2011	Optimizations when deleting all the messages of a user or several users. (124513 lines)
-	Version 11.28.1 :Dic 28, 2011	Changes in layout. (124471 lines)
-	Version 11.28   :Dic 23, 2011	New options to contract an expanded message. (124470 lines)
-	Version 11.27.2 :Dic 22, 2011	Optimizations on pagination of items. (124389 lines)
-	Version 11.27.1 :Dic 22, 2011	Number of new messages is removed. (124461 lines)
-	Version 11.27   :Dic 21, 2011	Changes in received and sent messages.
+	Version 11.29   :Dec 30, 2011	Optimizations when deleting all the messages of a user or several users. (124513 lines)
+	Version 11.28.1 :Dec 28, 2011	Changes in layout. (124471 lines)
+	Version 11.28   :Dec 23, 2011	New options to contract an expanded message. (124470 lines)
+	Version 11.27.2 :Dec 22, 2011	Optimizations on pagination of items. (124389 lines)
+	Version 11.27.1 :Dec 22, 2011	Number of new messages is removed. (124461 lines)
+	Version 11.27   :Dec 21, 2011	Changes in received and sent messages.
 					When a user clicks on a notification of message, that message is expanded. (124461 lines)
-	Version 11.26.2 :Dic 20, 2011	Notifications of removed events are marked with light colors. (124430 lines)
-	Version 11.26.1 :Dic 19, 2011	Notifications of removed events are marked with red background. (124279 lines)
-	Version 11.26   :Dic 19, 2011	Notifications are marked as removed when the source of the notification is removed.
+	Version 11.26.2 :Dec 20, 2011	Notifications of removed events are marked with light colors. (124430 lines)
+	Version 11.26.1 :Dec 19, 2011	Notifications of removed events are marked with red background. (124279 lines)
+	Version 11.26   :Dec 19, 2011	Notifications are marked as removed when the source of the notification is removed.
 					Notifications marked as removed are shown, but not as new notifications. (124231 lines)
-	Version 11.25.3 :Dic 17, 2011	Several messages translated. (124191 lines)
-	Version 11.25.2 :Dic 12, 2011	Fixed bug when writing a private message.
+	Version 11.25.3 :Dec 17, 2011	Several messages translated. (124191 lines)
+	Version 11.25.2 :Dec 12, 2011	Fixed bug when writing a private message.
 					Removing the use of the struct for another user in parst of the code. (124044 lines)
-	Version 11.25.1 :Dic 11, 2011	More changes in layout. (124011 lines)
-	Version 11.25   :Dic 10, 2011	More changes in layout. (124038 lines)
-	Version 11.24.3 :Dic 09, 2011	Optimization in header layout. (123954 lines)
-	Version 11.24.2 :Dic 09, 2011	Reordering of several options in groups. (123952 lines)
-	Version 11.24.1 :Dic 08, 2011	Fixed bug in test tags related to sending tests to plugins via web service, reported by Juan Miguel Boyero Corral. (123951 lines)
-	Version 11.24   :Dic 08, 2011	Lot of changes in layout.
+	Version 11.25.1 :Dec 11, 2011	More changes in layout. (124011 lines)
+	Version 11.25   :Dec 10, 2011	More changes in layout. (124038 lines)
+	Version 11.24.3 :Dec 09, 2011	Optimization in header layout. (123954 lines)
+	Version 11.24.2 :Dec 09, 2011	Reordering of several options in groups. (123952 lines)
+	Version 11.24.1 :Dec 08, 2011	Fixed bug in test tags related to sending tests to plugins via web service, reported by Juan Miguel Boyero Corral. (123951 lines)
+	Version 11.24   :Dec 08, 2011	Lot of changes in layout.
 					Options are grouped in menus. (123948 lines)
-	Version 11.23.2 :Dic 07, 2011	More changes in layout. (123982 lines)
-	Version 11.23.1 :Dic 06, 2011	More changes in layout. (123980 lines)
-	Version 11.23   :Dic 06, 2011	Lot of changes in layout. (123975 lines)
+	Version 11.23.2 :Dec 07, 2011	More changes in layout. (123982 lines)
+	Version 11.23.1 :Dec 06, 2011	More changes in layout. (123980 lines)
+	Version 11.23   :Dec 06, 2011	Lot of changes in layout. (123975 lines)
 	Version 11.22.9 :Nov 29, 2011	More optimizations for big lists of users. (124061 lines)
 	Version 11.22.8 :Nov 28, 2011	Fixed problem with big lists of users, reported by Francisco A. Ocaña Lara. (124056 lines)
 	Version 11.22.7 :Nov 28, 2011	Fixed bug when registering users in a course. (124051 lines)

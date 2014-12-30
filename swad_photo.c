@@ -239,7 +239,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);	// Link (form) to remove photo
 
       /* Show photo */
-      Pho_ShowUsrPhoto (UsrDat,PhotoURL,Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,true);
+      Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",true);
      }
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
 
@@ -964,48 +964,26 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       int Width,int Height,bool Zoom)
+                       const char *ClassPhoto,bool Zoom)
   {
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
 
-   /* Replace tildes, ñ, etc. in full name by codes, because some browsers (i.e., IE5) don't show correctly tildes with AJAX */
+   /* Replace tildes, ñ, etc. in full name by codes,
+      because some browsers (i.e., IE5) don't show correctly tildes with AJAX */
    strcpy (SpecialFullName,UsrDat->FullName);
    Str_ReplaceSpecialCharByCodes (SpecialFullName,sizeof (SpecialFullName)-1);
 
-   if (SpecialFullName[0])
-      fprintf (Gbl.F.Out,"<span title=\"%s\">",SpecialFullName);
    fprintf (Gbl.F.Out,"<img src=\"");
    if (PhotoURL)
       fprintf (Gbl.F.Out,"%s",PhotoURL);
    else
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
-   if      (Width ==  12 && Height ==  16)
-      fprintf (Gbl.F.Out,"\" class=\"F12x16\"");
-   else if (Width ==  15 && Height ==  20)
-      fprintf (Gbl.F.Out,"\" class=\"F15x20\"");
-   else if (Width ==  18 && Height ==  24)
-      fprintf (Gbl.F.Out,"\" class=\"F18x24\" style=\"width:18px; height:24px;\"");        // Here width and height are written explicitely in order to allow copy-paste to Excel
-   else if (Width ==  24 && Height ==  32)
-      fprintf (Gbl.F.Out,"\" class=\"F24x32\"");
-   else if (Width ==  36 && Height ==  48)
-      fprintf (Gbl.F.Out,"\" class=\"F36x48\"");
-   else if (Width ==  75 && Height == 100)
-      fprintf (Gbl.F.Out,"\" class=\"F75x100\"");
-   else if (Width ==  90 && Height == 120)
-      fprintf (Gbl.F.Out,"\" class=\"F90x120\"");
-   else if (Width == 120 && Height == 160)
-      fprintf (Gbl.F.Out,"\" class=\"F120x160\"");
-   else if (Width == 150 && Height == 200)
-      fprintf (Gbl.F.Out,"\" class=\"F150x200\"");
-   else
-      fprintf (Gbl.F.Out,"\" style=\"width:%dpx; height:%dpx;"
-	                 " vertical-align:middle;\"",
-	       Width,Height);
-   if (Zoom && PhotoURL &&
-       (Width  != Pho_PHOTO_REAL_WIDTH ||
-        Height != Pho_PHOTO_REAL_HEIGHT))
+   fprintf (Gbl.F.Out,"\" class=\"%s\"",ClassPhoto);
+   if (SpecialFullName[0])
+      fprintf (Gbl.F.Out," title=\"%s\"",SpecialFullName);
+   if (Zoom && PhotoURL)
      {
       strcpy (SpecialShortName,UsrDat->FirstName);
       Str_LimitLengthHTMLStr (SpecialShortName,23);
@@ -1026,8 +1004,6 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                PhotoURL,SpecialShortName);
      }
    fprintf (Gbl.F.Out," />");
-   if (SpecialFullName[0])
-      fprintf (Gbl.F.Out,"</span>");
   }
 
 /*****************************************************************************/

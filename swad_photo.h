@@ -99,7 +99,7 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto);
 bool Pho_RemovePhoto (struct UsrData *UsrDat);
 void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       int Width,int Height,bool Zoom);
+                       const char *ClassPhoto,bool Zoom);
 
 void Pho_CalcPhotoDegree (void);
 void Pho_RemoveObsoleteStatDegrees (void);

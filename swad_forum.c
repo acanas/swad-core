@@ -3147,7 +3147,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Me.PhotoURL);
          else
             fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
-         fprintf (Gbl.F.Out,"\" class=\"F12x16\" alt=\"%s\" /></span>",
+         fprintf (Gbl.F.Out,"\" class=\"PHOTO12x16\" alt=\"%s\" /></span>",
                   Txt_Thread_with_posts_from_you);
         }
       fprintf (Gbl.F.Out,"</td>");

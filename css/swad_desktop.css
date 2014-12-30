@@ -370,6 +370,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /*********************************** Icons ***********************************/
 .ICON16x16	{width:16px; height:16px; vertical-align:middle;}
+.ICON16x16B	{width:16px; height:16px; vertical-align:middle; display:block;}
 .ICON32x32	{width:32px; height:32px; vertical-align:middle;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
 
@@ -487,15 +488,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************* User's photo ********************************/
-.F12x16		{width: 12px; height: 16px; vertical-align:middle; border-radius:2px;}
-.F15x20		{width: 15px; height: 20px; vertical-align:middle; border-radius:2px;}
-.F18x24		{width: 18px; height: 24px; vertical-align:middle; border-radius:2px;}
-.F24x32		{width: 24px; height: 32px; vertical-align:middle; border-radius:3px;}
-.F36x48		{width: 36px; height: 48px; vertical-align:middle; border-radius:4px;}
-.F75x100	{width: 75px; height:100px; vertical-align:middle; border-radius:5px;}
-.F90x120	{width: 90px; height:120px; vertical-align:middle; border-radius:6px;}
-.F120x160	{width:120px; height:160px; vertical-align:middle; border-radius:7px;}
-.F150x200	{width:150px; height:200px; vertical-align:middle; border-radius:8px;}
+.PHOTO12x16	{width: 12px; height: 16px; vertical-align:middle; border-radius:2px;}
+.PHOTO12x16B	{width: 12px; height: 16px; vertical-align:middle; border-radius:2px; display:block;}
+.PHOTO15x20	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px;}
+.PHOTO18x24	{width: 18px; height: 24px; vertical-align:middle; border-radius:2px;}
+.PHOTO24x32	{width: 24px; height: 32px; vertical-align:middle; border-radius:3px;}
+.PHOTO36x48	{width: 36px; height: 48px; vertical-align:middle; border-radius:4px;}
+.PHOTO75x100	{width: 75px; height:100px; vertical-align:middle; border-radius:5px;}
+.PHOTO150x200	{width:150px; height:200px; vertical-align:middle; border-radius:8px;}
 .IMG_USR
 	{
 	width:150px;

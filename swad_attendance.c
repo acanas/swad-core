@@ -386,10 +386,9 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     12,16,true);
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                	                 NULL,
+                     "PHOTO12x16",true);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -2097,10 +2096,9 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	                 " background-color:%s;\">",
 	       BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        36,48,true);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO36x48",true);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3215,10 +3213,9 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 	                 " vertical-align:middle; background-color:%s;\">",
 	       BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 			Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -3354,10 +3351,9 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	              " vertical-align:middle; background-color:%s;\">",
             BgColor);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,
-		     ShowPhoto ? PhotoURL :
-				 NULL,
-		     18,24,
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+				        NULL,
+		     "PHOTO18x24",
 		     Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
    fprintf (Gbl.F.Out,"</td>");
 

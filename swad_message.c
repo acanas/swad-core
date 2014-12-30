@@ -2512,8 +2512,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                       "<td style=\"width:16px; padding:0;"
                       " text-align:center; vertical-align:top;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
-                      " alt=\"\" title=\"%s\" class=\"ICON16x16\""
-                      " style=\"display:block;\" />"
+                      " alt=\"\" title=\"%s\" class=\"ICON16x16B\" />"
                       "</td>"
                       "</tr>",
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
@@ -2760,10 +2759,9 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
      {
       /***** First column with author's photo (if author has a web page, put a link to it) *****/
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        24,32,true);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO24x32",true);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
@@ -2919,10 +2917,9 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    fprintf (Gbl.F.Out,"<td style=\"width:24px; text-align:center;"
                       " vertical-align:middle;\">");
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
-   Pho_ShowUsrPhoto (UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     18,24,true);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                	                NULL,
+                     "PHOTO18x24",true);
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -3065,10 +3062,9 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                             " vertical-align:top;\">");
          ShowPhoto = (UsrValid ? Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
                                  false);
-         Pho_ShowUsrPhoto (&UsrDat,
-                           ShowPhoto ? PhotoURL :
-                        	       NULL,
-                           18,24,true);
+         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	               NULL,
+                           "PHOTO18x24",true);
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
@@ -3164,8 +3160,7 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-	              " style=\"display:block;\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
 	              "</form>"
 	              "</td>",
             Gbl.Prefs.IconsURL,
@@ -3455,10 +3450,9 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"<td style=\"width:24px;"
         	               " text-align:left; vertical-align:middle;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-            Pho_ShowUsrPhoto (&UsrDat,
-                              ShowPhoto ? PhotoURL :
-                        	          NULL,
-                              18,24,true);
+            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	                  NULL,
+                              "PHOTO18x24",true);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write user's full name */

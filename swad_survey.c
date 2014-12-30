@@ -559,10 +559,9 @@ static void Svy_WriteAuthor (struct Survey *Svy)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     12,16,true);
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                	                 NULL,
+                     "PHOTO12x16",true);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);

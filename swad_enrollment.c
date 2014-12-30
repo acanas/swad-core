@@ -2274,10 +2274,9 @@ void Enr_ShowEnrollmentRequests (void)
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:18px;"
         	               " text-align:center; vertical-align:top;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-            Pho_ShowUsrPhoto (&UsrDat,
-                              ShowPhoto ? PhotoURL :
-                        	          NULL,
-                              18,24,true);
+            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	                  NULL,
+                              "PHOTO18x24",true);
             fprintf (Gbl.F.Out,"</td>");
 
             /***** User name *****/

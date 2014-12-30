@@ -1492,10 +1492,9 @@ void Usr_WriteLoggedUsrHead (void)
 
    /***** Show photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     15,20,true);
+   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
+                	                             NULL,
+                     "PHOTO15x20",true);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
@@ -2498,10 +2497,9 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2602,10 +2600,9 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2661,10 +2658,9 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
                         Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2767,10 +2763,9 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
                         Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2925,10 +2920,9 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2986,10 +2980,9 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -3070,10 +3063,9 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; background-color:%s;\">",
                BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        18,24,
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                                           NULL,
+                        "PHOTO18x24",
 	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -6780,8 +6772,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool ShowPhoto;
    bool ShowData;
    bool UsrIsTheMsgSender;
-   int PhotoWidth = 36;		// Default photo width
-   int PhotoHeight = 48;	// Default photo height
+   const char *ClassPhoto = "PHOTO18x24";	// Default photo size
    int LengthUsrData = 10;	// Maximum number of characters of user data
    char PhotoURL[PATH_MAX+1];
    char BreadcrumbStr[512];
@@ -6805,14 +6796,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    switch (ClassPhotoType)
      {
       case Usr_CLASS_PHOTO_SEL:
-         PhotoWidth = 18; PhotoHeight = 24; LengthUsrData = 10;
+	 ClassPhoto = "PHOTO18x24";
+         LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_SEL_SEE:
       case Usr_CLASS_PHOTO_SEE:
-         PhotoWidth = 36; PhotoHeight = 48; LengthUsrData = 10;
+	 ClassPhoto = "PHOTO36x48";
+         LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_PRN:
-         PhotoWidth = 36; PhotoHeight = 48; LengthUsrData = 15;
+	 ClassPhoto = "PHOTO36x48";
+         LengthUsrData = 15;
          break;
      }
 
@@ -6859,10 +6853,9 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
          /***** Show photo *****/
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-         Pho_ShowUsrPhoto (&UsrDat,
-                           ShowPhoto ? PhotoURL :
-                        	       NULL,
-                           PhotoWidth,PhotoHeight,
+         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	               NULL,
+                           ClassPhoto,
                            Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
 
          /***** Photo foot *****/

@@ -961,10 +961,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
    Act_LinkFormSubmitId (NULL,NULL,Gbl.FormId);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     18,24,true);
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                	                 NULL,
+                     "PHOTO18x24",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</form>"
 		      "</td>");
@@ -1147,10 +1146,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
             Act_LinkFormSubmit (NULL,NULL);
            }
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-         Pho_ShowUsrPhoto (&UsrDat,
-                           ShowPhoto ? PhotoURL :
-                        	       NULL,
-                           18,24,true);
+         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	               NULL,
+                           "PHOTO18x24",true);
          if (PutLinkToRecord)
 	    fprintf (Gbl.F.Out,"</a>"
 			       "</form>");

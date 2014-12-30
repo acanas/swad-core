@@ -1766,10 +1766,9 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	                 " vertical-align:top; background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,
-                        ShowPhoto ? PhotoURL :
-                                    NULL,
-                        12,16,true);
+      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                                            NULL,
+                        "PHOTO12x16",true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
@@ -2828,25 +2827,29 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td style=\"width:%upx;text-align:left;\">"
 	                 "<img src=\"%s/ejexizq24x1.gif\" alt=\"\""
-	                 " style=\"width:%upx; height:1px; display:block;\" />"
+	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
-	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
+	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       WIDTH_SEMIDIVISION_GRAPHIC);
       /* All the intermediate divisions */
       for (i = 0;
 	   i < NUM_DIVISIONS_X*2;
 	   i++)
 	 fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
 	                    "<img src=\"%s/ejex24x1.gif\" alt=\"\""
-	                    " style=\"width:%upx; height:1px; display:block;\" />"
+	                    " style=\"display:block;"
+	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
-		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
+		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+		  WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
 	                 "<img src=\"%s/tr24x1.gif\" alt=\"\""
-	                 " style=\"width:%upx; height:1px; display:block;\" />"
+	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
-	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,WIDTH_SEMIDIVISION_GRAPHIC);
+	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       WIDTH_SEMIDIVISION_GRAPHIC);
 
       /***** Write again the labels of the X axis *****/
       Sta_WriteLabelsXAxisAccMin (IncX,Format);
@@ -2933,8 +2936,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    if (NumPagesGenerated != 0.0)
       if ((BarWidth = (unsigned) (((NumPagesGenerated * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\" alt=\"\""
-	                    " style=\"width:%upx; height:1px;"
-	                    " display:block;\" />",
+	                    " style=\"display:block;"
+	                    " width:%upx; height:1px;\" />",
                   Gbl.Prefs.IconsURL,
                   (Minute % 60) == 0 ? 'g' :
                 	               'b',

@@ -297,8 +297,8 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormul[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+   fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\" alt=\"%s\""
+	              " title=\"%s\" class=\"ICON16x16B\" />"
 		      "</a>"
 		      "</form>",
 	 Gbl.Prefs.IconsURL,Txt_Create_ZIP_file,Txt_Create_ZIP_file);

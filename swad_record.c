@@ -2020,8 +2020,6 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    unsigned Col3Width = 160;
    unsigned Cols1and2Width;
    unsigned Cols2and3Width;
-   unsigned PhotoWidth = Pho_PHOTO_REAL_WIDTH;
-   unsigned PhotoHeight = Pho_PHOTO_REAL_HEIGHT;
    const char *ClassHead,*ClassForm,*ClassData;
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
@@ -2079,8 +2077,6 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	 RecordWidth = Rec_WIDTH_COMMON_RECORD_BIG;
          FrameWidth = 10;
          Col3Width = 160;
-         PhotoWidth = Pho_PHOTO_REAL_WIDTH;
-         PhotoHeight = Pho_PHOTO_REAL_HEIGHT;
 	 ClassHead = "HEAD_REC";
 	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2100,8 +2096,6 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	 RecordWidth = Rec_WIDTH_COMMON_RECORD_BIG;
          FrameWidth = 10;
          Col3Width = 160;
-         PhotoWidth = Pho_PHOTO_REAL_WIDTH;
-         PhotoHeight = Pho_PHOTO_REAL_HEIGHT;
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2112,8 +2106,6 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	 RecordWidth = Rec_WIDTH_COMMON_RECORD_SMALL;
          FrameWidth = 10;
          Col3Width = 160;
-         PhotoWidth = Pho_PHOTO_REAL_WIDTH;
-         PhotoHeight = Pho_PHOTO_REAL_HEIGHT;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2122,8 +2114,6 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	 RecordWidth = Rec_WIDTH_COMMON_RECORD_PRINT;
          FrameWidth = 1;
          Col3Width = 160;
-         PhotoWidth = Pho_PHOTO_REAL_WIDTH;
-         PhotoHeight = Pho_PHOTO_REAL_HEIGHT;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2230,10 +2220,9 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             TypeOfView == Rec_FORM_MY_COMMON_RECORD ? ClassForm :
         	                                      ClassData,
 	    Col3Width);
-   Pho_ShowUsrPhoto (UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-		     PhotoWidth,PhotoHeight,
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                	                NULL,
+		     "PHOTO150x200",
 		     Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
    /* Public / private photo */
    if (ShowData)

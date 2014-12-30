@@ -6400,10 +6400,9 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
 	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     36,48,true);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                	                NULL,
+                     "PHOTO36x48",true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to go to user's record card *****/
@@ -6539,10 +6538,9 @@ void Tst_ShowOneTestExam (void)
 	       Gbl.Usrs.Other.UsrDat.FirstName);
    fprintf (Gbl.F.Out,"<br />");
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,
-                     ShowPhoto ? PhotoURL :
-                	         NULL,
-                     36,48,true);
+   Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+                	                                NULL,
+                     "PHOTO36x48",true);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
