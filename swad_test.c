@@ -131,6 +131,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Tst_PutFormToSeeResultsOfUsersTests (void);
 static void Tst_PutFormToEdit (void);
 static void Tst_PutFormToConfigure (void);
 
@@ -251,10 +252,12 @@ void Tst_ShowFormAskTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Put form to go to test edition and configuration *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ||
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
      {
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      Tst_PutFormToSeeResultsOfUsersTests ();
       Tst_PutFormToEdit ();
       Tst_PutFormToConfigure ();
       fprintf (Gbl.F.Out,"</div>");
@@ -302,6 +305,22 @@ void Tst_ShowFormAskTst (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*************** Write a form to go to result of users' tests ****************/
+/*****************************************************************************/
+
+static void Tst_PutFormToSeeResultsOfUsersTests (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Results_tests;
+
+   Act_FormStart (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ActReqSeeMyTstExa:
+	                                                       ActReqSeeUsrTstExa);
+   Act_LinkFormSubmit (Txt_Results_tests,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("file",Txt_Results_tests,Txt_Results_tests);
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

@@ -30451,6 +30451,27 @@ const char *Txt_results_per_page =
 	"results per page";		// Necessita de tradução
 #endif
 
+const char *Txt_Results_tests =
+#if   L==0
+	"Resultats tests";
+#elif L==1
+	"Ergebnisse Tests";
+#elif L==2
+	"Results tests";
+#elif L==3
+	"Resultados tests";
+#elif L==4
+	"R&eacute;sultats tests";
+#elif L==5
+	"Resultados tests";			// Okoteve traducción
+#elif L==6
+	"Risultati test";
+#elif L==7
+	"Wyniki test&oacute;w";
+#elif L==8
+	"Resultados testes";
+#endif
+
 const char *Txt_Retype_new_password =
 #if   L==0
 	"Reescriviu la nova contrasenya";
