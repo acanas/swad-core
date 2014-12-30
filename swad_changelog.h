@@ -35,11 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.48.3 (2014/12/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.48.4 (2014/12/31)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.48.4  :Dec 31, 2014	The text of some menu items has been reduced to a single word.
+	                                Fixed bugs in layout. (174420 lines)
 	Version 14.48.3  :Dec 30, 2014	Options to see the results of test exams removed from main menu. (174418 lines)
 	Version 14.48.2  :Dec 30, 2014	New links to see the results of test exams. (174539 lines)
 	Version 14.48.1  :Dec 30, 2014	The text of some menu items has been reduced to a single word.

@@ -1182,9 +1182,8 @@ static void Lay_WriteMenuThisTabDesktop (void)
          fprintf (Gbl.F.Out,"</li>");
 
          PreviousVisibleOptions = true;
+         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
         }
-
-      SeparationBetweenPreviousAndCurrentOption |= Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
      }
 
    /***** List end *****/

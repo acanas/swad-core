@@ -1809,7 +1809,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
       fprintf (Gbl.F.Out,"<br />"
 	                 "<img src=\"%s/mail13x10.gif\""
 	                 " style=\"width:13px; height:10px;"
-	                 " vertical-align:bottom;\" /> ",
+	                 " vertical-align:middle;\" /> ",
                Gbl.Prefs.IconsURL);
 
       /***** Number of new notifications *****/

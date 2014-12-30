@@ -15586,65 +15586,65 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqRemOldCrs
 #if   L==0
-	"Eliminar assig.<br />antics"
+	"Antics"
 #elif L==1
-	"Fr&uuml;here<br />Kursen<br />entfernen"
+	"Fr&uuml;here"
 #elif L==2
-	"Eliminate<br />old courses"
+	"Old"
 #elif L==3
-	"Eliminar asig.<br />antiguas"
+	"Antiguas"
 #elif L==4
-	"&Eacute;liminer anciens<br />mati&egrave;res"
+	"Anciens"
 #elif L==5
-	"Eliminar asig.<br />antiguas"	// Okoteve traducción
+	"Antiguas"	// Okoteve traducción
 #elif L==6
-	"Rimuovere<br />vecchi corsi"
+	"Vecchi"
 #elif L==7
-	"Wyeleminuj<br />starych kurs&oacute;w"
+	"Starych"
 #elif L==8
-	"Eliminar antigas<br />disciplinas"
+	"Antigas"
 #endif
 	,
 	// ActSeeDegTyp
 #if   L==0
-	"Tipus<br />titulaci&oacute;"
+	"Estudis"
 #elif L==1
-	"Abschlussarten"
+	"Studium"
 #elif L==2
-	"Degree<br />types"
+	"Studies"
 #elif L==3
-	"Tipos<br />titulaci&oacute;n"
+	"Estudios"
 #elif L==4
-	"Types<br />&eacute;tude"
+	"&Eacute;tudes"
 #elif L==5
-	"Arandur&atilde;<br />l&aacute;ja"
+	"Estudios"	// Okoteve traducción
 #elif L==6
-	"Tipi<br />laurea"
+	"Studi"
 #elif L==7
-	"Typy<br />stopnia"
+	"Studia"
 #elif L==8
-	"Tipos<br />titula&ccedil;&atilde;o"
+	"Estudos"
 #endif
 	,
 	// ActSeeMai
 #if   L==0
-	"Dominis<br />correu"
+	"Dominis"
 #elif L==1
-	"Mail-<br />Dom&auml;nen"
+	"Dom&auml;nen"
 #elif L==2
-	"Mail<br />domains"
+	"Domains"
 #elif L==3
-	"Dominios<br />correo"
+	"Dominios"
 #elif L==4
-	"Domaines<br />messagerie"
+	"Domaines"
 #elif L==5
-	"Dominios<br />correo"	// Okoteve traducción
+	"Dominios"	// Okoteve traducción
 #elif L==6
-	"Campi<br />mail"
+	"Campi"
 #elif L==7
-	"Mail<br />domen"
+	"Domen"
 #elif L==8
-	"Dom&iacute;nios<br />email"
+	"Dom&iacute;nios"
 #endif
 	,
 	// ActSeeBan
@@ -15934,15 +15934,15 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeHld
 #if   L==0
-	"Dies festius"
+	"Festius"
 #elif L==1
 	"Feiertage"
 #elif L==2
 	"Holidays"
 #elif L==3
-	"D&iacute;as festivos"
+	"Festivos"
 #elif L==4
-	"Jours f&eacute;ri&eacute;s"
+	"F&eacute;ri&eacute;s"
 #elif L==5
 	"Arete"
 #elif L==6
@@ -16180,23 +16180,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeTchGui
 #if   L==0
-	"Guia<br />docent"
+	"Guia"
 #elif L==1
-	"Hinweise zur<br />Kurs"
+	"Hinweise"
 #elif L==2
-	"Teaching<br />guide"
+	"Guide"
 #elif L==3
-	"Gu&iacute;a<br />docente"
+	"Gu&iacute;a"
 #elif L==4
-	"Guide<br />p&eacute;dagogique"
+	"Guide"
 #elif L==5
-	"Gu&iacute;a<br />docente"	// Okoteve traducción
+	"Gu&iacute;a"	// Okoteve traducción
 #elif L==6
-	"Guida<br />didattica"
+	"Guida"
 #elif L==7
-	"Nauczanie<br />podrecznikowe"
+	"Podr&eogon;cznik"
 #elif L==8
-	"Guia<br />de ensino"
+	"Guia"
 #endif
 	,
 	// ActSeeSyl
@@ -16243,23 +16243,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActAdmCom
 #if   L==0
-	"Arxius<br />compartits"
+	"Compartits"
 #elif L==1
-	"Freigegebene<br />Dateien"
+	"Freigegebene"
 #elif L==2
-	"Shared<br />files"
+	"Shared"
 #elif L==3
-	"Archivos<br />compartidos"
+	"Compartidos"
 #elif L==4
-	"Fichiers<br />partag&eacute;s"
+	"Partag&eacute;s"
 #elif L==5
-	"Archivos<br />compartidos"	// Okoteve traducción
+	"Compartidos"	// Okoteve traducción
 #elif L==6
-	"File<br />condivisi"
+	"Condivisi"
 #elif L==7
-	"Pliki<br />udost&eogon;pnione"
+	"Udost&eogon;pnione"
 #elif L==8
-	"Arquivos<br />compartilhados"
+	"Compartilhados"
 #endif
 	,
 	// ActSeeCal
@@ -16380,23 +16380,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabAss *****************************************************
 	// ActSeeAss
 #if   L==0
-	"Sistema<br />d'avaluaci&oacute;"
+	"Sistema"
 #elif L==1
-	"Bewertungs-<br />System"
+	"System"
 #elif L==2
-	"Assessment<br />system"
+	"System"
 #elif L==3
-	"Sistema de<br />evaluaci&oacute;n"
+	"Sistema"
 #elif L==4
-	"Syst&egrave;me<br />d'&eacute;valuation"
+	"Syst&egrave;me"
 #elif L==5
-	"Sistema de<br />evaluaci&oacute;n"	// Okoteve traducción
+	"Sistema"	// Okoteve traducción
 #elif L==6
-	"Sistema di<br />valutazione"
+	"Sistema"
 #elif L==7
-	"Oceny<br />system"
+	"System"
 #elif L==8
-	"Sistema de<br />avalia&ccedil;&atilde;o"
+	"Sistema"
 #endif
 	,
 	// ActSeeAsg
@@ -16422,44 +16422,44 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActAdmAsgWrkUsr
 #if   L==0
-	"Els meus<br />treballs"
+	"Treballs"
 #elif L==1
-	"Eingereichte<br />Hausarbeiten"
+	"Hausarbeiten"
 #elif L==2
-	"My<br />homework"
+	"Homework"
 #elif L==3
-	"Mis<br />trabajos"
+	"Trabajos"
 #elif L==4
-	"Mes<br />travaux"
+	"Travaux"
 #elif L==5
-	"Che<br />tembiapo"
+	"Tembiapo"
 #elif L==6
-	"Miei<br />lavori"
+	"Lavori"
 #elif L==7
-	"Moje<br />zadanie domowe"
+	"Zadanie"
 #elif L==8
-	"Os meus<br />trabalhos"
+	"Trabalhos"
 #endif
 	,
 	// ActReqAsgWrkCrs
 #if   L==0
-	"Treballs<br />usuaris"
+	"Treballs"
 #elif L==1
-	"Hausarbeiten<br />der Benutzer"
+	"Hausarbeiten"
 #elif L==2
-	"Users'<br />homework"
+	"Homework"
 #elif L==3
-	"Trabajos<br />usuarios"
+	"Trabajos"
 #elif L==4
-	"Travails<br />utilisateurs"
+	"Travaux"
 #elif L==5
-	"Trabajos<br />usuarios"	// Okoteve traducción
+	"Tembiapo"
 #elif L==6
-	"Lavori<br />utenti"
+	"Lavori"
 #elif L==7
-	"Uzytkownicy<br />praca domowa"
+	"Zadanie"
 #elif L==8
-	"Trabalhos<br />utilizadores"
+	"Trabalhos"
 #endif
 	,
 	// ActReqTst
@@ -16485,23 +16485,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeExaAnn
 #if   L==0
-	"Convocat&ograve;ries<br />d'ex&agrave;mens"
+	"Convocat&ograve;ries"
 #elif L==1
-	"Pr&uuml;fungs-<br />Einberufungen"
+	"Pr&uuml;fungsaufrufe"
 #elif L==2
-	"Announcements<br />of exams"
+	"Announcements"
 #elif L==3
-	"Convocatorias<br />de ex&aacute;menes"
+	"Convocatorias"
 #elif L==4
-	"Convocations<br />&agrave; examens"
+	"Convocations"
 #elif L==5
-	"Convocatorias<br />de ex&aacute;menes"// Okoteve traducción
+	"Convocatorias"	// Okoteve traducción
 #elif L==6
-	"Sessioni<br />d'esame"
+	"Appelli"
 #elif L==7
-	"Ogloszenia<br />egzamin&oacute;w"
+	"Ogloszenia"
 #elif L==8
-	"Chamadas<br />exames"
+	"Chamadas"
 #endif
 	,
 	// ActSeeMrk
@@ -16527,23 +16527,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeRecCrs
 #if   L==0
-	"La meva fitxa<br />en assignat."
+	"Fitxa"
 #elif L==1
-	"Profil bei<br />Kurs"
+	"Profil"
 #elif L==2
-	"My record for<br />this course"
+	"Record"
 #elif L==3
-	"Mi ficha en<br />asignatura"
+	"Ficha"
 #elif L==4
-	"Ma carte<br />dans mati&egrave;re"
+	"Carte"
 #elif L==5
-	"Mi ficha en<br />asignatura"	// Okoteve traducción
+	"Ficha"	// Okoteve traducción
 #elif L==6
-	"La mia scheda<br />per questo corso"
+	"Scheda"
 #elif L==7
-	"M&oacute;j rekord dla<br />tego kursu"
+	"Rekord"
 #elif L==8
-	"Meu cart&atilde;o<br />em disciplina"
+	"Cart&atilde;o"
 #endif
 	,
 	NULL,
@@ -16710,23 +16710,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeSignUpReq
 #if   L==0
-	"Peticions<br />d'inscripci&oacute;"
+	"Peticions"
 #elif L==1
-	"Registrierungs-<br />anforderungen"
+	"Ersuchen"
 #elif L==2
-	"Enrollment<br />requests"
+	"Requests"
 #elif L==3
-	"Peticiones<br />de inscripci&oacute;n"
+	"Solicitudes"
 #elif L==4
-	"Demandes<br />d'inscription"
+	"Demandes"
 #elif L==5
-	"Peticiones<br />de inscripci&oacute;n"// Okoteve traducción
+	"Solicitudes"// Okoteve traducción
 #elif L==6
-	"Richieste<br />di iscrizione"
+	"Richieste"
 #elif L==7
-	"&Zdot;&aogon;dania<br />rejestrowania"
+	"Upraszanie"
 #elif L==8
-	"Solicita&ccedil;&otilde;es<br />de inscri&ccedil;&atilde;o"
+	"Solicita&ccedil;&otilde;es"
 #endif
 	,
 	// ActReqMdfOneUsr
@@ -16911,23 +16911,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqMsgUsr
 #if   L==0
-	"Escriure<br />missatge"
+	"Redactar"
 #elif L==1
-	"Neue<br />Nachricht"
+	"Schreiben"
 #elif L==2
-	"New<br />message"
+	"Write"
 #elif L==3
-	"Escribir<br />mensaje"
+	"Redactar"
 #elif L==4
-	"Nouveau<br />message"
+	"Ecrire"
 #elif L==5
-	"Escribir<br />mensaje"	// Okoteve traducción
+	"Redactar"	// Okoteve traducción
 #elif L==6
-	"Nuovo<br />messaggio"
+	"Scrivi"
 #elif L==7
-	"Nowa<br />wiadomosc"
+	"Napisz"
 #elif L==8
-	"Nova<br />mensagem"
+	"Escrever"
 #endif
 	,
 	// ActSeeRcvMsg
@@ -17440,65 +17440,65 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqRemOldCrs
 #if   L==0
-	"Eliminar assignatures antics"
+	"Antics"
 #elif L==1
-	"Fr&uuml;here Kursen entfernen"
+	"Fr&uuml;here"
 #elif L==2
-	"Eliminate old courses"
+	"Old"
 #elif L==3
-	"Eliminar asignaturas antiguas"
+	"Antiguas"
 #elif L==4
-	"&Eacute;liminer anciens mati&egrave;res"
+	"Anciens"
 #elif L==5
-	"Eliminar asignaturas antiguas"	// Okoteve traducción
+	"Antiguas"	// Okoteve traducción
 #elif L==6
-	"Rimuovere vecchi corsi"
+	"Vecchi"
 #elif L==7
-	"Wyeleminuj starych kurs&oacute;w"
+	"Starych"
 #elif L==8
-	"Eliminar antigas disciplinas"
+	"Antigas"
 #endif
 	,
 	// ActSeeDegTyp
 #if   L==0
-	"Tipus de titulaci&oacute;"
+	"Estudis"
 #elif L==1
-	"Abschlussarten"
+	"Studium"
 #elif L==2
-	"Degree types"
+	"Studies"
 #elif L==3
-	"Tipos de titulaci&oacute;n"
+	"Estudios"
 #elif L==4
-	"Types d'&eacute;tude"
+	"&Eacute;tudes"
 #elif L==5
-	"Arandur&atilde; l&aacute;ja"
+	"Estudios"	// Okoteve traducción
 #elif L==6
-	"Tipi di laurea"
+	"Studi"
 #elif L==7
-	"Typy stopnia"
+	"Studia"
 #elif L==8
-	"Tipos de titula&ccedil;&atilde;o"
+	"Estudos"
 #endif
 	,
 	// ActSeeMai
 #if   L==0
-	"Dominis correu"
+	"Dominis"
 #elif L==1
-	"Mail-Dom&auml;nen"
+	"Dom&auml;nen"
 #elif L==2
-	"Mail domains"
+	"Domains"
 #elif L==3
-	"Dominios correo"
+	"Dominios"
 #elif L==4
-	"Domaines messagerie"
+	"Domaines"
 #elif L==5
-	"Dominios correo"	// Okoteve traducción
+	"Dominios"	// Okoteve traducción
 #elif L==6
-	"Campi mail"
+	"Campi"
 #elif L==7
-	"Mail domen"
+	"Domen"
 #elif L==8
-	"Dom&iacute;nios email"
+	"Dom&iacute;nios"
 #endif
 	,
 	// ActSeeBan
@@ -17788,19 +17788,19 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeHld
 #if   L==0
-	"Dies festius"
+	"Festius"
 #elif L==1
 	"Feiertage"
 #elif L==2
 	"Holidays"
 #elif L==3
-	"D&iacute;as festivos"
+	"Festivos"
 #elif L==4
-	"Jours f&eacute;ri&eacute;s"
+	"F&eacute;ri&eacute;s"
 #elif L==5
 	"Arete"
 #elif L==6
-	"Giorni festivi"
+	"Vacanze"
 #elif L==7
 	"Noclegi"
 #elif L==8
@@ -18034,23 +18034,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeTchGui
 #if   L==0
-	"Guia docent"
+	"Guia"
 #elif L==1
-	"Hinweise zur Kurs"
+	"Hinweise"
 #elif L==2
-	"Teaching guide"
+	"Guide"
 #elif L==3
-	"Gu&iacute;a docente"
+	"Gu&iacute;a"
 #elif L==4
-	"Guide p&eacute;dagogique"
+	"Guide"
 #elif L==5
-	"Gu&iacute;a docente"	// Okoteve traducción
+	"Gu&iacute;a"	// Okoteve traducción
 #elif L==6
-	"Guida didattica"
+	"Guida"
 #elif L==7
-	"Nauczanie przypomnienie"
+	"Podr&eogon;cznik"
 #elif L==8
-	"Guia de ensino"
+	"Guia"
 #endif
 	,
 	// ActSeeSyl
@@ -18097,23 +18097,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActAdmCom
 #if   L==0
-	"Arxius compartits"
+	"Compartits"
 #elif L==1
-	"Freigegebene Dateien"
+	"Freigegebene"
 #elif L==2
-	"Shared files"
+	"Shared"
 #elif L==3
-	"Archivos compartidos"
+	"Compartidos"
 #elif L==4
-	"Fichiers partag&eacute;s"
+	"Partag&eacute;s"
 #elif L==5
-	"Archivos compartidos"	// Okoteve traducción
+	"Compartidos"	// Okoteve traducción
 #elif L==6
-	"File condivisi"
+	"Condivisi"
 #elif L==7
-	"Pliki udost&eogon;pnione"
+	"Udost&eogon;pnione"
 #elif L==8
-	"Arquivos compartilhados"
+	"Compartilhados"
 #endif
 	,
 	// ActSeeCal
@@ -18234,23 +18234,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabAss *****************************************************
 	// ActSeeAss
 #if   L==0
-	"Sistema d'avaluaci&oacute;"
+	"Sistema"
 #elif L==1
-	"Bewertungs-System"
+	"System"
 #elif L==2
-	"Assessment system"
+	"System"
 #elif L==3
-	"Sistema de evaluaci&oacute;n"
+	"Sistema"
 #elif L==4
-	"Syst&egrave;me d'&eacute;valuation"
+	"Syst&egrave;me"
 #elif L==5
-	"Sistema de evaluaci&oacute;n"	// Okoteve traducción
+	"Sistema"	// Okoteve traducción
 #elif L==6
-	"Sistema di valutazione"
+	"Sistema"
 #elif L==7
-	"System oceny"
+	"System"
 #elif L==8
-	"Sistema de avalia&ccedil;&atilde;o"
+	"Sistema"
 #endif
 	,
 	// ActSeeAsg
@@ -18276,44 +18276,44 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActAdmAsgWrkUsr
 #if   L==0
-	"Els meus treballs"
+	"Treballs"
 #elif L==1
-	"Eingereichte Hausarbeiten"
+	"Hausarbeiten"
 #elif L==2
-	"My submitted homework"
+	"Homework"
 #elif L==3
-	"Mis trabajos"
+	"Trabajos"
 #elif L==4
-	"Mes travaux"
+	"Travaux"
 #elif L==5
-	"Che tembiapo"
+	"Tembiapo"
 #elif L==6
-	"Miei lavori"
+	"Lavori"
 #elif L==7
-	"My zlozone zadanie domowe"
+	"Zadanie"
 #elif L==8
-	"Os meus trabalhos"
+	"Trabalhos"
 #endif
 	,
 	// ActReqAsgWrkCrs
 #if   L==0
-	"Treballs usuaris"
+	"Treballs"
 #elif L==1
-	"Hausarbeiten der Benutzer"
+	"Hausarbeiten"
 #elif L==2
-	"Users' homework"
+	"Homework"
 #elif L==3
-	"Trabajos usuarios"
+	"Trabajos"
 #elif L==4
-	"Travails utilisateurs"
+	"Travaux"
 #elif L==5
-	"Trabajos usuarios"	// Okoteve traducción
+	"Tembiapo"
 #elif L==6
-	"Lavori utenti"
+	"Lavori"
 #elif L==7
-	"Uzytkownik&oacute;w domowych"
+	"Zadanie"
 #elif L==8
-	"Trabalhos utilizadores"
+	"Trabalhos"
 #endif
 	,
 	// ActReqTst
@@ -18339,23 +18339,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeExaAnn
 #if   L==0
-	"Convocat&ograve;ries d'ex&agrave;mens"
+	"Convocat&ograve;ries"
 #elif L==1
 	"Pr&uuml;fungsaufrufe"
 #elif L==2
-	"Announcements of exams"
+	"Announcements"
 #elif L==3
-	"Convocatorias de ex&aacute;menes"
+	"Convocatorias"
 #elif L==4
-	"Convocations &agrave; examens"
+	"Convocations"
 #elif L==5
-	"Convocatorias de ex&aacute;menes"	// Okoteve traducción
+	"Convocatorias"	// Okoteve traducción
 #elif L==6
-	"Appelli d'esame"
+	"Appelli"
 #elif L==7
-	"Ogloszenia egzamin&oacute;w"
+	"Ogloszenia"
 #elif L==8
-	"Chamadas exames"
+	"Chamadas"
 #endif
 	,
 	// ActSeeMrk
@@ -18381,23 +18381,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeRecCrs
 #if   L==0
-	"La meva fitxa en assignat."
+	"Fitxa"
 #elif L==1
-	"Profil bei Kurs"
+	"Profil"
 #elif L==2
-	"My record for this course"
+	"Record"
 #elif L==3
-	"Mi ficha en asignatura"
+	"Ficha"
 #elif L==4
-	"Ma carte dans mati&egrave;re"
+	"Carte"
 #elif L==5
-	"Mi ficha en asignatura"	// Okoteve traducción
+	"Ficha"	// Okoteve traducción
 #elif L==6
-	"La mia scheda per questo corso"
+	"Scheda"
 #elif L==7
-	"M&oacute;j rekord na ten kurs"
+	"Rekord"
 #elif L==8
-	"Meu cart&atilde;o em disciplina"
+	"Cart&atilde;o"
 #endif
 	,
 	NULL,
@@ -18564,23 +18564,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeSignUpReq
 #if   L==0
-	"Peticions d'inscripci&oacute;"
+	"Peticions"
 #elif L==1
-	"Registrierungsanforderungen"
+	"Ersuchen"
 #elif L==2
-	"Enrollment requests"
+	"Requests"
 #elif L==3
-	"Peticiones de inscripci&oacute;n"
+	"Solicitudes"
 #elif L==4
-	"Demandes d'inscription"
+	"Demandes"
 #elif L==5
-	"Peticiones de inscripci&oacute;n"		// Okoteve traducción
+	"Solicitudes"// Okoteve traducción
 #elif L==6
-	"Richieste di iscrizione"
+	"Richieste"
 #elif L==7
-	"&Zdot;&aogon;dania rejestrowania"
+	"Upraszanie"
 #elif L==8
-	"Solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o"
+	"Solicita&ccedil;&otilde;es"
 #endif
 	,
 	// ActReqMdfOneUsr
@@ -18765,23 +18765,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqMsgUsr
 #if   L==0
-	"Escriure missatge"
+	"Redactar"
 #elif L==1
-	"Neue Nachricht"
+	"Schreiben"
 #elif L==2
-	"New message"
+	"Write"
 #elif L==3
-	"Escribir mensaje"
+	"Redactar"
 #elif L==4
-	"Nouveau message"
+	"Ecrire"
 #elif L==5
-	"Escribir mensaje"	// Okoteve traducción
+	"Redactar"	// Okoteve traducción
 #elif L==6
-	"Nuovo messaggio"
+	"Scrivi"
 #elif L==7
-	"Nowych wiadomosci"
+	"Napisz"
 #elif L==8
-	"Nova mensagem"
+	"Escrever"
 #endif
 	,
 	// ActSeeRcvMsg
