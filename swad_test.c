@@ -1119,7 +1119,8 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_ShowFormAnswerTypes ();
 
       /***** Starting and ending dates in the search *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	                 " style=\"margin:0 auto;\">");
       Dat_WriteFormIniEndDates ();
       fprintf (Gbl.F.Out,"</table>");
 
@@ -4215,8 +4216,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.QstCod != -1)	// If the question already has assigned a code
       Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table>");
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
    /***** Get tags already existing for questions in current course *****/
    NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res);
@@ -4501,8 +4501,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Send and undo buttons *****/
    fprintf (Gbl.F.Out,"</table>"
 	              "</tr>"
-	              "</table>"
-	              "</div>");
+	              "</table>");
    Lay_PutSendButton (Txt_Save);
    fprintf (Gbl.F.Out,"</form>");
 
@@ -5934,11 +5933,9 @@ void Tst_SelDatesToSeeMyTstExams (void)
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Dat_WriteFormIniEndDates ();
-   fprintf (Gbl.F.Out,"</table>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Button to send the form *****/
    Lay_PutSendButton (Txt_See_exams);
@@ -6274,7 +6271,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 						              ActSeeOneTstExaOth);
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file16x16.gif\""
-			       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICON16x16B\" />"
 			       "</form>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_See_exam,

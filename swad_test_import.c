@@ -138,7 +138,7 @@ void TsI_ShowFormImportQstsFromXML (void)
 
    /***** Write a form to import questions *****/
    Act_FormStart (ActImpTstQst);
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"
@@ -148,7 +148,7 @@ void TsI_ShowFormImportQstsFromXML (void)
 	              "</td>"
                       "</tr>"
                       "<tr>"
-	              "<td colspan=\"2\" style=\"text-align:right;\">"
+	              "<td colspan=\"2\" style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" accept=\"text/xml\" />"
 	              "</td>"
 	              "</tr>"

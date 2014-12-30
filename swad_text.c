@@ -16867,23 +16867,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeAnn
 #if   L==0
-	"Anuncis<br />globals"
+	"Anuncis"
 #elif L==1
-	"Globale<br />Bekanntmachungen"
+	"Bekanntmachungen"
 #elif L==2
-	"Global<br />announcements"
+	"Announcements"
 #elif L==3
-	"Anuncios<br />globales"
+	"Anuncios"
 #elif L==4
-	"Annonces<br />globales"
+	"Annonces"
 #elif L==5
-	"Anuncios<br />globales"	// Okoteve traducción
+	"Anuncios"	// Okoteve traducción
 #elif L==6
-	"Annunci<br />globali"
+	"Annunci"
 #elif L==7
-	"Globalne<br />og&lstrok;oszenia"
+	"Og&lstrok;oszenia"
 #elif L==8
-	"An&uacute;ncios<br />globais"
+	"An&uacute;ncios"
 #endif
 	,
 	// ActSeeNot
@@ -17014,17 +17014,17 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMaiStd
 #if   L==0
-	"Correu<br />electr&ograve;nic"
+	"Correu"
 #elif L==1
 	"E-Mail"
 #elif L==2
 	"E-mail"
 #elif L==3
-	"Correo<br />electr&oacute;nico"
+	"Correo"
 #elif L==4
-	"Courrier<br />&eacute;lectronique"
+	"Courrier"
 #elif L==5
-	"&Ntilde;e'&#7869;veve"
+	"Correo"	// Okoteve traducción
 #elif L==6
 	"E-mail"
 #elif L==7
@@ -17070,65 +17070,65 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqUseGbl
 #if   L==0
-	"&Uacute;s de<br />SWAD"
+	"Xifres"
 #elif L==1
-	"Nutzung<br />von SWAD"
+	"Zahlen"
 #elif L==2
-	"Use of<br />SWAD"
+	"Figures"
 #elif L==3
-	"Uso de<br />SWAD"
+	"Cifras"
 #elif L==4
-	"Utilisation<br />de SWAD"
+	"Chiffres"
 #elif L==5
-	"Uso de<br />SWAD"	// Okoteve traducción
+	"Cifras"	// Okoteve traducción
 #elif L==6
-	"Uso di<br />SWAD"
+	"Cifre"
 #elif L==7
-	"Korzystanie z<br />SWAD"
+	"Cyfry"
 #elif L==8
-	"Utiliza&ccedil;&atilde;o<br />de SWAD"
+	"N&uacute;meros"
 #endif
 	,
 	// ActSeePhoDeg
 #if   L==0
-	"Orla<br />titulacions"
+	"Titulacions"
 #elif L==1
-	"Mischbilder der<br />Studieng&auml;nge"
+	"Studiengang"
 #elif L==2
-	"Photos<br />of degrees"
+	"Degrees"
 #elif L==3
-	"Orla<br />titulaciones"
+	"Titulaciones"
 #elif L==4
-	"Photographie<br />&eacute;tudes"
+	"&Eacute;tudes"
 #elif L==5
-	"Orla<br />titulaciones"	// Okoteve traducción
+	"Arandur&atilde;"
 #elif L==6
-	"Foto<br />di laurea"
+	"Lauree"
 #elif L==7
-	"Zdjecia<br />stopni"
+	"Stopnie"
 #elif L==8
-	"Fotografia<br />titula&ccedil;oes"
+	"Titula&ccedil;&atilde;os"
 #endif
 	,
 	// ActReqStaCrs
 #if   L==0
-	"Indicadors<br />assignatures"
+	"Indicadors"
 #elif L==1
-	"Anzeigen<br />Kursen"
+	"Anzeigen"
 #elif L==2
-	"Indicators<br />courses"
+	"Indicators"
 #elif L==3
-	"Indicadores<br />asignaturas"
+	"Indicadores"
 #elif L==4
-	"Indicateurs<br />mati&egrave;res"
+	"Indicateurs"
 #elif L==5
-	"Indicadores<br />asignaturas"	// Okoteve traducción
+	"Indicadores"	// Okoteve traducción
 #elif L==6
-	"Indicatori<br />corsi"
+	"Indicatori"
 #elif L==7
-	"Wska&zacute;niki<br />kurs&oacute;w"
+	"Wska&zacute;niki"
 #elif L==8
-	"Indicadores<br />disciplinas"
+	"Indicadores"
 #endif
 	,
 	// ActReqAccCrs
@@ -17175,23 +17175,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActLstClk
 #if   L==0
-	"&Uacute;ltims<br />clics"
+	"Clics"
 #elif L==1
-	"Letzte<br />Klicks"
+	"Klicks"
 #elif L==2
-	"Last<br />clicks"
+	"Clicks"
 #elif L==3
-	"&Uacute;ltimos<br />clics"
+	"Clics"
 #elif L==4
-	"Derni&egrave;re<br />clics"
+	"Clics"
 #elif L==5
-	"&Uacute;ltimos<br />clics"	// Okoteve traducción
+	"Clics"	// Okoteve traducción
 #elif L==6
-	"Ultimi<br />clic"
+	"Clic"
 #elif L==7
-	"Ostatnich<br />klikni&eogon;&cacute;"
+	"Klikni&eogon;&cacute;"
 #elif L==8
-	"&Uacute;ltimos<br />cliques"
+	"Cliques"
 #endif
 	,
 	NULL,
@@ -17233,23 +17233,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMyCrs
 #if   L==0
-	"Els meus<br />assignatures"
+	"Assignatures"
 #elif L==1
-	"Meine<br />Kursen"
+	"Kursen"
 #elif L==2
-	"My courses"
+	"Courses"
 #elif L==3
-	"Mis<br />asignaturas"
+	"Asignaturas"
 #elif L==4
-	"Mes<br />mati&egrave;res"
+	"Mati&egrave;res"
 #elif L==5
-	"Ch<br />mbo'esyry"
+	"Mbo'esyry"
 #elif L==6
-	"Miei corsi"
+	"Corsi"
 #elif L==7
-	"Moje<br />kurs&oacute;w"
+	"Kurs&oacute;w"
 #elif L==8
-	"As minha<br />disciplinas"
+	"Disciplinas"
 #endif
 	,
 	// ActSeeMyTimTbl
@@ -17359,23 +17359,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMFUAct
 #if   L==0
-	"Accions<br />freq&uuml;ents"
+	"Accions"
 #elif L==1
-	"H&auml;ufige<br />Aktionen"
+	"Aktionen"
 #elif L==2
-	"Frequent<br />actions"
+	"Actions"
 #elif L==3
-	"Acciones<br />frecuentes"
+	"Acciones"
 #elif L==4
-	"Actions<br />fr&eacute;quentes"
+	"Actions"
 #elif L==5
-	"Acciones<br />frecuentes"	// Okoteve traducción
+	"Acciones"	// Okoteve traducción
 #elif L==6
-	"Azioni<br />frequenti"
+	"Azioni"
 #elif L==7
-	"Cz&eogon;ste<br />dzia&lstrok;ania"
+	"Akcje"
 #elif L==8
-	"A&ccedil;&otilde;es<br />freq&uuml;entes"
+	"A&ccedil;&otilde;es"
 #endif
 	,
 	NULL,
@@ -18761,23 +18761,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeAnn
 #if   L==0
-	"Anuncis globals"
+	"Anuncis"
 #elif L==1
-	"Globale Bekanntmachungen"
+	"Bekanntmachungen"
 #elif L==2
-	"Global announcements"
+	"Announcements"
 #elif L==3
-	"Anuncios globales"
+	"Anuncios"
 #elif L==4
-	"Annonces globales"
+	"Annonces"
 #elif L==5
-	"Anuncios globales"	// Okoteve traducción
+	"Anuncios"	// Okoteve traducción
 #elif L==6
-	"Annunci globali"
+	"Annunci"
 #elif L==7
-	"Globalne og&lstrok;oszenia"
+	"Og&lstrok;oszenia"
 #elif L==8
-	"An&uacute;ncios globais"
+	"An&uacute;ncios"
 #endif
 	,
 	// ActSeeNot
@@ -18908,17 +18908,17 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMaiStd
 #if   L==0
-	"Correu electr&ograve;nic"
+	"Correu"
 #elif L==1
 	"E-Mail"
 #elif L==2
 	"E-mail"
 #elif L==3
-	"Correo electr&oacute;nico"
+	"Correo"
 #elif L==4
-	"Courrier &eacute;lectronique"
+	"Courrier"
 #elif L==5
-	"&Ntilde;e'&#7869;veve"
+	"Correo"	// Okoteve traducción
 #elif L==6
 	"E-mail"
 #elif L==7
@@ -18964,65 +18964,65 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqUseGbl
 #if   L==0
-	"&Uacute;s de SWAD"
+	"Xifres"
 #elif L==1
-	"Nutzung von SWAD"
+	"Zahlen"
 #elif L==2
-	"Use of SWAD"
+	"Figures"
 #elif L==3
-	"Uso de SWAD"
+	"Cifras"
 #elif L==4
-	"Utilisation de SWAD"
+	"Chiffres"
 #elif L==5
-	"Uso de SWAD"	// Okoteve traducción
+	"Cifras"	// Okoteve traducción
 #elif L==6
-	"Uso di SWAD"
+	"Cifre"
 #elif L==7
-	"Korzystanie z SWAD"
+	"Cyfry"
 #elif L==8
-	"Utiliza&ccedil;&atilde;o de SWAD"
+	"N&uacute;meros"
 #endif
 	,
 	// ActSeePhoDeg
 #if   L==0
-	"Orla titulacions"
+	"Titulacions"
 #elif L==1
-	"Mischbilder der Studieng&auml;nge"
+	"Studiengang"
 #elif L==2
-	"Photos of degrees"
+	"Degrees"
 #elif L==3
-	"Orla titulaciones"
+	"Titulaciones"
 #elif L==4
-	"Photographie &eacute;tudes"
+	"&Eacute;tudes"
 #elif L==5
-	"Orla titulaciones"	// Okoteve traducción
+	"Arandur&atilde;"
 #elif L==6
-	"Foto di lauree"
+	"Lauree"
 #elif L==7
-	"Zdjecia stopni"
+	"Stopnie"
 #elif L==8
-	"Fotografia titula&ccedil;oes"
+	"Titula&ccedil;&atilde;os"
 #endif
 	,
 	// ActReqStaCrs
 #if   L==0
-	"Indicadors assignatures"
+	"Indicadors"
 #elif L==1
-	"Anzeigen Kursen"
+	"Anzeigen"
 #elif L==2
-	"Indicators courses"
+	"Indicators"
 #elif L==3
-	"Indicadores asignaturas"
+	"Indicadores"
 #elif L==4
-	"Indicateurs mati&egrave;res"
+	"Indicateurs"
 #elif L==5
-	"Indicadores asignaturas"	// Okoteve traducción
+	"Indicadores"	// Okoteve traducción
 #elif L==6
-	"Indicatori corsi"
+	"Indicatori"
 #elif L==7
-	"Wska&zacute;niki kurs&oacute;w"
+	"Wska&zacute;niki"
 #elif L==8
-	"Indicadores disciplinas"
+	"Indicadores"
 #endif
 	,
 	// ActReqAccCrs
@@ -19069,23 +19069,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActLstClk
 #if   L==0
-	"&Uacute;ltims clics"
+	"Clics"
 #elif L==1
-	"Letzte Klicks"
+	"Klicks"
 #elif L==2
-	"Last clicks"
+	"Clicks"
 #elif L==3
-	"&Uacute;ltimos clics"
+	"Clics"
 #elif L==4
-	"Derni&egrave;re clics"
+	"Clics"
 #elif L==5
-	"&Uacute;ltimos clics"	// Okoteve traducción
+	"Clics"	// Okoteve traducción
 #elif L==6
-	"Ultimi clic"
+	"Clic"
 #elif L==7
-	"Ostatnich klikni&eogon;&cacute;"
+	"Klikni&eogon;&cacute;"
 #elif L==8
-	"&Uacute;ltimos cliques"
+	"Cliques"
 #endif
 	,
 	NULL,
@@ -19127,23 +19127,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMyCrs
 #if   L==0
-	"Els meus assignatures"
+	"Assignatures"
 #elif L==1
-	"Meine Kursen"
+	"Kursen"
 #elif L==2
-	"My courses"
+	"Courses"
 #elif L==3
-	"Mis asignaturas"
+	"Asignaturas"
 #elif L==4
-	"Mes mati&egrave;res"
+	"Mati&egrave;res"
 #elif L==5
-	"Che mbo'esyry"
+	"Mbo'esyry"
 #elif L==6
-	"Miei corsi"
+	"Corsi"
 #elif L==7
-	"Moje kurs&oacute;w"
+	"Kurs&oacute;w"
 #elif L==8
-	"As minha disciplinas"
+	"Disciplinas"
 #endif
 	,
 	// ActSeeMyTimTbl
@@ -19253,23 +19253,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMFUAct
 #if   L==0
-	"Accions freq&uuml;ents"
+	"Accions"
 #elif L==1
-	"H&auml;ufige Aktionen"
+	"Aktionen"
 #elif L==2
-	"Frequent actions"
+	"Actions"
 #elif L==3
-	"Acciones frecuentes"
+	"Acciones"
 #elif L==4
-	"Actions fr&eacute;quentes"
+	"Actions"
 #elif L==5
-	"Acciones frecuentes"	// Okoteve traducción
+	"Acciones"	// Okoteve traducción
 #elif L==6
-	"Azioni frequenti"
+	"Azioni"
 #elif L==7
-	"Cz&eogon;ste dzia&lstrok;ania"
+	"Akcje"
 #elif L==8
-	"A&ccedil;&otilde;es freq&uuml;entes"
+	"A&ccedil;&otilde;es"
 #endif
 	,
 	NULL,
