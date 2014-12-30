@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.47.6 (2014/12/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.47.7 (2014/12/30)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.47.7  :Dic 30, 2014	Changes in CSS font families. (174554 lines)
 	Version 14.47.6  :Dic 30, 2014	Changes in HTML and CSS. (174551 lines)
 	Version 14.47.5  :Dic 29, 2014	Restricted length of links in user's courses. (174549 lines)
 	Version 14.47.4  :Dic 29, 2014	Changes in HTML and CSS. (174535 lines)
