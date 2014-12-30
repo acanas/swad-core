@@ -16464,65 +16464,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqTst
 #if   L==0
-	"Test"
+	"Tests"
 #elif L==1
-	"Test"
+	"Tests"
 #elif L==2
-	"Test"
+	"Tests"
 #elif L==3
-	"Test"
+	"Tests"
 #elif L==4
-	"Test"
+	"Tests"
 #elif L==5
-	"Test"	// Okoteve traducción
+	"Tests"	// Okoteve traducción
 #elif L==6
 	"Test"
 #elif L==7
-	"Test"
+	"Test&oacute;w"
 #elif L==8
-	"Teste"
-#endif
-	,
-	// ActReqSeeMyTstExa
-#if   L==0
-	"Resultats<br />meus tests"
-#elif L==1
-	"Ergebnisse<br />meiner Tests"
-#elif L==2
-	"Results<br />my tests"
-#elif L==3
-	"Resultados<br />mis tests"
-#elif L==4
-	"R&eacute;sultats<br />mes tests"
-#elif L==5
-	"Resultados<br />mis tests"		// Okoteve traducción
-#elif L==6
-	"Risultati<br />miei test"
-#elif L==7
-	"Wyniki<br />moich test&oacute;w"
-#elif L==8
-	"Resultados<br />meus testes"
-#endif
-	,
-	// ActReqSeeUsrTstExa
-#if   L==0
-	"Resultats<br />tests usuaris"
-#elif L==1
-	"Ergebnisse<br />Benutzer Tests"
-#elif L==2
-	"Results<br />users tests"
-#elif L==3
-	"Resultados<br />tests usuarios"
-#elif L==4
-	"R&eacute;sultats<br />tests utilis."
-#elif L==5
-	"Resultados<br />tests usuarios"	// Okoteve traducción
-#elif L==6
-	"Risultati<br />test utenti"
-#elif L==7
-	"Wyniki<br />test&oacute;w uzyt."
-#elif L==8
-	"Resultados<br />testes utiliz."
+	"Testes"
 #endif
 	,
 	// ActSeeExaAnn
@@ -16588,6 +16546,8 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Meu cart&atilde;o<br />em disciplina"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18358,65 +18318,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqTst
 #if   L==0
-	"Test"
+	"Tests"
 #elif L==1
-	"Test"
+	"Tests"
 #elif L==2
-	"Test"
+	"Tests"
 #elif L==3
-	"Test"
+	"Tests"
 #elif L==4
-	"Test"
+	"Tests"
 #elif L==5
-	"Test"	// Okoteve traducción
+	"Tests"	// Okoteve traducción
 #elif L==6
 	"Test"
 #elif L==7
-	"Test"
+	"Test&oacute;w"
 #elif L==8
-	"Teste"
-#endif
-	,
-	// ActReqSeeMyTstExa
-#if   L==0
-	"Resultats dels meus tests"
-#elif L==1
-	"Ergebnisse meiner Tests"
-#elif L==2
-	"Results of my tests"
-#elif L==3
-	"Resultados de mis tests"
-#elif L==4
-	"R&eacute;sultats de mes tests"
-#elif L==5
-	"Resultados de mis tests"			// Okoteve traducción
-#elif L==6
-	"Risultati dei miei test"
-#elif L==7
-	"Wyniki moich test&oacute;w"
-#elif L==8
-	"Resultados dos meus testes"
-#endif
-	,
-	// ActReqSeeUsrTstExa
-#if   L==0
-	"Resultats tests usuaris"
-#elif L==1
-	"Ergebnisse Benutzer Tests"
-#elif L==2
-	"Results users tests"
-#elif L==3
-	"Resultados tests usuarios"
-#elif L==4
-	"R&eacute;sultats tests utilisateurs"
-#elif L==5
-	"Resultados tests usuarios"			// Okoteve traducción
-#elif L==6
-	"Risultati test utenti"
-#elif L==7
-	"Wyniki test&oacute;w uzytkownik&oacute;w"
-#elif L==8
-	"Resultados testes utilizadores"
+	"Testes"
 #endif
 	,
 	// ActSeeExaAnn
@@ -18482,6 +18400,8 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Meu cart&atilde;o em disciplina"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20266,65 +20186,23 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqTst
 #if   L==0
-	"Test sobre els continguts d'aquesta assignatura"
+	"Tests sobre els continguts d'aquesta assignatura"
 #elif L==1
-	"Test"
+	"Tests"
 #elif L==2
-	"Test on the contents of this course"
+	"Tests on the contents of this course"
 #elif L==3
-	"Test sobre los contenidos de esta asignatura"
+	"Tests sobre los contenidos de esta asignatura"
 #elif L==4
-	"Test sur le contenu de cette mati&egrave;re"
+	"Tests sur le contenu de cette mati&egrave;re"
 #elif L==5
-	"Test sobre los contenidos de esta asignatura"// Okoteve traducción
+	"Tests sobre los contenidos de esta asignatura"// Okoteve traducción
 #elif L==6
 	"Test sui contenuti del corso"
 #elif L==7
-	"Test"
+	"Test&oacute;w"
 #elif L==8
-	"Teste"
-#endif
-	,
-	// ActReqSeeMyTstExa
-#if   L==0
-	"Resultats del meus tests"
-#elif L==1
-	"Ergebnisse meiner Tests"
-#elif L==2
-	"Results of my tests"
-#elif L==3
-	"Resultados de mis tests en esta asignatura"
-#elif L==4
-	"R&eacute;sultats de mes tests"
-#elif L==5
-	"Resultados de mis tests en esta asignatura"// Okoteve traducción
-#elif L==6
-	"Risultati dei miei test"
-#elif L==7
-	"Wyniki moich test&oacute;w"
-#elif L==8
-	"Resultados dos meus testes"
-#endif
-	,
-	// ActReqSeeUsrTstExa
-#if   L==0
-	"Resultats tests usuaris"
-#elif L==1
-	"Ergebnisse Benutzer Tests"
-#elif L==2
-	"Results users tests"
-#elif L==3
-	"Resultados de tests de los usuarios de esta asignatura"
-#elif L==4
-	"R&eacute;sultats tests utilisateurs"
-#elif L==5
-	"Resultados de tests de los usuarios de esta asignatura"// Okoteve traducción
-#elif L==6
-	"Risultati dei test utenti"
-#elif L==7
-	"Wyniki test&oacute;w uzytkownik&oacute;w"
-#elif L==8
-	"Resultados testes utilizadores"
+	"Testes"
 #endif
 	,
 	// ActSeeExaAnn
@@ -20396,6 +20274,8 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Meu cart&atilde;o em disciplina"
 #endif
 	,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

@@ -480,8 +480,6 @@ Assessment:
         360. ActAdmAsgWrkUsr		One user sends works of the course
         361. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
 	362. ActReqTst			Request a test of self-assesment
-	363. ActReqSeeMyTstExa		Select range of dates to see my results of test exams
-	364. ActReqSeeUsrTstExa		Select users and range of dates to see results of test exams
 	365. ActSeeExaAnn		Show the exam announcements
 	366. ActSeeAdmMrk		Marks zone (see or admin)
         367. ActSeeRecCrs		Show fields of my record in this course
@@ -578,7 +576,7 @@ Assessment:
 	458. ActReqDatWrkCrs		Ask for metadata of a file of works in a course
 	459. ActChgDatWrkCrs		Change metadata of a file of works in a course
 	460. ActDowWrkCrs		Download a file of works in a course
-	461. ActSeeTst			Show the sleft-assessment test
+	461. ActSeeTst			Show the seft-assessment test
 	462. ActAssTst			Assess a self-assessment test
 	463. ActEdiTstQst		Request the edition of self-assessment questions
 	464. ActEdiOneTstQst		Edit one self-assesment test question
@@ -593,7 +591,9 @@ Assessment:
 	473. ActDisableTag		Disable a tag
 	474. ActRenTag			Rename a tag
 	475. ActRcvCfgTst		Receive configuration of test
+	363. ActReqSeeMyTstExa		Select range of dates to see my results of test exams
 	476. ActSeeMyTstExa		Show my test results
+	364. ActReqSeeUsrTstExa		Select users and range of dates to see results of test exams
 	477. ActSeeUsrTstExa		Show test results of several users
 	478. ActSeeOneTstExaMe		Show one test exam of me as student
 	479. ActSeeOneTstExaOth		Show one test exam of other user
@@ -1126,9 +1126,7 @@ const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		{ActAdmAsgWrkUsr	,false},
 		{ActReqAsgWrkCrs	,true },
 
-		{ActReqTst		,false},
-		{ActReqSeeMyTstExa	,false},
-		{ActReqSeeUsrTstExa	,true },
+		{ActReqTst		,true },
 
 		{ActSeeExaAnn		,false},
 		{ActSeeAdmMrk		,false},
@@ -1642,11 +1640,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAdmAsgWrkUsr	*/{ 792, 2,TabAss,ActAdmAsgWrkUsr	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"editfolderuser"	},
    /* ActReqAsgWrkCrs	*/{ 899, 3,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskEditWorksCrs		,"folderusers"		},
    /* ActReqTst		*/{ 103, 4,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowFormAskTst		,"test"			},
-   /* ActReqSeeMyTstExa	*/{1083, 5,TabAss,ActReqSeeMyTstExa	,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_SelDatesToSeeMyTstExams	,"testresult"		},
-   /* ActReqSeeUsrTstExa*/{1080, 6,TabAss,ActReqSeeUsrTstExa	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_SelUsrsToSeeUsrsTstExams	,"testresult"		},
-   /* ActSeeExaAnn	*/{  85, 7,TabAss,ActSeeExaAnn		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ListExamAnnouncementsSee	,"announce"		},
-   /* ActSeeAdmMrk	*/{  17, 8,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"grades"		},
-   /* ActSeeRecCrs	*/{ 299, 9,TabAss,ActSeeRecCrs		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCrsRecord	,"editcard"		},
+   /* ActSeeExaAnn	*/{  85, 5,TabAss,ActSeeExaAnn		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ListExamAnnouncementsSee	,"announce"		},
+   /* ActSeeAdmMrk	*/{  17, 6,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"grades"		},
+   /* ActSeeRecCrs	*/{ 299, 7,TabAss,ActSeeRecCrs		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCrsRecord	,"editcard"		},
 
    // Actions not in menu:
    /* ActEdiAss		*/{  69,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
@@ -1767,10 +1763,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenTag		*/{ 143,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RenameTag			,NULL},
    /* ActRcvCfgTst	*/{ 454,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ReceiveConfigTst		,NULL},
 
-   /* ActSeeMyTstExa	*/{1084,-1,TabAss,ActReqSeeMyTstExa	,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowMyTestResults		,NULL},
-   /* ActSeeUsrTstExa	*/{1081,-1,TabAss,ActReqSeeUsrTstExa	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowUsrsTestResults	,NULL},
-   /* ActSeeOneTstExaMe	*/{1085,-1,TabAss,ActReqSeeMyTstExa	,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneTestExam		,NULL},
-   /* ActSeeOneTstExaOth*/{1082,-1,TabAss,ActReqSeeUsrTstExa	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneTestExam		,NULL},
+   /* ActReqSeeMyTstExa	*/{1083,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_SelDatesToSeeMyTstExams	,NULL},
+   /* ActSeeMyTstExa	*/{1084,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowMyTestResults		,NULL},
+   /* ActSeeOneTstExaMe	*/{1085,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneTestExam		,NULL},
+   /* ActReqSeeUsrTstExa*/{1080,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_SelUsrsToSeeUsrsTstExams	,NULL},
+   /* ActSeeUsrTstExa	*/{1081,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowUsrsTestResults	,NULL},
+   /* ActSeeOneTstExaOth*/{1082,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneTestExam		,NULL},
 
    /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
    /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
