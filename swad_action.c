@@ -937,7 +937,6 @@ Statistics:
 	801. ActReqUseGbl		Request showing use of the platform
 	802. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
 	803. ActReqStaCrs		Request statistics of courses
-	804. ActReqAccCrs		Request query of clicks in the course
 	805. ActReqAccGbl		Request query of clicks to the complete platform
 	806. ActLstClk			List last clicks in real time
 
@@ -960,6 +959,7 @@ Statistics:
 	823. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
 	824. ActCalPhoDeg		Compute the average photos of the students of each degree
 	825. ActSeeAccGbl		Query clicks to the complete platform
+	804. ActReqAccCrs		Request query of clicks in the course
 	826. ActSeeAccCrs		Query clicks to current course
 	827. ActSeeAllStaCrs		Show statistics of courses
 Profile:
@@ -1173,7 +1173,6 @@ const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		{ActSeePhoDeg		,false},
 		{ActReqStaCrs		,true },
 
-		{ActReqAccCrs		,false},
 		{ActReqAccGbl		,false},
 		{ActLstClk		,true },
 		},
@@ -2149,9 +2148,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_ReqUseOfPlatform		,"pie"			},
    /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ShowPhotoDegree		,"classphoto"		},
    /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ind_ReqIndicatorsCourses	,"tablestats"		},
-   /* ActReqAccCrs	*/{ 594, 4,TabSta,ActReqAccCrs		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskSeeCrsAccesses		,"statsuser"		},
-   /* ActReqAccGbl	*/{ 591, 5,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskSeeGblAccesses		,"stats"		},
-   /* ActLstClk		*/{ 989, 6,TabSta,ActLstClk		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,"recyclelist"		},
+   /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskSeeGblAccesses		,"stats"		},
+   /* ActLstClk		*/{ 989, 5,TabSta,ActLstClk		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,"recyclelist"		},
 
    // Actions not in menu:
    /* ActSeeOneSvy	*/{ 982,-1,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_SeeOneSurvey		,NULL},
@@ -2176,8 +2174,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnPhoDeg	*/{ 448,-1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Pho_PrintPhotoDegree  		,NULL},
    /* ActCalPhoDeg	*/{ 444,-1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_CalcPhotoDegree		,NULL},
    /* ActSeeAccGbl	*/{  79,-1,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeGblAccesses		,NULL},
-   /* ActSeeAccCrs	*/{ 119,-1,TabSta,ActReqAccCrs		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeCrsAccesses		,NULL},
-   /* ActSeeAllStaCrs	*/{ 768,-1,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ind_ShowIndicatorsCourses	,NULL},
+   /* ActReqAccCrs	*/{ 594,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskSeeCrsAccesses		,NULL},
+   /* ActSeeAccCrs	*/{ 119,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeCrsAccesses		,NULL},
+   /* ActSeeAllStaCrs	*/{ 768,-1,TabSta,ActReqAccGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ind_ShowIndicatorsCourses	,NULL},
 
    // TabPrf ******************************************************************
    // Actions in menu:

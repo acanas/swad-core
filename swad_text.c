@@ -17091,46 +17091,25 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores"
 #endif
 	,
-	// ActReqAccCrs
-#if   L==0
-	"Accessos<br />assignatura"
-#elif L==1
-	"Anmeldungen<br />bei Kurs"
-#elif L==2
-	"Visits to<br />course"
-#elif L==3
-	"Accesos<br />asignatura"
-#elif L==4
-	"Visites<br />mati&egrave;re"
-#elif L==5
-	"Accesos<br />asignatura"	// Okoteve traducción
-#elif L==6
-	"Accessi<br />corso"
-#elif L==7
-	"Odiwedzic<br />kurs&oacute;w"
-#elif L==8
-	"Visitas<br />disciplina"
-#endif
-	,
 	// ActReqAccGbl
 #if   L==0
-	"Accessos<br />SWAD"
+	"Accessos"
 #elif L==1
-	"Anmeldungen<br />bei SWAD"
+	"Anmeldungen"
 #elif L==2
-	"Logins to<br />SWAD"
+	"Logins"
 #elif L==3
-	"Accesos<br />SWAD"
+	"Accesos"
 #elif L==4
-	"Visites<br />SWAD"
+	"Visites"
 #elif L==5
-	"Accesos<br />SWAD"	// Okoteve traducción
+	"Accesos"	// Okoteve traducción
 #elif L==6
-	"Accessi<br />SWAD"
+	"Accessi"
 #elif L==7
-	"Logowanie sie do<br />SWAD"
+	"Logowanie"
 #elif L==8
-	"Visitas<br />SWAD"
+	"Visitas"
 #endif
 	,
 	// ActLstClk
@@ -17154,6 +17133,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cliques"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18945,46 +18925,25 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores"
 #endif
 	,
-	// ActReqAccCrs
-#if   L==0
-	"Accessos assignatura"
-#elif L==1
-	"Anmeldungen bei Kurs"
-#elif L==2
-	"Visits to course"
-#elif L==3
-	"Accesos asignatura"
-#elif L==4
-	"Visites mati&egrave;re"
-#elif L==5
-	"Accesos asignatura"	// Okoteve traducción
-#elif L==6
-	"Accessi al corso"
-#elif L==7
-	"Wizyty w trakcie"
-#elif L==8
-	"Visitas disciplina"
-#endif
-	,
 	// ActReqAccGbl
 #if   L==0
-	"Accessos SWAD"
+	"Accessos"
 #elif L==1
-	"Anmeldungen bei SWAD"
+	"Anmeldungen"
 #elif L==2
-	"Logins to SWAD"
+	"Logins"
 #elif L==3
-	"Accesos SWAD"
+	"Accesos"
 #elif L==4
-	"Visites SWAD"
+	"Visites"
 #elif L==5
-	"Accesos SWAD"	// Okoteve traducción
+	"Accesos"	// Okoteve traducción
 #elif L==6
-	"Accessi SWAD"
+	"Accessi"
 #elif L==7
-	"Logowanie sie do SWAD"
+	"Logowanie"
 #elif L==8
-	"Visitas SWAD"
+	"Visitas"
 #endif
 	,
 	// ActLstClk
@@ -19008,6 +18967,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cliques"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20856,46 +20816,25 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores de disciplinas para o contrato programa"
 #endif
 	,
-	// ActReqAccCrs
-#if   L==0
-	"Estad&iacute;stiques d'accessos a aquesta assignatura"
-#elif L==1
-	"Anmeldungen bei Kurs"
-#elif L==2
-	"Visits to course"
-#elif L==3
-	"Estad&iacute;sticas de accesos a esta asignatura"
-#elif L==4
-	"Visites mati&egrave;re"
-#elif L==5
-	"Estad&iacute;sticas de accesos a esta asignatura"// Okoteve traducción
-#elif L==6
-	"Accessi al corso"
-#elif L==7
-	"Wizyty w trakcie"
-#elif L==8
-	"Visitas disciplina"
-#endif
-	,
 	// ActReqAccGbl
 #if   L==0
-	"Estad&iacute;stiques d'accessos a tota la plataforma"
+	"Estad&iacute;stiques d'accesso a la plataforma"
 #elif L==1
-	"Anmeldungen bei SWAD"
+	"Zugriffsstatistik auf die Plattform"
 #elif L==2
-	"Logins to SWAD"
+	"Access statistics to the platform"
 #elif L==3
-	"Estad&iacute;sticas de accesos a toda la plataforma"
+	"Estad&iacute;sticas de acceso a la plataforma"
 #elif L==4
-	"Visites SWAD"
+	"Statistiques de connexion &agrave; la plate-forme"
 #elif L==5
-	"Estad&iacute;sticas de accesos a toda la plataforma"// Okoteve traducción
+	"Estad&iacute;sticas de acceso a la plataforma"	// Okoteve traducción
 #elif L==6
-	"Accessi SWAD"
+	"Statistiche di accesso alla piattaforma"
 #elif L==7
-	"Logowanie sie do SWAD"
+	"Statystyki dost&eogon;p do platformy"
 #elif L==8
-	"Visitas SWAD"
+	"Estat&iacute;sticas de acesso &agrave; plataforma"
 #endif
 	,
 	// ActLstClk
@@ -20919,6 +20858,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"&Uacute;ltimos cliques em tempo real"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

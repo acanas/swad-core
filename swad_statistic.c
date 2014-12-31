@@ -379,7 +379,7 @@ void Sta_AskSeeCrsAccesses (void)
    extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
    extern const char *Txt_results_per_page;
    static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
-#define NUM_OPTIONS_ROSvc_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
+#define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    Sta_ClicksStatType_t ClicksStatType;
    unsigned long i;
 
@@ -481,7 +481,7 @@ void Sta_AskSeeCrsAccesses (void)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
          fprintf (Gbl.F.Out,">");
          for (i = 0;
-              i < NUM_OPTIONS_ROSvc_PER_PAGE;
+              i < NUM_OPTIONS_ROWS_PER_PAGE;
               i++)
            {
             fprintf (Gbl.F.Out,"<option");
