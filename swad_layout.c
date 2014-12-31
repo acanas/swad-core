@@ -63,6 +63,8 @@ const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS] =
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
+// #define HORIZONTAL_MENU 1
+
 const char *Lay_TabIcons[Act_NUM_TABS] =
   {
    /* TabUnk */	NULL,
@@ -107,13 +109,20 @@ static void Lay_DrawTabsDeskTop (void);
 static void Lay_DrawTabsMobile (void);
 static bool Lay_CheckIfICanViewTab (Act_Tab_t Tab);
 static void Lay_DrawBreadcrumb (void);
-static void Lay_WriteMenuThisTabDesktop (void);
+#ifndef HORIZONTAL_MENU
+static void Lay_WriteVerticalMenuThisTabDesktop (void);
+#endif
+#ifdef HORIZONTAL_MENU
+static void Lay_WriteHorizontalMenuThisTabDesktop (void);
+#endif
 static void Lay_WriteMenuThisTabMobile (void);
 
 static void Lay_WriteBreadcrumbHome (void);
 static void Lay_WriteBreadcrumbTab (void);
 static void Lay_WriteBreadcrumbAction (void);
+#ifndef HORIZONTAL_MENU
 static void Lay_WriteTitleAction (void);
+#endif
 
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
@@ -295,11 +304,14 @@ void Lay_WriteStartOfPage (void)
          Prf_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</td>");
 
+#ifndef HORIZONTAL_MENU
          /* Tab content, including always vertical menu (left) and always main zone (right) */
          fprintf (Gbl.F.Out,"<td style=\"width:140px; text-align:left;"
                             " vertical-align:top;\">");
-         Lay_WriteMenuThisTabDesktop ();
+         Lay_WriteVerticalMenuThisTabDesktop ();
          fprintf (Gbl.F.Out,"</td>");
+#endif
+
          break;
       case Lay_LAYOUT_MOBILE:
          /* Tab content */
@@ -323,16 +335,26 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<td style=\"padding:0 10px 10px 10px;"
 		      " text-align:left; vertical-align:top;\">");
 
+#ifdef HORIZONTAL_MENU
+
+   	 fprintf (Gbl.F.Out,"<div id=\"submenu_container\" style=\"display:table; margin:0 auto;\">");
+         Lay_WriteHorizontalMenuThisTabDesktop ();
+	 fprintf (Gbl.F.Out,"</div>");
+
+#endif
+
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
 
    /* If it is mandatory to read any information about course */
    if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
       Inf_WriteMsgYouMustReadInfo ();
 
+#ifndef HORIZONTAL_MENU
    /* Write title of the current action */
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
       Lay_WriteTitleAction ();
+#endif
 
    Gbl.Layout.WritingHTMLStart = false;
    Gbl.Layout.HTMLStartWritten = true;
@@ -922,7 +944,9 @@ static void Lay_DrawTabsDeskTop (void)
 	 if (ICanViewTab)
 	   {
 	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	    if (NumTab != Gbl.CurrentTab)
+	    if (NumTab == Gbl.CurrentTab)
+	       fprintf (Gbl.F.Out," class=\"ICON_SCALED\"");
+	    else
 	       fprintf (Gbl.F.Out," class=\"ICON_HIGHLIGHT\"");
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
@@ -932,7 +956,7 @@ static void Lay_DrawTabsDeskTop (void)
 							   The_ClassTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
+			       " class=\"ICON28x28\" style=\"margin:4px;\" />"
 			       "<div>%s</div>"
 			       "</a>"
 			       "</form>",
@@ -946,7 +970,7 @@ static void Lay_DrawTabsDeskTop (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
+			       " class=\"ICON28x28\" style=\"margin:4px;\" />"
 			       "<div class=\"%s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
 		     Lay_TabIcons[NumTab],
@@ -1113,7 +1137,8 @@ static void Lay_DrawBreadcrumb (void)
 /************* Write the menu of current tab (desktop layout) ****************/
 /*****************************************************************************/
 
-static void Lay_WriteMenuThisTabDesktop (void)
+#ifndef HORIZONTAL_MENU
+static void Lay_WriteVerticalMenuThisTabDesktop (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
@@ -1200,6 +1225,80 @@ static void Lay_WriteMenuThisTabDesktop (void)
    /***** List end *****/
    fprintf (Gbl.F.Out,"</ul>");
   }
+#endif
+
+/*****************************************************************************/
+/********** Write horizontal menu of current tab (desktop layout) ************/
+/*****************************************************************************/
+
+#ifdef HORIZONTAL_MENU
+static void Lay_WriteHorizontalMenuThisTabDesktop (void)
+  {
+   extern const char *The_ClassMenuOn[The_NUM_THEMES];
+   extern const char *The_ClassMenuOff[The_NUM_THEMES];
+   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   unsigned NumOptInMenu;
+   Act_Action_t NumAct;
+   const char *Title;
+   bool IsTheSelectedAction;
+
+   /***** List start *****/
+   fprintf (Gbl.F.Out,"<ul>");
+
+   /***** Loop to write all options in menu. Each row holds an option *****/
+   for (NumOptInMenu = 0;
+        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+        NumOptInMenu++)
+     {
+      NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
+      if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+         break;
+      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+        {
+         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
+
+         Title = Act_GetSubtitleAction (NumAct);
+
+         /***** Start of element *****/
+	 fprintf (Gbl.F.Out,"<li class=\"%s\">",
+		  IsTheSelectedAction ? "MENU_ON" :
+					"MENU_OFF");
+
+         /***** Start of container used to highlight this option *****/
+         if (IsTheSelectedAction)
+            fprintf (Gbl.F.Out,"<div class=\"ICON_SCALED\" style=\"display:inline-block;\">");
+         else
+            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline-block;\">");
+
+         /***** Start of form and link *****/
+         Act_FormStart (NumAct);
+         Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
+                                                         The_ClassMenuOff[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s32x32.gif\""
+	                    " alt=\"\" class=\"%s\""
+	                    " style=\"margin:0;\" />"
+			    "<div>%s</div>"
+                            "</a>"
+                            "</form>",
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+	          Act_Actions[NumAct].Icon,
+	          IsTheSelectedAction ? "ICON28x28" :
+					"ICON28x28",
+                  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+
+         /***** End of container used to highlight this option *****/
+         fprintf (Gbl.F.Out,"</div>");
+
+         /***** End of element *****/
+         fprintf (Gbl.F.Out,"</li>");
+        }
+     }
+
+   /***** List end *****/
+   fprintf (Gbl.F.Out,"</ul>");
+  }
+#endif
 
 /*****************************************************************************/
 /************* Write the menu of current tab (mobile layout) *****************/
@@ -1325,6 +1424,7 @@ static void Lay_WriteBreadcrumbAction (void)
 /*********** Write icon and title associated to the current action ***********/
 /*****************************************************************************/
 
+#ifndef HORIZONTAL_MENU
 static void Lay_WriteTitleAction (void)
   {
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
@@ -1351,6 +1451,7 @@ static void Lay_WriteTitleAction (void)
    /***** Container end *****/
    fprintf (Gbl.F.Out,"</div>");
   }
+#endif
 
 /*****************************************************************************/
 /***************************** Show left column ******************************/

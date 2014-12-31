@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.49.2 (2014/12/31)"
+#define Log_PLATFORM_VERSION	"SWAD 14.50 (2014/12/31)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-	Version 14.49.2  :Dec 31, 2014	Removed text of menu options whit BR. (172611 lines)
+	Version 14.50    :Dec 31, 2014	Horizontal menu (not finished). (172735 lines)
+	Version 14.49.2  :Dec 31, 2014	Removed text of menu options with BR. (172611 lines)
 	Version 14.49.1  :Dec 31, 2014	Changes in layout. (174432 lines)
 	Version 14.49    :Dec 31, 2014	Option to admin one user removed from main menu.
 					Fixed bugs in layout.

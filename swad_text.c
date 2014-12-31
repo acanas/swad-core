@@ -16689,23 +16689,23 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActLstAdm
 #if   L==0
-	"Administradors"
+	"Administrad."	// Administradors
 #elif L==1
 	"Verwalter"
 #elif L==2
-	"Administrators"
+	"Administrat."	// Administrators
 #elif L==3
-	"Administradores"
+	"Administrad."	// Administradores
 #elif L==4
-	"Administrateurs"
+	"Administrat."	// Administrateurs
 #elif L==5
-	"Administradores"	// Okoteve traducción
+	"Administrad."	// Administradores	// Okoteve traducción
 #elif L==6
-	"Amministratori"
+	"Amministrat."	// Amministratori
 #elif L==7
-	"Administratorzy"
+	"Administrat."	// Administratorzy
 #elif L==8
-	"Administradores"
+	"Administrad."	// Administradores
 #endif
 	,
 	// ActReqSignUp
