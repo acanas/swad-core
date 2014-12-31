@@ -130,7 +130,7 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
-   unsigned ColspanCentralPart = 3;
+   unsigned ColspanCentralPart;
 //   char QueryDebug[1024];
 
    /***** If, when this function is called, the head is being written, or the head is already written ==>
@@ -259,17 +259,27 @@ void Lay_WriteStartOfPage (void)
 
    Lay_WritePageTopHeading ();
 
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+   switch (Gbl.Prefs.Layout)
      {
-      if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)	// 11: both side columns visible, left and right
-	 ColspanCentralPart = 1;
-      else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
-	 ColspanCentralPart = 2;
+      case Lay_LAYOUT_DESKTOP:
+	 if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)
+	    ColspanCentralPart = 1;	// 11: both side columns visible, left and right
+	 else if (Gbl.Prefs.SideCols == Lay_HIDE_BOTH_COLUMNS)
+	    ColspanCentralPart = 3;	// 00: both side columns hidden
+	 else
+	    ColspanCentralPart = 2;	// 10 or 01: only one side column visible, left or right
+	 break;
+      case Lay_LAYOUT_MOBILE:
+         ColspanCentralPart = 3;
+         break;
+      default:
+      	 break;
      }
+
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"text-align:center;"
 	              " vertical-align:top;\">"
 		      "<div id=\"CENTRAL_ZONE\""
-		      " style=\"vertical-align:top; background-color:%s;\">"
+		      " style=\"background-color:%s;\">"
 		      "<table style=\"width:100%%; vertical-align:top;\">"
 		      "<tr>",
 	    ColspanCentralPart,
@@ -290,15 +300,6 @@ void Lay_WriteStartOfPage (void)
                             " vertical-align:top;\">");
          Lay_WriteMenuThisTabDesktop ();
          fprintf (Gbl.F.Out,"</td>");
-
-         /* Start of main zone for actions output */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;\">");
-
-         Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
-
-         /* If it is mandatory to read any information about course */
-         if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
-            Inf_WriteMsgYouMustReadInfo ();
          break;
       case Lay_LAYOUT_MOBILE:
          /* Tab content */
@@ -318,6 +319,16 @@ void Lay_WriteStartOfPage (void)
      }
 
    /***** Main zone *****/
+   /* Start of main zone for actions output */
+   fprintf (Gbl.F.Out,"<td style=\"padding:0 10px 10px 10px;"
+		      " text-align:left; vertical-align:top;\">");
+
+   Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
+
+   /* If it is mandatory to read any information about course */
+   if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
+      Inf_WriteMsgYouMustReadInfo ();
+
    /* Write title of the current action */
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
@@ -1131,7 +1142,7 @@ static void Lay_WriteMenuThisTabDesktop (void)
         {
          IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
 
-         Title = Act_GetTitleAction (NumAct);
+         Title = Act_GetSubtitleAction (NumAct);
 
          if (SeparationBetweenPreviousAndCurrentOption)
            {
@@ -1217,7 +1228,7 @@ static void Lay_WriteMenuThisTabMobile (void)
          break;
       if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
         {
-         Title = Act_GetTitleAction (NumAct);
+         Title = Act_GetSubtitleAction (NumAct);
 
          if (NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS == 0)
             fprintf (Gbl.F.Out,"<tr>");
@@ -1232,8 +1243,8 @@ static void Lay_WriteMenuThisTabMobile (void)
                              (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction) ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                                                    The_ClassMenuOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
-	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON64x64\" style=\"margin:4px;\" />"
+	                    " alt=\"\" class=\"ICON64x64\""
+	                    " style=\"margin:4px;\" />"
 			    "<div>%s</div>"
                             "</a>"
                             "</form>"
@@ -1241,8 +1252,6 @@ static void Lay_WriteMenuThisTabMobile (void)
                             "</td>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
 	          Act_Actions[NumAct].Icon,
-	          Title,
-	          Title,
                   Txt_MENU_BR[Gbl.CurrentTab][NumOptInMenu]);
 
          if ((NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) ==
