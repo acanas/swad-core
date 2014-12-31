@@ -251,7 +251,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       Act_FormStart (ActDetUsrPho);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"

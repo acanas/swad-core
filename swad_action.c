@@ -672,7 +672,6 @@ Users:
 	544. ActLstAdm			List main data of degree administrators
 	545. ActReqSignUp		Apply for my enrollment
 	546. ActSeeSignUpReq		Show pending requests for inscription in the current course
-	547. ActReqMdfOneUsr		Request the enrollment/removing of a user
 	548. ActReqMdfSevUsr		Request the enrollment/removing of several students to / from current course
 	549. ActLstCon			List connected users
 
@@ -738,8 +737,9 @@ Users:
 	605. ActSignUp			Apply for my enrollment
 	606. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
 	607. ActRejSignUp		Reject the enrollment of a user in a course
-	608. ActReqMdfUsr		Register a user in this course
 
+	547. ActReqMdfOneUsr		Request the enrollment/removing of a user
+	608. ActReqMdfUsr		Register a user in this course
 	609. ActReqUsrPho		Show form to send the photo of another user
 	610. ActDetUsrPho		Receive other user's photo and detect faces on it
 	611. ActUpdUsrPho		Update other user's photo
@@ -1144,7 +1144,6 @@ const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 
 		{ActReqSignUp		,false},
 		{ActSeeSignUpReq	,false},
-		{ActReqMdfOneUsr	,false},
 		{ActReqMdfSevUsr	,true },
 
 		{ActLstCon		,true },
@@ -1846,9 +1845,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstAdm		*/{ 587, 5,TabUsr,ActLstAdm		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListDataAdms		,"listtch"		},
    /* ActReqSignUp	*/{1054, 6,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqSignUpInCrs		,"enrollmentrequest"	},
    /* ActSeeSignUpReq	*/{1057, 7,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowEnrollmentRequests	,"enrollmentrequest"	},
-   /* ActReqMdfOneUsr	*/{ 177, 8,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemUsr		,"config"		},
-   /* ActReqMdfSevUsr	*/{ 797, 9,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowFormRegRemSeveralUsrs	,"configs"		},
-   /* ActLstCon		*/{ 995,10,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowConnectedUsrs		,"userplugged"		},
+   /* ActReqMdfSevUsr	*/{ 797, 8,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminUsrs		,"configs"		},
+   /* ActLstCon		*/{ 995, 9,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowConnectedUsrs		,"userplugged"		},
 
    // Actions not in menu:
    /* ActChgGrp		*/{ 118,-1,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMyGrpsAndShowChanges	,NULL},
@@ -1919,33 +1917,34 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRejSignUp	*/{1058,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRejectSignUp		,NULL},
    /* ActRejSignUp	*/{1059,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RejectSignUp		,NULL},
 
-   /* ActReqMdfUsr	*/{ 161,-1,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherUsr	,NULL},
+   /* ActReqMdfOneUsr	*/{ 177,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemUsr		,NULL},
+   /* ActReqMdfUsr	*/{ 161,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherUsr	,NULL},
 
-   /* ActReqUsrPho	*/{ 375,-1,TabUsr,ActReqMdfOneUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
-   /* ActDetUsrPho	*/{ 695,-1,TabUsr,ActReqMdfOneUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecUsrPhotoDetFaces	,NULL},
-   /* ActUpdUsrPho	*/{ 374,-1,TabUsr,ActReqMdfOneUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
-   /* ActRemUsrPho	*/{ 429,-1,TabUsr,ActReqMdfOneUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
+   /* ActReqUsrPho	*/{ 375,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
+   /* ActDetUsrPho	*/{ 695,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecUsrPhotoDetFaces	,NULL},
+   /* ActUpdUsrPho	*/{ 374,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActRemUsrPho	*/{ 429,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
 
-   /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActReqMdfOneUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreatAndShowNewUsrRecordAndRegInCrs,NULL},
-   /* ActUpdOthUsrDat	*/{ 439,-1,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifAndShowUsrCardAndRegInCrsAndGrps,NULL},
+   /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreatAndShowNewUsrRecordAndRegInCrs,NULL},
+   /* ActUpdOthUsrDat	*/{ 439,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifAndShowUsrCardAndRegInCrsAndGrps,NULL},
 
-   /* ActReqAccEnrCrs	*/{ 592,-1,TabUsr,ActReqMdfOneUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActReqMdfOneUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActRemMeCrs	*/{ 559,-1,TabUsr,ActReqMdfOneUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActReqAccEnrCrs	*/{ 592,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActRemMeCrs	*/{ 559,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
 
-   /* ActNewAdm		*/{ 586,-1,TabUsr,ActReqMdfOneUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
-   /* ActRemAdm		*/{ 584,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdm			,NULL},
+   /* ActNewAdm		*/{ 586,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
+   /* ActRemAdm		*/{ 584,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdm			,NULL},
 
    /* ActRcvFrmMdfUsrCrs*/{ 799,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormUsrsCrs		,NULL},
 
-   /* ActFrmIDsOthUsr	*/{1239,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-   /* ActRemIDOth	*/{1240,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-   /* ActNewIDOth	*/{1241,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
-   /* ActFrmPwdOthUsr	*/{ 598,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
-   /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActReqMdfOneUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActFrmIDsOthUsr	*/{1239,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
+   /* ActRemIDOth	*/{1240,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
+   /* ActNewIDOth	*/{1241,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+   /* ActFrmPwdOthUsr	*/{ 598,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
+   /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
-   /* ActRemUsrCrs	*/{  58,-1,TabUsr,ActReqMdfOneUsr	,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
-   /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActReqMdfOneUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemUsrGbl			,NULL},
+   /* ActRemUsrCrs	*/{  58,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemUsrGbl			,NULL},
 
    /* ActReqRemAllStdCrs*/{  88,-1,TabUsr,ActReqMdfSevUsr	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemAllStdsThisCrs	,NULL},
    /* ActRemAllStdCrs	*/{  87,-1,TabUsr,ActReqMdfSevUsr	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAllStdsThisCrs		,NULL},

@@ -742,19 +742,18 @@ void Pwd_ShowFormOthPwd (void)
 	 /***** Information message *****/
 	 Lay_ShowAlert (Lay_INFO,Txt_Changing_the_password_for_the_following_user);
 
-	 /***** Form to change password *****/
-	 /* Start form */
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-	 Act_FormStart (ActChgPwdOthUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-
-	 /* Show user's record */
-	 fprintf (Gbl.F.Out,"<table>"
+	 /***** Show user's record *****/
+	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
+
+	 /***** Form to change password *****/
+	 /* Start form */
+	 Act_FormStart (ActChgPwdOthUsr);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
 	 /* New password */
          Pwd_PutFormToGetNewPasswordTwice ();
@@ -762,8 +761,7 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /* End form */
 	 Lay_PutSendButton (Txt_Save);
-	 fprintf (Gbl.F.Out,"</form>"
-			    "</div>");
+	 fprintf (Gbl.F.Out,"</form>");
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

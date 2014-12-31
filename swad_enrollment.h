@@ -79,7 +79,8 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_FilterUsrDat (struct UsrData *UsrDat);
 void Enr_UpdateInstitutionCentreDepartment (void);
-void Enr_ShowFormRegRemSeveralUsrs (void);
+
+void Enr_ReqAdminUsrs (void);
 
 void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);

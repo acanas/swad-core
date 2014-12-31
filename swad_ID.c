@@ -403,8 +403,7 @@ void ID_ShowFormOthIDs (void)
 
 	 /***** Form to change IDs *****/
 	 /* Show user's record */
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	                    "<table>"
+	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -415,8 +414,7 @@ void ID_ShowFormOthIDs (void)
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 
-	 fprintf (Gbl.F.Out,"</table>"
-			    "</div>");
+	 fprintf (Gbl.F.Out,"</table>");
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

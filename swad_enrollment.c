@@ -86,6 +86,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Enr_ShowFormRegRemSeveralUsrs (void);
+
 static void Enr_PutFormToRemOldUsrs (void);
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
@@ -424,10 +426,61 @@ void Enr_UpdateInstitutionCentreDepartment (void)
   }
 
 /*****************************************************************************/
+/************** Form to request the user's ID of another user ****************/
+/*****************************************************************************/
+
+void Enr_ReqAdminUsrs (void)
+  {
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_ROLE_GUEST:
+      case Rol_ROLE_VISITOR:
+      case Rol_ROLE_STUDENT:
+	 Enr_AskIfRegRemMe ();
+	 break;
+      case Rol_ROLE_TEACHER:
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    Enr_ShowFormRegRemSeveralUsrs ();
+	 else
+	    Enr_AskIfRegRemMe ();
+	 break;
+      case Rol_ROLE_DEG_ADMIN:
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	 else
+	    Enr_AskIfRegRemMe ();
+	 break;
+      case Rol_ROLE_CTR_ADMIN:
+	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	 else
+	    Enr_AskIfRegRemMe ();
+	 break;
+      case Rol_ROLE_INS_ADMIN:
+	 if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	 else
+	    Enr_AskIfRegRemMe ();
+	 break;
+      case Rol_ROLE_SUPERUSER:
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    Enr_ShowFormRegRemSeveralUsrs ();
+	 else
+	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	 break;
+      default:
+	 Lay_ShowAlert (Lay_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /***** Register/remove users (taken from a list) in/from current course ******/
 /*****************************************************************************/
 
-void Enr_ShowFormRegRemSeveralUsrs (void)
+static void Enr_ShowFormRegRemSeveralUsrs (void)
   {
    extern const char *The_ClassTitle[The_NUM_THEMES];
    extern const char *Txt_Step_1_Provide_a_list_of_users;
@@ -750,7 +803,10 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
             The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+       (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER   ||
+	Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN ||
+        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
      {
       sprintf (Gbl.Message,UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
 		                                      Txt_Modify_user_in_the_course_X) :

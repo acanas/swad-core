@@ -15701,7 +15701,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Liens"
 #elif L==5
-	"Ambu&eacute;re<br />joaju"
+	"Ambu&eacute;re"
 #elif L==6
 	"Links"
 #elif L==7
@@ -16245,9 +16245,9 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Documents"
 #elif L==1
-	"Dokumente-Bereich"
+	"Dokumente"
 #elif L==2
-	"Documents<br />area"
+	"Documents"
 #elif L==3
 	"Documentos"
 #elif L==4
@@ -16257,7 +16257,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Documenti"
 #elif L==7
-	"Dokumenty<br />obszar"
+	"Dokumenty"
 #elif L==8
 	"Documentos"
 #endif
@@ -16297,7 +16297,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Arapapaha"
 #elif L==6
-	"Calendario<br />del corso"
+	"Calendario"
 #elif L==7
 	"Kalendarz"
 #elif L==8
@@ -16320,7 +16320,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Orario"
 #elif L==7
-	"Plan<br />lekcji"
+	"Plan"
 #elif L==8
 	"Hor&aacute;rio"
 #endif
@@ -16337,7 +16337,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Bibliographie"
 #elif L==5
-	"Aranduka-<br />purupyre"
+	"Aranduka"
 #elif L==6
 	"Bibliografia"
 #elif L==7
@@ -16379,7 +16379,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Liens"
 #elif L==5
-	"Ambu&eacute;re<br />joaju"
+	"Ambu&eacute;re"
 #elif L==6
 	"Link"
 #elif L==7
@@ -16710,23 +16710,23 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqSignUp
 #if   L==0
-	"Sol·licitar<br />inscripci&oacute;"
+	"Inscriure"
 #elif L==1
-	"Registrierung<br />beantragen"
+	"Anmeldung"
 #elif L==2
 	"Sign up"
 #elif L==3
-	"Solicitar<br />inscripci&oacute;n"
+	"Inscribirme"
 #elif L==4
-	"Demander<br />inscription"
+	"Signer"
 #elif L==5
-	"Solicitar<br />inscripci&oacute;n"	// Okoteve traducción
+	"Inscribirme"	// Okoteve traducción
 #elif L==6
-	"Richiedere<br />iscrizione"
+	"Iscrivi"
 #elif L==7
-	"Wniosku<br />rejestracj&eogon;"
+	"Zapisa&cacute;"
 #elif L==8
-	"Solicitar<br />inscri&ccedil;&atilde;o"
+	"Inscrever"
 #endif
 	,
 	// ActSeeSignUpReq
@@ -16750,46 +16750,25 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es"
 #endif
 	,
-	// ActReqMdfOneUsr
-#if   L==0
-	"Administrar<br />un usuari"
-#elif L==1
-	"Verwalten<br />eines Benutzer"
-#elif L==2
-	"Administer<br />a user"
-#elif L==3
-	"Administrar<br />un usuario"
-#elif L==4
-	"G&eacute;rer un<br />utilisateur"
-#elif L==5
-	"Administrar<br />un usuario"	// Okoteve traducción
-#elif L==6
-	"Gestire<br />un utente"
-#elif L==7
-	"Zarz&aogon;dzaj<br />u&zdot;ytkownika"
-#elif L==8
-	"Gerenciar um<br />utilizador"
-#endif
-	,
 	// ActReqMdfSevUsr
 #if   L==0
-	"Administrar<br />usuaris"
+	"Administrar"
 #elif L==1
-	"Verwalten<br />Benutzern"
+	"Verwalten"
 #elif L==2
-	"Administer<br />users"
+	"Administer"
 #elif L==3
-	"Administrar<br />usuarios"
+	"Administrar"
 #elif L==4
-	"G&eacute;rer<br />utilisateurs"
+	"G&eacute;rer"
 #elif L==5
-	"Administrar<br />usuarios"	// Okoteve traducción
+	"Administrar"	// Okoteve traducción
 #elif L==6
-	"Gestire<br />utenti"
+	"Gestire"
 #elif L==7
-	"Zarz&aogon;dzaj<br />uzytkownik&oacute;w"
+	"Zarz&aogon;dzaj"
 #elif L==8
-	"Gerenciar<br />utilizadores"
+	"Gerenciar"
 #endif
 	,
 	// ActLstCon
@@ -16813,6 +16792,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -17229,7 +17209,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Orario"
 #elif L==7
-	"Plan<br />lekcji"
+	"Plan"
 #elif L==8
 	"Hor&aacute;rio"
 #endif
@@ -17261,7 +17241,7 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Profil"
 #elif L==2
-	"Record<br />card"
+	"Record"
 #elif L==3
 	"Ficha"
 #elif L==4
@@ -17303,17 +17283,17 @@ const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Aktentasche"
 #elif L==2
-	"Virtual<br />pendrive"
+	"Virtual pendrive"
 #elif L==3
 	"Malet&iacute;n"
 #elif L==4
-	"Porte-<br />documents"
+	"Portedocuments"
 #elif L==5
 	"Malet&iacute;n"	// Okoteve traducción
 #elif L==6
 	"Penna USB"
 #elif L==7
-	"Pendrive<br />wirtualne"
+	"Pendrive"
 #elif L==8
 	"Pasta"
 #endif
@@ -17535,7 +17515,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Liens"
 #elif L==5
-	"Ambu&eacute;re joaju"
+	"Ambu&eacute;re"
 #elif L==6
 	"Link"
 #elif L==7
@@ -18091,7 +18071,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Documenti"
 #elif L==7
-	"Obszar Dokument&oacute;w"
+	"Dokument&oacute;w"
 #elif L==8
 	"Documentos"
 #endif
@@ -18131,7 +18111,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Arapapaha"
 #elif L==6
-	"Calendario del corso"
+	"Calendario"
 #elif L==7
 	"Kalendarz"
 #elif L==8
@@ -18154,7 +18134,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Orario"
 #elif L==7
-	"Plan lekcji"
+	"Plan"
 #elif L==8
 	"Hor&aacute;rio"
 #endif
@@ -18213,7 +18193,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Liens"
 #elif L==5
-	"Ambu&eacute;re joaju"
+	"Ambu&eacute;re"
 #elif L==6
 	"Link"
 #elif L==7
@@ -18544,23 +18524,23 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqSignUp
 #if   L==0
-	"Sol·licitar inscripci&oacute;"
+	"Inscriure"
 #elif L==1
-	"Registrierung beantragen"
+	"Anmeldung"
 #elif L==2
 	"Sign up"
 #elif L==3
-	"Solicitar inscripci&oacute;n"
+	"Inscribirme"
 #elif L==4
-	"Demander inscription"
+	"Signer"
 #elif L==5
-	"Solicitar inscripci&oacute;n"	// Okoteve traducción
+	"Inscribirme"	// Okoteve traducción
 #elif L==6
-	"Richiedere iscrizione"
+	"Iscrivi"
 #elif L==7
-	"Wniosku rejestracj&eogon;"
+	"Zapisa&cacute;"
 #elif L==8
-	"Solicitar inscri&ccedil;&atilde;o"
+	"Inscrever"
 #endif
 	,
 	// ActSeeSignUpReq
@@ -18584,46 +18564,25 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es"
 #endif
 	,
-	// ActReqMdfOneUsr
-#if   L==0
-	"Administrar un usuari"
-#elif L==1
-	"Verwalten eines Benutzer"
-#elif L==2
-	"Admin one user"
-#elif L==3
-	"Administrar un usuario"
-#elif L==4
-	"G&eacute;rer un utilisateur"
-#elif L==5
-	"Administrar un usuario"	// Okoteve traducción
-#elif L==6
-	"Gestire un utente"
-#elif L==7
-	"Zarz&aogon;dzaj u&zdot;ytkownika"
-#elif L==8
-	"Gerenciar um utilizador"
-#endif
-	,
 	// ActReqMdfSevUsr
 #if   L==0
-	"Administrar diversos usuaris"
+	"Administrar"
 #elif L==1
-	"Verwalten mehreren Benutzern"
+	"Verwalten"
 #elif L==2
-	"Administer multiple users"
+	"Administer"
 #elif L==3
-	"Administrar varios usuarios"
+	"Administrar"
 #elif L==4
-	"G&eacute;rer utilisateurs"
+	"G&eacute;rer"
 #elif L==5
-	"Administrar varios usuarios"	// Okoteve traducción
+	"Administrar"	// Okoteve traducción
 #elif L==6
-	"Gestire multipli utenti"
+	"Gestire"
 #elif L==7
-	"Zarz&aogon;dzaj uzytkownik&oacute;w"
+	"Zarz&aogon;dzaj"
 #elif L==8
-	"Gerenciar v&aacute;rios utilizadores"
+	"Gerenciar"
 #endif
 	,
 	// ActLstCon
@@ -18647,6 +18606,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19063,7 +19023,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Orario"
 #elif L==7
-	"Plan lekcji"
+	"Plan"
 #elif L==8
 	"Hor&aacute;rio"
 #endif
@@ -19095,7 +19055,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Profil"
 #elif L==2
-	"Record card"
+	"Record"
 #elif L==3
 	"Ficha"
 #elif L==4
@@ -19147,7 +19107,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==6
 	"Penna USB"
 #elif L==7
-	"Pendrive wirtualne"
+	"Pendrive"
 #elif L==8
 	"Pasta"
 #endif
@@ -20448,55 +20408,25 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o"
 #endif
 	,
-	// ActReqMdfOneUsr
-#if   L==0
-	"Inscripci&oacute; / o modificaci&oacute; /"
-	" eliminaci&oacute;n d'un usuari"
-#elif L==1
-	"Anmeldung / &Auml;nderung /"
-	" Entfernen eines Benutzers"
-#elif L==2
-	"Enrollment / modification /"
-	" removing of a user"
-#elif L==3
-	"Inscripci&oacute;n / modificaci&oacute;n /"
-	" eliminaci&oacute;n de un usuario"
-#elif L==4
-	"Inscription / modification /"
-	" suppression d'un utilisateur"
-#elif L==5
-	"Inscripci&oacute;n / modificaci&oacute;n /"
-	" eliminaci&oacute;n de un usuario"// Okoteve traducción
-#elif L==6
-	"Iscrizione / modifica /"
-	" rimozione di un utente"
-#elif L==7
-	"Rekrutacja / modyfikacja /"
-	" usuni&eogon;cie u&zdot;ytkownika"
-#elif L==8
-	"Inscri&ccedil;&atilde;o / altera&ccedil;&atilde;o /"
-	  " remo&ccedil;&atilde;o de um utilizador"
-#endif
-	,
 	// ActReqMdfSevUsr
 #if   L==0
-	"Inscripci&oacute; / eliminaci&oacute;n de diversos usuaris"
+	"Inscripci&oacute; / eliminaci&oacute;n de usuaris"
 #elif L==1
-	"Anmeldung / Entfernen von mehreren Benutzern"
+	"Anmeldung / Entfernen von Benutzern"
 #elif L==2
-	"Enrollment / removing of multiple users"
+	"Enrollment / removing of users"
 #elif L==3
-	"Inscripci&oacute;n / eliminaci&oacute;n de varios usuarios"
+	"Inscripci&oacute;n / eliminaci&oacute;n de usuarios"
 #elif L==4
-	"Inscription / suppression de plusieurs utilisateurs"
+	"Inscription / suppression de utilisateurs"
 #elif L==5
-	"Inscripci&oacute;n / eliminaci&oacute;n de varios usuario"// Okoteve traducción
+	"Inscripci&oacute;n / eliminaci&oacute;n de usuario"// Okoteve traducción
 #elif L==6
-	"Iscrizione / rimozione di utenti multipli"
+	"Iscrizione / rimozione di utenti"
 #elif L==7
 	"Rekrutacja / usuni&eogon;cie u&zdot;ytkownik&oacute;w"
 #elif L==8
-	"Inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o de v&aacute;rios utilizadores"
+	"Inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o de utilizadores"
 #endif
 	,
 	// ActLstCon
@@ -20520,6 +20450,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

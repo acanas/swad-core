@@ -1796,8 +1796,6 @@ void Ctr_ReqPhoto (void)
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y,
 	    Ctr_PHOTO_REAL_WIDTH,
@@ -1806,7 +1804,7 @@ void Ctr_ReqPhoto (void)
 
    /***** Write a form to send photo *****/
    Act_FormStart (ActRecCtrPho);
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"
@@ -1826,8 +1824,6 @@ void Ctr_ReqPhoto (void)
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Txt_Upload_photo);
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
