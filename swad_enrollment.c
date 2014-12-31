@@ -97,6 +97,7 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 
 static void Enr_PutFormToRemAllStdsThisCrs (void);
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
+static void Enr_PutFormToAdminOneUsr (void);
 
 static void Enr_ReqAnotherUsrIDToRegisterRemove (void);
 static void Enr_AskIfRegRemMe (void);
@@ -444,6 +445,9 @@ void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *Txt_Confirm;
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+   /***** Put form to go to admin one user *****/
+   Enr_PutFormToAdminOneUsr ();
 
    /***** Put link to remove all the students in the current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -2369,6 +2373,21 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'",
             CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a request for enrollment");
+  }
+
+/*****************************************************************************/
+/********************** Write a form to admin one user ***********************/
+/*****************************************************************************/
+
+static void Enr_PutFormToAdminOneUsr (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Admin_one_user;
+
+   Act_FormStart (ActReqMdfOneUsr);
+   Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("configtest",Txt_Admin_one_user,Txt_Admin_one_user);
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

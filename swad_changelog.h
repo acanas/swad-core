@@ -35,14 +35,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.48.6 (2014/12/31)"
+#define Log_PLATFORM_VERSION	"SWAD 14.48.7 (2014/12/31)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.48.7  :Dec 31, 2014	New link to admin one user in option to admin several users. (174440 lines)
 	Version 14.48.6  :Dec 31, 2014	Option to see accesses to the current course removed from main menu.
 					The text of some menu items has been reduced to a single word. (174404 lines)
-	Version 14.48.5  :Dec 31, 2014	New links to see accesses to the current course in platform accesses. (174463 lines)
+	Version 14.48.5  :Dec 31, 2014	New link to see accesses to the current course in platform accesses. (174463 lines)
 	Version 14.48.4  :Dec 31, 2014	The text of some menu items has been reduced to a single word.
 					Fixed bugs in layout. (174420 lines)
 	Version 14.48.3  :Dec 30, 2014	Options to see the results of test exams removed from main menu. (174418 lines)

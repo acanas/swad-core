@@ -1640,6 +1640,27 @@ const char *Txt_Action =
 	"A&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Admin_one_user =
+#if   L==0
+	"Administrar un usuari";
+#elif L==1
+	"Verwalten eines Benutzer";
+#elif L==2
+	"Admin one user";
+#elif L==3
+	"Administrar un usuario";
+#elif L==4
+	"G&eacute;rer un utilisateur";
+#elif L==5
+	"Administrar un usuario";	// Okoteve traducción
+#elif L==6
+	"Gestire un utente";
+#elif L==7
+	"Zarz&aogon;dzaj u&zdot;ytkownika";
+#elif L==8
+	"Gerenciar um utilizador";
+#endif
+
 const char *Txt_Admin_user =
 #if   L==0
 	"Administrar usuari";
@@ -18569,7 +18590,7 @@ const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Verwalten eines Benutzer"
 #elif L==2
-	"Admin a user"
+	"Admin one user"
 #elif L==3
 	"Administrar un usuario"
 #elif L==4
