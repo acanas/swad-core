@@ -235,9 +235,9 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .TAB_OFF
 	{
 	float:left;
-	width:86px;height:59px;
+	width:86px;height:61px;
 	margin:1px 1px 0 1px;
-	padding:2px 1px 0 1px;
+	padding:0 1px 0 1px;
 	border-radius:6px 6px 0 0;
 	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
@@ -248,9 +248,9 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .TAB_ON
 	{
 	float:left;
-	width:88px;height:60px;
+	width:88px;height:62px;
 	margin:0;
-	padding:3px 1px 0 1px;
+	padding:1px 1px 0 1px;
 	border-radius:6px 6px 0 0;
 	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
@@ -261,7 +261,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .WHITE_TAB_OFF
 	{
 	color:#707070;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -270,7 +270,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .GREY_TAB_OFF
 	{
 	color:#505050;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -279,7 +279,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .BLUE_TAB_OFF
 	{
 	color:#365E6E;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -288,7 +288,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .YELLOW_TAB_OFF
 	{
 	color:#7C4D2A;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -297,7 +297,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .WHITE_TAB_ON
 	{
 	color:#4D88A1;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -306,7 +306,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .GREY_TAB_ON
 	{
 	color:#606060;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -315,7 +315,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .BLUE_TAB_ON
 	{
 	color:#4D88A1;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -324,7 +324,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .YELLOW_TAB_ON
 	{
 	color:#BD4815;
-	font-size:7pt;
+	font-size:7.5pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -577,33 +577,35 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ICON_HIGHLIGHT:hover
 	{
 	opacity:1;
-	transform:scale(1.1,1.1);
+	}
+.ICON_SCALING:hover
+	{
+	opacity:1;
+	transform:scale(1.15,1.15);
 	}
 .ICON_SCALED
 	{
 	opacity:1;
-	transform:scale(1.1,1.1);
+	transform:scale(1.15,1.15);
 	}
 
 /***************************** Horizontal menu *******************************/
-#submenu_container ul
+#horizontal_menu_container ul
 	{
+	display:table;
+	border:0;
 	margin:0 auto;
-	padding:0;
+	padding:0 0 20px; 0;
 	list-style-type:none;
-	text-align:center;
-	vertical-align:middle;
 	}
-#submenu_container ul li
+#horizontal_menu_container li
 	{
 	display:table-cell;
-	height:60px;
-	vertical-align:middle;
-	}
-#submenu_container li
-	{
-	display:inline-block;
 	width:100px;height:60px;
+	border:0;
+	margin:0;
+	padding:0;
+	text-align:center;
 	vertical-align:middle;
 	}
 .MENU_OFF
@@ -628,7 +630,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************** Menu options *******************************/
-#menu
+#vertical_menu_container
 	{
 	list-style-type:none;
 	padding:0;
@@ -652,7 +654,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table-cell;
 	vertical-align:middle;
 	}
-.WHITE_MENU_OFF		{color:#707070; font-size:10pt; font-weight:bold; line-height:110%;}
+.WHITE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
 .GREY_MENU_OFF		{color:#707070; font-size:10pt; font-weight:bold; line-height:110%;}
 .BLUE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
 .YELLOW_MENU_OFF	{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}

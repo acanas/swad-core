@@ -337,7 +337,7 @@ void Lay_WriteStartOfPage (void)
 
 #ifdef HORIZONTAL_MENU
 
-   	 fprintf (Gbl.F.Out,"<div id=\"submenu_container\" style=\"display:table; margin:0 auto;\">");
+   	 fprintf (Gbl.F.Out,"<div id=\"horizontal_menu_container\">");
          Lay_WriteHorizontalMenuThisTabDesktop ();
 	 fprintf (Gbl.F.Out,"</div>");
 
@@ -944,9 +944,7 @@ static void Lay_DrawTabsDeskTop (void)
 	 if (ICanViewTab)
 	   {
 	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	    if (NumTab == Gbl.CurrentTab)
-	       fprintf (Gbl.F.Out," class=\"ICON_SCALED\"");
-	    else
+	    if (NumTab != Gbl.CurrentTab)
 	       fprintf (Gbl.F.Out," class=\"ICON_HIGHLIGHT\"");
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
@@ -956,7 +954,7 @@ static void Lay_DrawTabsDeskTop (void)
 							   The_ClassTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON28x28\" style=\"margin:4px;\" />"
+			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
 			       "<div>%s</div>"
 			       "</a>"
 			       "</form>",
@@ -1153,7 +1151,7 @@ static void Lay_WriteVerticalMenuThisTabDesktop (void)
    bool PreviousVisibleOptions = false;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul id=\"menu\">");
+   fprintf (Gbl.F.Out,"<ul id=\"vertical_menu_container\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -1269,7 +1267,7 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
          if (IsTheSelectedAction)
             fprintf (Gbl.F.Out,"<div class=\"ICON_SCALED\" style=\"display:inline-block;\">");
          else
-            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline-block;\">");
+            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT ICON_SCALING\" style=\"display:inline-block;\">");
 
          /***** Start of form and link *****/
          Act_FormStart (NumAct);
