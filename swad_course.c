@@ -134,7 +134,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_This_course_fulfills_X_out_of_Y_indicators_;
    extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Show_more_details;
    extern const char *Txt_NO;
    extern const char *Txt_Course;
@@ -173,7 +173,7 @@ static void Crs_Configuration (bool PrintView)
 		  Ind_NUM_INDICATORS,
 		  Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeAllStaCrs].ActCod,
 		  Txt_TABS_FULL_TXT[Act_Actions[Superaction].Tab],
-		  Txt_MENU_NO_BR[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu],
+		  Txt_MENU_TITLE[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu],
 		  Txt_Show_more_details,
 		  Txt_NO);
 	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);

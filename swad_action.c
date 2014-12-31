@@ -3539,27 +3539,16 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
   }
 
 /*****************************************************************************/
-/*************** Get the text for menu associated to an action ***************/
-/*****************************************************************************/
-
-const char *Act_GetMenuTxtAction (Act_Action_t Action)
-  {
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-
-   return Txt_MENU_NO_BR[Act_Actions[Act_Actions[Action].SuperAction].Tab][Act_Actions[Act_Actions[Action].SuperAction].IndexInMenu];
-  }
-
-/*****************************************************************************/
 /******************* Get the title associated to an action *******************/
 /*****************************************************************************/
 
 const char *Act_GetTitleAction (Act_Action_t Action)
   {
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
-   return Txt_MENU_NO_BR[Act_Actions[Act_Actions[Action].SuperAction].Tab][Act_Actions[Act_Actions[Action].SuperAction].IndexInMenu];
+   return Txt_MENU_TITLE[Act_Actions[Act_Actions[Action].SuperAction].Tab][Act_Actions[Act_Actions[Action].SuperAction].IndexInMenu];
   }
 
 /*****************************************************************************/
@@ -3582,7 +3571,7 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *BreadcrumbStr)
   {
    extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Act_Action_t Superaction = Act_Actions[Action].SuperAction;
    char *Arrow;
 
@@ -3591,7 +3580,7 @@ void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *Breadcru
    sprintf (BreadcrumbStr,"%s %s %s %s %s",
             Cfg_HTTPS_URL_SWAD_CGI,Arrow,
             Txt_TABS_FULL_TXT[Act_Actions[Superaction].Tab],Arrow,
-            Txt_MENU_NO_BR[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu]);
+            Txt_MENU_TITLE[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu]);
   }
 
 /*****************************************************************************/
@@ -4074,7 +4063,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
    extern const char *The_ClassFormulNB[The_NUM_THEMES];
    extern const char *Txt_Frequent_actions;
    extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
@@ -4104,7 +4093,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 		  Act_Actions[Action].Icon,Title);
          sprintf (ActionStr,"%s &gt; %s",
                   Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],
-                  Txt_MENU_NO_BR[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
+                  Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
          Str_LimitLengthHTMLStr (ActionStr,40);
          fprintf (Gbl.F.Out," %s</a>"
                             "</form>"
@@ -4125,7 +4114,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *Txt_Frequent_actions;
-   extern const char *Txt_MENU_NO_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
@@ -4169,7 +4158,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_16x16,
                   Act_Actions[Action].Icon,Title);
 
-         strcpy (ActionStr,Txt_MENU_NO_BR[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
+         strcpy (ActionStr,Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
          Str_LimitLengthHTMLStr (ActionStr,12);
          fprintf (Gbl.F.Out," %s</a>"
                             "</form>"

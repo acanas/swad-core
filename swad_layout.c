@@ -1119,7 +1119,7 @@ static void Lay_WriteMenuThisTabDesktop (void)
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
    extern const char *The_ClassSeparator[The_NUM_THEMES];
    extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
    const char *Title;
@@ -1177,7 +1177,7 @@ static void Lay_WriteMenuThisTabDesktop (void)
 	                    "<span class=\"%s\">%s</span>",
 		  IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                         The_ClassMenuOff[Gbl.Prefs.Theme],
-		  Txt_MENU_BR[Gbl.CurrentTab][NumOptInMenu]);
+		  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          /***** End of link and form *****/
          fprintf (Gbl.F.Out,"</div>"
@@ -1210,7 +1210,7 @@ static void Lay_WriteMenuThisTabMobile (void)
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
    extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_BR[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    unsigned NumOptVisible;	// Only options I can see
    Act_Action_t NumAct;
@@ -1252,7 +1252,7 @@ static void Lay_WriteMenuThisTabMobile (void)
                             "</td>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
 	          Act_Actions[NumAct].Icon,
-                  Txt_MENU_BR[Gbl.CurrentTab][NumOptInMenu]);
+                  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          if ((NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) ==
              (Cfg_LAYOUT_MOBILE_NUM_COLUMNS - 1))
@@ -1309,7 +1309,7 @@ static void Lay_WriteBreadcrumbTab (void)
 static void Lay_WriteBreadcrumbAction (void)
   {
    extern const char *The_ClassTabOn[The_NUM_THEMES];
-   const char *Title = Act_GetMenuTxtAction (Gbl.CurrentAct);
+   const char *Title = Act_GetTitleAction (Gbl.CurrentAct);
 
    /***** Start form *****/
    Act_FormStart (Act_Actions[Gbl.CurrentAct].SuperAction);

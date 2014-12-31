@@ -1154,7 +1154,6 @@ struct Act_ListMFUActions
 /*****************************************************************************/
 
 bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
-const char *Act_GetMenuTxtAction (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
 void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *BreadcrumbStr);
