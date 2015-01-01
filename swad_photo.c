@@ -79,11 +79,11 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /*****************************************************************************/
 
 static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat);
-
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
-
 static void Pho_ClearPhotoName (long UsrCod);
+
+static void Pho_PutFormPublicPhoto (void);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
@@ -137,7 +137,7 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
   }
 
 /*****************************************************************************/
-/********* Put a link to the action used to request user's photo *************/
+/********** Put a link to the action used to request user's photo ************/
 /*****************************************************************************/
 
 void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
@@ -178,7 +178,6 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_Remove_photo;
 
    /***** Link for changing / uploading the photo *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Act_FormStart (ActRemMyPho);
    else							// Not me
@@ -189,8 +188,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
 
    Act_LinkFormSubmit (Txt_Remove_photo,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_photo,Txt_Remove_photo);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/
@@ -236,14 +234,18 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    /***** Write message about photo presence or ausence *****/
    if (PhotoExists)	// User has photo
      {
-      Pho_PutLinkToRemoveUsrPhoto (UsrDat);	// Link (form) to remove photo
+      /***** Forms to remove photo and make it public *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      Pho_PutLinkToRemoveUsrPhoto (UsrDat);
+      Pho_PutFormPublicPhoto ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
       Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",true);
      }
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
 
-   /***** Write a form to send photo *****/
+   /***** Form to send photo *****/
    if (ItsMe)
       Act_FormStart (ActDetMyPho);
    else
@@ -1004,6 +1006,62 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                PhotoURL,SpecialShortName);
      }
    fprintf (Gbl.F.Out," />");
+  }
+
+/*****************************************************************************/
+/*********************** Select public / private photo ***********************/
+/*****************************************************************************/
+
+static void Pho_PutFormPublicPhoto (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Public_photo;
+
+   /***** Start form *****/
+   Act_FormStart (ActChgPubPho);
+
+   /***** Checkbox to select between public or private photo *****/
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
+   if (Gbl.Usrs.Me.UsrDat.PublicPhoto)
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                      "<span class=\"%s\">%s</span>",
+            Gbl.FormId,
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_photo);
+
+   /***** End form *****/
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
+/********** Get parameter with public / private photo from form **************/
+/*****************************************************************************/
+
+bool Pho_GetParamPublicPhoto (void)
+  {
+   char YN[1+1];
+
+   Par_GetParToText ("PublicPhoto",YN,1);
+   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+  }
+
+/*****************************************************************************/
+/*********************** Change public / private photo ***********************/
+/*****************************************************************************/
+
+void Pho_ChangePublicPhoto (void)
+  {
+   char Query[512];
+
+   /***** Get param with public/private photo *****/
+   Gbl.Usrs.Me.UsrDat.PublicPhoto = Pho_GetParamPublicPhoto ();
+
+   /***** Store public/private photo in database *****/
+   sprintf (Query,"UPDATE usr_data SET PublicPhoto='%c' WHERE UsrCod='%ld'",
+            Gbl.Usrs.Me.UsrDat.PublicPhoto ? 'Y' :
+        	                             'N',
+            Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not update your preference about public photo");
   }
 
 /*****************************************************************************/

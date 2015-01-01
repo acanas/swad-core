@@ -1862,7 +1862,7 @@ void Rec_ShowFormMyCommRecord (void)
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_sex;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_name;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_country_nationality;
-   extern const char *Txt_Save;
+   extern const char *Txt_Save_changes;
 
    /***** If user has no sex, name and surname... *****/
    if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
@@ -1882,7 +1882,7 @@ void Rec_ShowFormMyCommRecord (void)
    /***** My record *****/
    Act_FormStart (ActChgMyData);
    Rec_ShowCommonRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
-   Lay_PutSendButton (Txt_Save);
+   Lay_PutSendButton (Txt_Save_changes);
    Rec_WriteLinkToDataProtectionClause ();
    fprintf (Gbl.F.Out,"</form>"
 	              "</div>");
@@ -2979,7 +2979,7 @@ void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
    /***** Get whether photo is public from form *****/
-   UsrDat->PublicPhoto = Prf_GetParamPublicPhoto ();
+   UsrDat->PublicPhoto = Pho_GetParamPublicPhoto ();
 
    /***** Get country code *****/
    Par_GetParToText ("OthCtyCod",LongStr,1+10);

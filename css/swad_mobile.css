@@ -32,7 +32,7 @@ body
 	background-color:white;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	}
-input			{font-size:16pt;}
+input			{font-size:16pt; vertical-align:middle;}
 select			{font-size:16pt;}
 textarea		{font-size:12pt;}
 table
@@ -99,9 +99,9 @@ p			{margin:0;}
 .DAY_WRK_LIGHT		{color:#E0E0E0; font-size:8pt;}
 .DAY_NO_WORK_LIGHT	{color:#FFE0FF; font-size:8pt;}
 .DAY_HLD_LIGHT		{color:#FFE0E0; font-size:8pt;}
-.DAY			{border:solid 1px; border-color:#FFFFFF;}
+.DAY			{border:solid 1px; border-color:white;}
 .TODAY			{border:solid 1px; border-color:#50B800;}
-.DAY_EVENT		{border:solid 1px; border-color:#FFFFFF; background-color:#FFF080;}
+.DAY_EVENT		{border:solid 1px; border-color:white; background-color:#FFF080;}
 .TODAY_EVENT		{border:solid 1px; border-color:#50B800; background-color:#FFF080;}
 
 /********************************** Notice ***********************************/
@@ -228,6 +228,7 @@ p			{margin:0;}
 .ICON16x16	{width:16px; height:16px; vertical-align:middle;}
 .ICON16x16B	{width:16px; height:16px; vertical-align:middle; display:block;}
 .ICON32x32	{width:32px; height:32px; vertical-align:middle;}
+.ICON32x32B	{width:32px; height:32px; vertical-align:middle; display:block;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
 
 /********************************* Frame 10 **********************************/
@@ -390,17 +391,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .WHITE_COURSE		{color:#4D88A1; font-size:14pt; white-space:nowrap;}
 .GREY_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#F7F6F5; font-size:14pt; white-space:nowrap;}
-.BLUE_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
-.YELLOW_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:14pt; white-space:nowrap;}
+.BLUE_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:white; font-size:14pt; white-space:nowrap;}
+.YELLOW_COURSE		{font-Family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:white; font-size:14pt; white-space:nowrap;}
 
 .WHITE_HEAD		{color:#E0E0E0; font-size:16pt; white-space:nowrap;}
 .GREY_HEAD		{color:#E0E0E0; font-size:16pt; white-space:nowrap;}
-.BLUE_HEAD		{color:#FFFFFF; font-size:16pt; white-space:nowrap;}
+.BLUE_HEAD		{color:white; font-size:16pt; white-space:nowrap;}
 .YELLOW_HEAD		{color:#B3B0B3; font-size:16pt; white-space:nowrap;}
 
 .WHITE_USR		{color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
 .GREY_USR		{color:#E0E0E0; font-size:16pt; font-weight:bold; white-space:nowrap;}
-.BLUE_USR		{color:#FFFFFF; font-size:16pt; font-weight:bold; white-space:nowrap;}
+.BLUE_USR		{color:white; font-size:16pt; font-weight:bold; white-space:nowrap;}
 .YELLOW_USR		{color:#B3B0B3; font-size:16pt; font-weight:bold; white-space:nowrap;}
 
 .WHITE_CONNECTED	{color:#398000; font-size:10pt;}
@@ -584,11 +585,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .CUR_TIME		{color:#BAD2DA; font-size:12pt; font-weight:bold;}
 
-.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:#FFFFFF;}
+.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:white;}
 .USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
 
-.LAYOUT_OFF		{background-color:white;}
-.LAYOUT_ON		{background-color:#80E000;}
+.LAYOUT_OFF		{height:32px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
+.LAYOUT_ON		{height:32px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
 
 .LOG			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#606060; font-size:9pt;}
 .LOG_R			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:9pt;}

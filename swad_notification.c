@@ -1648,7 +1648,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Change_preferences;
+   extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
    extern const char *Txt_Notify_me_BR_by_e_mail;
@@ -1705,7 +1705,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</table>");
-   Lay_PutSendButton (Txt_Change_preferences);
+   Lay_PutSendButton (Txt_Save_changes);
    fprintf (Gbl.F.Out,"</form>");
 
    /***** End table *****/

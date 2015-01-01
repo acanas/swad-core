@@ -998,6 +998,7 @@ Profile:
 	856. ActDetMyPho		Receive my photo and detect faces on it
 	857. ActUpdMyPho		Update my photo
 	858. ActRemMyPho		Remove my photo
+	878. ActChgPubPho		Change photo privacity
 
 	859. ActReqEdiMyIns		Request the edition of my institution, centre and department
 	860. ActChgCtyMyIns		Change the country of my institution
@@ -1020,7 +1021,6 @@ Profile:
 	875. ActShoLftCol		Show left side column
 	876. ActShoRgtCol		Show right side column
 	877. ActChgIco			Change icon set
-	878. ActChgPubPho		Change photo privacity
 	879. ActChgNtfPrf		Change whether to notify by e-mail new messages
 	880. ActPrnUsrQR		Show my QR code ready to print
 	881. ActPrnMyTimTbl		Show the timetable listo to impresión of all my courses
@@ -2220,6 +2220,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
    /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
    /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
+   /* ActChgPubPho	*/{ 774,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_ChangePublicPhoto	,Rec_ShowMyCommonRecordUpd	,NULL},
 
    /* ActReqEdiMyIns	*/{1165,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,NULL},
    /* ActChgCtyMyIns	*/{1166,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChgCountryOfMyInstitution	,NULL},
@@ -2242,7 +2243,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoLftCol	*/{ 670,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Prf_ShowLeftCol		,Prf_EditPrefs			,NULL},
    /* ActShoRgtCol	*/{ 671,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Prf_ShowRightCol		,Prf_EditPrefs			,NULL},
    /* ActChgIco		*/{1092,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ico_ChangeIconSet		,Prf_EditPrefs			,NULL},
-   /* ActChgPubPho	*/{ 774,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Prf_ChangePublicPhoto	,Prf_EditPrefs			,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ntf_ChangeNotifyEvents	,Prf_EditPrefs			,NULL},
 
    /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode		,NULL},

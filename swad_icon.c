@@ -75,13 +75,14 @@ void Ico_PutIconsToSelectIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\">",
                IconSet == Gbl.Prefs.IconSet ? "LAYOUT_ON" :
         	                              "LAYOUT_OFF");
       Act_FormStart (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32\" />"
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
+	                 " style=\"margin:0 auto;\" />"
                          "</form>"
                          "</td>",
                Gbl.Prefs.IconsURL,

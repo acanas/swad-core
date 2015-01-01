@@ -60,7 +60,4 @@ void Prf_ShowLeftCol (void);
 void Prf_ShowRightCol (void);
 unsigned Prf_GetParamSideCols (void);
 
-bool Prf_GetParamPublicPhoto (void);
-void Prf_ChangePublicPhoto (void);
-
 #endif

@@ -2033,13 +2033,14 @@ void Lay_PutIconsToSelectLayout (void)
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\">",
                Layout == Gbl.Prefs.Layout ? "LAYOUT_ON" :
         	                            "LAYOUT_OFF");
       Act_FormStart (ActChgLay);
       Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32\" />"
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
+	                 " style=\"margin:0 auto;\" />"
                          "</form>"
                          "</td>",
                Gbl.Prefs.IconsURL,

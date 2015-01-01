@@ -16247,7 +16247,7 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Dokumente"
 #elif L==2
-	"Documents area"
+	"Documents"
 #elif L==3
 	"Documentos"
 #elif L==4
@@ -17283,7 +17283,7 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Aktentasche"
 #elif L==2
-	"Virtual pendrive"
+	"Briefcase"
 #elif L==3
 	"Malet&iacute;n"
 #elif L==4
@@ -17291,9 +17291,9 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Malet&iacute;n"	// Okoteve traducción
 #elif L==6
-	"Penna USB"
+	"Cartella"
 #elif L==7
-	"Pendrive"
+	"Teczka"
 #elif L==8
 	"Pasta"
 #endif
@@ -32006,6 +32006,27 @@ const char *Txt_Save =
 	"Salvar";
 #endif
 
+const char *Txt_Save_changes =
+#if   L==0
+	"Desar canvis";
+#elif L==1
+	"&Auml;nderungen speichern";
+#elif L==2
+	"Save changes";
+#elif L==3
+	"Guardar cambios";
+#elif L==4
+	"Enregistrer les modifications";
+#elif L==5
+	"&Ntilde;ongatu";
+#elif L==6
+	"Salva modifiche";
+#elif L==7
+	"Zapisz zmiany";
+#elif L==8
+	"Salvar altera&ccedil;&otilde;es";
+#endif
+
 const char *Txt_Save_file_properties =
 #if   L==0
 	"Guardar les propietats del fitxer";
@@ -41805,17 +41826,17 @@ const char *Txt_The_ZIP_file_has_been_unzipped_successfully =
 
 const char *Txt_Theme_SKIN =
 #if   L==0
-	"Tema (colors)";
+	"Tema";
 #elif L==1
 	"Skin";
 #elif L==2
 	"Theme";
 #elif L==3
-	"Tema (colores)";
+	"Tema";
 #elif L==4
 	"Th&egrave;me";
 #elif L==5
-	"Tema (colores)";	// Okoteve traducción
+	"Tema";	// Okoteve traducción
 #elif L==6
 	"Tema";
 #elif L==7

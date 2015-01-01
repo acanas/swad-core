@@ -54,7 +54,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Prf_UpdateSideColsOnUsrDataTable (void);
-static void Prf_PutFormPublicPhoto (void);
 
 /*****************************************************************************/
 /***************************** Edit preferences ******************************/
@@ -75,7 +74,7 @@ void Prf_EditPrefs (void)
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
 
-   /***** Layout & icons *****/
+   /***** Layout, icons, theme & side columns *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
                       "<tr>"
                       "<td>");
@@ -84,12 +83,6 @@ void Prf_EditPrefs (void)
                       "<td>");
    Ico_PutIconsToSelectIconSet ();
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-	              "</table>");
-
-   /***** Theme & side colums *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
-                      "<tr>"
                       "<td>");
    The_PutIconsToSelectTheme ();
    fprintf (Gbl.F.Out,"</td>"
@@ -101,9 +94,6 @@ void Prf_EditPrefs (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
-      /***** Public / private photo *****/
-      Prf_PutFormPublicPhoto ();
-
       /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
 
@@ -342,14 +332,14 @@ void Prf_PutIconsToSelectSideCols (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s\">",
                SideCols == Gbl.Prefs.SideCols ? "LAYOUT_ON" :
         	                                "LAYOUT_OFF");
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " style=\"display:block; width:32px; height:20px;\" />"
+	                 " alt=\"%s\" title=\"%s\" style=\"display:block;"
+	                 " width:32px; height:20px; margin:0 auto;\" />"
 	                 "</form>"
 	                 "</td>",
                Gbl.Prefs.IconsURL,
@@ -528,66 +518,4 @@ unsigned Prf_GetParamSideCols (void)
       return Cfg_DEFAULT_COLUMNS;
 
    return UnsignedNum;
-  }
-
-/*****************************************************************************/
-/*********************** Select public / private photo ***********************/
-/*****************************************************************************/
-
-static void Prf_PutFormPublicPhoto (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Public_photo;
-
-   /***** Start form *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Public_photo);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
-   Act_FormStart (ActChgPubPho);
-
-   /***** Checkbox to select between public or private photo *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
-   if (Gbl.Usrs.Me.UsrDat.PublicPhoto)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />",
-            Gbl.FormId);
-   fprintf (Gbl.F.Out,"%s",Txt_Public_photo);
-
-   /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
-  }
-
-/*****************************************************************************/
-/********** Get parameter with public / private photo from form **************/
-/*****************************************************************************/
-
-bool Prf_GetParamPublicPhoto (void)
-  {
-   char YN[1+1];
-
-   Par_GetParToText ("PublicPhoto",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-  }
-
-/*****************************************************************************/
-/*********************** Change public / private photo ***********************/
-/*****************************************************************************/
-
-void Prf_ChangePublicPhoto (void)
-  {
-   char Query[512];
-
-   /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PublicPhoto = Prf_GetParamPublicPhoto ();
-
-   /***** Store public/private photo in database *****/
-   sprintf (Query,"UPDATE usr_data SET PublicPhoto='%c' WHERE UsrCod='%ld'",
-            Gbl.Usrs.Me.UsrDat.PublicPhoto ? 'Y' :
-        	                             'N',
-            Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your preference about public photo");
   }

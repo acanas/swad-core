@@ -33,7 +33,7 @@ body
 	background-color:white;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	}
-input			{font-size:10pt;}
+input			{font-size:10pt; vertical-align:middle;}
 select			{font-size:10pt;}
 textarea		{font-size:8pt;}
 table
@@ -149,9 +149,9 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .DAY_WRK_LIGHT		{color:#E0E0E0; font-size:8pt;}
 .DAY_NO_WORK_LIGHT	{color:#FFE0FF; font-size:8pt;}
 .DAY_HLD_LIGHT		{color:#FFE0E0; font-size:8pt;}
-.DAY			{border:solid 1px; border-color:#FFFFFF;}
+.DAY			{border:solid 1px; border-color:white;}
 .TODAY			{border:solid 1px; border-color:#50B800;}
-.DAY_EVENT		{border:solid 1px; border-color:#FFFFFF; background-color:#FFF080;}
+.DAY_EVENT		{border:solid 1px; border-color:white; background-color:#FFF080;}
 .TODAY_EVENT		{border:solid 1px; border-color:#50B800; background-color:#FFF080;}
 
 /********************************** Notice ***********************************/
@@ -264,6 +264,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .ICON16x16B	{width:16px; height:16px; vertical-align:middle; display:block;}
 .ICON28x28	{width:28px; height:28px; vertical-align:middle;}
 .ICON32x32	{width:32px; height:32px; vertical-align:middle;}
+.ICON32x32B	{width:32px; height:32px; vertical-align:middle; display:block;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
 
 /********************************* Frame 10 **********************************/
@@ -427,12 +428,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .WHITE_COURSE		{color:#4D88A1; font-size:20pt; white-space:nowrap;}
 .GREY_COURSE		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#F7F6F5; font-size:20pt; white-space:nowrap;}
-.BLUE_COURSE		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:20pt; white-space:nowrap;}
-.YELLOW_COURSE		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#FFFFFF; font-size:20pt; white-space:nowrap;}
+.BLUE_COURSE		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:white; font-size:20pt; white-space:nowrap;}
+.YELLOW_COURSE		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:white; font-size:20pt; white-space:nowrap;}
 
 .WHITE_HEAD		{color:#E0E0E0; font-size:10pt; white-space:nowrap;}
 .GREY_HEAD		{color:#E0E0E0; font-size:10pt; white-space:nowrap;}
-.BLUE_HEAD		{color:#FFFFFF; font-size:10pt; white-space:nowrap;}
+.BLUE_HEAD		{color:white; font-size:10pt; white-space:nowrap;}
 .YELLOW_HEAD		{color:#B3B0B3; font-size:10pt; white-space:nowrap;}
 
 .WHITE_CUR_TIME		{color:#808080; font-size:12pt; font-weight:bold;}
@@ -442,12 +443,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .WHITE_NOTIF		{color:#707070; font-size:10pt; white-space:nowrap;}
 .GREY_NOTIF		{color:#E0E0E0; font-size:10pt; white-space:nowrap;}
-.BLUE_NOTIF		{color:#FFFFFF; font-size:10pt; white-space:nowrap;}
+.BLUE_NOTIF		{color:white; font-size:10pt; white-space:nowrap;}
 .YELLOW_NOTIF		{color:#B3B0B3; font-size:10pt; white-space:nowrap;}
 
 .WHITE_USR		{color:#E0E0E0; font-size:12pt; font-weight:bold; white-space:nowrap;}
 .GREY_USR		{color:#E0E0E0; font-size:12pt; font-weight:bold; white-space:nowrap;}
-.BLUE_USR		{color:#FFFFFF; font-size:12pt; font-weight:bold; white-space:nowrap;}
+.BLUE_USR		{color:white; font-size:12pt; font-weight:bold; white-space:nowrap;}
 .YELLOW_USR		{color:#B3B0B3; font-size:12pt; font-weight:bold; white-space:nowrap;}
 
 .WHITE_CONNECTED	{color:#398000; font-size:10pt;}
@@ -773,11 +774,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PRAC			{background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
 .TUTO			{background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
-.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:#FFFFFF;}
+.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:white;}
 .USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
 
-.LAYOUT_OFF		{background-color:white;}
-.LAYOUT_ON		{background-color:#80E000;}
+.LAYOUT_OFF		{height:32px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
+.LAYOUT_ON		{height:32px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
 
 .LOG			{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#606060; font-size:9pt;}
 .LOG_R			{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:9pt;}
