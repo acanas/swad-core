@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2014 Antonio Cañas Vargas
+    Copyright (C) 1999-2015 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -427,7 +427,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	opacity:1;
 	}
 
-/********************************* Tabs **************************************/
+/*********************************** Tabs ************************************/
 .WHITE_TAB_ON
 	{
 	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
@@ -465,6 +465,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	white-space:nowrap;
 	}
 
+/********************************* Menu fonts ********************************/
 .WHITE_MENU_OFF		{color:#707070; font-size:20pt; line-height:110%;}
 .GREY_MENU_OFF		{color:#707070; font-size:20pt; line-height:110%;}
 .BLUE_MENU_OFF		{color:#4D88A1; font-size:20pt; line-height:110%;}
@@ -475,20 +476,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BLUE_MENU_ON		{color:#4D88A1; font-size:20pt; font-weight:bold; line-height:110%;}
 .YELLOW_MENU_ON		{color:#FF4301; font-size:20pt; font-weight:bold; line-height:110%;}
 
-.WHITE_FORMUL		{color:#4D88A1; font-size:16pt;}
-.GREY_FORMUL		{color:#4D88A1; font-size:16pt;}
-.BLUE_FORMUL		{color:#4D88A1; font-size:16pt;}
-.YELLOW_FORMUL		{color:#FF4301; font-size:16pt;}
+/********************************* Form fonts ********************************/
+.WHITE_FORM		{color:#4D88A1; font-size:16pt;}
+.GREY_FORM		{color:#4D88A1; font-size:16pt;}
+.BLUE_FORM		{color:#4D88A1; font-size:16pt;}
+.YELLOW_FORM		{color:#FF4301; font-size:16pt;}
 
-.WHITE_FORMUL_NB	{color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.GREY_FORMUL_NB		{color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.BLUE_FORMUL_NB		{color:#4D88A1; font-size:16pt; white-space:nowrap;}
-.YELLOW_FORMUL_NB	{color:#FF4301; font-size:16pt; white-space:nowrap;}
+.WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.GREY_FORM_NOWRAP	{color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.BLUE_FORM_NOWRAP	{color:#4D88A1; font-size:16pt; white-space:nowrap;}
+.YELLOW_FORM_NOWRAP	{color:#FF4301; font-size:16pt; white-space:nowrap;}
 
-.WHITE_FORMULB		{color:#4D88A1; font-size:16pt; font-weight:bold;}
-.GREY_FORMULB		{color:#4D88A1; font-size:16pt; font-weight:bold;}
-.BLUE_FORMULB		{color:#4D88A1; font-size:16pt; font-weight:bold;}
-.YELLOW_FORMULB		{color:#FF4301; font-size:16pt; font-weight:bold;}
+.WHITE_FORM_BOLD	{color:#4D88A1; font-size:16pt; font-weight:bold;}
+.GREY_FORM_BOLD		{color:#4D88A1; font-size:16pt; font-weight:bold;}
+.BLUE_FORM_BOLD		{color:#4D88A1; font-size:16pt; font-weight:bold;}
+.YELLOW_FORM_BOLD	{color:#FF4301; font-size:16pt; font-weight:bold;}
+
 
 .FILENAME		{color:#404040; font-size:18pt; font-weight:bold;}
 

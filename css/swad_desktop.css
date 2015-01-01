@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2014 Antonio Cañas Vargas
+    Copyright (C) 1999-2015 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -25,7 +25,7 @@
 a:link			{text-decoration:none;}
 a:visited		{text-decoration:none;}
 a:active		{text-decoration:none;}
-a:hover			{text-decoration:none;}
+a:hover			{text-decoration:underline;}
 
 body
 	{
@@ -225,111 +225,6 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	color:#4D88A1;
 	}
 
-/***************************** Tabs and main zone ****************************/
-#tabs_container
-	{
-	width:540px;	/* 90 px * 6 visible tabs */
-	height:56px;
-	margin:0 auto;
-	}
-.TAB_OFF
-	{
-	float:left;
-	width:86px;height:61px;
-	margin:1px 1px 0 1px;
-	padding:0 1px 0 1px;
-	border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
-	text-align:center;
-	vertical-align:middle;
-	overflow:hidden;
-	display:inline-block;
-	}
-.TAB_ON
-	{
-	float:left;
-	width:88px;height:62px;
-	margin:0;
-	padding:1px 1px 0 1px;
-	border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
-	text-align:center;
-	vertical-align:middle;
-	overflow:hidden;
-	display:inline-block;
-	}
-.WHITE_TAB_OFF
-	{
-	color:#707070;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.GREY_TAB_OFF
-	{
-	color:#505050;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.BLUE_TAB_OFF
-	{
-	color:#365E6E;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.YELLOW_TAB_OFF
-	{
-	color:#7C4D2A;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.WHITE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.GREY_TAB_ON
-	{
-	color:#606060;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.BLUE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.YELLOW_TAB_ON
-	{
-	color:#BD4815;
-	font-size:7.5pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
 #CENTRAL_ZONE
 	{
 	min-width:740px;
@@ -589,14 +484,120 @@ a:hover img.CENTRE_PHOTO_SHOW
 	transform:scale(1.15,1.15);
 	}
 
+/*********************************** Tabs ************************************/
+#tabs_container
+	{
+	width:540px;	/* 90 px * 6 visible tabs */
+	height:56px;
+	margin:0 auto;
+	}
+.TAB_OFF
+	{
+	float:left;
+	width:86px;height:61px;
+	margin:1px 1px 0 1px;
+	padding:0 1px 0 1px;
+	border-radius:6px 6px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	text-align:center;
+	vertical-align:middle;
+	overflow:hidden;
+	display:inline-block;
+	}
+.TAB_ON
+	{
+	float:left;
+	width:88px;height:62px;
+	margin:0;
+	padding:1px 1px 0 1px;
+	border-radius:6px 6px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
+	text-align:center;
+	vertical-align:middle;
+	overflow:hidden;
+	display:inline-block;
+	}
+.WHITE_TAB_OFF
+	{
+	color:#707070;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.GREY_TAB_OFF
+	{
+	color:#505050;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.BLUE_TAB_OFF
+	{
+	color:#365E6E;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.YELLOW_TAB_OFF
+	{
+	color:#7C4D2A;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.WHITE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.GREY_TAB_ON
+	{
+	color:#606060;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.BLUE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.YELLOW_TAB_ON
+	{
+	color:#BD4815;
+	font-size:7.5pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+
 /***************************** Horizontal menu *******************************/
 #horizontal_menu_container ul
 	{
 	display:table;
+	list-style-type:none;
 	border:0;
 	margin:0 auto;
-	padding:0 0 20px; 0;
-	list-style-type:none;
+	padding:0 0 20px 0;
 	}
 #horizontal_menu_container li
 	{
@@ -629,7 +630,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	overflow:hidden;
 	}
 
-/******************************** Menu options *******************************/
+/******************************* Vertical menu *******************************/
 #vertical_menu_container
 	{
 	list-style-type:none;
@@ -654,30 +655,34 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table-cell;
 	vertical-align:middle;
 	}
-.WHITE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:10pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}
 
-.WHITE_MENU_ON		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:10pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}
+/********************************* Menu fonts ********************************/
+.WHITE_MENU_OFF		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_OFF		{color:#707070; font-size:11pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_OFF		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_OFF	{color:#BD4815; font-size:11pt; font-weight:bold; line-height:110%;}
 
-.WHITE_FORMUL		{color:#4D88A1; font-size:11pt;}
-.GREY_FORMUL		{color:#4D88A1; font-size:11pt;}
-.BLUE_FORMUL		{color:#4D88A1; font-size:11pt;}
-.YELLOW_FORMUL		{color:#7C4D2A; font-size:11pt;}
+.WHITE_MENU_ON		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{color:#606060; font-size:11pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{color:#BD4815; font-size:11pt; font-weight:bold; line-height:110%;}
 
-.WHITE_FORMUL_NB	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
-.GREY_FORMUL_NB		{color:#4D88A1; font-size:11pt; white-space:nowrap;}
-.BLUE_FORMUL_NB		{color:#4D88A1; font-size:11pt; white-space:nowrap;}
-.YELLOW_FORMUL_NB	{color:#7C4D2A; font-size:11pt; white-space:nowrap;}
+/********************************* Form fonts ********************************/
+.WHITE_FORM		{color:#4D88A1; font-size:11pt;}
+.GREY_FORM		{color:#4D88A1; font-size:11pt;}
+.BLUE_FORM		{color:#4D88A1; font-size:11pt;}
+.YELLOW_FORM		{color:#7C4D2A; font-size:11pt;}
 
-.WHITE_FORMULB		{color:#4D88A1; font-size:11pt; font-weight:bold;}
-.GREY_FORMULB		{color:#4D88A1; font-size:11pt; font-weight:bold;}
-.BLUE_FORMULB		{color:#4D88A1; font-size:11pt; font-weight:bold;}
-.YELLOW_FORMULB		{color:#7C4D2A; font-size:11pt; font-weight:bold;}
+.WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
+.GREY_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
+.BLUE_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
+.YELLOW_FORM_NOWRAP	{color:#7C4D2A; font-size:11pt; white-space:nowrap;}
+
+.WHITE_FORM_BOLD	{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.GREY_FORM_BOLD		{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.BLUE_FORM_BOLD		{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.YELLOW_FORM_BOLD	{color:#7C4D2A; font-size:11pt; font-weight:bold;}
+
 
 .FILENAME		{color:#404040; font-size:14pt; font-weight:bold;}
 

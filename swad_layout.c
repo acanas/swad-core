@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2014 Antonio Cañas Vargas
+    Copyright (C) 1999-2015 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -968,7 +968,7 @@ static void Lay_DrawTabsDeskTop (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s32x32.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON28x28\" style=\"margin:4px;\" />"
+			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
 			       "<div class=\"%s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
 		     Lay_TabIcons[NumTab],
@@ -1274,15 +1274,13 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
          Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                          The_ClassMenuOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s32x32.gif\""
-	                    " alt=\"\" class=\"%s\""
+	                    " alt=\"\" class=\"ICON28x28\""
 	                    " style=\"margin:0;\" />"
 			    "<div>%s</div>"
                             "</a>"
                             "</form>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
 	          Act_Actions[NumAct].Icon,
-	          IsTheSelectedAction ? "ICON28x28" :
-					"ICON28x28",
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          /***** End of container used to highlight this option *****/

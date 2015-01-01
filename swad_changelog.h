@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2014 Antonio Cañas Vargas
+    Copyright (C) 1999-2015 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.50 (2014/12/31)"
+#define Log_PLATFORM_VERSION	"SWAD 14.50.2 (2015/01/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.50.2  :Jan 01, 2014	Changes in CSS. (172739 lines)
 	Version 14.50.1  :Dec 31, 2014	Horizontal menu (not finished). (172736 lines)
 	Version 14.50    :Dec 31, 2014	Horizontal menu (not finished). (172735 lines)
 	Version 14.49.2  :Dec 31, 2014	Removed text of menu options with BR. (172611 lines)

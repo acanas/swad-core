@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2014 Antonio Cañas Vargas
+    Copyright (C) 1999-2015 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -202,26 +202,26 @@ const char *The_ClassTitle[The_NUM_THEMES] =
 
 const char *The_ClassFormul[The_NUM_THEMES] =
   {
-   "WHITE_FORMUL",
-   "GREY_FORMUL",
-   "BLUE_FORMUL",
-   "YELLOW_FORMUL",
+   "WHITE_FORM",
+   "GREY_FORM",
+   "BLUE_FORM",
+   "YELLOW_FORM",
   };
 
 const char *The_ClassFormulNB[The_NUM_THEMES] =
   {
-   "WHITE_FORMUL_NB",
-   "GREY_FORMUL_NB",
-   "BLUE_FORMUL_NB",
-   "YELLOW_FORMUL_NB",
+   "WHITE_FORM_NOWRAP",
+   "GREY_FORM_NOWRAP",
+   "BLUE_FORM_NOWRAP",
+   "YELLOW_FORM_NOWRAP",
   };
 
 const char *The_ClassFormulB[The_NUM_THEMES] =
   {
-   "WHITE_FORMULB",
-   "GREY_FORMULB",
-   "BLUE_FORMULB",
-   "YELLOW_FORMULB",
+   "WHITE_FORM_BOLD",
+   "GREY_FORM_BOLD",
+   "BLUE_FORM_BOLD",
+   "YELLOW_FORM_BOLD",
   };
 
 /*****************************************************************************/
