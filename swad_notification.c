@@ -1656,14 +1656,13 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Notifications);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center;\">");
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
-   fprintf (Gbl.F.Out,"<p class=\"TIT_TBL\">%s</p>"
-                      "<table class=\"CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 		      "<th></th>"
 		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
@@ -1673,7 +1672,6 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                       "%s"
                       "</th>"
 	              "</tr>",
-            Txt_Notifications,
 	    Txt_Create_BR_notification,
 	    Txt_Notify_me_BR_by_e_mail);
 

@@ -63,7 +63,7 @@ const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS] =
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-// #define HORIZONTAL_MENU 1
+#define HORIZONTAL_MENU 1
 
 const char *Lay_TabIcons[Act_NUM_TABS] =
   {
@@ -336,11 +336,8 @@ void Lay_WriteStartOfPage (void)
 		      " text-align:left; vertical-align:top;\">");
 
 #ifdef HORIZONTAL_MENU
-
-   	 fprintf (Gbl.F.Out,"<div id=\"horizontal_menu_container\">");
-         Lay_WriteHorizontalMenuThisTabDesktop ();
-	 fprintf (Gbl.F.Out,"</div>");
-
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+      Lay_WriteHorizontalMenuThisTabDesktop ();
 #endif
 
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
@@ -1242,7 +1239,8 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
    bool IsTheSelectedAction;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul>");
+   fprintf (Gbl.F.Out,"<div id=\"horizontal_menu_container\">"
+                      "<ul>");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -1292,7 +1290,8 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
      }
 
    /***** List end *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
   }
 #endif
 
@@ -2024,11 +2023,12 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
 
 void Lay_PutIconsToSelectLayout (void)
   {
+   extern const char *Txt_Layout;
    extern const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS];
    Lay_Layout_t Layout;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
-                      "<tr>");
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Layout);
+   fprintf (Gbl.F.Out,"<tr>");
    for (Layout = (Lay_Layout_t) 0;
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)
@@ -2047,8 +2047,8 @@ void Lay_PutIconsToSelectLayout (void)
                Txt_LAYOUT_NAMES[Layout],
                Txt_LAYOUT_NAMES[Layout]);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

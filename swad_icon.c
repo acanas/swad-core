@@ -66,10 +66,11 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
 
 void Ico_PutIconsToSelectIconSet (void)
   {
+   extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
-	              "<tr>");
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Icons);
+   fprintf (Gbl.F.Out,"<tr>");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
@@ -90,8 +91,8 @@ void Ico_PutIconsToSelectIconSet (void)
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

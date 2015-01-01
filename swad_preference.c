@@ -63,98 +63,46 @@ static void Prf_PutFormPublicPhoto (void);
 void Prf_EditPrefs (void)
   {
    extern const char *Txt_Language;
-   extern const char *Txt_Layout;
-   extern const char *Txt_Theme_SKIN;
-   extern const char *Txt_Columns;
-   extern const char *Txt_Icons;
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
    char MailDomain[Cns_MAX_BYTES_STRING+1];
 
-   /***** Language selection *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   /***** Language *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Language);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td style=\"text-align:center;\">",
-            Txt_Language);
+                      "<td style=\"text-align:center;\">");
    Prf_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
 
-   /***** Layout selection *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
+   /***** Layout & icons *****/
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
                       "<tr>"
-                      "<td style=\"text-align:center;\">",
-            Txt_Layout);
+                      "<td>");
    Lay_PutIconsToSelectLayout ();
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
-
-   /***** Theme selection *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td style=\"text-align:center;\">",
-            Txt_Theme_SKIN);
-   The_PutIconsToSelectTheme ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
-
-   /***** Side columns selection *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td style=\"text-align:center;\">",
-            Txt_Columns);
-   Prf_PutIconsToSelectSideCols ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
-
-   /***** Icons selection *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td style=\"text-align:center;\">",
-            Txt_Icons);
+                      "<td>");
    Ico_PutIconsToSelectIconSet ();
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+                      "</tr>"
+	              "</table>");
+
+   /***** Theme & side colums *****/
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
+                      "<tr>"
+                      "<td>");
+   The_PutIconsToSelectTheme ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td>");
+   Prf_PutIconsToSelectSideCols ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+	              "</table>");
 
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Public / private photo *****/
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:center;\">");
       Prf_PutFormPublicPhoto ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
 
       /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
@@ -384,11 +332,12 @@ Txt_Language_t Prf_GetParamLanguage (void)
 
 void Prf_PutIconsToSelectSideCols (void)
   {
-   unsigned SideCols;
+   extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
+   unsigned SideCols;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
-                      "<tr>");
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Columns);
+   fprintf (Gbl.F.Out,"<tr>");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
@@ -408,8 +357,8 @@ void Prf_PutIconsToSelectSideCols (void)
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
@@ -591,27 +540,25 @@ static void Prf_PutFormPublicPhoto (void)
    extern const char *Txt_Public_photo;
 
    /***** Start form *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Public_photo);
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s\">",
+	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (ActChgPubPho);
-   fprintf (Gbl.F.Out,"<table style=\"border-spacing:2px;\">"
-                      "<tr>");
 
    /***** Checkbox to select between public or private photo *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:right;\">"
-                      "<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
    if (Gbl.Usrs.Me.UsrDat.PublicPhoto)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                      "</td>",
+   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />",
             Gbl.FormId);
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
-	              "%s"
-	              "</td>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_photo);
+   fprintf (Gbl.F.Out,"%s",Txt_Public_photo);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>"
-                      "</form>");
+   fprintf (Gbl.F.Out,"</form>"
+	              "</td>"
+	              "</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

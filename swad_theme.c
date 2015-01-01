@@ -230,10 +230,11 @@ const char *The_ClassFormulB[The_NUM_THEMES] =
 
 void The_PutIconsToSelectTheme (void)
   {
+   extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
-	              "<tr>");
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Theme_SKIN);
+   fprintf (Gbl.F.Out,"<tr>");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)
@@ -254,8 +255,8 @@ void The_PutIconsToSelectTheme (void)
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
