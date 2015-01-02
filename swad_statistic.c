@@ -120,6 +120,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
 static void Sta_WriteSelectedRangeOfDates (unsigned NumDays);
 static void Sta_WriteFloatNum (float Number);
 
+static void Sta_GetAndShowDegCrsStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
 static void Sta_GetAndShowNumCtysInSWAD (void);
 static void Sta_GetAndShowNumInssInSWAD (void);
@@ -127,22 +128,22 @@ static void Sta_GetAndShowNumCtrsInSWAD (void);
 static void Sta_GetAndShowNumDegsInSWAD (void);
 static void Sta_GetAndShowNumCrssInSWAD (void);
 
-static void Sta_ShowUsersStats (void);
+static void Sta_GetAndShowUsersStats (void);
 
-static void Sta_ShowStatsFileBrowsers (void);
+static void Sta_GetAndShowFileBrowsersStats (void);
 static void Sta_WriteStatsExpTreesTableHead (void);
 static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *NameOfFileZones);
 static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t FileBrowser,struct Sta_SizeOfFileZones *SizeOfFileZones);
 
-static void Sta_ShowOERs (void);
-static void Sta_GetNumberOfOERFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2]);
+static void Sta_GetAndShowOERsStats (void);
+static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2]);
 
-static void Sta_ShowAssignmentsStats (void);
-static void Sta_ShowTestsStats (void);
+static void Sta_GetAndShowAssignmentsStats (void);
+static void Sta_GetAndShowTestsStats (void);
+static void Sta_GetAndShowNoticesStats (void);
+static void Sta_GetAndShowMsgsStats (void);
 
-static void Sta_ShowNoticesStats (void);
-static void Sta_ShowMsgsStats (void);
-static void Sta_ShowForumStats (void);
+static void Sta_GetAndShowForumStats (void);
 static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
                                       long InsCod,long CtrCod,long DegCod,long CrsCod,
                                       struct Sta_StatsForum *StatsForum);
@@ -152,8 +153,7 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *ForumName1,const char *ForumName2);
 static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum);
 
-static void Sta_ShowSurveysStats (void);
-
+static void Sta_GetAndShowSurveysStats (void);
 static void Sta_GetAndShowNumUsrsPerLanguage (void);
 static void Sta_GetAndShowNumUsrsPerLayout (void);
 static void Sta_GetAndShowNumUsrsPerTheme (void);
@@ -3617,12 +3617,14 @@ void Sta_ReqUseOfPlatform (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Scope;
+   extern const char *Txt_Statistics;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
    extern const char *Txt_Show_statistic;
    Sta_UseStatType_t UseStatType;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"padding-bottom:10px;"
+	              " text-align:center;\">");
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
@@ -3638,31 +3640,26 @@ void Sta_ReqUseOfPlatform (void)
    Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
    Sco_GetScope ();
    Sco_PutSelectorScope (false);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Type of statistic *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " margin:0; padding:0; text-align:left;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<br />"
+	              "%s: <select name=\"UseStatType\">",
+	    Txt_Statistics);
    for (UseStatType = (Sta_UseStatType_t) 0;
 	UseStatType < Sta_NUM_TYPES_USE_STATS;
 	UseStatType++)
      {
-      fprintf (Gbl.F.Out,"<li>"
-                         "<input type=\"radio\" name=\"UseStatType\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",
                (unsigned) UseStatType);
       if (UseStatType == Gbl.Stat.UseStatType)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s</li>",
+         fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</option>",
                Txt_STAT_USE_STAT_TYPES[UseStatType]);
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   fprintf (Gbl.F.Out,"</select>"
+                      "</div>");
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />",
@@ -3698,18 +3695,11 @@ void Sta_ShowUseOfPlatform (void)
      {
       case Sta_DEGREES_AND_COURSES:
          /***** Number of degrees and courses *****/
-         Lay_StartRoundFrameTable10 (NULL,2,NULL);
-         Sta_WriteHeadDegsCrssInSWAD ();
-         Sta_GetAndShowNumCtysInSWAD ();
-         Sta_GetAndShowNumInssInSWAD ();
-         Sta_GetAndShowNumCtrsInSWAD ();
-         Sta_GetAndShowNumDegsInSWAD ();
-         Sta_GetAndShowNumCrssInSWAD ();
-         Lay_EndRoundFrameTable10 ();
+	 Sta_GetAndShowDegCrsStats ();
          break;
       case Sta_USERS:
 	 /***** Number of users *****/
-         Sta_ShowUsersStats ();
+         Sta_GetAndShowUsersStats ();
          break;
       case Sta_SOCIAL_NETWORKS:
 	 /***** Number of users in social networks *****/
@@ -3718,19 +3708,19 @@ void Sta_ShowUseOfPlatform (void)
       case Sta_FOLDERS_AND_FILES:
          /***** File browsers (folders and files) *****/
 	 // TODO: add links to statistic
-         Sta_ShowStatsFileBrowsers ();
+         Sta_GetAndShowFileBrowsersStats ();
          break;
       case Sta_OER:
 	 /***** Number of Open Educational Resources (OERs) *****/
-	 Sta_ShowOERs ();
+	 Sta_GetAndShowOERsStats ();
 	 break;
       case Sta_ASSIGNMENTS:
          /***** Number of assignments *****/
-         Sta_ShowAssignmentsStats ();
+         Sta_GetAndShowAssignmentsStats ();
          break;
       case Sta_TESTS:
          /***** Number of tests *****/
-         Sta_ShowTestsStats ();
+         Sta_GetAndShowTestsStats ();
          break;
       case Sta_NOTIFY_EVENTS:
          /***** Number of users who want to be notified by e-mail on each event *****/
@@ -3738,19 +3728,19 @@ void Sta_ShowUseOfPlatform (void)
          break;
       case Sta_NOTICES:
          /***** Number of notices *****/
-         Sta_ShowNoticesStats ();
+         Sta_GetAndShowNoticesStats ();
          break;
       case Sta_MSGS_BETWEEN_USERS:
          /***** Number of sent and received messages *****/
-         Sta_ShowMsgsStats ();
+         Sta_GetAndShowMsgsStats ();
          break;
       case Sta_FORUMS:
          /***** Number of forums, threads and posts *****/
-         Sta_ShowForumStats ();
+         Sta_GetAndShowForumStats ();
          break;
       case Sta_SURVEYS:
          /***** Number of surveys *****/
-         Sta_ShowSurveysStats ();
+         Sta_GetAndShowSurveysStats ();
          break;
       case Sta_LANGUAGES:
          /***** Number of users who have chosen a language *****/
@@ -3777,6 +3767,24 @@ void Sta_ShowUseOfPlatform (void)
          Sta_GetAndShowNumUsrsPerSideColumns ();
          break;
      }
+  }
+
+/*****************************************************************************/
+/*************** Get and show stats about degrees and courses ****************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowDegCrsStats (void)
+  {
+   extern const char *Txt_Degrees_and_courses;
+
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees_and_courses);
+   Sta_WriteHeadDegsCrssInSWAD ();
+   Sta_GetAndShowNumCtysInSWAD ();
+   Sta_GetAndShowNumInssInSWAD ();
+   Sta_GetAndShowNumCtrsInSWAD ();
+   Sta_GetAndShowNumDegsInSWAD ();
+   Sta_GetAndShowNumCrssInSWAD ();
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
@@ -4403,7 +4411,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
 /********************** Show stats about number of users *********************/
 /*****************************************************************************/
 
-static void Sta_ShowUsersStats (void)
+static void Sta_GetAndShowUsersStats (void)
   {
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
@@ -4411,7 +4419,7 @@ static void Sta_ShowUsersStats (void)
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
    /***** Number of users *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Users);
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
@@ -4442,8 +4450,9 @@ static void Sta_ShowUsersStats (void)
 /********************* Show stats about exploration trees ********************/
 /*****************************************************************************/
 
-static void Sta_ShowStatsFileBrowsers (void)
+static void Sta_GetAndShowFileBrowsersStats (void)
   {
+   extern const char *Txt_Folders_and_files;
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
    extern const char *Txt_Virtual_pendrives;
    static const Brw_FileBrowser_t StatCrsFileZones[Sta_NUM_STAT_CRS_FILE_ZONES] =
@@ -4461,7 +4470,7 @@ static void Sta_ShowStatsFileBrowsers (void)
    unsigned NumStat;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Folders_and_files);
 
    /***** Write table heading *****/
    Sta_WriteStatsExpTreesTableHead ();
@@ -4897,8 +4906,9 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
 /************ Show stats about Open Educational Resources (OERs) *************/
 /*****************************************************************************/
 
-static void Sta_ShowOERs (void)
+static void Sta_GetAndShowOERsStats (void)
   {
+   extern const char *Txt_OER;
    extern const char *Txt_License;
    extern const char *Txt_No_of_private_files;
    extern const char *Txt_No_of_public_files;
@@ -4907,7 +4917,7 @@ static void Sta_ShowOERs (void)
    unsigned long NumFiles[2];
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_OER);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4929,7 +4939,7 @@ static void Sta_ShowOERs (void)
 	License < Brw_NUM_LICENSES;
 	License++)
      {
-      Sta_GetNumberOfOERFromDB (Gbl.Scope.Current,License,NumFiles);
+      Sta_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
 
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT\" style=\"text-align:left;\">"
@@ -4955,7 +4965,7 @@ static void Sta_ShowOERs (void)
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-static void Sta_GetNumberOfOERFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2])
+static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,unsigned long NumFiles[2])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -5048,8 +5058,9 @@ static void Sta_GetNumberOfOERFromDB (Sco_Scope_t Scope,Brw_License_t License,un
 /************************ Show stats about assignments ***********************/
 /*****************************************************************************/
 
-static void Sta_ShowAssignmentsStats (void)
+static void Sta_GetAndShowAssignmentsStats (void)
   {
+   extern const char *Txt_Assignments;
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
    extern const char *Txt_Average_number_BR_of_assignments_BR_per_course;
@@ -5066,7 +5077,7 @@ static void Sta_ShowAssignmentsStats (void)
          NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Assignments);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5116,8 +5127,9 @@ static void Sta_ShowAssignmentsStats (void)
 /********************** Show stats about test questions **********************/
 /*****************************************************************************/
 
-static void Sta_ShowTestsStats (void)
+static void Sta_GetAndShowTestsStats (void)
   {
+   extern const char *Txt_Tests;
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
    extern const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions;
@@ -5135,7 +5147,7 @@ static void Sta_ShowTestsStats (void)
 	                  " border-width:1px;";
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Tests);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5284,8 +5296,9 @@ static void Sta_ShowTestsStats (void)
 /***************************** Show stats of notices *************************/
 /*****************************************************************************/
 
-static void Sta_ShowNoticesStats (void)
+static void Sta_GetAndShowNoticesStats (void)
   {
+   extern const char *Txt_Notices;
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
    extern const char *Txt_NOTICE_Deleted_BR_notices;
@@ -5313,7 +5326,7 @@ static void Sta_ShowNoticesStats (void)
    NumTotalNotifications += NumNotif;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Notices);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5371,7 +5384,7 @@ static void Sta_ShowNoticesStats (void)
 /*************************** Show stats of messages **************************/
 /*****************************************************************************/
 
-static void Sta_ShowMsgsStats (void)
+static void Sta_GetAndShowMsgsStats (void)
   {
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -5393,7 +5406,7 @@ static void Sta_ShowMsgsStats (void)
    NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Messages);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5472,7 +5485,7 @@ static void Sta_ShowMsgsStats (void)
 /***************************** Show stats of forums **************************/
 /*****************************************************************************/
 
-static void Sta_ShowForumStats (void)
+static void Sta_GetAndShowForumStats (void)
   {
    extern const char *Txt_Forums;
    extern const char *Txt_No_of_forums;
@@ -5491,7 +5504,7 @@ static void Sta_ShowForumStats (void)
    StatsForum.NumUsrsToBeNotifiedByEMail = 0;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Forums);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5825,8 +5838,9 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 /***************************** Show stats of surveys *************************/
 /*****************************************************************************/
 
-static void Sta_ShowSurveysStats (void)
+static void Sta_GetAndShowSurveysStats (void)
   {
+   extern const char *Txt_Surveys;
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
    extern const char *Txt_Average_number_BR_of_surveys_BR_per_course;
@@ -5848,7 +5862,7 @@ static void Sta_ShowSurveysStats (void)
      }
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Surveys);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6630,6 +6644,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
   {
+   extern const char *Txt_Notifications;
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_No_of_users;
@@ -6651,7 +6666,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    char *StyleTableCell = " border-style:solid none none none;"
 	                  " border-width:1px;";
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Event);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Notifications);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

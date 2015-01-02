@@ -7281,6 +7281,27 @@ const char *Txt_degrees =
 	"titula&ccedil;oes";
 #endif
 
+const char *Txt_Degrees_and_courses =
+#if   L==0
+	 "Titulaciones y asignaturas";	// Necessita traducció
+#elif L==1
+	 "Studieng&auml;nge und Kursen";
+#elif L==2
+	 "Degrees and courses";
+#elif L==3
+	 "Titulaciones y asignaturas";
+#elif L==4
+	 "&Eacute;tudes et mati&egrave;res";
+#elif L==5
+	 "Titulaciones y asignaturas";	// Okoteve traducción
+#elif L==6
+	 "Lauree e corsi";
+#elif L==7
+	 "Degrees and courses";		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Titula&ccedil;oes e disciplinas";
+#endif
+
 const char *Txt_Degrees_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Titulacions de %s";
@@ -11299,6 +11320,27 @@ const char *Txt_folders =
 	"diret&oacute;rios";
 #endif
 
+const char *Txt_Folders_and_files =
+#if   L==0
+	 "Carpetes i fitxers";
+#elif L==1
+	 "Verzeichnisse und Dateien";
+#elif L==2
+	 "Folders and files";
+#elif L==3
+	 "Carpetas y archivos";
+#elif L==4
+	 "R&eacute;pertoires et fichiers";
+#elif L==5
+	 "Carpetas y archivos";		// Okoteve traducción
+#elif L==6
+	 "Cartelle e file";
+#elif L==7
+	 "Foldery i pliki";
+#elif L==8
+	 "Diret&oacute;rios e arquivos";
+#endif
+
 const char *Txt_Folders_copied =
 #if   L==0
 	"Carpetes copiades";
@@ -12266,27 +12308,6 @@ const char *Txt_Guided_academic_assignments =
 	"Zwiedzanie dyplomowe";
 #elif L==8
 	"Atividades acad&eacute;micas guided";
-#endif
-
-const char *Txt_Help_on_the_file_browser =
-#if   L==0
-	"Ajuda sobre el explorador de fitxers";
-#elif L==1
-	"Hilfe auf dem Datei-Browser";
-#elif L==2
-	"Help on the file browser";
-#elif L==3
-	"Ayuda sobre el explorador de archivos";
-#elif L==4
-	"Aide sur le navigateur de fichiers";
-#elif L==5
-	"Ayuda sobre el explorador de archivos";	// Okoteve traducción
-#elif L==6
-	"Guida sul file browser";
-#elif L==7
-	"Pomoc w przegladarke plik&oacute;w";
-#elif L==8
-	"Ajuda sobre o arquivo navegador";
 #endif
 
 const char *Txt_Hidden_MALE_PLURAL =
@@ -24584,6 +24605,27 @@ const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
 	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";
 #endif
 
+const char *Txt_OER =
+#if   L==0
+	 "Recursos Educatius Oberts (OER)";
+#elif L==1
+	 "Open Educational Resources (OER)";
+#elif L==2
+	 "Open Educational Resources (OER)";
+#elif L==3
+	 "Recursos Educativos Abiertos (OER)";
+#elif L==4
+	 "Ressources &Eacute;ducatives Libres (REL)";
+#elif L==5
+	 "Recursos Educativos Abiertos (OER)";	// Okoteve traducción
+#elif L==6
+	 "Risorse Didattiche Aperte (OER)";
+#elif L==7
+	 "Otwarte Zasoby Edukacyjne (OER)";
+#elif L==8
+	 "Recursos Educacionais Abertos (OER)";
+#endif
+
 const char *Txt_of_PART_OF_A_TOTAL =	// Example: transferred 2 of 3 files
 #if   L==0
 	"de";	// Necessita traduccio
@@ -35165,6 +35207,27 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 #endif
 	};
 
+const char *Txt_Statistics =
+#if   L==0
+	 "Estad&iacute;stiques";
+#elif L==1
+	 "Statistik";
+#elif L==2
+	 "Statistics";
+#elif L==3
+	 "Estad&iacute;sticas";
+#elif L==4
+	 "Statistiques";
+#elif L==5
+	 "Papy'aporeko";
+#elif L==6
+	 "Statistiche";
+#elif L==7
+	 "Statystyki";
+#elif L==8
+	 "Estat&iacute;sticas";
+#endif
+
 const char *Txt_Statistics_of_all_visits =
 #if   L==0
 	"Estad&iacute;stica de todos los accesos";	// Necessita traduccio
@@ -36960,6 +37023,27 @@ const char *Txt_Test_result =
 	"Test result";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Resultado do teste";
+#endif
+
+const char *Txt_Tests =
+#if   L==0
+	"Tests";
+#elif L==1
+	"Tests";
+#elif L==2
+	"Tests";
+#elif L==3
+	"Tests";
+#elif L==4
+	"Tests";
+#elif L==5
+	"Tests";	// Okoteve traducción
+#elif L==6
+	"Test";
+#elif L==7
+	"Test&oacute;w";
+#elif L==8
+	"Testes";
 #endif
 
 const char *Txt_Thanks_for_answering_the_survey =
