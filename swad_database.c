@@ -113,9 +113,10 @@ mysql> DESCRIBE IP_prefs;
 | Layout     | tinyint(4) | NO   |     | 0       |       |
 | Theme      | char(16)   | NO   |     | NULL    |       |
 | IconSet    | char(16)   | NO   |     | NULL    |       |
+| Menu       | tinyint(4) | NO   |     | 0       |       |
 | SideCols   | tinyint(4) | NO   |     | NULL    |       |
 +------------+------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
                    "IP CHAR(15) NOT NULL,"
@@ -124,6 +125,7 @@ mysql> DESCRIBE IP_prefs;
                    "Layout TINYINT NOT NULL DEFAULT 0,"
                    "Theme CHAR(16) NOT NULL,"
                    "IconSet CHAR(16) NOT NULL,"
+                   "Menu TINYINT NOT NULL DEFAULT 0,"
                    "SideCols TINYINT NOT NULL,"
                    "PRIMARY KEY (IP),INDEX(UsrCod),INDEX(LastChange))");
 
@@ -2280,11 +2282,12 @@ mysql> DESCRIBE usr_data;
 | OriginPlace     | varchar(127)                    | NO   |     | NULL    |                |
 | Birthday        | date                            | NO   |     | NULL    |                |
 | Comments        | text                            | NO   |     | NULL    |                |
+| Menu            | tinyint(4)                      | NO   | MUL | 0       |                |
 | SideCols        | tinyint(4)                      | NO   | MUL | 3       |                |
 | NotifNtfEvents  | int(11)                         | NO   |     | 0       |                |
 | EmailNtfEvents  | int(11)                         | NO   |     | 0       |                |
 +-----------------+---------------------------------+------+-----+---------+----------------+
-33 rows in set (0.00 sec)
+34 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2317,10 +2320,11 @@ mysql> DESCRIBE usr_data;
                    "OriginPlace VARCHAR(127) NOT NULL,"
                    "Birthday DATE NOT NULL,"
                    "Comments TEXT NOT NULL,"
+                   "Menu TINYINT NOT NULL DEFAULT 0,"
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
                    "NotifNtfEvents INT NOT NULL DEFAULT 0,"
                    "EmailNtfEvents INT NOT NULL DEFAULT 0,"
-                   "PRIMARY KEY(UsrCod),UNIQUE INDEX(EncryptedUsrCod),INDEX(Layout),INDEX(Theme),INDEX(IconSet),INDEX(Language),INDEX(SideCols),INDEX(CtyCod),INDEX(InsCtyCod),INDEX(InsCod),INDEX(DptCod),INDEX(CtrCod))");
+                   "PRIMARY KEY(UsrCod),UNIQUE INDEX(EncryptedUsrCod),INDEX(Layout),INDEX(Theme),INDEX(IconSet),INDEX(Language),INDEX(CtyCod),INDEX(InsCtyCod),INDEX(InsCod),INDEX(DptCod),INDEX(CtrCod),INDEX(Menu),INDEX(SideCols))");
 
    /***** Table usr_emails *****/
    /*

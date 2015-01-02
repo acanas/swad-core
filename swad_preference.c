@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notification.h"
+#include "swad_menu.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_text.h"
@@ -53,6 +54,7 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
+static void Prf_PutIconsToSelectSideCols (void);
 static void Prf_UpdateSideColsOnUsrDataTable (void);
 
 /*****************************************************************************/
@@ -85,11 +87,17 @@ void Prf_EditPrefs (void)
    fprintf (Gbl.F.Out,"</td>"
                       "<td>");
    The_PutIconsToSelectTheme ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td>");
-   Prf_PutIconsToSelectSideCols ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
+   fprintf (Gbl.F.Out,"</td>");
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+     {
+      fprintf (Gbl.F.Out,"<td>");
+      Mnu_PutIconsToSelectMenu ();
+      fprintf (Gbl.F.Out,"</td>"
+                         "<td>");
+      Prf_PutIconsToSelectSideCols ();
+      fprintf (Gbl.F.Out,"</td>");
+     }
+   fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
 
    if (Gbl.Usrs.Me.Logged)
@@ -118,7 +126,7 @@ void Prf_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      sprintf (Query,"SELECT Layout,Theme,IconSet,SideCols"
+      sprintf (Query,"SELECT Layout,Theme,IconSet,Menu,SideCols"
 		     " FROM IP_prefs WHERE IP='%s'",
 	       Gbl.IP);
       if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get preferences")))
@@ -141,8 +149,14 @@ void Prf_GetPrefsFromIP (void)
 	 /* Get icon set (row[2]) */
 	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[2]);
 
-	 /* Get if user wants to show side columns (row[3]) */
-	 if (sscanf (row[3],"%u",&Gbl.Prefs.SideCols) == 1)
+	 /* Get menu (row[3]) */
+	 Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;
+	 if (sscanf (row[3],"%u",&UnsignedNum) == 1)
+	    if (UnsignedNum < Mnu_NUM_MENUS)
+	       Gbl.Prefs.Menu = (Lay_Layout_t) UnsignedNum;
+
+	 /* Get if user wants to show side columns (row[4]) */
+	 if (sscanf (row[4],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
 	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -164,23 +178,25 @@ void Prf_SetPrefsFromIP (void)
    char Query[512];
 
    /***** Update preferences from current IP in database *****/
-   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,Layout,Theme,IconSet,SideCols)"
-                  " VALUES ('%s','%ld',NOW(),'%u','%s','%s','%u')",
+   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,Layout,Theme,IconSet,Menu,SideCols)"
+                  " VALUES ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Gbl.Prefs.Layout,
             The_ThemeId[Gbl.Prefs.Theme],
             Ico_IconSetId[Gbl.Prefs.IconSet],
+            (unsigned) Gbl.Prefs.Menu,
             Gbl.Prefs.SideCols);
    DB_QueryREPLACE (Query,"can not store preferences from current IP address");
 
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs SET Layout='%u',Theme='%s',IconSet='%s',SideCols='%u'"
+      sprintf (Query,"UPDATE IP_prefs SET Layout='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
                      " WHERE UsrCod='%ld'",
                (unsigned) Gbl.Prefs.Layout,
                The_ThemeId[Gbl.Prefs.Theme],
                Ico_IconSetId[Gbl.Prefs.IconSet],
+               (unsigned) Gbl.Prefs.Menu,
                Gbl.Prefs.SideCols,
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your preferences");
@@ -320,7 +336,7 @@ Txt_Language_t Prf_GetParamLanguage (void)
 /************ Put icons to select the layout of the side columns *************/
 /*****************************************************************************/
 
-void Prf_PutIconsToSelectSideCols (void)
+static void Prf_PutIconsToSelectSideCols (void)
   {
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];

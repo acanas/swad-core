@@ -1021,6 +1021,7 @@ Profile:
 	875. ActShoLftCol		Show left side column
 	876. ActShoRgtCol		Show right side column
 	877. ActChgIco			Change icon set
+	---. ActChgMnu			Change menu
 	879. ActChgNtfPrf		Change whether to notify by e-mail new messages
 	880. ActPrnUsrQR		Show my QR code ready to print
 	881. ActPrnMyTimTbl		Show the timetable listo to impresión of all my courses
@@ -2243,6 +2244,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoLftCol	*/{ 670,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Prf_ShowLeftCol		,Prf_EditPrefs			,NULL},
    /* ActShoRgtCol	*/{ 671,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Prf_ShowRightCol		,Prf_EditPrefs			,NULL},
    /* ActChgIco		*/{1092,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ico_ChangeIconSet		,Prf_EditPrefs			,NULL},
+   /* ActChgMnu		*/{1243,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Mnu_ChangeMenu		,Prf_EditPrefs			,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ntf_ChangeNotifyEvents	,Prf_EditPrefs			,NULL},
 
    /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode		,NULL},
@@ -3516,6 +3518,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemIDOth,		// #1240
 	ActNewIDOth,		// #1241
 	ActSeeSyl,		// #1242
+	ActChgMnu,		// #1243
 	};
 
 /*****************************************************************************/

@@ -51,9 +51,10 @@
 #include "swad_institution.h"
 #include "swad_layout.h"
 #include "swad_link.h"
-#include "swad_message.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
+#include "swad_message.h"
+#include "swad_menu.h"
 #include "swad_password.h"
 #include "swad_photo.h"
 #include "swad_place.h"
@@ -136,6 +137,7 @@ struct Globals
       Ico_IconSet_t IconSet;
       char PathIconSet[PATH_MAX+1];
       char IconsURL[PATH_MAX+1];
+      Mnu_Menu_t Menu;
      } Prefs;
 
    struct

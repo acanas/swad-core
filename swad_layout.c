@@ -63,8 +63,6 @@ const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS] =
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-#define HORIZONTAL_MENU 1
-
 const char *Lay_TabIcons[Act_NUM_TABS] =
   {
    /* TabUnk */	NULL,
@@ -109,20 +107,14 @@ static void Lay_DrawTabsDeskTop (void);
 static void Lay_DrawTabsMobile (void);
 static bool Lay_CheckIfICanViewTab (Act_Tab_t Tab);
 static void Lay_DrawBreadcrumb (void);
-#ifndef HORIZONTAL_MENU
 static void Lay_WriteVerticalMenuThisTabDesktop (void);
-#endif
-#ifdef HORIZONTAL_MENU
 static void Lay_WriteHorizontalMenuThisTabDesktop (void);
-#endif
 static void Lay_WriteMenuThisTabMobile (void);
 
 static void Lay_WriteBreadcrumbHome (void);
 static void Lay_WriteBreadcrumbTab (void);
 static void Lay_WriteBreadcrumbAction (void);
-#ifndef HORIZONTAL_MENU
 static void Lay_WriteTitleAction (void);
-#endif
 
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
@@ -304,14 +296,14 @@ void Lay_WriteStartOfPage (void)
          Prf_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</td>");
 
-#ifndef HORIZONTAL_MENU
-         /* Tab content, including always vertical menu (left) and always main zone (right) */
-         fprintf (Gbl.F.Out,"<td style=\"width:140px; text-align:left;"
-                            " vertical-align:top;\">");
-         Lay_WriteVerticalMenuThisTabDesktop ();
-         fprintf (Gbl.F.Out,"</td>");
-#endif
-
+         if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
+           {
+	    /* Tab content, including vertical menu (left) and main zone (right) */
+	    fprintf (Gbl.F.Out,"<td style=\"width:140px; text-align:left;"
+			       " vertical-align:top;\">");
+	    Lay_WriteVerticalMenuThisTabDesktop ();
+	    fprintf (Gbl.F.Out,"</td>");
+           }
          break;
       case Lay_LAYOUT_MOBILE:
          /* Tab content */
@@ -335,10 +327,9 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<td style=\"padding:0 10px 10px 10px;"
 		      " text-align:left; vertical-align:top;\">");
 
-#ifdef HORIZONTAL_MENU
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
+       Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
       Lay_WriteHorizontalMenuThisTabDesktop ();
-#endif
 
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
 
@@ -346,12 +337,11 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
       Inf_WriteMsgYouMustReadInfo ();
 
-#ifndef HORIZONTAL_MENU
    /* Write title of the current action */
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-       Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
+       Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
+      Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
       Lay_WriteTitleAction ();
-#endif
 
    Gbl.Layout.WritingHTMLStart = false;
    Gbl.Layout.HTMLStartWritten = true;
@@ -1132,7 +1122,6 @@ static void Lay_DrawBreadcrumb (void)
 /************* Write the menu of current tab (desktop layout) ****************/
 /*****************************************************************************/
 
-#ifndef HORIZONTAL_MENU
 static void Lay_WriteVerticalMenuThisTabDesktop (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
@@ -1220,13 +1209,11 @@ static void Lay_WriteVerticalMenuThisTabDesktop (void)
    /***** List end *****/
    fprintf (Gbl.F.Out,"</ul>");
   }
-#endif
 
 /*****************************************************************************/
 /********** Write horizontal menu of current tab (desktop layout) ************/
 /*****************************************************************************/
 
-#ifdef HORIZONTAL_MENU
 static void Lay_WriteHorizontalMenuThisTabDesktop (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
@@ -1293,7 +1280,6 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
   }
-#endif
 
 /*****************************************************************************/
 /************* Write the menu of current tab (mobile layout) *****************/
@@ -1419,7 +1405,6 @@ static void Lay_WriteBreadcrumbAction (void)
 /*********** Write icon and title associated to the current action ***********/
 /*****************************************************************************/
 
-#ifndef HORIZONTAL_MENU
 static void Lay_WriteTitleAction (void)
   {
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
@@ -1446,7 +1431,6 @@ static void Lay_WriteTitleAction (void)
    /***** Container end *****/
    fprintf (Gbl.F.Out,"</div>");
   }
-#endif
 
 /*****************************************************************************/
 /***************************** Show left column ******************************/

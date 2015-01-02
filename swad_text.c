@@ -75,6 +75,7 @@
 #include "swad_forum.h"
 #include "swad_holiday.h"
 #include "swad_info.h"
+#include "swad_menu.h"
 #include "swad_notification.h"
 #include "swad_photo.h"
 #include "swad_QR.h"
@@ -15514,6 +15515,70 @@ const char *Txt_maximum =
 #elif L==8
 	"m&aacute;ximo";
 #endif
+
+const char *Txt_Menu =
+#if   L==0
+	"Men&uacute;";
+#elif L==1
+	"Men&uuml;";
+#elif L==2
+	"Menu";
+#elif L==3
+	"Men&uacute;";
+#elif L==4
+	"Menu";
+#elif L==5
+	"Men&uacute;";	// Okoteve traducción
+#elif L==6
+	"Menu";
+#elif L==7
+	"Menu";
+#elif L==8
+	"Menu";
+#endif
+
+const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
+   {
+#if   L==0
+	 "Horitzontal"
+#elif L==1
+	 "Horizontal"
+#elif L==2
+	 "Horizontal"
+#elif L==3
+	 "Horizontal"
+#elif L==4
+	 "Horizontal"
+#elif L==5
+	 "Horizontal"	// Okoteve traducción
+#elif L==6
+	 "Orizzontale"
+#elif L==7
+	 "Poziomy"
+#elif L==8
+	 "Horizontal"
+#endif
+	 ,
+#if   L==0
+	 "Vertical"
+#elif L==1
+	 "Vertikal"
+#elif L==2
+	 "Vertical"
+#elif L==3
+	 "Vertical"
+#elif L==4
+	 "Vertical"
+#elif L==5
+	 "Vertical"		// Okoteve traducción
+#elif L==6
+	 "Verticale"
+#elif L==7
+	 "Pionowy"
+#elif L==8
+	 "Vertical"
+#endif
+	};
 
 const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {

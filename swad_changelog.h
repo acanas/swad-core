@@ -35,11 +35,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.50.4 (2015/01/01)"
+#define Log_PLATFORM_VERSION	"SWAD 14.51 (2015/01/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.51    :Jan 01, 2014	Users can select horizontal or vertical menu. (172958 lines)
+					1 change necessary in Makefile:
+Add swad_menu.o to list of object files
+					4 changes necessary in database:
+ALTER TABLE usr_data ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER Comments;
+ALTER TABLE usr_data ADD INDEX (Menu);
+UPDATE usr_data SET Menu=1;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1243','es','N','Cambiar men&uacute;');
+
 	Version 14.50.4  :Jan 01, 2014	Changes in preferences and photos. (172705 lines)
 	Version 14.50.3  :Jan 01, 2014	Changes in layout of preferences. (172691 lines)
 	Version 14.50.2  :Jan 01, 2014	Changes in CSS. (172739 lines)

@@ -10441,4 +10441,12 @@ INSERT INTO announcements (Roles,Subject,Content) VALUES ('16','ENCUESTA AN&Oacu
 
 SELECT tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback FROM tst_questions,tst_question_tags,tst_tags WHERE tst_questions.CrsCod='5432' AND tst_questions.QstCod NOT IN (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags WHERE tst_tags.CrsCod='5432' AND tst_tags.TagHidden='Y' AND tst_tags.TagCod=tst_question_tags.TagCod) AND tst_questions.QstCod=tst_question_tags.QstCod AND tst_question_tags.TagCod=tst_tags.TagCod AND tst_tags.CrsCod='5432' AND (UNIX_TIMESTAMP(tst_questions.EditTime)>='0' OR UNIX_TIMESTAMP(tst_tags.ChangeTime)>='0') ORDER BY QstCod;
 
+----- 2015-01-01, swad14.51
+
+ALTER TABLE usr_data ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER Comments;
+ALTER TABLE usr_data ADD INDEX (Menu);
+UPDATE usr_data SET Menu=1;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1243','es','N','Cambiar men&uacute;');
+ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
+
 

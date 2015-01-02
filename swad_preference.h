@@ -50,7 +50,6 @@ void Prf_AskChangeLanguage (void);
 void Prf_ChangeLanguage (void);
 Txt_Language_t Prf_GetParamLanguage (void);
 
-void Prf_PutIconsToSelectSideCols (void);
 void Prf_PutLeftIconToHideShowCols (void);
 void Prf_PutRigthIconToHideShowCols (void);
 void Prf_ChangeSideCols (void);

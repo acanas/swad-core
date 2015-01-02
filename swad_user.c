@@ -266,8 +266,9 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
    UsrDat->Prefs.Layout = Lay_LAYOUT_DEFAULT;
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-   UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
+   UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
+   UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.EmailNtfEvents = 0;        // By default, don't notify anything
   }
 
@@ -394,7 +395,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
                   "Layout,Theme,IconSet,Language,Photo,PublicPhoto,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
-                  "SideCols,NotifNtfEvents,EmailNtfEvents"
+                  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
                   " FROM usr_data WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's data");
@@ -494,8 +495,14 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
 
+   /* Get menu */
+   UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
+   if (sscanf (row[26],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Mnu_NUM_MENUS)
+         UsrDat->Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
+
    /* Get if user wants to show side columns */
-   if (sscanf (row[26],"%u",&UsrDat->Prefs.SideCols) == 1)
+   if (sscanf (row[27],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
          UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -504,10 +511,10 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified by e-mail */
-   if (sscanf (row[27],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   if (sscanf (row[28],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
-   if (sscanf (row[28],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   if (sscanf (row[29],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
@@ -2191,6 +2198,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
 	    Ico_IconSetId[Gbl.Prefs.IconSet]);
 
+   Gbl.Prefs.Menu = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
    Gbl.Prefs.SideCols = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    /***** Get my last data *****/

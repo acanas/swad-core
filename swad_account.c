@@ -434,12 +434,12 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 		  "Layout,Theme,IconSet,Language,PublicPhoto,"
 		  "CtyCod,"
 		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
-		  "SideCols,NotifNtfEvents,EmailNtfEvents)"
+		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 		  " VALUES ('%s','%s','%s','%s','%s','%s',"
 		  "'%u','%s','%s','%s','%c',"
 		  "'%ld',"
 		  "'%s','%s','%s','%s','%s','%04u-%02u-%02u','%s',"
-		  "'%u','-1','0')",
+		  "'%u','%u','-1','0')",
 	    UsrDat->EncryptedUsrCod,
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
@@ -457,6 +457,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
+            Mnu_MENU_DEFAULT,
             Cfg_DEFAULT_COLUMNS);
    UsrDat->UsrCod = DB_QueryINSERTandReturnCode (Query,"can not create user");
 

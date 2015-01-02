@@ -36,6 +36,7 @@
 #include "swad_degree.h"
 #include "swad_icon.h"
 #include "swad_layout.h"
+#include "swad_menu.h"
 #include "swad_nickname.h"
 #include "swad_role.h"
 #include "swad_scope.h"
@@ -149,8 +150,9 @@ struct UsrData
       Txt_Language_t Language;
       Lay_Layout_t Layout;
       The_Theme_t Theme;
-      unsigned SideCols;
       Ico_IconSet_t IconSet;
+      Mnu_Menu_t Menu;
+      unsigned SideCols;
       unsigned NotifNtfEvents;		// One bit activated for each type of event
       unsigned EmailNtfEvents;		// One bit activated for each type of event
      } Prefs;

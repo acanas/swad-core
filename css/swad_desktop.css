@@ -658,15 +658,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /********************************* Menu fonts ********************************/
-.WHITE_MENU_OFF		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:11pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#BD4815; font-size:11pt; font-weight:bold; line-height:110%;}
+.WHITE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_OFF		{color:#707070; font-size:10pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_OFF		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_OFF	{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}
 
-.WHITE_MENU_ON		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:11pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:11pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#BD4815; font-size:11pt; font-weight:bold; line-height:110%;}
+.WHITE_MENU_ON		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{color:#606060; font-size:10pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{color:#4D88A1; font-size:10pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
 .WHITE_FORM		{color:#4D88A1; font-size:11pt;}

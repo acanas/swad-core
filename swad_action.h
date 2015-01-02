@@ -71,9 +71,9 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 
 /* Related with tabs, menus, etc. */
 #define Act_NUM_TABS	(1+11)
-#define Act_NUM_ACTIONS	(7+52+15+39+22+17+206+182+94+168+28+74)
+#define Act_NUM_ACTIONS	(7+52+15+39+22+17+206+182+94+168+28+75)
 
-#define Act_MAX_ACTION_COD 1242
+#define Act_MAX_ACTION_COD 1243
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1088,31 +1088,32 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActShoLftCol		(ActSeeAllStaCrs+49)
 #define ActShoRgtCol		(ActSeeAllStaCrs+50)
 #define ActChgIco		(ActSeeAllStaCrs+51)
-#define ActChgNtfPrf		(ActSeeAllStaCrs+52)
+#define ActChgMnu		(ActSeeAllStaCrs+52)
+#define ActChgNtfPrf		(ActSeeAllStaCrs+53)
 
-#define ActPrnUsrQR		(ActSeeAllStaCrs+53)
+#define ActPrnUsrQR		(ActSeeAllStaCrs+54)
 
-#define ActPrnMyTimTbl		(ActSeeAllStaCrs+54)
-#define ActEdiTut		(ActSeeAllStaCrs+55)
-#define ActChgTut		(ActSeeAllStaCrs+56)
-#define ActReqRemFilBrf		(ActSeeAllStaCrs+57)
-#define ActRemFilBrf		(ActSeeAllStaCrs+58)
-#define ActRemFolBrf		(ActSeeAllStaCrs+59)
-#define ActCopBrf		(ActSeeAllStaCrs+60)
-#define ActPasBrf		(ActSeeAllStaCrs+61)
-#define ActRemTreBrf		(ActSeeAllStaCrs+62)
-#define ActFrmCreBrf		(ActSeeAllStaCrs+63)
-#define ActCreFolBrf		(ActSeeAllStaCrs+64)
-#define ActCreLnkBrf		(ActSeeAllStaCrs+65)
-#define ActRenFolBrf		(ActSeeAllStaCrs+66)
-#define ActRcvFilBrfDZ		(ActSeeAllStaCrs+67)
-#define ActRcvFilBrfCla		(ActSeeAllStaCrs+68)
-#define ActExpBrf		(ActSeeAllStaCrs+69)
-#define ActConBrf		(ActSeeAllStaCrs+70)
-#define ActZIPBrf		(ActSeeAllStaCrs+71)
-#define ActReqDatBrf		(ActSeeAllStaCrs+72)
-#define ActChgDatBrf		(ActSeeAllStaCrs+73)
-#define ActDowBrf		(ActSeeAllStaCrs+74)
+#define ActPrnMyTimTbl		(ActSeeAllStaCrs+55)
+#define ActEdiTut		(ActSeeAllStaCrs+56)
+#define ActChgTut		(ActSeeAllStaCrs+57)
+#define ActReqRemFilBrf		(ActSeeAllStaCrs+58)
+#define ActRemFilBrf		(ActSeeAllStaCrs+59)
+#define ActRemFolBrf		(ActSeeAllStaCrs+60)
+#define ActCopBrf		(ActSeeAllStaCrs+61)
+#define ActPasBrf		(ActSeeAllStaCrs+62)
+#define ActRemTreBrf		(ActSeeAllStaCrs+63)
+#define ActFrmCreBrf		(ActSeeAllStaCrs+64)
+#define ActCreFolBrf		(ActSeeAllStaCrs+65)
+#define ActCreLnkBrf		(ActSeeAllStaCrs+66)
+#define ActRenFolBrf		(ActSeeAllStaCrs+67)
+#define ActRcvFilBrfDZ		(ActSeeAllStaCrs+68)
+#define ActRcvFilBrfCla		(ActSeeAllStaCrs+69)
+#define ActExpBrf		(ActSeeAllStaCrs+70)
+#define ActConBrf		(ActSeeAllStaCrs+71)
+#define ActZIPBrf		(ActSeeAllStaCrs+72)
+#define ActReqDatBrf		(ActSeeAllStaCrs+73)
+#define ActChgDatBrf		(ActSeeAllStaCrs+74)
+#define ActDowBrf		(ActSeeAllStaCrs+75)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

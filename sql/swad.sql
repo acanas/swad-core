@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS IP_prefs (
 	Layout TINYINT NOT NULL DEFAULT 0,
 	Theme CHAR(16) NOT NULL,
 	IconSet CHAR(16) NOT NULL,
+	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL,
 	PRIMARY KEY(IP),
 	INDEX(UsrCod),
@@ -1137,6 +1138,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	OriginPlace VARCHAR(127) NOT NULL,
 	Birthday DATE NOT NULL,
 	Comments TEXT NOT NULL,
+	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL DEFAULT 3,
         NotifNtfEvents INT NOT NULL DEFAULT 0,
         EmailNtfEvents INT NOT NULL DEFAULT 0,
@@ -1146,12 +1148,14 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(Theme),
 	INDEX(IconSet),
 	INDEX(Language),
-	INDEX(SideCols),
 	INDEX(CtyCod),
 	INDEX(InsCtyCod),
 	INDEX(InsCod),
 	INDEX(DptCod),
-	INDEX(CtrCod));
+	INDEX(CtrCod),
+	INDEX(Menu),
+	INDEX(SideCols));
+);
 --
 -- Table usr_emails: stores the users' e-mails
 --
