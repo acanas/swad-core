@@ -35,11 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.52.1 (2015/01/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.52.2 (2015/01/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.52.2  :Jan 02, 2014	Fixed bugs in layout.
+					Statistics about number of users who hace chosen a menu. (173163 lines)
 	Version 14.52.1  :Jan 02, 2014	Link to calendar in name of month. (173021 lines)
 	Version 14.52    :Jan 02, 2014	Calendar is moved from course tab to assessment tab. (? lines)
 	Version 14.51.2  :Jan 02, 2014	Changes in layout and titles of some options. (172987 lines)
@@ -47,11 +49,12 @@
 	Version 14.51    :Jan 01, 2014	Users can select horizontal or vertical menu. (172958 lines)
 					1 change necessary in Makefile:
 Add swad_menu.o to list of object files
-					4 changes necessary in database:
+					5 changes necessary in database:
 ALTER TABLE usr_data ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER Comments;
 ALTER TABLE usr_data ADD INDEX (Menu);
 UPDATE usr_data SET Menu=1;
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1243','es','N','Cambiar men&uacute;');
+ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
 
 	Version 14.50.4  :Jan 01, 2014	Changes in preferences and photos. (172705 lines)
 	Version 14.50.3  :Jan 01, 2014	Changes in layout of preferences. (172691 lines)

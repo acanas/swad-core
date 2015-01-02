@@ -4908,7 +4908,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td aclass=\"TIT_TBL\" style=\"text-align:left;"
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;"
 	                       " background-color:%s;\">"
         	               "%s&nbsp;"
         	               "</td>",
@@ -5321,7 +5321,7 @@ void Usr_ListAllDataStds (void)
       /* Start row */
       fprintf (Gbl.F.Out,"<tr>");
 
-      /* 1. Columns fot the data */
+      /* 1. Columns for the data */
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 	                                           1);
            NumCol < NumColumnsCommonCard;

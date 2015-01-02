@@ -76,33 +76,33 @@ void Prf_EditPrefs (void)
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
 
-   /***** Layout, icons, theme & side columns *****/
+   /***** Layout, theme, icon set, menu & side columns *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
                       "<tr>"
                       "<td>");
-   Lay_PutIconsToSelectLayout ();
+   Lay_PutIconsToSelectLayout ();	// 1. Layout
    fprintf (Gbl.F.Out,"</td>"
                       "<td>");
-   Ico_PutIconsToSelectIconSet ();
+   The_PutIconsToSelectTheme ();	// 2. Theme
    fprintf (Gbl.F.Out,"</td>"
                       "<td>");
-   The_PutIconsToSelectTheme ();
+   Ico_PutIconsToSelectIconSet ();	// 3. Icon set
    fprintf (Gbl.F.Out,"</td>");
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {
       fprintf (Gbl.F.Out,"<td>");
-      Mnu_PutIconsToSelectMenu ();
+      Mnu_PutIconsToSelectMenu ();	// 4. Menu
       fprintf (Gbl.F.Out,"</td>"
                          "<td>");
-      Prf_PutIconsToSelectSideCols ();
+      Prf_PutIconsToSelectSideCols ();	// 5. Side columns
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
 
+   /***** Automatic e-mail to notify of new events *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
 
       Str_GetMailBox (Gbl.Usrs.Me.UsrDat.Email,MailDomain,Cns_MAX_BYTES_STRING);

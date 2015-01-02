@@ -131,7 +131,7 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
-   unsigned ColspanCentralPart;
+   unsigned ColspanCentralPart = 3;	// Initialized to avoid warnning
 //   char QueryDebug[1024];
 
    /***** If, when this function is called, the head is being written, or the head is already written ==>

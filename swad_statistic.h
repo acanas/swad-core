@@ -86,7 +86,7 @@ typedef enum
    Sta_ACC_GBL_PER_COURSE        = 20,
   } Sta_ClicksStatType_t;
 
-#define Sta_NUM_TYPES_USE_STATS 17
+#define Sta_NUM_TYPES_USE_STATS 18
 typedef enum
   {
    Sta_DEGREES_AND_COURSES,	// Number of degrees and courses
@@ -104,8 +104,9 @@ typedef enum
    Sta_LANGUAGES,		// Number of users per language
    Sta_LAYOUTS,			// Number of users per layout
    Sta_THEMES,			// Number of users per theme
-   Sta_COLUMNS,			// Number of users per design of columns
-   Sta_ICONS,			// Number of users per icon set
+   Sta_ICON_SETS,		// Number of users per icon set
+   Sta_MENUS,			// Number of users per menu
+   Sta_SIDE_COLUMNS,		// Number of users per layout of columns
   } Sta_UseStatType_t;
 
 #define Sta_NUM_COLOR_TYPES 3

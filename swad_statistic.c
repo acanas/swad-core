@@ -129,7 +129,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void);
 
 static void Sta_ShowUsersStats (void);
 
-static void Sta_ShowStatsExpTrees (void);
+static void Sta_ShowStatsFileBrowsers (void);
 static void Sta_WriteStatsExpTreesTableHead (void);
 static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *NameOfFileZones);
 static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t FileBrowser,struct Sta_SizeOfFileZones *SizeOfFileZones);
@@ -157,8 +157,9 @@ static void Sta_ShowSurveysStats (void);
 static void Sta_GetAndShowNumUsrsPerLanguage (void);
 static void Sta_GetAndShowNumUsrsPerLayout (void);
 static void Sta_GetAndShowNumUsrsPerTheme (void);
-static void Sta_GetAndShowNumUsrsPerColumns (void);
 static void Sta_GetAndShowNumUsrsPerIconSet (void);
+static void Sta_GetAndShowNumUsrsPerMenu (void);
+static void Sta_GetAndShowNumUsrsPerSideColumns (void);
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void);
 
 /*****************************************************************************/
@@ -3695,7 +3696,7 @@ void Sta_ShowUseOfPlatform (void)
    /***** Show the stat of use selected by user *****/
    switch (Gbl.Stat.UseStatType)
      {
-      case Sta_DEGREES_AND_COURSES:	// Number of degrees and courses
+      case Sta_DEGREES_AND_COURSES:
          /***** Number of degrees and courses *****/
          Lay_StartRoundFrameTable10 (NULL,2,NULL);
          Sta_WriteHeadDegsCrssInSWAD ();
@@ -3706,66 +3707,74 @@ void Sta_ShowUseOfPlatform (void)
          Sta_GetAndShowNumCrssInSWAD ();
          Lay_EndRoundFrameTable10 ();
          break;
-      case Sta_USERS:			// Number of users
+      case Sta_USERS:
+	 /***** Number of users *****/
          Sta_ShowUsersStats ();
          break;
-      case Sta_SOCIAL_NETWORKS:		// Number of users in social networks
+      case Sta_SOCIAL_NETWORKS:
+	 /***** Number of users in social networks *****/
          Net_ShowWebAndSocialNetworksStats ();
          break;
-      case Sta_FOLDERS_AND_FILES:	// Number of folders and files
-         /***** Stats of exploration trees *****/
-         Sta_ShowStatsExpTrees ();
+      case Sta_FOLDERS_AND_FILES:
+         /***** File browsers (folders and files) *****/
+	 // TODO: add links to statistic
+         Sta_ShowStatsFileBrowsers ();
          break;
       case Sta_OER:
-	 Sta_ShowOERs ();		// Number of Open Educational Resources (OERs)
+	 /***** Number of Open Educational Resources (OERs) *****/
+	 Sta_ShowOERs ();
 	 break;
-      case Sta_ASSIGNMENTS:		// Number of assignments
-         /***** Stats of notices *****/
+      case Sta_ASSIGNMENTS:
+         /***** Number of assignments *****/
          Sta_ShowAssignmentsStats ();
          break;
-      case Sta_TESTS:			// Number of tests
-         /***** Stats of notices *****/
+      case Sta_TESTS:
+         /***** Number of tests *****/
          Sta_ShowTestsStats ();
          break;
-      case Sta_NOTIFY_EVENTS:		// Number of users per notify event
+      case Sta_NOTIFY_EVENTS:
          /***** Number of users who want to be notified by e-mail on each event *****/
          Sta_GetAndShowNumUsrsPerNotifyEvent ();
          break;
-      case Sta_NOTICES:			// Number of notices
-         /***** Stats of notices *****/
+      case Sta_NOTICES:
+         /***** Number of notices *****/
          Sta_ShowNoticesStats ();
          break;
-      case Sta_MSGS_BETWEEN_USERS:	// Number of users' (sent and received) messages
-         /***** Stats of messages *****/
+      case Sta_MSGS_BETWEEN_USERS:
+         /***** Number of sent and received messages *****/
          Sta_ShowMsgsStats ();
          break;
-      case Sta_FORUMS:			// Number of forums, threads and posts
-         /***** Stats of forums *****/
+      case Sta_FORUMS:
+         /***** Number of forums, threads and posts *****/
          Sta_ShowForumStats ();
          break;
-      case Sta_SURVEYS:			// Number of surveys
-         /***** Stats of notices *****/
+      case Sta_SURVEYS:
+         /***** Number of surveys *****/
          Sta_ShowSurveysStats ();
          break;
-      case Sta_LANGUAGES:		// Number of users per language
-         /***** Number of users who have choice a language *****/
+      case Sta_LANGUAGES:
+         /***** Number of users who have chosen a language *****/
          Sta_GetAndShowNumUsrsPerLanguage ();
          break;
-      case Sta_LAYOUTS:			// Number of users per layout
-         /***** Number of users who have choice a layout *****/
+      case Sta_LAYOUTS:
+         /***** Number of users who have chosen a layout *****/
          Sta_GetAndShowNumUsrsPerLayout ();
          break;
-      case Sta_THEMES:			// Number of users per theme
-         /***** Number of users who have choice a theme *****/
+      case Sta_THEMES:
+         /***** Number of users who have chosen a theme *****/
          Sta_GetAndShowNumUsrsPerTheme ();
          break;
-      case Sta_COLUMNS:			// Number of users per design of columns
-         /***** Number of users who have choice a layout of columns *****/
-         Sta_GetAndShowNumUsrsPerColumns ();
-         break;
-      case Sta_ICONS:			// Number of users per icon set
-         /***** Number of users who have choice a layout of columns *****/
+      case Sta_ICON_SETS:
+         /***** Number of users who have chosen an icon set *****/
          Sta_GetAndShowNumUsrsPerIconSet ();
+         break;
+      case Sta_MENUS:
+         /***** Number of users who have chosen a menu *****/
+         Sta_GetAndShowNumUsrsPerMenu ();
+         break;
+      case Sta_SIDE_COLUMNS:
+         /***** Number of users who have chosen a layout of columns *****/
+         Sta_GetAndShowNumUsrsPerSideColumns ();
          break;
      }
   }
@@ -4433,7 +4442,7 @@ static void Sta_ShowUsersStats (void)
 /********************* Show stats about exploration trees ********************/
 /*****************************************************************************/
 
-static void Sta_ShowStatsExpTrees (void)
+static void Sta_ShowStatsFileBrowsers (void)
   {
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
    extern const char *Txt_Virtual_pendrives;
@@ -5992,7 +6001,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
       NumUsrsTotal += NumUsrs[Lan];
      }
 
-   /***** Write number of users who have choice each language *****/
+   /***** Write number of users who have chosen each language *****/
    for (Lan = (Txt_Language_t) 0;
 	Lan < Txt_NUM_LANGUAGES;
 	Lan++)
@@ -6016,7 +6025,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
   }
 
 /*****************************************************************************/
-/********* Get and show number of users who have choice a layout *************/
+/********* Get and show number of users who have chosen a layout *************/
 /*****************************************************************************/
 
 static void Sta_GetAndShowNumUsrsPerLayout (void)
@@ -6135,7 +6144,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
   }
 
 /*****************************************************************************/
-/********** Get and show number of users who have choice a theme *************/
+/********** Get and show number of users who have chosen a theme *************/
 /*****************************************************************************/
 
 static void Sta_GetAndShowNumUsrsPerTheme (void)
@@ -6248,125 +6257,6 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],The_ThemeNames[Theme],
                NumUsrs[Theme],
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
-
-   Lay_EndRoundFrameTable10 ();
-  }
-
-/*****************************************************************************/
-/***** Get and show number of users who have chosen a layout of columns ******/
-/*****************************************************************************/
-
-static void Sta_GetAndShowNumUsrsPerColumns (void)
-  {
-   extern const char *Txt_Columns;
-   extern const char *Txt_No_of_users;
-   extern const char *Txt_PERCENT_of_users;
-   unsigned SideCols;
-   char Query[1024];
-   unsigned NumUsrs[4];
-   unsigned NumUsrsTotal = 0;
-   extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
-
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
-
-   /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Columns,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
-
-   /***** For each language... *****/
-   for (SideCols = 0;
-	SideCols <= Lay_SHOW_BOTH_COLUMNS;
-	SideCols++)
-     {
-      /***** Get the number of users who have chosen this layout of columns from database *****/
-      switch (Gbl.Scope.Current)
-        {
-         case Sco_SCOPE_PLATFORM:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",
-                     SideCols);
-            break;
-	 case Sco_SCOPE_INSTITUTION:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
-                     Gbl.CurrentIns.Ins.InsCod,SideCols);
-            break;
-         case Sco_SCOPE_CENTRE:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
-            break;
-         case Sco_SCOPE_DEGREE:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
-                     Gbl.CurrentDeg.Deg.DegCod,SideCols);
-            break;
-         case Sco_SCOPE_COURSE:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
-                     Gbl.CurrentCrs.Crs.CrsCod,SideCols);
-            break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
-	    break;
-        }
-      NumUsrs[SideCols] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a layout of columns");
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[SideCols];
-     }
-
-   /***** Write number of users who have chosen this layout of columns *****/
-   for (SideCols = 0;
-	SideCols <= Lay_SHOW_BOTH_COLUMNS;
-	SideCols++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:center;\">"
-                         "<img src=\"%s/layout%u%u_32x20.gif\" alt=\"%s\""
-                         " style=\"width:32px; height:20px;\" />"
-                         "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
-                         "%5.2f%%"
-                         "</td>"
-                         "</tr>",
-               Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,
-               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
-               NumUsrs[SideCols],
-               NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
 
@@ -6490,6 +6380,244 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                Ico_IconSetNames[IconSet],
                NumUsrs[IconSet],
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/*********** Get and show number of users who have chosen a menu *************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerMenu (void)
+  {
+   extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
+   extern const char *Txt_Menu;
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
+   Mnu_Menu_t Menu;
+   char Query[1024];
+   unsigned NumUsrs[Mnu_NUM_MENUS];
+   unsigned NumUsrsTotal = 0;
+
+   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Menu,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users);
+
+   /***** For each menu... *****/
+   for (Menu = (Mnu_Menu_t) 0;
+	Menu < Mnu_NUM_MENUS;
+	Menu++)
+     {
+      /***** Get number of users who have chosen this menu from database *****/
+      switch (Gbl.Scope.Current)
+        {
+         case Sco_SCOPE_PLATFORM:
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+        	           " WHERE Menu='%u'",
+                     (unsigned) Menu);
+            break;
+	 case Sco_SCOPE_INSTITUTION:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                           " FROM centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE centres.InsCod='%ld'"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.Menu='%u'",
+                     Gbl.CurrentIns.Ins.InsCod,(unsigned) Menu);
+            break;
+         case Sco_SCOPE_CENTRE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                           " FROM degrees,courses,crs_usr,usr_data"
+                           " WHERE degrees.CtrCod='%ld'"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.Menu='%u'",
+                     Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Menu);
+            break;
+         case Sco_SCOPE_DEGREE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                           " FROM courses,crs_usr,usr_data"
+                           " WHERE courses.DegCod='%ld'"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.Menu='%u'",
+                     Gbl.CurrentDeg.Deg.DegCod,(unsigned) Menu);
+            break;
+         case Sco_SCOPE_COURSE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                           " FROM crs_usr,usr_data"
+                           " WHERE crs_usr.CrsCod='%ld'"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.Menu='%u'",
+                     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Menu);
+            break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+        }
+      NumUsrs[Menu] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a menu");
+
+      /* Update total number of users */
+      NumUsrsTotal += NumUsrs[Menu];
+     }
+
+   /***** Write number of users who have chosen each menu *****/
+   for (Menu = (Mnu_Menu_t) 0;
+	Menu < Mnu_NUM_MENUS;
+	Menu++)
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td style=\"text-align:center;\">"
+                         "<img src=\"%s/%s32x32.gif\" alt=\"%s\" class=\"ICON32x32\" />"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "</tr>",
+               Gbl.Prefs.IconsURL,Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],
+               NumUsrs[Menu],
+               NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/***** Get and show number of users who have chosen a layout of columns ******/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerSideColumns (void)
+  {
+   extern const char *Txt_Columns;
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   unsigned SideCols;
+   char Query[1024];
+   unsigned NumUsrs[4];
+   unsigned NumUsrsTotal = 0;
+   extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
+
+   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Columns,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users);
+
+   /***** For each language... *****/
+   for (SideCols = 0;
+	SideCols <= Lay_SHOW_BOTH_COLUMNS;
+	SideCols++)
+     {
+      /***** Get the number of users who have chosen this layout of columns from database *****/
+      switch (Gbl.Scope.Current)
+        {
+         case Sco_SCOPE_PLATFORM:
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",
+                     SideCols);
+            break;
+	 case Sco_SCOPE_INSTITUTION:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE centres.InsCod='%ld'"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.SideCols='%u'",
+                     Gbl.CurrentIns.Ins.InsCod,SideCols);
+            break;
+         case Sco_SCOPE_CENTRE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM degrees,courses,crs_usr,usr_data"
+                           " WHERE degrees.CtrCod='%ld'"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.SideCols='%u'",
+                     Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
+            break;
+         case Sco_SCOPE_DEGREE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM courses,crs_usr,usr_data"
+                           " WHERE courses.DegCod='%ld'"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.SideCols='%u'",
+                     Gbl.CurrentDeg.Deg.DegCod,SideCols);
+            break;
+         case Sco_SCOPE_COURSE:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM crs_usr,usr_data"
+                           " WHERE crs_usr.CrsCod='%ld'"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.SideCols='%u'",
+                     Gbl.CurrentCrs.Crs.CrsCod,SideCols);
+            break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+        }
+      NumUsrs[SideCols] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a layout of columns");
+
+      /* Update total number of users */
+      NumUsrsTotal += NumUsrs[SideCols];
+     }
+
+   /***** Write number of users who have chosen this layout of columns *****/
+   for (SideCols = 0;
+	SideCols <= Lay_SHOW_BOTH_COLUMNS;
+	SideCols++)
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td style=\"text-align:center;\">"
+                         "<img src=\"%s/layout%u%u_32x20.gif\" alt=\"%s\""
+                         " style=\"width:32px; height:20px;\" />"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "</tr>",
+               Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,
+               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
+               NumUsrs[SideCols],
+               NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
 

@@ -35105,26 +35105,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 #endif
 	 ,
 #if   L==0
-	 "columnes"
-#elif L==1
-	 "Spalten"
-#elif L==2
-	 "columns"
-#elif L==3
-	 "columnas"
-#elif L==4
-	 "colonnes"
-#elif L==5
-	 "columnas"	// Okoteve traducción
-#elif L==6
-	 "colonne"
-#elif L==7
-	 "kolumny"
-#elif L==8
-	 "colunas"
-#endif
-	 ,
-#if   L==0
 	 "icones"
 #elif L==1
 	 "Symbole"
@@ -35142,6 +35122,46 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "ikony"
 #elif L==8
 	 "&iacute;cones"
+#endif
+	 ,
+#if   L==0
+	"men&uacute;"
+#elif L==1
+	"Men&uuml;"
+#elif L==2
+	"menu"
+#elif L==3
+	"men&uacute;"
+#elif L==4
+	"menu"
+#elif L==5
+	"men&uacute;"	// Okoteve traducción
+#elif L==6
+	"menu"
+#elif L==7
+	"menu"
+#elif L==8
+	"menu"
+#endif
+	 ,
+#if   L==0
+	 "columnes"
+#elif L==1
+	 "Spalten"
+#elif L==2
+	 "columns"
+#elif L==3
+	 "columnas"
+#elif L==4
+	 "colonnes"
+#elif L==5
+	 "columnas"	// Okoteve traducción
+#elif L==6
+	 "colonne"
+#elif L==7
+	 "kolumny"
+#elif L==8
+	 "colunas"
 #endif
 	};
 
