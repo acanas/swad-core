@@ -231,7 +231,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	min-height:740px;
 	width:100%;
 	margin:-7px 0 0 0;
-	padding:10px 0;
+	padding:8px 0;
 	border-radius:6px;
 	box-shadow:inset -2px -2px 1px 0 rgba(50, 50, 50, 0.2);
 	text-align:center;
@@ -598,7 +598,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	list-style-type:none;
 	border:0;
 	margin:0 auto;
-	padding:0 0 10px 0;
+	padding:0 0 8px 0;
 	}
 #horizontal_menu_container li
 	{
