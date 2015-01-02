@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.52.2 (2015/01/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.52.3 (2015/01/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.52.3  :Jan 02, 2014	Titles in statistics. (? lines)
 	Version 14.52.2  :Jan 02, 2014	Fixed bugs in layout.
 					Statistics about number of users who hace chosen a menu. (173163 lines)
 	Version 14.52.1  :Jan 02, 2014	Link to calendar in name of month. (173021 lines)

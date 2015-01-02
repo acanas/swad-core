@@ -5908,9 +5908,9 @@ static void Sta_ShowSurveysStats (void)
 
 static void Sta_GetAndShowNumUsrsPerLanguage (void)
   {
+   extern const char *Txt_Language;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Language;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    Txt_Language_t Lan;
@@ -5918,7 +5918,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
    unsigned NumUsrs[Txt_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Language);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6040,7 +6040,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
    unsigned NumUsrs[Lay_NUM_LAYOUTS];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Layout);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6149,9 +6149,9 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 
 static void Sta_GetAndShowNumUsrsPerTheme (void)
   {
+   extern const char *Txt_Theme_SKIN;
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
-   extern const char *Txt_Theme_SKIN;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    The_Theme_t Theme;
@@ -6159,7 +6159,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Theme_SKIN);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6269,9 +6269,9 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
 static void Sta_GetAndShowNumUsrsPerIconSet (void)
   {
+   extern const char *Txt_Icons;
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
-   extern const char *Txt_Icons;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    Ico_IconSet_t IconSet;
@@ -6279,7 +6279,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Icons);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6392,8 +6392,8 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
 static void Sta_GetAndShowNumUsrsPerMenu (void)
   {
-   extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
    extern const char *Txt_Menu;
+   extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
@@ -6402,7 +6402,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Menu);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6520,7 +6520,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
    unsigned NumUsrsTotal = 0;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Columns);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6651,7 +6651,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    char *StyleTableCell = " border-style:solid none none none;"
 	                  " border-width:1px;";
 
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Event);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
