@@ -221,13 +221,14 @@ void TT_ShowClassTimeTable (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Edit;
    extern const char *Txt_Edit_office_hours;
+   extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;
    bool PutEditButton = (Gbl.CurrentAct == ActSeeCrsTimTbl &&
                          Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
    bool PutEditOfficeHours = (Gbl.CurrentAct == ActSeeMyTimTbl &&
                               (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_ROLE_TEACHER)));
-   bool PrintView = (Gbl.CurrentAct == ActSeeCrsTimTbl ||
-	             Gbl.CurrentAct == ActSeeMyTimTbl);
+   bool PrintView = (Gbl.CurrentAct == ActPrnCrsTimTbl ||
+	             Gbl.CurrentAct == ActPrnMyTimTbl);
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
@@ -246,7 +247,7 @@ void TT_ShowClassTimeTable (void)
      }
 
    /***** Put buttons *****/
-   if (PutEditButton || PutEditOfficeHours || PrintView)
+   if (PutEditButton || PutEditOfficeHours || !PrintView)
      {
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
@@ -267,7 +268,7 @@ void TT_ShowClassTimeTable (void)
 	 fprintf (Gbl.F.Out,"</form>");
 	}
 
-      if (PrintView)
+      if (!PrintView)
 	{
          Lay_PutLinkToPrintView1 (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
                                                                       ActPrnMyTimTbl);
@@ -278,7 +279,7 @@ void TT_ShowClassTimeTable (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TimeTableType]);
 
    /***** Start time table drawing *****/
    if (TimeTableType == TT_COURSE_TIMETABLE)
@@ -286,6 +287,9 @@ void TT_ShowClassTimeTable (void)
 				 Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    if (PrintView)
+      /***** Show whether only my groups or all groups are selected *****/
+      TT_ShowTimeTableGrpsSelected ();
+   else
      {
       /***** Select whether show only my groups or all groups *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -296,9 +300,6 @@ void TT_ShowClassTimeTable (void)
 			 "</td>"
 			 "</tr>");
      }
-   else
-      /***** Show whether only my groups or all groups are selected *****/
-      TT_ShowTimeTableGrpsSelected ();
 
    /***** Show the time table *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -350,7 +351,7 @@ void TT_ShowMyTutTimeTable (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Show_timetable;
-   extern const char *Txt_Office_hours;
+   extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -361,7 +362,7 @@ void TT_ShowMyTutTimeTable (void)
 	              "</div>");
 
    /***** Time table *****/
-   Lay_StartRoundFrameTable10 ("98%",0,Txt_Office_hours);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center;\">");
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -780,7 +781,7 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"min-width:520px;\">");
+   fprintf (Gbl.F.Out,"<table style=\"min-width:520px; margin:0 auto;\">");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();
@@ -1035,7 +1036,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place)
   {
    extern const char *Txt_unknown_course;
-   extern const char *Txt_TIME_TABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES];
+   extern const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
    extern const char *Txt_Classroom;
@@ -1148,7 +1149,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 			                      Txt_unknown_course);
               }
 	    fprintf (Gbl.F.Out,"%s (%dh%s)",
-		     Txt_TIME_TABLE_CLASS_TYPES[ClassType],
+		     Txt_TIMETABLE_CLASS_TYPES[ClassType],
 	             Duration / 2,
 	             Duration % 2 ? "30'" :
 	        	            "");
@@ -1199,7 +1200,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
 	       fprintf (Gbl.F.Out," value=\"%s\">%s</option>",
 		        TimeTableStrsClassTypeDB[CT],
-		        Txt_TIME_TABLE_CLASS_TYPES[CT]);
+		        Txt_TIMETABLE_CLASS_TYPES[CT]);
 	      }
 	 fprintf (Gbl.F.Out,"</select>");
 	 if (HourType == TT_FREE_HOUR)

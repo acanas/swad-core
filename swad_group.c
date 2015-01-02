@@ -4186,7 +4186,7 @@ void Grp_ShowSelectorWhichGrps (void)
    Grp_WhichGroups_t WhichGrps;
 
    fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-                      " padding:0; margin:10px auto;\">");
+                      " padding:0; margin:0 auto 10px auto;\">");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)

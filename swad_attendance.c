@@ -147,11 +147,11 @@ void Att_SeeAttEvents (void)
 
 static void Att_ShowAllAttEvents (void)
   {
+   extern const char *Txt_Events;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_No_events;
    Att_EventsOrderType_t Order;
    struct Pagination Pagination;
    unsigned NumAttEvent;
@@ -159,70 +159,73 @@ static void Att_ShowAllAttEvents (void)
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
 
+   /***** Compute variables related to pagination *****/
+   Pagination.NumItems = Gbl.AttEvents.Num;
+   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pag_CalculatePagination (&Pagination);
+   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+
+   /***** Write links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+
+   /***** Table start *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
+
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Att_PutFormToSelectWhichGroupsToShow ();
-
-   if (Gbl.AttEvents.Num)	// There are attendance events in current course
      {
-      /***** Compute variables related to pagination *****/
-      Pagination.NumItems = Gbl.AttEvents.Num;
-      Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
-      Pag_CalculatePagination (&Pagination);
-      Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
-
-      /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
-
-      /***** Table head *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Att_ORDER_BY_START_DATE;
-	   Order <= Att_ORDER_BY_END_DATE;
-	   Order++)
-        {
-         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
-                            " style=\"text-align:left;\">");
-         Act_FormStart (ActSeeAtt);
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-         Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
-         if (Order == Gbl.AttEvents.SelectedOrderType)
-            fprintf (Gbl.F.Out,"<u>");
-         fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
-         if (Order == Gbl.AttEvents.SelectedOrderType)
-            fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>"
-                            "</form>"
-                            "</th>");
-        }
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
-	                 "%s"
-	                 "</th>"
-	                 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-	                 "%s"
-	                 "</th>"
-	                 "</tr>",
-               Txt_Event,
-               Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
-
-      /***** Write all the attendance events *****/
-      for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
-           NumAttEvent <= Pagination.LastItemVisible;
-           NumAttEvent++)
-         Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
-
-      /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
-
-      /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"4\">");
+      Att_PutFormToSelectWhichGroupsToShow ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   else	// There are no attendance events in current course
-      Lay_ShowAlert (Lay_INFO,Txt_No_events);
+
+   /***** Table head *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   for (Order = Att_ORDER_BY_START_DATE;
+	Order <= Att_ORDER_BY_END_DATE;
+	Order++)
+     {
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
+			 " style=\"text-align:left;\">");
+      Act_FormStart (ActSeeAtt);
+      Grp_PutParamWhichGrps ();
+      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+      if (Order == Gbl.AttEvents.SelectedOrderType)
+	 fprintf (Gbl.F.Out,"<u>");
+      fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+      if (Order == Gbl.AttEvents.SelectedOrderType)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>"
+			 "</form>"
+			 "</th>");
+     }
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+		      "%s"
+		      "</th>"
+		      "</tr>",
+	    Txt_Event,
+	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+
+   /***** Write all the attendance events *****/
+   for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
+	NumAttEvent <= Pagination.LastItemVisible;
+	NumAttEvent++)
+      Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
+
+   /***** Table end *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();
@@ -234,13 +237,11 @@ static void Att_ShowAllAttEvents (void)
 
 static void Att_PutFormToSelectWhichGroupsToShow (void)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeAtt);
    Att_PutHiddenParamAttOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

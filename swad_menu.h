@@ -1,7 +1,7 @@
-// swad_timetable.h: timetables
+// swad_menu.h: menu (horizontal or vertical) selection
 
-#ifndef _SWAD_TT
-#define _SWAD_TT
+#ifndef _SWAD_MNU
+#define _SWAD_MNU
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,49 +24,33 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_bool.h"
-
 /*****************************************************************************/
-/************************* Public constants and types ************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define TT_MAX_BYTES_PLACE	127
-#define TT_MAX_BYTES_GROUP	255
+#define Mnu_NUM_MENUS 2
 
-#define TT_NUM_TIMETABLE_TYPES 3
-typedef enum
-  {
-   TT_COURSE_TIMETABLE = 0,
-   TT_MY_TIMETABLE     = 1,
-   TT_TUTOR_TIMETABLE  = 2,
-  } TT_TimeTableType_t;
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
 typedef enum
   {
-   TT_FREE_HOUR,
-   TT_FIRST_HOUR,
-   TT_NEXT_HOUR,
-  } TT_HourType_t;
-
-#define TT_NUM_CLASS_TYPES 4
-typedef enum
-  {
-   TT_NO_CLASS     = 0,
-   TT_THEORY_CLASS = 1,
-   TT_PRACT_CLASS  = 2,
-   TT_TUTOR_CLASS  = 3,
-  } TT_ClassType_t;
+   Mnu_MENU_HORIZONTAL = 0,
+   Mnu_MENU_VERTICAL   = 1,
+   Mnu_MENU_UNKNOWN    = 2,
+   } Mnu_Menu_t;	// Stored in database. Don't change numbers!
+#define Mnu_MENU_DEFAULT Mnu_MENU_HORIZONTAL
 
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TT_ShowClassTimeTable (void);
-void TT_EditCrsTimeTable (void);
-void TT_ShowMyTutTimeTable (void);
-void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod);
+void Mnu_PutIconsToSelectMenu (void);
+void Mnu_ChangeMenu (void);
+Mnu_Menu_t Mnu_GetParamMenu (void);
 
 #endif

@@ -1121,7 +1121,7 @@ void Rec_ListRecordsStdsCrs (void)
 
 void Rec_ListRecordOneTchCrs (void)
   {
-   extern const char *Txt_Office_hours;
+   extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1156,7 +1156,7 @@ void Rec_ListRecordOneTchCrs (void)
 	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /* Office hours */
-	 Lay_StartRoundFrameTable10 (NULL,0,Txt_Office_hours);
+	 Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td style=\"text-align:center;\">");
 	 TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -1175,7 +1175,7 @@ void Rec_ListRecordOneTchCrs (void)
 void Rec_ListRecordsTchsCrs (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_teachers;
-   extern const char *Txt_Office_hours;
+   extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsrs = 0;
    const char *Ptr;
    Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevTch) ? Rec_RECORD_LIST :
@@ -1251,7 +1251,7 @@ void Rec_ListRecordsTchsCrs (void)
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       Lay_StartRoundFrameTable10 (NULL,0,Txt_Office_hours);
+	       Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
 	       fprintf (Gbl.F.Out,"<tr>"
 				  "<td style=\"text-align:center;\">");
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);

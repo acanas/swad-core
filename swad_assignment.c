@@ -116,12 +116,12 @@ void Asg_SeeAssignments (void)
 
 static void Asg_ShowAllAssignments (void)
   {
+   extern const char *Txt_Assignments;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Assignment;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
-   extern const char *Txt_No_assignments;
    tAsgsOrderType Order;
    struct Pagination Pagination;
    unsigned NumAsg;
@@ -129,74 +129,77 @@ static void Asg_ShowAllAssignments (void)
    /***** Get list of assignments *****/
    Asg_GetListAssignments ();
 
+   /***** Compute variables related to pagination *****/
+   Pagination.NumItems = Gbl.Asgs.Num;
+   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pag_CalculatePagination (&Pagination);
+   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+
+   /***** Write links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
+
+   /***** Start table *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Assignments);
+
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Asg_PutFormToSelectWhichGroupsToShow ();
-
-   if (Gbl.Asgs.Num)	// There are assignments in current course
      {
-      /***** Compute variables related to pagination *****/
-      Pagination.NumItems = Gbl.Asgs.Num;
-      Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
-      Pag_CalculatePagination (&Pagination);
-      Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
-
-      /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
-
-      /***** Table head *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Asg_ORDER_BY_START_DATE;
-	   Order <= Asg_ORDER_BY_END_DATE;
-	   Order++)
-        {
-         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
-                            " style=\"text-align:left;\">");
-         Act_FormStart (ActSeeAsg);
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-         Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
-         if (Order == Gbl.Asgs.SelectedOrderType)
-            fprintf (Gbl.F.Out,"<u>");
-         fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
-         if (Order == Gbl.Asgs.SelectedOrderType)
-            fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>"
-                            "</form>"
-                            "</th>");
-        }
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
-                         "%s"
-                         "</th>"
-	                 "</tr>",
-               Txt_Assignment,
-               Txt_Upload_files_QUESTION,
-               Txt_Folder);
-
-      /***** Write all the assignments *****/
-      for (NumAsg = Pagination.FirstItemVisible;
-           NumAsg <= Pagination.LastItemVisible;
-           NumAsg++)
-         Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg-1]);
-
-      /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
-
-      /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"5\">");
+      Asg_PutFormToSelectWhichGroupsToShow ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   else	// There are no assignments in current course
-      Lay_ShowAlert (Lay_INFO,Txt_No_assignments);
+
+   /***** Table head *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   for (Order = Asg_ORDER_BY_START_DATE;
+	Order <= Asg_ORDER_BY_END_DATE;
+	Order++)
+     {
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\""
+			 " style=\"text-align:left;\">");
+      Act_FormStart (ActSeeAsg);
+      Grp_PutParamWhichGrps ();
+      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+      if (Order == Gbl.Asgs.SelectedOrderType)
+	 fprintf (Gbl.F.Out,"<u>");
+      fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+      if (Order == Gbl.Asgs.SelectedOrderType)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>"
+			 "</form>"
+			 "</th>");
+     }
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+		      "%s"
+		      "</th>"
+		      "</tr>",
+	    Txt_Assignment,
+	    Txt_Upload_files_QUESTION,
+	    Txt_Folder);
+
+   /***** Write all the assignments *****/
+   for (NumAsg = Pagination.FirstItemVisible;
+	NumAsg <= Pagination.LastItemVisible;
+	NumAsg++)
+      Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg-1]);
+
+   /***** Table end *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
    /***** Free list of assignments *****/
    Asg_FreeListAssignments ();
@@ -208,13 +211,11 @@ static void Asg_ShowAllAssignments (void)
 
 static void Asg_PutFormToSelectWhichGroupsToShow (void)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSeeAsg);
    Asg_PutHiddenParamAsgOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/

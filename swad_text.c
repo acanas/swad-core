@@ -18206,7 +18206,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==4
 	"Horaire"
 #elif L==5
-	"Horario de clases de la asignatura"// Okoteve traducción
+	"Horario de clases de la asignatura"	// Okoteve traducción
 #elif L==6
 	"Orario del corso"
 #elif L==7
@@ -22043,27 +22043,6 @@ const char *Txt_No =
 	"N&atilde;o";
 #endif
 
-const char *Txt_No_assignments =
-#if   L==0
-	"No hay actividades.";	// Necessita traduccio
-#elif L==1
-	"Keine Aufgaben.";
-#elif L==2
-	"No assignments.";
-#elif L==3
-	"No hay actividades.";
-#elif L==4
-	"Il n'y a pas d'activit&eacute;s.";
-#elif L==5
-	"No hay actividades.";	// Okoteve traducción
-#elif L==6
-	"Non ci sono attivit&agrave;.";
-#elif L==7
-	"Nr zadania.";
-#elif L==8
-	"N&atilde;o h&aacute; atividades.";
-#endif
-
 const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"No hay convocatorias de examen de <strong>%s</strong>.";	// Necessita traduccio
@@ -22230,27 +22209,6 @@ const char *Txt_No_enrollment_requests =
 	"No enrollment requests.";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"No enrollment requests.";			// Necessita de tradução
-#endif
-
-const char *Txt_No_events =
-#if   L==0
-	"No hay eventos.";	// Necessita traduccio
-#elif L==1
-	"Keine Ereignisse.";
-#elif L==2
-	"No events.";
-#elif L==3
-	"No hay eventos.";
-#elif L==4
-	"Il n'y a pas d'&eacute;v&eacute;nements.";
-#elif L==5
-	"No hay eventos.";	// Okoteve traducción
-#elif L==6
-	"Non ci sono eventi.";
-#elif L==7
-	"Nr wydarzenie.";
-#elif L==8
-	"N&atilde;o h&aacute; eventos.";
 #endif
 
 const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file =
@@ -22941,27 +22899,6 @@ const char *Txt_no_subject =
 	"bez tematu";
 #elif L==8
 	"sem assunto";
-#endif
-
-const char *Txt_No_surveys =
-#if   L==0
-	"No hi ha enquestes.";
-#elif L==1
-	"Keine Umfragen.";
-#elif L==2
-	"No surveys.";
-#elif L==3
-	"No hay encuestas.";
-#elif L==4
-	"Il n'y a pas de sondages.";
-#elif L==5
-	"No hay encuestas.";	// Okoteve traducción
-#elif L==6
-	"Non ci sono sondaggi.";
-#elif L==7
-	"Brak badan.";
-#elif L==8
-	"N&atilde;o h&aacute; inqu&eacute;ritos.";
 #endif
 
 const char *Txt_no_tags =		// Tags used in test
@@ -24666,27 +24603,6 @@ const char *Txt_Office =
 	"Biuro";
 #elif L==8
 	"Gabinete";
-#endif
-
-const char *Txt_Office_hours =
-#if   L==0
-	"Horari de tutories";
-#elif L==1
-	"Gesch&auml;ftszeiten";
-#elif L==2
-	"Office hours";
-#elif L==3
-	"Horario de tutor&iacute;as";
-#elif L==4
-	"Heures de tuteur";
-#elif L==5
-	"Horario de tutor&iacute;as";	// Okoteve traducción
-#elif L==6
-	"Orario di tutoraggi";
-#elif L==7
-	"Godziny pracy";
-#elif L==8
-	"Hor&aacute;rio de tutor";
 #endif
 
 const char *Txt_Official_students =
@@ -36045,7 +35961,7 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 	"Inqu&eacute;rito <strong>%s</strong> fixado em zero.";
 #endif
 
-const char *Txt_SVY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
+const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
    {
 #if   L==0
 	 "Elecci&oacute; &uacute;nica"
@@ -36087,6 +36003,27 @@ const char *Txt_SVY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
 	 "M&uacute;ltipla escolha"
 #endif
 	};
+
+const char *Txt_Surveys =
+#if   L==0
+	"Enquestes";
+#elif L==1
+	"Umfragen";
+#elif L==2
+	"Surveys";
+#elif L==3
+	"Encuestas";
+#elif L==4
+	"Sondages";
+#elif L==5
+	"Encuestas";	// Okoteve traducción
+#elif L==6
+	"Sondaggi";
+#elif L==7
+	"Ankiety";
+#elif L==8
+	"Inqu&eacute;ritos";
+#endif
 
 const char *Txt_Syllabus =
 #if   L==0
@@ -43242,8 +43179,74 @@ const char *Txt_time =
 	"tempo";
 #endif
 
-const char *Txt_TIME_TABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
-   {
+const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
+	{
+   // TT_COURSE_TIMETABLE
+#if   L==0
+	"Horari de classes de l'assignatura"
+#elif L==1
+	"Stundenplan"
+#elif L==2
+	"Class timetable"
+#elif L==3
+	"Horario de clases de la asignatura"
+#elif L==4
+	"Horaire"
+#elif L==5
+	"Horario de clases de la asignatura"	// Okoteve traducción
+#elif L==6
+	"Orario del corso"
+#elif L==7
+	"Harmonogram klasy"
+#elif L==8
+	"Hor&aacute;rio"
+#endif
+	 ,
+   // TT_MY_TIMETABLE
+#if   L==0
+	"Horari de les meves assignatures"
+#elif L==1
+	"Stundenplan"
+#elif L==2
+	"My timetable"
+#elif L==3
+	"Horario de mis asignaturas"
+#elif L==4
+	"Horaire mes mati&egrave;res"
+#elif L==5
+	"Horario de mis asignaturas"	// Okoteve traducción
+#elif L==6
+	"Orario dei miei corsi"
+#elif L==7
+	"M&oacute;j plan lekcji"
+#elif L==8
+	"Hor&aacute;rio minha disciplinas"
+#endif
+	 ,
+   // TT_TUTOR_TIMETABLE
+#if   L==0
+	"Horari de tutories"
+#elif L==1
+	"Gesch&auml;ftszeiten"
+#elif L==2
+	"Office hours"
+#elif L==3
+	"Horario de tutor&iacute;as"
+#elif L==4
+	"Heures de tuteur"
+#elif L==5
+	"Horario de tutor&iacute;as"	// Okoteve traducción
+#elif L==6
+	"Orario di tutoraggi"
+#elif L==7
+	"Godziny pracy"
+#elif L==8
+	"Hor&aacute;rio de tutor"
+#endif
+	};
+
+const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
+	{
    // TT_NO_CLASS
 #if   L==0
 	 "Lliure"
