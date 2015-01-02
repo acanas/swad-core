@@ -33256,6 +33256,27 @@ const char *Txt_Show_anyway =
 	"Mostrar de qualquer maneira";
 #endif
 
+const char *Txt_Show_calendar =
+#if   L==0
+	"Mostra calendari";
+#elif L==1
+	"Kalender anzeigen";
+#elif L==2
+	"Show calendar";
+#elif L==3
+	"Ver calendario";
+#elif L==4
+	"Afficher calendrier";
+#elif L==5
+	"Ver calendario";	// Okoteve traducción
+#elif L==6
+	"Mostra calendario";
+#elif L==7
+	"Poka&zdot; kalendarz";
+#elif L==8
+	"Mostrar calend&aacute;rio";
+#endif
+
 const char *Txt_Show_left_column =
 #if   L==0
 	"Mostrar columna izquierda";	// Necessita traduccio

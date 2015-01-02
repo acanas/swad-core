@@ -306,6 +306,7 @@ void Dat_DrawCalendar (void)
 void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
                     bool DrawingCalendar,bool PutLinkToEvents,bool PrintView)
   {
+   extern const char *Txt_Show_calendar;
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_Exam_of_X;
@@ -323,6 +324,7 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
    unsigned NumExamAnnouncement;	// Number of exam announcement
    int ResultOfCmpStartDate;
    bool ContinueSearching;
+   bool PutLinkToCalendar = !DrawingCalendar && Gbl.CurrentCrs.Crs.CrsCod > 0;
    bool ThisDayHasEvent = false;
    bool IsToday;
 
@@ -353,15 +355,25 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
      }
 
    /***** Start of month *****/
-   fprintf (Gbl.F.Out,"<div class=\"MONTH_CONTAINER\">"
-		      "<div class=\"MONTH\">"
-		      "%s %u"
-		      "</div>"
-		      "<table class=\"MONTH_TABLE_DAYS\">",
+   fprintf (Gbl.F.Out,"<div class=\"MONTH_CONTAINER\">");
+
+   /***** Month name *****/
+   fprintf (Gbl.F.Out,"<div class=\"MONTH\">");
+   if (PutLinkToCalendar)
+     {
+      Act_FormStart (ActSeeCal);
+      Act_LinkFormSubmit (Txt_Show_calendar,"MONTH");
+     }
+   fprintf (Gbl.F.Out,"%s %u",
 	    Txt_MONTHS_CAPS[RealMonth-1],RealYear);
+   if (PutLinkToCalendar)
+      fprintf (Gbl.F.Out,"</a>"
+	                 "</form>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Month head: first letter for each day of week *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<table class=\"MONTH_TABLE_DAYS\">"
+                      "<tr>");
    for (DayOfWeek = 0;
 	DayOfWeek < 7;
 	DayOfWeek++)
@@ -489,7 +501,8 @@ void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
          /* If day has an exam announcement */
 	 if (PutLinkToEvents && ThisDayHasEvent)
-            fprintf (Gbl.F.Out,"</a></td>"
+            fprintf (Gbl.F.Out,"</a>"
+        	               "</td>"
         	               "</tr>"
         	               "</table>"
         	               "</form>");
