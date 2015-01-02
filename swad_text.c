@@ -14366,6 +14366,27 @@ const char *Txt_Language =
 	"Lingua";
 #endif
 
+const char *Txt_Last_clicks_in_real_time =
+#if   L==0
+	"&Uacute;ltims clics en temps real";
+#elif L==1
+	"Letzte Klicks in Echtzeit";
+#elif L==2
+	"Last clicks in real time";
+#elif L==3
+	"&Uacute;ltimos clics en tiempo real";
+#elif L==4
+	"Derni&egrave;re clics en temps r&eacute;el";
+#elif L==5
+	"&Uacute;ltimos clics en tiempo real";	// Okoteve traducción
+#elif L==6
+	"Ultimi clic in tempo reale";
+#elif L==7
+	"Ostatnie dwa klikni&eogon;cia w czasie rzeczywistym";
+#elif L==8
+	"&Uacute;ltimos cliques em tempo real";
+#endif
+
 const char *Txt_Last_BR_year =	// "Last academic year", the opposite to "First academic year"
 #if   L==0
 	"&Uacute;lt..<br />curso";	// Necessita traduccio

@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.51.1 (2015/01/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.51.2 (2015/01/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.51.2  :Jan 02, 2014	Changes in layout and titles of some options. (? lines)
 	Version 14.51.1  :Jan 02, 2014	Changes in layout and titles of some options. (172963 lines)
 	Version 14.51    :Jan 01, 2014	Users can select horizontal or vertical menu. (172958 lines)
 					1 change necessary in Makefile:

@@ -127,7 +127,9 @@ void Con_ShowConnectedUsrs (void)
 
 void Con_ShowLastClicks (void)
   {
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   extern const char *Txt_Last_clicks_in_real_time;
+
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Last_clicks_in_real_time);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td>");
 
