@@ -142,8 +142,7 @@ void Msg_ListEMails (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Start of the frame used to list the e-mails *****/
-         Lay_WriteTitle (Txt_Students_who_have_accepted_and_who_have_e_mail);
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT_SMALL\""
                             " style=\"text-align:left;\">");
@@ -1488,8 +1487,9 @@ void Msg_ShowRecMsgs (void)
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *Txt_any_course;
    extern const char *Txt_View_messages;
+   extern const char *Txt_Messages_received;
+   extern const char *Txt_Messages_sent;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    MYSQL_RES *mysql_res;
@@ -1558,7 +1558,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
             if (MsgCod == Gbl.Msg.ExpandedMsgCod)	// Expanded message found
               {
-               Gbl.Pag.CurrentPage = (unsigned) (NumRow/Pag_ITEMS_PER_PAGE)+ 1;
+               Gbl.Pag.CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
                break;
               }
            }
@@ -1581,8 +1581,10 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
                                                                                   Pag_MESSAGES_SENT,
                                         0,&Pagination);
 
-      /***** Show messages from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrameTable10 ("100%",0,NULL);
+      /***** Show received messages in this page *****/
+      Lay_StartRoundFrameTable10 ("100%",0,
+                                  TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
+                                	                                    Txt_Messages_sent);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td style=\"width:100%%; text-align:center;\">"
 	                 "<table class=\"CELLS_PAD_2\""
