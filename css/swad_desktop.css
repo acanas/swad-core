@@ -603,7 +603,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 #horizontal_menu_container li
 	{
 	display:table-cell;
-	width:100px;height:60px;
+	width:110px;height:60px;
 	border:0;
 	margin:0;
 	padding:0;
@@ -613,7 +613,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MENU_OFF
 	{
 	display:inline-block;
-	width:100px;height:60px;
+	width:110px;height:60px;
 	margin:0;
 	padding:0 2px;
 	text-align:center;
@@ -623,7 +623,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MENU_ON
 	{
 	display:inline-block;
-	width:100px;height:60px;
+	width:110px;height:60px;
 	margin:0;
 	padding:0;
 	text-align:center;

@@ -16369,27 +16369,6 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Compartilhados"
 #endif
 	,
-	// ActSeeCal
-#if   L==0
-	"Calendari"
-#elif L==1
-	"Kalender"
-#elif L==2
-	"Calendar"
-#elif L==3
-	"Calendario"
-#elif L==4
-	"Calendrier"
-#elif L==5
-	"Arapapaha"
-#elif L==6
-	"Calendario"
-#elif L==7
-	"Kalendarz"
-#elif L==8
-	"Calend&aacute;rio"
-#endif
-	,
 	// ActSeeCrsTimTbl
 #if   L==0
 	"Horari"
@@ -16474,6 +16453,7 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -16590,6 +16570,27 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
+	// ActSeeCal
+#if   L==0
+	"Calendari"
+#elif L==1
+	"Kalender"
+#elif L==2
+	"Calendar"
+#elif L==3
+	"Calendario"
+#elif L==4
+	"Calendrier"
+#elif L==5
+	"Arapapaha"
+#elif L==6
+	"Calendario"
+#elif L==7
+	"Kalendarz"
+#elif L==8
+	"Calend&aacute;rio"
+#endif
+	,
 	// ActSeeExaAnn
 #if   L==0
 	"Convocat&ograve;ries"
@@ -16653,7 +16654,6 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18191,30 +18191,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Arquivos compartilhados"
 #endif
 	,
-	// ActSeeCal
-#if   L==0
-	"Calendari acad&egrave;mic (els dies festius"
-	" corresponen al lloc del centre seleccionada)"
-#elif L==1
-	"Kalender"
-#elif L==2
-	"Academic calendar"
-#elif L==3
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"
-#elif L==4
-	"Calendrier"
-#elif L==5
-	"Calendario acad&eacute;mico (los d&iacute;as festivos"
-	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
-#elif L==6
-	"Calendario del corso"
-#elif L==7
-	"Kalendarz akademicki"
-#elif L==8
-	"Calend&aacute;rio"
-#endif
-	,
 	// ActSeeCrsTimTbl
 #if   L==0
 	"Horari de classes de l'assignatura"
@@ -18299,6 +18275,7 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18418,6 +18395,30 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
+	// ActSeeCal
+#if   L==0
+	"Calendari acad&egrave;mic (els dies festius"
+	" corresponen al lloc del centre seleccionada)"
+#elif L==1
+	"Kalender"
+#elif L==2
+	"Academic calendar"
+#elif L==3
+	"Calendario acad&eacute;mico (los d&iacute;as festivos"
+	" corresponden al lugar del centro seleccionado)"
+#elif L==4
+	"Calendrier"
+#elif L==5
+	"Calendario acad&eacute;mico (los d&iacute;as festivos"
+	" corresponden al lugar del centro seleccionado)"// Okoteve traducción
+#elif L==6
+	"Calendario del corso"
+#elif L==7
+	"Kalendarz akademicki"
+#elif L==8
+	"Calend&aacute;rio"
+#endif
+	,
 	// ActSeeExaAnn
 #if   L==0
 	"Llistat de convocat&ograve;ries d'exàmens d'aquesta assignatura"
@@ -18487,7 +18488,6 @@ const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Meu cart&atilde;o em disciplina"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
