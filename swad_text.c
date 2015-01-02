@@ -7281,27 +7281,6 @@ const char *Txt_degrees =
 	"titula&ccedil;oes";
 #endif
 
-const char *Txt_Degrees_and_courses =
-#if   L==0
-	 "Titulaciones y asignaturas";	// Necessita traducció
-#elif L==1
-	 "Studieng&auml;nge und Kursen";
-#elif L==2
-	 "Degrees and courses";
-#elif L==3
-	 "Titulaciones y asignaturas";
-#elif L==4
-	 "&Eacute;tudes et mati&egrave;res";
-#elif L==5
-	 "Titulaciones y asignaturas";	// Okoteve traducción
-#elif L==6
-	 "Lauree e corsi";
-#elif L==7
-	 "Degrees and courses";		// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Titula&ccedil;oes e disciplinas";
-#endif
-
 const char *Txt_Degrees_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Titulacions de %s";
@@ -11318,27 +11297,6 @@ const char *Txt_folders =
 	"foldery";
 #elif L==8
 	"diret&oacute;rios";
-#endif
-
-const char *Txt_Folders_and_files =
-#if   L==0
-	 "Carpetes i fitxers";
-#elif L==1
-	 "Verzeichnisse und Dateien";
-#elif L==2
-	 "Folders and files";
-#elif L==3
-	 "Carpetas y archivos";
-#elif L==4
-	 "R&eacute;pertoires et fichiers";
-#elif L==5
-	 "Carpetas y archivos";		// Okoteve traducción
-#elif L==6
-	 "Cartelle e file";
-#elif L==7
-	 "Foldery i pliki";
-#elif L==8
-	 "Diret&oacute;rios e arquivos";
 #endif
 
 const char *Txt_Folders_copied =
@@ -23534,27 +23492,6 @@ const char *Txt_Notice_created =
 	"Aviso criado.";
 #endif
 
-const char *Txt_Notices =
-#if   L==0
-	"Avisos";
-#elif L==1
-	"Ank&uuml;ndigungen";
-#elif L==2
-	"Notices";
-#elif L==3
-	"Avisos";
-#elif L==4
-	"Avis";
-#elif L==5
-	"Marandu";
-#elif L==6
-	"Avvisi";
-#elif L==7
-	"Ogloszenia";
-#elif L==8
-	"Avisos";
-#endif
-
 const char *Txt_NOTIF_new_SINGULAR =
 #if   L==0
 	"nueva";	// Necessita traduccio
@@ -24603,27 +24540,6 @@ const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
 	"Nnumerycznych<br />kod<br />ISO 3166-1";
 #elif L==8
 	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";
-#endif
-
-const char *Txt_OER =
-#if   L==0
-	 "Recursos Educatius Oberts (OER)";
-#elif L==1
-	 "Open Educational Resources (OER)";
-#elif L==2
-	 "Open Educational Resources (OER)";
-#elif L==3
-	 "Recursos Educativos Abiertos (OER)";
-#elif L==4
-	 "Ressources &Eacute;ducatives Libres (REL)";
-#elif L==5
-	 "Recursos Educativos Abiertos (OER)";	// Okoteve traducción
-#elif L==6
-	 "Risorse Didattiche Aperte (OER)";
-#elif L==7
-	 "Otwarte Zasoby Edukacyjne (OER)";
-#elif L==8
-	 "Recursos Educacionais Abertos (OER)";
 #endif
 
 const char *Txt_of_PART_OF_A_TOTAL =	// Example: transferred 2 of 3 files
@@ -34847,381 +34763,381 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES] =
 const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
    {
 #if   L==0
-	 "titulaciones y asignaturas"	// Necessita traducció
+	 "Titulaciones y asignaturas"	// Necessita traducció
 #elif L==1
 	 "Studieng&auml;nge und Kursen"
 #elif L==2
-	 "degrees and courses"
+	 "Degrees and courses"
 #elif L==3
-	 "titulaciones y asignaturas"
+	 "Titulaciones y asignaturas"
 #elif L==4
-	 "&eacute;tudes et mati&egrave;res"
+	 "&Eacute;tudes et mati&egrave;res"
 #elif L==5
-	 "titulaciones y asignaturas"	// Okoteve traducción
+	 "Titulaciones y asignaturas"	// Okoteve traducción
 #elif L==6
-	 "lauree e corsi"
+	 "Lauree e corsi"
 #elif L==7
-	 "degrees and courses"		// Potrzebujesz tlumaczenie
+	 "Degrees and courses"		// Potrzebujesz tlumaczenie
 #elif L==8
-	 "titula&ccedil;oes e disciplinas"
+	 "Titula&ccedil;oes e disciplinas"
 #endif
 	 ,
 #if   L==0
-	 "usuaris"
+	 "Usuaris"
 #elif L==1
 	 "Benutzer"
 #elif L==2
-	 "users"
+	 "Users"
 #elif L==3
-	 "usuarios"
+	 "Usuarios"
 #elif L==4
-	 "utilisateurs"
+	 "Utilisateurs"
 #elif L==5
-	 "puruh&aacute;ra"
+	 "Puruh&aacute;ra"
 #elif L==6
-	 "utenti"
+	 "Utenti"
 #elif L==7
-	 "u&zdot;ytkownicy"
+	 "U&zdot;ytkownicy"
 #elif L==8
-	 "utilizadores"
+	 "Utilizadores"
 #endif
 	 ,
 #if   L==0
-	 "webs / xarxes socials"
+	 "Webs / xarxes socials"
 #elif L==1
 	 "Webs / Social Networks"
 #elif L==2
-	 "webs / social networks"
+	 "Webs / social networks"
 #elif L==3
-	 "webs / redes sociales"
+	 "Webs / redes sociales"
 #elif L==4
-	 "webs / r&eacute;seaux sociaux"
+	 "Webs / r&eacute;seaux sociaux"
 #elif L==5
-	 "webs / redes sociales"	// Okoteve traducción
+	 "Webs / redes sociales"	// Okoteve traducción
 #elif L==6
-	 "webs / reti sociali"
+	 "Webs / reti sociali"
 #elif L==7
-	 "webs / sieci spo&lstrok;eczne"
+	 "Webs / sieci spo&lstrok;eczne"
 #elif L==8
-	 "webs / redes sociais"
+	 "Webs / redes sociais"
 #endif
 	 ,
 #if   L==0
-	 "carpetes i fitxers"
+	 "Carpetes i fitxers"
 #elif L==1
 	 "Verzeichnisse und Dateien"
 #elif L==2
-	 "folders and files"
+	 "Folders and files"
 #elif L==3
-	 "carpetas y archivos"
+	 "Carpetas y archivos"
 #elif L==4
-	 "r&eacute;pertoires et fichiers"
+	 "R&eacute;pertoires et fichiers"
 #elif L==5
-	 "carpetas y archivos"		// Okoteve traducción
+	 "Carpetas y archivos"		// Okoteve traducción
 #elif L==6
-	 "cartelle e file"
+	 "Cartelle e file"
 #elif L==7
-	 "folders and files"		// Potrzebujesz tlumaczenie
+	 "Folders and files"		// Potrzebujesz tlumaczenie
 #elif L==8
-	 "diret&oacute;rios e arquivos"
+	 "Diret&oacute;rios e arquivos"
 #endif
 	 ,
 #if   L==0
-	 "recursos educatius oberts (OER)"
+	 "Recursos Educatius Oberts (OER)"
 #elif L==1
 	 "Open Educational Resources (OER)"
 #elif L==2
-	 "open educational resources (OER)"
+	 "Open Educational Resources (OER)"
 #elif L==3
-	 "recursos educativos abiertos (OER)"
+	 "Recursos Educativos Abiertos (OER)"
 #elif L==4
 	 "Ressources &Eacute;ducatives Libres (REL)"
 #elif L==5
-	 "recursos educativos abiertos (OER)"	// Okoteve traducción
+	 "Recursos Educativos Abiertos (OER)"	// Okoteve traducción
 #elif L==6
-	 "risorse didattiche aperte (OER)"
+	 "Risorse Didattiche Aperte (OER)"
 #elif L==7
 	 "Otwarte Zasoby Edukacyjne (OER)"
 #elif L==8
-	 "recursos educacionais abertos (OER)"
+	 "Recursos Educacionais Abertos (OER)"
 #endif
 	 ,
 #if   L==0
-	 "activitats"
+	 "Activitats"
 #elif L==1
 	 "Aufgaben"
 #elif L==2
-	 "assignments"
+	 "Assignments"
 #elif L==3
-	 "actividades"
+	 "Actividades"
 #elif L==4
-	 "activit&eacute;s"
+	 "Activit&eacute;s"
 #elif L==5
-	 "tar&eacute;a"
+	 "Tar&eacute;a"
 #elif L==6
-	 "attivit&agrave;"
+	 "Attivit&agrave;"
 #elif L==7
-	 "assignments"	// Potrzebujesz tlumaczenie
+	 "Assignments"	// Potrzebujesz tlumaczenie
 #elif L==8
-	 "atividades"
+	 "Atividades"
 #endif
 	 ,
 #if   L==0
-	 "tests"
+	 "Tests"
 #elif L==1
 	 "Tests"
 #elif L==2
-	 "tests"
+	 "Tests"
 #elif L==3
-	 "tests"
+	 "Tests"
 #elif L==4
-	 "tests"
+	 "Tests"
 #elif L==5
-	 "tests"		// Okoteve traducción
+	 "Tests"		// Okoteve traducción
 #elif L==6
-	 "test"
+	 "Test"
 #elif L==7
-	 "tests"		// Potrzebujesz tlumaczenie
+	 "Tests"		// Potrzebujesz tlumaczenie
 #elif L==8
-	 "testes"
+	 "Testes"
 #endif
 	 ,
 #if   L==0
-	 "notificacions"
+	 "Notificacions"
 #elif L==1
 	 "Anmeldungen"
 #elif L==2
-	 "notifications"
+	 "Notifications"
 #elif L==3
-	 "notificaciones"
+	 "Notificaciones"
 #elif L==4
-	 "notifications"
+	 "Notifications"
 #elif L==5
-	 "momarandu"
+	 "Momarandu"
 #elif L==6
-	 "notifiche"
+	 "Notifiche"
 #elif L==7
-	 "powiadomienia"
+	 "Powiadomienia"
 #elif L==8
-	 "notifica&ccedil;&otilde;es"
+	 "Notifica&ccedil;&otilde;es"
 #endif
 	 ,
 #if   L==0
-	 "avisos"
+	 "Avisos"
 #elif L==1
 	 "Ank&uuml;ndigungen"
 #elif L==2
-	 "notices"
+	 "Notices"
 #elif L==3
-	 "avisos"
+	 "Avisos"
 #elif L==4
-	 "avis"
+	 "Avis"
 #elif L==5
-	 "marandu"
+	 "Marandu"
 #elif L==6
-	 "avvisi"
+	 "Avvisi"
 #elif L==7
-	 "notices"	// Potrzebujesz tlumaczenie
+	 "Notices"	// Potrzebujesz tlumaczenie
 #elif L==8
-	 "avisos"
+	 "Avisos"
 #endif
 	 ,
 #if   L==0
-	 "missatges"
+	 "Missatges"
 #elif L==1
 	 "Nachrichten"
 #elif L==2
-	 "messages"
+	 "Messages"
 #elif L==3
-	 "mensajes"
+	 "Mensajes"
 #elif L==4
-	 "messages"
+	 "Messages"
 #elif L==5
-	 "marandu"
+	 "Marandu"
 #elif L==6
-	 "messaggi"
+	 "Messaggi"
 #elif L==7
-	 "wiadomo&sacute;ci"
+	 "Wiadomo&sacute;ci"
 #elif L==8
-	 "mensagens"
+	 "Mensagens"
 #endif
 	 ,
 #if   L==0
-	 "f&ograve;rums"
+	 "F&ograve;rums"
 #elif L==1
 	 "Foren"
 #elif L==2
-	 "forums"
+	 "Forums"
 #elif L==3
-	 "foros"
+	 "Foros"
 #elif L==4
-	 "forums"
+	 "Forums"
 #elif L==5
-	 "foros"		// Okoteve traducción
+	 "Foros"		// Okoteve traducción
 #elif L==6
-	 "forum"
+	 "Forum"
 #elif L==7
-	 "forums"		// Potrzebujesz tlumaczenie
+	 "Forums"		// Potrzebujesz tlumaczenie
 #elif L==8
-	 "f&oacute;runs"
+	 "F&oacute;runs"
 #endif
 	 ,
 #if   L==0
-	 "enquestes"
+	 "Enquestes"
 #elif L==1
 	 "Umfragen"
 #elif L==2
-	 "surveys"
+	 "Surveys"
 #elif L==3
-	 "encuestas"
+	 "Encuestas"
 #elif L==4
-	 "sondages"
+	 "Sondages"
 #elif L==5
-	 "encuestas"	// Okoteve traducción
+	 "Encuestas"	// Okoteve traducción
 #elif L==6
-	 "sondaggi"
+	 "Sondaggi"
 #elif L==7
-	 "badania"
+	 "Badania"
 #elif L==8
-	 "inqu&eacute;ritos"
+	 "Inqu&eacute;ritos"
 #endif
 	 ,
 #if   L==0
-	 "idioma"
+	 "Idioma"
 #elif L==1
 	 "Sprache"
 #elif L==2
-	 "language"
+	 "Language"
 #elif L==3
-	 "idioma"
+	 "Idioma"
 #elif L==4
-	 "langue"
+	 "Langue"
 #elif L==5
-	 "&ntilde;e'&#7869;"
+	 "&Ntilde;e'&#7869;"
 #elif L==6
-	 "lingua"
+	 "Lingua"
 #elif L==7
-	 "language"	// Potrzebujesz tlumaczenie
+	 "Language"	// Potrzebujesz tlumaczenie
 #elif L==8
-	 "lingua"
+	 "Lingua"
 #endif
 	 ,
 #if   L==0
-	 "disseny"
+	 "Disseny"
 #elif L==1
 	 "layout"
 #elif L==2
-	 "layout"
+	 "Layout"
 #elif L==3
-	 "dise&ntilde;o"
+	 "Dise&ntilde;o"
 #elif L==4
-	 "disposition"
+	 "Disposition"
 #elif L==5
-	 "ta'&atilde;ngahai"
+	 "Ta'&atilde;ngahai"
 #elif L==6
-	 "layout"
+	 "Layout"
 #elif L==7
-	 "uk&lstrok;ad"
+	 "Uk&lstrok;ad"
 #elif L==8
-	 "layout"
+	 "Layout"
 #endif
 	 ,
 #if   L==0
-	 "tema (colors)"
+	 "Tema (colors)"
 #elif L==1
 	 "Skin"
 #elif L==2
-	 "theme"
+	 "Theme"
 #elif L==3
-	 "tema (colores)"
+	 "Tema (colores)"
 #elif L==4
-	 "th&egrave;me"
+	 "Th&egrave;me"
 #elif L==5
-	 "tema (colores)"	// Okoteve traducción
+	 "Tema (colores)"	// Okoteve traducción
 #elif L==6
-	 "tema"
+	 "Tema"
 #elif L==7
-	 "temat"
+	 "Temat"
 #elif L==8
-	 "skin"
+	 "Skin"
 #endif
 	 ,
 #if   L==0
-	 "icones"
+	 "Icones"
 #elif L==1
 	 "Symbole"
 #elif L==2
-	 "icons"
+	 "Icons"
 #elif L==3
-	 "iconos"
+	 "Iconos"
 #elif L==4
-	 "ic&ocirc;nes"
+	 "Ic&ocirc;nes"
 #elif L==5
-	 "iconos"	// Okoteve traducción
+	 "Iconos"	// Okoteve traducción
 #elif L==6
-	 "icone"
+	 "Icone"
 #elif L==7
-	 "ikony"
+	 "Ikony"
 #elif L==8
-	 "&iacute;cones"
+	 "&Iacute;cones"
 #endif
 	 ,
 #if   L==0
-	"men&uacute;"
+	"Men&uacute;"
 #elif L==1
 	"Men&uuml;"
 #elif L==2
-	"menu"
+	"Menu"
 #elif L==3
-	"men&uacute;"
+	"Men&uacute;"
 #elif L==4
-	"menu"
+	"Menu"
 #elif L==5
-	"men&uacute;"	// Okoteve traducción
+	"Men&uacute;"	// Okoteve traducción
 #elif L==6
-	"menu"
+	"Menu"
 #elif L==7
-	"menu"
+	"Menu"
 #elif L==8
-	"menu"
+	"Menu"
 #endif
 	 ,
 #if   L==0
-	 "columnes"
+	 "Columnes"
 #elif L==1
 	 "Spalten"
 #elif L==2
-	 "columns"
+	 "Columns"
 #elif L==3
-	 "columnas"
+	 "Columnas"
 #elif L==4
-	 "colonnes"
+	 "Colonnes"
 #elif L==5
-	 "columnas"	// Okoteve traducción
+	 "Columnas"	// Okoteve traducción
 #elif L==6
-	 "colonne"
+	 "Colonne"
 #elif L==7
-	 "kolumny"
+	 "Kolumny"
 #elif L==8
-	 "colunas"
+	 "Colunas"
 #endif
 	};
 
-const char *Txt_Statistics =
+const char *Txt_Statistic =
 #if   L==0
-	 "Estad&iacute;stiques";
+	 "Estad&iacute;stique";
 #elif L==1
 	 "Statistik";
 #elif L==2
-	 "Statistics";
+	 "Statistic";
 #elif L==3
-	 "Estad&iacute;sticas";
+	 "Estad&iacute;stica";
 #elif L==4
-	 "Statistiques";
+	 "Statistique";
 #elif L==5
 	 "Papy'aporeko";
 #elif L==6
-	 "Statistiche";
+	 "Statistica";
 #elif L==7
 	 "Statystyki";
 #elif L==8
@@ -37023,27 +36939,6 @@ const char *Txt_Test_result =
 	"Test result";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Resultado do teste";
-#endif
-
-const char *Txt_Tests =
-#if   L==0
-	"Tests";
-#elif L==1
-	"Tests";
-#elif L==2
-	"Tests";
-#elif L==3
-	"Tests";
-#elif L==4
-	"Tests";
-#elif L==5
-	"Tests";	// Okoteve traducción
-#elif L==6
-	"Test";
-#elif L==7
-	"Test&oacute;w";
-#elif L==8
-	"Testes";
 #endif
 
 const char *Txt_Thanks_for_answering_the_survey =
