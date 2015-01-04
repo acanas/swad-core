@@ -36,6 +36,7 @@
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_preference.h"
+#include "swad_tab.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -149,7 +150,7 @@ void Par_GetMainParameters (void)
    if (Gbl.WebService.IsWebService)
      {
       Gbl.CurrentAct = ActWebSvc;
-      Lay_SetCurrentTab ();
+      Tab_SetCurrentTab ();
       return;
      }
 
@@ -159,7 +160,7 @@ void Par_GetMainParameters (void)
        Gbl.Imported.ExternalSesId[0])
      {
       Gbl.CurrentAct = ActAutUsrExt;
-      Lay_SetCurrentTab ();
+      Tab_SetCurrentTab ();
       return;
      }
    // SWAD is not called from external site
@@ -300,14 +301,14 @@ void Par_GetMainParameters (void)
       Par_GetParToText ("NxtTab",UnsignedStr,10);
       if (UnsignedStr[0])
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Act_NUM_TABS)
+	    if (UnsignedNum < Tab_NUM_TABS)
 	      {
 	       Gbl.CurrentTab = (Act_Tab_t) UnsignedNum;
-	       Lay_DisableIncompatibleTabs ();
+	       Tab_DisableIncompatibleTabs ();
 	      }
      }
    else	// Set tab depending on current action
-      Lay_SetCurrentTab ();
+      Tab_SetCurrentTab ();
   }
 
 /*****************************************************************************/

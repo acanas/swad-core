@@ -43,6 +43,7 @@
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
+#include "swad_tab.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -133,8 +134,8 @@ static void Crs_Configuration (bool PrintView)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_This_course_fulfills_X_out_of_Y_indicators_;
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Show_more_details;
    extern const char *Txt_NO;
    extern const char *Txt_Course;
@@ -539,7 +540,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_My_courses;
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_Go_to_X;
    struct Country Cty;
    struct Institution Ins;

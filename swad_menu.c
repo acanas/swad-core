@@ -1,4 +1,4 @@
-// swad_menu.h: menu (horizontal or vertical) selection
+// swad_menu.c: menu (horizontal or vertical) selection
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -33,6 +33,7 @@
 #include "swad_menu.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_tab.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -42,7 +43,7 @@ extern struct Globals Gbl;
 extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
-/******************************** Private constants **************************/
+/****************************** Private constants ****************************/
 /*****************************************************************************/
 
 #define MAX_MENU_ID 16
@@ -65,7 +66,6 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
    "vertical",
   };
 
-
 /*****************************************************************************/
 /************* Write the menu of current tab (desktop layout) ****************/
 /*****************************************************************************/
@@ -75,8 +75,8 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
    extern const char *The_ClassSeparator[The_NUM_THEMES];
-   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
    const char *Title;
@@ -166,8 +166,8 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
-   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
    const char *Title;
@@ -238,8 +238,8 @@ void Mnu_WriteMenuThisTabMobile (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
-   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    unsigned NumOptVisible;	// Only options I can see
    Act_Action_t NumAct;

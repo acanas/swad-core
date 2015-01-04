@@ -59,6 +59,7 @@
 #include "swad_QR.h"
 #include "swad_search.h"
 #include "swad_setup.h"
+#include "swad_tab.h"
 #include "swad_test_import.h"
 #include "swad_zip.h"
 
@@ -1050,7 +1051,7 @@ Profile:
 	904. ActDowBrf			Download a file in the briefcase
 */
 
-const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
 		// TabUnk **********
 		{
@@ -3550,7 +3551,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 
 const char *Act_GetTitleAction (Act_Action_t Action)
   {
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
@@ -3563,7 +3564,7 @@ const char *Act_GetTitleAction (Act_Action_t Action)
 
 const char *Act_GetSubtitleAction (Act_Action_t Action)
   {
-   extern const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
@@ -3576,8 +3577,8 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 
 void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *BreadcrumbStr)
   {
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Act_Action_t Superaction = Act_Actions[Action].SuperAction;
    char *Arrow;
 
@@ -3732,7 +3733,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
       Gbl.CurrentAct = ActSeeCtyInf;
    else
       Gbl.CurrentAct = Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED;
-   Lay_SetCurrentTab ();
+   Tab_SetCurrentTab ();
   }
 
 /*****************************************************************************/
@@ -3763,7 +3764,7 @@ void Act_AdjustCurrentAction (void)
             break;
          default:
 	    Gbl.CurrentAct = ActFrmChgMyPwd;
-	    Lay_SetCurrentTab ();
+	    Tab_SetCurrentTab ();
             return;
         }
      }
@@ -3773,7 +3774,7 @@ void Act_AdjustCurrentAction (void)
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
         {
          Gbl.CurrentAct = ActFrmChgMyPwd;
-         Lay_SetCurrentTab ();
+         Tab_SetCurrentTab ();
          return;
         }
 
@@ -3790,7 +3791,7 @@ void Act_AdjustCurrentAction (void)
             break;
          default:
 	    Gbl.CurrentAct = ActFrmUsrAcc;
-	    Lay_SetCurrentTab ();
+	    Tab_SetCurrentTab ();
             return;
         }
      }
@@ -3808,7 +3809,7 @@ void Act_AdjustCurrentAction (void)
             break;
          default:
 	    Gbl.CurrentAct = ActReqEdiRecCom;
-	    Lay_SetCurrentTab ();
+	    Tab_SetCurrentTab ();
             return;
         }
 
@@ -3825,7 +3826,7 @@ void Act_AdjustCurrentAction (void)
             break;
          default:
 	    Gbl.CurrentAct = ActReqEdiMyIns;
-	    Lay_SetCurrentTab ();
+	    Tab_SetCurrentTab ();
             return;
         }
 
@@ -3837,7 +3838,7 @@ void Act_AdjustCurrentAction (void)
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.CurrentAct != ActLogOut)
 	{
 	 Gbl.CurrentAct = ActReqAccEnrCrs;
-	 Lay_SetCurrentTab ();
+	 Tab_SetCurrentTab ();
 	 return;
 	}
 
@@ -3870,7 +3871,7 @@ void Act_AdjustCurrentAction (void)
                   if (Grp_NumGrpTypesMandatIDontBelong ())	// To do: if this query is too slow ==> put it only when login.
                     {
 	             Gbl.CurrentAct = ActReqSelGrp;
-	             Lay_SetCurrentTab ();
+	             Tab_SetCurrentTab ();
                      return;
 	            }
 
@@ -3884,7 +3885,7 @@ void Act_AdjustCurrentAction (void)
 	                   /* If limit of clicks has been reached,
 	                      the only action possible is show a form to send my photo */
 	                   Gbl.CurrentAct = ActReqMyPho;
-	                   Lay_SetCurrentTab ();
+	                   Tab_SetCurrentTab ();
                            return;
 	                 }
                   break;
@@ -3902,7 +3903,7 @@ void Act_AdjustCurrentAction (void)
                if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
                  {
                   Gbl.CurrentAct = ActCfgTst;
-                  Lay_SetCurrentTab ();
+                  Tab_SetCurrentTab ();
                   return;
                  }
             break;
@@ -4068,8 +4069,8 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *The_ClassFormulNB[The_NUM_THEMES];
    extern const char *Txt_Frequent_actions;
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
@@ -4120,7 +4121,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *Txt_Frequent_actions;
-   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;

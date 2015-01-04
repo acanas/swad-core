@@ -40,6 +40,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_tab.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
 
@@ -61,24 +62,8 @@ const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS] =
   };
 
 /*****************************************************************************/
-/****************************** Private constants ****************************/
+/***************************** Private constants *****************************/
 /*****************************************************************************/
-
-const char *Lay_TabIcons[Act_NUM_TABS] =
-  {
-   /* TabUnk */	NULL,
-   /* TabSys */	"sys",
-   /* TabCty */	"cty",
-   /* TabIns */	"ins",
-   /* TabCtr */	"ctr",
-   /* TabDeg */	"deg",
-   /* TabCrs */	"crs",
-   /* TabAss */	"ass",
-   /* TabUsr */	"usr",
-   /* TabMsg */	"msg",
-   /* TabSta */	"sta",
-   /* TabPrf */	"prf",
-  };
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -103,15 +88,7 @@ static void Lay_WriteScriptConnectedUsrs (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
 static void Lay_WritePageTopHeading (void);
-static void Lay_DrawTabs (void);
-static void Lay_DrawTabsDeskTop (void);
-static void Lay_DrawTabsMobile (void);
-static bool Lay_CheckIfICanViewTab (Act_Tab_t Tab);
-static void Lay_DrawBreadcrumb (void);
 
-static void Lay_WriteBreadcrumbHome (void);
-static void Lay_WriteBreadcrumbTab (void);
-static void Lay_WriteBreadcrumbAction (void);
 static void Lay_WriteTitleAction (void);
 
 static void Lay_ShowLeftColumn (void);
@@ -313,7 +290,7 @@ void Lay_WriteStartOfPage (void)
             if (Gbl.CurrentAct == ActMnu)
                Mnu_WriteMenuThisTabMobile ();
             else
-               Lay_DrawTabsMobile ();
+               Tab_DrawTabsMobile ();
            }
          break;
       default:
@@ -730,7 +707,7 @@ static void Lay_WritePageTopHeading (void)
             Gbl.Prefs.PathTheme);
 
          /***** 3rd. row, 2nd. column *****/
-         Lay_DrawTabs ();
+         Tab_DrawTabs ();
 
          /***** 3rd. row, 3rd. column *****/
          if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
@@ -754,421 +731,13 @@ static void Lay_WritePageTopHeading (void)
            }
          break;
       case Lay_LAYOUT_MOBILE:
-         Lay_DrawTabs ();
+         Tab_DrawTabs ();
          fprintf (Gbl.F.Out,"</tr>"
                             "<tr>");
          break;
       default:
       	 break;
      }
-  }
-
-/*****************************************************************************/
-/*************** Set current tab depending on current action *****************/
-/*****************************************************************************/
-
-void Lay_SetCurrentTab (void)
-  {
-   Gbl.CurrentTab = Act_Actions[Gbl.CurrentAct].Tab;
-
-   /***** Change action and tab if country, institution, centre or degree
-          are incompatible with the current tab *****/
-   switch (Gbl.CurrentTab)
-     {
-      case TabCty:
-	 if (Gbl.CurrentCty.Cty.CtyCod <= 0)		// No country selected
-	    Gbl.CurrentAct = ActSeeCty;
-	 break;
-      case TabIns:
-	 if (Gbl.CurrentIns.Ins.InsCod <= 0)		// No institution selected
-	   {
-	    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
-	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
-	  }
-	break;
-      case TabCtr:
-	 if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)		// No centre selected
-	   {
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected, but no centre selected
-	       Gbl.CurrentAct = ActSeeCtr;
-	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
-	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
-	   }
-         break;
-      case TabDeg:
-         if (Gbl.CurrentDeg.Deg.DegCod <= 0)		// No degree selected
-	   {
-	    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected, but no degree selected
-	       Gbl.CurrentAct = ActSeeDeg;
-	    else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected, but no centre selected
-	       Gbl.CurrentAct = ActSeeCtr;
-	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
-	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
-	   }
-         break;
-      default:
-         break;
-     }
-   Gbl.CurrentTab = Act_Actions[Gbl.CurrentAct].Tab;
-
-   Lay_DisableIncompatibleTabs ();
-  }
-
-/*****************************************************************************/
-/************************** Disable incompatible tabs ************************/
-/*****************************************************************************/
-
-void Lay_DisableIncompatibleTabs (void)
-  {
-   /***** Set country, institution, centre, degree and course depending on the current tab.
-          This will disable tabs incompatible with the current one. *****/
-   switch (Gbl.CurrentTab)
-     {
-      case TabSys:
-	 Gbl.CurrentCty.Cty.CtyCod = -1L;
-	 // no break
-      case TabCty:
-	 Gbl.CurrentIns.Ins.InsCod = -1L;
-	 // no break
-      case TabIns:
-	 Gbl.CurrentCtr.Ctr.CtrCod = -1L;
-	 // no break
-      case TabCtr:
-	 Gbl.CurrentDeg.Deg.DegCod = -1L;
-	 // no break
-      case TabDeg:
-	 Gbl.CurrentCrs.Crs.CrsCod = -1L;
-	 break;
-      default:
-         break;
-     }
-  }
-
-/*****************************************************************************/
-/**************** Draw tabs with the current tab highlighted *****************/
-/*****************************************************************************/
-
-static void Lay_DrawTabs (void)
-  {
-   unsigned ColspanCentralPart = 3;
-
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-     {
-      if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)	// 11: both side columns visible, left and right
-	 ColspanCentralPart = 1;
-      else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
-	 ColspanCentralPart = 2;
-     }
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"height:56px;"
-	              " text-align:center; vertical-align:top;"
-		      " background-image: url('%s/head_base_background_1x56.gif');"
-		      " background-repeat:repeat-x;\">"
-		      "<div id=\"tabs_container\">",
-            ColspanCentralPart,Gbl.Prefs.PathTheme);
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-         Lay_DrawTabsDeskTop ();
-         break;
-      case Lay_LAYOUT_MOBILE:
-         Lay_DrawBreadcrumb ();
-         break;
-      default:
-      	 break;
-     }
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>");
-  }
-
-/*****************************************************************************/
-/**************** Draw tabs with the current tab highlighted *****************/
-/*****************************************************************************/
-
-static void Lay_DrawTabsDeskTop (void)
-  {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-   extern const char *The_ClassTabOff[The_NUM_THEMES];
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *The_TabOffBgColors[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   extern const char *Txt_TABS_SHORT_TXT[Act_NUM_TABS];
-   Act_Tab_t NumTab;
-   bool ICanViewTab;
-
-   /***** Table start *****/
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none; padding:0; margin:0;\">");
-
-   /***** Draw the tabs *****/
-   for (NumTab = (Act_Tab_t) 1;
-        NumTab <= (Act_Tab_t) Act_NUM_TABS - 1;
-        NumTab++)
-     {
-      ICanViewTab = Lay_CheckIfICanViewTab (NumTab);
-
-      /* If current tab is unknown, then activate the first one with access allowed */
-      if (Gbl.CurrentTab == TabUnk)
-	{
-	 Gbl.CurrentTab = NumTab;
-	 Lay_DisableIncompatibleTabs ();
-	}
-
-      if (ICanViewTab || NumTab > TabCrs)	// Don't show the first hidden tabs
-	{
-	 /* Form, icon (at top) and text (at bottom) of the tab */
-	 fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"background-color:%s;\">",
-		  NumTab == Gbl.CurrentTab ? "TAB_ON" :
-					     "TAB_OFF",
-		  NumTab == Gbl.CurrentTab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
-					     The_TabOffBgColors[Gbl.Prefs.Theme]);
-	 if (ICanViewTab)
-	   {
-	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	    if (NumTab != Gbl.CurrentTab)
-	       fprintf (Gbl.F.Out," class=\"ICON_HIGHLIGHT\"");
-	    fprintf (Gbl.F.Out,">");
-	    Act_FormStart (ActMnu);
-	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
-				NumTab == Gbl.CurrentTab ? The_ClassTabOn[Gbl.Prefs.Theme] :
-							   The_ClassTabOff[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
-			       "<div>%s</div>"
-			       "</a>"
-			       "</form>",
-		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
-		     Lay_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_SHORT_TXT[NumTab]);
-	   }
-	 else
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
-			       "<img src=\"%s/%s/%s32x32.gif\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
-			       "<div class=\"%s\">%s</div>",
-		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
-		     Lay_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     The_ClassTabOff[Gbl.Prefs.Theme],
-		     Txt_TABS_SHORT_TXT[NumTab]);
-
-	 fprintf (Gbl.F.Out,"</div>"
-			    "</li>");
-	}
-     }
-
-   /***** End of the table *****/
-   fprintf (Gbl.F.Out,"</ul>");
-  }
-
-/*****************************************************************************/
-/************************ Draw vertical menu with tabs ***********************/
-/*****************************************************************************/
-
-static void Lay_DrawTabsMobile (void)
-  {
-   extern const char *The_ClassMenuOff[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-   unsigned NumTabVisible;
-   Act_Tab_t NumTab;
-   bool ICanViewTab;
-
-   /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
-
-   /***** Loop to write all tabs. Each row holds a tab *****/
-   for (NumTabVisible = 0, NumTab = (Act_Tab_t) 1;
-        NumTab <= (Act_Tab_t) Act_NUM_TABS - 1;
-        NumTab++)
-     {
-      ICanViewTab = Lay_CheckIfICanViewTab (NumTab);
-
-      if (ICanViewTab || NumTab > TabCrs)	// Don't show the first hidden tabs
-	{
-	 if (NumTabVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS == 0)
-	    fprintf (Gbl.F.Out,"<tr>");
-
-	 /* Icon at top and text at bottom */
-	 fprintf (Gbl.F.Out,"<td style=\"width:25%%; text-align:center;"
-	                    " vertical-align:top;\">");
-	 if (ICanViewTab)
-	   {
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">");
-	    Act_FormStart (ActMnu);
-	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],The_ClassMenuOff[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
-			       " alt=\"%s\" title=\"%s\" class=\"ICON64x64\""
-			       " style=\"margin:4px;\" />"
-			       "<div>%s</div>"
-			       "</a>"
-			       "</form>"
-			       "</div>",
-		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
-		     Lay_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab]);
-	   }
-	 else
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
-			       "<img src=\"%s/%s/%s64x64.gif\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON64x64\" style=\"margin:4px;\" />"
-			       "<div class=\"%s\">%s</div>"
-			       "</div>",
-		     Gbl.Prefs.PathIconSet,
-		     Cfg_ICON_ACTION_64x64,
-		     Lay_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     The_ClassMenuOff[Gbl.Prefs.Theme],
-		     Txt_TABS_FULL_TXT[NumTab]);
-	 fprintf (Gbl.F.Out,"</td>");
-	 if ((NumTabVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) == (Cfg_LAYOUT_MOBILE_NUM_COLUMNS-1))
-	    fprintf (Gbl.F.Out,"</tr>");
-
-	 NumTabVisible++;
-	}
-     }
-
-   /***** End of the table *****/
-   fprintf (Gbl.F.Out,"</table>");
-  }
-
-/*****************************************************************************/
-/************************* Check if I can view a tab *************************/
-/*****************************************************************************/
-
-static bool Lay_CheckIfICanViewTab (Act_Tab_t Tab)
-  {
-   switch (Tab)
-     {
-      case TabUnk:
-	 return false;
-      case TabSys:
-	 return (Gbl.CurrentCty.Cty.CtyCod <= 0);
-      case TabCty:
-	 return (Gbl.CurrentCty.Cty.CtyCod > 0 &&
-	         Gbl.CurrentIns.Ins.InsCod <= 0);
-      case TabIns:
-	 return (Gbl.CurrentIns.Ins.InsCod > 0 &&
-	         Gbl.CurrentCtr.Ctr.CtrCod <= 0);
-      case TabCtr:
-	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0 &&
-	         Gbl.CurrentDeg.Deg.DegCod <= 0);
-      case TabDeg:
-	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-	         Gbl.CurrentCrs.Crs.CrsCod <= 0);
-      case TabCrs:
-      case TabAss:
-	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case TabMsg:
-	 return (Gbl.Usrs.Me.Logged ||
-	         Gbl.CurrentCrs.Crs.CrsCod > 0);
-      default:
-	 return true;
-     }
-  }
-
-/*****************************************************************************/
-/********************* Draw breadcrumb with tab and action *******************/
-/*****************************************************************************/
-
-static void Lay_DrawBreadcrumb (void)
-  {
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-
-   fprintf (Gbl.F.Out,"<div class=\"TAB_ON\" style=\"background-color:%s;\">",
-	    The_TabOnBgColors[Gbl.Prefs.Theme]);
-
-   /***** Home *****/
-   Lay_WriteBreadcrumbHome ();
-
-   if (Gbl.CurrentAct == ActMnu ||
-       Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
-     {
-      /***** Tab *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-               The_ClassTabOn[Gbl.Prefs.Theme]);
-      Lay_WriteBreadcrumbTab ();
-
-      if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
-        {
-         /***** Menu *****/
-         fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-                  The_ClassTabOn[Gbl.Prefs.Theme]);
-         Lay_WriteBreadcrumbAction ();
-        }
-     }
-
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/************************ Write home in breadcrumb ***************************/
-/*****************************************************************************/
-
-static void Lay_WriteBreadcrumbHome (void)
-  {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-   extern const char *Txt_Home_PAGE;
-
-   Act_FormStart (ActHom);
-   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTabOn[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
-	    Txt_Home_PAGE);
-  }
-
-/*****************************************************************************/
-/************ Write icon and title associated to the current tab *************/
-/*****************************************************************************/
-
-static void Lay_WriteBreadcrumbTab (void)
-  {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
-
-   /***** Start form *****/
-   Act_FormStart (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.CurrentTab);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.CurrentTab],The_ClassTabOn[Gbl.Prefs.Theme]);
-
-   /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
-	    Txt_TABS_FULL_TXT[Gbl.CurrentTab]);
-  }
-
-/*****************************************************************************/
-/***************** Write title associated to the current action **************/
-/*****************************************************************************/
-
-static void Lay_WriteBreadcrumbAction (void)
-  {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-   const char *Title = Act_GetTitleAction (Gbl.CurrentAct);
-
-   /***** Start form *****/
-   Act_FormStart (Act_Actions[Gbl.CurrentAct].SuperAction);
-   Act_LinkFormSubmit (Title,The_ClassTabOn[Gbl.Prefs.Theme]);
-
-   /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
-	    Title);
   }
 
 /*****************************************************************************/
@@ -1179,7 +748,7 @@ static void Lay_WriteTitleAction (void)
   {
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
    extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""

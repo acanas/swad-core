@@ -86,9 +86,6 @@ typedef enum
 void Lay_WriteStartOfPage (void);
 void Lay_WriteTitle (const char *Title);
 
-void Lay_SetCurrentTab (void);
-void Lay_DisableIncompatibleTabs (void);
-
 void Lay_PutFormToEdit (Act_Action_t Action);
 void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutSendButton (const char *TextSendButton);

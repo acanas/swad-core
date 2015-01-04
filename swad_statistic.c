@@ -46,6 +46,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_statistic.h"
+#include "swad_tab.h"
 #include "swad_web_service.h"
 
 /*****************************************************************************/
@@ -688,7 +689,7 @@ static void Sta_WriteSelectorAction (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Action;
-   extern const char *Txt_TABS_SHORT_TXT[Act_NUM_TABS];
+   extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
    Act_Action_t NumAction;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 

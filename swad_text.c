@@ -83,6 +83,7 @@
 #include "swad_statistic.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
+#include "swad_tab.h"
 #include "swad_test.h"
 #include "swad_text.h"
 #include "swad_timetable.h"
@@ -15580,7 +15581,7 @@ const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
 #endif
 	};
 
-const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
 	{
 	// TabUnk ****************************************************
@@ -17394,7 +17395,7 @@ const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	}
 };
 
-const char *Txt_MENU_SUBTITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
 	{
 	// TabUnk ****************************************************
@@ -36238,7 +36239,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 	"Table not found in the file of marks.";			// Necessita de tradução
 #endif
 
-const char *Txt_TABS_FULL_TXT[Act_NUM_TABS] =
+const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS] =
    {
    // TabUnk
 	 NULL,
@@ -36474,7 +36475,7 @@ const char *Txt_TABS_FULL_TXT[Act_NUM_TABS] =
 #endif
 	};
 
-const char *Txt_TABS_SHORT_TXT[Act_NUM_TABS] =	// Must be visible in 1024x768 without horizontal scroll bar
+const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS] =	// Must be visible in 1024x768 without horizontal scroll bar
 	 {
 	 // TabUnk
 	   NULL,

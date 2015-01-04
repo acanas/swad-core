@@ -46,8 +46,9 @@
 #include "swad_QR.h"
 #include "swad_RSS.h"
 #include "swad_string.h"
-#include "swad_theme.h"
+#include "swad_tab.h"
 #include "swad_text.h"
+#include "swad_theme.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -627,7 +628,7 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
 void Deg_WriteCtyInsCtrDeg (void)
   {
    extern const char *The_ClassDegree[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Act_NUM_TABS];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
 
    /***** Form to go to the system *****/

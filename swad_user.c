@@ -50,6 +50,7 @@
 #include "swad_password.h"
 #include "swad_preference.h"
 #include "swad_record.h"
+#include "swad_tab.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -614,7 +615,7 @@ static void Usr_GetMyLastData (void)
       /* Get last tab */
       Gbl.Usrs.Me.UsrLast.LastTab = TabPrf;        // By default, set last tab to the profile tab
       if (sscanf (row[2],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum >= 1 || UnsignedNum <= Act_NUM_TABS)
+         if (UnsignedNum >= 1 || UnsignedNum <= Tab_NUM_TABS)
             Gbl.Usrs.Me.UsrLast.LastTab = (Act_Tab_t) UnsignedNum;
 
       /* Get last access to notifications */
@@ -1698,7 +1699,7 @@ void Usr_ChkUsrAndGetUsrData (void)
       if (Gbl.CurrentAct != ActRefCon)
 	{
 	 Gbl.CurrentAct = ActLogOut;
-	 Lay_SetCurrentTab ();
+	 Tab_SetCurrentTab ();
 	 Lay_ShowAlert (Lay_WARNING,Txt_The_session_has_expired_due_to_inactivity);
 	 PutFormLogin = true;
 	}
@@ -1800,7 +1801,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    Gbl.CurrentTab = ((Gbl.Usrs.Me.UsrLast.LastTab == TabCrs) &&
 			      (Gbl.CurrentCrs.Crs.CrsCod <= 0)) ? TabSys :
 								  Gbl.Usrs.Me.UsrLast.LastTab;
-	    Lay_DisableIncompatibleTabs ();
+	    Tab_DisableIncompatibleTabs ();
 	   }
 	 Usr_UpdateMyLastData ();
 	 Crs_UpdateCrsLast ();
