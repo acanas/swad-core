@@ -477,8 +477,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 		     UsrDat->IDs.List[NumID].ID);
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />"
 			       "<input type=\"image\" src=\"%s/delon16x16.gif\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON16x16\" style=\"margin-right:2px;\" />"
+			       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+			       " style=\"margin-right:2px;\" />"
 			       "</form>",
 		     UsrDat->IDs.List[NumID].ID,
 		     Gbl.Prefs.IconsURL,

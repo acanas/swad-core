@@ -1010,8 +1010,8 @@ static void Lay_DrawTabsMobile (void)
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],The_ClassMenuOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON64x64\" style=\"margin:4px;\" />"
+			       " alt=\"%s\" title=\"%s\" class=\"ICON64x64\""
+			       " style=\"margin:4px;\" />"
 			       "<div>%s</div>"
 			       "</a>"
 			       "</form>"
@@ -1258,14 +1258,15 @@ static void Lay_WriteHorizontalMenuThisTabDesktop (void)
          Act_FormStart (NumAct);
          Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                          The_ClassMenuOff[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s32x32.gif\""
-	                    " alt=\"\" class=\"ICON28x28\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
+	                    " alt=\"%s\" class=\"ICON28x28\""
 	                    " style=\"margin:0;\" />"
 			    "<div>%s</div>"
                             "</a>"
                             "</form>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
 	          Act_Actions[NumAct].Icon,
+	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          /***** End of container used to highlight this option *****/
@@ -1323,7 +1324,7 @@ static void Lay_WriteMenuThisTabMobile (void)
                              (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction) ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                                                    The_ClassMenuOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
-	                    " alt=\"\" class=\"ICON64x64\""
+	                    " alt=\"%s\" class=\"ICON64x64\""
 	                    " style=\"margin:4px;\" />"
 			    "<div>%s</div>"
                             "</a>"
@@ -1332,6 +1333,7 @@ static void Lay_WriteMenuThisTabMobile (void)
                             "</td>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
 	          Act_Actions[NumAct].Icon,
+	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          if ((NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) ==

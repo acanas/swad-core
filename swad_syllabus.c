@@ -608,8 +608,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                      LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
                                                                  Txt_Move_down_X,
                      StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/down_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	    fprintf (Gbl.F.Out,"<input type=\"image\""
+		               " src=\"%s/down_on16x16.gif\" alt=\"%s\""
+		               " title=\"%s\" class=\"ICON16x16\" />"
 		               "</form>",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
@@ -630,8 +631,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    Syl_PutParamNumItem (NumItem);
 	    sprintf (Gbl.Title,Txt_Increase_level_of_X,
                      StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/left_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	    fprintf (Gbl.F.Out,"<input type=\"image\""
+		               " src=\"%s/left_on16x16.gif\" alt=\"%s\""
+		               " title=\"%s\" class=\"ICON16x16\" />"
 		               "</form>",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
@@ -653,8 +655,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    Syl_PutParamNumItem (NumItem);
 	    sprintf (Gbl.Title,Txt_Decrease_level_of_X,
                      StrItemCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/right_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	    fprintf (Gbl.F.Out,"<input type=\"image\""
+		               " src=\"%s/right_on16x16.gif\" alt=\"%s\""
+		               " title=\"%s\" class=\"ICON16x16\" />"
 		               "</form>",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,

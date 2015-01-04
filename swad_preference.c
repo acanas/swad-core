@@ -379,8 +379,9 @@ void Prf_PutLeftIconToHideShowCols (void)
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)
      {
       Act_FormStart (ActHidLftCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_left_8x800.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:8px;height:800px;\" />",
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
+	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Hide_left_column,
                Txt_Hide_left_column);
@@ -388,8 +389,9 @@ void Prf_PutLeftIconToHideShowCols (void)
    else
      {
       Act_FormStart (ActShoLftCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_right_8x800.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:8px;height:800px;\" />",
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
+	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Show_left_column,
                Txt_Show_left_column);
@@ -409,8 +411,9 @@ void Prf_PutRigthIconToHideShowCols (void)
    if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)
      {
       Act_FormStart (ActHidRgtCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_right_8x800.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:8px;height:800px;\" />",
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
+	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Hide_right_column,
                Txt_Hide_right_column);
@@ -418,8 +421,9 @@ void Prf_PutRigthIconToHideShowCols (void)
    else
      {
       Act_FormStart (ActShoRgtCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/central_left_8x800.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"width:8px;height:800px;\" />",
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
+	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Show_right_column,
                Txt_Show_right_column);

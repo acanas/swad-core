@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.52.5 (2015/01/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.52.6 (2015/01/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.52.6  :Jan 04, 2014	Fixed bugs for HTML5 validation. (173187 lines)
 	Version 14.52.5  :Jan 02, 2014	Changes in CSS. (173170 lines)
 	Version 14.52.4  :Jan 02, 2014	Removed unnecessary titles in statistics. (173169 lines)
 	Version 14.52.3  :Jan 02, 2014	Titles in statistics. (173258 lines)

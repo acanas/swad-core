@@ -499,8 +499,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_ACTIVE_NOTICE:
                Act_FormStart (ActHidNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_on16x16.gif\""
-        	                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+               fprintf (Gbl.F.Out,"<input type=\"image\""
+        	                  " src=\"%s/visible_on16x16.gif\" alt=\"%s\""
+        	                  " title=\"%s\" class=\"ICON16x16\" />"
                                   "</form>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
@@ -509,8 +510,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_OBSOLETE_NOTICE:
                Act_FormStart (ActRevNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_on16x16.gif\""
-        	                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+               fprintf (Gbl.F.Out,"<input type=\"image\""
+        	                  " src=\"%s/hidden_on16x16.gif\" alt=\"%s\""
+        	                  " title=\"%s\" class=\"ICON16x16\" />"
                                   "</form>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,

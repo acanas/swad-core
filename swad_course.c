@@ -1363,8 +1363,9 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActRemCrs);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-        	                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+               fprintf (Gbl.F.Out,"<input type=\"image\""
+        	                  " src=\"%s/delon16x16.gif\" alt=\"%s\""
+        	                  " title=\"%s\" class=\"ICON16x16\" />"
         	                  "</form>",
                         Gbl.Prefs.IconsURL,
                         Txt_Remove_course,

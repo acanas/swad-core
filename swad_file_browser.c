@@ -4150,8 +4150,9 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
         }
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/folder-%s-plus16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+	                 " src=\"%s/folder-%s-plus16x16.gif\" alt=\"%s\""
+	                 " title=\"%s\" class=\"ICON16x16B\" />"
 	                 "</form>",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :

@@ -1073,8 +1073,8 @@ void Mai_ShowFormChangeUsrEmail (void)
 		  row[0]);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />"
 			    "<input type=\"image\" src=\"%s/delon16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16\" style=\"margin-right:2px;\" />"
+			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+			    " style=\"margin-right:2px;\" />"
 			    "</form>",
 		  row[0],
 		  Gbl.Prefs.IconsURL,

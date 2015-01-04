@@ -3440,8 +3440,9 @@ void Msg_ListBannedUsrs (void)
                                "<td class=\"BM\">");
             Act_FormStart (ActUnbUsrLst);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/closed_on16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+            fprintf (Gbl.F.Out,"<input type=\"image\""
+        	               " src=\"%s/closed_on16x16.gif\" alt=\"%s\""
+        	               " title=\"%s\" class=\"ICON16x16\" />"
         	               "</form>"
         	               "</td>",
                      Gbl.Prefs.IconsURL,
