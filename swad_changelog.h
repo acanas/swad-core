@@ -35,12 +35,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.53 (2015/01/04)"
+#define Log_PLATFORM_VERSION	"SWAD 14.53.1 (2015/01/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-	Version 14.53    :Jan 04, 2014	New module swad_calendar for calendar. (173254 lines)
+	Version 14.53.1  :Jan 04, 2014	Some functions moved from swad_layout to swad_menu. (173256 lines)
+	Version 14.53    :Jan 04, 2014	New module swad_calendar for drawing months and calendar. (173254 lines)
 					1 change necessary in Makefile:
 Add swad_calendar.o to list of object files
 

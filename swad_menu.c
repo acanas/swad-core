@@ -39,6 +39,7 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
+extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /******************************** Private constants **************************/
@@ -63,6 +64,237 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
    "horizontal",
    "vertical",
   };
+
+
+/*****************************************************************************/
+/************* Write the menu of current tab (desktop layout) ****************/
+/*****************************************************************************/
+
+void Mnu_WriteVerticalMenuThisTabDesktop (void)
+  {
+   extern const char *The_ClassMenuOn[The_NUM_THEMES];
+   extern const char *The_ClassMenuOff[The_NUM_THEMES];
+   extern const char *The_ClassSeparator[The_NUM_THEMES];
+   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   unsigned NumOptInMenu;
+   Act_Action_t NumAct;
+   const char *Title;
+   bool IsTheSelectedAction;
+   bool SeparationBetweenPreviousAndCurrentOption = false;
+   bool PreviousVisibleOptions = false;
+
+   /***** List start *****/
+   fprintf (Gbl.F.Out,"<ul id=\"vertical_menu_container\">");
+
+   /***** Loop to write all options in menu. Each row holds an option *****/
+   for (NumOptInMenu = 0;
+        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+        NumOptInMenu++)
+     {
+      NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
+      if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+         break;
+      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+        {
+         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
+
+         Title = Act_GetSubtitleAction (NumAct);
+
+         if (SeparationBetweenPreviousAndCurrentOption)
+           {
+            if (PreviousVisibleOptions)
+               fprintf (Gbl.F.Out,"<li>"
+        	                  "<hr class=\"%s\" />"
+        	                  "</li>",
+                        The_ClassSeparator[Gbl.Prefs.Theme]);
+            SeparationBetweenPreviousAndCurrentOption = false;
+           }
+
+         /***** Start of element *****/
+         fprintf (Gbl.F.Out,"<li>");
+
+         /***** Start of container used to highlight this option *****/
+         if (!IsTheSelectedAction)
+            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">");
+
+         /***** Start of form and link *****/
+         Act_FormStart (NumAct);
+         Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
+                                                         The_ClassMenuOff[Gbl.Prefs.Theme]);
+
+         /***** Icon *****/
+	 fprintf (Gbl.F.Out,"<div class=\"MENU_OPTION\""
+			    " style=\"background-image: url('%s/%s/%s32x32.gif');\">",
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+                  Act_Actions[NumAct].Icon);
+
+         /***** Text *****/
+	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT\">"
+	                    "<span class=\"%s\">%s</span>",
+		  IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
+                                        The_ClassMenuOff[Gbl.Prefs.Theme],
+		  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+
+         /***** End of link and form *****/
+         fprintf (Gbl.F.Out,"</div>"
+	                    "</div>"
+	                    "</a>"
+	                    "</form>");
+
+         /***** End of container used to highlight this option *****/
+         if (!IsTheSelectedAction)
+	    fprintf (Gbl.F.Out,"</div>");
+
+         /***** End of element *****/
+         fprintf (Gbl.F.Out,"</li>");
+
+         PreviousVisibleOptions = true;
+         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
+        }
+     }
+
+   /***** List end *****/
+   fprintf (Gbl.F.Out,"</ul>");
+  }
+
+/*****************************************************************************/
+/********** Write horizontal menu of current tab (desktop layout) ************/
+/*****************************************************************************/
+
+void Mnu_WriteHorizontalMenuThisTabDesktop (void)
+  {
+   extern const char *The_ClassMenuOn[The_NUM_THEMES];
+   extern const char *The_ClassMenuOff[The_NUM_THEMES];
+   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   unsigned NumOptInMenu;
+   Act_Action_t NumAct;
+   const char *Title;
+   bool IsTheSelectedAction;
+
+   /***** List start *****/
+   fprintf (Gbl.F.Out,"<div id=\"horizontal_menu_container\">"
+                      "<ul>");
+
+   /***** Loop to write all options in menu. Each row holds an option *****/
+   for (NumOptInMenu = 0;
+        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+        NumOptInMenu++)
+     {
+      NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
+      if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+         break;
+      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+        {
+         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
+
+         Title = Act_GetSubtitleAction (NumAct);
+
+         /***** Start of element *****/
+	 fprintf (Gbl.F.Out,"<li class=\"%s\">",
+		  IsTheSelectedAction ? "MENU_ON" :
+					"MENU_OFF");
+
+         /***** Start of container used to highlight this option *****/
+         if (IsTheSelectedAction)
+            fprintf (Gbl.F.Out,"<div class=\"ICON_SCALED\" style=\"display:inline-block;\">");
+         else
+            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT ICON_SCALING\" style=\"display:inline-block;\">");
+
+         /***** Start of form and link *****/
+         Act_FormStart (NumAct);
+         Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
+                                                         The_ClassMenuOff[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
+	                    " alt=\"%s\" class=\"ICON28x28\""
+	                    " style=\"margin:0;\" />"
+			    "<div>%s</div>"
+                            "</a>"
+                            "</form>",
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+	          Act_Actions[NumAct].Icon,
+	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
+                  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+
+         /***** End of container used to highlight this option *****/
+         fprintf (Gbl.F.Out,"</div>");
+
+         /***** End of element *****/
+         fprintf (Gbl.F.Out,"</li>");
+        }
+     }
+
+   /***** List end *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
+  }
+
+/*****************************************************************************/
+/************* Write the menu of current tab (mobile layout) *****************/
+/*****************************************************************************/
+
+void Mnu_WriteMenuThisTabMobile (void)
+  {
+   extern const char *The_ClassMenuOn[The_NUM_THEMES];
+   extern const char *The_ClassMenuOff[The_NUM_THEMES];
+   extern const struct Act_Menu Act_Menu[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_MENU_TITLE[Act_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   unsigned NumOptInMenu;
+   unsigned NumOptVisible;	// Only options I can see
+   Act_Action_t NumAct;
+   const char *Title;
+
+   /***** Table start *****/
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+
+   /***** Loop to write all options in menu. Each row holds an option *****/
+   for (NumOptInMenu = NumOptVisible = 0;
+        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+        NumOptInMenu++)
+     {
+      if ((NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action) == 0)	// At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+         break;
+      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+        {
+         Title = Act_GetSubtitleAction (NumAct);
+
+         if (NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS == 0)
+            fprintf (Gbl.F.Out,"<tr>");
+
+         /* Icon at top and text at bottom */
+	 fprintf (Gbl.F.Out,"<td style=\"width:25%%; text-align:center;"
+	                    " vertical-align:top;\">"
+	                    "<div class=\"ICON_HIGHLIGHT\">");
+
+         Act_FormStart (NumAct);
+         Act_LinkFormSubmit (Title,
+                             (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction) ? The_ClassMenuOn[Gbl.Prefs.Theme] :
+                                                                                   The_ClassMenuOff[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
+	                    " alt=\"%s\" class=\"ICON64x64\""
+	                    " style=\"margin:4px;\" />"
+			    "<div>%s</div>"
+                            "</a>"
+                            "</form>"
+                            "</div>"
+                            "</td>",
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
+	          Act_Actions[NumAct].Icon,
+	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
+                  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+
+         if ((NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) ==
+             (Cfg_LAYOUT_MOBILE_NUM_COLUMNS - 1))
+            fprintf (Gbl.F.Out,"</tr>");
+
+         NumOptVisible++;
+        }
+     }
+
+   /***** Table end *****/
+   fprintf (Gbl.F.Out,"</table>");
+  }
 
 /*****************************************************************************/
 /************* Put icons to select menu (horizontal or vertical) *************/
