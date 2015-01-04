@@ -73,10 +73,6 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
 bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YYYYMMDDHHMMSS);
 
 void Dat_ShowCurrentDateTime (void);
-void Dat_DrawCurrentMonth (void);
-void Dat_DrawCalendar (void);
-void Dat_DrawMonth (unsigned RealYear,unsigned RealMonth,
-                    bool DrawingCalendar,bool PutLinkToEvents,bool PrintView);
 
 void Dat_GetLocalTimeFromClock (const time_t *clock);
 void Dat_WriteDateTimeFromtblock (void);

@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_calendar.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_connected.h"
@@ -1464,7 +1465,7 @@ static void Lay_ShowLeftColumn (void)
    /***** Month *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center; vertical-align:top;\">");
-   Dat_DrawCurrentMonth ();
+   Cal_DrawCurrentMonth ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

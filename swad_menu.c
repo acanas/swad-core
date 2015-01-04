@@ -26,12 +26,9 @@
 /*****************************************************************************/
 
 #include <stdio.h>	// For fprintf, etc.
-// #include <string.h>
 
-// #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
-// #include "swad_icon.h"
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_parameter.h"

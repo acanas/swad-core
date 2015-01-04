@@ -728,7 +728,7 @@ static void Sta_WriteSelectorAction (void)
 
 void Sta_SetIniEndDates (void)
   {
-   extern const unsigned NumDaysMonth[1+12];			// Declaration in swad_date.c
+   extern const unsigned Dat_NumDaysMonth[1+12];			// Declaration in swad_date.c
 
    Gbl.DateRange.DateEnd.Day   = Gbl.Now.Date.Day;
    Gbl.DateRange.DateEnd.Month = Gbl.Now.Date.Month;
@@ -747,7 +747,7 @@ void Sta_SetIniEndDates (void)
       Gbl.DateRange.DateIni.Month = (Gbl.DateRange.DateEnd.Month == 1) ? 12 :
                                                                          Gbl.DateRange.DateEnd.Month - 1;
       Gbl.DateRange.DateIni.Day   = ((Gbl.DateRange.DateIni.Month == 2) ? Dat_GetNumDaysFebruary (Gbl.DateRange.DateIni.Year) :
-	                                                                  NumDaysMonth[Gbl.DateRange.DateIni.Month]) +
+	                                                                  Dat_NumDaysMonth[Gbl.DateRange.DateIni.Month]) +
                                                                           Gbl.DateRange.DateEnd.Day -
                                                                           (Cfg_DAYS_IN_RECENT_LOG-1);
      }
