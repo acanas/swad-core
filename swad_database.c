@@ -2263,9 +2263,6 @@ mysql> DESCRIBE usr_data;
 | Theme           | char(16)                        | NO   | MUL | NULL    |                |
 | IconSet         | char(16)                        | NO   | MUL | NULL    |                |
 | Language        | char(2)                         | NO   | MUL | NULL    |                |
-| WWW             | varchar(255)                    | NO   |     | NULL    |                |
-| Twitter         | varchar(15)                     | NO   |     | NULL    |                |
-| Skype           | varchar(60)                     | NO   |     | NULL    |                |
 | Photo           | char(43)                        | NO   |     | NULL    |                |
 | PublicPhoto     | enum('N','Y')                   | NO   |     | N       |                |
 | CtyCod          | int(11)                         | NO   | MUL | -1      |                |
@@ -2287,7 +2284,7 @@ mysql> DESCRIBE usr_data;
 | NotifNtfEvents  | int(11)                         | NO   |     | 0       |                |
 | EmailNtfEvents  | int(11)                         | NO   |     | 0       |                |
 +-----------------+---------------------------------+------+-----+---------+----------------+
-34 rows in set (0.00 sec)
+31 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2301,9 +2298,6 @@ mysql> DESCRIBE usr_data;
                    "Theme CHAR(16) NOT NULL,"
                    "IconSet CHAR(16) NOT NULL,"
                    "Language CHAR(2) NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "Twitter VARCHAR(15) NOT NULL,"
-                   "Skype VARCHAR(60) NOT NULL,"
                    "Photo CHAR(43) NOT NULL,"
                    "PublicPhoto ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "CtyCod INT NOT NULL DEFAULT -1,"

@@ -3,17 +3,7 @@
 
  <head>
   <title>SWAD: Database</title>
-  <style type="text/css">
-A:link {text-decoration: none;}
-A:visited {text-decoration: none;}
-A:active {text-decoration: none;}
-A:hover	{color:#000000;}
-body		{margin:0px;}
-td,p,.h		{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#404040;font-size:11pt;}
-table		{border-width:0px; border-style:none;}
-img		{border-width:0px; border-style:none;}
-.SWAD{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#F8B000;font-size:16pt;font-weight:bold;}
-  </style>
+  <link rel="StyleSheet" href="/swad.css" type="text/css" />
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -50,7 +40,7 @@ img		{border-width:0px; border-style:none;}
 	<td align="center">
 		<h1>SWAD database</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2014
+		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
 	</td>
 	</tr>
 
@@ -75,7 +65,7 @@ img		{border-width:0px; border-style:none;}
 	</p>
 
 	<p align="justify">
-	There are 97 tables in SWAD:
+	There are 99 tables in SWAD:
 	</p>
 
 	<pre>
@@ -210,15 +200,16 @@ mysql> DESCRIBE IP_prefs;
 +------------+------------+------+-----+---------+-------+
 | Field      | Type       | Null | Key | Default | Extra |
 +------------+------------+------+-----+---------+-------+
-| IP         | char(15)   | NO   | PRI | NULL    |       | 
-| UsrCod     | int(11)    | NO   | MUL | -1      |       | 
-| LastChange | datetime   | NO   | MUL | NULL    |       | 
-| Layout     | tinyint(4) | NO   |     | 0       |       | 
-| Theme      | char(16)   | NO   |     | NULL    |       | 
-| IconSet    | char(16)   | NO   |     | NULL    |       | 
-| SideCols   | tinyint(4) | NO   |     | 3       |       | 
+| IP         | char(15)   | NO   | PRI | NULL    |       |
+| UsrCod     | int(11)    | NO   | MUL | -1      |       |
+| LastChange | datetime   | NO   | MUL | NULL    |       |
+| Layout     | tinyint(4) | NO   |     | 0       |       |
+| Theme      | char(16)   | NO   |     | NULL    |       |
+| IconSet    | char(16)   | NO   |     | NULL    |       |
+| Menu       | tinyint(4) | NO   |     | 0       |       |
+| SideCols   | tinyint(4) | NO   |     | NULL    |       |
 +------------+------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
+8 rows in set (0.00 sec)
 	</pre>
 
 	<h3>Table actions</h3>
@@ -1946,9 +1937,6 @@ mysql> DESCRIBE usr_data;
 | Theme           | char(16)                        | NO   | MUL | NULL    |                |
 | IconSet         | char(16)                        | NO   | MUL | NULL    |                |
 | Language        | char(2)                         | NO   | MUL | NULL    |                |
-| WWW             | varchar(255)                    | NO   |     | NULL    |                |
-| Twitter         | varchar(15)                     | NO   |     | NULL    |                |
-| Skype           | varchar(60)                     | NO   |     | NULL    |                |
 | Photo           | char(43)                        | NO   |     | NULL    |                |
 | PublicPhoto     | enum('N','Y')                   | NO   |     | N       |                |
 | CtyCod          | int(11)                         | NO   | MUL | -1      |                |
@@ -1965,12 +1953,12 @@ mysql> DESCRIBE usr_data;
 | OriginPlace     | varchar(127)                    | NO   |     | NULL    |                |
 | Birthday        | date                            | NO   |     | NULL    |                |
 | Comments        | text                            | NO   |     | NULL    |                |
+| Menu            | tinyint(4)                      | NO   | MUL | 0       |                |
 | SideCols        | tinyint(4)                      | NO   | MUL | 3       |                |
-| SecureIcons     | enum('N','Y')                   | NO   | MUL | Y       |                |
-| NotifNtfEvents  | int(11)                         | NO   |     | -1      |                |
+| NotifNtfEvents  | int(11)                         | NO   |     | 0       |                |
 | EmailNtfEvents  | int(11)                         | NO   |     | 0       |                |
 +-----------------+---------------------------------+------+-----+---------+----------------+
-34 rows in set (0.04 sec)
+31 rows in set (0.00 sec)
 	</pre>
 
 	<h3>Table usr_emails</h3>
@@ -2030,16 +2018,16 @@ mysql> DESCRIBE usr_nicknames;
 	<p align="justify">
 	Stores users' web and social networks:
 	</p>
-	<pre>
+	<pre style="font-size:0.5em;">
 mysql> DESCRIBE usr_webs;
-+--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field  | Type                                                                                                                                                                                                                                 | Null | Key | Default | Extra |
-+--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod | int(11)                                                                                                                                                                                                                              | NO   | PRI | NULL    |       | 
-| Web    | enum('www','delicious','edmodo','facebook','flickr','foursquare','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') | NO   | PRI | NULL    |       | 
-| URL    | varchar(255)                                                                                                                                                                                                                         | NO   |     | NULL    |       | 
-+--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-3 rows in set (0.01 sec)
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field  | Type                                                                                                                                                                                                                                          | Null | Key | Default | Extra |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod | int(11)                                                                                                                                                                                                                                       | NO   | PRI | NULL    |       |
+| Web    | enum('www','delicious','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') | NO   | PRI | NULL    |       |
+| URL    | varchar(255)                                                                                                                                                                                                                                  | NO   |     | NULL    |       |
++--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
 	</pre>
 
 	<h3>Table ws_keys</h3>

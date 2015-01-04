@@ -10449,4 +10449,7 @@ UPDATE usr_data SET Menu=1;
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1243','es','N','Cambiar men&uacute;');
 ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
 
+----- 2015-01-04, swad14.54.1
+
+ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
 

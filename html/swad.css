@@ -1,0 +1,37 @@
+a:link
+	{
+	text-decoration: none;
+	}
+a:visited
+	{
+	text-decoration: none;
+	}
+a:active
+	{
+	text-decoration: none;
+	}
+a:hover	
+	{
+	text-decoration: underline;
+	}
+body
+	{
+	margin:0;
+	background-color:white;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	}
+table
+	{
+	border-width:0px;
+	border-style:none;
+	}
+img	{
+	border-width:0px;
+	border-style:none;
+	}
+.SWAD
+	{
+	color:#F8B000;
+	font-size:16pt;
+	font-weight:bold;
+	}
