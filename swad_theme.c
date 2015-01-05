@@ -70,14 +70,14 @@ const char *The_TabOnBgColors[The_NUM_THEMES] =
    "#F7F6F5",
    "#F7F6F5",
    "#E8F3F6",
-   "#FFFA85",
+   "#FAF0A0",
   };
 const char *The_TabOffBgColors[The_NUM_THEMES] =
   {
    "#D4D4D4",
    "#D4D4D4",
    "#CAE1E8",
-   "#FDC469",
+   "#F0C870",
   };
 
 const char *The_ClassSeparator[The_NUM_THEMES] =

@@ -35,11 +35,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.54.1 (2015/01/04)"
+#define Log_PLATFORM_VERSION	"SWAD 14.54.2 (2015/01/05)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.54.2:  Jan 05, 2015	Changes in yellow theme. (173339 lines)
 	Version 14.54.1:  Jan 04, 2015	Removed unused fields in user's data. (173338 lines)
 					1 change necessary in database:
 ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
