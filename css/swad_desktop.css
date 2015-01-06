@@ -245,12 +245,12 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .ALERT
 	{
 	margin:4px auto;
-	background-color:#FFFDB9;
+	background-color:#FFF9E0;
 	background-repeat:no-repeat;
 	background-position:10px 10px;
 	padding:10px 10px 10px 36px;
 	border-radius:4px;
-	box-shadow:1px 1px 1px #CCC;
+	box-shadow:1px 1px 1px #CCC7B4;
 	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:10pt;
 	color:#632921;
@@ -468,7 +468,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .ICON_HIGHLIGHT
 	{
-	opacity:0.6;
+	opacity:0.7;
 	}
 .ICON_HIGHLIGHT:hover
 	{

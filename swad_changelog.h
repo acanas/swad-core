@@ -30,16 +30,21 @@
 
 // TODO: When notifications are marked as seen, do it in a priori function
 // TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
+// TODO: [Ceferino Bustos Valdivia]:
+//	Enhorabuena por esta nueva aplicación. La he utilizado con los códigos QR y va muy bien.
+//	Me genera las listas de alumnos y es bastante rápida la lectura del código QR.
+//	Sería completa esta aplicación, si la asistencia se incluyera, automáticamente, en el apartado de evaluación de cada alumno. De esta forma podríamos ver sus trabajos y asistencias de forma personalizada.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.54.2 (2015/01/05)"
+#define Log_PLATFORM_VERSION	"SWAD 14.54.3 (2015/01/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.54.3:  Jan 06, 2015	Changes in themes and colors. (173344 lines)
 	Version 14.54.2:  Jan 05, 2015	Changes in yellow theme. (173339 lines)
 	Version 14.54.1:  Jan 04, 2015	Removed unused fields in user's data. (173338 lines)
 					1 change necessary in database:
