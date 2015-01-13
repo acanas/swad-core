@@ -48402,39 +48402,39 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =
 #if   L==0
 	"S&oacute;lo podr&aacute; recibir notificaciones por correo electr&oacute;nico"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en Titulaci&oacute;n &gt; Dominios correo.";	// Necessita traduccio
+	" listados en PLATAFORMA &gt; Dominios.";	// Necessita traduccio
 #elif L==1
 	"You can only receive email notifications"
 	" if your email ends in one of the domains"
-	" listed in Degree &gt; Mail domains.";			// Need Übersetzung
+	" listed in SYSTEM &gt; Domains.";			// Need Übersetzung
 #elif L==2
 	"You can only receive email notifications"
 	" if your email ends in one of the domains"
-	" listed in Degree &gt; Mail domains.";
+	" listed in SYSTEM &gt; Domains.";
 #elif L==3
 	"S&oacute;lo podr&aacute; recibir notificaciones por correo electr&oacute;nico"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en Titulaci&oacute;n &gt; Dominios correo.";
+	" listados en PLATAFORMA &gt; Dominios.";
 #elif L==4
 	"You can only receive email notifications"
 	" if your email ends in one of the domains"
-	" listed in Degree &gt; Mail domains.";			// Besoin de traduction
+	" listed in SYSTEM &gt; Domains.";			// Besoin de traduction
 #elif L==5
 	"S&oacute;lo podr&aacute; recibir notificaciones por correo electr&oacute;nico"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en Titulaci&oacute;n &gt; Dominios correo.";	// Okoteve traducción
+	" listados en PLATAFORMA &gt; Dominios.";	// Okoteve traducción
 #elif L==6
 	"Puoi solo ricevere e-mail di notifica"
 	" se la tua e-mail termina in uno dei campi"
-	" listati in Lauree &gt; Campo mail.";
+	" listati in PIATTAFORMA &gt; Campi.";
 #elif L==7
 	"You can only receive email notifications"
 	" if your email ends in one of the domains"
-	" listed in Degree &gt; Mail domains.";			// Potrzebujesz tlumaczenie
+	" listed in SYSTEM &gt; Domains.";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"You can only receive email notifications"
 	" if your email ends in one of the domains"
-	" listed in Degree &gt; Mail domains.";			// Necessita de tradução
+	" listed in SYSTEM &gt; Domains.";			// Necessita de tradução
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences

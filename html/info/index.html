@@ -3,24 +3,21 @@
 
  <head>
   <title>SWAD: Info</title>
-  <style type="text/css">
-A:link {text-decoration: none;}
-A:visited {text-decoration: none;}
-A:active {text-decoration: none;}
-A:hover	{color:#000000;}
-body		{margin:0px;}
-td,p,.h		{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#404040;font-size:11pt;}
-table		{border-width:0px; border-style:none;}
-img		{border-width:0px; border-style:none;}
-.SWAD{font-family:Arial,DejaVu LGC Sans,Bitstream Vera Sans,sans-serif;color:#F8B000;font-size:16pt;font-weight:bold;}
-  </style>
+  <link rel="StyleSheet" href="/swad.css" type="text/css" />
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-40768375-1', 'openswad.org');
+  ga('create', 'UA-40768375-1', 'openswad.org', {
+    'anonymizeIp': true,
+    'storage': 'none',
+    'clientId': window.localStorage.getItem('ga_clientId')
+  });
+  ga(function(tracker) {
+    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));
+  });
   ga('send', 'pageview');
 
 </script>
@@ -41,9 +38,9 @@ img		{border-width:0px; border-style:none;}
 
 	<tr>
 	<td align="center">
-		<h1>Introduction to SWAD</h1>
+		<h1>What is SWAD?</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2014
+		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
 	</td>
 	</tr>
 
@@ -52,381 +49,471 @@ img		{border-width:0px; border-style:none;}
 
 <dl>
 
-<dt><h2>Resumen</h2></dt>
+<dt><h2>Abstract</h2></dt>
 
 <dd>
-<p align="justify">
+
+<p>
 <a href="http://openswad.org/">SWAD</a> (shared workspace at a distance)
-es una plataforma <a href="http://openswad.org/source/">libre</a> para teleformaci&oacute;n y gesti&oacute;n docente. 
-Ha sido desarrollada y utilizada en la <a href="http://www.ugr.es/">Universidad de Granada (UGR)</a>
-<a href="http://swad.ugr.es/stat/">desde 1999</a>,
-y desde 2012 es utilizada en otras universidades.
+is a <a href="http://openswad.org/source/">free</a> platform
+for distance learning and teaching management.
+
+It has been developed and used at the
+<a href="http://www.ugr.es/">University of Granada (UGR)</a>
+<a href="http://swad.ugr.es/stat/">since 1999</a>
+and since 2012 is used in other universities.
 </p>
-<p align="justify">
-SWAD integra en una herramienta web diversas funciones de apoyo al aprendizaje,
-a la docencia y a la gesti&oacute;n de datos de estudiantes y profesores.
-Entre ellas se encuentran
-el acceso a informaci&oacute;n sobre las asignaturas (gu&iacute;a docente, horarios, bibliograf&iacute;a,...),
-la descarga de documentos (apuntes, presentaciones, relaciones de problemas, guiones de pr&aacute;cticas...), 
-las listas y fichas de estudiantes y profesores, los foros de discusi&oacute;n,
-la asignaci&oacute;n de actividades, la autoevaluaci&oacute;n mediante ex&aacute;menes interactivos y
-la consulta individual de calificaciones.
-Algunas de sus principales funcionalidades est&aacute;n disponibles adem&aacute;s
-en una <a href="http://openswad.org/mobile/">aplicaci&oacute;n para dispositivos
-m&oacute;viles Android y iOS</a>.
+
+<p>
+SWAD integrates into a web tool various functions to support learning, teaching
+and management of data from students and teachers.
+
+These include access to information on the courses (teaching guide, timetables, bibliography,...),
+documents storage (notes, presentations, problems, practice outlines...),
+lists and record cards of students and teachers, discussion forums,
+assignments, student's self-assessment through interactive tests,
+and individual consultation of marks.
+
+Some of its main features are also available as an
+<a href="http://openswad.org/swadroid/">app for Android mobile devices</a>.
+</a>
+
+<p>
+SWAD is a very useful tool that has become an important complement to classroom teaching,
+with a cost of implementation very low even in large educational institutions.
+</p>
+
+</dd>
+
+<dt><h2>History</h2></dt>
+
+<dd>
+
+<p>
+The use of web applications to support learning, teaching and management of student data
+in an educational institution is interesting because it facilitates teachers
+performing some teaching and management tasks
+&ndash;for example the dissemination of documents or the query of students data&ndash;,
+and because it fosters student's autonomy and self-learning,
+who can access such services at any time and from anywhere.
+</p>
+
+<p>
+Due to the complexity of implementation of these desired features
+on the web of the teacher, the department or the centre,
+it is desirable that the educational institution
+has a common tool for all courses and teachers.
+
+Therefore, since the late 90s the use of
+<a href="http://en.wikipedia.org/wiki/E-learning"><em>e-learning</em></a> and
+<a href="http://en.wikipedia.org/wiki/Blended_learning"><em>blended learning</em></a>
+platforms &ndash;also called LMS, Learning Management Systems&ndash; has extended,
+bringing together the necessary functionalities to support teaching and learning through internet.
+
+The most widespread example among privative platforms is
+<a href="http://www.blackboard.com/">Blackboard</a>.
+As examples of free software platforms we can cite
+<a href="https://moodle.org/">Moodle</a>,
+<a href="https://chamilo.org/">Chamilo</a> or
+<a href="http://www.claroline.net/">Claroline</a>, among others.
+
+In general, these systems allow the creation of courses
+that can be designed and managed as a whole by teachers
+without a highly technical knowledge.
+
+Its main drawbacks are the high cost of licenses (in the case of privative platforms),
+large computing needs of most of the platforms
+in institutions with a large volume of courses and users,
+the dependence on an outside company,
+and the difficulty of adapting to the needs and particularities of each organization.
+</p>
+
+<p>
+Alternatively, some educational institutions developed their own platforms
+designed for their specific needs
+&ndash;for example, <a href="http://aulaweb.etsii.upm.es/">AulaWeb</a>
+at the <a href="http://www.upm.es/">Polytechnic University of Madrid</a>&ndash;.
+
+So SWAD emerged and developed over several years as a specific tool
+for the <a href="http://www.ugr.es/">University of Granada (UGR)</a>.
+</p>
+
+<p>
+SWAD began in September 1999
+in the <a href="http://atc.ugr.es/">Department of Architecture and Computer Technology</a>
+of the <a href="http://www.ugr.es/">UGR</a>,
+grew since 2003 until 2008 under three teaching innovation projects,
+and since 2008 until 2015 it has been one of the three tools of PRADO,
+the platform of resources to support teaching of the UGR,
+supported by the <a href="http://cevug.ugr.es/">Virtual Learning Center</a>
+and provided free to all UGR as a support to face-to-face teaching.
+So SWAD has become a complement to traditional learning
+and has been <a href="https://swad.ugr.es/stat/">very well received by students and teachers at the UGR</a>.
+</p>
+
+<p>
+In recent years its <a href="http://openswad.org/tool/">functions</a>
+have become more widespread and more independent of an individual institution,
+resulting in a configurable tool for any educational institution.
+
+In January 2010 the <a href="http://openswad.org/source/">SWAD source code</a>
+was released under the
+<a href="http://en.wikipedia.org/wiki/Affero_General_Public_License">GNU Affero General Public License version 3</a>
+so that it could be installed at other universities or educational institutions.
+
+Today SWAD is not only used in the <a href="http://www.ugr.es/">UGR</a>.
+In April 2012 came into use in the <a href="http://openswad.org/">OpenSWAD project (openswad.org)</a>
+as a free cloud platform for any institution,
+and since July 2012 is used in the <a href="http://www.cevuna.una.py/swad/">National University of Asunci&oacute;n (Paraguay)</a>.
+</p>
+
+<p>
+The name SWAD originally stood for
+&quot;<u>S</u>istema <u>W</u>eb de <u>A</u>poyo a la <u>D</u>ocencia&quot; in Spanish
+(&quot;Web System for Education Support&quot;).
+Currently we prefer &quot;<u>S</u>hared <u>W</u>orkspace <u>At</u> a <u>D</u>istance&quot;.
+Furthermore, the main meaning of the word <em>swad</em>, barely used,
+is &quot;bunch of things&quot;, a concept that fits the idea of a system that includes various services;
+and in Punjabi language <em>swad</em> means &quot;tasty&quot;,
+which adds a positive connotation to the platform name.
 </p>
 </dd>
 
-<dt><h2>Introducci&oacute;n</h2></dt>
+<dt><h2>Goals</h2></dt>
 
 <dd>
-<p align="justify">
-La utilizaci&oacute;n de portales web de apoyo al aprendizaje,
-a la docencia y a la gesti&oacute;n de datos de los estudiantes de una instituci&oacute;n docente es interesante
-porque facilita al profesorado la realizaci&oacute;n de algunas tareas docentes y de gesti&oacute;n
--por ejemplo la difusi&oacute;n de documentos o la consulta de datos de estudiantes-,
-y porque propicia la autonom&iacute;a y el autoaprendizaje del estudiante,
-que puede hacer uso de tales servicios en cualquier instante y desde cualquier sitio.
-</p>
-<p align="justify">
-Debido a la complejidad de implementaci&oacute;n de estas funcionalidades en las p&aacute;gina web de los profesores, los departamentos o los centros,
-es conveniente que el profesorado de la instituci&oacute;n docente
-disponga de una herramienta com&uacute;n.
-Por ello, en la &uacute;ltima d&eacute;cada se ha extendido el uso de plataformas de
-<a href="http://es.wikipedia.org/wiki/E-learning"><em>e-learning</em></a> y
-<a href="http://es.wikipedia.org/wiki/B-learning"><em>b-Learning</em></a>,
-tanto libres como privativas,
-que aglutinan las funcionalidades necesarias para dar soporte a una infraestructura completa de teleformaci&oacute;n
-a trav&eacute;s de internet.
-El ejemplo m&aacute;s difundido entre las plataformas privativas es <a href="http://www.blackboard.com/">Blackboard</a>.
-Como ejemplos de plataformas de software libre podemos citar <a href="http://moodle.org/">Moodle</a>,
-<a href="http://www.ilias.de/">ILIAS</a> o
-<a href="http://www.dokeos.com/">dokeos</a>, entre otras.
-En general, estos sistemas permiten la creaci&oacute;n de cursos o asignaturas
-que pueden dise&ntilde;arse y gestionarse como un todo por personal docente,
-sin necesidad de un conocimiento muy t&eacute;cnico.
-Sus principales inconvenientes son el elevado coste de adquisici&oacute;n (en el caso de las plataformas comerciales),
-las grandes necesidades de c&oacute;mputo de la mayor parte de las plataformas en instituciones con un gran volumen de asignaturas y usuarios,
-la dependencia de una compa&ntilde;&iacute;a externa,
-y la dificultad de adaptaci&oacute;n a las necesidades y particularidades de cada organizaci&oacute;n docente.
-</p>
-
-<p align="justify">
-Como alternativa, diversas instituciones docentes utilizan desarrollos propios pensados para sus necesidades espec&iacute;ficas
--por ejemplo, <a href="http://aulaweb.etsii.upm.es/">AulaWeb</a> en la <a href="http://www.upm.es/">Universidad Polit&eacute;cnica de Madrid</a>-,
-y as&iacute; surgi&oacute; y se desarroll&oacute; SWAD durante a&ntilde;os
-como herramienta espec&iacute;fica para la <a href="http://www.ugr.es/">Universidad de Granada</a>.
-SWAD comenz&oacute; su andadura
-en septiembre de 1999 en el <a href="http://atc.ugr.es/">Departamento de Arquitectura y Tecnolog&iacute;a de Computadores</a>
-de la <a href="http://www.ugr.es/">Universidad de Granada</a>,
-creci&oacute; en el marco de tres proyectos de innovaci&oacute;n docente,
-y desde 2008 es la herramienta oficial que el <a href="http://cevug.ugr.es/">Centro de Ense&ntilde;anzas Virtuales</a>
-brinda gratuitamente a toda la <a href="http://www.ugr.es/">UGR</a> para el apoyo a la docencia presencial.
-En los &uacute;ltimos a&ntilde;os sus <a href="http://openswad.org/tool/">funcionalidades</a>
-se han ido generalizando e independizando de una instituci&oacute;n concreta,
-dando como resultado una herramienta configurable para cualquier instituci&oacute;n docente.
-En enero de 2010 <a href="http://openswad.org/source/">se liber&oacute; el c&oacute;digo fuente</a>
-de SWAD bajo licencia <a href="http://es.wikipedia.org/wiki/GNU_Affero_General_Public_License">GNU Affero General Public License, versi&oacute;n 3</a>
-para que pudiera <a href="http://openswad.org/setup/">instalarse</a> en otras universidades o instituciones docentes.
-</p>
-
-<p align="justify">
-Hoy d&iacute;a SWAD no se usa solamente en la <a href="http://www.ugr.es/">UGR</a>.
-En abril de 2012 comenz&oacute; a usarse en el proyecto <a href="http://openswad.org/">OpenSWAD (openswad.org)</a>
-y desde julio de 2012 se utiliza en la <a href="http://www.cevuna.una.py/swad/">Universidad Nacional de Asunci&oacute;n (Paraguay)</a>.
-</p>
-
-<p align="justify">
-El nombre SWAD corresponde a las siglas de &quot;Sistema/Servicio/Servidor Web de Apoyo a la Docencia&quot;.
-Adem&aacute;s, la principal acepci&oacute;n de la palabra inglesa <em>swad</em>
--escasamente utilizada- es &quot;manojo o pu&ntilde;ado de cosas&quot;,
-concepto que se ajusta a la idea de un sistema que engloba diversos servicios;
-y en <a href="http://es.wikipedia.org/wiki/Idioma_panyabi">idioma panyab&iacute;</a> <em>swad</em> significa &quot;sabroso&quot;,
-lo cual a&ntilde;ade una connotaci&oacute;n positiva al nombre de la plataforma.
-</p>
-</dd>
-
-<dt><h2>Objetivos</h2></dt>
-
-<dd>
-	<p align="justify">
-	Los objetivos planteados al abordar el desarrollo de la plataforma SWAD
-	pueden concretarse seg&uacute;n los posibles beneficiarios de su aplicaci&oacute;n:
+	<p>
+	The objectives addressed in the development of the platform SWAD
+	can be specified depending on its potential beneficiaries:
 	</p>
 	<ul>
 		<li>
-		Para profesores y otros administradores de la plataforma,
-		los objetivos propuestos fueron la realizaci&oacute;n a trav&eacute;s de internet
-		de la mayor&iacute;a de las tareas de gesti&oacute;n relacionadas con una asignatura
-		y sus estudiantes, y la mejora en la tutorizaci&oacute;n y comunicaci&oacute;n en general con los mismos.
+		For teachers and other administrators of the platform,
+		the objectives were carrying through internet
+		the management tasks related to a course and its students,
+		and improved mentoring and general communication with them.
 		</li>
 		<li>
-		Para los estudiantes, los objetivos planteados han sido
-		la mejora del acceso a materiales e informaci&oacute;n de las asignaturas,
-		la posibilidad de autoevaluaci&oacute;n a distancia,
-		y la ampliaci&oacute;n de los medios de comunicaci&oacute;n tanto entre unos estudiantes y otros
-		como entre estudiantes y profesores.
+		For students, the objectives have been improved access
+		to materials and information of the courses,
+		the possibility of self-assessment at a distance,
+		and the improvement of the communication both student-student and student-teacher.
 		</li>
 	</ul>
-	<p align="justify">
-	Un criterio fundamental contemplado en el desarrollo de la plataforma ha sido facilitar su utilizaci&oacute;n
-	por parte de los usuarios,
-	haciendo hincapi&eacute; tanto en la facilidad de aprendizaje y uso para estudiantes y profesores,
-	como en el ahorro de tiempo y mejora de calidad en diversas tareas propias de la docencia.
+	<p>
+	A fundamental criterion at the development of the platform has been
+	to facilitate its use by users, emphasizing both
+	the ease of learning and use for students and teachers (usability),
+	and the time saving and quality improvement in various tasks related to teaching.
 	</p>
-	<p align="justify">
-	Para la instituci&oacute;n o empresa, SWAD cuenta con la ventaja adicional de ser un sistema r&aacute;pido y eficiente,
-	con un consumo de recursos inform&aacute;ticos muy escaso,
-	adecuado para instalaciones de bajo coste.
+	<p>
+	For the institution or company, SWAD has the additional advantage of being fast and efficient,
+	consuming <a href="http://swad.ugr.es/server/">very little computer resources</a>,
+	so being suitable for low-cost installations.
+	Compared to other tools used for the same purpose,
+	since its <a href="https://openswad.org/source/">implementation in C language</a>,
+	SWAD does not require a big hardware and software infrastructure,
+	even in large universities, being sufficient a <a href="http://swad.ugr.es/server/">single server</a>.
 	</p>
 </dd>
 
-<dt><h2>Resumen de herramientas y funcionalidades ofrecidas</h2></dt>
+<dt><h2>Hierarchy and roles</h2></dt>
+
+<dd>
+	<h3>Hierarchical organization</h3>
+
+	<p>
+	SWAD can accommodate in a single platform one or multiple educational organizations.
+	It uses the following hierarchical structure:
+	<ul>
+    		<li>Countries</li>
+    		<li>Institutions (universities, academies, organizations, companies,...)</li>
+    		<li>Centres (faculties, buildings,...)</li>
+    		<li>Degrees (degrees, masters,...)</li>
+    		<li>Courses</li>
+    		<li>Group types (lectures, practicals, seminars,...)</li>
+    		<li>Groups (A, B, morning, afternoon,...)</li>
+	</ul>
+	The central element of this hierarchy is the course, which can register several teachers and students.
+	</p>
+
+	<h3>Roles</h3>
+
+	<p>
+	Each user has a role of student or teacher at each of the course in which he/she is enrolled.
+	In addition, some users may be administrators of one or more degrees,
+	or superusers (global administrators of the platform).
+	</p>
+</dd>
+
+<dt><h2>Summary of tools and functionalities</h2></dt>
 
 <dd>
 
-	<p align="justify">
-	La plataforma SWAD pretende alcanzar los objetivos propuestos ofreciendo las funcionalidades
-	que se enumeran a continuaci&oacute;n, agrupadas en siete grupos (pesta&ntilde;as en la interfaz web):<br />
+	<p>
+	The SWAD platform aims to achieve these objectives by providing the features listed below,
+	grouped into 11 groups (tabs):
 		<ul>
-		<li><strong>Pesta&ntilde;a &quot;Plataforma&quot;</strong>: Administraci&oacute;n de instituciones, titulaciones y asignaturas
+
+		<li><strong>System</strong>: Global configuration and administration of countries
 			<ul>
-			<li>b&uacute;squeda de asignaturas, profesores y documentos</li>
-			<li>listado de asignaturas del usuario identificado</li>
-			<li>listado y edici&oacute;n de pa&iacute;ses</li>
-			<li>listado y edici&oacute;n de instituciones de un pa&iacute;s</li>
-			<li>listado y edici&oacute;n de centros de una instituci&oacute;n</li>
-			<li>listado y edici&oacute;n de titulaciones de un centro</li>
-			<li>listado y edici&oacute;n de asignaturas de una titulaci&oacute;n</li>
-			<li>listado de asignaturas solicitadas pendientes de activar</li>
-			<li>listado y edici&oacute;n de tipos de titulaciones</li>
-			<li>listado y edici&oacute;n de lugares (campus)</li>
-			<li>listado y edici&oacute;n de d&iacute;as festivos</li>
-			<li>listado y edici&oacute;n de departamentos</li>
-			<li>listado y edici&oacute;n de dominios de correo permitidos para notificaciones</li>
-			<li>listado y edici&oacute;n de enlaces institucionales</li>
-			<li>listado y edici&oacute;n de <a href="http://openswad.org/ws/">complementos</a></li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>listing and editing countries</li>
+			<li>list of pending institutions, centres, degrees and courses</li>
+			<li>removing old unused courses</li>
+			<li>listing and editing types of degrees</li>
+			<li>listing and editing allowed mail domains for notifications</li>
+			<li>listing and editing banners</li>
+			<li>listing and editing institutional links</li>
+			<li>listing and editing <a href="http://openswad.org/ws/">plugins</a></li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Asignatura&quot;</strong>: Informaci&oacute;n y documentaci&oacute;n de la asignatura seleccionada
+		<li><strong>Country</strong>: Management of institutions of the selected country
 			<ul>
-			<li>configuraci&oacute;n de la asignatura</li>
-			<li>introducci&oacute;n a la asignatura</li>
-			<li>gu&iacute;a docente de la asignatura</li>
-			<li>temario/programa de teor&iacute;a</li>
-			<li>temario/programa de pr&aacute;cticas</li>
-			<li>descarga de documentos (apuntes, presentaciones, relaciones de problemas, etc.,
-			aunque sin creaci&oacute;n de contenidos html)</li>
-			<li>archivos compartidos entre estudiantes y profesores</li>
-			<li>calendario acad&eacute;mico</li>
-			<li>horario de clases</li>
-			<li>bibliograf&iacute;a</li>
-			<li>FAQ (preguntas frecuentes)</li>
-			<li>enlaces</li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>information about the selected country</li>
+			<li>listing and editing institutions of the selected country</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Evaluaci&oacute;n&quot;</strong>: Evaluaci&oacute;n de estudiantes en la asignatura seleccionada
+		<li><strong>Institution</strong>: Management of centres of the selected institution
 			<ul>
-			<li>informaci&oacute;n sobre el sistema de evaluaci&oacute;n</li>
-			<li>gesti&oacute;n de actividades</li>
-			<li>entrega de actividades y otros trabajos</li>
-			<li>revisi&oacute;n de las actividades y trabajos entregados por los estudiantes</li>
-			<li>ex&aacute;menes de evaluaci&oacute;n y autoevaluaci&oacute;n de tipo test</li>
-			<li>convocatorias de examen</li>
-			<li>consulta de calificaciones individualizada</li>
-			<li>ficha personalizada del estudiante en la asignatura</li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>information about the selected institution</li>
+			<li>listing and editing centres of the selected institution</li>
+			<li>listing and editing departaments of the selected institution</li>
+			<li>listing and editing places (campuses) of the selected institution</li>
+			<li>listing and editing holidays in the campuses of the selected institution</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Inscripci&oacute;n&quot;</strong>: Administraci&oacute;n de estudiantes y profesores
+		<li><strong>Centre</strong>: Management of degrees of the selected centre
 			<ul>
-			<li>gesti&oacute;n de tipos de grupos y de grupos</li>
-			<li>inscripci&oacute;n en grupos</li>
-			<li>inscripci&oacute;n y eliminaci&oacute;n de usuarios</li>
-			<li>cambio de contrase&ntilde;a y fotograf&iacute;a de otros usuarios</li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>information about the selected centre</li>
+			<li>listing and editing degrees of the selected centre</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Usuarios&quot;</strong>: Informaci&oacute;n sobre estudiantes y profesores
+		<li><strong>Degree</strong>: Management of courses of the selected degree
 			<ul>
-			<li>lista de usuarios conectados</li>
-			<li>listas y fichas de estudiantes</li>	
-			<li>edici&oacute;n de campos de fichas personalizadas</li>
-			<li>control de asistencia a clase</li>
-			<li>listas y fichas de profesores</li>	
-			<li>horarios de tutor&iacute;as de profesores</li>
-			<li>listas de administradores</li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>information about the selected degree</li>
+			<li>listing and editing courses of the selected degree</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Mensajes&quot;</strong>: Comunicaci&oacute;n entre usuarios
+		<li><strong>Course</strong>: Informaci&oacute;n y documentaci&oacute;n de la asignatura seleccionada
 			<ul>
-			<li>notificaciones de eventos para los usuarios</li>
-			<li>avisos</li>
-			<li>foros de discusi&oacute;n</li>
+			<li>search institutions, centres, degrees, courses, users and documents</li>
+			<li>information about the selected course</li>
+			<li>teaching guide of the course</li>
+			<li>agenda / program of lectures and practicals</li>
+			<li>documents (notes, presentations, problems,...)</li>
+			<li>shared files between students and teachers</li>
+			<li>class schedule</li>
+			<li>bibliography</li>
+			<li>FAQ (Frequently Asked Questions)</li>
+			<li>links</li>
+			</ul>
+		</li>
+		<li><strong>Assessment</strong>: Evaluation of students in the selected subject
+			<ul>
+			<li>information on the evaluation system</li>
+			<li>management of assignments</li>
+			<li>uploading assignments and other works</li>
+			<li>review of assignments and other works submitted by students</li>
+			<li>self-assessment tests</li>
+			<li>academic calendar</li>
+			<li>exam announcements</li>
+			<li>individualized marks</li>
+			<li>student record card in the course</li>
+			</ul>
+		</li>
+		<li><strong>Users</strong>: Information and group management of groups and users
+			<ul>
+			<li>enrollment in groups</li>
+			<li>management of types of groups and groups</li>
+			<li>lists and record cards of guests</li>	
+			<li>lists and record cards of students</li>	
+			<li>editing fields of custom record cards</li>
+			<li>attendance control</li>
+			<li>lists, record cards and scheduling of tutorials of teachers</li>	
+			<li>listis of administrators</li>
+			<li>management of requests for registration</li>
+			<li>user administration</li>
+			<li>lists of connected users</li>
+			</ul>
+		</li>
+		<li><strong>Messages</strong>: Communication between users, forums, chat
+			<ul>
+			<li>event notifications to users</li>
+			<li>global announcements</li>
+			<li>notices</li>
+			<li>discussion forums</li>
 			<li>chat</li>
-			<li>mensajer&iacute;a web interna entre usuarios de la plataforma</li>
-			<li>env&iacute;o de correo electr&oacute;nico a estudiantes</li>
+			<li>internal web messaging between users of the platform</li>
+			<li>email sending to students</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Estad&iacute;sticas&quot;</strong>: Estad&iacute;sticas y control de visitas
+		<li><strong>Statistics</strong>: Statistics and monitoring of visits
 			<ul>
-			<li>encuestas a los usuarios</li>
-			<li>utilizaci&oacute;n del sistema</li>
-			<li>orla de titulaciones</li>
-			<li>indicadores de asignaturas</li>
-			<li>estad&iacute;sticas de acceso a la asignatura
+			<li>surveys</li>
+			<li>big figures (system utilization)</li>
+			<li>stats on degrees</li>
+			<li>course indicators</li>
+			<li>course access statistics
 				<ul>
-				<li>consulta por usuario, fecha, hora, acci&oacute;n,...</li>
-				<li>listado accesos detallados</li>
+				<li>query by user, date, time, action,...</li>
+				<li>detailed list of access</li>
 				</ul>
 			</li>
-			<li>estad&iacute;sticas acceso globales
+			<li>global access statistics
 				<ul>
-				<li>consulta por usuario, fecha, hora, acci&oacute;n, titulaci&oacute;n, asignatura,...</li>
+				<li>query by user, date, time, action, degree, course,...</li>
 				</ul>
 			</li>
-			<li>clics en tiempo real</li>
+			<li>clicks in real time</li>
 			</ul>
 		</li>
-		<li><strong>Pesta&ntilde;a &quot;Perfil&quot;</strong>: Informaci&oacute;n personal del usuario identificado
+		<li><strong>Profile</strong>: Personal information of the user identified
 			<ul>
-			<li>inicio y cierre de sesi&oacute;n</li>
-			<li>cambio de rol</li>
-			<li>cambio de contrase&ntilde;a y apodo</li>
-			<li>ficha con datos personales</li>
-			<li>cambio de fotograf&iacute;a</li>
-			<li>preferencias personales</li>
-			<li>c&oacute;digo QR del usuario</li>
-			<li>horario de todas las asignaturas del usuario identificado</li>
-			<li>edici&oacute;n del horario de tutor&iacute;as</li>
-			<li>malet&iacute;n (disco duro virtual) personal</li>
-			<li>acciones m&aacute;s frecuentes del usuario</li>
+			<li>sign up</li>
+			<li>login and logout</li>
+			<li>changing role</li>
+			<li>list of courses</li>
+			<li>time table</li>
+			<li>account data (nickname, email, ID, password)</li>
+			<li>record card with personal data</li>
+			<li>photo</li>
+			<li>selection of the institution, centre and department</li>
+			<li>websites and social networking</li>
+			<li>personal preferences</li>
+			<li>briefcase (personal virtual drive)</li>
+			<li>frecuent actions</li>
 			</ul>
 		</li>
 		</ul>
 	</p>
 
-	<p align="justify">
-	Est&aacute; disponible una <a href="http://openswad.org/tool/">descripci&oacute;n mucho m&aacute;s detallada de estas herramientas y funcionalidades</a>,
-	incluyendo capturas de pantalla.
+	<p>
+	<a href="http://openswad.org/tool/">A more detailed description of these tools and features is available</a>.
 	</p>
 
 </dd>
 
-<dt><h2>Conclusiones</h2></dt>
+<dt><h2>Technical specifications</h2></dt>
 
 <dd>
-	<p align="justify">
-	La herramienta SWAD constituye un complemento para el aprendizaje tradicional
-	y cuenta con una aceptaci&oacute;n muy buena por parte de estudiantes y profesores
-	en la <a href="http://www.ugr.es/">UGR</a>.
+	<h3>Server</h3>
+	
+	<p>
+	SWAD core is a <a href="http://en.wikipedia.org/wiki/Common_Gateway_Interface">CGI</a>
+	programmed in <a href="http://en.wikipedia.org/wiki/C_%28programming_language%29">C</a>
+	comprising almost all the functionality of the platform.
+	The core is supplemented with some external programs like photo processing module and chat module.
+	The server runs on a <a href="http://en.wikipedia.org/wiki/Linux">GNU/Linux</a> system
+	with <a href="http://en.wikipedia.org/wiki/Apache_HTTP_Server">Apache</a>
+	and a <a href="http://en.wikipedia.org/wiki/MySQL">MySQL</a>
+	or <a href="http://en.wikipedia.org/wiki/MariaDB">MariaDB</a> database.
 	</p>
-	<p align="justify">
-	Se ha <a href="http://swad.ugr.es/stat/">analizado el uso de la plataforma</a>
-	y se ha demostrado que los estudiantes utilizan frecuentemente
-	muchos de los servicios ofrecidos, principalmente la descarga de documentos de las asignaturas,
-	la consulta de calificaciones,
-	los ex&aacute;menes de tipo test y la mensajer&iacute;a interna.
-	Adem&aacute;s, se ha constatado que los estudiantes apenas necesitan instrucciones de uso.
-	</p>
-	<p align="justify">
-	Por parte de los profesores, podemos destacar que la utilizaci&oacute;n en las p&aacute;ginas de sus asignaturas de secciones
-	como las de enlaces, autoevaluaci&oacute;n,
-	consulta de calificaciones o foros de discusi&oacute;n es una idea contemplada en alguna ocasi&oacute;n por casi todos
-	y pocas veces desarrollada de forma particular.
-	El hecho de que estas y otras funcionalidades se incluyan en la plataforma
-	anima a su definitiva utilizaci&oacute;n.
-	Con la incorporaci&oacute;n de SWAD, la imagen de una asignatura mejora,
-	a pesar de no requerir mucho esfuerzo por parte del profesor.
-	</p>
-	<p align="justify">
-	SWAD es desde 2008 una de las tres herramientas de PRADO,
-	la plataforma de recursos de apoyo a la docencia de la UGR.
-	Desde 2010 es <a href="http://openswad.org/source/">libre</a> y puede utilizarse en cualquier instituci&oacute;n acad&eacute;mica.
-	Frente a otras herramientas usadas para el mismo fin,
-	debido a su <a href="http://openswad.org/source/">implementaci&oacute;n en lenguaje C</a>,
-	SWAD no requiere una gran infraestructura hardware y software,
-	ni siquiera en grandes universidades,
-	siendo suficiente un <a href="http://swad.ugr.es/server/">&uacute;nico servidor</a>.
-	</p>
-	<p align="justify">
-	En resumen, SWAD es una herramienta de gran utilidad
-	como un importante complemento a la docencia presencial,
-	con un coste de implantaci&oacute;n muy bajo incluso en grandes instituciones docentes.
+	
+	<h3>Clients</h3>
+	
+	<p>
+	Being a web application, the client can be any modern web browser.
+	To use the chat you must have Java runtime environment.
+	Besides the web client, there is an M-learning application for Android devices
+	called <a href="https://openswad.org/swadroid/">SWADroid</a>,
+	which implements some of the most used features in the web version.
 	</p>
 </dd>
 
-<dt><h2>M&aacute;s informaci&oacute;n</h2></dt>
+<dt><h2>More information</h2></dt>
 
 <dd>
 	<ul>
-		<li>Software libre
+		<li>Information
 			<ul>
-				<li><a href="/setup/">Procedimiento de instalaci&oacute;n</a></li>
-				<li><a href="/source/">C&oacute;digo fuente de SWAD</a></li>
-				<li><a href="/database/">Descripci&oacute;n de la base de datos</a></li>
-				<li><a href="/translation/">Traducci&oacute;n de SWAD a varios idiomas</a></li>
-				<li><a href="/ws/">Complementos y servicios web</a></li>
-				<li><a href="/changelog/">Registro de cambios</a></li>
-				<li><a href="/roadmap/">Mejoras futuras</a></li>
-				<li><a href="/author/">Autores y colaboradores</a></li>
-				<li><a href="/pfc/">Proyectos fin de carrera</a></li>
+			<li><a href="https://openswad.org/info/" target="_blank" title="What is SWAD?">
+			What is SWAD?</a></li>
+			<li><a href="https://twitter.com/openswad" target="_blank" title="@OpenSWAD">
+			@OpenSWAD</a></li>
+			<li><a href="http://openswad.wordpress.com/" target="_blank" title="Blog">
+			Blog</a></li>
+			<li><a href="https://openswad.org/paper/" target="_blank" title="Publications">
+			Publications</a></li>
+			<li><a href="https://openswad.org/press/" target="_blank" title="Press">
+			Press</a></li>
+			<li><a href="https://openswad.org/logo/" target="_blank" title="Logos">
+			Logos</a></li>
+			<li><a href="http://www.cafepress.com/swad_ugr_es/" target="_blank" title="Shop">
+			Shop</a></li>
 			</ul>
 		</li>
-		<li>Informaci&oacute;n
+		<li>Documentation
 			<ul>
-				<li><a href="/info/">&iquest;Qu&eacute; es SWAD?</a></li>
-				<li><a href="http://twitter.com/openswad">Twitter</a></li>
-				<li><a href="http://openswad.wordpress.com/">Blog</a></li>
-				<li><a href="/paper/">Publicaciones sobre SWAD</a></li>
-				<li><a href="/press/">Recortes de prensa</a></li>
-				<li><a href="/logo/">Logos en distintos tama&ntilde;os</a></li>
-				<li><a href="http://www.cafepress.com/swad_ugr_es/">Objetos promocionales (tienda virtual)</a></li>
-				<li><a href="mailto:openswad@gmail.com">Correo electr&oacute;nico</a></li>
+			<li><a href="https://openswad.org/SWAD-manual-EN.pdf" target="_blank" title="Basic manual (EN)">
+			Basic manual (EN)</a></li>
+			<li><a href="https://openswad.org/SWAD-manual-ES.pdf" target="_blank" title="Manual b&aacute;sico (ES)">
+			Manual b&aacute;sico (ES)</a></li>
+			<li><a href="https://openswad.org/presentation/" target="_blank" title="Presentations">
+			Presentations</a></li>
+			<li><a href="https://openswad.org/video/" target="_blank" title="Videotutorials">
+			Videotutorials</a></li>
+			<li><a href="https://openswad.org/tool/" target="_blank" title="Tools">
+			Tools</a></li>
 			</ul>
 		</li>
-		<li>Documentaci&oacute;n
+		<li>Mobile
 			<ul>
-				<li><a href="/SWAD-sheet.pdf">Manual b&aacute;sico</a></li>
-				<li><a href="/presentation/">Presentaciones</a></li>
-				<li><a href="/video/">Videotutoriales</a></li>
-				<li><a href="/tool/">Herramientas y funcionalidades</a></li>
-				<li><a href="http://swad.ugr.es/wiki/index.php/FAQ">FAQ (preguntas frecuentes)</a></li>
-				<li><a href="http://swad.ugr.es/wiki/">Wiki SWAD (manual creado colaborativamente)</a></li>
+			<li><a href="https://openswad.org/swadroid/" target="_blank" title="SWADroid: SWAD App para Android">
+			SWADroid</a></li>
+			<li><a href="https://twitter.com/swadroid" target="_blank" title="@SWADroid">
+			@SWADroid</a></li>
+			<li><a href="http://swadroid.wordpress.com/" target="_blank" title="SWADroid Blog">
+			SWADroid Blog</a></li>
+			<li><a href="https://twitter.com/iswad_ugr" target="_blank" title="@iswad_ugr">
+			@iswad_ugr</a></li>
 			</ul>
 		</li>
-		<li>SWAD en el m&oacute;vil
+		<li>Free software
 			<ul>
-				<li><a href="http://openswad.org/mobile/">SWAD para m&oacute;viles</a></li>
-				<li><a href="https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid&hl=es">SWADroid</a></li>
-				<li><a href="http://swadroid.wordpress.com/">Blog de SWADroid</a></li>
-				<li><a href="https://twitter.com/swadroid">Twitter de SWADroid</a></li>
-				<li><a href="https://twitter.com/iswad_ugr">Twitter de iSWAD</a></li>
+			<li><a href="https://openswad.org/source/" target="_blank" title="Source code">
+			Source code</a></li>
+			<li><a href="https://openswad.org/download/" target="_blank" title="Download">
+			Download</a></li>
+			<li><a href="https://openswad.org/install/" target="_blank" title="Install">
+			Install</a></li>
+			<li><a href="https://openswad.org/database/" target="_blank" title="Database">
+			Database</a></li>
+			<li><a href="https://openswad.org/translation/" target="_blank" title="Translation">
+			Translation</a></li>
+			<li><a href="https://openswad.org/ws/" target="_blank" title="Plugins">
+			Plugins</a></li>
+			<li><a href="https://openswad.org/changelog/" target="_blank" title="Changelog">
+			Changelog</a></li>
+			<li><a href="https://openswad.org/roadmap/" target="_blank" title="Roadmap">
+			Roadmap</a></li>
+			<li><a href="https://openswad.org/author/" target="_blank" title="Authors">
+			Authors</a></li>
+			<li><a href="https://openswad.org/pfc/" target="_blank" title="Proyectos fin de carrera">
+			Proyectos fin de carrera</a></li>
 			</ul>
 		</li>
-		<li><a href="http://swad.ugr.es/">SWAD en la UGR</a>
+		<li>Installations
 			<ul>
-				<li><a href="http://swad.ugr.es/begin/">&iquest;C&oacute;mo se puede acceder a SWAD? (informaci&oacute;n para principiantes)</a></li>
-				<li><a href="https://swad.ugr.es/?Layout=0">Acceso a SWAD, interfaz est&aacute;ndar</a></li>
-				<li><a href="https://swad.ugr.es/?Layout=1">Acceso a SWAD, interfaz sencilla</a></li>
-				<li><a href="http://twitter.com/swad_ugr">Twitter: @swad_ugr</a></li>
-				<li><a href="http://swad.ugr.es/stat/">Estad&iacute;sticas de acceso en la UGR</a></li>
-				<li><a href="http://swad.ugr.es/server/">Servidor web de SWAD en la UGR</a></li>
-				<li><a href="http://swad.ugr.es/PRADO-comparativa.pdf">Comparativa de herramientas de PRADO</a></li>
-				<li><a href="http://swad.ugr.es/encuentro/">I Encuentro de usuarios</a></li>
-			</ul>
-		</li>
-		<li><a href="http://www.cevuna.una.py/swad/">SWAD en la UNA (Paraguay)</a>
-			<ul>
-				<li><a href="https://www.cevuna.una.py/swad/?Layout=0">Acceso a SWAD, interfaz est&aacute;ndar</a></li>
-				<li><a href="https://www.cevuna.una.py/swad/?Layout=1">Acceso a SWAD, interfaz sencilla</a></li>
-			</ul>
-		</li>
-		<li><a href="http://openswad.org">SWAD en OpenSWAD.org</a>
-			<ul>
-				<li><a href="https://openswad.org/swad/?Layout=0">Acceso a SWAD, interfaz est&aacute;ndar</a></li>
-				<li><a href="https://openswad.org/swad/?Layout=1">Acceso a SWAD, interfaz sencilla</a></li>
-				<li><a href="http://twitter.com/openswad">Twitter: @OpenSWAD</a></li>
-				<li><a href="http://openswad.wordpress.com/">Blog de OpenSWAD</a></li>
-			</ul>
+			<li><a href="https://openswad.org/">OpenSWAD.org</a>
+			<li><a href="https://swad.ugr.es/">UGR</a>
+				<ul>
+				<li><a href="https://twitter.com/swad_ugr" target="_blank">
+				@swad_ugr</a></li>
+				<li><a href="https://swad.ugr.es/stat/" target="_blank">
+				Stats</a></li>
+				<li><a href="https://swad.ugr.es/server/" target="_blank">
+				Server</a></li>
+				<li><a href="https://swad.ugr.es/encuentro/" target="_blank">
+				Meeting</a></li>
+				</ul>
+			</li>
+			<li><a href="http://www.cevuna.una.py/swad/">UNA (Paraguay)</a>
+			</li>
 		</li>
 	</ul>
 </dd>

@@ -21,7 +21,14 @@ img		{border-width:0px; border-style:none;}
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-40768375-1', 'openswad.org');
+  ga('create', 'UA-40768375-1', 'openswad.org', {
+    'anonymizeIp': true,
+    'storage': 'none',
+    'clientId': window.localStorage.getItem('ga_clientId')
+  });
+  ga(function(tracker) {
+    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));
+  });
   ga('send', 'pageview');
 
 </script>

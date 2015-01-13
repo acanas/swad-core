@@ -20,7 +20,14 @@ img		{border-width:0px; border-style:none;}
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-40768375-1', 'openswad.org');
+  ga('create', 'UA-40768375-1', 'openswad.org', {
+    'anonymizeIp': true,
+    'storage': 'none',
+    'clientId': window.localStorage.getItem('ga_clientId')
+  });
+  ga(function(tracker) {
+    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));
+  });
   ga('send', 'pageview');
 
 </script>
@@ -54,47 +61,48 @@ img		{border-width:0px; border-style:none;}
 
 		<div style="width:425px" id="__ss_8438290">
 		<strong style="display:block;margin:12px 0 4px">
-		<a href="http://www.slideshare.net/acanas/swad-introduccin-y-funcionalidades" title="SWAD: introducci&oacute;n y funcionalidades">
+		<a href="https://www.slideshare.net/acanas/swad-introduccin-y-funcionalidades" title="SWAD: introducci&oacute;n y funcionalidades">
 		SWAD: introducci&oacute;n y funcionalidades</a>
 		</strong>
-		<iframe src="http://www.slideshare.net/slideshow/embed_code/8438290" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<iframe src="https://www.slideshare.net/slideshow/embed_code/8438290" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 
 		<div style="width:425px" id="__ss_8438341">
 		<strong style="display:block;margin:12px 0 4px">
-		<a href="http://www.slideshare.net/acanas/swad-manual-bsico" title="SWAD: manual b&aacute;sico">
+		<a href="https://www.slideshare.net/acanas/swad-manual-bsico" title="SWAD: manual b&aacute;sico">
 		SWAD: manual b&aacute;sico</a>
 		</strong>
-		<iframe src="http://www.slideshare.net/slideshow/embed_code/8438341" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<iframe src="https://www.slideshare.net/slideshow/embed_code/8438341" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 
 		<div style="width:425px" id="__ss_8438376">
 		<strong style="display:block;margin:12px 0 4px">
-		<a href="http://www.slideshare.net/acanas/swad-estadsticas-de-uso-en-la-ugr" title="SWAD: estad&iacute;sticas de uso en la UGR">
+		<a href="https://www.slideshare.net/acanas/swad-estadsticas-de-uso-en-la-ugr" title="SWAD: estad&iacute;sticas de uso en la UGR">
 		SWAD: estad&iacute;sticas de uso en la UGR</a>
 		</strong>
-		<iframe src="http://www.slideshare.net/slideshow/embed_code/8438376" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<iframe src="https://www.slideshare.net/slideshow/embed_code/8438376" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 
 		<div style="width:425px" id="__ss_8438441">
 		<strong style="display:block;margin:12px 0 4px">
-		<a href="http://www.slideshare.net/acanas/swad-implementacin" title="SWAD: implementaci&oacute;n">
+		<a href="https://www.slideshare.net/acanas/swad-implementacin" title="SWAD: implementaci&oacute;n">
 		SWAD: implementaci&oacute;n</a>
 		</strong>
-		<iframe src="http://www.slideshare.net/slideshow/embed_code/8438441" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<iframe src="https://www.slideshare.net/slideshow/embed_code/8438441" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 
 		<div style="width:425px" id="__ss_8438491">
 		<strong style="display:block;margin:12px 0 4px">
-		<a href="http://www.slideshare.net/acanas/swad-en-el-mvil" title="SWAD: en el m&oacute;vil">
+		<a href="https://www.slideshare.net/acanas/swad-en-el-mvil" title="SWAD: en el m&oacute;vil">
 		SWAD: en el m&oacute;vil</a>
 		</strong>
-		<iframe src="http://www.slideshare.net/slideshow/embed_code/8438491" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<iframe src="https://www.slideshare.net/slideshow/embed_code/8438491" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 
 	</td>
 	</tr>
 
+<!--
 	<tr>
 	<td align="center">
 		<h2>PRADO - SWAD</h2>
@@ -316,6 +324,7 @@ img		{border-width:0px; border-style:none;}
 
 	</td>
 	</tr>
+-->
 
      </table>
     </td>

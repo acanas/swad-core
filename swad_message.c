@@ -2782,7 +2782,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" class=\"F18x24\" />"
 	                 "</td>"
                          "<td class=\"%s\" style=\"width:%upx; text-align:left;",
-               Style,Gbl.Prefs.IconsURL,WidthOfNameColumn);
+               Gbl.Prefs.IconsURL,Style,WidthOfNameColumn);
       if (BgColor)
          fprintf (Gbl.F.Out," background-color:%s;",BgColor);
       fprintf (Gbl.F.Out,"\">&nbsp;");
