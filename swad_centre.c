@@ -81,7 +81,7 @@ static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName);
-static bool Ctr_CheckIfCentreNameExists (const char *FieldName,const char *Name,long CtrCod);
+static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists);
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
@@ -1601,7 +1601,7 @@ static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_CheckIfCentreNameExists (ParamName,NewCtrName,Ctr->CtrCod))
+         if (Ctr_CheckIfCentreNameExistsInCurrentIns (ParamName,NewCtrName,Ctr->CtrCod))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      NewCtrName);
@@ -1637,14 +1637,14 @@ static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
 /********************* Check if the name of centre exists ********************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfCentreNameExists (const char *FieldName,const char *Name,long CtrCod)
+static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod)
   {
    char Query[512];
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE %s='%s' AND CtrCod<>'%ld'",
-            FieldName,Name,CtrCod);
+	          " WHERE InsCod='%ld' AND %s='%s' AND CtrCod<>'%ld'",
+            Gbl.CurrentIns.Ins.InsCod,FieldName,Name,CtrCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a centre already existed") != 0);
   }
 
@@ -2216,13 +2216,13 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       if (Ctr->WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCentreNameExists ("ShortName",Ctr->ShortName,-1L))
+         if (Ctr_CheckIfCentreNameExistsInCurrentIns ("ShortName",Ctr->ShortName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      Ctr->ShortName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
-         else if (Ctr_CheckIfCentreNameExists ("FullName",Ctr->FullName,-1L))
+         else if (Ctr_CheckIfCentreNameExistsInCurrentIns ("FullName",Ctr->FullName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      Ctr->FullName);
