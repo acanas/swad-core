@@ -2106,11 +2106,11 @@ void Ins_DrawInstitutionLogo (const char *Logo,const char *AltText,
    if (Logo)
       if (Logo[0])
 	{
-	 sprintf (PathLogo,"%s/%s/%s/%s%ux%u.gif",
+	 sprintf (PathLogo,"%s/%s/%s/%s64x64.gif",
 		  Cfg_PATH_SWAD_PUBLIC,
 		  Cfg_FOLDER_PUBLIC_ICON,
 		  Cfg_ICON_FOLDER_INSTITUTIONS,
-		  Logo,Size,Size);
+		  Logo);
          LogoExists = Fil_CheckIfPathExists (PathLogo);
 	}
 
@@ -2122,8 +2122,8 @@ void Ins_DrawInstitutionLogo (const char *Logo,const char *AltText,
    else
       fprintf (Gbl.F.Out,"%s/ins",
 	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"%ux%u.gif\" alt=\"%s\" class=\"ICON%ux%u\"",
-            Size,Size,AltText,Size,Size);
+   fprintf (Gbl.F.Out,"64x64.gif\" alt=\"%s\" class=\"ICON%ux%u\"",
+            AltText,Size,Size);
    if (Style)
       if (Style[0])
          fprintf (Gbl.F.Out," style=\"%s\"",Style);

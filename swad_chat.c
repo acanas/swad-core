@@ -170,7 +170,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
       /* Link to the room of this degree */
       IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegrees.Num-1);
-      sprintf (Icon,"<img src=\"%s/%s/%s16x16.gif\""
+      sprintf (Icon,"<img src=\"%s/%s/%s64x64.gif\""
 	            " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,Deg.Logo);
       sprintf (ThisRoomCode,"DEG_%ld",Deg.DegCod);

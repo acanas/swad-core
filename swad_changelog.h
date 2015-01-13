@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.54.4 (2015/01/13)"
+#define Log_PLATFORM_VERSION	"SWAD 14.54.5 (2015/01/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.54.5:  Jan 13, 2015	Icons for institutions, centres and degrees always in 64x64 pixels. (173346 lines)
 	Version 14.54.4:  Jan 13, 2015	Fized bug in photos. (173345 lines)
 	Version 14.54.3:  Jan 06, 2015	Changes in themes and colors. (173344 lines)
 	Version 14.54.2:  Jan 05, 2015	Changes in yellow theme. (173339 lines)

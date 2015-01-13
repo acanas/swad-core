@@ -3308,7 +3308,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Deg_PutParamDegCod (DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[4]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" alt=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" alt=\"%s\""
                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
                       "&nbsp;%s (%s)"
                       "</a>"
