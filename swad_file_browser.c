@@ -6399,7 +6399,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                       " class=\"dropzone\""
                       " enctype=\"multipart/form-data\""
                       " id=\"my-awesome-dropzone\""
-                      " style=\"display:inline-block;width:100%%; background:url('%s/upload320x320.gif') no-repeat center;\">",
+                      " style=\"display:inline-block; width:100%%;"
+                      " background:url('%s/upload320x320.gif') no-repeat center;\">",
             Cfg_HTTPS_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Prefs.IconsURL);
@@ -8038,12 +8039,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,Brw_FileType_t FileT
 		                           FileNameToShow);
       Brw_PutIconFile (32,FileType,Gbl.FileBrowser.FilFolLnkName);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/%s/download32x32.gif\""
+			 "<img src=\"%s/%s/download64x64.gif\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON32x32\">"
 			 "</a>",
 	       FileNameToShow,
-	       Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+	       Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	       Txt_Download,Txt_Download);
      }
   }

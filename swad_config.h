@@ -401,9 +401,7 @@
 #define Cfg_ICON_FOLDER_DEGREES			"degree"	// Directory with icons for degrees
 #define Cfg_ICON_FOLDER_FILEXT			"filext"	// Directory with icons for file extensions
 #define Cfg_ICON_FOLDER_PLUGINS			"plugin"	// Directory with icons for plugins
-#define Cfg_ICON_ACTION_16x16			"action16x16"	// Directory with icons for MFU actions
-#define Cfg_ICON_ACTION_32x32			"action32x32"	// Directory with icons for menu actions
-#define Cfg_ICON_ACTION_64x64			"action64x64"	// Directory with icons for title of current menu action
+#define Cfg_ICON_ACTION				"action64x64"	// Directory with icons for title of current menu action
 #define Cfg_ICON_128x128			"128x128"	// Directory with big size icons
 
 /* Folders and file used to store syllabus */

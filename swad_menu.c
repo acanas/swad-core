@@ -125,8 +125,9 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
 
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_OPTION\""
-			    " style=\"background-image: url('%s/%s/%s32x32.gif');\">",
-	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+			    " style=\"background-image:url('%s/%s/%s64x64.gif');"
+			    " background-size:32px 32px;\"\">",
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[NumAct].Icon);
 
          /***** Text *****/
@@ -206,13 +207,13 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
          Act_FormStart (NumAct);
          Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                          The_ClassMenuOff[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 	                    " alt=\"%s\" class=\"ICON28x28\""
 	                    " style=\"margin:0;\" />"
 			    "<div>%s</div>"
                             "</a>"
                             "</form>",
-	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	          Act_Actions[NumAct].Icon,
 	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
@@ -279,7 +280,7 @@ void Mnu_WriteMenuThisTabMobile (void)
                             "</form>"
                             "</div>"
                             "</td>",
-	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_64x64,
+	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	          Act_Actions[NumAct].Icon,
 	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);

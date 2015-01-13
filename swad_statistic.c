@@ -2955,8 +2955,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    /***** Start of cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"width:%upx; height:1px;"
 	              " text-align:left; vertical-align:bottom;"
-	              " background-image: url('%s/malla%c48x1.gif');"
-	              " background-repeat: repeat;\">",
+	              " background-image:url('%s/malla%c48x1.gif');"
+	              " background-repeat:repeat;\">",
 	    NUM_DIVISIONS_X*2,WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
@@ -6386,8 +6386,8 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:left;\">"
-                         "<img src=\"%s/%s/%s/%s/heart32x32.gif\" alt=\"%s\""
-                         " style=\"wisth:32px; height:32px;\" />"
+                         "<img src=\"%s/%s/%s/%s/heart64x64.gif\" alt=\"%s\""
+                         " class=\"ICON32x32\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
                          "%u"
@@ -6399,7 +6399,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
-               Cfg_ICON_ACTION_32x32,
+               Cfg_ICON_ACTION,
                Ico_IconSetNames[IconSet],
                NumUsrs[IconSet],
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /

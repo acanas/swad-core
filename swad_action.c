@@ -4094,9 +4094,9 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,The_ClassFormulNB[Gbl.Prefs.Theme]);
 
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s32x32.gif\" alt=\"%s\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" alt=\"%s\""
 	                    " class=\"ICON32x32\" style=\"margin:4px;\" />",
-		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_32x32,
+		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		  Act_Actions[Action].Icon,Title);
          sprintf (ActionStr,"%s &gt; %s",
                   Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],
@@ -4149,8 +4149,8 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
         {
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"width:4px; text-align:left;"
-                            " background-image: url('%s/mbw2_4x1.gif');"
-                            " background-repeat: repeat-y;\">"
+                            " background-image:url('%s/mbw2_4x1.gif');"
+                            " background-repeat:repeat-y;\">"
                             "</td>",
                   Gbl.Prefs.IconsURL);
 
@@ -4160,9 +4160,9 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
                             " vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,"MFU_ACT");
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" vspace=\"1\" alt=\"%s\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" vspace=\"1\" alt=\"%s\""
                             " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-                  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION_16x16,
+                  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[Action].Icon,Title);
 
          strcpy (ActionStr,Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
