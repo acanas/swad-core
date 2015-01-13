@@ -385,7 +385,7 @@ void Pho_RemoveUsrPhoto (void)
 
 void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
   {
-   extern const char *Txt_The_file_is_not_jpg;
+   extern const char *Txt_The_file_is_not_X;
    extern const char *Txt_Could_not_detect_any_face_in_front_position_;
    extern const char *Txt_A_face_marked_in_green_has_been_detected_;
    extern const char *Txt_A_face_marked_in_red_has_been_detected_;
@@ -450,7 +450,8 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                   WrongType = true;
    if (WrongType)
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_file_is_not_jpg);
+      sprintf (Gbl.Message,Txt_The_file_is_not_X,"jpg");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
       return;
      }
 
@@ -460,7 +461,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
             Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp))
      {
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
       return;
      }
 

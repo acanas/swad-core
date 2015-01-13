@@ -378,11 +378,10 @@ mysql> DESCRIBE centres;
 | RequesterUsrCod  | int(11)      | NO   |     | -1      |                |
 | ShortName        | varchar(32)  | NO   |     | NULL    |                |
 | FullName         | varchar(127) | NO   |     | NULL    |                |
-| Logo             | varchar(16)  | NO   |     | NULL    |                |
 | WWW              | varchar(255) | NO   |     | NULL    |                |
 | PhotoAttribution | text         | NO   |     | NULL    |                |
 +------------------+--------------+------+-----+---------+----------------+
-10 rows in set (0.01 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS centres ("
                    "CtrCod INT NOT NULL AUTO_INCREMENT,"
@@ -392,7 +391,6 @@ mysql> DESCRIBE centres;
                    "RequesterUsrCod INT NOT NULL DEFAULT -1,"
                    "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
-                   "Logo VARCHAR(16) NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
                    "PhotoAttribution TEXT NOT NULL,"
                    "UNIQUE INDEX(CtrCod),INDEX(InsCod),INDEX(PlcCod),INDEX(Status))");

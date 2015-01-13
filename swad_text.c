@@ -3996,6 +3996,27 @@ const char *Txt_Change_IDs =
 	"Alterar n&ordm;s. identif.";
 #endif
 
+const char *Txt_Change_logo =
+#if   L==0
+	"Canviar logo";
+#elif L==1
+	"Logo &auml;ndern";
+#elif L==2
+	"Change logo";
+#elif L==3
+	"Cambiar logo";
+#elif L==4
+	"Changer logo";
+#elif L==5
+	"Cambiar logo";		// Okoteve traducción
+#elif L==6
+	"Cambiare logo";
+#elif L==7
+	"Zmie&nacute; logo";
+#elif L==8
+	"Alterar logotipo";
+#endif
+
 const char *Txt_Change_my_groups =
 #if   L==0
 	"Canviar de grups";
@@ -10728,6 +10749,27 @@ const char *Txt_FILE_UPLOAD_Done =
 	"Gotowe";
 #elif L==8
 	"Terminar";
+#endif
+
+const char *Txt_File_with_the_logo =
+#if   L==0
+	"Fitxer amb el logo";
+#elif L==1
+	"Datei mit dem Logo";
+#elif L==2
+	"File with the logo";
+#elif L==3
+	"Archivo con el logo";
+#elif L==4
+	"Fichier avec le logo";
+#elif L==5
+	"Archivo con el logo";	// Okoteve traducción
+#elif L==6
+	"File con il logo";
+#elif L==7
+	"Plik ze logo";
+#elif L==8
+	"Arquivo com o logotipo";
 #endif
 
 const char *Txt_File_with_the_photo =
@@ -38127,46 +38169,25 @@ const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 	" dentro do diret&oacute;rio <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_file_is_not_jpg =
+const char *Txt_The_file_is_not_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"El archivo no es <em>jpg</em>.";	// Necessita traduccio
+	"El archivo no es <em>%s</em>.";	// Necessita traduccio
 #elif L==1
-	"The file is not <em>jpg</em>.";	// Need Übersetzung
+	"The file is not <em>%s</em>.";	// Need Übersetzung
 #elif L==2
-	"The file is not <em>jpg</em>.";
+	"The file is not <em>%s</em>.";
 #elif L==3
-	"El archivo no es <em>jpg</em>.";
+	"El archivo no es <em>%s</em>.";
 #elif L==4
-	"The file is not <em>jpg</em>.";	// Besoin de traduction
+	"The file is not <em>%s</em>.";	// Besoin de traduction
 #elif L==5
-	"El archivo no es <em>jpg</em>.";	// Okoteve traducción
+	"El archivo no es <em>%s</em>.";	// Okoteve traducción
 #elif L==6
-	"IL file non &egrave; <em>jpg</em>.";
+	"IL file non &egrave; <em>%s</em>.";
 #elif L==7
-	"The file is not <em>jpg</em>.";	// Potrzebujesz tlumaczenie
+	"The file is not <em>%s</em>.";	// Potrzebujesz tlumaczenie
 #elif L==8
-	"The file is not <em>jpg</em>.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_file_is_not_xml =
-#if   L==0
-	"El archivo no es <em>xml</em>.";	// Necessita traduccio
-#elif L==1
-	"The file is not <em>xml</em>.";	// Need Übersetzung
-#elif L==2
-	"The file is not <em>xml</em>.";
-#elif L==3
-	"El archivo no es <em>xml</em>.";
-#elif L==4
-	"The file is not <em>xml</em>.";	// Besoin de traduction
-#elif L==5
-	"El archivo no es <em>xml</em>.";	// Okoteve traducción
-#elif L==6
-	"IL file non &egrave; <em>xml</em>.";
-#elif L==7
-	"The file is not <em>xml</em>.";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"The file is not <em>xml</em>.";	// Necessita de tradução
+	"The file is not <em>%s</em>.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
@@ -45238,6 +45259,27 @@ const char *Txt_Upload_files_QUESTION =
 	"Fazer upload<br />de arquivos?";
 #endif
 
+const char *Txt_Upload_logo =
+#if   L==0
+	"Enviar logo";
+#elif L==1
+	"Upload Logo";
+#elif L==2
+	"Upload logo";
+#elif L==3
+	"Subir logo";
+#elif L==4
+	"T&eacute;l&eacute;charger logo";
+#elif L==5
+	"Subir logo";		// Okoteve traducción
+#elif L==6
+	"Caricare logo";
+#elif L==7
+	"Upload logo";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Fazer upload de logotipo";
+#endif
+
 const char *Txt_Upload_photo =
 #if   L==0
 	"Enviar foto";
@@ -48486,6 +48528,36 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 #elif L==8
 	"You can register voluntarily"
 	" in one or more groups of type %s.";		// Necessita de tradução
+#endif
+
+const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
+#if   L==0
+	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Necessita traduccio
+#elif L==1
+	"You can send a file with an image in <em>png</em> format,"
+	" transparent background and size %u&times;%u pixels.";			// Need Übersetzung
+#elif L==2
+	"You can send a file with an image in <em>png</em> format,"
+	" transparent background and size %u&times;%u pixels.";
+#elif L==3
+	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";
+#elif L==4
+	"You can send a file with an image in <em>png</em> format,"
+	" transparent background and size %u&times;%u pixels.";			// Besoin de traduction
+#elif L==5
+	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Okoteve traducción
+#elif L==6
+	"Puoi inviare un file con un'immagine in formato <em>png</em>,"
+	" sfondo trasparente e di dimensione %u&times;%u pixel.";
+#elif L==7
+	"You can send a file with an image in <em>png</em> format,"
+	" transparent background and size %u&times;%u pixels.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"You can send a file with an image in <em>png</em> format,"
+	" transparent background and size %u&times;%u pixels.";			// Necessita de tradução
 #endif
 
 const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_ =

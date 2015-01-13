@@ -271,9 +271,6 @@
 #define Cfg_ABOUT_SWAD_URL		"http://openswad.org/info/"
 #define Cfg_HOW_TO_COLLABORATE_URL	"http://swad.ugr.es/wiki/index.php/Colaborar"
 
-/* Link to nettiquete rules for messages */
-// #define Cfg_NETTIQUETE			"http://swad.ugr.es/wiki/index.php/Netiquette"
-
 /* Link to download Java: keep updated! */
 #define Cfg_JAVA_URL			"http://www.java.com/es/download/"
 #define Cfg_JAVA_NAME			"Java Runtime Environment"
@@ -397,7 +394,6 @@
 #define Cfg_ICON_FOLDER_ICON_SETS		"iconset"	// Directory with all the icons for each icon set
 #define Cfg_ICON_FOLDER_COUNTRIES		"country"	// Directory with icons for countries
 #define Cfg_ICON_FOLDER_INSTITUTIONS		"institution"	// Directory with icons for institutions
-#define Cfg_ICON_FOLDER_CENTRES			"centre"	// Directory with icons for centres
 #define Cfg_ICON_FOLDER_DEGREES			"degree"	// Directory with icons for degrees
 #define Cfg_ICON_FOLDER_FILEXT			"filext"	// Directory with icons for file extensions
 #define Cfg_ICON_FOLDER_PLUGINS			"plugin"	// Directory with icons for plugins

@@ -55,7 +55,6 @@ typedef enum
 
 #define Ctr_MAX_LENGTH_CENTRE_SHORT_NAME	     32
 #define Ctr_MAX_LENGTH_CENTRE_FULL_NAME		    127
-#define Ctr_MAX_LENGTH_CENTRE_LOGO		     16
 #define Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION	(4*1024)
 
 struct Centre
@@ -67,7 +66,6 @@ struct Centre
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
    char ShortName[Ctr_MAX_LENGTH_CENTRE_SHORT_NAME+1];
    char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
-   char Logo[Ctr_MAX_LENGTH_CENTRE_LOGO+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumDegs;		// Number of degrees in this centre
    unsigned NumTchs;		// Number of teachers in this centre
@@ -103,10 +101,11 @@ void Ctr_ChangeCentreIns (void);
 void Ctr_ChangeCentrePlace (void);
 void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
-void Ctr_ChangeCtrLogo (void);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
-void Ctr_ReqPhoto (void);
+void Ctr_RequestLogo (void);
+void Ctr_ReceiveLogo (void);
+void Ctr_RequestPhoto (void);
 void Ctr_ReceivePhoto (void);
 void Ctr_ChangeCtrPhotoAttribution (void);
 void Ctr_RecFormReqCtr (void);
@@ -120,7 +119,7 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-void Ctr_DrawCentreLogo (const char *Logo,const char *AltText,
+void Ctr_DrawCentreLogo (long CtrCod,const char *AltText,
                          unsigned Size,const char *Style);
 
 unsigned Ctr_ListCtrsFound (const char *Query);

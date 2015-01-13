@@ -216,10 +216,11 @@ Centre:
 	116. ActCtrSch			Search for courses, teachers, documents...
 
 	117. ActPrnCtrInf		Print information on the current centre
-	118. ActReqCtrPho		Show form to send the photo of the current centre
-	119. ActRecCtrPho		Receive and store the photo of the current centre
-	120. ActChgCtrPhoAtt		Change attribution of centre photo
-	121. ActChgCtrLog		Change logo of centre
+	---. ActReqCtrLog		Show form to send the logo of the current centre
+	118. ActRecCtrLog		Receive and store the logo of the current centre
+	119. ActReqCtrPho		Show form to send the photo of the current centre
+	120. ActRecCtrPho		Receive and store the photo of the current centre
+	121. ActChgCtrPhoAtt		Change attribution of centre photo
 
 	122. ActEdiDeg			Request edition of degrees of a type
 	123. ActReqDeg			Request the creation of a request for a new degree (a teacher makes the petition to an administrator)
@@ -1358,10 +1359,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCtrSch		*/{1183,-1,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
 
    /* ActPrnCtrInf	*/{1152,-1,TabCtr,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ctr_PrintConfiguration		,NULL},
-   /* ActReqCtrPho	*/{1160,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ReqPhoto			,NULL},
+   /* ActReqCtrLog	*/{1244,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RequestLogo		,NULL},
+   /* ActRecCtrLog	*/{1051,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ctr_ReceiveLogo		,NULL},
+   /* ActReqCtrPho	*/{1160,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RequestPhoto		,NULL},
    /* ActRecCtrPho	*/{1161,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ctr_ReceivePhoto		,NULL},
    /* ActChgCtrPhoAtt	*/{1159,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCtrPhotoAttribution	,NULL},
-   /* ActChgCtrLog	*/{1051,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCtrLogo		,NULL},
 
    /* ActEdiDeg		*/{ 536,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_EditDegrees		,NULL},
    /* ActReqDeg		*/{1206,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RecFormReqDeg		,NULL},
@@ -3330,7 +3332,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
         ActChgDatBrf,		// #1048
 	ActChgDegCtr,		// #1049
 	-1,			// #1050 (obsolete action)
-	ActChgCtrLog,		// #1051
+	ActRecCtrLog,		// #1051
 	-1,			// #1052 (obsolete action)
 	ActReqCrs,		// #1053
 	ActReqSignUp,		// #1054
@@ -3523,6 +3525,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActNewIDOth,		// #1241
 	ActSeeSyl,		// #1242
 	ActChgMnu,		// #1243
+	ActReqCtrLog,		// #1244
 	};
 
 /*****************************************************************************/

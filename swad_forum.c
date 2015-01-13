@@ -2150,7 +2150,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Ctr_DrawCentreLogo (Gbl.Forum.Ctr.Logo,ForumName,16,"vertical-align:middle;");
+         Ctr_DrawCentreLogo (Gbl.Forum.Ctr.CtrCod,ForumName,16,"vertical-align:middle;");
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:

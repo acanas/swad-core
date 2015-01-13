@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+39+22+17+204+184+94+168+28+75)
+#define Act_NUM_ACTIONS	(7+52+15+39+23+17+204+184+94+168+28+75)
 
-#define Act_MAX_ACTION_COD 1243
+#define Act_MAX_ACTION_COD 1244
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -233,24 +233,25 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 // Secondary actions
 #define ActCtrSch		(ActRenHld+  4)
 #define ActPrnCtrInf		(ActRenHld+  5)
-#define ActReqCtrPho		(ActRenHld+  6)
-#define ActRecCtrPho		(ActRenHld+  7)
-#define ActChgCtrPhoAtt		(ActRenHld+  8)
-#define ActChgCtrLog		(ActRenHld+  9)
+#define ActReqCtrLog		(ActRenHld+  6)
+#define ActRecCtrLog		(ActRenHld+  7)
+#define ActReqCtrPho		(ActRenHld+  8)
+#define ActRecCtrPho		(ActRenHld+  9)
+#define ActChgCtrPhoAtt		(ActRenHld+ 10)
 
-#define ActEdiDeg		(ActRenHld+ 10)
-#define ActReqDeg		(ActRenHld+ 11)
-#define ActNewDeg		(ActRenHld+ 12)
-#define ActRemDeg		(ActRenHld+ 13)
-#define ActRenDegSho		(ActRenHld+ 14)
-#define ActRenDegFul		(ActRenHld+ 15)
-#define ActChgDegTyp		(ActRenHld+ 16)
-#define ActChgDegCtr		(ActRenHld+ 17)
-#define ActChgDegFstYea		(ActRenHld+ 18)
-#define ActChgDegLstYea		(ActRenHld+ 19)
-#define ActChgDegOptYea		(ActRenHld+ 20)
-#define ActChgDegWWW		(ActRenHld+ 21)
-#define ActChgDegSta		(ActRenHld+ 22)
+#define ActEdiDeg		(ActRenHld+ 11)
+#define ActReqDeg		(ActRenHld+ 12)
+#define ActNewDeg		(ActRenHld+ 13)
+#define ActRemDeg		(ActRenHld+ 14)
+#define ActRenDegSho		(ActRenHld+ 15)
+#define ActRenDegFul		(ActRenHld+ 16)
+#define ActChgDegTyp		(ActRenHld+ 17)
+#define ActChgDegCtr		(ActRenHld+ 18)
+#define ActChgDegFstYea		(ActRenHld+ 19)
+#define ActChgDegLstYea		(ActRenHld+ 20)
+#define ActChgDegOptYea		(ActRenHld+ 21)
+#define ActChgDegWWW		(ActRenHld+ 22)
+#define ActChgDegSta		(ActRenHld+ 23)
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/

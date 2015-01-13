@@ -1949,7 +1949,7 @@ void Inf_ReceivePagInfo (void)
             FileIsOK = true;
            }
          else
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
         }
       else if (Str_FileIs (SourceFileName,"zip")) // .zip file
         {
@@ -1989,7 +1989,7 @@ void Inf_ReceivePagInfo (void)
                Lay_ShowErrorAndExit ("Can not unzip file.");
            }
          else
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
         }
       else
          Lay_ShowAlert (Lay_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);

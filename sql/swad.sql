@@ -146,7 +146,6 @@ CREATE TABLE IF NOT EXISTS centres (
 	RequesterUsrCod INT NOT NULL DEFAULT -1,
 	ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,
 	FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,
-	Logo VARCHAR(16) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
 	PhotoAttribution TEXT NOT NULL,
 	UNIQUE INDEX(CtrCod),

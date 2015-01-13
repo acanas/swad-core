@@ -39,11 +39,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.54.7 (2015/01/13)"
+#define Log_PLATFORM_VERSION	"SWAD 14.55 (2015/01/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.55  :  Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
+					3 changes necessary in database:
+UPDATE actions SET Txt='Enviar logo del centro' WHERE ActCod='1051' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de foto del centro');
+ALTER TABLE centres DROP COLUMN Logo;
+
 	Version 14.54.7:  Jan 13, 2015	Fixed bug in edition of centres. (173349 lines)
 	Version 14.54.6:  Jan 13, 2015	Tab and menu icons always in 64x64 pixels. (173348 lines)
 	Version 14.54.5:  Jan 13, 2015	Icons for institutions, centres and degrees always in 64x64 pixels. (173346 lines)

@@ -701,7 +701,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassFormul[Gbl.Prefs.Theme]);
-	    Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:middle;");
+	    Ctr_DrawCentreLogo (Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:middle;");
 	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
 	    if (Highlight)

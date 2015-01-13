@@ -82,6 +82,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
+static void Ctr_PutFormToChangeCtrLogo (bool LogoExists);
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists);
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
@@ -171,7 +172,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
-         Ctr_DrawCentreLogo (Ctr.Logo,Ctr.ShortName,16,"vertical-align:top;");
+         Ctr_DrawCentreLogo (Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -236,12 +237,13 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Centre;
    extern const char *Txt_Short_Name;
-   extern const char *Txt_Logo;
    extern const char *Txt_Shortcut_to_this_centre;
    extern const char *Txt_QR_code;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char PathLogo[PATH_MAX+1];
+   bool LogoExists;
    char PathPhoto[PATH_MAX+1];
    bool PhotoExists;
    char *PhotoAttribution = NULL;
@@ -249,6 +251,15 @@ static void Ctr_Configuration (bool PrintView)
 
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
+      /***** Path to logo *****/
+      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
+	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+      LogoExists = Fil_CheckIfPathExists (PathLogo);
+
+      /***** Path to photo *****/
       sprintf (PathPhoto,"%s/%s/%02u/%u/%u.jpg",
                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
@@ -266,8 +277,11 @@ static void Ctr_Configuration (bool PrintView)
 	 Lay_PutLinkToPrintView2 ();
 
 	 /* Link to upload photo */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	   {
+	    Ctr_PutFormToChangeCtrLogo (LogoExists);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
+	   }
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -284,7 +298,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
-      Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.Logo,
+      Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,
                           Gbl.CurrentCtr.Ctr.ShortName,
                           64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
@@ -381,28 +395,6 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_Short_Name,
 	       Gbl.CurrentCtr.Ctr.ShortName);
-
-      /***** Centre logo *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
-			    "%s:"
-			    "</td>"
-			    "<td style=\"text-align:left;"
-			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_Logo);
-	 Act_FormStart (ActChgCtrLog);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>"
-			    "</tr>",
-		  Ctr_MAX_LENGTH_CENTRE_LOGO,Gbl.CurrentCtr.Ctr.Logo,
-		  Gbl.FormId);
-	}
 
       /***** Link to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -560,7 +552,7 @@ static void Ctr_ListCentresForSeeing (void)
 
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.ShortName);
+            Gbl.CurrentIns.Ins.FullName);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
@@ -612,7 +604,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
-   Ctr_DrawCentreLogo (Ctr->Logo,Ctr->ShortName,16,"vertical-align:top;");
+   Ctr_DrawCentreLogo (Ctr->CtrCod,Ctr->ShortName,16,"vertical-align:top;");
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -759,7 +751,7 @@ void Ctr_GetListCentres (long InsCod)
    if (InsCod > 0)	// Only the centres of the specified institution
       sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
                      "centres.Status,centres.RequesterUsrCod,"
-		     "centres.ShortName,centres.FullName,centres.logo,centres.WWW,"
+		     "centres.ShortName,centres.FullName,centres.WWW,"
 		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
 		     " FROM centres,usr_data,crs_usr"
 		     " WHERE centres.InsCod='%ld' AND crs_usr.Role='%u'"
@@ -767,7 +759,7 @@ void Ctr_GetListCentres (long InsCod)
 		     " GROUP BY centres.CtrCod)"
 		     " UNION "
 		     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		     "ShortName,FullName,Logo,WWW,0 AS NumTchs"
+		     "ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM centres"
 		     " WHERE centres.InsCod='%ld' AND CtrCod NOT IN"
 		     " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
@@ -782,7 +774,7 @@ void Ctr_GetListCentres (long InsCod)
    else			// InsCod <= 0 ==> all the centres
       sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
                      "centres.Status,centres.RequesterUsrCod,"
-		     "centres.ShortName,centres.FullName,centres.Logo,centres.WWW,"
+		     "centres.ShortName,centres.FullName,centres.WWW,"
 		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
 		     " FROM centres,usr_data,crs_usr"
 		     " WHERE crs_usr.Role='%u'"
@@ -790,7 +782,7 @@ void Ctr_GetListCentres (long InsCod)
 		     " GROUP BY centres.CtrCod)"
 		     " UNION "
 		     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		     "ShortName,FullName,Logo,WWW,0 AS NumTchs"
+		     "ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM centres"
 		     " WHERE CtrCod NOT IN"
 		     " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
@@ -844,14 +836,11 @@ void Ctr_GetListCentres (long InsCod)
          /* Get the full name of the centre (row[6]) */
          strcpy (Ctr->FullName,row[6]);
 
-         /* Get the logo of the centre (row[7]) */
-         strcpy (Ctr->Logo,row[7]);
+         /* Get the URL of the centre (row[7]) */
+         strcpy (Ctr->WWW,row[7]);
 
-         /* Get the URL of the centre (row[8]) */
-         strcpy (Ctr->WWW,row[8]);
-
-         /* Get number of teachers in this centre (row[9]) */
-         if (sscanf (row[9],"%u",&Ctr->NumTchs) != 1)
+         /* Get number of teachers in this centre (row[8]) */
+         if (sscanf (row[8],"%u",&Ctr->NumTchs) != 1)
             Ctr->NumTchs = 0;
 
          /* Count number of degrees in this centre */
@@ -883,7 +872,6 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->RequesterUsrCod = -1L;
    Ctr->ShortName[0] = '\0';
    Ctr->FullName[0]  = '\0';
-   Ctr->Logo[0]      = '\0';
    Ctr->WWW[0]       = '\0';
    Ctr->NumDegs = 0;
    Ctr->NumTchs = 0;
@@ -893,13 +881,13 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
      {
       /***** Get data of a centre from database *****/
       sprintf (Query,"(SELECT centres.InsCod,centres.PlcCod,centres.Status,centres.RequesterUsrCod,centres.ShortName,centres.FullName,"
-                     "centres.Logo,centres.WWW,COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
+                     "centres.WWW,COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
                      " FROM centres,usr_data,crs_usr"
                      " WHERE centres.CtrCod='%ld'"
                      " AND centres.CtrCod=usr_data.CtrCod AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'"
                      " GROUP BY centres.CtrCod)"
                      " UNION "
-                     "(SELECT InsCod,PlcCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW,0 AS NumTchs"
+                     "(SELECT InsCod,PlcCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumTchs"
                      " FROM centres"
                      " WHERE CtrCod='%ld' AND CtrCod NOT IN"
                      " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
@@ -933,14 +921,11 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
          /* Get the full name of the centre (row[5]) */
          strcpy (Ctr->FullName,row[5]);
 
-         /* Get the logo of the centre (row[6]) */
-         strcpy (Ctr->Logo,row[6]);
+         /* Get the URL of the centre (row[6]) */
+         strcpy (Ctr->WWW,row[6]);
 
-         /* Get the URL of the centre (row[7]) */
-         strcpy (Ctr->WWW,row[7]);
-
-         /* Get number of teachers in this centre (row[8]) */
-         if (sscanf (row[8],"%u",&Ctr->NumTchs) != 1)
+         /* Get number of teachers in this centre (row[7]) */
+         if (sscanf (row[7],"%u",&Ctr->NumTchs) != 1)
             Ctr->NumTchs = 0;
 
          /* Count number of degrees in this centre */
@@ -1114,7 +1099,7 @@ static void Ctr_ListCentresForEdition (void)
 
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.ShortName);
+            Gbl.CurrentIns.Ins.FullName);
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForEdition ();
 
@@ -1158,11 +1143,11 @@ static void Ctr_ListCentresForEdition (void)
 	                 "</td>",
                Ctr->CtrCod);
 
-      /* Institution logo */
+      /* Centre logo */
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ctr->FullName);
-      Ctr_DrawCentreLogo (Ctr->Logo,Ctr->ShortName,16,NULL);
+      Ctr_DrawCentreLogo (Ctr->CtrCod,Ctr->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
@@ -1649,31 +1634,6 @@ static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const
   }
 
 /*****************************************************************************/
-/************************ Change the logo of a centre ************************/
-/*****************************************************************************/
-
-void Ctr_ChangeCtrLogo (void)
-  {
-   extern const char *Txt_The_new_logo_is_X;
-   char Query[256+Ctr_MAX_LENGTH_CENTRE_LOGO];
-
-   /***** Get the new logo for the centre from form *****/
-   Par_GetParToText ("Logo",Gbl.CurrentCtr.Ctr.Logo,Ctr_MAX_LENGTH_CENTRE_LOGO);
-
-   /***** Update the table changing old logo by new logo *****/
-   sprintf (Query,"UPDATE centres SET Logo='%s' WHERE CtrCod='%ld'",
-	    Gbl.CurrentCtr.Ctr.Logo,Gbl.CurrentCtr.Ctr.CtrCod);
-   DB_QueryUPDATE (Query,"can not update the logo of the centre");
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_new_logo_is_X,Gbl.CurrentCtr.Ctr.Logo);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Show the form again *****/
-   Ctr_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
 /************************* Change the URL of a centre ************************/
 /*****************************************************************************/
 
@@ -1766,6 +1726,131 @@ void Ctr_ChangeCtrStatus (void)
   }
 
 /*****************************************************************************/
+/********* Put a link to the action used to request logo of centre ***********/
+/*****************************************************************************/
+
+static void Ctr_PutFormToChangeCtrLogo (bool LogoExists)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Change_logo;
+   extern const char *Txt_Upload_logo;
+   const char *Msg;
+
+   /***** Link for changing / uploading the photo *****/
+   Act_FormStart (ActReqCtrLog);
+   Msg = LogoExists ? Txt_Change_logo :
+		      Txt_Upload_logo;
+   Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("ctr",Msg,Msg);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
+/*********** Show a form for sending a logo of the current centre ************/
+/*****************************************************************************/
+
+void Ctr_RequestLogo (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
+   extern const char *Txt_File_with_the_logo;
+   extern const char *Txt_Upload_logo;
+
+   /***** Write help message *****/
+   sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y,
+	    64,64);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+   /***** Write a form to send logo *****/
+   Act_FormStart (ActRecCtrLog);
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+                      "<tr>"
+                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "%s:"
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
+                      "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
+                      "</td>"
+                      "</tr>"
+                      "<tr>"
+                      "<td colspan=\"2\" style=\"text-align:center;\">"
+                      "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
+                      "</td>"
+                      "</tr>"
+                      "</table>"
+                      "</form>",
+            The_ClassFormul[Gbl.Prefs.Theme],
+            Txt_File_with_the_logo,
+            Fil_NAME_OF_PARAM_FILENAME_ORG,
+            Txt_Upload_logo);
+  }
+
+/*****************************************************************************/
+/****************** Receive a photo of the current centre ********************/
+/*****************************************************************************/
+
+void Ctr_ReceiveLogo (void)
+  {
+   extern const char *Txt_The_file_is_not_X;
+   char Path[PATH_MAX+1];
+   char FileNameLogoSrc[PATH_MAX+1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
+   bool WrongType = false;
+
+   /***** Creates directories if not exist *****/
+   sprintf (Path,"%s/%s",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
+   Fil_CreateDirIfNotExists (Path);
+   sprintf (Path,"%s/%s/%02u",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
+   Fil_CreateDirIfNotExists (Path);
+   sprintf (Path,"%s/%s/%02u/%u",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+   Fil_CreateDirIfNotExists (Path);
+   sprintf (Path,"%s/%s/%02u/%u/logo",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+   Fil_CreateDirIfNotExists (Path);
+
+   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   Fil_StartReceptionOfFile (FileNameLogoSrc,MIMEType);
+
+   /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
+   if (strcmp (MIMEType,"image/png"))
+      if (strcmp (MIMEType,"image/x-png"))
+         if (strcmp (MIMEType,"application/octet-stream"))
+            if (strcmp (MIMEType,"application/octetstream"))
+               if (strcmp (MIMEType,"application/octet"))
+                  WrongType = true;
+   if (WrongType)
+     {
+      sprintf (Gbl.Message,Txt_The_file_is_not_X,"png");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      return;
+     }
+
+   /* End the reception of logo in a temporary file */
+   sprintf (FileNameLogo,"%s/%s/%02u/%u/logo/%u.png",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
+	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+   if (!Fil_EndReceptionOfFile (FileNameLogo))
+     {
+      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+      return;
+     }
+
+   /***** Show the centre information again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
 /******** Put a link to the action used to request photo of centre ***********/
 /*****************************************************************************/
 
@@ -1789,7 +1874,7 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
 /*********** Show a form for sending a photo of the current centre ***********/
 /*****************************************************************************/
 
-void Ctr_ReqPhoto (void)
+void Ctr_RequestPhoto (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y;
@@ -1832,7 +1917,7 @@ void Ctr_ReqPhoto (void)
 
 void Ctr_ReceivePhoto (void)
   {
-   extern const char *Txt_The_file_is_not_jpg;
+   extern const char *Txt_The_file_is_not_X;
    char Path[PATH_MAX+1];
    char FileNamePhotoSrc[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
@@ -1865,7 +1950,8 @@ void Ctr_ReceivePhoto (void)
                   WrongType = true;
    if (WrongType)
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_file_is_not_jpg);
+      sprintf (Gbl.Message,Txt_The_file_is_not_X,"jpg");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
       return;
      }
 
@@ -1877,7 +1963,7 @@ void Ctr_ReceivePhoto (void)
 	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
    if (!Fil_EndReceptionOfFile (FileNamePhoto))
      {
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
       return;
      }
 
@@ -1953,7 +2039,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Ctr_DrawCentreLogo (NULL,"",16,NULL);
+   Ctr_DrawCentreLogo (-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/
@@ -2231,7 +2317,7 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
          else	// Add new centre to database
             Ctr_CreateCentre (Ctr,Status);
         }
-      else	// If there is not a centre logo or web
+      else	// If there is not a web
         {
          sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_web_address_of_the_new_centre);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -2258,9 +2344,9 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
 
    /***** Create a new centre *****/
    sprintf (Query,"INSERT INTO centres (InsCod,PlcCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,Logo,WWW)"
+                  "ShortName,FullName,WWW)"
                   " VALUES ('%ld','%ld','%u','%ld',"
-                  "'%s','%s','','%s')",
+                  "'%s','%s','%s')",
             Ctr->InsCod,Ctr->PlcCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2391,33 +2477,37 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /****************************** Draw centre logo *****************************/
 /*****************************************************************************/
 
-void Ctr_DrawCentreLogo (const char *Logo,const char *AltText,
+void Ctr_DrawCentreLogo (long CtrCod,const char *AltText,
                          unsigned Size,const char *Style)
   {
    char PathLogo[PATH_MAX+1];
-   bool LogoExists = false;
+   bool LogoExists;
 
    /***** Path to logo *****/
-   if (Logo)
-      if (Logo[0])
-	{
-	 sprintf (PathLogo,"%s/%s/%s/%s64x64.gif",
-		  Cfg_PATH_SWAD_PUBLIC,
-		  Cfg_FOLDER_PUBLIC_ICON,
-		  Cfg_ICON_FOLDER_CENTRES,
-		  Logo);
-         LogoExists = Fil_CheckIfPathExists (PathLogo);
-	}
+   if (CtrCod > 0)
+     {
+      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (CtrCod % 100),
+	       (unsigned) CtrCod,
+	       (unsigned) CtrCod);
+      LogoExists = Fil_CheckIfPathExists (PathLogo);
+     }
+   else
+      LogoExists = false;
 
    /***** Draw logo *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%s",
-	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_CENTRES,Logo);
+      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (CtrCod % 100),
+	       (unsigned) CtrCod,
+	       (unsigned) CtrCod);
    else
-      fprintf (Gbl.F.Out,"%s/ctr",
+      fprintf (Gbl.F.Out,"%s/ctr64x64.gif",
 	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"64x64.gif\" alt=\"%s\" class=\"ICON%ux%u\"",
+   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
             AltText,Size,Size);
    if (Style)
       if (Style[0])

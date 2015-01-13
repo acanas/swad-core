@@ -386,7 +386,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
 
 void TsI_ImportQstsFromXML (void)
   {
-   extern const char *Txt_The_file_is_not_xml;
+   extern const char *Txt_The_file_is_not_X;
    char PathTestPriv[PATH_MAX+1];
    char FileNameXMLSrc[PATH_MAX+1];
    char FileNameXMLTmp[PATH_MAX+1];	// Full name (including path and .xml) of the destination temporary file
@@ -420,10 +420,13 @@ void TsI_ImportQstsFromXML (void)
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
       else
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_The_file_is_not_xml);
+     {
+      sprintf (Gbl.Message,Txt_The_file_is_not_X,"xml");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+     }
   }
 
 /*****************************************************************************/
