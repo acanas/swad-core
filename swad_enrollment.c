@@ -122,6 +122,22 @@ static void Enr_AskIfRemAdmFromDeg (bool ItsMe);
 static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat);
 
 /*****************************************************************************/
+/************ Show form to request sign up in the current course *************/
+/*****************************************************************************/
+
+void Enr_PutLinkToRequestSignUp (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Sign_up;
+
+   /***** Show the form *****/
+   Act_FormStart (ActReqSignUp);
+   Act_LinkFormSubmit (Txt_Sign_up,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("signup",Txt_Sign_up,Txt_Sign_up);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /***************** Modify the role of a user in a course *********************/
 /*****************************************************************************/
 
@@ -2682,7 +2698,11 @@ static void Enr_ShowFormToEditOtherUsr (void)
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
      {
       if (ItsMe)
-         Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
+	{
+	 // Don't show groups if I don't belong to course
+	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+            Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
+	}
       else
          Grp_ShowLstGrpsToChgOtherUsrsGrps (Gbl.Usrs.Other.UsrDat.UsrCod);
      }

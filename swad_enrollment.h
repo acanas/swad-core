@@ -63,6 +63,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Enr_PutLinkToRequestSignUp (void);
+
 void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
                                  Rol_Role_t NewRole,
                                  Cns_QuietOrVerbose_t QuietOrVerbose);

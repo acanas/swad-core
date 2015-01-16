@@ -180,10 +180,17 @@ static void Crs_Configuration (bool PrintView)
 	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	}
 
-       /* Link to print view */
+      /***** Links to print view and request enrollment *****/
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /* Link to print view */
       Lay_PutLinkToPrintView1 (ActPrnCrsInf);
       Lay_PutLinkToPrintView2 ();
+
+      /* Link to request enrollment in the current course */
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST)
+         Enr_PutLinkToRequestSignUp ();
+
       fprintf (Gbl.F.Out,"</div>");
 
       /* Start form */
