@@ -336,6 +336,12 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	}
 
 /******************************* Map of country ******************************/
+.COUNTRY_MAP_TITLE
+	{
+	width:32px; height:32px;
+	margin-right:8px;
+	vertical-align:top;
+	}
 .COUNTRY_MAP_SMALL
 	{
 	width:50px; height:50px;

@@ -149,17 +149,11 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"<tr>"
 	                    "<td style=\"text-align:center;"
 	                    " vertical-align:middle; background-color:%s;\">"
-                            "<a href=\"%s\" target=\"_blank\">"
-                            "<img src=\"%s/%s/%s/%s.png\" class=\"COUNTRY_MAP_SMALL\""
-			    " alt=\"%s\" title=\"%s\" />"
-			    "</a>"
-			    "</td>",
-                  BgColor,Cty.WWW[Gbl.Prefs.Language],
-		  Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
-		  Cty.Alpha2,
-		  Cty.Alpha2,
-		  Cty.Alpha2,
-		  Cty.Name[Gbl.Prefs.Language]);
+                            "<a href=\"%s\" target=\"_blank\">",
+                  BgColor,Cty.WWW[Gbl.Prefs.Language]);
+         Cty_DrawCountryMap (&Cty,"COUNTRY_MAP_SMALL");
+         fprintf (Gbl.F.Out,"</a>"
+			    "</td>");
 
          /* Country name */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
@@ -279,15 +273,8 @@ static void Cty_Configuration (bool PrintView)
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
 		     Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" class=\"%s\""
-			    " alt=\"%s\" title=\"%s\" />",
-		  Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
-		  Gbl.CurrentCty.Cty.Alpha2,
-		  Gbl.CurrentCty.Cty.Alpha2,
-		  PrintView ? "COUNTRY_MAP_PRINT" :
-			      "COUNTRY_MAP_SHOW",
-		  Gbl.CurrentCty.Cty.Alpha2,
-		  Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	 Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
+			                                     "COUNTRY_MAP_SHOW");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"</a>");
 	 fprintf (Gbl.F.Out,"</td>"
@@ -587,15 +574,9 @@ void Cty_ListCountries2 (void)
 	 sprintf (Gbl.Title,Txt_Go_to_X,
 		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 	 Act_LinkFormSubmit (Gbl.Title,NULL);
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" class=\"COUNTRY_MAP_SMALL\""
-			    " alt=\"%s\" title=\"%s\" />"
-			    "</a>"
-			    "</form>",
-		  Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
-		  Gbl.Ctys.Lst[NumCty].Alpha2,
-		  Gbl.Ctys.Lst[NumCty].Alpha2,
-		  Gbl.Ctys.Lst[NumCty].Alpha2,
-		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	 Cty_DrawCountryMap (&Gbl.Ctys.Lst[NumCty],"COUNTRY_MAP_SMALL");
+         fprintf (Gbl.F.Out,"</a>"
+			    "</form>");
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -723,6 +704,23 @@ void Cty_ListCountries2 (void)
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
+  }
+
+/*****************************************************************************/
+/**************************** Draw institution logo **************************/
+/*****************************************************************************/
+
+void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
+  {
+   /***** Draw country map *****/
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" alt=\"%s\" title=\"%s\""
+		      " class=\"%s\" />",
+	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
+	    Cty->Alpha2,
+	    Cty->Alpha2,
+	    Cty->Alpha2,
+	    Cty->Name[Gbl.Prefs.Language],
+	    Class);
   }
 
 /*****************************************************************************/

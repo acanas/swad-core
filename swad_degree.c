@@ -726,6 +726,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
    char FullName[Deg_MAX_LENGTH_FULL_NAME+1];	// Full name of course / degree
+   char PathMap[PATH_MAX+1];
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0 ||
        Gbl.CurrentIns.Ins.InsCod > 0 ||
@@ -742,10 +743,35 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	       Deg_MAX_LENGTH_FULL_NAME);
       FullName[Deg_MAX_LENGTH_FULL_NAME] = '\0';
       Str_LimitLengthHTMLStr (FullName,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
-      fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	                 "%s"
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       The_ClassCourse[Gbl.Prefs.Theme]);
+      if (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
+	  Gbl.Prefs.Theme == The_THEME_WHITE)	// TODO: Remove this line
+	{
+         if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.Logo,Gbl.CurrentDeg.Deg.ShortName,32,
+	                        "vertical-align:top; margin-right:8px;");
+	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	    Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,Gbl.CurrentCtr.Ctr.ShortName,32,
+	                        "vertical-align:top; margin-right:8px;");
+	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.Logo,Gbl.CurrentIns.Ins.ShortName,32,
+	                             "vertical-align:top; margin-right:8px;");
+	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+	   {
+	    sprintf (PathMap,"%s/%s/%s/%s/%s.png",
+		     Cfg_PATH_SWAD_PUBLIC,
+		     Cfg_FOLDER_PUBLIC_ICON,
+		     Cfg_ICON_FOLDER_COUNTRIES,
+		     Gbl.CurrentCty.Cty.Alpha2,
+		     Gbl.CurrentCty.Cty.Alpha2);
+            if (Fil_CheckIfPathExists (PathMap))
+	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
+	   }
+	}
+      fprintf (Gbl.F.Out,"%s"
 	                 "</div>",
-	       The_ClassCourse[Gbl.Prefs.Theme],FullName);
+	       FullName);
      }
   }
 

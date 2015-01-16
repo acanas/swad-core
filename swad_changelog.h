@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.55.1 (2015/01/14)"
+#define Log_PLATFORM_VERSION	"SWAD 14.55.2 (2015/01/15)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.55.2:  Jan 15, 2015	Logo of centre, degree, institution or country in title. (173546 lines)
 	Version 14.55.1:  Jan 14, 2015	Fixed bug in user's photo. (173510 lines)
 	Version 14.55  :  Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
 					3 changes necessary in database:

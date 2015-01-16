@@ -738,7 +738,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
-	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:middle;");
+	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,NULL);
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
 	       if (Highlight)
