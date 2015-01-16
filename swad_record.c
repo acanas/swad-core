@@ -2388,10 +2388,12 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             fprintf (Gbl.F.Out,"<select name=\"Role\">");
             switch (Gbl.Usrs.Me.LoggedRole)
               {
-               case Rol_ROLE_STUDENT:	// A student only can edir his/her record
-		  fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
-			   (unsigned) Rol_ROLE_STUDENT,
-			   Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][UsrDat->Sex]);
+               case Rol_ROLE_GUEST:
+               case Rol_ROLE_VISITOR:
+               case Rol_ROLE_STUDENT:
+		  fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
+			   (unsigned) Gbl.Usrs.Me.LoggedRole,
+			   Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
                   break;
                case Rol_ROLE_TEACHER:
                   for (Role = Rol_ROLE_STUDENT;

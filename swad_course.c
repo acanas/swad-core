@@ -188,7 +188,8 @@ static void Crs_Configuration (bool PrintView)
       Lay_PutLinkToPrintView2 ();
 
       /* Link to request enrollment in the current course */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_VISITOR)
          Enr_PutLinkToRequestSignUp ();
 
       fprintf (Gbl.F.Out,"</div>");

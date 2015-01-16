@@ -39,13 +39,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.55.3 (2015/01/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.55.4 (2015/01/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.55.4:  Jan 16, 2015	Fixed bugs in enrollment.
+					New MIME type, reported by Francisco Ocaña Lara. (173576 lines)
 	Version 14.55.3:  Jan 16, 2015	Link in course information to request registration in course.
-					Fixed bugs in enrollment. (173570 lines)
+					Fixed bug in enrollment. (173570 lines)
 	Version 14.55.2:  Jan 15, 2015	Logo of centre, degree, institution or country in title. (173546 lines)
 	Version 14.55.1:  Jan 14, 2015	Fixed bug in user's photo. (173510 lines)
 	Version 14.55  :  Jan 14, 2015	New option to upload logo of a centre. (173509 lines)

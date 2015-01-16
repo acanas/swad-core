@@ -849,6 +849,7 @@ const char *Brw_MIMETypesAllowed[] =
    "video/mpeg",			// MPEG video mpe, mpeg, mpg
    "video/msvideo",			// Microsoft Windows video avi
    "video/quicktime",			// QuickTime video mov, qt
+   "video/unknown",			// ?
    "video/x-ms-asf",			// WMA (Windows Media Audio File)
    "video/x-ms-wmv",			// WMV (Windows Media File)
    "video/x-msvideo",			// AVI
