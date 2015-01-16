@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.55.4 (2015/01/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.55.5 (2015/01/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.55.5:  Jan 16, 2015	Code refactoring related to maps of countries. (173573 lines)
 	Version 14.55.4:  Jan 16, 2015	Fixed bugs in enrollment.
 					New MIME type, reported by Francisco Ocaña Lara. (173576 lines)
 	Version 14.55.3:  Jan 16, 2015	Link in course information to request registration in course.

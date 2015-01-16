@@ -78,6 +78,7 @@ void Cty_PrintConfiguration (void);
 void Cty_ListCountries (void);
 void Cty_ListCountries1 (void);
 void Cty_ListCountries2 (void);
+bool Cty_CheckIfCountryMapExists (struct Country *Cty);
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class);
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutHiddenParamCtyOrderType (void);

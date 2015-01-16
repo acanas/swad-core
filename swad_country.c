@@ -148,12 +148,16 @@ void Cty_SeeCtyWithPendingInss (void)
          /* Country map */
          fprintf (Gbl.F.Out,"<tr>"
 	                    "<td style=\"text-align:center;"
-	                    " vertical-align:middle; background-color:%s;\">"
-                            "<a href=\"%s\" target=\"_blank\">",
-                  BgColor,Cty.WWW[Gbl.Prefs.Language]);
-         Cty_DrawCountryMap (&Cty,"COUNTRY_MAP_SMALL");
-         fprintf (Gbl.F.Out,"</a>"
-			    "</td>");
+	                    " vertical-align:middle; background-color:%s;\">",
+                  BgColor);
+         if (Cty_CheckIfCountryMapExists (&Cty))
+           {
+            fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
+                     Cty.WWW[Gbl.Prefs.Language]);
+            Cty_DrawCountryMap (&Cty,"COUNTRY_MAP_SMALL");
+            fprintf (Gbl.F.Out,"</a>");
+           }
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Country name */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
@@ -221,7 +225,6 @@ static void Cty_Configuration (bool PrintView)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char PathMap[PATH_MAX+1];
    char *MapAttribution = NULL;
    bool PutLink = !PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0];
 
@@ -255,13 +258,7 @@ static void Cty_Configuration (bool PrintView)
 	                 "</tr>");
 
       /***** Country map (and link to WWW if exists) *****/
-      sprintf (PathMap,"%s/%s/%s/%s/%s.png",
-               Cfg_PATH_SWAD_PUBLIC,
-               Cfg_FOLDER_PUBLIC_ICON,
-               Cfg_ICON_FOLDER_COUNTRIES,
-               Gbl.CurrentCty.Cty.Alpha2,
-               Gbl.CurrentCty.Cty.Alpha2);
-      if (Fil_CheckIfPathExists (PathMap))
+      if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
 	{
 	 /* Get map attribution */
 	 Cty_GetMapAttribution (Gbl.CurrentCty.Cty.CtyCod,&MapAttribution);
@@ -495,7 +492,6 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Country_unspecified;
    Cty_CtysOrderType_t Order;
    unsigned NumCty;
-   char PathMap[PATH_MAX+1];
    unsigned NumUsrs;
    unsigned NumStds;
    unsigned NumTchs;
@@ -560,13 +556,7 @@ void Cty_ListCountries2 (void)
 			 "<td class=\"COUNTRY_MAP_SMALL\""
 			 " style=\"text-align:center; background-color:%s;\">",
 	       BgColor);
-      sprintf (PathMap,"%s/%s/%s/%s/%s.png",
-               Cfg_PATH_SWAD_PUBLIC,
-               Cfg_FOLDER_PUBLIC_ICON,
-               Cfg_ICON_FOLDER_COUNTRIES,
-               Gbl.Ctys.Lst[NumCty].Alpha2,
-               Gbl.Ctys.Lst[NumCty].Alpha2);
-      if (Fil_CheckIfPathExists (PathMap))
+      if (Cty_CheckIfCountryMapExists (&Gbl.Ctys.Lst[NumCty]))
 	{
 	 /* Map image */
 	 Act_FormGoToStart (ActSeeIns);
@@ -707,7 +697,24 @@ void Cty_ListCountries2 (void)
   }
 
 /*****************************************************************************/
-/**************************** Draw institution logo **************************/
+/*********************** Check if country map exists *************************/
+/*****************************************************************************/
+
+bool Cty_CheckIfCountryMapExists (struct Country *Cty)
+  {
+   char PathMap[PATH_MAX+1];
+
+   sprintf (PathMap,"%s/%s/%s/%s/%s.png",
+	    Cfg_PATH_SWAD_PUBLIC,
+	    Cfg_FOLDER_PUBLIC_ICON,
+	    Cfg_ICON_FOLDER_COUNTRIES,
+	    Cty->Alpha2,
+	    Cty->Alpha2);
+   return Fil_CheckIfPathExists (PathMap);
+  }
+
+/*****************************************************************************/
+/***************************** Draw country map ******************************/
 /*****************************************************************************/
 
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class)

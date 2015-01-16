@@ -726,7 +726,6 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
    char FullName[Deg_MAX_LENGTH_FULL_NAME+1];	// Full name of course / degree
-   char PathMap[PATH_MAX+1];
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0 ||
        Gbl.CurrentIns.Ins.InsCod > 0 ||
@@ -758,16 +757,8 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	    Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.Logo,Gbl.CurrentIns.Ins.ShortName,32,
 	                             "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-	   {
-	    sprintf (PathMap,"%s/%s/%s/%s/%s.png",
-		     Cfg_PATH_SWAD_PUBLIC,
-		     Cfg_FOLDER_PUBLIC_ICON,
-		     Cfg_ICON_FOLDER_COUNTRIES,
-		     Gbl.CurrentCty.Cty.Alpha2,
-		     Gbl.CurrentCty.Cty.Alpha2);
-            if (Fil_CheckIfPathExists (PathMap))
+            if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
 	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
-	   }
 	}
       fprintf (Gbl.F.Out,"%s"
 	                 "</div>",
