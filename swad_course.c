@@ -39,6 +39,7 @@
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_indicator.h"
+#include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -211,7 +212,7 @@ static void Crs_Configuration (bool PrintView)
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
 	       Gbl.CurrentDeg.Deg.WWW,
 	       Gbl.CurrentDeg.Deg.FullName);
-   Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.ShortName,64,NULL);
+   Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.ShortName,64,NULL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"<br />%s"
@@ -668,7 +669,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassFormul[Gbl.Prefs.Theme]);
-	 Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,16,"vertical-align:middle;");
+	 Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,16,"vertical-align:middle;");
 	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
 	 if (Highlight)
@@ -705,7 +706,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassFormul[Gbl.Prefs.Theme]);
-	    Ctr_DrawCentreLogo (Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:middle;");
+	    Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:middle;");
 	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
 	    if (Highlight)
@@ -742,7 +743,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
-	       Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,NULL);
+	       Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,NULL);
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
 	       if (Highlight)
@@ -3314,7 +3315,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
-   Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,64,NULL);
+   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,64,NULL);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>"
                       "</form>"

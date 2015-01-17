@@ -165,9 +165,6 @@ bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg);
 
 void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan);
 
-void Deg_DrawDegreeLogo (long DegCod,const char *AltText,
-                         unsigned Size,const char *Style);
-
 unsigned Deg_ListDegsFound (const char *Query);
 
 #endif

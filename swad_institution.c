@@ -163,7 +163,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
-         Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -266,9 +266,8 @@ static void Ins_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
-      Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.InsCod,
-                               Gbl.CurrentIns.Ins.ShortName,
-                               64,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
+                    Gbl.CurrentIns.Ins.ShortName,64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -530,7 +529,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
-   Ins_DrawInstitutionLogo (Ins->InsCod,Ins->ShortName,16,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,16,NULL);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1114,7 +1113,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ins->FullName);
-      Ins_DrawInstitutionLogo (Ins->InsCod,Ins->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Country */
@@ -1733,7 +1732,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Ins_DrawInstitutionLogo (-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/
@@ -2062,48 +2061,6 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND crs_usr.Role='%u'",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of institutions with users");
-  }
-
-/*****************************************************************************/
-/**************************** Draw institution logo **************************/
-/*****************************************************************************/
-
-void Ins_DrawInstitutionLogo (long InsCod,const char *AltText,
-                              unsigned Size,const char *Style)
-  {
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
-
-   /***** Path to logo *****/
-   if (InsCod > 0)
-     {
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
-	       (unsigned) (InsCod % 100),
-	       (unsigned) InsCod,
-	       (unsigned) InsCod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
-     }
-   else
-      LogoExists = false;
-
-   /***** Draw logo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
-   if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_INS,
-	       (unsigned) (InsCod % 100),
-	       (unsigned) InsCod,
-	       (unsigned) InsCod);
-   else
-      fprintf (Gbl.F.Out,"%s/ins64x64.gif",
-	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-            AltText,Size,Size);
-   if (Style)
-      if (Style[0])
-         fprintf (Gbl.F.Out," style=\"%s\"",Style);
-   fprintf (Gbl.F.Out," />");
   }
 
 /*****************************************************************************/

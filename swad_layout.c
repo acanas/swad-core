@@ -36,6 +36,7 @@
 #include "swad_connected.h"
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_logo.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -1278,7 +1279,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,Size,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,Size,NULL);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
@@ -1327,7 +1328,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,Size,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,Size,NULL);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }

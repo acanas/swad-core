@@ -122,8 +122,6 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery);
 unsigned Ins_GetNumInssWithCrss (const char *SubQuery);
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-void Ins_DrawInstitutionLogo (long InsCod,const char *AltText,unsigned Size,const char *Style);
-
 unsigned Ins_ListInssFound (const char *Query);
 
 #endif

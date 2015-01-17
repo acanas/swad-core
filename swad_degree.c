@@ -223,7 +223,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
-         Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -324,9 +324,8 @@ static void Deg_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.FullName);
-      Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,
-                          Gbl.CurrentDeg.Deg.ShortName,
-                          64,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+                    Gbl.CurrentDeg.Deg.ShortName,64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",
                Gbl.CurrentDeg.Deg.FullName);
       if (PutLink)
@@ -733,14 +732,17 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	  Gbl.Prefs.Theme == The_THEME_WHITE)	// TODO: Remove this line
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.ShortName,32,
-	                        "vertical-align:top; margin-right:8px;");
+	    Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+	                  Gbl.CurrentDeg.Deg.ShortName,32,
+	                  "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,Gbl.CurrentCtr.Ctr.ShortName,32,
-	                        "vertical-align:top; margin-right:8px;");
+	    Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
+	                  Gbl.CurrentCtr.Ctr.ShortName,32,
+	                  "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentIns.Ins.ShortName,32,
-	                             "vertical-align:top; margin-right:8px;");
+	    Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
+	                  Gbl.CurrentIns.Ins.ShortName,32,
+	                  "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
 	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
@@ -1268,7 +1270,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Deg->WWW,Deg->FullName);
-   Deg_DrawDegreeLogo (Deg->DegCod,Deg->ShortName,16,"vertical-align:top;");
+   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,"vertical-align:top;");
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1411,7 +1413,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Deg->FullName);
-      Deg_DrawDegreeLogo (Deg->DegCod,Deg->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
@@ -1818,7 +1820,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Deg_DrawDegreeLogo (-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_DEGREE,-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/
@@ -3918,7 +3920,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Deg_PutParamDegCod (DegCod);
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
-            Deg_DrawDegreeLogo (DegCod,row[1],16,"vertical-align:top;");
+            Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,row[1],16,"vertical-align:top;");
             fprintf (Gbl.F.Out,"&nbsp;%s</a>"
                                "</form>",
                      row[2]);
@@ -3938,48 +3940,6 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/****************************** Draw degree logo *****************************/
-/*****************************************************************************/
-
-void Deg_DrawDegreeLogo (long DegCod,const char *AltText,
-                         unsigned Size,const char *Style)
-  {
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
-
-   /***** Path to logo *****/
-   if (DegCod > 0)
-     {
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
-	       (unsigned) (DegCod % 100),
-	       (unsigned) DegCod,
-	       (unsigned) DegCod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
-     }
-   else
-      LogoExists = false;
-
-   /***** Draw logo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
-   if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_DEG,
-	       (unsigned) (DegCod % 100),
-	       (unsigned) DegCod,
-	       (unsigned) DegCod);
-   else
-      fprintf (Gbl.F.Out,"%s/deg64x64.gif",
-	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-            AltText,Size,Size);
-   if (Style)
-      if (Style[0])
-         fprintf (Gbl.F.Out," style=\"%s\"",Style);
-   fprintf (Gbl.F.Out," />");
   }
 
 /*****************************************************************************/

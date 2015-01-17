@@ -41,6 +41,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_logo.h"
 #include "swad_network.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -3486,7 +3487,7 @@ static void Sta_WriteDegree (long DegCod)
       fprintf (Gbl.F.Out,"%s\">"
                          "<a href=\"%s\" class=\"LOG\" target=\"_blank\">",
                Deg.WWW,Deg.FullName);
-      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
                Deg.ShortName);
      }

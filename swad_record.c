@@ -36,6 +36,7 @@
 #include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_logo.h"
 #include "swad_network.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -1529,9 +1530,8 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
                       "<tr>"
                       "<td style=\"width:%upx; text-align:left;\">",
             Rec_DEGREE_LOGO_SIZE);
-   Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,
-                       Gbl.CurrentDeg.Deg.ShortName,
-                       Rec_DEGREE_LOGO_SIZE,NULL);
+   Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+                 Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL);
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"%s\" style=\"text-align:center;\">"
                       "%s<br />%s<br />%s"
@@ -2143,7 +2143,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      {
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-      Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,Rec_INSTITUTION_LOGO_SIZE,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+                    Rec_INSTITUTION_LOGO_SIZE,NULL);
       fprintf (Gbl.F.Out,"</td>"
                          "<td class=\"%s\" style=\"text-align:left;"
                          " vertical-align:middle;\">"

@@ -37,6 +37,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_layout.h"
+#include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 
@@ -2146,15 +2147,18 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
      {
       case For_FORUM_INSTITUTION_USRS:
       case For_FORUM_INSTITUTION_TCHS:
-         Ins_DrawInstitutionLogo (Gbl.Forum.Ins.InsCod,ForumName,16,"vertical-align:middle;");
+         Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.Forum.Ins.InsCod,ForumName,
+                       16,"vertical-align:middle;");
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Ctr_DrawCentreLogo (Gbl.Forum.Ctr.CtrCod,ForumName,16,"vertical-align:middle;");
+         Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.Forum.Ctr.CtrCod,ForumName,
+                       16,"vertical-align:middle;");
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Deg_DrawDegreeLogo (Gbl.Forum.Deg.DegCod,ForumName,16,"vertical-align:middle;");
+         Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.Forum.Deg.DegCod,ForumName,
+                       16,"vertical-align:middle;");
          break;
       default:
          fprintf (Gbl.F.Out,"%s",Icon);

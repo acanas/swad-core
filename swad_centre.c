@@ -173,7 +173,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
-         Ctr_DrawCentreLogo (Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -289,9 +289,8 @@ static void Ctr_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
-      Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,
-                          Gbl.CurrentCtr.Ctr.ShortName,
-                          64,NULL);
+      Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
+                    Gbl.CurrentCtr.Ctr.ShortName,64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -595,7 +594,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
-   Ctr_DrawCentreLogo (Ctr->CtrCod,Ctr->ShortName,16,"vertical-align:top;");
+   Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,"vertical-align:top;");
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1138,7 +1137,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ctr->FullName);
-      Ctr_DrawCentreLogo (Ctr->CtrCod,Ctr->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
@@ -1923,7 +1922,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Ctr_DrawCentreLogo (-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_CENTRE,-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/
@@ -2355,48 +2354,6 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND crs_usr.Role='%u'",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres with users");
-  }
-
-/*****************************************************************************/
-/****************************** Draw centre logo *****************************/
-/*****************************************************************************/
-
-void Ctr_DrawCentreLogo (long CtrCod,const char *AltText,
-                         unsigned Size,const char *Style)
-  {
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
-
-   /***** Path to logo *****/
-   if (CtrCod > 0)
-     {
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (CtrCod % 100),
-	       (unsigned) CtrCod,
-	       (unsigned) CtrCod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
-     }
-   else
-      LogoExists = false;
-
-   /***** Draw logo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
-   if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (CtrCod % 100),
-	       (unsigned) CtrCod,
-	       (unsigned) CtrCod);
-   else
-      fprintf (Gbl.F.Out,"%s/ctr64x64.gif",
-	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-            AltText,Size,Size);
-   if (Style)
-      if (Style[0])
-         fprintf (Gbl.F.Out," style=\"%s\"",Style);
-   fprintf (Gbl.F.Out," />");
   }
 
 /*****************************************************************************/

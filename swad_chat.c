@@ -34,6 +34,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
 #include "swad_text.h"
@@ -184,7 +185,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       sprintf (ThisRoomShortName,"%s",Deg.ShortName);
       sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShortName);
       Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,1,IsLastItemInLevel);
-      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,NULL);
       Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
       /* Get my courses in this degree from database */

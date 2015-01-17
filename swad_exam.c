@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_global.h"
+#include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -790,7 +791,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    else
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
-   Ins_DrawInstitutionLogo (Ins.InsCod,Ins.FullName,64,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.FullName,64,NULL);
    fprintf (Gbl.F.Out,"<br />%s%s" \
                       "</td>" \
 	              "</tr>",

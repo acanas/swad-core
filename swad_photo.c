@@ -40,6 +40,7 @@
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_global.h"
+#include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_theme.h"
@@ -1983,7 +1984,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       if (SeeOrPrint == Pho_DEGREES_SEE)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   Deg.WWW,Deg.FullName);
-      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
                Deg.ShortName);
       if (SeeOrPrint == Pho_DEGREES_SEE)

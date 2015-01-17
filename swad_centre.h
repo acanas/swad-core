@@ -120,9 +120,6 @@ unsigned Ctr_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithCrss (const char *SubQuery);
 unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-void Ctr_DrawCentreLogo (long CtrCod,const char *AltText,
-                         unsigned Size,const char *Style);
-
 unsigned Ctr_ListCtrsFound (const char *Query);
 
 #endif
