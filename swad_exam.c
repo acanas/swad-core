@@ -790,7 +790,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    else
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
-   Ins_DrawInstitutionLogo (Ins.Logo,Ins.FullName,64,NULL);
+   Ins_DrawInstitutionLogo (Ins.InsCod,Ins.FullName,64,NULL);
    fprintf (Gbl.F.Out,"<br />%s%s" \
                       "</td>" \
 	              "</tr>",

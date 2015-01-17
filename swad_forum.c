@@ -2146,7 +2146,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
      {
       case For_FORUM_INSTITUTION_USRS:
       case For_FORUM_INSTITUTION_TCHS:
-         Ins_DrawInstitutionLogo (Gbl.Forum.Ins.Logo,ForumName,16,"vertical-align:middle;");
+         Ins_DrawInstitutionLogo (Gbl.Forum.Ins.InsCod,ForumName,16,"vertical-align:middle;");
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:

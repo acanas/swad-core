@@ -1,7 +1,7 @@
 // swad_changelog.h: changelog
 
-#ifndef _SWAD_LOG
-#define _SWAD_LOG
+#ifndef _SWAD_CHG
+#define _SWAD_CHG
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -39,22 +39,31 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.55.5 (2015/01/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.56 (2015/01/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.56:    Jan 17, 2015	New module swad_logo for drawing logos of institutions, centres and degrees.
+					New option to upload logo of institution. (173735 lines)
+					1 change necessary in Makefile:
+Add swad_logo.o to list of object files
+					3 changes necessary in database:
+UPDATE actions SET Txt='Cambiar logo de instituci&oacute;n' WHERE ActCod='699' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1245','es','N','Solicitar env&iacute;o de logo de instituci&oacute;n');
+ALTER TABLE institutions DROP COLUMN Logo;
+
 	Version 14.55.5:  Jan 16, 2015	Code refactoring related to maps of countries. (173573 lines)
 	Version 14.55.4:  Jan 16, 2015	Fixed bugs in enrollment.
-					New MIME type, reported by Francisco Ocaña Lara. (173576 lines)
+					New MIME type, suggested by Francisco Ocaña Lara. (173576 lines)
 	Version 14.55.3:  Jan 16, 2015	Link in course information to request registration in course.
 					Fixed bug in enrollment. (173570 lines)
 	Version 14.55.2:  Jan 15, 2015	Logo of centre, degree, institution or country in title. (173546 lines)
 	Version 14.55.1:  Jan 14, 2015	Fixed bug in user's photo. (173510 lines)
-	Version 14.55  :  Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
+	Version 14.55:    Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
 					3 changes necessary in database:
-UPDATE actions SET Txt='Enviar logo del centro' WHERE ActCod='1051' AND Language='es';
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de foto del centro');
+UPDATE actions SET Txt='Cambiar logo de centro' WHERE ActCod='1051' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de logo cde entro');
 ALTER TABLE centres DROP COLUMN Logo;
 
 	Version 14.54.7:  Jan 13, 2015	Fixed bug in edition of centres. (173349 lines)

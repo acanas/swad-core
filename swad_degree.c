@@ -41,6 +41,7 @@
 #include "swad_global.h"
 #include "swad_indicator.h"
 #include "swad_info.h"
+#include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -296,12 +297,19 @@ static void Deg_Configuration (bool PrintView)
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
+      /***** Links to print view and upload logo *****/
       if (!PrintView)
 	{
-	  /* Link to print view */
 	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+	  /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnDegInf);
 	 Lay_PutLinkToPrintView2 ();
+
+	 /* Link to upload logo */
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	    Log_PutFormToChangeLogo (Sco_SCOPE_DEGREE);
+
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
@@ -754,7 +762,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	    Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,Gbl.CurrentCtr.Ctr.ShortName,32,
 	                        "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.Logo,Gbl.CurrentIns.Ins.ShortName,32,
+	    Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentIns.Ins.ShortName,32,
 	                             "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))

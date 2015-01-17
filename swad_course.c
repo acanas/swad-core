@@ -672,7 +672,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassFormul[Gbl.Prefs.Theme]);
-	 Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,"vertical-align:middle;");
+	 Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,16,"vertical-align:middle;");
 	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
 	 if (Highlight)

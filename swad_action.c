@@ -172,7 +172,8 @@ Institution:
 	 80. ActInsSch			Search for courses, teachers, documents...
 
 	 81. ActPrnInsInf		Print information on the current institution
-	 82. ActChgInsLog		Change logo of institution
+	 --. ActReqInsLog		Show form to send the logo of the current institution
+	 82. ActRecInsLog		Receive and store the logo of the current institution
 
 	 83. ActEdiCtr			Edit centres
 	 84. ActReqCtr			Request the creation of a request for a new centre (a teacher makes the petition to an administrator)
@@ -1312,7 +1313,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActInsSch		*/{1182,-1,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
 
    /* ActPrnInsInf	*/{1154,-1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ins_PrintConfiguration		,NULL},
-   /* ActChgInsLog	*/{ 699,-1,TabIns,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsLogo		,NULL},
+   /* ActReqInsLog	*/{1245,-1,TabCtr,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RequestLogo		,NULL},
+   /* ActRecInsLog	*/{ 699,-1,TabCtr,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ins_ReceiveLogo		,NULL},
 
    /* ActEdiCtr		*/{ 681,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_EditCentres		,NULL},
    /* ActReqCtr		*/{1208,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormReqCtr		,NULL},
@@ -2980,7 +2982,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeIns,		// #696
 	ActEdiIns,		// #697
 	ActNewIns,		// #698
-	ActChgInsLog,		// #699
+	ActRecInsLog,		// #699
 	ActChgInsWWW,		// #700
 	ActRenInsFul,		// #701
 	ActRenInsSho,		// #702
@@ -3526,6 +3528,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeSyl,		// #1242
 	ActChgMnu,		// #1243
 	ActReqCtrLog,		// #1244
+	ActReqInsLog,		// #1245
 	};
 
 /*****************************************************************************/

@@ -1278,7 +1278,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,Size,NULL);
+      Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,Size,NULL);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }

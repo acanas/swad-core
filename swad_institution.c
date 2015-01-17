@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_institution.h"
+#include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_text.h"
@@ -162,7 +163,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
-         Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,16,NULL);
+         Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -226,7 +227,6 @@ static void Ins_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institution;
    extern const char *Txt_Short_Name;
-   extern const char *Txt_Logo;
    extern const char *Txt_Shortcut_to_this_institution;
    extern const char *Txt_QR_code;
    extern const char *Txt_Centres;
@@ -238,12 +238,19 @@ static void Ins_Configuration (bool PrintView)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      /***** Link to print view *****/
+      /***** Links to print view and upload logo *****/
       if (!PrintView)
 	{
 	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+	 /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
 	 Lay_PutLinkToPrintView2 ();
+
+	 /* Link to upload logo */
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	    Log_PutFormToChangeLogo (Sco_SCOPE_INSTITUTION);
+
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
@@ -259,7 +266,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
-      Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.Logo,
+      Ins_DrawInstitutionLogo (Gbl.CurrentIns.Ins.InsCod,
                                Gbl.CurrentIns.Ins.ShortName,
                                64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
@@ -304,28 +311,6 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_Short_Name,
 	       Gbl.CurrentIns.Ins.ShortName);
-
-      /***** Institution logo *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
-			    "%s:"
-			    "</td>"
-			    "<td style=\"text-align:left;"
-			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_Logo);
-	 Act_FormStart (ActChgInsLog);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>"
-			    "</tr>",
-		  Ins_MAX_LENGTH_INSTITUTION_LOGO,Gbl.CurrentIns.Ins.Logo,
-		  Gbl.FormId);
-	}
 
       /***** Link to the institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -545,7 +530,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
-   Ins_DrawInstitutionLogo (Ins->Logo,Ins->ShortName,16,NULL);
+   Ins_DrawInstitutionLogo (Ins->InsCod,Ins->ShortName,16,NULL);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -737,11 +722,11 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
      {
       case Ins_GET_MINIMAL_DATA:
          if (CtyCod <= 0)	// Get all the institutions, belonging to any country
-            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW"
+            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
                            " FROM institutions"
                            " ORDER BY FullName");
          else			// Get only the institutions belonging to the country specified by CtyCod
-            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW"
+            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
                            " FROM institutions"
                            " WHERE CtyCod='%ld'"
                            " ORDER BY FullName",
@@ -761,12 +746,12 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
             sprintf (Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
                            "institutions.Status,institutions.RequesterUsrCod,"
                            "institutions.ShortName,institutions.FullName,"
-                           "institutions.Logo,institutions.WWW,COUNT(*) AS NumUsrs"
+                           "institutions.WWW,COUNT(*) AS NumUsrs"
                            " FROM institutions,usr_data"
                            " WHERE institutions.InsCod=usr_data.InsCod"
                            " GROUP BY institutions.InsCod)"
                            " UNION "
-                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW,0 AS NumUsrs"
+                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
                            " FROM institutions"
                            " WHERE InsCod NOT IN (SELECT DISTINCT InsCod FROM usr_data))"
                            " ORDER BY %s",
@@ -775,12 +760,12 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
             sprintf (Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
                            "institutions.Status,institutions.RequesterUsrCod,"
                            "institutions.ShortName,institutions.FullName,"
-                           "institutions.Logo,institutions.WWW,COUNT(*) AS NumUsrs"
+                           "institutions.WWW,COUNT(*) AS NumUsrs"
                            " FROM institutions,usr_data"
                            " WHERE institutions.CtyCod='%ld' AND institutions.InsCod=usr_data.InsCod"
                            " GROUP BY institutions.InsCod)"
                            " UNION "
-                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW,0 AS NumUsrs"
+                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
                            " FROM institutions"
                            " WHERE CtyCod='%ld' AND InsCod NOT IN (SELECT DISTINCT InsCod FROM usr_data))"
                            " ORDER BY %s",
@@ -830,11 +815,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
          strncpy (Ins->FullName,row[5],Ins_MAX_LENGTH_INSTITUTION_FULL_NAME);
          Ins->FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME] = '\0';
 
-         /* Get the logo of the institution (row[6]) */
-         strcpy (Ins->Logo,row[6]);
-
-         /* Get the URL of the institution (row[7]) */
-         strcpy (Ins->WWW,row[7]);
+         /* Get the URL of the institution (row[6]) */
+         strcpy (Ins->WWW,row[6]);
 
          /* Get extra data */
          switch (GetExtraData)
@@ -844,8 +826,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                Ins->NumCtrs = Ins->NumDpts = Ins->NumDegs = 0;
                break;
             case Ins_GET_EXTRA_DATA:
-               /* Get number of users in this institution (row[8]) */
-               if (sscanf (row[8],"%u",&Ins->NumUsrs) == 1)
+               /* Get number of users in this institution (row[7]) */
+               if (sscanf (row[7],"%u",&Ins->NumUsrs) == 1)
                  {
                   if (Ins->NumUsrs)
                     {
@@ -894,7 +876,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
    Ins->RequesterUsrCod = -1L;
    Ins->ShortName[0] =
    Ins->FullName[0]  =
-   Ins->Logo[0]      =
    Ins->WWW[0]       = '\0';
    Ins->NumStds = Ins->NumTchs = Ins->NumUsrs =
    Ins->NumCtrs = Ins->NumDpts = Ins->NumDegs = 0;
@@ -905,7 +886,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
    // Ins->InsCod > 0
 
    /***** Get data of an institution from database *****/
-   sprintf (Query,"SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,Logo,WWW"
+   sprintf (Query,"SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
                   " FROM institutions WHERE InsCod='%ld'",
             Ins->InsCod);
 
@@ -934,16 +915,13 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
       strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTITUTION_FULL_NAME);
       Ins->FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME] = '\0';
 
-      /* Get the logo of the institution (row[5]) */
-      strcpy (Ins->Logo,row[5]);
-
-      /* Get the URL of the institution (row[6]) */
-      strcpy (Ins->WWW,row[6]);
+      /* Get the URL of the institution (row[5]) */
+      strcpy (Ins->WWW,row[5]);
 
       /* Get extra data */
       if (GetExtraData == Ins_GET_EXTRA_DATA)
 	{
-	 /* Get number of users in this institution (row[8]) */
+	 /* Get number of users in this institution */
 	 Ins->NumStds = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_ROLE_STUDENT);	// Slow query
 	 Ins->NumTchs = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_ROLE_TEACHER);	// Slow query
 	 Ins->NumUsrs = Ins->NumStds + Ins->NumTchs;
@@ -1136,7 +1114,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ins->FullName);
-      Ins_DrawInstitutionLogo (Ins->Logo,Ins->ShortName,16,NULL);
+      Ins_DrawInstitutionLogo (Ins->InsCod,Ins->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Country */
@@ -1546,7 +1524,7 @@ void Ins_ChangeInsCountry (void)
    extern const char *Txt_The_country_of_the_institution_X_has_changed_Y;
    struct Institution *Ins;
    struct Country NewCty;
-   char Query[256+Ins_MAX_LENGTH_INSTITUTION_LOGO];
+   char Query[256];
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -1583,8 +1561,9 @@ void Ins_ChangeInsCountry (void)
 	}
       else
 	{
-	 /***** Update the table changing old logo by new logo *****/
-	 sprintf (Query,"UPDATE institutions SET CtyCod='%ld' WHERE InsCod='%ld'",
+	 /***** Update the table changing the country of the institution *****/
+	 sprintf (Query,"UPDATE institutions SET CtyCod='%ld'"
+	                " WHERE InsCod='%ld'",
 		  NewCty.CtyCod,Ins->InsCod);
 	 DB_QueryUPDATE (Query,"can not update the country of an institution");
 
@@ -1599,31 +1578,6 @@ void Ins_ChangeInsCountry (void)
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
-  }
-
-/*****************************************************************************/
-/********************* Change the logo of a institution **********************/
-/*****************************************************************************/
-
-void Ins_ChangeInsLogo (void)
-  {
-   extern const char *Txt_The_new_logo_is_X;
-   char Query[256+Ins_MAX_LENGTH_INSTITUTION_LOGO];
-
-   /***** Get the new logo for the institution from form *****/
-   Par_GetParToText ("Logo",Gbl.CurrentIns.Ins.Logo,Ins_MAX_LENGTH_INSTITUTION_LOGO);
-
-   /***** Update the table changing old logo by new logo *****/
-   sprintf (Query,"UPDATE institutions SET Logo='%s' WHERE InsCod='%ld'",
-	    Gbl.CurrentIns.Ins.Logo,Gbl.CurrentIns.Ins.InsCod);
-   DB_QueryUPDATE (Query,"can not update the logo of the institution");
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_new_logo_is_X,Gbl.CurrentIns.Ins.Logo);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Show the form again *****/
-   Ins_ShowConfiguration ();
   }
 
 /*****************************************************************************/
@@ -1716,6 +1670,24 @@ void Ins_ChangeInsStatus (void)
   }
 
 /*****************************************************************************/
+/******** Show a form for sending a logo of the current institution **********/
+/*****************************************************************************/
+
+void Ins_RequestLogo (void)
+  {
+   Log_RequestLogo (Sco_SCOPE_INSTITUTION);
+  }
+
+/*****************************************************************************/
+/************** Receive the logo of the current institution ******************/
+/*****************************************************************************/
+
+void Ins_ReceiveLogo (void)
+  {
+   Log_ReceiveLogo (Sco_SCOPE_INSTITUTION);
+  }
+
+/*****************************************************************************/
 /******************* Put a form to create a new institution ******************/
 /*****************************************************************************/
 
@@ -1761,7 +1733,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Ins_DrawInstitutionLogo (NULL,"",16,NULL);
+   Ins_DrawInstitutionLogo (-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/
@@ -1958,7 +1930,7 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
          else	// Add new institution to database
             Ins_CreateInstitution (Ins,Status);
         }
-      else	// If there is not a logo or a web
+      else	// If there is not a web
          Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
      }
    else	// If there is not a institution name
@@ -1979,9 +1951,9 @@ static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
 
    /***** Create a new institution *****/
    sprintf (Query,"INSERT INTO institutions (CtyCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,Logo,WWW)"
+                  "ShortName,FullName,WWW)"
                   " VALUES ('%ld','%u','%ld',"
-                  "'%s','%s','','%s')",
+                  "'%s','%s','%s')",
             Ins->CtyCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2096,33 +2068,37 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /**************************** Draw institution logo **************************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogo (const char *Logo,const char *AltText,
+void Ins_DrawInstitutionLogo (long InsCod,const char *AltText,
                               unsigned Size,const char *Style)
   {
    char PathLogo[PATH_MAX+1];
    bool LogoExists = false;
 
    /***** Path to logo *****/
-   if (Logo)
-      if (Logo[0])
-	{
-	 sprintf (PathLogo,"%s/%s/%s/%s64x64.gif",
-		  Cfg_PATH_SWAD_PUBLIC,
-		  Cfg_FOLDER_PUBLIC_ICON,
-		  Cfg_ICON_FOLDER_INSTITUTIONS,
-		  Logo);
-         LogoExists = Fil_CheckIfPathExists (PathLogo);
-	}
+   if (InsCod > 0)
+     {
+      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	       (unsigned) (InsCod % 100),
+	       (unsigned) InsCod,
+	       (unsigned) InsCod);
+      LogoExists = Fil_CheckIfPathExists (PathLogo);
+     }
+   else
+      LogoExists = false;
 
    /***** Draw logo *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%s",
-	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_INSTITUTIONS,Logo);
+      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	       (unsigned) (InsCod % 100),
+	       (unsigned) InsCod,
+	       (unsigned) InsCod);
    else
-      fprintf (Gbl.F.Out,"%s/ins",
+      fprintf (Gbl.F.Out,"%s/ins64x64.gif",
 	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"64x64.gif\" alt=\"%s\" class=\"ICON%ux%u\"",
+   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
             AltText,Size,Size);
    if (Style)
       if (Style[0])

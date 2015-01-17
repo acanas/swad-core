@@ -1304,10 +1304,9 @@ mysql> DESCRIBE institutions;
 | RequesterUsrCod | int(11)      | NO   |     | -1      |                |
 | ShortName       | varchar(32)  | NO   |     | NULL    |                |
 | FullName        | text         | NO   |     | NULL    |                |
-| Logo            | varchar(32)  | NO   |     | NULL    |                |
 | WWW             | varchar(255) | NO   |     | NULL    |                |
 +-----------------+--------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
+7 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS institutions ("
                    "InsCod INT NOT NULL AUTO_INCREMENT,"
@@ -1316,7 +1315,6 @@ mysql> DESCRIBE institutions;
                    "RequesterUsrCod INT NOT NULL DEFAULT -1,"
                    "ShortName VARCHAR(32) NOT NULL,"
                    "FullName TEXT NOT NULL,"
-                   "Logo VARCHAR(32) NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(InsCod),INDEX(CtyCod),INDEX(Status))");
 

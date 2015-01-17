@@ -348,8 +348,14 @@
 #define Cfg_MAX_BYTES_DATABASE_PASSWORD		256
 #define Cfg_MAX_BYTES_SMTP_PASSWORD		256
 
-/* Folders for courses, inside public and private swad directories */
+/* Folders for institutions, inside public and private swad directories */
+#define Cfg_FOLDER_INS				"ins"			// If not exists, it should be created during installation inside swad private and public directory!
+
+/* Folders for centres, inside public and private swad directories */
 #define Cfg_FOLDER_CTR				"ctr"			// If not exists, it should be created during installation inside swad private and public directory!
+
+/* Folders for centres, inside public and private swad directories */
+#define Cfg_FOLDER_DEG				"deg"			// If not exists, it should be created during installation inside swad private and public directory!
 
 /* Folders for courses, inside public and private swad directories */
 #define Cfg_FOLDER_CRS 				"crs"			// If not exists, it should be created during installation inside swad private and public directory!
@@ -393,7 +399,6 @@
 #define Cfg_ICON_FOLDER_THEMES			"theme"		// Directory with all the images for each theme
 #define Cfg_ICON_FOLDER_ICON_SETS		"iconset"	// Directory with all the icons for each icon set
 #define Cfg_ICON_FOLDER_COUNTRIES		"country"	// Directory with icons for countries
-#define Cfg_ICON_FOLDER_INSTITUTIONS		"institution"	// Directory with icons for institutions
 #define Cfg_ICON_FOLDER_DEGREES			"degree"	// Directory with icons for degrees
 #define Cfg_ICON_FOLDER_FILEXT			"filext"	// Directory with icons for file extensions
 #define Cfg_ICON_FOLDER_PLUGINS			"plugin"	// Directory with icons for plugins

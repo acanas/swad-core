@@ -2143,7 +2143,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      {
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-      Ins_DrawInstitutionLogo (Ins.Logo,Ins.ShortName,Rec_INSTITUTION_LOGO_SIZE,NULL);
+      Ins_DrawInstitutionLogo (Ins.InsCod,Ins.ShortName,Rec_INSTITUTION_LOGO_SIZE,NULL);
       fprintf (Gbl.F.Out,"</td>"
                          "<td class=\"%s\" style=\"text-align:left;"
                          " vertical-align:middle;\">"

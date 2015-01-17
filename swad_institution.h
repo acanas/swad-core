@@ -54,7 +54,6 @@ typedef enum
 
 #define Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME	 32
 #define Ins_MAX_LENGTH_INSTITUTION_FULL_NAME   1024
-#define Ins_MAX_LENGTH_INSTITUTION_LOGO		 32
 
 struct Institution
   {
@@ -64,7 +63,6 @@ struct Institution
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
    char ShortName[Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME+1];
    char FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
-   char Logo[Ins_MAX_LENGTH_INSTITUTION_LOGO+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumStds;
    unsigned NumTchs;
@@ -110,9 +108,10 @@ void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
 void Ins_ChangeInsCountry (void);
-void Ins_ChangeInsLogo (void);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
+void Ins_RequestLogo (void);
+void Ins_ReceiveLogo (void);
 void Ins_RecFormReqIns (void);
 void Ins_RecFormNewIns (void);
 
@@ -123,7 +122,7 @@ unsigned Ins_GetNumInssWithDegs (const char *SubQuery);
 unsigned Ins_GetNumInssWithCrss (const char *SubQuery);
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-void Ins_DrawInstitutionLogo (const char *Logo,const char *AltText,unsigned Size,const char *Style);
+void Ins_DrawInstitutionLogo (long InsCod,const char *AltText,unsigned Size,const char *Style);
 
 unsigned Ins_ListInssFound (const char *Query);
 

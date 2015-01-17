@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_institution.h"
+#include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_string.h"
@@ -82,7 +83,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
-static void Ctr_PutFormToChangeCtrLogo (bool LogoExists);
+
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists);
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
@@ -242,8 +243,6 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
    char PathPhoto[PATH_MAX+1];
    bool PhotoExists;
    char *PhotoAttribution = NULL;
@@ -251,14 +250,6 @@ static void Ctr_Configuration (bool PrintView)
 
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
-      /***** Path to logo *****/
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
-
       /***** Path to photo *****/
       sprintf (PathPhoto,"%s/%s/%02u/%u/%u.jpg",
                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
@@ -267,7 +258,7 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      /***** Links to print view and upload photo *****/
+      /***** Links to print view, upload logo and upload photo *****/
       if (!PrintView)
 	{
 	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -276,10 +267,10 @@ static void Ctr_Configuration (bool PrintView)
 	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
 	 Lay_PutLinkToPrintView2 ();
 
-	 /* Link to upload photo */
+	 /* Links to upload logo and photo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
 	   {
-	    Ctr_PutFormToChangeCtrLogo (LogoExists);
+	    Log_PutFormToChangeLogo (Sco_SCOPE_CENTRE);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 	   }
 
@@ -1726,128 +1717,21 @@ void Ctr_ChangeCtrStatus (void)
   }
 
 /*****************************************************************************/
-/********* Put a link to the action used to request logo of centre ***********/
-/*****************************************************************************/
-
-static void Ctr_PutFormToChangeCtrLogo (bool LogoExists)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Change_logo;
-   extern const char *Txt_Upload_logo;
-   const char *Msg;
-
-   /***** Link for changing / uploading the photo *****/
-   Act_FormStart (ActReqCtrLog);
-   Msg = LogoExists ? Txt_Change_logo :
-		      Txt_Upload_logo;
-   Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("ctr",Msg,Msg);
-   fprintf (Gbl.F.Out,"</form>");
-  }
-
-/*****************************************************************************/
 /*********** Show a form for sending a logo of the current centre ************/
 /*****************************************************************************/
 
 void Ctr_RequestLogo (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
-   extern const char *Txt_File_with_the_logo;
-   extern const char *Txt_Upload_logo;
-
-   /***** Write help message *****/
-   sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y,
-	    64,64);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
-   /***** Write a form to send logo *****/
-   Act_FormStart (ActRecCtrLog);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
-                      "%s:"
-                      "</td>"
-                      "<td style=\"text-align:left;\">"
-                      "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
-                      "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>"
-                      "</form>",
-            The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_File_with_the_logo,
-            Fil_NAME_OF_PARAM_FILENAME_ORG,
-            Txt_Upload_logo);
+   Log_RequestLogo (Sco_SCOPE_CENTRE);
   }
 
 /*****************************************************************************/
-/****************** Receive a photo of the current centre ********************/
+/***************** Receive the logo of the current centre ********************/
 /*****************************************************************************/
 
 void Ctr_ReceiveLogo (void)
   {
-   extern const char *Txt_The_file_is_not_X;
-   char Path[PATH_MAX+1];
-   char FileNameLogoSrc[PATH_MAX+1];
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
-   char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
-   bool WrongType = false;
-
-   /***** Creates directories if not exist *****/
-   sprintf (Path,"%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
-   Fil_CreateDirIfNotExists (Path);
-   sprintf (Path,"%s/%s/%02u",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
-   Fil_CreateDirIfNotExists (Path);
-   sprintf (Path,"%s/%s/%02u/%u",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-   Fil_CreateDirIfNotExists (Path);
-   sprintf (Path,"%s/%s/%02u/%u/logo",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-   Fil_CreateDirIfNotExists (Path);
-
-   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNameLogoSrc,MIMEType);
-
-   /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
-   if (strcmp (MIMEType,"image/png"))
-      if (strcmp (MIMEType,"image/x-png"))
-         if (strcmp (MIMEType,"application/octet-stream"))
-            if (strcmp (MIMEType,"application/octetstream"))
-               if (strcmp (MIMEType,"application/octet"))
-                  WrongType = true;
-   if (WrongType)
-     {
-      sprintf (Gbl.Message,Txt_The_file_is_not_X,"png");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      return;
-     }
-
-   /* End the reception of logo in a temporary file */
-   sprintf (FileNameLogo,"%s/%s/%02u/%u/logo/%u.png",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-   if (!Fil_EndReceptionOfFile (FileNameLogo))
-     {
-      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
-      return;
-     }
-
-   /***** Show the centre information again *****/
-   Ctr_ShowConfiguration ();
+   Log_ReceiveLogo (Sco_SCOPE_CENTRE);
   }
 
 /*****************************************************************************/

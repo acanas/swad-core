@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+39+23+17+204+184+94+168+28+75)
+#define Act_NUM_ACTIONS	(7+52+15+40+23+17+204+184+94+168+28+75)
 
-#define Act_MAX_ACTION_COD 1244
+#define Act_MAX_ACTION_COD 1245
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -186,41 +186,42 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 // Secondary actions
 #define ActInsSch		(ActChgInsSta+  7)
 #define ActPrnInsInf		(ActChgInsSta+  8)
-#define ActChgInsLog		(ActChgInsSta+  9)
+#define ActReqInsLog		(ActChgInsSta+  9)
+#define ActRecInsLog		(ActChgInsSta+ 10)
 
-#define ActEdiCtr		(ActChgInsSta+ 10)
-#define ActReqCtr		(ActChgInsSta+ 11)
-#define ActNewCtr		(ActChgInsSta+ 12)
-#define ActRemCtr		(ActChgInsSta+ 13)
-#define ActChgCtrIns		(ActChgInsSta+ 14)
-#define ActChgCtrPlc		(ActChgInsSta+ 15)
-#define ActRenCtrSho		(ActChgInsSta+ 16)
-#define ActRenCtrFul		(ActChgInsSta+ 17)
-#define ActChgCtrWWW		(ActChgInsSta+ 18)
-#define ActChgCtrSta		(ActChgInsSta+ 19)
+#define ActEdiCtr		(ActChgInsSta+ 11)
+#define ActReqCtr		(ActChgInsSta+ 12)
+#define ActNewCtr		(ActChgInsSta+ 13)
+#define ActRemCtr		(ActChgInsSta+ 14)
+#define ActChgCtrIns		(ActChgInsSta+ 15)
+#define ActChgCtrPlc		(ActChgInsSta+ 16)
+#define ActRenCtrSho		(ActChgInsSta+ 17)
+#define ActRenCtrFul		(ActChgInsSta+ 18)
+#define ActChgCtrWWW		(ActChgInsSta+ 19)
+#define ActChgCtrSta		(ActChgInsSta+ 20)
 
-#define ActEdiDpt		(ActChgInsSta+ 20)
-#define ActNewDpt		(ActChgInsSta+ 21)
-#define ActRemDpt		(ActChgInsSta+ 22)
-#define ActChgDptIns		(ActChgInsSta+ 23)
-#define ActRenDptSho		(ActChgInsSta+ 24)
-#define ActRenDptFul		(ActChgInsSta+ 25)
-#define ActChgDptWWW		(ActChgInsSta+ 26)
+#define ActEdiDpt		(ActChgInsSta+ 21)
+#define ActNewDpt		(ActChgInsSta+ 22)
+#define ActRemDpt		(ActChgInsSta+ 23)
+#define ActChgDptIns		(ActChgInsSta+ 24)
+#define ActRenDptSho		(ActChgInsSta+ 25)
+#define ActRenDptFul		(ActChgInsSta+ 26)
+#define ActChgDptWWW		(ActChgInsSta+ 27)
 
-#define ActEdiPlc		(ActChgInsSta+ 27)
-#define ActNewPlc		(ActChgInsSta+ 28)
-#define ActRemPlc		(ActChgInsSta+ 29)
-#define ActRenPlcSho		(ActChgInsSta+ 30)
-#define ActRenPlcFul		(ActChgInsSta+ 31)
+#define ActEdiPlc		(ActChgInsSta+ 28)
+#define ActNewPlc		(ActChgInsSta+ 29)
+#define ActRemPlc		(ActChgInsSta+ 30)
+#define ActRenPlcSho		(ActChgInsSta+ 31)
+#define ActRenPlcFul		(ActChgInsSta+ 32)
 
-#define ActEdiHld		(ActChgInsSta+ 32)
-#define ActNewHld		(ActChgInsSta+ 33)
-#define ActRemHld		(ActChgInsSta+ 34)
-#define ActChgHldPlc		(ActChgInsSta+ 35)
-#define ActChgHldTyp		(ActChgInsSta+ 36)
-#define ActChgHldStrDat		(ActChgInsSta+ 37)
-#define ActChgHldEndDat		(ActChgInsSta+ 38)
-#define ActRenHld		(ActChgInsSta+ 39)
+#define ActEdiHld		(ActChgInsSta+ 33)
+#define ActNewHld		(ActChgInsSta+ 34)
+#define ActRemHld		(ActChgInsSta+ 35)
+#define ActChgHldPlc		(ActChgInsSta+ 36)
+#define ActChgHldTyp		(ActChgInsSta+ 37)
+#define ActChgHldStrDat		(ActChgInsSta+ 38)
+#define ActChgHldEndDat		(ActChgInsSta+ 39)
+#define ActRenHld		(ActChgInsSta+ 40)
 
 /*****************************************************************************/
 /********************************* Centre tab ********************************/
