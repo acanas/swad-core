@@ -874,10 +874,9 @@ mysql> DESCRIBE degrees;
 | FirstYear       | tinyint(4)    | NO   |     | 0       |                |
 | LastYear        | tinyint(4)    | NO   |     | 0       |                |
 | OptYear         | enum('N','Y') | NO   |     | N       |                |
-| Logo            | varchar(16)   | NO   |     | NULL    |                |
 | WWW             | varchar(255)  | NO   |     | NULL    |                |
 +-----------------+---------------+------+-----+---------+----------------+
-12 rows in set (0.01 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
                    "DegCod INT NOT NULL AUTO_INCREMENT,"
@@ -890,7 +889,6 @@ mysql> DESCRIBE degrees;
                    "FirstYear TINYINT NOT NULL DEFAULT 0,"
                    "LastYear TINYINT NOT NULL DEFAULT 0,"
                    "OptYear ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Logo VARCHAR(16) NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(DegCod),INDEX(CtrCod),INDEX(DegTypCod),INDEX(Status))");
 

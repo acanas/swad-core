@@ -58,8 +58,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
-                                 unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS]);
+static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
+                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS]);
+static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName);
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
 
 /*****************************************************************************/
@@ -105,8 +106,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    struct Course Crs;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
-   char Icon[512];
+   unsigned long NumRow;
+   unsigned long NumRows;
    char ThisRoomCode     [MAX_LENGTH_ROOM_CODE      +1];
    char ThisRoomShortName[MAX_LENGTH_ROOM_SHORT_NAME+1];
    char ThisRoomFullName [MAX_LENGTH_ROOM_FULL_NAME +1];
@@ -133,26 +134,35 @@ void Cht_ShowListOfAvailableChatRooms (void)
             Gbl.Prefs.IconsURL,Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
-   sprintf (Icon,"<img src=\"%s/chat16x16.gif\""
-	         " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-            Gbl.Prefs.IconsURL);
-
    IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_STUDENT &&
                            Gbl.Usrs.Me.LoggedRole != Rol_ROLE_TEACHER &&
                            !Gbl.Usrs.Me.MyDegrees.Num);
    sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
-   Cht_WriteLinkToChat (Icon,"GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
+   Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
+   fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
+	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+            Gbl.Prefs.IconsURL);
+   Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
+
 
    IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegrees.Num;
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_STUDENT:
          sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat (Icon,"GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+         Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
+			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+		  Gbl.Prefs.IconsURL);
+	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
       case Rol_ROLE_TEACHER:
          sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat (Icon,"GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+         Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
+			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+		  Gbl.Prefs.IconsURL);
+	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
          break;
       default:
          break;
@@ -169,14 +179,13 @@ void Cht_ShowListOfAvailableChatRooms (void)
          Lay_ShowErrorAndExit ("Degree not found.");
 
       /* Link to the room of this degree */
-      IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegrees.Num-1);
-      sprintf (Icon,"<img src=\"%s/%s/%s64x64.gif\""
-	            " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,Deg.Logo);
+      IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegrees.Num - 1);
       sprintf (ThisRoomCode,"DEG_%ld",Deg.DegCod);
       sprintf (ThisRoomShortName,"%s",Deg.ShortName);
       sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShortName);
-      Cht_WriteLinkToChat (Icon,ThisRoomCode,ThisRoomShortName,ThisRoomFullName,1,IsLastItemInLevel);
+      Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,1,IsLastItemInLevel);
+      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,NULL);
+      Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
       /* Get my courses in this degree from database */
       if ((NumRows = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res)) > 0) // Courses found in this degree
@@ -194,14 +203,15 @@ void Cht_ShowListOfAvailableChatRooms (void)
                Crs_GetDataOfCourseByCod (&Crs);
 
                /* Link to the room of this course */
-               IsLastItemInLevel[2] = (NumRow == NumRows-1);
-               sprintf (Icon,"<img src=\"%s/dot16x16.gif\""
-        	             " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-                        Gbl.Prefs.IconsURL);
+               IsLastItemInLevel[2] = (NumRow == NumRows - 1);
                sprintf (ThisRoomCode,"CRS_%ld",Crs.CrsCod);
                sprintf (ThisRoomShortName,"%s",Crs.ShortName);
                sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShortName);
-               Cht_WriteLinkToChat (Icon,ThisRoomCode,ThisRoomShortName,ThisRoomFullName,2,IsLastItemInLevel);
+               Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,2,IsLastItemInLevel);
+               fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
+        	                  " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+                        Gbl.Prefs.IconsURL);
+               Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }
 	   }
 
@@ -284,24 +294,30 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 /******************** Write title and link to a chat room ********************/
 /*****************************************************************************/
 
-static void Cht_WriteLinkToChat (const char *Icon,const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
-                                 unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS])
+static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
+                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS])
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_connected_PLURAL;
-   extern const char *Txt_connected_SINGULAR;
-   unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
 
-   sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
+   // sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
 
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
    Act_LinkFormSubmit (RoomFullName,The_ClassFormul[Gbl.Prefs.Theme]);
+  }
+
+static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_connected_PLURAL;
+   extern const char *Txt_connected_SINGULAR;
+   unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
+
    if (NumUsrsInRoom)
       fprintf (Gbl.F.Out,"<strong>");
-   fprintf (Gbl.F.Out,"%s&nbsp;%s",Icon,RoomFullName);
+   fprintf (Gbl.F.Out,"%s",RoomFullName);
    if (NumUsrsInRoom > 1)
       fprintf (Gbl.F.Out," [%d %s]",
                NumUsrsInRoom,Txt_connected_PLURAL);

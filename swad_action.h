@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+40+23+17+204+184+94+168+28+75)
+#define Act_NUM_ACTIONS	(7+52+15+40+23+18+204+184+94+168+28+75)
 
-#define Act_MAX_ACTION_COD 1245
+#define Act_MAX_ACTION_COD 1246
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -265,19 +265,20 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 // Secondary actions
 #define ActDegSch		(ActChgDegSta+  4)
 #define ActPrnDegInf		(ActChgDegSta+  5)
-#define ActChgDegLog		(ActChgDegSta+  6)
+#define ActReqDegLog		(ActChgDegSta+  6)
+#define ActRecDegLog		(ActChgDegSta+  7)
 
-#define ActEdiCrs		(ActChgDegSta+  7)
-#define ActReqCrs		(ActChgDegSta+  8)
-#define ActNewCrs		(ActChgDegSta+  9)
-#define ActRemCrs		(ActChgDegSta+ 10)
-#define ActChgInsCrsCod		(ActChgDegSta+ 11)
-#define ActChgCrsDeg		(ActChgDegSta+ 12)
-#define ActChgCrsYea		(ActChgDegSta+ 13)
-#define ActChgCrsSem		(ActChgDegSta+ 14)
-#define ActRenCrsSho		(ActChgDegSta+ 15)
-#define ActRenCrsFul		(ActChgDegSta+ 16)
-#define ActChgCrsSta		(ActChgDegSta+ 17)
+#define ActEdiCrs		(ActChgDegSta+  8)
+#define ActReqCrs		(ActChgDegSta+  9)
+#define ActNewCrs		(ActChgDegSta+ 10)
+#define ActRemCrs		(ActChgDegSta+ 11)
+#define ActChgInsCrsCod		(ActChgDegSta+ 12)
+#define ActChgCrsDeg		(ActChgDegSta+ 13)
+#define ActChgCrsYea		(ActChgDegSta+ 14)
+#define ActChgCrsSem		(ActChgDegSta+ 15)
+#define ActRenCrsSho		(ActChgDegSta+ 16)
+#define ActRenCrsFul		(ActChgDegSta+ 17)
+#define ActChgCrsSta		(ActChgDegSta+ 18)
 
 /*****************************************************************************/
 /******************************** Course tab *********************************/

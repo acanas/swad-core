@@ -2154,7 +2154,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Deg_DrawDegreeLogo (Gbl.Forum.Deg.Logo,ForumName,16,"vertical-align:middle;");
+         Deg_DrawDegreeLogo (Gbl.Forum.Deg.DegCod,ForumName,16,"vertical-align:middle;");
          break;
       default:
          fprintf (Gbl.F.Out,"%s",Icon);

@@ -223,7 +223,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
-         Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,"vertical-align:top;");
+         Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -288,7 +288,6 @@ static void Deg_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Degree;
    extern const char *Txt_Short_Name;
-   extern const char *Txt_Logo;
    extern const char *Txt_Shortcut_to_this_degree;
    extern const char *Txt_QR_code;
    extern const char *Txt_Courses;
@@ -325,7 +324,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.FullName);
-      Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.Logo,
+      Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,
                           Gbl.CurrentDeg.Deg.ShortName,
                           64,NULL);
       fprintf (Gbl.F.Out,"<br />%s",
@@ -371,28 +370,6 @@ static void Deg_Configuration (bool PrintView)
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_Short_Name,
 	       Gbl.CurrentDeg.Deg.ShortName);
-
-      /***** Degree logo *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td style=\"text-align:left;"
-	                    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_Logo);
-	 Act_FormStart (ActChgDegLog);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>"
-			    "</tr>",
-		  Deg_MAX_LENGTH_DEGREE_LOGO,Gbl.CurrentDeg.Deg.Logo,
-		  Gbl.FormId);
-	}
 
       /***** Link to the degree *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -756,7 +733,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	  Gbl.Prefs.Theme == The_THEME_WHITE)	// TODO: Remove this line
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.Logo,Gbl.CurrentDeg.Deg.ShortName,32,
+	    Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.ShortName,32,
 	                        "vertical-align:top; margin-right:8px;");
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Ctr_DrawCentreLogo (Gbl.CurrentCtr.Ctr.CtrCod,Gbl.CurrentCtr.Ctr.ShortName,32,
@@ -1291,7 +1268,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Deg->WWW,Deg->FullName);
-   Deg_DrawDegreeLogo (Deg->Logo,Deg->ShortName,16,"vertical-align:top;");
+   Deg_DrawDegreeLogo (Deg->DegCod,Deg->ShortName,16,"vertical-align:top;");
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1434,7 +1411,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Deg->FullName);
-      Deg_DrawDegreeLogo (Deg->Logo,Deg->ShortName,16,NULL);
+      Deg_DrawDegreeLogo (Deg->DegCod,Deg->ShortName,16,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
@@ -1841,7 +1818,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Deg_DrawDegreeLogo (NULL,"",16,NULL);
+   Deg_DrawDegreeLogo (-1L,"",16,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/
@@ -2211,9 +2188,9 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
 
    /***** Create a new degree *****/
    sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,Logo,WWW)"
+                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW)"
                   " VALUES ('%ld','%ld','%u','%ld',"
-                  "'%s','%s','%u','%u','%c','','%s')",
+                  "'%s','%s','%u','%u','%c','%s')",
             Deg->CtrCod,Deg->DegTypCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2377,7 +2354,7 @@ void Deg_GetListAllDegs (void)
 
    /***** Get degrees admin by me from database *****/
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,Logo,WWW"
+                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
                   " FROM degrees ORDER BY FullName");
    Gbl.Degs.AllDegs.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
 
@@ -2432,7 +2409,7 @@ static void Deg_GetListDegsOfCurrentCtr (void)
 
    /***** Get degrees of the current centre from database *****/
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,Logo,WWW"
+                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
                   " FROM degrees WHERE CtrCod='%ld' ORDER BY FullName",
             Gbl.CurrentCtr.Ctr.CtrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees of a centre");
@@ -2506,7 +2483,7 @@ void Deg_GetListDegsAdminByMe (void)
    /***** Get degrees admin by me from database *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
       sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                     "ShortName,FullName,FirstYear,LastYear,OptYear,Logo,WWW"
+                     "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
                      " FROM degrees"
                      " WHERE CtrCod='%ld'"
                      " ORDER BY ShortName",
@@ -2514,7 +2491,7 @@ void Deg_GetListDegsAdminByMe (void)
    // TODO: put an if to select all degrees for admins of all degrees !!!!!!!!!!!!!
    else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN
       sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-                     "degrees.ShortName,degrees.FullName,degrees.FirstYear,degrees.LastYear,degrees.OptYear,degrees.Logo,degrees.WWW"
+                     "degrees.ShortName,degrees.FullName,degrees.FirstYear,degrees.LastYear,degrees.OptYear,degrees.WWW"
                      " FROM deg_admin,degrees"
                      " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod<>'-1' AND deg_admin.DegCod=degrees.DegCod"
                      " ORDER BY degrees.ShortName",
@@ -2938,7 +2915,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
       Deg->OptYear = false;
-      Deg->Logo[0] = '\0';
       Deg->WWW[0] = '\0';
       Deg->NumCourses = 0;
       Deg->LstCrss = NULL;
@@ -2947,7 +2923,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
 
    /***** Get data of a degree from database *****/
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,Logo,WWW"
+                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
                   " FROM degrees WHERE DegCod ='%ld'",
             Deg->DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a degree");
@@ -2972,7 +2948,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
       Deg->OptYear = false;
-      Deg->Logo[0] = '\0';
       Deg->WWW[0] = '\0';
       Deg->NumCourses = 0;
       Deg->LstCrss = NULL;
@@ -3026,10 +3001,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    Deg->OptYear = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
 
    /***** Get logo (row[10]) *****/
-   strcpy (Deg->Logo,row[10]);
-
-   /***** Get logo (row[11]) *****/
-   strcpy (Deg->WWW,row[11]);
+   strcpy (Deg->WWW,row[10]);
 
    /***** Get number of courses *****/
    Deg->NumCourses = Crs_GetNumCrssInDeg (Deg->DegCod);
@@ -3671,31 +3643,6 @@ void Deg_ChangeDegOptYear (void)
   }
 
 /*****************************************************************************/
-/************************ Change the logo of a degree ************************/
-/*****************************************************************************/
-
-void Deg_ChangeDegLogo (void)
-  {
-   extern const char *Txt_The_new_logo_is_X;
-   char Query[256+Deg_MAX_LENGTH_DEGREE_LOGO];
-
-   /***** Get the new logo for the degree from form *****/
-   Par_GetParToText ("Logo",Gbl.CurrentDeg.Deg.Logo,Deg_MAX_LENGTH_DEGREE_LOGO);
-
-   /***** Update the table changing old logo by new logo *****/
-   sprintf (Query,"UPDATE degrees SET Logo='%s' WHERE DegCod='%ld'",
-	    Gbl.CurrentDeg.Deg.Logo,Gbl.CurrentDeg.Deg.DegCod);
-   DB_QueryUPDATE (Query,"can not update the logo of the degree");
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_new_logo_is_X,Gbl.CurrentDeg.Deg.Logo);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Show the form again *****/
-   Deg_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
 /************************* Change the WWW of a degree ************************/
 /*****************************************************************************/
 
@@ -3785,6 +3732,24 @@ void Deg_ChangeDegStatus (void)
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
+  }
+
+/*****************************************************************************/
+/*********** Show a form for sending a logo of the current degree ************/
+/*****************************************************************************/
+
+void Deg_RequestLogo (void)
+  {
+   Log_RequestLogo (Sco_SCOPE_DEGREE);
+  }
+
+/*****************************************************************************/
+/***************** Receive the logo of the current degree ********************/
+/*****************************************************************************/
+
+void Deg_ReceiveLogo (void)
+  {
+   Log_ReceiveLogo (Sco_SCOPE_DEGREE);
   }
 
 /*****************************************************************************/
@@ -3913,8 +3878,9 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
    /***** Get degrees admin by a user from database *****/
    sprintf (Query,"(SELECT DegCod,'','' AS ShortName,'' FROM deg_admin WHERE UsrCod='%ld' AND DegCod<'0')"
                   " UNION "
-                  "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName,degrees.Logo FROM deg_admin,degrees"
-                  " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod>='0' AND deg_admin.DegCod=degrees.DegCod) ORDER BY ShortName",
+                  "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName FROM deg_admin,degrees"
+                  " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod>='0' AND deg_admin.DegCod=degrees.DegCod)"
+                  " ORDER BY ShortName",
             UsrCod,UsrCod);
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by a user"))) // If degrees found for this administrator
      {
@@ -3952,7 +3918,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Deg_PutParamDegCod (DegCod);
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
-            Deg_DrawDegreeLogo (row[3],row[1],16,"vertical-align:top;");
+            Deg_DrawDegreeLogo (DegCod,row[1],16,"vertical-align:top;");
             fprintf (Gbl.F.Out,"&nbsp;%s</a>"
                                "</form>",
                      row[2]);
@@ -3978,33 +3944,37 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
 
-void Deg_DrawDegreeLogo (const char *Logo,const char *AltText,
+void Deg_DrawDegreeLogo (long DegCod,const char *AltText,
                          unsigned Size,const char *Style)
   {
    char PathLogo[PATH_MAX+1];
-   bool LogoExists = false;
+   bool LogoExists;
 
    /***** Path to logo *****/
-   if (Logo)
-      if (Logo[0])
-	{
-	 sprintf (PathLogo,"%s/%s/%s/%s64x64.gif",
-		  Cfg_PATH_SWAD_PUBLIC,
-		  Cfg_FOLDER_PUBLIC_ICON,
-		  Cfg_ICON_FOLDER_DEGREES,
-		  Logo);
-         LogoExists = Fil_CheckIfPathExists (PathLogo);
-	}
+   if (DegCod > 0)
+     {
+      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+	       (unsigned) (DegCod % 100),
+	       (unsigned) DegCod,
+	       (unsigned) DegCod);
+      LogoExists = Fil_CheckIfPathExists (PathLogo);
+     }
+   else
+      LogoExists = false;
 
    /***** Draw logo *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%s",
-	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,Logo);
+      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+	       (unsigned) (DegCod % 100),
+	       (unsigned) DegCod,
+	       (unsigned) DegCod);
    else
-      fprintf (Gbl.F.Out,"%s/deg",
+      fprintf (Gbl.F.Out,"%s/deg64x64.gif",
 	       Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"64x64.gif\" alt=\"%s\" class=\"ICON%ux%u\"",
+   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
             AltText,Size,Size);
    if (Style)
       if (Style[0])

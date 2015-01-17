@@ -700,7 +700,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
       if (Sch_BuildSearchQuery (SearchQuery,"courses.FullName",NULL,NULL))
 	{
 	 /***** Query database and list courses found *****/
-	 sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.Logo,degrees.ShortName,degrees.FullName,"
+	 sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
 			"courses.Year,courses.Semester,courses.FullName,centres.ShortName"
 			" FROM courses,degrees,centres,institutions,countries"
 			" WHERE %s"

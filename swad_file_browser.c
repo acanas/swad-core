@@ -9562,7 +9562,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (DegCod);
          sprintf (Gbl.Title,Txt_Go_to_X,row[5]);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Deg_DrawDegreeLogo (row[3],row[4],16,"vertical-align:top;");
+         Deg_DrawDegreeLogo (DegCod,row[4],16,"vertical-align:top;");
 	 fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>"
 			    "</form>",
 		  row[4],row[5]);

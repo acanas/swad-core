@@ -1529,7 +1529,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
                       "<tr>"
                       "<td style=\"width:%upx; text-align:left;\">",
             Rec_DEGREE_LOGO_SIZE);
-   Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.Logo,
+   Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,
                        Gbl.CurrentDeg.Deg.ShortName,
                        Rec_DEGREE_LOGO_SIZE,NULL);
    fprintf (Gbl.F.Out,"</td>"

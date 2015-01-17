@@ -245,7 +245,8 @@ Degree:
 	138. ActDegSch			Search for courses, teachers, documents...
 
 	139. ActPrnDegInf		Print information on the current degree
-	140. ActChgDegLog		Request change of the logo of a degree
+	---. ActReqDegLog		Show form to send the logo of the current degree
+	140. ActRecDegLog		Receive and store the logo of the current degree
 
 	141. ActEdiCrs			Request edition of courses of a degree
 	142. ActReqCrs			Request the creation of a request for a new course (a teacher makes the petition to an administrator)
@@ -1313,8 +1314,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActInsSch		*/{1182,-1,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
 
    /* ActPrnInsInf	*/{1154,-1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ins_PrintConfiguration		,NULL},
-   /* ActReqInsLog	*/{1245,-1,TabCtr,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RequestLogo		,NULL},
-   /* ActRecInsLog	*/{ 699,-1,TabCtr,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ins_ReceiveLogo		,NULL},
+   /* ActReqInsLog	*/{1245,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RequestLogo		,NULL},
+   /* ActRecInsLog	*/{ 699,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ins_ReceiveLogo		,NULL},
 
    /* ActEdiCtr		*/{ 681,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_EditCentres		,NULL},
    /* ActReqCtr		*/{1208,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormReqCtr		,NULL},
@@ -1392,7 +1393,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDegSch		*/{1184,-1,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
 
    /* ActPrnDegInf	*/{1150,-1,TabDeg,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Deg_PrintConfiguration		,NULL},
-   /* ActChgDegLog	*/{ 553,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegLogo		,NULL},
+   /* ActReqDegLog	*/{1246,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RequestLogo		,NULL},
+   /* ActRecDegLog	*/{ 553,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Deg_ReceiveLogo		,NULL},
 
    /* ActEdiCrs		*/{ 555,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqEditCourses		,NULL},
    /* ActReqCrs		*/{1053,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_RecFormReqCrs		,NULL},
@@ -2836,7 +2838,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgDegFstYea,	// #550
 	ActChgDegLstYea,	// #551
 	ActChgDegOptYea,	// #552
-	ActChgDegLog,		// #553
+	ActRecDegLog,		// #553
 	ActChgDegWWW,		// #554
 	ActEdiCrs,		// #555
 	ActNewCrs,		// #556
@@ -3529,6 +3531,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgMnu,		// #1243
 	ActReqCtrLog,		// #1244
 	ActReqInsLog,		// #1245
+	ActReqDegLog,		// #1246
 	};
 
 /*****************************************************************************/

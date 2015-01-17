@@ -211,11 +211,7 @@ static void Crs_Configuration (bool PrintView)
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
 	       Gbl.CurrentDeg.Deg.WWW,
 	       Gbl.CurrentDeg.Deg.FullName);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
-	              " alt=\"%s\" class=\"ICON64x64\" />",
-	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,
-	    Gbl.CurrentDeg.Deg.Logo,
-	    Gbl.CurrentDeg.Deg.ShortName);
+   Deg_DrawDegreeLogo (Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.ShortName,64,NULL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"<br />%s"
@@ -746,7 +742,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
-	       Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,16,NULL);
+	       Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,16,NULL);
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
 	       if (Highlight)
@@ -3085,7 +3081,7 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
    unsigned NumCrs;
 
    /***** Get courses of a user from database *****/
-   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.Logo,degrees.ShortName,degrees.FullName,"
+   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
                   "courses.Year,courses.Semester,courses.FullName,centres.ShortName,crs_usr.Accepted"
                   " FROM crs_usr,courses,degrees,centres"
                   " WHERE crs_usr.UsrCod='%ld'"
@@ -3249,7 +3245,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
-   long DegCod;
+   struct Degree Deg;
    long CrsCod;
    unsigned NumStds;
    unsigned NumTchs;
@@ -3259,8 +3255,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    bool Accepted;
 
    /***** Get degree code (row[0]) *****/
-   if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of degree.");
+   if (!Deg_GetDataOfDegreeByCod (&Deg))
+      Lay_ShowErrorAndExit ("Degree not found.");
 
    /***** Get course code (row[1]) *****/
    if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
@@ -3288,7 +3286,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Teacher has accepted joining to this course/to any course in degree/to any course? *****/
    if (WriteColumnAccepted)
      {
-      Accepted = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
+      Accepted = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
       fprintf (Gbl.F.Out,"<td class=\"BT\" style=\"background-color:%s;\">"
 	                 "<img src=\"%s/%s16x16.gif\""
 	                 " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
@@ -3308,44 +3306,42 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	              "</td>",
             StyleNoBR,BgColor,NumCrs);
 
-   /***** Write degree logo (row[2]), degree short name (row[3]) and centre short name (row[8]) *****/
+   /***** Write degree logo, degree short name (row[2]) and centre short name (row[7]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">",
             StyleNoBR,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
-   Deg_PutParamDegCod (DegCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[4]);
+   Deg_PutParamDegCod (Deg.DegCod);
+   sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" alt=\"%s\""
-                      " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
-                      "&nbsp;%s (%s)"
+   Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,64,NULL);
+   fprintf (Gbl.F.Out," %s (%s)"
                       "</a>"
                       "</form>"
                       "</td>",
-            Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_DEGREES,row[2],
-            row[3],row[3],row[8]);
+            row[2],row[7]);
 
-   /***** Write year (row[5]) *****/
+   /***** Write year (row[4]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
 	              " vertical-align:top; background-color:%s;\">"
 	              "%s"
 	              "</td>",
-            Style,BgColor,Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[5])]);
+            Style,BgColor,Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
 
-   /***** Write semester (row[6]) *****/
+   /***** Write semester (row[5]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
 	              " vertical-align:top; background-color:%s;\">"
 	              "%s"
 	              "</td>",
-            Style,BgColor,Txt_SEMESTER_OF_YEAR[Deg_ConvStrToSemester (row[6])]);
+            Style,BgColor,Txt_SEMESTER_OF_YEAR[Deg_ConvStrToSemester (row[5])]);
 
-   /***** Write course full name (row[7]) *****/
+   /***** Write course full name (row[6]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">",
             Style,BgColor);
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[7]);
+   sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
    Act_LinkFormSubmit (Gbl.Title,Style);
    fprintf (Gbl.F.Out,"%s</a>"
 	              "</form>"

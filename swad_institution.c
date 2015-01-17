@@ -2072,7 +2072,7 @@ void Ins_DrawInstitutionLogo (long InsCod,const char *AltText,
                               unsigned Size,const char *Style)
   {
    char PathLogo[PATH_MAX+1];
-   bool LogoExists = false;
+   bool LogoExists;
 
    /***** Path to logo *****/
    if (InsCod > 0)

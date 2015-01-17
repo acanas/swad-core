@@ -43,7 +43,6 @@
 #define Deg_MAX_LENGTH_DEGREE_TYPE_NAME		 32
 #define Deg_MAX_LENGTH_DEGREE_SHORT_NAME	 32
 #define Deg_MAX_LENGTH_DEGREE_FULL_NAME		127
-#define Deg_MAX_LENGTH_DEGREE_LOGO		 16
 
 #define Deg_MAX_LENGTH_LOCATION_SHORT_NAME	 32
 #define Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR (Deg_MAX_LENGTH_LOCATION_SHORT_NAME*Str_MAX_LENGTH_SPEC_CHAR_HTML)
@@ -80,7 +79,6 @@ struct Degree
    unsigned FirstYear;
    unsigned LastYear;
    bool OptYear;
-   char Logo[Deg_MAX_LENGTH_DEGREE_LOGO+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumCourses;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
@@ -151,9 +149,10 @@ void Deg_ChangeDegreeCtr (void);
 void Deg_ChangeDegFirstYear (void);
 void Deg_ChangeDegLastYear (void);
 void Deg_ChangeDegOptYear (void);
-void Deg_ChangeDegLogo (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
+void Deg_RequestLogo (void);
+void Deg_ReceiveLogo (void);
 
 unsigned Deg_GetNumDegsTotal (void);
 unsigned Deg_GetNumDegsInCty (long InsCod);
@@ -166,7 +165,7 @@ bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg);
 
 void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan);
 
-void Deg_DrawDegreeLogo (const char *Logo,const char *AltText,
+void Deg_DrawDegreeLogo (long DegCod,const char *AltText,
                          unsigned Size,const char *Style);
 
 unsigned Deg_ListDegsFound (const char *Query);

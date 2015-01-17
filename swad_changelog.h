@@ -39,11 +39,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.56 (2015/01/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.57 (2015/01/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.57:    Jan 17, 2015	New option to upload logo of degree. (173720 lines)
+					3 changes necessary in database:
+UPDATE actions SET Txt='Cambiar logo de titulaci&oacute;n' WHERE ActCod='553' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1246','es','N','Solicitar env&iacute;o de logo de titulaci&oacute;n');
+ALTER TABLE degrees DROP COLUMN Logo;
+
 	Version 14.56:    Jan 17, 2015	New module swad_logo for drawing logos of institutions, centres and degrees.
 					New option to upload logo of institution. (173735 lines)
 					1 change necessary in Makefile:

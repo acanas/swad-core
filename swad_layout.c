@@ -1327,7 +1327,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Deg_DrawDegreeLogo (Deg.Logo,Deg.ShortName,Size,NULL);
+      Deg_DrawDegreeLogo (Deg.DegCod,Deg.ShortName,Size,NULL);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }
