@@ -3330,7 +3330,7 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LOG\""
 	                 " style=\"text-align:right; vertical-align:top;\">");
-      if (DegCod >= 0)
+      if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
 	                 "</td>");
@@ -3486,7 +3486,7 @@ static void Sta_WriteDegree (long DegCod)
       Deg_GetDataOfDegreeByCod (&Deg);
       fprintf (Gbl.F.Out,"%s\">"
                          "<a href=\"%s\" class=\"LOG\" target=\"_blank\">",
-               Deg.WWW,Deg.FullName);
+               Deg.FullName,Deg.WWW);
       Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
                     16,"vertical-align:top;",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",

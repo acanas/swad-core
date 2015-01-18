@@ -10453,3 +10453,5 @@ ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
 
 ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
 
+
+SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,ShortName,FullName,FirstYear,LastYear,OptYear,WWW FROM degrees;
