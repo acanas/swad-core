@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.57.1 (2015/01/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.57.2 (2015/01/18)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.57.2:  Jan 18, 2015	Icon of institution, centre or degree is not drawn on title when logo does not exist. (173693 lines)
 	Version 14.57.1:  Jan 17, 2015	Code refactoring related to logos of institutions, centres and degrees. (173674 lines)
 	Version 14.57:    Jan 17, 2015	New option to upload logo of degree. (173720 lines)
 					3 changes necessary in database:

@@ -173,7 +173,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
-         Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,
+                       16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -290,7 +291,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
       Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
-                    Gbl.CurrentCtr.Ctr.ShortName,64,NULL);
+                    Gbl.CurrentCtr.Ctr.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -594,7 +595,8 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
-   Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,"vertical-align:top;");
+   Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,
+                 16,"vertical-align:top;",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1137,7 +1139,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ctr->FullName);
-      Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
@@ -1922,7 +1924,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_CENTRE,-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_CENTRE,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/

@@ -1984,7 +1984,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       if (SeeOrPrint == Pho_DEGREES_SEE)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   Deg.WWW,Deg.FullName);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+                    16,"vertical-align:top;",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
                Deg.ShortName);
       if (SeeOrPrint == Pho_DEGREES_SEE)

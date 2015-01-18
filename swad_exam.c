@@ -791,7 +791,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    else
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.FullName,64,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.FullName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s%s" \
                       "</td>" \
 	              "</tr>",

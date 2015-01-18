@@ -2148,17 +2148,17 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
       case For_FORUM_INSTITUTION_USRS:
       case For_FORUM_INSTITUTION_TCHS:
          Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.Forum.Ins.InsCod,ForumName,
-                       16,"vertical-align:middle;");
+                       16,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
          Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.Forum.Ctr.CtrCod,ForumName,
-                       16,"vertical-align:middle;");
+                       16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
          Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.Forum.Deg.DegCod,ForumName,
-                       16,"vertical-align:middle;");
+                       16,NULL,true);
          break;
       default:
          fprintf (Gbl.F.Out,"%s",Icon);

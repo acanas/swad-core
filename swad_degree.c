@@ -223,7 +223,8 @@ void Deg_SeeDegWithPendingCrss (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
-         Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+                       16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -325,7 +326,7 @@ static void Deg_Configuration (bool PrintView)
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.FullName);
       Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
-                    Gbl.CurrentDeg.Deg.ShortName,64,NULL);
+                    Gbl.CurrentDeg.Deg.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",
                Gbl.CurrentDeg.Deg.FullName);
       if (PutLink)
@@ -728,21 +729,20 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
       Str_LimitLengthHTMLStr (FullName,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       The_ClassCourse[Gbl.Prefs.Theme]);
-      if (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
-	  Gbl.Prefs.Theme == The_THEME_WHITE)	// TODO: Remove this line
+      if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
 	                  Gbl.CurrentDeg.Deg.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;");
+	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
 	                  Gbl.CurrentCtr.Ctr.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;");
+	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
 	                  Gbl.CurrentIns.Ins.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;");
+	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
 	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
@@ -1270,7 +1270,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Deg->WWW,Deg->FullName);
-   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,"vertical-align:top;");
+   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,
+                 16,"vertical-align:top;",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1413,7 +1414,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Deg->FullName);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
@@ -1820,7 +1821,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_DEGREE,-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_DEGREE,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/
@@ -3920,7 +3921,8 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Deg_PutParamDegCod (DegCod);
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
-            Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,row[1],16,"vertical-align:top;");
+            Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,row[1],
+                          16,"vertical-align:top;",true);
             fprintf (Gbl.F.Out,"&nbsp;%s</a>"
                                "</form>",
                      row[2]);

@@ -163,7 +163,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
-         Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,16,"vertical-align:top;");
+         Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+                       16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -267,7 +268,7 @@ static void Ins_Configuration (bool PrintView)
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
       Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
-                    Gbl.CurrentIns.Ins.ShortName,64,NULL);
+                    Gbl.CurrentIns.Ins.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -529,7 +530,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,16,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,
+                 16,NULL,true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1113,7 +1115,8 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ins->FullName);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,16,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,
+                    16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Country */
@@ -1732,7 +1735,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,-1L,"",16,NULL);
+   Log_DrawLogo (Sco_SCOPE_INSTITUTION,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/

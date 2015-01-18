@@ -1531,7 +1531,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
                       "<td style=\"width:%upx; text-align:left;\">",
             Rec_DEGREE_LOGO_SIZE);
    Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
-                 Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL);
+                 Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL,true);
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"%s\" style=\"text-align:center;\">"
                       "%s<br />%s<br />%s"
@@ -2144,7 +2144,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
       Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
-                    Rec_INSTITUTION_LOGO_SIZE,NULL);
+                    Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       fprintf (Gbl.F.Out,"</td>"
                          "<td class=\"%s\" style=\"text-align:left;"
                          " vertical-align:middle;\">"

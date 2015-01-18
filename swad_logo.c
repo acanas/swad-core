@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Style)
+                   unsigned Size,const char *Style,bool PutIconIfNotExists)
   {
    const char *Folder;
    const char *Icon;
@@ -102,23 +102,26 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
    else
       LogoExists = false;
 
-   /***** Draw logo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
-   if (LogoExists)
-      fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
-	       (unsigned) (Cod % 100),
-	       (unsigned) Cod,
-	       (unsigned) Cod);
-   else
-      fprintf (Gbl.F.Out,"%s/%s64x64.gif",
-	       Gbl.Prefs.IconsURL,Icon);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-            AltText,Size,Size);
-   if (Style)
-      if (Style[0])
-         fprintf (Gbl.F.Out," style=\"%s\"",Style);
-   fprintf (Gbl.F.Out," />");
+   if (LogoExists || PutIconIfNotExists)
+     {
+      /***** Draw logo *****/
+      fprintf (Gbl.F.Out,"<img src=\"");
+      if (LogoExists)
+	 fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+		  Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
+		  (unsigned) (Cod % 100),
+		  (unsigned) Cod,
+		  (unsigned) Cod);
+      else
+	 fprintf (Gbl.F.Out,"%s/%s64x64.gif",
+		  Gbl.Prefs.IconsURL,Icon);
+      fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
+	       AltText,Size,Size);
+      if (Style)
+	 if (Style[0])
+	    fprintf (Gbl.F.Out," style=\"%s\"",Style);
+      fprintf (Gbl.F.Out," />");
+     }
   }
 
 /*****************************************************************************/

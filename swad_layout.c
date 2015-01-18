@@ -1279,7 +1279,8 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,Size,NULL);
+      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+                    Size,NULL,true);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
@@ -1328,7 +1329,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,Size,NULL);
+      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,Size,NULL,true);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }
