@@ -3003,7 +3003,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    /***** Get optional year (row[9]) *****/
    Deg->OptYear = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
 
-   /***** Get logo (row[10]) *****/
+   /***** Get WWW (row[10]) *****/
    strcpy (Deg->WWW,row[10]);
 
    /***** Get number of courses *****/

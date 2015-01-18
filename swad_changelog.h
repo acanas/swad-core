@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.58 (2015/01/18)"
+#define Log_PLATFORM_VERSION	"SWAD 14.58.1 (2015/01/18)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+	Version 14.58.1:  Jan 18, 2015	Fixed minor bugs in layout. (174178 lines)
 	Version 14.58:    Jan 18, 2015	New options to see/admin documents of degree, centre and institution (not finished). (174174 lines)
 	Version 14.57.3:  Jan 18, 2015	Fixed bug in statistics. (173694 lines)
 	Version 14.57.2:  Jan 18, 2015	Icon of institution, centre or degree is not drawn on title when logo does not exist. (173693 lines)

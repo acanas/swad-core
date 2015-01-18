@@ -688,9 +688,11 @@ void Cty_ListCountries2 (void)
 
    /***** Div for Google Geochart *****/
    if (Gbl.CurrentAct == ActSeeCty)
-      fprintf (Gbl.F.Out,"<div id='chart_div'"
-	                 " style=\"text-align:center; margin-top:10px;\">"
-	                 "</div>");
+     {
+      fprintf (Gbl.F.Out,"<div id='chart_div' style=\"width:500px;"
+	                 " margin:10px auto;\">"
+                         "</div>");
+     }
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
