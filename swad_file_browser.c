@@ -102,6 +102,12 @@ static long Brw_FileBrowserForDB[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_ADMIN_MARKS_GRP     = 13,
    Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_USR     = 14,
    Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_CRS     = 15,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG   = 16,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG = 17,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR   = 18,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR = 19,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   };
 /*
 const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
@@ -135,6 +141,12 @@ const Brw_FileBrowser_t Brw_FileBrowserForExpandedFolders[Brw_NUM_TYPES_FILE_BRO
    Brw_FILE_BRW_SEE_MARKS_GRP,		// Brw_FILE_BRW_ADMIN_MARKS_GRP
    Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   Brw_FILE_BRW_SEE_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   Brw_FILE_BRW_SEE_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   Brw_FILE_BRW_SEE_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   Brw_FILE_BRW_SEE_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 
 // Internal names of root folders
@@ -156,46 +168,64 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,		// Brw_FILE_BRW_ADMIN_MARKS_GRP
    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 
 // Number of columns of a file browser
 const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   5,			// Brw_FILE_BRW_UNKNOWN
-   5,			// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
-   4,			// Brw_FILE_BRW_SEE_MARKS_CRS
-   8,			// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
-   8,			// Brw_FILE_BRW_COMMON_CRS
-   8,			// Brw_FILE_BRW_COMMON_GRP
-   8,			// Brw_FILE_BRW_WORKS_USR
-   8,			// Brw_FILE_BRW_WORKS_CRS
-  10,			// Brw_FILE_BRW_ADMIN_MARKS_CRS
-   8,			// Brw_FILE_BRW_BRIEFCASE_USR
-   5,			// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
-   8,			// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
-   4,			// Brw_FILE_BRW_SEE_MARKS_GRP
-  10,			// Brw_FILE_BRW_ADMIN_MARKS_GRP
-   8,			// Brw_FILE_BRW_ASSIGNMENTS_USR
-   8,			// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   5,	// Brw_FILE_BRW_UNKNOWN
+   5,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   4,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   8,	// Brw_FILE_BRW_COMMON_CRS
+   8,	// Brw_FILE_BRW_COMMON_GRP
+   8,	// Brw_FILE_BRW_WORKS_USR
+   8,	// Brw_FILE_BRW_WORKS_CRS
+  10,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   8,	// Brw_FILE_BRW_BRIEFCASE_USR
+   5,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   4,	// Brw_FILE_BRW_SEE_MARKS_GRP
+  10,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   8,	// Brw_FILE_BRW_ASSIGNMENTS_USR
+   8,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   5,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   5,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   5,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   false,		// Brw_FILE_BRW_UNKNOWN
-   false,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
-   false,		// Brw_FILE_BRW_SEE_MARKS_CRS
-   true,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
-   true,		// Brw_FILE_BRW_COMMON_CRS
-   true,		// Brw_FILE_BRW_COMMON_GRP
-   true,		// Brw_FILE_BRW_WORKS_USR
-   true,		// Brw_FILE_BRW_WORKS_CRS
-   true,		// Brw_FILE_BRW_ADMIN_MARKS_CRS
-   true,		// Brw_FILE_BRW_BRIEFCASE_USR
-   false,		// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
-   true,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
-   false,		// Brw_FILE_BRW_SEE_MARKS_GRP
-   true,		// Brw_FILE_BRW_ADMIN_MARKS_GRP
-   true,		// Brw_FILE_BRW_ASSIGNMENTS_USR
-   true,		// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   false,	// Brw_FILE_BRW_UNKNOWN
+   false,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   false,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   true,	// Brw_FILE_BRW_COMMON_CRS
+   true,	// Brw_FILE_BRW_COMMON_GRP
+   true,	// Brw_FILE_BRW_WORKS_USR
+   true,	// Brw_FILE_BRW_WORKS_CRS
+   true,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   true,	// Brw_FILE_BRW_BRIEFCASE_USR
+   false,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   false,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   true,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   true,	// Brw_FILE_BRW_ASSIGNMENTS_USR
+   true,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   false,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   false,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   false,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -215,6 +245,12 @@ const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqRemFilMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActReqRemFilAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActReqRemFilAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -234,6 +270,12 @@ const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFilMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRemFilAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemFilAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -253,6 +295,12 @@ const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFolMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRemFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -272,6 +320,12 @@ const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemTreMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRemTreAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemTreAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -291,6 +345,12 @@ const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCopMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActCopAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCopAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -310,6 +370,12 @@ const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActPasMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActPasAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActPasAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -329,6 +395,12 @@ const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActFrmCreMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActFrmCreAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActFrmCreAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -348,6 +420,12 @@ const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreFolMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActCreFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCreFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -367,6 +445,12 @@ const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActCreLnkAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCreLnkAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -386,6 +470,12 @@ const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRenFolMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRenFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRenFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -405,6 +495,12 @@ const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilMrkGrpDZ,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRcvFilAsgUsrDZ,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRcvFilAsgCrsDZ,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -424,6 +520,12 @@ const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilMrkGrpCla,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActRcvFilAsgUsrCla,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRcvFilAsgCrsCla,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -443,6 +545,12 @@ const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActAdmAsgWrkUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActAdmAsgWrkCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -462,6 +570,12 @@ const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActExpAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActExpAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -481,6 +595,12 @@ const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActConAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActConAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -500,15 +620,33 @@ const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActChgDatAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActChgDatAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
 #define Brw_GiB (1024ULL*1024ULL*1024ULL)
 
 /* Maximum quotas for each type of file browser */
-#define Brw_MAX_QUOTA_DOWNLOAD_CRS		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOWNLOAD_CRS		5000
-#define Brw_MAX_FOLDERS_DOWNLOAD_CRS		1000
+#define Brw_MAX_QUOTA_DOCUMENTS_INS		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_DOCUMENTS_INS		5000
+#define Brw_MAX_FOLDERS_DOCUMENTS_INS		1000
+
+#define Brw_MAX_QUOTA_DOCUMENTS_CTR		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_DOCUMENTS_CTR		5000
+#define Brw_MAX_FOLDERS_DOCUMENTS_CTR		1000
+
+#define Brw_MAX_QUOTA_DOCUMENTS_DEG		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_DOCUMENTS_DEG		5000
+#define Brw_MAX_FOLDERS_DOCUMENTS_DEG		1000
+
+#define Brw_MAX_QUOTA_DOCUMENTS_CRS		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_DOCUMENTS_CRS		5000
+#define Brw_MAX_FOLDERS_DOCUMENTS_CRS		1000
 
 #define Brw_MAX_QUOTA_DOWNLOAD_GRP		( 1ULL*Brw_GiB)
 #define Brw_MAX_FILES_DOWNLOAD_GRP		1000
@@ -1012,7 +1150,31 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get type of file browser *****/
    switch (Gbl.CurrentAct)
      {
-      case ActSeeAdmDoc:	// Access to a documents zone from menu
+      case ActSeeAdmDocIns:	// Access to a documents zone from menu
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	    /* These roles can edit documents of institution */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_INS;
+	 else
+	    /* The rest of roles can not edit documents of institution */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_INS;
+         break;
+      case ActSeeAdmDocCtr:	// Access to a documents zone from menu
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	    /* These roles can edit documents of centre */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR;
+	 else
+	    /* The rest of roles can not edit documents of centre */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_CTR;
+         break;
+      case ActSeeAdmDocDeg:	// Access to a documents zone from menu
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	    /* These roles can edit documents of degree */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG;
+	 else
+	    /* The rest of roles can not edit documents of degree */
+	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_DEG;
+         break;
+      case ActSeeAdmDocCrs:	// Access to a documents zone from menu
          /* Set file browser type acording to last group accessed */
 	 switch (Gbl.Usrs.Me.LoggedRole)
 	   {
@@ -1023,7 +1185,7 @@ void Brw_GetParAndInitFileBrowser (void)
 								         Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS;
 	       break;
 	    default:
-	       /* The rest of roles can not edit documentos of course/groups */
+	       /* The rest of roles can not edit documents of course/groups */
 	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_FILE_BRW_SEE_DOCUMENTS_GRP :
 								         Brw_FILE_BRW_SEE_DOCUMENTS_CRS;
 	       break;
@@ -1411,7 +1573,7 @@ static long Brw_GetGrpSettings (void)
       /***** Try to get group code from database *****/
       switch (Gbl.CurrentAct)
 	{
-	 case ActSeeAdmDoc:
+	 case ActSeeAdmDocCrs:
 	 case ActSeeDocGrp:
 	 case ActAdmDocGrp:	// Access to a documents zone from menu
 	    return Brw_GetGrpLastAccZone ("LastDowGrpCod");
@@ -1442,7 +1604,7 @@ static void Brw_GetDataCurrentGrp (void)
 
       switch (Gbl.CurrentAct)
 	{
-	 case ActSeeAdmDoc:	// Access to see/admin a documents zone from menu
+	 case ActSeeAdmDocCrs:	// Access to see/admin a documents zone from menu
 	 case ActChgToSeeDoc:	// Access to see a documents zone
 	 case ActSeeDocGrp:	// Access to see a documents zone
 
@@ -1602,6 +1764,18 @@ static void Brw_SetPathFileBrowser (void)
    /***** Set paths depending on file browser *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
+         break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
@@ -1962,11 +2136,29 @@ static void Brw_SetMaxQuota (void)
   {
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUMENTS_INS;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUMENTS_INS;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDERS_DOCUMENTS_INS;
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUMENTS_CTR;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUMENTS_CTR;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDERS_DOCUMENTS_CTR;
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUMENTS_DEG;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUMENTS_DEG;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDERS_DOCUMENTS_DEG;
+         break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOWNLOAD_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOWNLOAD_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDERS_DOWNLOAD_CRS;
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUMENTS_CRS;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUMENTS_CRS;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDERS_DOCUMENTS_CRS;
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
@@ -2487,6 +2679,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Private_storage_zone;
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
 
+   /***** Set title of file browser *****/
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_UNKNOWN            ] = NULL;				// Brw_FILE_BRW_UNKNOWN
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_CRS  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_MARKS_CRS      ] = Txt_Marks_zone;			// Brw_FILE_BRW_SEE_MARKS_CRS
@@ -2503,6 +2696,12 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_MARKS_GRP    ] = Txt_Marks_management_zone;	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_ASSIGNMENTS_USR    ] = Txt_Assignments_zone;		// Brw_FILE_BRW_ASSIGNMENTS_USR
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_ASSIGNMENTS_CRS    ] = Txt_Assignments_zone;		// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_DEG  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_CTR  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_INS  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_INS	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_INS] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct text
 
    /***** Check if the maximum quota has been exceeded *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -2727,6 +2926,15 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    /***** Write subtitle *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         sprintf (Subtitle,"(%s)",
+                  "option in development");
+	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course);

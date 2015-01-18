@@ -70,6 +70,12 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActZIPAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActZIPAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS	// TODO: Set the correct action
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
   };
 
 /*****************************************************************************/

@@ -16082,7 +16082,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&eacute;rias"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocIns
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents"
+#elif L==3
+	"Documentos"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Kuatia"
+#elif L==6
+	"Documenti"
+#elif L==7
+	"Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -16162,7 +16182,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocCtr
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents"
+#elif L==3
+	"Documentos"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Kuatia"
+#elif L==6
+	"Documenti"
+#elif L==7
+	"Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -16245,7 +16285,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocDeg
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents"
+#elif L==3
+	"Documentos"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Kuatia"
+#elif L==6
+	"Documenti"
+#elif L==7
+	"Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -16349,7 +16409,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeDoc
+	// ActSeeAdmDocCrs
 #if   L==0
 	"Documents"
 #elif L==1
@@ -17900,7 +17960,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Feriados e dias sem escola"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocIns
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents of the institution uploaded by administrators"
+#elif L==3
+	"Documentos de la instituci&oacute;n subidos por administradores"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Documentos de la instituci&oacute;n subidos por administradores"	// Okoteve traducción
+#elif L==6
+	"Area documenti"
+#elif L==7
+	"Obszar Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -17980,7 +18060,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocCtr
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents of the centre uploaded by administrators"
+#elif L==3
+	"Documentos del centro subidos por administradores"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Documentos del centro subidos por administradores"	// Okoteve traducción
+#elif L==6
+	"Area documenti"
+#elif L==7
+	"Obszar Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -18063,7 +18163,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas nesta titula&ccedil;&atilde;o"
 #endif
 	,
-	NULL,
+	// ActSeeAdmDocDeg
+#if   L==0
+	"Documents"
+#elif L==1
+	"Dokumente"
+#elif L==2
+	"Documents of the degree uploaded by administrators"
+#elif L==3
+	"Documentos de la titulaci&oacute;n subidos por administradores"
+#elif L==4
+	"Documents"
+#elif L==5
+	"Documentos de la titulaci&oacute;n subidos por administradores"	// Okoteve traducción
+#elif L==6
+	"Area documenti"
+#elif L==7
+	"Obszar Dokument&oacute;w"
+#elif L==8
+	"Documentos"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -18167,7 +18287,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeDoc
+	// ActSeeAdmDocCrs
 #if   L==0
 	"Documents de l'assignatura o d'un grup enviats per professors"
 #elif L==1
@@ -31670,7 +31790,7 @@ const char *Txt_Rooms_with_users =
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
    {
-   // Brw_FILE_BRW_UNKNOWN
+	 // Brw_FILE_BRW_UNKNOWN
 	 "",
 	 // Brw_FILE_BRW_SEE_DOCUMENTS_CRS
 #if   L==0
@@ -31985,6 +32105,132 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "assignments"		// Potrzebujesz tlumaczenie
 #elif L==8
 	 "atividades"
+#endif
+	 ,
+	 // Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
+#endif
+	 ,
+	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
+#endif
+	 ,
+	 // Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
+#endif
+	 ,
+	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
+#endif
+	 ,
+	 // Brw_FILE_BRW_SEE_DOCUMENTS_INS
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
+#endif
+	 ,
+	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+#if   L==0
+	 "documents"
+#elif L==1
+	 "Dokumente"
+#elif L==2
+	 "documents"
+#elif L==3
+	 "documentos"
+#elif L==4
+	 "documents"
+#elif L==5
+	 "kuatia"
+#elif L==6
+	 "documenti"
+#elif L==7
+	 "documents"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "documentos"
 #endif
 	};
 

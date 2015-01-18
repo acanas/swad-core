@@ -85,7 +85,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActUnk,		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   ActSeeAdmDoc,	// Ntf_EVENT_DOCUMENT_FILE
+   ActSeeAdmDocCrs,	// Ntf_EVENT_DOCUMENT_FILE
    ActAdmCom,		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */

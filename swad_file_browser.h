@@ -35,7 +35,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Brw_NUM_TYPES_FILE_BROWSER 16
+#define Brw_NUM_TYPES_FILE_BROWSER 22
 // The following types are stored in clipboard, expanded_folders, file_browser_size tables as numeric fields, so don't change numbers!
 typedef enum
   {
@@ -55,6 +55,12 @@ typedef enum
    Brw_FILE_BRW_ADMIN_MARKS_GRP     = 13,
    Brw_FILE_BRW_ASSIGNMENTS_USR     = 14,
    Brw_FILE_BRW_ASSIGNMENTS_CRS     = 15,
+   Brw_FILE_BRW_SEE_DOCUMENTS_DEG   = 16,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG = 17,
+   Brw_FILE_BRW_SEE_DOCUMENTS_CTR   = 18,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR = 19,
+   Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   } Brw_FileBrowser_t;
 
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
@@ -117,12 +123,13 @@ struct FileMetadata
 
 #define Brw_MAX_BYTES_MIME_TYPE	256	// Maximum length of "image/jpeg", "text/html", etc.
 
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_COMMON		"comun"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS		"trabajos"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEFCASE		"maletin"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be "doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_COMMON		"comun"			// TODO: It should be "sha"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS		"trabajos"		// TODO: It should be "wrk"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"	// TODO: It should be "mrk"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEFCASE		"maletin"		// TODO: It should be "brf"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
