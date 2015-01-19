@@ -227,6 +227,156 @@ const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
    false,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
+const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActSeeMrkCrs,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActAdmComCrs,	// Brw_FILE_BRW_COMMON_CRS
+   ActAdmComGrp,	// Brw_FILE_BRW_COMMON_GRP
+   ActAdmAsgWrkUsr,	// Brw_FILE_BRW_WORKS_USR
+   ActAdmAsgWrkCrs,	// Brw_FILE_BRW_WORKS_CRS
+   ActAdmMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActAdmBrf,		// Brw_FILE_BRW_BRIEFCASE_USR
+   ActSeeDocGrp,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActAdmDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActSeeMrkGrp,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActAdmAsgWrkUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActAdmAsgWrkCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActChgToSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActChgToSeeMrk,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActChgToAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActChgToAdmCom,	// Brw_FILE_BRW_COMMON_CRS
+   ActChgToAdmCom,	// Brw_FILE_BRW_COMMON_GRP
+   ActUnk,		// Brw_FILE_BRW_WORKS_USR
+   ActUnk,		// Brw_FILE_BRW_WORKS_CRS
+   ActChgToAdmMrk,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActUnk,		// Brw_FILE_BRW_BRIEFCASE_USR
+   ActChgToSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActChgToAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActChgToSeeMrk,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActChgToAdmMrk,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActShoDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_COMMON_CRS
+   ActUnk,		// Brw_FILE_BRW_COMMON_GRP
+   ActUnk,		// Brw_FILE_BRW_WORKS_USR
+   ActUnk,		// Brw_FILE_BRW_WORKS_CRS
+   ActShoMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActUnk,		// Brw_FILE_BRW_BRIEFCASE_USR
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActShoDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActShoMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActShoDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActShoDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActShoDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActHidDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_COMMON_CRS
+   ActUnk,		// Brw_FILE_BRW_COMMON_GRP
+   ActUnk,		// Brw_FILE_BRW_WORKS_USR
+   ActUnk,		// Brw_FILE_BRW_WORKS_CRS
+   ActHidMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActUnk,		// Brw_FILE_BRW_BRIEFCASE_USR
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActHidDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActHidMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActUnk,		// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActHidDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActHidDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActHidDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActReqDatSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActReqDatSeeMrkCrs,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActReqDatAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActReqDatComCrs,	// Brw_FILE_BRW_COMMON_CRS
+   ActReqDatComGrp,	// Brw_FILE_BRW_COMMON_GRP
+   ActReqDatWrkUsr,	// Brw_FILE_BRW_WORKS_USR
+   ActReqDatWrkCrs,	// Brw_FILE_BRW_WORKS_CRS
+   ActReqDatAdmMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActReqDatBrf,	// Brw_FILE_BRW_BRIEFCASE_USR
+   ActReqDatSeeDocGrp,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActReqDatAdmDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActReqDatSeeMrkGrp,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActReqDatAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActReqDatAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActReqDatAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActReqDatSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActReqDatAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActReqDatSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActReqDatAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActReqDatSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActReqDatAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_FILE_BRW_UNKNOWN
+   ActDowSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   ActSeeMyMrkCrs,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   ActDowAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   ActDowComCrs,	// Brw_FILE_BRW_COMMON_CRS
+   ActDowComGrp,	// Brw_FILE_BRW_COMMON_GRP
+   ActDowWrkUsr,	// Brw_FILE_BRW_WORKS_USR
+   ActDowWrkCrs,	// Brw_FILE_BRW_WORKS_CRS
+   ActDowAdmMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   ActDowBrf,		// Brw_FILE_BRW_BRIEFCASE_USR
+   ActDowSeeDocGrp,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   ActDowAdmDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   ActSeeMyMrkGrp,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   ActDowAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   ActDowAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
+   ActDowAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
+   ActDowSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActDowAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActDowSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActDowAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActDowSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActDowAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
 const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
@@ -1642,6 +1792,9 @@ void Brw_GetParAndInitFileBrowser (void)
 
    switch (Gbl.CurrentAct)
      {
+      case ActCreFolDocIns:	case ActRenFolDocIns:
+      case ActCreFolDocCtr:	case ActRenFolDocCtr:
+      case ActCreFolDocDeg:	case ActRenFolDocDeg:
       case ActCreFolDocCrs:	case ActRenFolDocCrs:
       case ActCreFolDocGrp:	case ActRenFolDocGrp:
       case ActCreFolComCrs:	case ActRenFolComCrs:
@@ -1656,6 +1809,9 @@ void Brw_GetParAndInitFileBrowser (void)
 	 /* Get the name of the new folder */
 	 Par_GetParToText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
+      case ActCreLnkDocIns:
+      case ActCreLnkDocCtr:
+      case ActCreLnkDocDeg:
       case ActCreLnkDocCrs:
       case ActCreLnkDocGrp:
       case ActCreLnkComCrs:
@@ -1736,10 +1892,10 @@ static void Brw_GetDataCurrentGrp (void)
       switch (Gbl.CurrentAct)
 	{
 	 case ActSeeAdmDocCrs:	// Access to see/admin a documents zone from menu
-	 case ActChgToSeeDocCrs:	// Access to see a documents zone
+	 case ActChgToSeeDocCrs:// Access to see a documents zone
 	 case ActSeeDocGrp:	// Access to see a documents zone
 
-	 case ActChgToAdmDocCrs:	// Access to admin a documents zone
+	 case ActChgToAdmDocCrs:// Access to admin a documents zone
 	 case ActAdmDocGrp:	// Access to admin a documents zone
 
 	 case ActChgToAdmCom:	// Access to admin a common zone
@@ -2601,31 +2757,7 @@ static void Brw_FormToChangeZone (void)
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
    /***** Form start *****/
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-         Act_FormStart (ActChgToSeeDocCrs);
-         break;
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         Act_FormStart (ActChgToAdmDocCrs);
-         break;
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_COMMON_GRP:
-         Act_FormStart (ActChgToAdmCom);
-         break;
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-         Act_FormStart (ActChgToSeeMrk);
-         break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         Act_FormStart (ActChgToAdmMrk);
-         break;
-      default:
-         break;
-     }
+   Act_FormStart (Brw_ActChgZone[Gbl.FileBrowser.Type]);
 
    /***** List start *****/
    fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
@@ -3450,64 +3582,26 @@ static void Brw_WriteFormFullTree (void)
    fprintf (Gbl.F.Out,"<div class=\"%s\""
 	              " style=\"text-align:center; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_FormStart (Brw_ActSeeAdm[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-	 Act_FormStart (ActSeeDocCrs);
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_SEE_MARKS_CRS:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
          Grp_PutParamGrpCod (-1L);
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-	 Act_FormStart (ActSeeDocGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-	 Act_FormStart (ActAdmDocCrs);
-         Grp_PutParamGrpCod (-1L);
-	 break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-	 Act_FormStart (ActAdmDocGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_COMMON_CRS:
-	 Act_FormStart (ActAdmComCrs);
-         Grp_PutParamGrpCod (-1L);
-	 break;
       case Brw_FILE_BRW_COMMON_GRP:
-	 Act_FormStart (ActAdmComGrp);
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
          Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-	 Act_FormStart (ActAdmAsgWrkUsr);
 	 break;
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-	 Act_FormStart (ActAdmAsgWrkCrs);
-	 Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
-	 break;
-      case Brw_FILE_BRW_WORKS_USR:
-	 Act_FormStart (ActAdmAsgWrkUsr);
-	 break;
       case Brw_FILE_BRW_WORKS_CRS:
-	 Act_FormStart (ActAdmAsgWrkCrs);
-	 Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
-	 break;
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-	 Act_FormStart (ActSeeMrkCrs);
-         Grp_PutParamGrpCod (-1L);
-	 break;
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-	 Act_FormStart (ActSeeMrkGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-	 Act_FormStart (ActAdmMrkCrs);
-         Grp_PutParamGrpCod (-1L);
-	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-	 Act_FormStart (ActAdmMrkGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-	 Act_FormStart (ActAdmBrf);
+	 Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
 	 break;
       default:
 	 break;
@@ -4448,20 +4542,11 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
    extern const char *Txt_Show_FOLDER_FILE_OR_LINK_X;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   Act_FormStart (Brw_ActShow[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         Act_FormStart (ActShoDocCrs);
-         break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         Act_FormStart (ActShoDocGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-         Act_FormStart (ActShoMrkCrs);
-         break;
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         Act_FormStart (ActShoMrkGrp);
          Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
          break;
       default:
@@ -4490,20 +4575,11 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
    extern const char *Txt_Hide_FOLDER_FILE_OR_LINK_X;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   Act_FormStart (Brw_ActHide[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         Act_FormStart (ActHidDocCrs);
-         break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         Act_FormStart (ActHidDocGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-         Act_FormStart (ActHidMrkCrs);
-         break;
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         Act_FormStart (ActHidMrkGrp);
          Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
          break;
       default:
@@ -4623,61 +4699,20 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,Brw_FileType_t 
   {
    extern const char *Txt_View_data_of_FILE_OR_LINK_X;
 
+   Act_FormStart (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-	 Act_FormStart (ActReqDatSeeDocCrs);
-	 break;
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-	 Act_FormStart (ActReqDatAdmDocCrs);
-	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-	 Act_FormStart (ActReqDatSeeDocGrp);
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-	 Act_FormStart (ActReqDatAdmDocGrp);
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_COMMON_CRS:
-	 Act_FormStart (ActReqDatComCrs);
-	 break;
       case Brw_FILE_BRW_COMMON_GRP:
-	 Act_FormStart (ActReqDatComGrp);
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
 	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-	 Act_FormStart (ActReqDatAsgUsr);
 	 break;
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-	 Act_FormStart (ActReqDatAsgCrs);
-	 Usr_PutHiddenParUsrCodAll (ActReqDatAsgCrs,Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-	 break;
-      case Brw_FILE_BRW_WORKS_USR:
-	 Act_FormStart (ActReqDatWrkUsr);
-	 break;
       case Brw_FILE_BRW_WORKS_CRS:
-	 Act_FormStart (ActReqDatWrkCrs);
-	 Usr_PutHiddenParUsrCodAll (ActReqDatWrkCrs,Gbl.Usrs.Select.All);
+	 Usr_PutHiddenParUsrCodAll (Brw_ActReqDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-	 break;
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-	 Act_FormStart (ActReqDatSeeMrkCrs);
-	 break;
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-	 Act_FormStart (ActReqDatSeeMrkGrp);
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-	 Act_FormStart (ActReqDatAdmMrkCrs);
-	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-	 Act_FormStart (ActReqDatAdmMrkGrp);
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-	 Act_FormStart (ActReqDatBrf);
 	 break;
       default:
 	 break;
@@ -4824,61 +4859,20 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
          fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
       fprintf (Gbl.F.Out,"\">&nbsp;");
 
+      Act_FormStart (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-            Act_FormStart (ActDowSeeDocCrs);
-            break;
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-            Act_FormStart (ActDowAdmDocCrs);
-            break;
          case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-            Act_FormStart (ActDowSeeDocGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-            Act_FormStart (ActDowAdmDocGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_FILE_BRW_COMMON_CRS:
-            Act_FormStart (ActDowComCrs);
-            break;
          case Brw_FILE_BRW_COMMON_GRP:
-            Act_FormStart (ActDowComGrp);
+         case Brw_FILE_BRW_SEE_MARKS_GRP:
+         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
             Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_FILE_BRW_ASSIGNMENTS_USR:
-            Act_FormStart (ActDowAsgUsr);
             break;
          case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-            Act_FormStart (ActDowAsgCrs);
-	    Usr_PutHiddenParUsrCodAll (ActDowAsgCrs,Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-            break;
-         case Brw_FILE_BRW_WORKS_USR:
-            Act_FormStart (ActDowWrkUsr);
-            break;
          case Brw_FILE_BRW_WORKS_CRS:
-            Act_FormStart (ActDowWrkCrs);
-	    Usr_PutHiddenParUsrCodAll (ActDowWrkCrs,Gbl.Usrs.Select.All);
+	    Usr_PutHiddenParUsrCodAll (Brw_ActDowFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
             Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-            break;
-         case Brw_FILE_BRW_SEE_MARKS_CRS:
-	    Act_FormStart (ActSeeMyMrkCrs);
-            break;
-         case Brw_FILE_BRW_SEE_MARKS_GRP:
-            Act_FormStart (ActSeeMyMrkGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-            Act_FormStart (ActDowAdmMrkCrs);
-            break;
-         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-            Act_FormStart (ActDowAdmMrkGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_FILE_BRW_BRIEFCASE_USR:
-            Act_FormStart (ActDowBrf);
             break;
          default:
             break;
@@ -8376,6 +8370,9 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 
    switch (Gbl.CurrentAct)	// Only in actions where edition is allowed
      {
+      case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
+      case ActReqDatAdmDocCtr:		case ActChgDatAdmDocCtr:
+      case ActReqDatAdmDocDeg:		case ActChgDatAdmDocDeg:
       case ActReqDatAdmDocCrs:		case ActChgDatAdmDocCrs:
       case ActReqDatAdmDocGrp:		case ActChgDatAdmDocGrp:
       case ActReqDatComCrs:		case ActChgDatComCrs:
@@ -8387,7 +8384,7 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
       case ActReqDatAdmMrkCrs:		case ActChgDatAdmMrkCrs:
       case ActReqDatAdmMrkGrp:		case ActChgDatAdmMrkGrp:
       case ActReqDatBrf:		case ActChgDatBrf:
-	 if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)						// I am logged
+	 if (Gbl.Usrs.Me.Logged)							// I am logged
 	   {
 	    if (PublisherUsrCod > 0)							// The file has publisher
 	      {
@@ -8397,7 +8394,7 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 	    else									// The file has no publisher
 	      {
 	       ZoneUsrCod = Brw_GetZoneUsrCod ();
-	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER) ||	// It's a zone without owner and I am a teacher (I may be the future owner)
+	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 		  return true;
 	      }
