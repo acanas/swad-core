@@ -209,6 +209,40 @@ Institution:
 	111. ActChgHldStrDat		Change start date of a holiday
 	112. ActChgHldEndDat		Change end date of a holiday
 	113. ActRenHld			Change name of a holiday
+
+	---. ActChgToSeeDocIns		Change to see institution documents
+
+	---. ActSeeDocIns		See the files of the documents zone of the institution
+	---. ActExpSeeDocIns		Expand a folder in institution documents
+	---. ActConSeeDocIns		Contract a folder in institution documents
+	---. ActZIPSeeDocIns		Compress a folder in institution documents
+	---. ActReqDatSeeDocIns		Ask for metadata of a file of the documents zone of the institution
+	---. ActDowSeeDocIns		Download a file in documents zone of the institution
+
+	---. ActChgToAdmDocIns		Change to administrate institution documents
+
+	---. ActAdmDocIns		Admin the files of the documents zone of the institution
+	---. ActReqRemFilDocIns		Request removal of a file in the documents zone of the institution
+	---. ActRemFilDocIns		Remove a file in the documents zone of the institution
+	---. ActRemFolDocIns		Remove a folder empty the documents zone of the institution
+	---. ActCopDocIns		Set source of copy in the documents zone of the institution
+	---. ActPasDocIns		Paste a folder or file in the documents zone of the institution
+	---. ActRemTreDocIns		Remove a folder no empty in the documents zone of the institution
+	---. ActFrmCreDocIns		Form to crear a folder or file in the documents zone of the institution
+	---. ActCreFolDocIns		Create a new folder in the documents zone of the institution
+	---. ActCreLnkDocIns		Create a new link in the documents zone of the institution
+	---. ActRenFolDocIns		Rename a folder in the documents zone of the institution
+	---. ActRcvFilDocInsDZ		Receive a file in the documents zone of the institution using Dropzone.js
+	---. ActRcvFilDocInsCla		Receive a file in the documents zone of the institution using the classic way
+	---. ActExpAdmDocIns		Expand a folder when administrating the documents zone of the institution
+	---. ActConAdmDocIns		Contract a folder when administrating the documents zone of the institution
+	---. ActZIPAdmDocIns		Compress a folder when administrating the documents zone of the institution
+	---. ActShoDocIns		Show hidden folder or file of the documents zone of the institution
+	---. ActHidDocIns		Hide folder or file of the documents zone of the institution
+	---. ActReqDatAdmDocIns		Ask for metadata of a file of the documents zone of the institution
+	---. ActChgDatAdmDocIns		Change metadata of a file of the documents zone of the institution
+	---. ActDowAdmDocIns		Download a file of the documents zone of the institution
+
 Centre:
 	114. ActCtrReqSch		Request search in centre tab
 
@@ -238,6 +272,40 @@ Centre:
 	134. ActChgDegOptYea		Request change of the year of optativas of a degree
 	135. ActChgDegWWW		Request change of the web of a degree
 	136. ActChgDegSta		Request change of status of a degree
+
+	---. ActChgToSeeDocCtr		Change to see centre documents
+
+	---. ActSeeDocCtr		See the files of the documents zone of the centre
+	---. ActExpSeeDocCtr		Expand a folder in centre documents
+	---. ActConSeeDocCtr		Contract a folder in centre documents
+	---. ActZIPSeeDocCtr		Compress a folder in centre documents
+	---. ActReqDatSeeDocCtr		Ask for metadata of a file of the documents zone of the centre
+	---. ActDowSeeDocCtr		Download a file in documents zone of the centre
+
+	---. ActChgToAdmDocCtr		Change to administrate centre documents
+
+	---. ActAdmDocCtr		Admin the files of the documents zone of the centre
+	---. ActReqRemFilDocCtr		Request removal of a file in the documents zone of the centre
+	---. ActRemFilDocCtr		Remove a file in the documents zone of the centre
+	---. ActRemFolDocCtr		Remove a folder empty the documents zone of the centre
+	---. ActCopDocCtr		Set source of copy in the documents zone of the centre
+	---. ActPasDocCtr		Paste a folder or file in the documents zone of the centre
+	---. ActRemTreDocCtr		Remove a folder no empty in the documents zone of the centre
+	---. ActFrmCreDocCtr		Form to crear a folder or file in the documents zone of the centre
+	---. ActCreFolDocCtr		Create a new folder in the documents zone of the centre
+	---. ActCreLnkDocCtr		Create a new link in the documents zone of the centre
+	---. ActRenFolDocCtr		Rename a folder in the documents zone of the centre
+	---. ActRcvFilDocCtrDZ		Receive a file in the documents zone of the centre using Dropzone.js
+	---. ActRcvFilDocCtrCla		Receive a file in the documents zone of the centre using the classic way
+	---. ActExpAdmDocCtr		Expand a folder when administrating the documents zone of the centre
+	---. ActConAdmDocCtr		Contract a folder when administrating the documents zone of the centre
+	---. ActZIPAdmDocCtr		Compress a folder when administrating the documents zone of the centre
+	---. ActShoDocCtr		Show hidden folder or file of the documents zone of the centre
+	---. ActHidDocCtr		Hide folder or file of the documents zone of the centre
+	---. ActReqDatAdmDocCtr		Ask for metadata of a file of the documents zone of the centre
+	---. ActChgDatAdmDocCtr		Change metadata of a file of the documents zone of the centre
+	---. ActDowAdmDocCtr		Download a file of the documents zone of the centre
+
 Degree:
 	137. ActDegReqSch		Request search in degree tab
 
@@ -262,6 +330,40 @@ Degree:
 	152. ActRenCrsSho		Request change of short name of a course
 	153. ActRenCrsFul		Request change of full name of a course
 	154. ActChgCrsSta		Request change of status of a course
+
+	---. ActChgToSeeDocDeg		Change to see degree documents
+
+	---. ActSeeDocDeg		See the files of the documents zone of the degree
+	---. ActExpSeeDocDeg		Expand a folder in degree documents
+	---. ActConSeeDocDeg		Contract a folder in degree documents
+	---. ActZIPSeeDocDeg		Compress a folder in degree documents
+	---. ActReqDatSeeDocDeg		Ask for metadata of a file of the documents zone of the degree
+	---. ActDowSeeDocDeg		Download a file in documents zone of the degree
+
+	---. ActChgToAdmDocDeg		Change to administrate degree documents
+
+	---. ActAdmDocDeg		Admin the files of the documents zone of the degree
+	---. ActReqRemFilDocDeg		Request removal of a file in the documents zone of the degree
+	---. ActRemFilDocDeg		Remove a file in the documents zone of the degree
+	---. ActRemFolDocDeg		Remove a folder empty the documents zone of the degree
+	---. ActCopDocDeg		Set source of copy in the documents zone of the degree
+	---. ActPasDocDeg		Paste a folder or file in the documents zone of the degree
+	---. ActRemTreDocDeg		Remove a folder no empty in the documents zone of the degree
+	---. ActFrmCreDocDeg		Form to crear a folder or file in the documents zone of the degree
+	---. ActCreFolDocDeg		Create a new folder in the documents zone of the degree
+	---. ActCreLnkDocDeg		Create a new link in the documents zone of the degree
+	---. ActRenFolDocDeg		Rename a folder in the documents zone of the degree
+	---. ActRcvFilDocDegDZ		Receive a file in the documents zone of the degree using Dropzone.js
+	---. ActRcvFilDocDegCla		Receive a file in the documents zone of the degree using the classic way
+	---. ActExpAdmDocDeg		Expand a folder when administrating the documents zone of the degree
+	---. ActConAdmDocDeg		Contract a folder when administrating the documents zone of the degree
+	---. ActZIPAdmDocDeg		Compress a folder when administrating the documents zone of the degree
+	---. ActShoDocDeg		Show hidden folder or file of the documents zone of the degree
+	---. ActHidDocDeg		Hide folder or file of the documents zone of the degree
+	---. ActReqDatAdmDocDeg		Ask for metadata of a file of the documents zone of the degree
+	---. ActChgDatAdmDocDeg		Change metadata of a file of the documents zone of the degree
+	---. ActDowAdmDocDeg		Download a file of the documents zone of the degree
+
 Course:
 	155. ActCrsReqSch		Request search in course tab
 
@@ -303,7 +405,7 @@ Course:
 	189. ActModIteSylLec		Modify a item of the syllabus of lectures
 	190. ActModIteSylPra		Modify a item of the syllabus of practicals
 
-	191. ActChgToSeeDoc		Change to see course/group documents
+	191. ActChgToSeeDocCrs		Change to see course/group documents
 
 	192. ActSeeDocCrs		See the files of the documents zone of the course
 	193. ActExpSeeDocCrs		Expand a folder in course documents
@@ -319,7 +421,7 @@ Course:
 	202. ActReqDatSeeDocGrp		Ask for metadata of a file of the documents zone of a group
 	203. ActDowSeeDocGrp		Download a file of the documents zone of a group
 
-	204. ActChgToAdmDoc		Change to administrate course/group documents
+	204. ActChgToAdmDocCrs		Change to administrate course/group documents
 
 	205. ActAdmDocCrs		Admin the files of the documents zone of the course
 	206. ActReqRemFilDocCrs		Request removal of a file in the documents zone of the course
@@ -1318,7 +1420,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_SeeDepts			,"houseteachers"	},
    /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_SeePlaces			,"earth"		},
    /* ActSeeHld		*/{ 707, 5,TabIns,ActSeeHld		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_SeeHolidays		,"date"			},
-   /* ActSeeAdmDocIns	*/{1249, 6,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
+   /* ActSeeAdmDocIns	*/{1249, 6,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
 
    // Actions not in menu:
    /* ActInsSch		*/{1182,-1,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
@@ -1361,13 +1463,46 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgHldEndDat	*/{ 718,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeEndDate		,NULL},
    /* ActRenHld		*/{ 766,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RenameHoliday		,NULL},
 
+   /* ActChgToSeeDocIns	*/{1308,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActSeeDocIns	*/{1309,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocIns	*/{1310,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocIns	*/{1311,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocIns	*/{1312,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocIns*/{1313,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocIns   */{1314,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActChgToAdmDocIns	*/{1315,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActAdmDocIns	*/{1316,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocIns*/{1317,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocIns	*/{1318,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocIns	*/{1319,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocIns	*/{1320,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocIns	*/{1321,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocIns	*/{1322,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocIns	*/{1323,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocIns	*/{1324,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocIns	*/{1325,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocIns	*/{1326,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocInsDZ	*/{1327,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
+   /* ActRcvFilDocInsCla*/{1328,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocIns	*/{1329,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocIns	*/{1330,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocIns	*/{1331,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocIns	*/{1332,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocIns	*/{1333,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocIns*/{1334,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocIns*/{1335,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocIns   */{1336,-1,TabIns,ActSeeAdmDocIns	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
    // TabCtr ******************************************************************
    // Actions in menu:
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqCtrSearch		,"search"		},
 
    /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ShowConfiguration		,"ctr"			},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ShowDegsOfCurrentCtr	,"deg"			},
-   /* ActSeeAdmDocCtr	*/{1248, 3,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
+   /* ActSeeAdmDocCtr	*/{1248, 3,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
 
    // Actions not in menu:
    /* ActCtrSch		*/{1183,-1,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
@@ -1393,13 +1528,46 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDegWWW	*/{ 554,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegStatus		,NULL},
 
+   /* ActChgToSeeDocCtr	*/{1279,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActSeeDocCtr	*/{1280,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocCtr	*/{1281,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocCtr	*/{1282,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocCtr	*/{1283,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocCtr*/{1284,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocCtr   */{1285,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActChgToAdmDocCtr	*/{1286,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActAdmDocCtr	*/{1287,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocCtr*/{1288,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocCtr	*/{1289,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocCtr	*/{1290,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocCtr	*/{1291,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocCtr	*/{1292,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocCtr	*/{1293,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocCtr	*/{1294,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocCtr	*/{1295,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocCtr	*/{1296,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocCtr	*/{1297,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocCtrDZ	*/{1298,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
+   /* ActRcvFilDocCtrCla*/{1299,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocCtr	*/{1300,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocCtr	*/{1301,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocCtr	*/{1302,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocCtr	*/{1303,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocCtr	*/{1304,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocCtr*/{1305,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocCtr*/{1306,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocCtr   */{1307,-1,TabCtr,ActSeeAdmDocCtr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
    // TabDeg ******************************************************************
    // Actions in menu:
    /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqDegSearch		,"search"		},
 
    /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ShowConfiguration		,"deg"			},
    /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ShowCrssOfCurrentDeg	,"coursesdegree"	},
-   /* ActSeeAdmDocDeg	*/{1247, 3,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
+   /* ActSeeAdmDocDeg	*/{1247, 3,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
 
    // Actions not in menu:
    /* ActDegSch		*/{1184,-1,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
@@ -1419,6 +1587,39 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenCrsSho	*/{ 563,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseShort	,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRenCrsFul	*/{ 564,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseFull	,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgCrsSta	*/{1055,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsStatus		,NULL},
+
+   /* ActChgToSeeDocDeg	*/{1250,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActSeeDocDeg	*/{1251,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocDeg	*/{1252,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocDeg	*/{1253,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocDeg	*/{1254,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocDeg*/{1255,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocDeg   */{1256,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActChgToAdmDocDeg	*/{1257,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActAdmDocDeg	*/{1258,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocDeg*/{1259,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocDeg	*/{1260,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocDeg	*/{1261,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocDeg	*/{1262,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocDeg	*/{1263,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocDeg	*/{1264,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocDeg	*/{1265,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocDeg	*/{1266,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocDeg	*/{1267,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocDeg	*/{1268,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocDegDZ	*/{1269,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
+   /* ActRcvFilDocDegCla*/{1270,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocDeg	*/{1271,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocDeg	*/{1272,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocDeg	*/{1273,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocDeg	*/{1274,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocDeg	*/{1275,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocDeg*/{1276,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocDeg*/{1277,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocDeg   */{1278,-1,TabDeg,ActSeeAdmDocDeg	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    // TabCrs ******************************************************************
    // Actions in menu:
@@ -1463,7 +1664,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActModIteSylLec	*/{ 211,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_ModifyItemSyllabus		,NULL},
    /* ActModIteSylPra	*/{ 216,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_ModifyItemSyllabus		,NULL},
 
-   /* ActChgToSeeDoc	*/{1195,-1,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeDocCrs	*/{1195,-1,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
    /* ActSeeDocCrs	*/{1078,-1,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
    /* ActExpSeeDocCrs	*/{ 462,-1,TabCrs,ActSeeAdmDocCrs	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
@@ -1479,7 +1680,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqDatSeeDocGrp*/{1034,-1,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
    /* ActDowSeeDocGrp   */{1112,-1,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmDoc	*/{1196,-1,TabCrs,ActSeeAdmDocCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmDocCrs	*/{1196,-1,TabCrs,ActSeeAdmDocCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
    /* ActAdmDocCrs	*/{  12,-1,TabCrs,ActSeeAdmDocCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
    /* ActReqRemFilDocCrs*/{ 479,-1,TabCrs,ActSeeAdmDocCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
@@ -3492,8 +3693,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActHidMrkCrs,		// #1192
 	ActShoMrkGrp,		// #1193
 	ActHidMrkGrp,		// #1194
-	ActChgToSeeDoc,		// #1195
-	ActChgToAdmDoc,		// #1196
+	ActChgToSeeDocCrs,	// #1195
+	ActChgToAdmDocCrs,	// #1196
 	ActChgToAdmCom,		// #1197
 	ActChgToSeeMrk,		// #1198
 	ActChgToAdmMrk,		// #1199
@@ -3547,6 +3748,96 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeAdmDocDeg,	// #1247
 	ActSeeAdmDocCtr,	// #1248
 	ActSeeAdmDocIns,	// #1249
+
+	ActChgToSeeDocDeg,	// #1250
+	ActSeeDocDeg,		// #1251
+	ActExpSeeDocDeg,	// #1252
+	ActConSeeDocDeg,	// #1253
+	ActZIPSeeDocDeg,	// #1254
+	ActReqDatSeeDocDeg,	// #1255
+	ActDowSeeDocDeg,	// #1256
+	ActChgToAdmDocDeg,	// #1257
+	ActAdmDocDeg,		// #1258
+	ActReqRemFilDocDeg,	// #1259
+	ActRemFilDocDeg,	// #1260
+	ActRemFolDocDeg,	// #1261
+	ActCopDocDeg,		// #1262
+	ActPasDocDeg,		// #1263
+	ActRemTreDocDeg,	// #1264
+	ActFrmCreDocDeg,	// #1265
+	ActCreFolDocDeg,	// #1266
+	ActCreLnkDocDeg,	// #1267
+	ActRenFolDocDeg,	// #1268
+	ActRcvFilDocDegDZ,	// #1269
+	ActRcvFilDocDegCla,	// #1270
+	ActExpAdmDocDeg,	// #1271
+	ActConAdmDocDeg,	// #1272
+	ActZIPAdmDocDeg,	// #1273
+	ActShoDocDeg,		// #1274
+	ActHidDocDeg,		// #1275
+	ActReqDatAdmDocDeg,	// #1276
+	ActChgDatAdmDocDeg,	// #1277
+	ActDowAdmDocDeg,	// #1278
+
+	ActChgToSeeDocCtr,	// #1279
+	ActSeeDocCtr,		// #1280
+	ActExpSeeDocCtr,	// #1281
+	ActConSeeDocCtr,	// #1282
+	ActZIPSeeDocCtr,	// #1283
+	ActReqDatSeeDocCtr,	// #1284
+	ActDowSeeDocCtr,	// #1285
+	ActChgToAdmDocCtr,	// #1286
+	ActAdmDocCtr,		// #1287
+	ActReqRemFilDocCtr,	// #1288
+	ActRemFilDocCtr,	// #1289
+	ActRemFolDocCtr,	// #1290
+	ActCopDocCtr,		// #1291
+	ActPasDocCtr,		// #1292
+	ActRemTreDocCtr,	// #1293
+	ActFrmCreDocCtr,	// #1294
+	ActCreFolDocCtr,	// #1295
+	ActCreLnkDocCtr,	// #1296
+	ActRenFolDocCtr,	// #1297
+	ActRcvFilDocCtrDZ,	// #1298
+	ActRcvFilDocCtrCla,	// #1299
+	ActExpAdmDocCtr,	// #1300
+	ActConAdmDocCtr,	// #1301
+	ActZIPAdmDocCtr,	// #1302
+	ActShoDocCtr,		// #1303
+	ActHidDocCtr,		// #1304
+	ActReqDatAdmDocCtr,	// #1305
+	ActChgDatAdmDocCtr,	// #1306
+	ActDowAdmDocCtr,	// #1307
+
+	ActChgToSeeDocIns,	// #1308
+	ActSeeDocIns,		// #1309
+	ActExpSeeDocIns,	// #1310
+	ActConSeeDocIns,	// #1311
+	ActZIPSeeDocIns,	// #1312
+	ActReqDatSeeDocIns,	// #1313
+	ActDowSeeDocIns,	// #1314
+	ActChgToAdmDocIns,	// #1315
+	ActAdmDocIns,		// #1316
+	ActReqRemFilDocIns,	// #1317
+	ActRemFilDocIns,	// #1318
+	ActRemFolDocIns,	// #1319
+	ActCopDocIns,		// #1320
+	ActPasDocIns,		// #1321
+	ActRemTreDocIns,	// #1322
+	ActFrmCreDocIns,	// #1323
+	ActCreFolDocIns,	// #1324
+	ActCreLnkDocIns,	// #1325
+	ActRenFolDocIns,	// #1326
+	ActRcvFilDocInsDZ,	// #1327
+	ActRcvFilDocInsCla,	// #1328
+	ActExpAdmDocIns,	// #1329
+	ActConAdmDocIns,	// #1330
+	ActZIPAdmDocIns,	// #1331
+	ActShoDocIns,		// #1332
+	ActHidDocIns,		// #1333
+	ActReqDatAdmDocIns,	// #1334
+	ActChgDatAdmDocIns,	// #1335
+	ActDowAdmDocIns,	// #1336
 	};
 
 /*****************************************************************************/

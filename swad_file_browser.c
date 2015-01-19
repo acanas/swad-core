@@ -1191,7 +1191,7 @@ void Brw_GetParAndInitFileBrowser (void)
 	       break;
 	   }
          break;
-      case ActChgToSeeDoc:	// Access to see a documents zone
+      case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_FILE_BRW_SEE_DOCUMENTS_GRP :
                                                                    Brw_FILE_BRW_SEE_DOCUMENTS_CRS;
@@ -1212,7 +1212,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowSeeDocGrp:
 	 Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_GRP;
          break;
-      case ActChgToAdmDoc:	// Access to admin a documents zone
+      case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP :
                                                                    Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS;
@@ -1605,10 +1605,10 @@ static void Brw_GetDataCurrentGrp (void)
       switch (Gbl.CurrentAct)
 	{
 	 case ActSeeAdmDocCrs:	// Access to see/admin a documents zone from menu
-	 case ActChgToSeeDoc:	// Access to see a documents zone
+	 case ActChgToSeeDocCrs:	// Access to see a documents zone
 	 case ActSeeDocGrp:	// Access to see a documents zone
 
-	 case ActChgToAdmDoc:	// Access to admin a documents zone
+	 case ActChgToAdmDocCrs:	// Access to admin a documents zone
 	 case ActAdmDocGrp:	// Access to admin a documents zone
 
 	 case ActChgToAdmCom:	// Access to admin a common zone
@@ -2444,11 +2444,11 @@ static void Brw_FormToChangeZone (void)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-         Act_FormStart (ActChgToSeeDoc);
+         Act_FormStart (ActChgToSeeDocCrs);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         Act_FormStart (ActChgToAdmDoc);
+         Act_FormStart (ActChgToAdmDocCrs);
          break;
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_COMMON_GRP:
@@ -2747,41 +2747,74 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_WriteTopBeforeShowingFileBrowser (void)
   {
+   bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER  );
+   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
+
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
 
    /***** Write form to edit documents *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-            Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCrs);
-	    break;
-	 case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-            Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocGrp);
-	    break;
-	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-            Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCrs);
-	    break;
-	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-            Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocGrp);
-	    break;
-	 case Brw_FILE_BRW_SEE_MARKS_CRS:
-            Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkCrs);
-            break;
-         case Brw_FILE_BRW_SEE_MARKS_GRP:
-            Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkGrp);
-            break;
-	 case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-            Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkCrs);
-            break;
-         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-            Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkGrp);
-            break;
-	 default:
-	    break;
-	}
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocIns);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocIns);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCtr);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCtr);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocDeg);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocDeg);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCrs);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCrs);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocGrp);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocGrp);
+	 break;
+      case Brw_FILE_BRW_SEE_MARKS_CRS:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkCrs);
+	 break;
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkCrs);
+	 break;
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkGrp);
+	 break;
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 if (IAmTeacher || IAmSuperuser)
+	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkGrp);
+	 break;
+      default:
+	 break;
+     }
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
@@ -2820,15 +2853,15 @@ static void Brw_UpdateLastAccess (void)
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccDownloadCrs");
-         if (Gbl.CurrentAct == ActChgToSeeDoc ||
-             Gbl.CurrentAct == ActChgToAdmDoc)// Update group of last access to a documents zone only when user changes zone
+         if (Gbl.CurrentAct == ActChgToSeeDocCrs ||
+             Gbl.CurrentAct == ActChgToAdmDocCrs)// Update group of last access to a documents zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastDowGrpCod",-1L);
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccDownloadGrp");
-         if (Gbl.CurrentAct == ActChgToSeeDoc ||
-             Gbl.CurrentAct == ActChgToAdmDoc)// Update group of last access to a documents zone only when user changes zone
+         if (Gbl.CurrentAct == ActChgToSeeDocCrs ||
+             Gbl.CurrentAct == ActChgToAdmDocCrs)// Update group of last access to a documents zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_FILE_BRW_COMMON_CRS:
