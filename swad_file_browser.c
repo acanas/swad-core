@@ -246,11 +246,11 @@ const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqRemFilAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActReqRemFilAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActReqRemFilDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActReqRemFilDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActReqRemFilDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -271,11 +271,11 @@ const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFilAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemFilAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRemFilDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRemFilDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRemFilDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -296,11 +296,11 @@ const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRemFolDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRemFolDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRemFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -321,11 +321,11 @@ const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemTreAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRemTreAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRemTreDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRemTreDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRemTreDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -346,11 +346,11 @@ const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCopAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCopAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActCopDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActCopDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActCopDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -371,11 +371,11 @@ const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActPasAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActPasAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActPasDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActPasDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActPasDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -396,11 +396,11 @@ const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActFrmCreAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActFrmCreAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActFrmCreDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActFrmCreDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActFrmCreDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -421,11 +421,11 @@ const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCreFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActCreFolDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActCreFolDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActCreFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -446,11 +446,11 @@ const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreLnkAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActCreLnkAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActCreLnkDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActCreLnkDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActCreLnkDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -471,11 +471,11 @@ const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRenFolAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRenFolAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRenFolDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRenFolDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRenFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -496,11 +496,11 @@ const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilAsgUsrDZ,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRcvFilAsgCrsDZ,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRcvFilDocDegDZ,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRcvFilDocCtrDZ,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRcvFilDocInsDZ,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -521,11 +521,11 @@ const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilAsgUsrCla,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActRcvFilAsgCrsCla,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActRcvFilDocDegCla,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActRcvFilDocCtrCla,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActRcvFilDocInsCla,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -546,11 +546,11 @@ const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmAsgWrkUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActAdmAsgWrkCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -571,11 +571,11 @@ const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActExpAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActExpSeeDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActExpSeeDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActExpSeeDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -596,11 +596,11 @@ const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActConAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActConSeeDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActConSeeDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActConSeeDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -621,11 +621,11 @@ const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActChgDatAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct action
+   ActChgDatAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct action
+   ActChgDatAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct action
+   ActChgDatAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
@@ -1150,6 +1150,7 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get type of file browser *****/
    switch (Gbl.CurrentAct)
      {
+      /***** Documents of institution *****/
       case ActSeeAdmDocIns:	// Access to a documents zone from menu
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
 	    /* These roles can edit documents of institution */
@@ -1158,6 +1159,41 @@ void Brw_GetParAndInitFileBrowser (void)
 	    /* The rest of roles can not edit documents of institution */
 	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_INS;
          break;
+      case ActChgToSeeDocIns:	// Access to see a documents zone
+      case ActSeeDocIns:
+      case ActExpSeeDocIns:
+      case ActConSeeDocIns:
+      case ActZIPSeeDocIns:
+      case ActReqDatSeeDocIns:
+      case ActDowSeeDocIns:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_INS;
+         break;
+      case ActChgToAdmDocIns:	// Access to admin a documents zone
+      case ActAdmDocIns:
+      case ActReqRemFilDocIns:
+      case ActRemFilDocIns:
+      case ActRemFolDocIns:
+      case ActCopDocIns:
+      case ActPasDocIns:
+      case ActRemTreDocIns:
+      case ActFrmCreDocIns:
+      case ActCreFolDocIns:
+      case ActCreLnkDocIns:
+      case ActRenFolDocIns:
+      case ActRcvFilDocInsDZ:
+      case ActRcvFilDocInsCla:
+      case ActExpAdmDocIns:
+      case ActConAdmDocIns:
+      case ActZIPAdmDocIns:
+      case ActShoDocIns:
+      case ActHidDocIns:
+      case ActReqDatAdmDocIns:
+      case ActChgDatAdmDocIns:
+      case ActDowAdmDocIns:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_INS;
+         break;
+
+      /***** Documents of centre *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
 	    /* These roles can edit documents of centre */
@@ -1166,6 +1202,41 @@ void Brw_GetParAndInitFileBrowser (void)
 	    /* The rest of roles can not edit documents of centre */
 	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_CTR;
          break;
+      case ActChgToSeeDocCtr:	// Access to see a documents zone
+      case ActSeeDocCtr:
+      case ActExpSeeDocCtr:
+      case ActConSeeDocCtr:
+      case ActZIPSeeDocCtr:
+      case ActReqDatSeeDocCtr:
+      case ActDowSeeDocCtr:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_CTR;
+         break;
+      case ActChgToAdmDocCtr:	// Access to admin a documents zone
+      case ActAdmDocCtr:
+      case ActReqRemFilDocCtr:
+      case ActRemFilDocCtr:
+      case ActRemFolDocCtr:
+      case ActCopDocCtr:
+      case ActPasDocCtr:
+      case ActRemTreDocCtr:
+      case ActFrmCreDocCtr:
+      case ActCreFolDocCtr:
+      case ActCreLnkDocCtr:
+      case ActRenFolDocCtr:
+      case ActRcvFilDocCtrDZ:
+      case ActRcvFilDocCtrCla:
+      case ActExpAdmDocCtr:
+      case ActConAdmDocCtr:
+      case ActZIPAdmDocCtr:
+      case ActShoDocCtr:
+      case ActHidDocCtr:
+      case ActReqDatAdmDocCtr:
+      case ActChgDatAdmDocCtr:
+      case ActDowAdmDocCtr:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR;
+         break;
+
+      /***** Documents of degree *****/
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
 	    /* These roles can edit documents of degree */
@@ -1174,6 +1245,41 @@ void Brw_GetParAndInitFileBrowser (void)
 	    /* The rest of roles can not edit documents of degree */
 	    Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_DEG;
          break;
+      case ActChgToSeeDocDeg:	// Access to see a documents zone
+      case ActSeeDocDeg:
+      case ActExpSeeDocDeg:
+      case ActConSeeDocDeg:
+      case ActZIPSeeDocDeg:
+      case ActReqDatSeeDocDeg:
+      case ActDowSeeDocDeg:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_SEE_DOCUMENTS_DEG;
+         break;
+      case ActChgToAdmDocDeg:	// Access to admin a documents zone
+      case ActAdmDocDeg:
+      case ActReqRemFilDocDeg:
+      case ActRemFilDocDeg:
+      case ActRemFolDocDeg:
+      case ActCopDocDeg:
+      case ActPasDocDeg:
+      case ActRemTreDocDeg:
+      case ActFrmCreDocDeg:
+      case ActCreFolDocDeg:
+      case ActCreLnkDocDeg:
+      case ActRenFolDocDeg:
+      case ActRcvFilDocDegDZ:
+      case ActRcvFilDocDegCla:
+      case ActExpAdmDocDeg:
+      case ActConAdmDocDeg:
+      case ActZIPAdmDocDeg:
+      case ActShoDocDeg:
+      case ActHidDocDeg:
+      case ActReqDatAdmDocDeg:
+      case ActChgDatAdmDocDeg:
+      case ActDowAdmDocDeg:
+	 Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG;
+         break;
+
+      /***** Documents of course/group *****/
       case ActSeeAdmDocCrs:	// Access to a documents zone from menu
          /* Set file browser type acording to last group accessed */
 	 switch (Gbl.Usrs.Me.LoggedRole)
@@ -1228,7 +1334,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolDocCrs:
       case ActCreLnkDocCrs:
       case ActRenFolDocCrs:
-      case ActRcvFilDocCrsDZ:	case ActRcvFilDocCrsCla:
+      case ActRcvFilDocCrsDZ:
+      case ActRcvFilDocCrsCla:
       case ActExpAdmDocCrs:
       case ActConAdmDocCrs:
       case ActZIPAdmDocCrs:
@@ -1250,7 +1357,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolDocGrp:
       case ActCreLnkDocGrp:
       case ActRenFolDocGrp:
-      case ActRcvFilDocGrpDZ:	case ActRcvFilDocGrpCla:
+      case ActRcvFilDocGrpDZ:
+      case ActRcvFilDocGrpCla:
       case ActExpAdmDocGrp:
       case ActConAdmDocGrp:
       case ActZIPAdmDocGrp:
@@ -1261,6 +1369,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowAdmDocGrp:
 	 Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP;
          break;
+
+      /***** Shared files of course/group *****/
       case ActAdmCom:
       case ActChgToAdmCom:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
@@ -1278,7 +1388,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolComCrs:
       case ActCreLnkComCrs:
       case ActRenFolComCrs:
-      case ActRcvFilComCrsDZ:	case ActRcvFilComCrsCla:
+      case ActRcvFilComCrsDZ:
+      case ActRcvFilComCrsCla:
       case ActExpComCrs:
       case ActConComCrs:
       case ActZIPComCrs:
@@ -1298,7 +1409,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolComGrp:
       case ActCreLnkComGrp:
       case ActRenFolComGrp:
-      case ActRcvFilComGrpDZ:	case ActRcvFilComGrpCla:
+      case ActRcvFilComGrpDZ:
+      case ActRcvFilComGrpCla:
       case ActExpComGrp:
       case ActConComGrp:
       case ActZIPComGrp:
@@ -1307,6 +1419,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowComGrp:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_COMMON_GRP;
          break;
+
+      /***** My assignments *****/
       case ActReqRemFilAsgUsr:
       case ActRemFilAsgUsr:
       case ActRemFolAsgUsr:
@@ -1317,7 +1431,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolAsgUsr:
       case ActCreLnkAsgUsr:
       case ActRenFolAsgUsr:
-      case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
+      case ActRcvFilAsgUsrDZ:
+      case ActRcvFilAsgUsrCla:
       case ActExpAsgUsr:
       case ActConAsgUsr:
       case ActZIPAsgUsr:
@@ -1326,6 +1441,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowAsgUsr:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_ASSIGNMENTS_USR;
          break;
+
+      /***** Another users' assignments *****/
       case ActAdmAsgWrkCrs:
       case ActReqRemFilAsgCrs:
       case ActRemFilAsgCrs:
@@ -1337,7 +1454,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolAsgCrs:
       case ActCreLnkAsgCrs:
       case ActRenFolAsgCrs:
-      case ActRcvFilAsgCrsDZ:	case ActRcvFilAsgCrsCla:
+      case ActRcvFilAsgCrsDZ:
+      case ActRcvFilAsgCrsCla:
       case ActExpAsgCrs:
       case ActConAsgCrs:
       case ActZIPAsgCrs:
@@ -1346,6 +1464,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowAsgCrs:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_ASSIGNMENTS_CRS;
          break;
+
+      /***** My works *****/
       case ActAdmAsgWrkUsr:
       case ActReqRemFilWrkUsr:
       case ActRemFilWrkUsr:
@@ -1357,7 +1477,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolWrkUsr:
       case ActCreLnkWrkUsr:
       case ActRenFolWrkUsr:
-      case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
+      case ActRcvFilWrkUsrDZ:
+      case ActRcvFilWrkUsrCla:
       case ActExpWrkUsr:
       case ActConWrkUsr:
       case ActZIPWrkUsr:
@@ -1366,6 +1487,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowWrkUsr:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_WORKS_USR;
          break;
+
+      /***** Another users' works *****/
       case ActReqAsgWrkCrs:
       case ActReqRemFilWrkCrs:
       case ActRemFilWrkCrs:
@@ -1377,7 +1500,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolWrkCrs:
       case ActCreLnkWrkCrs:
       case ActRenFolWrkCrs:
-      case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
+      case ActRcvFilWrkCrsDZ:
+      case ActRcvFilWrkCrsCla:
       case ActExpWrkCrs:
       case ActConWrkCrs:
       case ActZIPWrkCrs:
@@ -1386,6 +1510,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActDowWrkCrs:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_WORKS_CRS;
          break;
+
+      /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT) ?
@@ -1428,7 +1554,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActFrmCreMrkCrs:
       case ActCreFolMrkCrs:
       case ActRenFolMrkCrs:
-      case ActRcvFilMrkCrsDZ:	case ActRcvFilMrkCrsCla:
+      case ActRcvFilMrkCrsDZ:
+      case ActRcvFilMrkCrsCla:
       case ActExpAdmMrkCrs:
       case ActConAdmMrkCrs:
       case ActZIPAdmMrkCrs:
@@ -1451,7 +1578,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActFrmCreMrkGrp:
       case ActCreFolMrkGrp:
       case ActRenFolMrkGrp:
-      case ActRcvFilMrkGrpDZ:	case ActRcvFilMrkGrpCla:
+      case ActRcvFilMrkGrpDZ:
+      case ActRcvFilMrkGrpCla:
       case ActExpAdmMrkGrp:
       case ActConAdmMrkGrp:
       case ActZIPAdmMrkGrp:
@@ -1464,6 +1592,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgNumRowFooGrp:
          Gbl.FileBrowser.Type = Brw_FILE_BRW_ADMIN_MARKS_GRP;
          break;
+
+      /***** Briefcase *****/
       case ActAdmBrf:
       case ActReqRemFilBrf:
       case ActRemFilBrf:
@@ -1475,7 +1605,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreFolBrf:
       case ActCreLnkBrf:
       case ActRenFolBrf:
-      case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
+      case ActRcvFilBrfDZ:
+      case ActRcvFilBrfCla:
       case ActExpBrf:
       case ActConBrf:
       case ActZIPBrf:
@@ -1766,16 +1897,46 @@ static void Brw_SetPathFileBrowser (void)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
+	 sprintf (Path,"%s/%s",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS);
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Path,"%s/%s/%02u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
+		  (unsigned) Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
-         break;
+	 sprintf (Path,"%s/%s",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Path,"%s/%s/%02u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-	 // TODO: Set Gbl.FileBrowser.Priv.PathAboveRootFolder
-         break;
+	 sprintf (Path,"%s/%s",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG);
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Path,"%s/%s/%02u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
+	 Fil_CreateDirIfNotExists (Path);
+	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
+		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
+		  (unsigned) Gbl.CurrentDeg.Deg.DegCod);
+	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
