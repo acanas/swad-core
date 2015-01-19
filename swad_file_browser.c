@@ -3087,6 +3087,12 @@ static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
 
 static void Brw_WriteSubtitleOfFileBrowser (void)
   {
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution;
+   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre;
+   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree;
+   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course;
    extern const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course;
    extern const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course;
@@ -3120,14 +3126,29 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    /***** Write subtitle *****/
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
       case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution);
+	 break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
          sprintf (Subtitle,"(%s)",
-                  "option in development");
+                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre);
+	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree);
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree);
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
          sprintf (Subtitle,"(%s)",

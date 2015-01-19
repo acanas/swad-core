@@ -186,7 +186,7 @@ void Sta_GetRemoteAddr (void)
 /*****************************************************************************/
 /********* If this click is made from the same IP too fast, abort ************/
 /*****************************************************************************/
-
+/*
 void Sta_ExitIfTooFast (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
@@ -195,35 +195,35 @@ void Sta_ExitIfTooFast (void)
    char Query[512];
    unsigned NumClicks;	// Very recent clicks from this IP (0 or 1)
 
-   /***** Some actions can be made fast *****/
+   ***** Some actions can be made fast *****
    if (Gbl.CurrentAct == ActRefCon    ||	// Refresh connected
        Gbl.CurrentAct == ActRefLstClk ||	// Refresh last clicks
        Gbl.CurrentAct == ActAutUsrChgLan)	// Change my language automatically just after log in
       return;
 
-   /***** Get if a click/refresh is made from the same IP very recently *****/
+   ***** Get if a click/refresh is made from the same IP very recently *****
    sprintf (Query,"SELECT COUNT(*) FROM IP_last"
                   " WHERE IP='%s' AND UNIX_TIMESTAMP(LastClick)>UNIX_TIMESTAMP()-%u",
             Gbl.IP,Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);
    NumClicks = (unsigned) DB_QueryCOUNT (Query,"can not get the number of very recent clicks");
 
-   /***** Remove old clicks/refreshes *****/
+   ***** Remove old clicks/refreshes *****
    sprintf (Query,"DELETE FROM IP_last"
                   " WHERE UNIX_TIMESTAMP(LastClick)<=UNIX_TIMESTAMP()-%u",
                   Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);
    DB_QueryDELETE (Query,"can not remove old last IP");
 
-   /***** Replace last click/refresh from this IP *****/
+   ***** Replace last click/refresh from this IP *****
    sprintf (Query,"REPLACE INTO IP_last"
                   " (IP,LastClick)"
                   " VALUES ('%s',NOW())",
 	    Gbl.IP);
    DB_QueryREPLACE (Query,"can not update last IP");
 
-   /***** If too fast, write warning and exit *****/
+   ***** If too fast, write warning and exit *****
    if (NumClicks)	// Too fast
      {
-      /***** Write header to standard output to avoid timeout *****/
+      ***** Write header to standard output to avoid timeout *****
       // Two \r\n are necessary
       fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n\r\n"
                       "<!DOCTYPE html>\n"
@@ -246,7 +246,7 @@ void Sta_ExitIfTooFast (void)
       // sleep (Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);	// Sleep those seconds
      }
   }
-
+*/
 /*****************************************************************************/
 /**************************** Log access in database *************************/
 /*****************************************************************************/

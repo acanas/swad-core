@@ -1474,6 +1474,69 @@ const char *Txt_Absents =
 	"Assentes";
 #endif
 
+const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre =
+#if   L==0
+	"accessible per a lectura i escriptura per administradors del centre";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Lehrinstitut";
+#elif L==2
+	"accessible for reading and writing by administrators of the centre";
+#elif L==3
+	"accesible para lectura y escritura por administradores del centro";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les administrateurs du centre";
+#elif L==5
+	"accesible para lectura y escritura por administradores del centro";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte dei amministratori del centro";
+#elif L==7
+	"dostep do odczytu i zapisu przez administratorzy centrum";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos administradores do centro";
+#endif
+
+const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree =
+#if   L==0
+	"accessible per a lectura i escriptura per administradors de la titulaci&oacute;";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Studiengang";
+#elif L==2
+	"accessible for reading and writing by administrators of the degree";
+#elif L==3
+	"accesible para lectura y escritura por administradores de la titulaci&oacute;n";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les administrateurs de l'&eacute;tude";
+#elif L==5
+	"accesible para lectura y escritura por administradores de la titulaci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte dei amministratori della laurea";
+#elif L==7
+	"dostep do odczytu i zapisu przez administratorzy stopnia";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos administradores da titula&ccedil;&atilde;o";
+#endif
+
+const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution =
+#if   L==0
+	"accessible per a lectura i escriptura per administradors de l'instituci&oacute;";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Administratoren der Hochschule";
+#elif L==2
+	"accessible for reading and writing by administrators of the institution";
+#elif L==3
+	"accesible para lectura y escritura por administradores de la instituci&oacute;n";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les administrateurs de l'&eacute;tablissement";
+#elif L==5
+	"accesible para lectura y escritura por administradores de la instituci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte dei amministratori della istituzione";
+#elif L==7
+	"dostep do odczytu i zapisu przez administratorzy instytucji";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos administradores da institui&ccedil;&atilde;o";
+#endif
+
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course =
 #if   L==0
 	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
@@ -1574,9 +1637,30 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #elif L==6
 	"accessibile solo per la lettura per te e i professori del corso";
 #elif L==7
-	"dostepne tylko do czytania przez Ciebie i nauczycieli prowadzacych ten kurs";
+	"dost&eogon;pne tylko do czytania przez Ciebie i nauczycieli prowadzacych ten kurs";
 #elif L==8
 	"acess&iacute;vel apenas para leitura por voc&ecirc; e os professores da disciplina";
+#endif
+
+const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre =
+#if   L==0
+	"accessible nom&eacute;s per a lectura per estudiants i professors del centre";
+#elif L==1
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+#elif L==2
+	"accessible only for reading by students and teachers of the centre";
+#elif L==3
+	"accesible s&oacute;lo para lectura por estudiantes y profesores del centro";
+#elif L==4
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du centre";
+#elif L==5
+	"accesible s&oacute;lo para lectura por estudiantes y profesores del centro";	// Okoteve traducción
+#elif L==6
+	"accessibile solo per la lettura da parte degli studenti e dei professori del centro";
+#elif L==7
+	"dost&eogon;pne tylko do czytania przez uczni&oacute;w i nauczycieli centrum";
+#elif L==8
+	"acess&iacute;vel apenas para leitura pelos alunos e professores do centro";
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course =
@@ -1595,9 +1679,51 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti e dei professori del corso";
 #elif L==7
-	"dostepne tylko do czytania przez uczni&oacute;w i nauczycieli zajec";
+	"dost&eogon;pne tylko do czytania przez uczni&oacute;w i nauczycieli zajec";
 #elif L==8
 	"acess&iacute;vel apenas para leitura pelos alunos e professores da disciplina";
+#endif
+
+const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree =
+#if   L==0
+	"accessible nom&eacute;s per a lectura per estudiants i professors de la titulaci&oacute;";
+#elif L==1
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+#elif L==2
+	"accessible only for reading by students and teachers of the degree";
+#elif L==3
+	"accesible s&oacute;lo para lectura por estudiantes y profesores de la titulaci&oacute;n";
+#elif L==4
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tude";
+#elif L==5
+	"accesible s&oacute;lo para lectura por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile solo per la lettura da parte degli studenti e dei professori della laurea";
+#elif L==7
+	"dost&eogon;pne tylko do czytania przez uczni&oacute;w i nauczycieli stopnia";
+#elif L==8
+	"acess&iacute;vel apenas para leitura pelos alunos e professores da titula&ccedil;&atilde;o";
+#endif
+
+const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution =
+#if   L==0
+	"accessible nom&eacute;s per a lectura per estudiants i professors de l'instituci&oacute;";
+#elif L==1
+	"zum Lesen zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Hochschule";
+#elif L==2
+	"accessible only for reading by students and teachers of the institution";
+#elif L==3
+	"accesible s&oacute;lo para lectura por estudiantes y profesores de la instituci&oacute;n";
+#elif L==4
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
+#elif L==5
+	"accesible s&oacute;lo para lectura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile solo per la lettura da parte degli studenti e dei professori della istituzione";
+#elif L==7
+	"dost&eogon;pne tylko do czytania przez uczni&oacute;w i nauczycieli instytucji";
+#elif L==8
+	"acess&iacute;vel apenas para leitura pelos alunos e professores da institui&ccedil;&atilde;o";
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course =
@@ -1616,7 +1742,7 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti del gruppo e dei professori del corso";
 #elif L==7
-	"dostepne tylko do czytania przez uczni&oacute;w i nauczycieli grupy kursu";
+	"dost&eogon;pne tylko do czytania przez uczni&oacute;w i nauczycieli grupy kursu";
 #elif L==8
 	"acess&iacute;vel apenas para leitura pelos alunos do grupo e professores da disciplina";
 #endif
@@ -10893,7 +11019,7 @@ const char *Txt_File_zones_of_the_group_X_are_now_enabled =	// Warning: it is ve
 #elif L==6
 	"Le aree file del gruppo %s sono ora abilitate.";
 #elif L==7
-	"Plik strefy grupa %s sa obecnie dostepne.";
+	"Plik strefy grupa %s sa obecnie dost&eogon;pne.";
 #elif L==8
 	"File zones of the group %s are now enabled.";				// Necessita de tradução
 #endif
@@ -18759,7 +18885,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	" a les quals podeu consultar"
 	" per crear assignatures o altres gestions"
 #elif L==1
-	"Liste der Verwalter"
+	"Liste der Administratoren"
 #elif L==2
 	"Administrators"
 #elif L==3

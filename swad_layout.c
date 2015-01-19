@@ -185,7 +185,10 @@ void Lay_WriteStartOfPage (void)
    // css/dropzone.css
    // images/spritemap@2x.png
    // images/spritemap.png
-   if (Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+       Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+       Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+       Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
        Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
        Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_FILE_BRW_COMMON_CRS
        Gbl.CurrentAct == ActFrmCreComGrp ||	// Brw_FILE_BRW_COMMON_GRP
@@ -196,7 +199,9 @@ void Lay_WriteStartOfPage (void)
        Gbl.CurrentAct == ActFrmCreMrkCrs ||	// Brw_FILE_BRW_ADMIN_MARKS_CRS
        Gbl.CurrentAct == ActFrmCreMrkGrp ||	// Brw_FILE_BRW_ADMIN_MARKS_GRP
        Gbl.CurrentAct == ActFrmCreBrf)		// Brw_FILE_BRW_BRIEFCASE_USR
-      fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/dropzone/css/dropzone.css\" type=\"text/css\" />\n",
+      fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
+	                 " href=\"%s/dropzone/css/dropzone.css\""
+	                 " type=\"text/css\" />\n",
                Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /* Redirect to correct language */
@@ -429,7 +434,10 @@ static void Lay_WriteScripts (void)
    // css/dropzone.css
    // images/spritemap@2x.png
    // images/spritemap.png
-   if (Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+       Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+       Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+       Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
        Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
        Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_FILE_BRW_COMMON_CRS
        Gbl.CurrentAct == ActFrmCreComGrp ||	// Brw_FILE_BRW_COMMON_GRP
@@ -442,7 +450,8 @@ static void Lay_WriteScripts (void)
        Gbl.CurrentAct == ActFrmCreBrf)		// Brw_FILE_BRW_BRIEFCASE_USR
      {
       // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/dropzone/dropzone.js\""
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+	                 " src=\"%s/dropzone/dropzone.js\""
 	                 " charset=\"windows-1252\">"
 			 "</script>\n",
 	       Cfg_HTTPS_URL_SWAD_PUBLIC);
