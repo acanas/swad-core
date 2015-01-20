@@ -39,12 +39,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.60 (2015/01/20)"
+#define Log_PLATFORM_VERSION	"SWAD 14.61 (2015/01/20)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-TODO: adapt tables files and file_view !!!!!
+TODO: adapt table file_view !!!!!
+        Version 14.61:    Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175112 lines)
+					6 changes necessary in database:
+ALTER TABLE files ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FilCod;
+ALTER TABLE files ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;
+ALTER TABLE files ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod;
+DROP INDEX CrsCod ON files;
+DROP INDEX CrsCod_GrpCod_FileBrowser ON files;
+CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
+
 	Version 14.60:    Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175079 lines)
 					3 changes necessary in database:
 ALTER TABLE clipboard ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);

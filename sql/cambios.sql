@@ -10458,8 +10458,17 @@ ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
 
 SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,ShortName,FullName,FirstYear,LastYear,OptYear,WWW FROM degrees;
 
------ 2015-01-20, swad14.59.4
+----- 2015-01-20, swad14.60
 
 ALTER TABLE clipboard ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);
 ALTER TABLE clipboard ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);
 ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+
+----- 2015-01-20, swad14.61
+
+ALTER TABLE files ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FilCod;
+ALTER TABLE files ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;
+ALTER TABLE files ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod;
+DROP INDEX CrsCod ON files;
+DROP INDEX CrsCod_GrpCod_FileBrowser ON files;
+CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);

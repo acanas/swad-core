@@ -172,6 +172,9 @@ CREATE TABLE IF NOT EXISTS clicks_without_photo (
 CREATE TABLE IF NOT EXISTS clipboard (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
+	InsCod INT NOT NULL DEFAULT -1,
+	CtrCod INT NOT NULL DEFAULT -1,
+	DegCod INT NOT NULL DEFAULT -1,
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpCod INT NOT NULL,
 	WorksUsrCod INT NOT NULL,
@@ -180,6 +183,9 @@ CREATE TABLE IF NOT EXISTS clipboard (
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod),
 	INDEX(FileBrowser),
+	INDEX(InsCod),
+	INDEX(CtrCod),
+	INDEX(DegCod),
 	INDEX(CrsCod));
 --
 -- Table connected: users currently connected to the platform
@@ -489,6 +495,9 @@ CREATE TABLE IF NOT EXISTS file_view (
 --
 CREATE TABLE IF NOT EXISTS files (
 	FilCod INT NOT NULL AUTO_INCREMENT,
+	InsCod INT NOT NULL DEFAULT -1,
+	CtrCod INT NOT NULL DEFAULT -1,
+	DegCod INT NOT NULL DEFAULT -1,
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpCod INT NOT NULL DEFAULT -1,
 	ZoneUsrCod INT NOT NULL DEFAULT -1,
@@ -500,7 +509,7 @@ CREATE TABLE IF NOT EXISTS files (
 	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
         License TINYINT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(FilCod),
-	INDEX(CrsCod,GrpCod,ZoneUsrCod,FileBrowser),
+	INDEX(InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser),
 	INDEX(PublisherUsrCod));
 --
 -- Table forum_disabled_post: stores the forum post that have been disabled

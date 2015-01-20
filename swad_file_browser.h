@@ -97,6 +97,9 @@ typedef enum	// Don't change these values! They are stored in database as number
 struct FileMetadata
   {
    long FilCod;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
    long CrsCod;
    long GrpCod;
    long ZoneUsrCod;

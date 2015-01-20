@@ -1045,7 +1045,10 @@ mysql> DESCRIBE files;
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
 | FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod          | int(11)       | NO   | MUL | -1      |                |
+| InsCod          | int(11)       | NO   | MUL | -1      |                |
+| CtrCod          | int(11)       | NO   |     | -1      |                |
+| DegCod          | int(11)       | NO   |     | -1      |                |
+| CrsCod          | int(11)       | NO   |     | -1      |                |
 | GrpCod          | int(11)       | NO   |     | -1      |                |
 | ZoneUsrCod      | int(11)       | NO   |     | -1      |                |
 | FileBrowser     | tinyint(4)    | NO   |     | NULL    |                |
@@ -1056,10 +1059,13 @@ mysql> DESCRIBE files;
 | Public          | enum('N','Y') | NO   |     | N       |                |
 | License         | tinyint(4)    | NO   |     | 0       |                |
 +-----------------+---------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
+14 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS files ("
 		   "FilCod INT NOT NULL AUTO_INCREMENT,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
+                   "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "GrpCod INT NOT NULL DEFAULT -1,"
                    "ZoneUsrCod INT NOT NULL DEFAULT -1,"
@@ -1070,7 +1076,7 @@ mysql> DESCRIBE files;
                    "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "License TINYINT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(FilCod),INDEX(CrsCod,GrpCod,ZoneUsrCod,FileBrowser),INDEX(PublisherUsrCod))");
+                   "UNIQUE INDEX(FilCod),INDEX(InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser),INDEX(PublisherUsrCod))");
 
    /***** Table forum_disabled_post *****/
 /*
