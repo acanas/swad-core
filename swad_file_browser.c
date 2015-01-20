@@ -8177,8 +8177,7 @@ void Brw_ShowFileMetadata (void)
    char FileNameToShow[NAME_MAX+1];
    char URL[PATH_MAX+1];
    bool Found;
-   bool IsHidden = false;
-   bool ICanView;
+   bool ICanView = false;
    bool ICanEdit;
    bool ICanChangePublic = false;
    bool ICanChangeLicense = false;
@@ -8201,17 +8200,36 @@ void Brw_ShowFileMetadata (void)
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
 	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
-	 Brw_GetFileMetadataByCod (&FileMetadata);
+	 // Brw_GetFileMetadataByCod (&FileMetadata);
 	}
 
       /***** Check if I can view this file.
-	     It could be marked as hidden by teachers *****/
-      if (Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
-	  Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_GRP)
-	 IsHidden = Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	     It could be marked as hidden or in a hidden folder *****/
+      ICanView = true;
+      switch (Gbl.FileBrowser.Type)
+	{
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_TEACHER)
+               ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	    break;
+	 default:
+	    break;
+	}
      }
 
-   ICanView = Found && (!IsHidden || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
    if (ICanView)
      {
       if (FileMetadata.FileType == Brw_IS_FILE ||
@@ -8583,8 +8601,7 @@ void Brw_DownloadFile (void)
    struct FileMetadata FileMetadata;
    char URL[PATH_MAX+1];
    bool Found;
-   bool IsHidden = false;
-   bool ICanView;
+   bool ICanView = false;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8600,18 +8617,36 @@ void Brw_DownloadFile (void)
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
 	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
-	 Brw_GetFileMetadataByCod (&FileMetadata);
+	 // Brw_GetFileMetadataByCod (&FileMetadata);
 	}
 
       /***** Check if I can view this file.
-	     It could be marked as hidden by teachers *****/
-      if (Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
-	  Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_GRP)
-	 IsHidden = Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	     It could be marked as hidden or in a hidden folder *****/
+      ICanView = true;
+      switch (Gbl.FileBrowser.Type)
+	{
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADMIN)
+	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+            break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_TEACHER)
+               ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	    break;
+	 default:
+	    break;
+	}
      }
 
-   ICanView = Found &&
-	      (!IsHidden || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
    if (ICanView)
      {
       if (FileMetadata.FileType == Brw_IS_FILE ||
