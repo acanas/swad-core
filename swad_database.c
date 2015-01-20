@@ -435,6 +435,9 @@ mysql> DESCRIBE clipboard;
 +-------------+------------+------+-----+-------------------+-----------------------------+
 | UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
 | FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
+| InsCod      | int(11)    | NO   | MUL | -1                |                             |
+| CtrCod      | int(11)    | NO   | MUL | -1                |                             |
+| DegCod      | int(11)    | NO   | MUL | -1                |                             |
 | CrsCod      | int(11)    | NO   | MUL | -1                |                             |
 | GrpCod      | int(11)    | NO   |     | NULL              |                             |
 | WorksUsrCod | int(11)    | NO   |     | NULL              |                             |
@@ -442,18 +445,21 @@ mysql> DESCRIBE clipboard;
 | Path        | text       | NO   |     | NULL              |                             |
 | CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
 +-------------+------------+------+-----+-------------------+-----------------------------+
-8 rows in set (0.00 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS clipboard ("
                    "UsrCod INT NOT NULL,"
                    "FileBrowser TINYINT NOT NULL,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
+                   "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "GrpCod INT NOT NULL,"
                    "WorksUsrCod INT NOT NULL,"
                    "FileType TINYINT NOT NULL DEFAULT 0,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "CopyTime TIMESTAMP,"
-                   "UNIQUE INDEX(UsrCod),INDEX(FileBrowser),INDEX(CrsCod))");
+                   "UNIQUE INDEX(UsrCod),INDEX(FileBrowser),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod))");
 
    /***** Table connected *****/
 /*

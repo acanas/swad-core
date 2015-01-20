@@ -10358,7 +10358,9 @@ UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;
 
 ----- 2014-10-05, swad14.1.2
 
-ALTER TABLE debug ADD COLUMN DbgCod INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (DbgCod);
+ALTER TABLE debug ADD COLUMN DbgCod INT NOT NULL AUTO_INCREMENT FIRST
+
+
 
 ----- 2014-10-07, swad14.4
 
@@ -10455,3 +10457,9 @@ ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
 
 
 SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,ShortName,FullName,FirstYear,LastYear,OptYear,WWW FROM degrees;
+
+----- 2015-01-20, swad14.59.4
+
+ALTER TABLE clipboard ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);
+ALTER TABLE clipboard ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);
+ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);

@@ -1423,8 +1423,15 @@ void Ctr_RemoveCentre (void)
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else	// Centre has no teachers ==> remove it
      {
+      /***** Remove information related to files in centre *****/
+      /* Remove clipboards related to the centre */
+      sprintf (Query,"DELETE FROM clipboard WHERE CtrCod='%ld'",
+	       Ctr.CtrCod);
+      DB_QueryDELETE (Query,"can not remove clipboards in a centre");
+
       /***** Remove centre *****/
-      sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",Ctr.CtrCod);
+      sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",
+               Ctr.CtrCod);
       DB_QueryDELETE (Query,"can not remove a centre");
 
       /***** Write message to show the change made *****/

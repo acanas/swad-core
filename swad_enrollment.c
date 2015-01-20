@@ -3221,7 +3221,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       /***** Remove fields of this user in its course record *****/
       Rec_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs,QuietOrVerbose);
 
-      /***** Remove user's clipboard in course *****/
+      /***** Remove user's clipboard *****/
       Brw_RemoveUsrClipboardInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user's expanded folders in course *****/

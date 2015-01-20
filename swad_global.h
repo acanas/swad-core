@@ -511,7 +511,10 @@ struct Globals
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
-         long CrsCod;			// Course code
+         long InsCod;			// Code of the institution related to the file browser with the clipboard
+         long CtrCod;			// Code of the centre related to the file browser with the clipboard
+         long DegCod;			// Code of the degree related to the file browser with the clipboard
+         long CrsCod;			// Code of the course related to the file browser with the clipboard
 	 long GrpCod;			// Code of the group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
          char Path[PATH_MAX+1];		// Complete path in the file browser

@@ -2054,42 +2054,42 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
 	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS);
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
 		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
 		  (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
 		  (unsigned) Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
 	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
 	 sprintf (Path,"%s/%s",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG);
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Path,"%s/%s/%02u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
 		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 	 sprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,"%s/%s/%02u/%u",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
 		  (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
 		  (unsigned) Gbl.CurrentDeg.Deg.DegCod);
 	 break;
@@ -3951,9 +3951,15 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    bool IsRecent = false;
    struct FileMetadata FileMetadata;
    char FileNameToShow[NAME_MAX+1];
-   bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
+   bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_INS ||
+	                  Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CTR ||
+	                  Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_DEG ||
+	                  Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
                           Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_GRP;
-   bool AdminDocsZone   = Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS ||
+   bool AdminDocsZone   = Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_INS ||
+                          Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR ||
+                          Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG ||
+                          Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS ||
                           Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP;
    bool CommonZone      = Gbl.FileBrowser.Type == Brw_FILE_BRW_COMMON_CRS ||
                           Gbl.FileBrowser.Type == Brw_FILE_BRW_COMMON_GRP;
@@ -5479,6 +5485,9 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_works_zone;
    extern const char *Txt_marks_management_zone;
    extern const char *Txt_private_storage_zone;
+   extern const char *Txt_institution;
+   extern const char *Txt_centre;
+   extern const char *Txt_degree;
    extern const char *Txt_course;
    extern const char *Txt_group;
    extern const char *Txt_user[Usr_NUM_SEXS];
@@ -5487,6 +5496,9 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_file;
    extern const char *Txt_folder;
    extern const char *Txt_link;
+   struct Institution Ins;
+   struct Centre Ctr;
+   struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
    struct UsrData UsrDat;
@@ -5496,8 +5508,26 @@ static void Brw_WriteCurrentClipboard (void)
 
    if (Gbl.FileBrowser.Clipboard.FileBrowser != Brw_FILE_BRW_BRIEFCASE_USR)
      {
-      Crs.CrsCod = Gbl.FileBrowser.Clipboard.CrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
+      if (Gbl.FileBrowser.Clipboard.CrsCod > 0)
+	{
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
+	}
+      else if (Gbl.FileBrowser.Clipboard.DegCod > 0)
+	{
+	 Deg.DegCod = Gbl.FileBrowser.Clipboard.DegCod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
+	}
+      else if (Gbl.FileBrowser.Clipboard.CtrCod > 0)
+	{
+	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	}
+      else if (Gbl.FileBrowser.Clipboard.InsCod > 0)
+	{
+	 Ins.InsCod = Gbl.FileBrowser.Clipboard.InsCod;
+	 Ins_GetDataOfInstitutionByCod (&Ins,false);
+	}
      }
 
    fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"text-align:center;\">"
@@ -5505,6 +5535,21 @@ static void Brw_WriteCurrentClipboard (void)
             Txt_Copy_source);
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
      {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_documents_management_zone,
+                  Txt_institution,Ins.ShortName);
+         break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_documents_management_zone,
+                  Txt_centre,Ctr.ShortName);
+         break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_documents_management_zone,
+                  Txt_degree,Deg.ShortName);
+         break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_zone,
@@ -5635,7 +5680,7 @@ static bool Brw_GetMyClipboard (void)
    unsigned UnsignedNum;
 
    /***** Get my current clipboard from database *****/
-   sprintf (Query,"SELECT FileBrowser,CrsCod,GrpCod,WorksUsrCod,FileType,Path"
+   sprintf (Query,"SELECT FileBrowser,InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,FileType,Path"
 	          " FROM clipboard WHERE UsrCod='%ld'",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get source of copy from clipboard");
@@ -5645,6 +5690,9 @@ static bool Brw_GetMyClipboard (void)
      {
       /***** Clear clipboard data *****/
       Gbl.FileBrowser.Clipboard.FileBrowser = Brw_FILE_BRW_UNKNOWN;
+      Gbl.FileBrowser.Clipboard.InsCod      = -1L;
+      Gbl.FileBrowser.Clipboard.CtrCod      = -1L;
+      Gbl.FileBrowser.Clipboard.DegCod      = -1L;
       Gbl.FileBrowser.Clipboard.CrsCod      = -1L;
       Gbl.FileBrowser.Clipboard.GrpCod      = -1L;
       Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
@@ -5662,24 +5710,33 @@ static bool Brw_GetMyClipboard (void)
         {
          Gbl.FileBrowser.Clipboard.FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-         /* Get course code (row[1]) */
-         Gbl.FileBrowser.Clipboard.CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+         /* Get institution code (row[1]) */
+         Gbl.FileBrowser.Clipboard.InsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-         /* Get group code (row[2]) */
-         if (sscanf (row[2],"%ld",&Gbl.FileBrowser.Clipboard.GrpCod) != 1)
+         /* Get centre code (row[2]) */
+         Gbl.FileBrowser.Clipboard.CtrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+         /* Get degree code (row[3]) */
+         Gbl.FileBrowser.Clipboard.DegCod = Str_ConvertStrCodToLongCod (row[3]);
+
+         /* Get course code (row[4]) */
+         Gbl.FileBrowser.Clipboard.CrsCod = Str_ConvertStrCodToLongCod (row[4]);
+
+         /* Get group code (row[5]) */
+         if (sscanf (row[5],"%ld",&Gbl.FileBrowser.Clipboard.GrpCod) != 1)
             Gbl.FileBrowser.Clipboard.GrpCod = -1L;
 
-         /* Get works user's code (row[3]) */
-         Gbl.FileBrowser.Clipboard.WorksUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+         /* Get works user's code (row[6]) */
+         Gbl.FileBrowser.Clipboard.WorksUsrCod = Str_ConvertStrCodToLongCod (row[6]);
 
-         /* Get file type (row[4]) */
+         /* Get file type (row[7]) */
          Gbl.FileBrowser.Clipboard.FileType = Brw_IS_UNKNOWN;	// default
-         if (sscanf (row[4],"%u",&UnsignedNum) == 1)
+         if (sscanf (row[7],"%u",&UnsignedNum) == 1)
             if (UnsignedNum < Brw_NUM_FILE_TYPES)
                Gbl.FileBrowser.Clipboard.FileType = (Brw_FileType_t) UnsignedNum;
 
-         /* Get file path (row[5]) */
-         strcpy (Gbl.FileBrowser.Clipboard.Path,row[5]);
+         /* Get file path (row[8]) */
+         strcpy (Gbl.FileBrowser.Clipboard.Path,row[8]);
          Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.Path,
                                                PathUntilFileName,
                                                Gbl.FileBrowser.Clipboard.FileName);
@@ -5687,6 +5744,9 @@ static bool Brw_GetMyClipboard (void)
       else
         {
          Gbl.FileBrowser.Clipboard.FileBrowser = Brw_FILE_BRW_UNKNOWN;
+	 Gbl.FileBrowser.Clipboard.InsCod      = -1L;
+	 Gbl.FileBrowser.Clipboard.CtrCod      = -1L;
+	 Gbl.FileBrowser.Clipboard.DegCod      = -1L;
          Gbl.FileBrowser.Clipboard.CrsCod      = -1L;
          Gbl.FileBrowser.Clipboard.GrpCod      = -1L;
          Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
@@ -5717,6 +5777,18 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
      {
       switch (Gbl.FileBrowser.Type)
         {
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+            if (Gbl.FileBrowser.Clipboard.InsCod == Gbl.CurrentIns.Ins.InsCod)
+               IsThisTree = true;		// I am in the institution of the clipboard
+            break;
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+            if (Gbl.FileBrowser.Clipboard.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
+               IsThisTree = true;		// I am in the centre of the clipboard
+            break;
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+            if (Gbl.FileBrowser.Clipboard.DegCod == Gbl.CurrentDeg.Deg.DegCod)
+               IsThisTree = true;		// I am in the degree of the clipboard
+            break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_CRS:
@@ -5728,7 +5800,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
          case Brw_FILE_BRW_ASSIGNMENTS_CRS:
          case Brw_FILE_BRW_WORKS_CRS:
             if (Gbl.FileBrowser.Clipboard.CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-               IsThisTree = true;		// We are in the course of the clipboard
+               IsThisTree = true;		// I am in the course of the clipboard
             break;
          case Brw_FILE_BRW_BRIEFCASE_USR:
             IsThisTree = true;
@@ -5763,21 +5835,51 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
 static void Brw_AddPathToClipboards (Brw_FileType_t FileType,const char *Path)
   {
    char Query[512+PATH_MAX];
+   long InsCod = -1L;
+   long CtrCod = -1L;
+   long DegCod = -1L;
+   long CrsCod = -1L;
+   long GrpCod = -1L;
+   long WorksUsrCod = -1L;
+
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 InsCod = Gbl.CurrentIns.Ins.InsCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 DegCod = Gbl.CurrentDeg.Deg.DegCod;
+	 break;
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_CRS:
+	 WorksUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+	 /* no break */
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+         GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
+	 break;
+      default:
+	 break;
+     }
 
    /***** Add path to clipboards *****/
-   sprintf (Query,"INSERT INTO clipboard (UsrCod,FileBrowser,CrsCod,GrpCod,WorksUsrCod,FileType,Path)"
-                  " VALUES ('%ld','%u','%ld','%ld','%ld','%u','%s')",
+   sprintf (Query,"INSERT INTO clipboard (UsrCod,FileBrowser,InsCod,CtrCod,DegCod,"
+	          "CrsCod,GrpCod,WorksUsrCod,FileType,Path)"
+                  " VALUES ('%ld','%u','%ld','%ld','%ld',"
+                  "'%ld','%ld','%ld','%u','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Gbl.FileBrowser.Type,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR) ? -1L :
-        	                                                   Gbl.CurrentCrs.Crs.CrsCod,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_COMMON_GRP ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP) ? Gbl.CurrentCrs.Grps.GrpCod :
-        	                                                     -1L,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_ASSIGNMENTS_CRS ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_WORKS_CRS) ? Gbl.Usrs.Other.UsrDat.UsrCod :
-        	                                               -1L,
+	    InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,
             (unsigned) FileType,
             Path);
    DB_QueryINSERT (Query,"can not add source of copy to clipboard");
@@ -5790,21 +5892,50 @@ static void Brw_AddPathToClipboards (Brw_FileType_t FileType,const char *Path)
 static void Brw_UpdatePathInClipboard (Brw_FileType_t FileType,const char *Path)
   {
    char Query[512+PATH_MAX];
+   long InsCod = -1L;
+   long CtrCod = -1L;
+   long DegCod = -1L;
+   long CrsCod = -1L;
+   long GrpCod = -1L;
+   long WorksUsrCod = -1L;
+
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 InsCod = Gbl.CurrentIns.Ins.InsCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 DegCod = Gbl.CurrentDeg.Deg.DegCod;
+	 break;
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_CRS:
+	 WorksUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+	 /* no break */
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+         GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
+	 break;
+      default:
+	 break;
+     }
 
    /***** Update path in my clipboard *****/
    sprintf (Query,"UPDATE clipboard"
-                  " SET FileBrowser='%u',CrsCod='%ld',GrpCod='%ld',WorksUsrCod='%ld',FileType='%u',Path='%s'"
+                  " SET FileBrowser='%u',InsCod='%ld',CtrCod='%ld',DegCod='%ld',"
+                  "CrsCod='%ld',GrpCod='%ld',WorksUsrCod='%ld',FileType='%u',Path='%s'"
                   " WHERE UsrCod='%ld'",
 	    (unsigned) Gbl.FileBrowser.Type,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR) ? -1L :
-        	                                                   Gbl.CurrentCrs.Crs.CrsCod,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_COMMON_GRP ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP) ? Gbl.CurrentCrs.Grps.GrpCod :
-        	                                                     -1L,
-            (Gbl.FileBrowser.Type == Brw_FILE_BRW_ASSIGNMENTS_CRS ||
-             Gbl.FileBrowser.Type == Brw_FILE_BRW_WORKS_CRS) ? Gbl.Usrs.Other.UsrDat.UsrCod :
-        	                                               -1L,
+	    InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,
             (unsigned) FileType,
             Path,
             Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -6116,6 +6247,21 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
           from a course or from a user *****/
    switch (FileBrowser)
      {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         sprintf (Query,"DELETE FROM clipboard"
+                        " WHERE FileBrowser='%u' AND InsCod='%ld'",
+                  (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
+         break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         sprintf (Query,"DELETE FROM clipboard"
+                        " WHERE FileBrowser='%u' AND CtrCod='%ld'",
+                  (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
+         break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         sprintf (Query,"DELETE FROM clipboard"
+                        " WHERE FileBrowser='%u' AND DegCod='%ld'",
+                  (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
+         break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
@@ -6321,11 +6467,17 @@ void Brw_PasteIntoFileBrowser (void)
 /*****************************************************************************/
 // Source:
 //	Type of file browser:		Gbl.FileBrowser.Clipboard.FileBrowser
+//	Possible institution:		Gbl.FileBrowser.Clipboard.InsCod
+//	Possible centre:		Gbl.FileBrowser.Clipboard.CtrCod
+//	Possible degree:		Gbl.FileBrowser.Clipboard.DegCod
 //	Possible course:		Gbl.FileBrowser.Clipboard.CrsCod
 //	Possible student in works:	Gbl.FileBrowser.Clipboard.WorksUsrCod
 //	Path (file or folder):		Gbl.FileBrowser.Clipboard.Path
 // Destination:
 //	Type of file browser:		Gbl.FileBrowser.Type
+//	Possible institution:		Gbl.CurrentIns.Ins.InsCod
+//	Possible centre:		Gbl.CurrentCtr.Ctr.CtrCod
+//	Possible degree:		Gbl.CurrentDeg.Deg.DegCod
 //	Possible course:		Gbl.CurrentCrs.Crs.CrsCod
 //	Possible student in works:	Gbl.Usrs.Other.UsrDat.UsrCod
 //	Path (should be a folder):	Gbl.FileBrowser.Priv.FullPathInTree
@@ -6338,8 +6490,11 @@ static void Brw_PasteClipboard (void)
    extern const char *Txt_Folders_copied;
    extern const char *Txt_Links_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
+   struct Institution Ins;
+   struct Centre Ctr;
+   struct Degree Deg;
    struct Course Crs;
-   char PathCrsOrg[PATH_MAX+1];
+   char PathAboveRootFolderOrg[PATH_MAX+1];
    char PathOrg[PATH_MAX+1];
    unsigned NumFilesPasted = 0;
    unsigned NumFoldsPasted = 0;
@@ -6354,6 +6509,36 @@ static void Brw_PasteClipboard (void)
       /***** Construct the relative path of the origin file or folder *****/
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+            Ins.InsCod = Gbl.FileBrowser.Clipboard.InsCod;
+            if (Ins_GetDataOfInstitutionByCod (&Ins,false))
+               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+		        (unsigned) (Ins.InsCod % 100),
+		        (unsigned) Ins.InsCod);
+            else
+               Lay_ShowErrorAndExit ("The institution of copy source does not exist.");
+            break;
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+            Ctr.CtrCod = Gbl.FileBrowser.Clipboard.CtrCod;
+            if (Ctr_GetDataOfCentreByCod (&Ctr))
+               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+		        (unsigned) (Ctr.CtrCod % 100),
+		        (unsigned) Ctr.CtrCod);
+            else
+               Lay_ShowErrorAndExit ("The centre of copy source does not exist.");
+            break;
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+            Deg.DegCod = Gbl.FileBrowser.Clipboard.DegCod;
+            if (Deg_GetDataOfDegreeByCod (&Deg))
+               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+		        (unsigned) (Deg.DegCod % 100),
+		        (unsigned) Deg.DegCod);
+            else
+               Lay_ShowErrorAndExit ("The degree of copy source does not exist.");
+            break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_CRS:
@@ -6366,7 +6551,7 @@ static void Brw_PasteClipboard (void)
          case Brw_FILE_BRW_WORKS_CRS:
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.CrsCod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-               sprintf (PathCrsOrg,"%s/%s/%ld",
+               sprintf (PathAboveRootFolderOrg,"%s/%s/%ld",
                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod);
             else
                Lay_ShowErrorAndExit ("The course of copy source does not exist.");
@@ -6376,25 +6561,28 @@ static void Brw_PasteClipboard (void)
         }
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
          case Brw_FILE_BRW_ADMIN_MARKS_CRS:
             sprintf (PathOrg,"%s/%s",
-        	     PathCrsOrg,
+        	     PathAboveRootFolderOrg,
         	     Gbl.FileBrowser.Clipboard.Path);
             break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_GRP:
          case Brw_FILE_BRW_ADMIN_MARKS_GRP:
             sprintf (PathOrg,"%s/grp/%ld/%s",
-        	     PathCrsOrg,
+        	     PathAboveRootFolderOrg,
         	     Gbl.FileBrowser.Clipboard.GrpCod,
         	     Gbl.FileBrowser.Clipboard.Path);
             break;
          case Brw_FILE_BRW_ASSIGNMENTS_USR:
          case Brw_FILE_BRW_WORKS_USR:
             sprintf (PathOrg,"%s/usr/%02u/%ld/%s",
-        	     PathCrsOrg,
+        	     PathAboveRootFolderOrg,
         	     (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
         	     Gbl.Usrs.Me.UsrDat.UsrCod,
         	     Gbl.FileBrowser.Clipboard.Path);
@@ -6402,7 +6590,7 @@ static void Brw_PasteClipboard (void)
          case Brw_FILE_BRW_ASSIGNMENTS_CRS:
          case Brw_FILE_BRW_WORKS_CRS:
             sprintf (PathOrg,"%s/usr/%02u/%ld/%s",
-        	     PathCrsOrg,
+        	     PathAboveRootFolderOrg,
         	     (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
         	     Gbl.FileBrowser.Clipboard.WorksUsrCod,
         	     Gbl.FileBrowser.Clipboard.Path);

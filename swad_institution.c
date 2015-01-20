@@ -1378,8 +1378,15 @@ void Ins_RemoveInstitution (void)
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
+      /***** Remove information related to files in institution *****/
+      /* Remove clipboards related to the institution */
+      sprintf (Query,"DELETE FROM clipboard WHERE InsCod='%ld'",
+	       Ins.InsCod);
+      DB_QueryDELETE (Query,"can not remove clipboards in an institution");
+
       /***** Remove institution *****/
-      sprintf (Query,"DELETE FROM institutions WHERE InsCod='%ld'",Ins.InsCod);
+      sprintf (Query,"DELETE FROM institutions WHERE InsCod='%ld'",
+               Ins.InsCod);
       DB_QueryDELETE (Query,"can not remove an institution");
 
       /***** Write message to show the change made *****/

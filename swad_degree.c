@@ -3182,12 +3182,20 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
             For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS,DegCod);
    DB_QueryDELETE (Query,"can not remove threads in forums of a degree");
 
+   /***** Remove information related to files in degree *****/
+   /* Remove clipboards related to the degree */
+   sprintf (Query,"DELETE FROM clipboard WHERE DegCod='%ld'",
+	    DegCod);
+   DB_QueryDELETE (Query,"can not remove clipboards in a degree");
+
    /***** Remove administrators of this degree *****/
-   sprintf (Query,"DELETE FROM deg_admin WHERE DegCod='%ld'",DegCod);
+   sprintf (Query,"DELETE FROM deg_admin WHERE DegCod='%ld'",
+            DegCod);
    DB_QueryDELETE (Query,"can not remove administrators of a degree");
 
    /***** Remove the degree *****/
-   sprintf (Query,"DELETE FROM degrees WHERE DegCod='%ld'",DegCod);
+   sprintf (Query,"DELETE FROM degrees WHERE DegCod='%ld'",
+            DegCod);
    DB_QueryDELETE (Query,"can not remove a degree");
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
