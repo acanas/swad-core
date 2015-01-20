@@ -32414,7 +32414,7 @@ const char *Txt_Save_file_properties =
 #elif L==4
 	"Enregistrer les propri&eacute;t&eacute;s du fichier";
 #elif L==5
-	"Guardar propiedades del archivo";
+	"Guardar propiedades del archivo";	// Okoteve traducción
 #elif L==6
 	"Salva le propriet&agrave; dei file";
 #elif L==7

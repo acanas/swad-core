@@ -449,7 +449,10 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    struct stat FileStatus;
    Brw_FileType_t FileType;
    bool Hidden;
-   bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
+   bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_INS ||
+                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CTR ||
+                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_DEG ||
+                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
                       Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_GRP;
    bool SeeMarks    = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_MARKS_CRS ||
                       Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_MARKS_GRP;

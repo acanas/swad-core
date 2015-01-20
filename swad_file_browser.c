@@ -730,12 +730,12 @@ const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActExpAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActExpAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActExpSeeDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActExpSeeDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActExpSeeDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+   ActExpSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActExpAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActExpSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActExpAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActExpSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActExpAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -755,12 +755,12 @@ const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    ActConAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    ActConAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActConSeeDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActConSeeDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
-   ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActConSeeDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+   ActConSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   ActConAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   ActConSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   ActConAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   ActConSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   ActConAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1177,7 +1177,7 @@ static void Brw_ShowFileBrowserNormal (void);
 static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
-static void Brw_FormToChangeZone (void);
+static void Brw_FormToChangeCrsGrpZone (void);
 static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError);
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
@@ -2768,10 +2768,10 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void)
   }
 
 /*****************************************************************************/
-/*************************** Form to change file zone ************************/
+/**************** Form to change file zone (course or group) *****************/
 /*****************************************************************************/
 
-static void Brw_FormToChangeZone (void)
+static void Brw_FormToChangeCrsGrpZone (void)
   {
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
@@ -3148,13 +3148,19 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
          Brw_InitHiddenLevels ();
 	 break;
@@ -3176,7 +3182,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 
 static void Brw_UpdateLastAccess (void)
   {
-   /***** Get and update date and hour of last access to works in the course *****/
+   /***** Get and update date and hour of last access to file browser *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
@@ -3273,19 +3279,21 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    char Subtitle[1024];
 
    fprintf (Gbl.F.Out,"<div style=\"margin:0 auto; min-width:600px;\">");
+
+   /***** Form to change zone (course and group browsers) *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_COMMON_GRP:
       case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         Brw_FormToChangeZone ();
+         Brw_FormToChangeCrsGrpZone ();
 	 break;
       default:
          break;
@@ -3648,6 +3656,12 @@ static void Brw_WriteFormFullTree (void)
    Act_FormStart (Brw_ActSeeAdm[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
@@ -3734,6 +3748,8 @@ void Brw_CreateDirDownloadTmp (void)
 /*****************************************************************************/
 /* Get and update the date of my last access to file browser in this course **/
 /*****************************************************************************/
+
+// TODO: Store last access for institution, centre and degree file browsers
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
   {
@@ -5907,12 +5923,15 @@ static void Brw_SetCodes (struct Brw_Codes *Codes)
 
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
 	 Codes->InsCod = Gbl.CurrentIns.Ins.InsCod;
 	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
 	 Codes->CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
 	 Codes->DegCod = Gbl.CurrentDeg.Deg.DegCod;
 	 break;
@@ -5920,13 +5939,17 @@ static void Brw_SetCodes (struct Brw_Codes *Codes)
       case Brw_FILE_BRW_WORKS_CRS:
 	 Codes->WorksUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
 	 /* no break */
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_SEE_MARKS_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
 	 Codes->CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
 	 break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
 	 Codes->CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
          Codes->GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
@@ -8963,6 +8986,9 @@ void Brw_ChgFileMetadata (void)
       /***** Get the new file privacity and license from form *****/
       switch (Gbl.FileBrowser.Type)
         {
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
             PublicFile = Brw_GetParamPublicFile ();
@@ -9164,8 +9190,10 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       /* File is hidden? (row[11]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
             FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[11][0]) == 'Y');
             break;
          default:
@@ -9176,8 +9204,10 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       /* Is a public file? (row[12]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
             FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[12][0]) == 'Y');
             break;
@@ -9290,8 +9320,10 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Is a hidden file? (row[11]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
             FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[11][0]) == 'Y');
             break;
          default:
@@ -9302,8 +9334,10 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Is a public file? (row[12]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
             FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[12][0]) == 'Y');
             break;
