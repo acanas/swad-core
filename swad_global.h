@@ -278,8 +278,10 @@ struct Globals
          char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
 	 char PathDir[PATH_MAX+1];
 	 bool Logged;
+         bool IBelongToCurrentIns;
+         bool IBelongToCurrentCtr;
+         bool IBelongToCurrentDeg;
          bool IBelongToCurrentCrs;
-	 bool IHaveAccessToCurrentCrs;
          bool MyPhotoExists;
          unsigned NumAccWithoutPhoto;
          char PhotoURL[PATH_MAX+1];

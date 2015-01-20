@@ -269,7 +269,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    Usr_GetParamOtherUsrCodEncrypted ();
 
    /***** Get list of users belonging to the current course *****/
-   if (Gbl.Usrs.Me.IHaveAccessToCurrentCrs)	// If there is a course selected and I belong to it
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
      {
       /***** Get and update type of list, number of columns in class photo
              and preference about view photos *****/
@@ -372,7 +373,8 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 	              "<td class=\"TIT_TBL\" style=\"text-align:left;"
 	              " background-color:%s;\"",
             VERY_LIGHT_BLUE);
-   if (Gbl.Usrs.Me.IHaveAccessToCurrentCrs)
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
       fprintf (Gbl.F.Out," colspan=\"%u\">%s:",
 	       Colspan,Txt_Other_recipients);
    else
@@ -384,7 +386,8 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
                       "<tr>"
                       "<td",
             Txt_nicks_emails_or_IDs_separated_by_commas);
-   if (Gbl.Usrs.Me.IHaveAccessToCurrentCrs)
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," style=\"text-align:left;\">"
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");

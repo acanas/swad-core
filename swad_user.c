@@ -2247,6 +2247,43 @@ static void Usr_SetUsrRoleAndPrefs (void)
    /***** Check if I belong to current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
       Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod);
+   else
+      Gbl.Usrs.Me.IBelongToCurrentCrs = false;
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+      Gbl.Usrs.Me.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Check if I belong to current degree *****/
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
+      else
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentDeg = false;
+
+   /***** Check if I belong to current centre *****/
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentDeg)
+         Gbl.Usrs.Me.IBelongToCurrentCtr = true;
+      else
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentCtr = false;
+
+   /***** Check if I belong to current institution *****/
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      if (Gbl.Usrs.Me.IBelongToCurrentCtr)
+	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
+      else
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+     }
+   else
+      Gbl.Usrs.Me.IBelongToCurrentIns = false;
 
    /***** Build my list of available roles for current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
@@ -2281,16 +2318,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
            Gbl.Usrs.Me.LoggedRole++)
          if (Gbl.Usrs.Me.AvailableRoles & (1 << Gbl.Usrs.Me.LoggedRole))
             break;
-
-   /***** Set other variables related with my user's type *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-     {
-      Gbl.Usrs.Me.IHaveAccessToCurrentCrs = ((Gbl.Usrs.Me.IBelongToCurrentCrs && (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ||
-                                                                                  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)) ||
-                                              Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
-      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-         Gbl.Usrs.Me.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
-     }
   }
 
 /*****************************************************************************/

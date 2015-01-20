@@ -1645,7 +1645,8 @@ void For_ShowForumList (void)
 		     if (ICanSeeDegForum)
 			/***** Links to forums of current degree *****/
 			if (For_WriteLinksToDegForums (Gbl.CurrentDeg.Deg.DegCod,true,IsLastItemInLevel) > 0)
-			   if (Gbl.Usrs.Me.IHaveAccessToCurrentCrs)
+			   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+			       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
 			      /***** Links to forums of current degree *****/
 			      For_WriteLinksToCrsForums (Gbl.CurrentCrs.Crs.CrsCod,true,IsLastItemInLevel);
         	 }

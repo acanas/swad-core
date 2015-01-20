@@ -488,7 +488,8 @@ static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role
      }
 
    /***** List connected users belonging to this course *****/
-   if (Gbl.Usrs.Me.IHaveAccessToCurrentCrs)	// If I belongs to this course or I am superuser
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
       Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
   }
 
@@ -530,7 +531,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
             return;
          break;
       case Sco_SCOPE_COURSE:		// Show connected users in the current course
-         if (!Gbl.Usrs.Me.IHaveAccessToCurrentCrs)
+         if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
             return;
          break;
       default:
@@ -598,7 +600,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
             return;
          break;
       case Sco_SCOPE_COURSE:		// Show connected users in the current course
-         if (!Gbl.Usrs.Me.IHaveAccessToCurrentCrs)
+         if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
             return;
          break;
       default:

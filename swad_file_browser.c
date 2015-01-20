@@ -1845,8 +1845,30 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get whether to show full tree *****/
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
-   Gbl.FileBrowser.ShowOnlyPublicFiles = (Gbl.FileBrowser.Type != Brw_FILE_BRW_BRIEFCASE_USR &&
-                                          !Gbl.Usrs.Me.IHaveAccessToCurrentCrs);
+   Gbl.FileBrowser.ShowOnlyPublicFiles = false;
+   if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+      switch (Gbl.FileBrowser.Type)
+	{
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentIns;
+	    break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentCtr;
+	    break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentDeg;
+	    break;
+	 case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+	 case Brw_FILE_BRW_COMMON_CRS:
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentCrs;
+	    break;
+	 default:
+	    break;
+	}
    Gbl.FileBrowser.FullTree = Gbl.FileBrowser.ShowOnlyPublicFiles ? true :
 	                                                            Brw_GetFullTreeFromForm ();
 
@@ -3004,11 +3026,11 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_ASSIGNMENTS_USR    ] = Txt_Assignments_zone;		// Brw_FILE_BRW_ASSIGNMENTS_USR
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_ASSIGNMENTS_CRS    ] = Txt_Assignments_zone;		// Brw_FILE_BRW_ASSIGNMENTS_CRS
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_DEG  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_DEG	// TODO: Set the correct text
-   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG] = Txt_Documents_management_zone;	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG	// TODO: Set the correct text
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_CTR  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_CTR	// TODO: Set the correct text
-   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR] = Txt_Documents_management_zone;	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR	// TODO: Set the correct text
    Brw_TitleOfFileBrowser[Brw_FILE_BRW_SEE_DOCUMENTS_INS  ] = Txt_Documents_zone;		// Brw_FILE_BRW_SEE_DOCUMENTS_INS	// TODO: Set the correct text
-   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_INS] = Txt_Documents_zone;		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct text
+   Brw_TitleOfFileBrowser[Brw_FILE_BRW_ADMIN_DOCUMENTS_INS] = Txt_Documents_management_zone;	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS	// TODO: Set the correct text
 
    /***** Check if the maximum quota has been exceeded *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -4040,11 +4062,11 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Brw_GetFileSizeAndDate (&FileMetadata);
    if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
       /* Add entry to the table of files/folders */
       FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
                                              Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
+   Brw_GetFileSizeAndDate (&FileMetadata);
 
    /***** Is this row public or private? *****/
    if (SeeDocsZone || AdminDocsZone || CommonZone)
@@ -8063,9 +8085,13 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
    /***** Get if a file or folder is hidden from database *****/
    sprintf (Query,"SELECT Hidden FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
+                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
                   " AND FileBrowser='%u'"
                   " AND Path='%s'",
+            Brw_GetInsCod (),
+            Brw_GetCtrCod (),
+            Brw_GetDegCod (),
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
@@ -8105,8 +8131,8 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld' AND CrsCod='%ld'"
-                  " AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
+                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
                   " AND FileBrowser='%u' AND Hidden='Y'"
                   " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
             FileMetadata->InsCod,
@@ -8233,6 +8259,9 @@ void Brw_ShowFileMetadata (void)
 	    Act_FormStart (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
 	    switch (Gbl.FileBrowser.Type)
 	      {
+	       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
 	       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
 	       case Brw_FILE_BRW_COMMON_CRS:
 		  ICanChangePublic  = true;
@@ -9518,8 +9547,12 @@ static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
 
    /***** Get if a file or folder is public from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
+                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
                   " AND FileBrowser='%u' AND Path LIKE '%s/%%' AND Public='Y'",
+            Brw_GetInsCod (),
+            Brw_GetCtrCod (),
+            Brw_GetDegCod (),
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
@@ -9761,10 +9794,13 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
    char Query[512+PATH_MAX];
 
    /***** Add path to the database *****/
-   sprintf (Query,"INSERT INTO files (CrsCod,GrpCod,ZoneUsrCod,FileBrowser,"
+   sprintf (Query,"INSERT INTO files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License)"
-                  " VALUES ('%ld','%ld','%ld','%u',"
+                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%u',"
                   "'%ld','%u','%s','N','%c','%u')",
+            Brw_GetInsCod (),
+            Brw_GetCtrCod (),
+            Brw_GetDegCod (),
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),

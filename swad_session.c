@@ -131,8 +131,10 @@ void Ses_CloseSession (void)
       /***** Now, user is not logged in *****/
       Gbl.Usrs.Me.LoggedRoleBeforeCloseSession = Gbl.Usrs.Me.LoggedRole;
       Gbl.Usrs.Me.Logged = false;
+      Gbl.Usrs.Me.IBelongToCurrentIns = false;
+      Gbl.Usrs.Me.IBelongToCurrentCtr = false;
+      Gbl.Usrs.Me.IBelongToCurrentDeg = false;
       Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-      Gbl.Usrs.Me.IHaveAccessToCurrentCrs = false;
       Gbl.Usrs.Me.LoggedRole = Rol_ROLE_UNKNOWN;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
       Gbl.Usrs.Me.MyCourses.Filled = false;
       Gbl.Usrs.Me.MyCourses.Num = 0;
