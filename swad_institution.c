@@ -1384,6 +1384,9 @@ void Ins_RemoveInstitution (void)
 	       Ins.InsCod);
       DB_QueryDELETE (Query,"can not remove clipboards in an institution");
 
+      /* Remove files in the institution from database */
+      Brw_RemoveFilesFromDB (Ins.InsCod,-1L,-1L,-1L,-1L,-1L);
+
       /***** Remove institution *****/
       sprintf (Query,"DELETE FROM institutions WHERE InsCod='%ld'",
                Ins.InsCod);

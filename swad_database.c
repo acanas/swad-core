@@ -969,28 +969,34 @@ mysql> DESCRIBE exam_announcements;
    /***** Table expanded_folders *****/
 /*
 mysql> DESCRIBE expanded_folders;
-+-------------+------------+------+-----+---------------------+-------+
-| Field       | Type       | Null | Key | Default             | Extra |
-+-------------+------------+------+-----+---------------------+-------+
-| UsrCod      | int(11)    | NO   | MUL | NULL                |       |
-| FileBrowser | tinyint(4) | NO   |     | NULL                |       |
-| CrsCod      | int(11)    | NO   | MUL | -1                  |       |
-| GrpCod      | int(11)    | NO   |     | 0                   |       |
-| WorksUsrCod | int(11)    | NO   |     | NULL                |       |
-| Path        | text       | NO   |     | NULL                |       |
-| ClickTime   | datetime   | NO   |     | 0000-00-00 00:00:00 |       |
-+-------------+------------+------+-----+---------------------+-------+
-7 rows in set (0.00 sec)
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | MUL | NULL    |       |
+| FileBrowser | tinyint(4) | NO   |     | NULL    |       |
+| InsCod      | int(11)    | NO   | MUL | -1      |       |
+| CtrCod      | int(11)    | NO   | MUL | -1      |       |
+| DegCod      | int(11)    | NO   | MUL | -1      |       |
+| CrsCod      | int(11)    | NO   | MUL | -1      |       |
+| GrpCod      | int(11)    | NO   |     | NULL    |       |
+| WorksUsrCod | int(11)    | NO   |     | NULL    |       |
+| Path        | text       | NO   |     | NULL    |       |
+| ClickTime   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS expanded_folders ("
                    "UsrCod INT NOT NULL,"
                    "FileBrowser TINYINT NOT NULL,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
+                   "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "GrpCod INT NOT NULL,"
                    "WorksUsrCod INT NOT NULL,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "ClickTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod,FileBrowser),INDEX(CrsCod))");
+                   "INDEX(UsrCod,FileBrowser),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod))");
 
    /***** Table file_browser_size *****/
 /*

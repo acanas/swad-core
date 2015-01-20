@@ -2444,7 +2444,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    DB_QueryDELETE (Query,"can not remove the properties of marks associated to a course");
 
    /* Remove files in the course from database */
-   Brw_RemoveFilesFromDB (CrsCod,-1L,-1L);
+   Brw_RemoveFilesFromDB (-1L,-1L,-1L,CrsCod,-1L,-1L);
 
    /* Remove size of file zones in the course from database */
    Brw_RemoveSizeOfFileTreeFromDB (CrsCod,-1L,-1L);

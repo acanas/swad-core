@@ -3188,6 +3188,9 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove clipboards in a degree");
 
+   /* Remove files in the degree from database */
+   Brw_RemoveFilesFromDB (-1L,-1L,DegCod,-1L,-1L,-1L);
+
    /***** Remove administrators of this degree *****/
    sprintf (Query,"DELETE FROM deg_admin WHERE DegCod='%ld'",
             DegCod);

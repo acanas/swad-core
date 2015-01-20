@@ -44,7 +44,12 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-TODO: adapt table file_view !!!!!
+        Version 14.62:    Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175296 lines)
+					3 changes necessary in database:
+ALTER TABLE expanded_folders ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);
+ALTER TABLE expanded_folders ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);
+ALTER TABLE expanded_folders ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+
         Version 14.61:    Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175112 lines)
 					6 changes necessary in database:
 ALTER TABLE files ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FilCod;

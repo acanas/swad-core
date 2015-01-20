@@ -147,7 +147,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 void Brw_RemoveSizeOfFileTreeFromDB (long CrsCod,long GrpCod,long UsrCod);
-void Brw_RemoveFilesFromDB (long CrsCod,long GrpCod,long UsrCod);
+void Brw_RemoveFilesFromDB (long InsCod,long CtrCod,long DegCod,long CrsCod,long GrpCod,long UsrCod);
 void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void);
 void Brw_AskRemFileFromTree (void);

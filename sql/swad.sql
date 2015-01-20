@@ -459,12 +459,18 @@ CREATE TABLE IF NOT EXISTS exam_announcements (
 CREATE TABLE IF NOT EXISTS expanded_folders (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
+	InsCod INT NOT NULL DEFAULT -1,
+	CtrCod INT NOT NULL DEFAULT -1,
+	DegCod INT NOT NULL DEFAULT -1,
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpCod INT NOT NULL,
 	WorksUsrCod INT NOT NULL,
 	Path TEXT COLLATE latin1_bin NOT NULL,
 	ClickTime DATETIME NOT NULL,
 	INDEX(UsrCod,FileBrowser),
+	INDEX(InsCod),
+	INDEX(CtrCod),
+	INDEX(DegCod),
 	INDEX(CrsCod));
 --
 -- Table file_browser_size: stores the sizes of the file zones

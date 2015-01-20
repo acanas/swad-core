@@ -1429,6 +1429,9 @@ void Ctr_RemoveCentre (void)
 	       Ctr.CtrCod);
       DB_QueryDELETE (Query,"can not remove clipboards in a centre");
 
+      /* Remove files in the centre from database */
+      Brw_RemoveFilesFromDB (-1L,Ctr.CtrCod,-1L,-1L,-1L,-1L);
+
       /***** Remove centre *****/
       sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",
                Ctr.CtrCod);

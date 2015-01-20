@@ -775,7 +775,7 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
    Brw_RemoveTree (PathRelUsr);
 
    /***** Remove files in the course from database *****/
-   Brw_RemoveFilesFromDB (-1L,-1L,UsrDat->UsrCod);
+   Brw_RemoveFilesFromDB (-1L,-1L,-1L,-1L,-1L,UsrDat->UsrCod);
 
    /***** Remove size of the briefcase of the user from database *****/
    Brw_RemoveSizeOfFileTreeFromDB (-1L,-1L,UsrDat->UsrCod);
