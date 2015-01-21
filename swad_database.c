@@ -998,6 +998,26 @@ mysql> DESCRIBE expanded_folders;
                    "ClickTime DATETIME NOT NULL,"
                    "INDEX(UsrCod,FileBrowser),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod))");
 
+   /***** Table file_browser_last *****/
+/*
+mysql> DESCRIBE file_browser_last;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | PRI | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| LastClick   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_last ("
+                   "UsrCod INT NOT NULL,"
+                   "FileBrowser TINYINT NOT NULL,"
+                   "Cod INT NOT NULL DEFAULT -1,"
+	           "LastClick DATETIME NOT NULL,"
+                   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
+
    /***** Table file_browser_size *****/
 /*
 mysql> DESCRIBE file_browser_size;

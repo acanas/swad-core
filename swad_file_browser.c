@@ -3185,6 +3185,14 @@ static void Brw_UpdateLastAccess (void)
    /***** Get and update date and hour of last access to file browser *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         Brw_GetAndUpdateDateLastAccFileBrowser ("");
+	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccDownloadCrs");
@@ -3749,8 +3757,6 @@ void Brw_CreateDirDownloadTmp (void)
 /* Get and update the date of my last access to file browser in this course **/
 /*****************************************************************************/
 
-// TODO: Store last access for institution, centre and degree file browsers
-
 static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
   {
    char Query1[256];
@@ -3762,6 +3768,45 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
    /***** Get date of last accesss to a file browser from database *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
+                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentIns.Ins.InsCod);
+         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
+                         " VALUES ('%ld','%u','%ld',NOW())",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentIns.Ins.InsCod);
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
+                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
+                         " VALUES ('%ld','%u','%ld',NOW())",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+         break;
+      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
+                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentDeg.Deg.DegCod);
+         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
+                         " VALUES ('%ld','%u','%ld',NOW())",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentDeg.Deg.DegCod);
+         break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
@@ -10494,7 +10539,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));
 
-      /***** Write degree logo (row[3]), degree short name (row[4]) and centre short name (row[5]) *****/
+      /***** Write degree logo, degree short name (row[3]) and centre short name (row[4]) *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
@@ -10508,11 +10553,11 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
                        16,"vertical-align:top;",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>"
 			    "</form>",
-		  row[4],row[5]);
+		  row[3],row[4]);
 	}
       fprintf (Gbl.F.Out,"</td>");
 
-      /***** Write course short name (row[6]) *****/
+      /***** Write course short name (row[5]) *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
@@ -10520,11 +10565,11 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	{
 	 Act_FormGoToStart (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (FileMetadata.CrsCod);
-	 sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
+	 sprintf (Gbl.Title,Txt_Go_to_X,row[5]);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%s</a>"
 	                    "</form>",
-		  row[6]);
+		  row[5]);
 	}
       fprintf (Gbl.F.Out,"</td>");
 

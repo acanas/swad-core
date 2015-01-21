@@ -39,11 +39,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.62.3 (2015/01/20)"
+#define Log_PLATFORM_VERSION	"SWAD 14.63 (2015/01/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.63:    Jan 21, 2015	See/admin documents of degree, centre and institution. (175512 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,LastClick DATETIME NOT NULL,UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+
+        Version 14.62.4:  Jan 20, 2015	Fixed bug in search of courses. (175443 lines)
         Version 14.62.3:  Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (? lines)
         Version 14.62.2:  Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175407 lines)
         Version 14.62.1:  Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175371 lines)
