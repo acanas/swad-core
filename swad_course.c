@@ -3259,6 +3259,17 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    const char *BgColor;
    bool Accepted;
 
+   /*
+   SELECT degrees.DegCod,	0
+          courses.CrsCod,	1
+          degrees.ShortName,	2
+          degrees.FullName,	3
+          courses.Year,		4
+          courses.Semester,	5
+          courses.FullName,	6
+          centres.ShortName	7
+   */
+
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of degree.");
@@ -3352,7 +3363,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out,"%s</a>"
 	              "</form>"
 	              "</td>",
-	    row[7]);
+	    row[6]);
 
    /***** Write number of students in course *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"

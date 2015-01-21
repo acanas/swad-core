@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.63.1 (2015/01/21)"
+#define Log_PLATFORM_VERSION	"SWAD 14.63.2 (2015/01/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.63.2:  Jan 21, 2015	Fixed bug in search of courses. (175542 lines)
         Version 14.63.1:  Jan 21, 2015	Remove last accesses to file browsers related with an institution, a centre or a degree. (175531 lines)
         Version 14.63:    Jan 21, 2015	See/admin documents of degree, centre and institution. (175512 lines)
 					1 change necessary in database:
@@ -65,7 +66,7 @@ ALTER TABLE files ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FilCod;
 ALTER TABLE files ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;
 ALTER TABLE files ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod;
 DROP INDEX CrsCod ON files;
-DROP INDEX CrsCod_GrpCod_FileBrowser ON files;
+DROP INDEX CrsCod_GrpCod_ZoneUsrCod_FileBrowser ON files;
 CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
 
 	Version 14.60:    Jan 20, 2015	See/admin documents of degree, centre and institution (not finished). (175079 lines)
