@@ -1384,6 +1384,9 @@ void Ins_RemoveInstitution (void)
 	       Ins.InsCod);
       DB_QueryDELETE (Query,"can not remove clipboards in an institution");
 
+      /* Remove last accesses to file browsers related with this institution */
+      Brw_RemoveFileBrowserLast (Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,Ins.InsCod);
+
       /* Remove files in the institution from database */
       Brw_RemoveFilesFromDB (Ins.InsCod,-1L,-1L,-1L,-1L,-1L);
 

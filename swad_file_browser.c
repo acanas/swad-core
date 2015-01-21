@@ -3879,6 +3879,20 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
   }
 
 /*****************************************************************************/
+/******************** Remove last accesses to file browser *******************/
+/*****************************************************************************/
+
+void Brw_RemoveFileBrowserLast (Brw_FileBrowser_t FileBrowser,long Cod)
+  {
+   char Query[128];
+
+   sprintf (Query,"DELETE FROM file_browser_last"
+	          " WHERE FileBrowser='%u' AND Cod='%ld'",
+            (unsigned) Brw_FileBrowserForDB[FileBrowser],Cod);
+   DB_QueryDELETE (Query,"can not remove last accesses to file browsers");
+  }
+
+/*****************************************************************************/
 /************* Get the group of my last access to a common zone **************/
 /*****************************************************************************/
 

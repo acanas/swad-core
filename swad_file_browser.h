@@ -149,6 +149,7 @@ void Brw_ShowAgainFileBrowserOrWorks (void);
 void Brw_RemoveSizeOfFileTreeFromDB (long CrsCod,long GrpCod,long UsrCod);
 void Brw_RemoveFilesFromDB (long InsCod,long CtrCod,long DegCod,long CrsCod,long GrpCod,long UsrCod);
 void Brw_CreateDirDownloadTmp (void);
+void Brw_RemoveFileBrowserLast (Brw_FileBrowser_t FileBrowser,long Cod);
 void Brw_AskEditWorksCrs (void);
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);

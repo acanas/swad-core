@@ -3188,6 +3188,9 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove clipboards in a degree");
 
+   /* Remove last accesses to file browsers related with this degree */
+   Brw_RemoveFileBrowserLast (Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,DegCod);
+
    /* Remove files in the degree from database */
    Brw_RemoveFilesFromDB (-1L,-1L,DegCod,-1L,-1L,-1L);
 
