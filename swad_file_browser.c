@@ -6001,6 +6001,8 @@ static void Brw_SetCodes (struct Brw_Codes *Codes)
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_ASSIGNMENTS_USR:
+      case Brw_FILE_BRW_WORKS_USR:
       case Brw_FILE_BRW_SEE_MARKS_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
 	 Codes->CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
