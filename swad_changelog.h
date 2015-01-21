@@ -39,11 +39,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.63.4 (2015/01/21)"
+#define Log_PLATFORM_VERSION	"SWAD 14.63.5 (2015/01/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.63.5:  Jan 22, 2015	Changes in last accesses to file browser (briefcases). (? lines)
+					2 changes necessary in database:
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
+ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
+
         Version 14.63.4:  Jan 21, 2015	Fixed bug in listing of degree administrators, reported by Antonio Fernández Ares. (175548 lines)
         Version 14.63.3:  Jan 21, 2015	Fixed bug when expanding folders, reported by Nadir Román Guerrero and others. (175545 lines)
         Version 14.63.2:  Jan 21, 2015	Fixed bug in search of courses. (175542 lines)

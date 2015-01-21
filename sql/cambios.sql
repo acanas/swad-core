@@ -10476,3 +10476,9 @@ CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
 ----- 2015-01-21, swad14.63
 
 CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,LastClick DATETIME NOT NULL,UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+
+----- 2015-01-22, swad14.63.5
+
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
+ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
+

@@ -3240,7 +3240,7 @@ static void Brw_UpdateLastAccess (void)
          Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccCrsWorks");
 	 break;
       case Brw_FILE_BRW_BRIEFCASE_USR:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccBriefcase");
+         Brw_GetAndUpdateDateLastAccFileBrowser ("");
 	 break;
       default:
 	 break;
@@ -3844,13 +3844,15 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
                   Gbl.Usrs.Me.UsrDat.UsrCod);
 	 break;
       case Brw_FILE_BRW_BRIEFCASE_USR:
-	 // FieldNameDB -> "LastAccBriefcase"
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(%s) FROM usr_last"
-                         " WHERE UsrCod='%ld'",
-                  FieldNameDB,Gbl.Usrs.Me.UsrDat.UsrCod);
-         sprintf (Query2,"UPDATE usr_last SET %s=NOW()"
-                         " WHERE UsrCod='%ld'",
-                  FieldNameDB,Gbl.Usrs.Me.UsrDat.UsrCod);
+         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
+                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='-1'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type]);
+         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
+                         " VALUES ('%ld','%u','-1',NOW())",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+                  Gbl.CurrentDeg.Deg.DegCod);
 	 break;
       default:
 	 return;

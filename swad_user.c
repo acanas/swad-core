@@ -2459,7 +2459,7 @@ void Usr_UpdateMyLastData (void)
    if (DB_QueryCOUNT (Query,"can not get last user's click"))
      {
       /***** Update my last accessed course, tab and time of click in database *****/
-      // WhatToSearch, LastAccNotif, LastAccBriefcase remain unchanged
+      // WhatToSearch, LastAccNotif remain unchanged
       sprintf (Query,"UPDATE usr_last SET LastCrs='%ld',LastTab='%u',LastTime=NOW()"
                      " WHERE UsrCod='%ld'",
                Gbl.CurrentCrs.Crs.CrsCod,
@@ -2480,7 +2480,7 @@ static void Usr_InsertMyLastData (void)
    char Query[256];
 
    /***** Insert my last accessed course, tab and time of click in database *****/
-   // WhatToSearch, LastAccNotif, LastAccBriefcase are set to default (0)
+   // WhatToSearch, LastAccNotif are set to default (0)
    sprintf (Query,"INSERT INTO usr_last (UsrCod,LastCrs,LastTab,LastTime)"
                   " VALUES ('%ld','%ld','%u',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,

@@ -2395,18 +2395,17 @@ mysql> DESCRIBE usr_IDs;
    /***** Table usr_last *****/
 /*
 mysql> DESCRIBE usr_last;
-+------------------+------------+------+-----+---------------------+-------+
-| Field            | Type       | Null | Key | Default             | Extra |
-+------------------+------------+------+-----+---------------------+-------+
-| UsrCod           | int(11)    | NO   | PRI | NULL                |       |
-| WhatToSearch     | tinyint(4) | NO   |     | 0                   |       |
-| LastCrs          | int(11)    | NO   |     | -1                  |       |
-| LastTab          | tinyint(4) | NO   |     | 0                   |       |
-| LastTime         | datetime   | NO   | MUL | 0000-00-00 00:00:00 |       |
-| LastAccNotif     | datetime   | NO   |     | 0000-00-00 00:00:00 |       |
-| LastAccBriefcase | datetime   | NO   |     | 0000-00-00 00:00:00 |       |
-+------------------+------------+------+-----+---------------------+-------+
-7 rows in set (0.01 sec)
++--------------+------------+------+-----+---------------------+-------+
+| Field        | Type       | Null | Key | Default             | Extra |
++--------------+------------+------+-----+---------------------+-------+
+| UsrCod       | int(11)    | NO   | PRI | NULL                |       |
+| WhatToSearch | tinyint(4) | NO   |     | 0                   |       |
+| LastCrs      | int(11)    | NO   |     | -1                  |       |
+| LastTab      | tinyint(4) | NO   |     | NULL                |       |
+| LastTime     | datetime   | NO   | MUL | 0000-00-00 00:00:00 |       |
+| LastAccNotif | datetime   | NO   |     | 0000-00-00 00:00:00 |       |
++--------------+------------+------+-----+---------------------+-------+
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
                    "UsrCod INT NOT NULL,"
@@ -2415,7 +2414,6 @@ mysql> DESCRIBE usr_last;
                    "LastTab TINYINT NOT NULL,"
                    "LastTime DATETIME NOT NULL DEFAULT 0,"
                    "LastAccNotif DATETIME NOT NULL DEFAULT 0,"
-                   "LastAccBriefcase DATETIME NOT NULL DEFAULT 0,"
                    "UNIQUE INDEX(UsrCod),INDEX(LastTime))");
 
 /***** Table usr_nicknames *****/
