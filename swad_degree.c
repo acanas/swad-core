@@ -3893,14 +3893,17 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
    long DegCod;
 
    /***** Get degrees admin by a user from database *****/
-   sprintf (Query,"(SELECT DegCod,'','' AS ShortName,'' FROM deg_admin WHERE UsrCod='%ld' AND DegCod<'0')"
+   sprintf (Query,"(SELECT DegCod,'' AS ShortName,''"
+	          " FROM deg_admin"
+	          " WHERE UsrCod='%ld' AND DegCod<'0')"
                   " UNION "
-                  "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName FROM deg_admin,degrees"
-                  " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod>='0' AND deg_admin.DegCod=degrees.DegCod)"
+                  "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName"
+                  " FROM deg_admin,degrees"
+                  " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod>='0'"
+                  " AND deg_admin.DegCod=degrees.DegCod)"
                   " ORDER BY ShortName",
             UsrCod,UsrCod);
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by a user"))) // If degrees found for this administrator
-     {
       /***** Get the list of degrees *****/
       for (NumRow = 1;
 	   NumRow <= NumRows;
@@ -3910,9 +3913,9 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"text-align:right;"
                             " background-color:%s;\">"
-                            "<img src=\"%s/%s16x16.gif\" alt=\"\""
-                            " class=\"ICON16x16\""
-                            " style=\"vertical-align:top;\" />"
+                            "<img src=\"%s/%s20x20.gif\" alt=\"\""
+                            " style=\"width:20px; height:20px;"
+                            " vertical-align:top;\" />"
                             "</td>",
                   Gbl.ColorRows[Gbl.RowEvenOdd],Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :
@@ -3952,7 +3955,6 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
