@@ -629,23 +629,17 @@ mysql> DESCRIBE crs_grp_types;
    /***** Table crs_grp_usr *****/
 /*
 mysql> DESCRIBE crs_grp_usr;
-+--------------------+----------+------+-----+---------+-------+
-| Field              | Type     | Null | Key | Default | Extra |
-+--------------------+----------+------+-----+---------+-------+
-| GrpCod             | int(11)  | NO   | PRI | NULL    |       |
-| UsrCod             | int(11)  | NO   | PRI | NULL    |       |
-| LastAccDownloadGrp | datetime | NO   |     | NULL    |       |
-| LastAccCommonGrp   | datetime | NO   |     | NULL    |       |
-| LastAccMarksGrp    | datetime | NO   |     | NULL    |       |
-+--------------------+----------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_usr ("
                    "GrpCod INT NOT NULL,"
                    "UsrCod INT NOT NULL,"
-                   "LastAccDownloadGrp DATETIME NOT NULL,"
-                   "LastAccCommonGrp DATETIME NOT NULL,"
-                   "LastAccMarksGrp DATETIME NOT NULL,"
                    "UNIQUE INDEX(GrpCod,UsrCod),INDEX(GrpCod),INDEX(UsrCod))");
 
    /***** Table crs_info_read *****/
@@ -763,40 +757,30 @@ mysql> DESCRIBE crs_records;
    /***** Table crs_usr *****/
 /*
 mysql> DESCRIBE crs_usr;
-+--------------------+---------------------------+------+-----+------------+-------+
-| Field              | Type                      | Null | Key | Default    | Extra |
-+--------------------+---------------------------+------+-----+------------+-------+
-| CrsCod             | int(11)                   | NO   | PRI | -1         |       |
-| UsrCod             | int(11)                   | NO   | PRI | NULL       |       |
-| Role               | tinyint(4)                | NO   | PRI | 0          |       |
-| Accepted           | enum('N','Y')             | NO   |     | N          |       |
-| LastAccDownloadCrs | datetime                  | NO   |     | NULL       |       |
-| LastAccCommonCrs   | datetime                  | NO   |     | NULL       |       |
-| LastAccMyWorks     | datetime                  | NO   |     | NULL       |       |
-| LastAccCrsWorks    | datetime                  | NO   |     | NULL       |       |
-| LastAccMarksCrs    | datetime                  | NO   |     | NULL       |       |
-| LastDowGrpCod      | int(11)                   | NO   |     | -1         |       |
-| LastComGrpCod      | int(11)                   | NO   |     | -1         |       |
-| LastAssGrpCod      | int(11)                   | NO   |     | -1         |       |
-| NumAccTst          | int(11)                   | NO   |     | 0          |       |
-| LastAccTst         | datetime                  | NO   |     | NULL       |       |
-| NumQstsLastTst     | int(11)                   | NO   |     | 0          |       |
-| UsrListType        | enum('classphoto','list') | NO   |     | classphoto |       |
-| ColsClassPhoto     | tinyint(4)                | NO   |     | NULL       |       |
-| ListWithPhotos     | enum('N','Y')             | NO   |     | Y          |       |
-+--------------------+---------------------------+------+-----+------------+-------+
-18 rows in set (0.02 sec)
++----------------+---------------------------+------+-----+------------+-------+
+| Field          | Type                      | Null | Key | Default    | Extra |
++----------------+---------------------------+------+-----+------------+-------+
+| CrsCod         | int(11)                   | NO   | PRI | -1         |       |
+| UsrCod         | int(11)                   | NO   | PRI | NULL       |       |
+| Role           | tinyint(4)                | NO   | PRI | 0          |       |
+| Accepted       | enum('N','Y')             | NO   |     | N          |       |
+| LastDowGrpCod  | int(11)                   | NO   |     | -1         |       |
+| LastComGrpCod  | int(11)                   | NO   |     | -1         |       |
+| LastAssGrpCod  | int(11)                   | NO   |     | -1         |       |
+| NumAccTst      | int(11)                   | NO   |     | 0          |       |
+| LastAccTst     | datetime                  | NO   |     | NULL       |       |
+| NumQstsLastTst | int(11)                   | NO   |     | 0          |       |
+| UsrListType    | enum('classphoto','list') | NO   |     | classphoto |       |
+| ColsClassPhoto | tinyint(4)                | NO   |     | NULL       |       |
+| ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
++----------------+---------------------------+------+-----+------------+-------+
+13 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr ("
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "UsrCod INT NOT NULL,"
                    "Role TINYINT NOT NULL DEFAULT 0,"
                    "Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "LastAccDownloadCrs DATETIME NOT NULL,"
-                   "LastAccCommonCrs DATETIME NOT NULL,"
-                   "LastAccMyWorks DATETIME NOT NULL,"
-                   "LastAccCrsWorks DATETIME NOT NULL,"
-                   "LastAccMarksCrs DATETIME NOT NULL,"
                    "LastDowGrpCod INT NOT NULL DEFAULT -1,"
                    "LastComGrpCod INT NOT NULL DEFAULT -1,"
                    "LastAssGrpCod INT NOT NULL DEFAULT -1,"

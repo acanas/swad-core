@@ -39,12 +39,34 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.63.5 (2015/01/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.64 (2015/01/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.63.5:  Jan 22, 2015	Changes in last accesses to file browser (briefcases). (? lines)
+        Version 14.64:    Jan 22, 2015	Changes in last accesses to group file browsers. (175510 lines)
+					6 changes necessary in database:
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'11',GrpCod,LastAccDownloadGrp FROM crs_grp_usr WHERE LastAccDownloadGrp>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'5',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccCommonGrp>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'13',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccMarksGrp>0;
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccDownloadGrp;
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccCommonGrp;
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccMarksGrp;
+
+        Version 14.63.6:  Jan 22, 2015	Changes in last accesses to course file browsers. (175588 lines)
+					10 changes necessary in database:
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'3',CrsCod,LastAccDownloadCrs FROM crs_usr WHERE LastAccDownloadCrs>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'4',CrsCod,LastAccCommonCrs FROM crs_usr WHERE LastAccCommonCrs>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'8',CrsCod,LastAccMarksCrs FROM crs_usr WHERE LastAccMarksCrs>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'14',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccMyWorks>0;
+INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'15',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccCrsWorks>0;
+ALTER TABLE crs_usr DROP COLUMN LastAccDownloadCrs;
+ALTER TABLE crs_usr DROP COLUMN LastAccCommonCrs;
+ALTER TABLE crs_usr DROP COLUMN LastAccMarksCrs;
+ALTER TABLE crs_usr DROP COLUMN LastAccMyWorks;
+ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;
+
+        Version 14.63.5:  Jan 22, 2015	Changes in last accesses to file browsers (briefcases). (? lines)
 					2 changes necessary in database:
 INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
 ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;

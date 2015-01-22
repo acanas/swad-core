@@ -203,11 +203,9 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 
    /***** Register user in current course in database *****/
    sprintf (Query,"INSERT INTO crs_usr (CrsCod,UsrCod,Role,Accepted,"
-		  "LastAccDownloadCrs,LastAccCommonCrs,LastAccMyWorks,LastAccCrsWorks,LastAccMarksCrs,"
 		  "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,NumAccTst,LastAccTst,NumQstsLastTst,"
 		  "UsrListType,ColsClassPhoto,ListWithPhotos)"
 		  " VALUES ('%ld','%ld','%u','%c',"
-		  "'0000-00-00','0000-00-00','0000-00-00','0000-00-00','0000-00-00',"
 		  "'-1','-1','-1','0','0000-00-00','0',"
 		  "'%s','%u','%c')",
 	    Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,

@@ -119,6 +119,31 @@ static long Brw_FileBrowserForDB[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   };
+static long Brw_FileBrowserForLastAccess[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN             =  0,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_SEE_MARKS_CRS       =  2,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS =  3,
+   Brw_FILE_BRW_COMMON_CRS,		// Brw_FILE_BRW_COMMON_CRS          =  4,
+   Brw_FILE_BRW_COMMON_GRP,		// Brw_FILE_BRW_COMMON_GRP          =  5,
+   Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_WORKS_USR           =  6,
+   Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_WORKS_CRS           =  7,
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_ADMIN_MARKS_CRS     =  8,
+   Brw_FILE_BRW_BRIEFCASE_USR,		// Brw_FILE_BRW_BRIEFCASE_USR       =  9,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP   = 10,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP = 11,
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_SEE_MARKS_GRP       = 12,
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_ADMIN_MARKS_GRP     = 13,
+   Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_USR     = 14,
+   Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_ASSIGNMENTS_CRS     = 15,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG   = 16,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG = 17,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR   = 18,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR = 19,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
+  };
 /*
 const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
   {
@@ -1192,7 +1217,7 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
                                       Act_Action_t Action);
 static void Brw_WriteFormFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
-static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB);
+static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 static void Brw_ResetFileBrowserSize (void);
 static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path);
@@ -3183,64 +3208,40 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 static void Brw_UpdateLastAccess (void)
   {
    /***** Get and update date and hour of last access to file browser *****/
+   Brw_GetAndUpdateDateLastAccFileBrowser ();
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("");
-	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccDownloadCrs");
          if (Gbl.CurrentAct == ActChgToSeeDocCrs ||
              Gbl.CurrentAct == ActChgToAdmDocCrs)// Update group of last access to a documents zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastDowGrpCod",-1L);
 	 break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccDownloadGrp");
          if (Gbl.CurrentAct == ActChgToSeeDocCrs ||
              Gbl.CurrentAct == ActChgToAdmDocCrs)// Update group of last access to a documents zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_FILE_BRW_COMMON_CRS:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccCommonCrs");
          if (Gbl.CurrentAct == ActChgToAdmCom) 	// Update group of last access to a shared files zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastComGrpCod",-1L);
 	 break;
       case Brw_FILE_BRW_COMMON_GRP:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccCommonGrp");
          if (Gbl.CurrentAct == ActChgToAdmCom) 	// Update group of last access to a shared files zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
 	 break;
       case Brw_FILE_BRW_SEE_MARKS_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccMarksCrs");
          if (Gbl.CurrentAct == ActChgToSeeMrk ||
              Gbl.CurrentAct == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastAssGrpCod",-1L);
 	 break;
       case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccMarksGrp");
          if (Gbl.CurrentAct == ActChgToSeeMrk ||
              Gbl.CurrentAct == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccMyWorks");
-	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("LastAccCrsWorks");
-	 break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         Brw_GetAndUpdateDateLastAccFileBrowser ("");
 	 break;
       default:
 	 break;
@@ -3757,10 +3758,10 @@ void Brw_CreateDirDownloadTmp (void)
 /* Get and update the date of my last access to file browser in this course **/
 /*****************************************************************************/
 
-static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
+static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
   {
-   char Query1[256];
-   char Query2[256];
+   long Cod;
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -3770,42 +3771,15 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentIns.Ins.InsCod);
-         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
-                         " VALUES ('%ld','%u','%ld',NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentIns.Ins.InsCod);
+	 Cod = Gbl.CurrentIns.Ins.InsCod;
          break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
-                         " VALUES ('%ld','%u','%ld',NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
          break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentDeg.Deg.DegCod);
-         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
-                         " VALUES ('%ld','%u','%ld',NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentDeg.Deg.DegCod);
+	 Cod = Gbl.CurrentDeg.Deg.DegCod;
          break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
@@ -3816,48 +3790,27 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
       case Brw_FILE_BRW_WORKS_USR:
       case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(%s) FROM crs_usr"
-                         " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-                  FieldNameDB,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-         sprintf (Query2,"UPDATE crs_usr SET %s=NOW()"
-                         " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-                  FieldNameDB,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-	 break;
+	 Cod = Gbl.CurrentCrs.Crs.CrsCod;
+         break;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
       case Brw_FILE_BRW_SEE_MARKS_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(%s) FROM crs_grp_usr"
-                         " WHERE GrpCod='%ld' AND UsrCod='%ld'",
-                  FieldNameDB,
-                  Gbl.CurrentCrs.Grps.GrpCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-         sprintf (Query2,"UPDATE crs_grp_usr SET %s=NOW()"
-                         " WHERE GrpCod='%ld' AND UsrCod='%ld'",
-                  FieldNameDB,
-                  Gbl.CurrentCrs.Grps.GrpCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod);
-	 break;
+	 Cod = Gbl.CurrentCrs.Grps.GrpCod;
+         break;
       case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query1,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='-1'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type]);
-         sprintf (Query2,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
-                         " VALUES ('%ld','%u','-1',NOW())",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
-                  Gbl.CurrentDeg.Deg.DegCod);
+	 Cod = -1L;
 	 break;
       default:
 	 return;
      }
-   NumRows = DB_QuerySELECT (Query1,&mysql_res,"can not get date-time of last access to a file browser");
+   sprintf (Query,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
+		  " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    (unsigned) Brw_FileBrowserForLastAccess[Gbl.FileBrowser.Type],
+	    Cod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get date-time of last access to a file browser");
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialize to a big value in order to show files as old
@@ -3877,7 +3830,12 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (const char *FieldNameDB)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   DB_QueryUPDATE (Query2,"can not update date of last access to a file browser");
+   sprintf (Query,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
+		  " VALUES ('%ld','%u','%ld',NOW())",
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    (unsigned) Brw_FileBrowserForLastAccess[Gbl.FileBrowser.Type],
+	    Cod);
+   DB_QueryUPDATE (Query,"can not update date of last access to a file browser");
   }
 
 /*****************************************************************************/

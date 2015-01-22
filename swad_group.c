@@ -1104,10 +1104,8 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
    char Query[512];
 
    /***** Register in group *****/
-   sprintf (Query,"INSERT INTO crs_grp_usr (GrpCod,UsrCod,"
-	          "LastAccDownloadGrp,LastAccCommonGrp,LastAccMarksGrp)"
-                  " VALUES ('%ld','%ld',"
-                  "'0000-00-00','0000-00-00','0000-00-00')",
+   sprintf (Query,"INSERT INTO crs_grp_usr (GrpCod,UsrCod)"
+                  " VALUES ('%ld','%ld')",
             GrpCod,UsrDat->UsrCod);
    DB_QueryINSERT (Query,"can not add a user to a group");
   }
