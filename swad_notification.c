@@ -621,8 +621,7 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    FileMetadata.FilCod = Cod;
             Brw_GetFileMetadataByCod (&FileMetadata);
-            CrsCod = FileMetadata.CrsCod;
-            GrpCod = FileMetadata.GrpCod;
+            Brw_GetCrsGrpFromFileMetadata (&FileMetadata,&CrsCod,&GrpCod);
 	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
 						  PathUntilFileName,
 						  FileName);
@@ -844,9 +843,8 @@ void Ntf_SetNotifInCrsAsRemoved (long CrsCod,long ToUsrCod)
 /************ Set possible notifications of one file as removed **************/
 /*****************************************************************************/
 
-void Ntf_SetNotifOneFileAsRemoved (long CrsCod,long GrpCod,
-                                   Brw_FileBrowser_t FileBrowser,
-                                   const char *Path)
+void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
+                                   long Cod,const char *Path)
   {
    char Query[512];
    char SubQuery[256];
@@ -881,8 +879,8 @@ void Ntf_SetNotifOneFileAsRemoved (long CrsCod,long GrpCod,
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
 	 sprintf (SubQuery,"SELECT FilCod FROM files"
-			   " WHERE CrsCod='%ld' AND GrpCod='%ld' AND Path='%s'",
-		  CrsCod,GrpCod,Path);
+			   " WHERE FileBrowser='%u' AND Cod='%ld' AND Path='%s'",
+		  (unsigned) FileBrowser,Cod,Path);
          break;
       default:
 	 break;
@@ -898,9 +896,8 @@ void Ntf_SetNotifOneFileAsRemoved (long CrsCod,long GrpCod,
 /************** Set possible notifications of marks as removed ***************/
 /*****************************************************************************/
 
-void Ntf_SetNotifChildrenOfFolderAsRemoved (long CrsCod,long GrpCod,
-                                            Brw_FileBrowser_t FileBrowser,
-                                            const char *Path)
+void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
+                                            long Cod,const char *Path)
   {
    char Query[512];
    char SubQuery[256];
@@ -935,8 +932,8 @@ void Ntf_SetNotifChildrenOfFolderAsRemoved (long CrsCod,long GrpCod,
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
 	 sprintf (SubQuery,"SELECT FilCod FROM files"
-			   " WHERE CrsCod='%ld' AND GrpCod='%ld' AND Path LIKE '%s/%%'",
-		  CrsCod,GrpCod,Path);
+			   " WHERE FileBrowser='%u' AND Cod='%ld' AND Path LIKE '%s/%%'",
+		  (unsigned) FileBrowser,Cod,Path);
          break;
       default:
 	 break;
@@ -952,7 +949,7 @@ void Ntf_SetNotifChildrenOfFolderAsRemoved (long CrsCod,long GrpCod,
 /******* Set all possible notifications of files in a group as removed *******/
 /*****************************************************************************/
 
-void Ntf_SetNotifFilesInGroupAsRemoved (long CrsCod,long GrpCod)
+void Ntf_SetNotifFilesInGroupAsRemoved (long GrpCod)
   {
    char Query[512];
 
@@ -960,12 +957,15 @@ void Ntf_SetNotifFilesInGroupAsRemoved (long CrsCod,long GrpCod)
    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
                   " WHERE NotifyEvent IN ('%u','%u','%u') AND Cod IN"
                   " (SELECT FilCod FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld')",
+                  " WHERE FileBrowser IN ('%u','%u','%u') AND Cod='%ld')",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
             (unsigned) Ntf_EVENT_DOCUMENT_FILE,
             (unsigned) Ntf_EVENT_SHARED_FILE,
             (unsigned) Ntf_EVENT_MARKS_FILE,
-            CrsCod,GrpCod);
+            (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+            (unsigned) Brw_FILE_BRW_COMMON_GRP,
+            (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+            GrpCod);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
   }
 

@@ -489,13 +489,9 @@ CREATE TABLE IF NOT EXISTS file_view (
 --
 CREATE TABLE IF NOT EXISTS files (
 	FilCod INT NOT NULL AUTO_INCREMENT,
-	InsCod INT NOT NULL DEFAULT -1,
-	CtrCod INT NOT NULL DEFAULT -1,
-	DegCod INT NOT NULL DEFAULT -1,
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpCod INT NOT NULL DEFAULT -1,
-	ZoneUsrCod INT NOT NULL DEFAULT -1,
 	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	ZoneUsrCod INT NOT NULL DEFAULT -1,
 	PublisherUsrCod INT NOT NULL,
 	FileType TINYINT NOT NULL DEFAULT 0,
 	Path TEXT COLLATE latin1_bin NOT NULL,
@@ -503,7 +499,8 @@ CREATE TABLE IF NOT EXISTS files (
 	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
         License TINYINT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(FilCod),
-	INDEX(InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser),
+	INDEX(FileBrowser,Cod,ZoneUsrCod),
+	INDEX(ZoneUsrCod),
 	INDEX(PublisherUsrCod));
 --
 -- Table forum_disabled_post: stores the forum post that have been disabled

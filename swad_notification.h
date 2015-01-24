@@ -98,13 +98,11 @@ void Ntf_SetNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_SetNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_SetNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_SetNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);
-void Ntf_SetNotifOneFileAsRemoved (long CrsCod,long GrpCod,
-                                   Brw_FileBrowser_t FileBrowser,
-                                   const char *Path);
-void Ntf_SetNotifChildrenOfFolderAsRemoved (long CrsCod,long GrpCod,
-                                            Brw_FileBrowser_t FileBrowser,
-                                            const char *Path);
-void Ntf_SetNotifFilesInGroupAsRemoved (long CrsCod,long GrpCod);
+void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
+                                   long Cod,const char *Path);
+void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
+                                            long Cod,const char *Path);
+void Ntf_SetNotifFilesInGroupAsRemoved (long GrpCod);
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     struct UsrData *UsrDat,

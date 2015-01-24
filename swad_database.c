@@ -1039,13 +1039,9 @@ mysql> DESCRIBE files;
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
 | FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| InsCod          | int(11)       | NO   | MUL | -1      |                |
-| CtrCod          | int(11)       | NO   |     | -1      |                |
-| DegCod          | int(11)       | NO   |     | -1      |                |
-| CrsCod          | int(11)       | NO   |     | -1      |                |
-| GrpCod          | int(11)       | NO   |     | -1      |                |
-| ZoneUsrCod      | int(11)       | NO   |     | -1      |                |
-| FileBrowser     | tinyint(4)    | NO   |     | NULL    |                |
+| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod             | int(11)       | NO   |     | -1      |                |
+| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
 | PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
 | FileType        | tinyint(4)    | NO   |     | 0       |                |
 | Path            | text          | NO   |     | NULL    |                |
@@ -1053,24 +1049,23 @@ mysql> DESCRIBE files;
 | Public          | enum('N','Y') | NO   |     | N       |                |
 | License         | tinyint(4)    | NO   |     | 0       |                |
 +-----------------+---------------+------+-----+---------+----------------+
-14 rows in set (0.00 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS files ("
 		   "FilCod INT NOT NULL AUTO_INCREMENT,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "GrpCod INT NOT NULL DEFAULT -1,"
-                   "ZoneUsrCod INT NOT NULL DEFAULT -1,"
                    "FileBrowser TINYINT NOT NULL,"
+                   "Cod INT NOT NULL DEFAULT -1,"
+                   "ZoneUsrCod INT NOT NULL DEFAULT -1,"
                    "PublisherUsrCod INT NOT NULL,"
                    "FileType TINYINT NOT NULL DEFAULT 0"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "License TINYINT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(FilCod),INDEX(InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser),INDEX(PublisherUsrCod))");
+                   "UNIQUE INDEX(FilCod),"
+                   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
+                   "INDEX(ZoneUsrCod),"
+                   "INDEX(PublisherUsrCod))");
 
    /***** Table forum_disabled_post *****/
 /*

@@ -97,13 +97,9 @@ typedef enum	// Don't change these values! They are stored in database as number
 struct FileMetadata
   {
    long FilCod;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
-   long GrpCod;
-   long ZoneUsrCod;
    Brw_FileBrowser_t FileBrowser;
+   long Cod;	// Code of institution, centre, degree, course or group
+   long ZoneUsrCod;
    long PublisherUsrCod;
    char Path[PATH_MAX+1];
    bool IsHidden;
@@ -179,6 +175,9 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
+
+void Brw_GetCrsGrpFromFileMetadata (struct FileMetadata *FileMetadata,long *CrsCod,long *GrpCod);
+
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *Path,bool IsPublic,Brw_License_t License);
 

@@ -39,11 +39,30 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.66.1 (2015/01/24)"
+#define Log_PLATFORM_VERSION	"SWAD 14.67 (2015/01/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.67:    Jan 25, 2015	Changes in files table. (175369 lines)
+					16 changes necessary in database:
+ALTER TABLE files ADD COLUMN ZoneUsrCod2 INT NOT NULL DEFAULT -1 AFTER FileBrowser;
+UPDATE files SET ZoneUsrCod2=ZoneUsrCod;
+ALTER TABLE files DROP COLUMN ZoneUsrCod;
+ALTER TABLE files CHANGE COLUMN ZoneUsrCod2 ZoneUsrCod INT NOT NULL DEFAULT -1;
+ALTER TABLE files ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (FileBrowser,Cod,ZoneUsrCod);
+CREATE INDEX ZoneUsrCod ON files (ZoneUsrCod);
+UPDATE files SET Cod=InsCod WHERE InsCod>'0';
+UPDATE files SET Cod=CtrCod WHERE CtrCod>'0';
+UPDATE files SET Cod=DegCod WHERE DegCod>'0';
+UPDATE files SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE files SET Cod=GrpCod WHERE GrpCod>'0';
+ALTER TABLE files DROP COLUMN InsCod;
+ALTER TABLE files DROP COLUMN CtrCod;
+ALTER TABLE files DROP COLUMN DegCod;
+ALTER TABLE files DROP COLUMN CrsCod;
+ALTER TABLE files DROP COLUMN GrpCod;
+
         Version 14.66.1:  Jan 24, 2015	Fixed bug in clipboard. (175404 lines)
         Version 14.66:    Jan 24, 2015	Changes in clipboard table. (175401 lines)
 					13 changes necessary in database:

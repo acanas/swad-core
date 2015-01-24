@@ -72,16 +72,6 @@ typedef enum
    Brw_ADMIN,
   } Brw_ShowOrAdmin_t;
 
-struct Brw_Codes
-  {
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
-   long GrpCod;
-   long WorksUsrCod;
-  };
-
 /*****************************************************************************/
 /**************************** Internal constants *****************************/
 /*****************************************************************************/
@@ -1341,12 +1331,8 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden);
 static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
                                       bool IsPublic,Brw_License_t License);
 
-static long Brw_GetInsCod (void);
-static long Brw_GetCtrCod (void);
-static long Brw_GetDegCod (void);
-static long Brw_GetCrsCod (void);
-static long Brw_GetGrpCod (void);
-static long Brw_GetZoneUsrCod (void);
+static long Brw_GetCodForFiles (void);
+static long Brw_GetZoneUsrCodForFiles (void);
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char *Path);
 static void Brw_RemoveChildrenOfFolderFromDB (const char *Path);
@@ -1354,7 +1340,7 @@ static void Brw_RenameOneFolderInDB (const char *OldPath,const char *NewPath);
 static void Brw_RenameChildrenFilesOrFoldersInDB (const char *OldPath,const char *NewPath);
 static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
-static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (long GrpCod);
+static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
@@ -3574,67 +3560,109 @@ void Brw_RemoveFilesFromDB (long InsCod,long CtrCod,long DegCod,long CrsCod,long
    char Query2[512];
 
    /***** Remove size of the file browser from database *****/
-   if (InsCod > 0)					// Documents of the institution
+   if (InsCod > 0)				// Documents of the institution
      {
       sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.InsCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
+                      " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+                      " AND files.FilCod=file_view.FilCod",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
                InsCod);
-      sprintf (Query2,"DELETE FROM files WHERE InsCod='%ld'",
+      sprintf (Query2,"DELETE FROM files"
+	              " WHERE FileBrowser='%u' AND Cod='%ld'",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
                InsCod);
      }
-   else if (CtrCod > 0)					// Documents of the centre
+   else if (CtrCod > 0)				// Documents of the centre
      {
       sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.CtrCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
+                      " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+                      " AND files.FilCod=file_view.FilCod",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
                CtrCod);
-      sprintf (Query2,"DELETE FROM files WHERE CtrCod='%ld'",
+      sprintf (Query2,"DELETE FROM files"
+	              " WHERE FileBrowser='%u' AND Cod='%ld'",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
                DegCod);
      }
-   else if (DegCod > 0)					// Documents of the degree
+   else if (DegCod > 0)				// Documents of the degree
      {
       sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.DegCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
+                      " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+                      " AND files.FilCod=file_view.FilCod",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
                DegCod);
-      sprintf (Query2,"DELETE FROM files WHERE DegCod='%ld'",
+      sprintf (Query2,"DELETE FROM files"
+	              " WHERE FileBrowser='%u' AND Cod='%ld'",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
                DegCod);
      }
-   else if (CrsCod > 0 && GrpCod <= 0 && UsrCod <= 0)	// All the zones of the course
+   else if (CrsCod > 0)
      {
-      sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.CrsCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
-               CrsCod);
-      sprintf (Query2,"DELETE FROM files WHERE CrsCod='%ld'",
-               CrsCod);
+      if (UsrCod > 0)				// Works of a user in the course
+	{
+	 sprintf (Query1,"DELETE FROM file_view USING file_view,files"
+			 " WHERE files.FileBrowser IN ('%u','%u')"
+			 " AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+			 " AND files.FilCod=file_view.FilCod",
+                  (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
+                  (unsigned) Brw_FILE_BRW_WORKS_USR,
+		  CrsCod,UsrCod);
+	 sprintf (Query2,"DELETE FROM files"
+	                 " WHERE FileBrowser IN ('%u','%u')"
+	                 " AND Cod='%ld' AND ZoneUsrCod='%ld'",
+                  (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
+                  (unsigned) Brw_FILE_BRW_WORKS_USR,
+		  CrsCod,UsrCod);
+	}
+      else // UsrCod <= 0			// All the zones of the course
+	{
+	 sprintf (Query1,"DELETE FROM file_view USING file_view,files"
+			 " WHERE files.FileBrowser IN ('%u','%u','%u','%u','%u')"
+			 " AND files.Cod='%ld'"
+			 " AND files.FilCod=file_view.FilCod",
+                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+                  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+                  (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
+                  (unsigned) Brw_FILE_BRW_WORKS_USR,
+                  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  CrsCod);
+	 sprintf (Query2,"DELETE FROM files"
+	                 " WHERE files.FileBrowser IN ('%u','%u','%u','%u','%u')"
+			 " AND Cod='%ld'",
+                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+                  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+                  (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
+                  (unsigned) Brw_FILE_BRW_WORKS_USR,
+                  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  CrsCod);
+	}
      }
-   else if (CrsCod > 0 && UsrCod > 0)			// Works of a student in the course
+   else if (GrpCod > 0)				// All the zones of the group
      {
       sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.CrsCod='%ld' AND files.ZoneUsrCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
-               CrsCod,UsrCod);
-      sprintf (Query2,"DELETE FROM files WHERE CrsCod='%ld' AND ZoneUsrCod='%ld'",
-               CrsCod,UsrCod);
-     }
-   else if (GrpCod > 0)					// All the zones of the group
-     {
-      sprintf (Query1,"DELETE FROM file_view USING file_view,files"
-                     " WHERE files.GrpCod='%ld'"
-                     " AND files.FilCod=file_view.FilCod",
+                      " WHERE files.FileBrowser IN ('%u','%u','%u')"
+                      " AND files.Cod='%ld'"
+                      " AND files.FilCod=file_view.FilCod",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+               (unsigned) Brw_FILE_BRW_COMMON_GRP,
+               (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
                GrpCod);
-      sprintf (Query2,"DELETE FROM files WHERE GrpCod='%ld'",
+      sprintf (Query2,"DELETE FROM files"
+	              " WHERE FileBrowser IN ('%u','%u','%u')"
+                      " AND Cod='%ld'",
+               (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+               (unsigned) Brw_FILE_BRW_COMMON_GRP,
+               (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
                GrpCod);
      }
-   else if (UsrCod > 0)					// All the zones of the user
+   else if (UsrCod > 0)				// All the zones of the user
      {
       sprintf (Query1,"DELETE FROM file_view USING file_view,files"
                      " WHERE files.ZoneUsrCod='%ld'"
                      " AND files.FilCod=file_view.FilCod",
                UsrCod);
-      sprintf (Query2,"DELETE FROM files WHERE ZoneUsrCod='%ld'",
+      sprintf (Query2,"DELETE FROM files"
+	              " WHERE ZoneUsrCod='%ld'",
                UsrCod);
      }
 
@@ -8097,6 +8125,8 @@ void Brw_SetDocumentAsHidden (void)
 
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -8104,17 +8134,10 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
    /***** Get if a file or folder is hidden from database *****/
    sprintf (Query,"SELECT Hidden FROM files"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u'"
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
                   " AND Path='%s'",
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Path);
    if (DB_QuerySELECT (Query,&mysql_res,"can not check if a file is hidden"))
      {
@@ -8140,7 +8163,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
 bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
   {
-   char Query[512+PATH_MAX];
+   char Query[512+PATH_MAX*2];
 
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
@@ -8150,17 +8173,12 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Hidden='Y'"
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Hidden='Y'"
                   " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
-            FileMetadata->InsCod,
-            FileMetadata->CtrCod,
-            FileMetadata->DegCod,
-            FileMetadata->CrsCod,
-            FileMetadata->GrpCod,
-            FileMetadata->ZoneUsrCod,
             FileMetadata->FileBrowser,
+            FileMetadata->Cod,
+            FileMetadata->ZoneUsrCod,
             FileMetadata->Path,
             FileMetadata->Path);
 
@@ -8790,7 +8808,7 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 	      }
 	    else									// The file has no publisher
 	      {
-	       ZoneUsrCod = Brw_GetZoneUsrCod ();
+	       ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
 	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 		  return true;
@@ -9079,6 +9097,8 @@ static Brw_License_t Brw_GetParLicense (void)
 
 long Brw_GetFilCodByPath (const char *Path)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[256+PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -9086,12 +9106,10 @@ long Brw_GetFilCodByPath (const char *Path)
 
    /***** Get metadata of a file from database *****/
    sprintf (Query,"SELECT FilCod FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path='%s'",
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path='%s'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Path);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file code"))
      {
@@ -9118,25 +9136,21 @@ long Brw_GetFilCodByPath (const char *Path)
 
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   sprintf (Query,"SELECT FilCod,InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,"
-	          "FileBrowser,PublisherUsrCod,FileType,Path,Hidden,Public,License"
+   sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
+	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path='%s'",
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path='%s'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Gbl.FileBrowser.Priv.FullPathInTree);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
@@ -9146,58 +9160,46 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       /* Get file code (row[0]) */
       FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get institution code (row[1]) */
-      FileMetadata->InsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get centre code (row[2]) */
-      FileMetadata->CtrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get degree code (row[3]) */
-      FileMetadata->DegCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /* Get course code (row[4]) */
-      FileMetadata->CrsCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /* Get group code (row[5]) */
-      FileMetadata->GrpCod = Str_ConvertStrCodToLongCod (row[5]);
-
-      /* Get the user's code of the owner of a zone of files (row[6]) */
-      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[6]);
-
-      /* Get file browser type in database (row[7]) */
+      /* Get file browser type in database (row[1]) */
       FileMetadata->FileBrowser = Brw_FILE_BRW_UNKNOWN;
-      if (sscanf (row[7],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
             FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-      /* Get publisher's code (row[8]) */
-      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[8]);
+      /* Get institution/centre/degree/course/group code (row[2]) */
+      FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get file type (row[9]) */
+      /* Get the user's code of the owner of a zone of files (row[3]) */
+      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get publisher's code (row[4]) */
+      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
+
+      /* Get file type (row[5]) */
       FileMetadata->FileType = Brw_IS_UNKNOWN;	// default
-      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[5],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
 	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
 
-      /* Get path (row[10]) */
-      strncpy (FileMetadata->Path,row[10],PATH_MAX);
+      /* Get path (row[6]) */
+      strncpy (FileMetadata->Path,row[6],PATH_MAX);
       FileMetadata->Path[PATH_MAX] = '\0';
 
-      /* File is hidden? (row[11]) */
+      /* File is hidden? (row[7]) */
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
          case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[11][0]) == 'Y');
+            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
             break;
          default:
             FileMetadata->IsHidden = false;
             break;
         }
 
-      /* Is a public file? (row[12]) */
+      /* Is a public file? (row[8]) */
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
@@ -9205,35 +9207,31 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
          case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
-            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[12][0]) == 'Y');
+            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
             break;
          default:
             FileMetadata->IsPublic = false;
             break;
         }
 
-      /* Get license (row[13]) */
+      /* Get license (row[9]) */
       FileMetadata->License = Brw_LICENSE_UNKNOWN;
-      if (sscanf (row[13],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Brw_NUM_LICENSES)
             FileMetadata->License = (Brw_License_t) UnsignedNum;
      }
    else
      {
-      FileMetadata->FilCod = -1L;
-      FileMetadata->InsCod = -1L;
-      FileMetadata->CtrCod = -1L;
-      FileMetadata->DegCod = -1L;
-      FileMetadata->CrsCod = -1L;
-      FileMetadata->GrpCod = -1L;
-      FileMetadata->ZoneUsrCod = -1L;
-      FileMetadata->FileBrowser = Brw_FILE_BRW_UNKNOWN;
+      FileMetadata->FilCod          = -1L;
+      FileMetadata->FileBrowser     = Brw_FILE_BRW_UNKNOWN;
+      FileMetadata->Cod             = -1L;
+      FileMetadata->ZoneUsrCod      = -1L;
       FileMetadata->PublisherUsrCod = -1L;
-      FileMetadata->FileType = Brw_IS_UNKNOWN;
-      FileMetadata->Path[0] = '\0';
-      FileMetadata->IsHidden = false;
-      FileMetadata->IsPublic = false;
-      FileMetadata->License = Brw_LICENSE_DEFAULT;
+      FileMetadata->FileType        = Brw_IS_UNKNOWN;
+      FileMetadata->Path[0]         = '\0';
+      FileMetadata->IsHidden        = false;
+      FileMetadata->IsPublic        = false;
+      FileMetadata->License         = Brw_LICENSE_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/
@@ -9263,8 +9261,8 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   sprintf (Query,"SELECT FilCod,InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,"
-	          "FileBrowser,PublisherUsrCod,FileType,Path,Hidden,Public,License"
+   sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
+	          ",PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
                   " WHERE FilCod='%ld'",
             FileMetadata->FilCod);
@@ -9276,58 +9274,46 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Get file code (row[0]) */
       FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get institution code (row[1]) */
-      FileMetadata->InsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get centre code (row[2]) */
-      FileMetadata->CtrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get degree code (row[3]) */
-      FileMetadata->DegCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /* Get course code (row[4]) */
-      FileMetadata->CrsCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /* Get group code (row[5]) */
-      FileMetadata->GrpCod = Str_ConvertStrCodToLongCod (row[5]);
-
-      /* Get the user's code of the owner of a zone of files (row[6]) */
-      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[6]);
-
-      /* Get file browser type in database (row[7]) */
+      /* Get file browser type in database (row[1]) */
       FileMetadata->FileBrowser = Brw_FILE_BRW_UNKNOWN;
-      if (sscanf (row[7],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
             FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-      /* Get publisher's code (row[8]) */
-      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[8]);
+      /* Get institution/centre/degree/course/group code (row[2]) */
+      FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get file type (row[9]) */
+      /* Get the user's code of the owner of a zone of files (row[3]) */
+      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get publisher's code (row[4]) */
+      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
+
+      /* Get file type (row[5]) */
       FileMetadata->FileType = Brw_IS_UNKNOWN;	// default
-      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[5],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
 	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
 
-      /* Get path (row[10]) */
-      strncpy (FileMetadata->Path,row[10],PATH_MAX);
+      /* Get path (row[6]) */
+      strncpy (FileMetadata->Path,row[6],PATH_MAX);
       FileMetadata->Path[PATH_MAX] = '\0';
 
-      /* Is a hidden file? (row[11]) */
+      /* Is a hidden file? (row[7]) */
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
          case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[11][0]) == 'Y');
+            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
             break;
          default:
             FileMetadata->IsHidden = false;
             break;
         }
 
-      /* Is a public file? (row[12]) */
+      /* Is a public file? (row[8]) */
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_FILE_BRW_SEE_DOCUMENTS_INS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
@@ -9335,35 +9321,31 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
          case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:	case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
          case Brw_FILE_BRW_COMMON_CRS:
-            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[12][0]) == 'Y');
+            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
             break;
          default:
             FileMetadata->IsPublic = false;
             break;
         }
 
-      /* Get license (row[13]) */
+      /* Get license (row[9]) */
       FileMetadata->License = Brw_LICENSE_UNKNOWN;
-      if (sscanf (row[13],"%u",&UnsignedNum) == 1)
+      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Brw_NUM_LICENSES)
             FileMetadata->License = (Brw_License_t) UnsignedNum;
      }
    else
      {
-      FileMetadata->FilCod = -1L;
-      FileMetadata->InsCod = -1L;
-      FileMetadata->CtrCod = -1L;
-      FileMetadata->DegCod = -1L;
-      FileMetadata->CrsCod = -1L;
-      FileMetadata->GrpCod = -1L;
-      FileMetadata->ZoneUsrCod = -1L;
-      FileMetadata->FileBrowser = Brw_FILE_BRW_UNKNOWN;
+      FileMetadata->FilCod          = -1L;
+      FileMetadata->FileBrowser     = Brw_FILE_BRW_UNKNOWN;
+      FileMetadata->Cod             = -1L;
+      FileMetadata->ZoneUsrCod      = -1L;
       FileMetadata->PublisherUsrCod = -1L;
-      FileMetadata->FileType = Brw_IS_UNKNOWN;
-      FileMetadata->Path[0] = '\0';
-      FileMetadata->IsHidden = false;
-      FileMetadata->IsPublic = false;
-      FileMetadata->License = Brw_LICENSE_DEFAULT;
+      FileMetadata->FileType        = Brw_IS_UNKNOWN;
+      FileMetadata->Path[0]         = '\0';
+      FileMetadata->IsHidden        = false;
+      FileMetadata->IsPublic        = false;
+      FileMetadata->License         = Brw_LICENSE_DEFAULT;
      }
 
    /***** Free structure that stores the query result *****/
@@ -9608,20 +9590,16 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
 
 static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
 
    /***** Get if a file or folder is public from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path LIKE '%s/%%' AND Public='Y'",
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path LIKE '%s/%%' AND Public='Y'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Path);
    return (DB_QueryCOUNT (Query,"can not check if a folder contains public files") != 0);
   }
@@ -9632,22 +9610,18 @@ static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
 
 static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden)
   {
-   char Query[256+PATH_MAX];
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   char Query[512+PATH_MAX];
 
    /***** Mark file as hidden in database *****/
    sprintf (Query,"UPDATE files SET Hidden='%c'"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path='%s'",
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path='%s'",
             IsHidden ? 'Y' :
         	       'N',
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Path);
    DB_QueryUPDATE (Query,"can not change status of a file in database");
   }
@@ -9659,98 +9633,103 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden)
 static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
                                       bool IsPublic,Brw_License_t License)
   {
-   char Query[256+PATH_MAX];
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   char Query[512+PATH_MAX];
 
    /***** Change publisher, public and license of file in database *****/
    sprintf (Query,"UPDATE files SET PublisherUsrCod='%ld',Public='%c',License='%u'"
-                  " WHERE InsCod='%ld' AND CtrCod='%ld' AND DegCod='%ld'"
-                  " AND CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path='%s'",
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path='%s'",
             PublisherUsrCod,
             IsPublic ? 'Y' :
         	       'N',
             (unsigned) License,
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             Path);
    DB_QueryUPDATE (Query,"can not change metadata of a file in database");
   }
 
 /*****************************************************************************/
-/**************** Get the institution code of a zone of files ****************/
+/**** Get code of institution, degree, course, group for expanded folders ****/
 /*****************************************************************************/
 
-static long Brw_GetInsCod (void)
+static long Brw_GetCodForFiles (void)
   {
-   return (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR ||
-	   Gbl.CurrentCtr.Ctr.CtrCod > 0) ? -1L :
-                                            Gbl.CurrentIns.Ins.InsCod;
-  }
-
-/*****************************************************************************/
-/****************** Get the centre code of a zone of files *******************/
-/*****************************************************************************/
-
-static long Brw_GetCtrCod (void)
-  {
-   return (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR ||
-	   Gbl.CurrentDeg.Deg.DegCod > 0) ? -1L :
-                                            Gbl.CurrentCtr.Ctr.CtrCod;
-  }
-
-/*****************************************************************************/
-/****************** Get the degree code of a zone of files *******************/
-/*****************************************************************************/
-
-static long Brw_GetDegCod (void)
-  {
-   return (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR ||
-	   Gbl.CurrentCrs.Crs.CrsCod > 0) ? -1L :
-                                            Gbl.CurrentDeg.Deg.DegCod;
-  }
-
-/*****************************************************************************/
-/****************** Get the course code of a zone of files *******************/
-/*****************************************************************************/
-
-static long Brw_GetCrsCod (void)
-  {
-   return (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR) ? -1L :
-                                                                 Gbl.CurrentCrs.Crs.CrsCod;
-  }
-
-/*****************************************************************************/
-/******************* Get the group code of a zone of files *******************/
-/*****************************************************************************/
-
-static long Brw_GetGrpCod (void)
-  {
-   return (Gbl.FileBrowser.Type == Brw_FILE_BRW_BRIEFCASE_USR) ? -1L :
-                                                                 Gbl.CurrentCrs.Grps.GrpCod;
-  }
-
-/*****************************************************************************/
-/********** Get the user's code of the owner of a zone of files **************/
-/*****************************************************************************/
-
-static long Brw_GetZoneUsrCod (void)
-  {
-   switch (Gbl.FileBrowser.Type)
+   switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
      {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 return Gbl.CurrentIns.Ins.InsCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 return Gbl.CurrentCtr.Ctr.CtrCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 return Gbl.CurrentDeg.Deg.DegCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         return Gbl.Usrs.Me.UsrDat.UsrCod;
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_USR:
       case Brw_FILE_BRW_WORKS_CRS:
-         return Gbl.Usrs.Other.UsrDat.UsrCod;
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 return Gbl.CurrentCrs.Crs.CrsCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 return Gbl.CurrentCrs.Grps.GrpCod;
       default:
          return -1L;
+     }
+  }
+
+/*****************************************************************************/
+/******** Get code of user in assignment / works for expanded folders ********/
+/*****************************************************************************/
+
+static long Brw_GetZoneUsrCodForFiles (void)
+  {
+   switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
+     {
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_CRS:
+	 return Gbl.Usrs.Other.UsrDat.UsrCod;
+      case Brw_FILE_BRW_BRIEFCASE_USR:
+	 return Gbl.Usrs.Me.UsrDat.UsrCod;
+      default:
+         return -1L;
+     }
+  }
+
+
+/*****************************************************************************/
+/******** Get code of user in assignment / works for expanded folders ********/
+/*****************************************************************************/
+
+void Brw_GetCrsGrpFromFileMetadata (struct FileMetadata *FileMetadata,long *CrsCod,long *GrpCod)
+  {
+   struct GroupData GrpDat;
+
+   switch (FileMetadata->FileBrowser)
+     {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_ASSIGNMENTS_USR:
+      case Brw_FILE_BRW_WORKS_USR:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 *CrsCod = FileMetadata->Cod;
+	 *GrpCod = -1L;
+	 break;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 *GrpCod = GrpDat.GrpCod = FileMetadata->Cod;
+	 Grp_GetDataOfGroupByCod (&GrpDat);
+	 *CrsCod = GrpDat.CrsCod;
+	 break;
+      default:
+	 *CrsCod = -1L;
+	 *GrpCod = -1L;
+	 break;
      }
   }
 
@@ -9761,20 +9740,17 @@ static long Brw_GetZoneUsrCod (void)
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *Path,bool IsPublic,Brw_License_t License)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
 
    /***** Add path to the database *****/
-   sprintf (Query,"INSERT INTO files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,ZoneUsrCod,FileBrowser,"
+   sprintf (Query,"INSERT INTO files (FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License)"
-                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%u',"
+                  " VALUES ('%u','%ld','%ld',"
                   "'%ld','%u','%s','N','%c','%u')",
-            Brw_GetInsCod (),
-            Brw_GetCtrCod (),
-            Brw_GetDegCod (),
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             PublisherUsrCod,
             (unsigned) FileType,
             Path,
@@ -9790,57 +9766,41 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
-   long InsCod = Brw_GetInsCod ();
-   long CtrCod = Brw_GetCtrCod ();
-   long DegCod = Brw_GetDegCod ();
-   long CrsCod = Brw_GetCrsCod ();
-   long GrpCod = Brw_GetGrpCod ();
-   long ZoneUsrCod = Brw_GetZoneUsrCod ();
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
           Important: do this before removing from files *****/
-   Ntf_SetNotifOneFileAsRemoved (CrsCod,GrpCod,FileBrowser,Path);
+   Ntf_SetNotifOneFileAsRemoved (FileBrowser,Cod,Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_CRS ||
        Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP)
      {
       sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-		     " WHERE files.CrsCod='%ld' AND files.GrpCod='%ld'"
-		     " AND files.FileBrowser='%u' AND files.Path='%s'"
+		     " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		     " AND files.Path='%s'"
 		     " AND files.FilCod=marks_properties.FilCod",
-	       CrsCod,
-	       GrpCod,
-	       (unsigned) FileBrowser,Path);
+	       (unsigned) FileBrowser,Cod,Path);
       DB_QueryDELETE (Query,"can not remove properties of marks from database");
      }
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-	          " WHERE files.InsCod='%ld' AND files.CtrCod='%ld' AND files.DegCod='%ld'"
-	          " AND files.CrsCod='%ld' AND files.GrpCod='%ld' AND files.ZoneUsrCod='%ld'"
-	          " AND files.FileBrowser='%u' AND files.Path='%s'"
+	          " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+	          " AND files.Path='%s'"
 	          " AND files.FilCod=file_view.FilCod",
-            InsCod,
-            CtrCod,
-            DegCod,
-            CrsCod,
-            GrpCod,
-            ZoneUsrCod,
-            (unsigned) FileBrowser,Path);
+	    (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
    DB_QueryDELETE (Query,"can not remove file views from database");
 
    /***** Remove from database the entry that stores the data of a file *****/
    sprintf (Query,"DELETE FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path='%s'",
-            CrsCod,
-            GrpCod,
-            ZoneUsrCod,
-            (unsigned) FileBrowser,Path);
-   DB_QueryDELETE (Query,"can not remove path from database");
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path='%s'",
+	    (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
+    DB_QueryDELETE (Query,"can not remove path from database");
   }
 
 /*****************************************************************************/
@@ -9849,56 +9809,40 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
 
 static void Brw_RemoveChildrenOfFolderFromDB (const char *Path)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX];
-   long InsCod = Brw_GetInsCod ();
-   long CtrCod = Brw_GetCtrCod ();
-   long DegCod = Brw_GetDegCod ();
-   long CrsCod = Brw_GetCrsCod ();
-   long GrpCod = Brw_GetGrpCod ();
-   long ZoneUsrCod = Brw_GetZoneUsrCod ();
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
           Important: do this before removing from files *****/
-   Ntf_SetNotifChildrenOfFolderAsRemoved (CrsCod,GrpCod,FileBrowser,Path);
+   Ntf_SetNotifChildrenOfFolderAsRemoved (FileBrowser,Cod,Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_CRS ||
        Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP)
      {
       sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-		     " WHERE files.CrsCod='%ld' AND files.GrpCod='%ld'"
-		     " AND files.FileBrowser='%u' AND files.Path LIKE '%s/%%'"
+		     " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		     " AND files.Path LIKE '%s/%%'"
 		     " AND files.FilCod=marks_properties.FilCod",
-	       CrsCod,
-	       GrpCod,
-	       FileBrowser,Path);
+	       FileBrowser,Cod,Path);
       DB_QueryDELETE (Query,"can not remove properties of marks from database");
      }
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-                  " WHERE files.InsCod='%ld' AND files.CtrCod='%ld' AND files.DegCod='%ld'"
-                  " AND files.CrsCod='%ld' AND files.GrpCod='%ld' AND files.ZoneUsrCod='%ld'"
-                  " AND files.FileBrowser='%u' AND files.Path LIKE '%s/%%'"
+                  " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+                  " AND files.Path LIKE '%s/%%'"
 	          " AND files.FilCod=file_view.FilCod",
-            InsCod,
-            CtrCod,
-            DegCod,
-            CrsCod,
-            GrpCod,
-            ZoneUsrCod,
-            FileBrowser,Path);
+            FileBrowser,Cod,ZoneUsrCod,Path);
    DB_QueryDELETE (Query,"can not remove file views from database");
 
    /***** Remove from database the entries that store the data of files *****/
    sprintf (Query,"DELETE FROM files"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path LIKE '%s/%%'",
-            CrsCod,
-            GrpCod,
-            ZoneUsrCod,
-            FileBrowser,Path);
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path LIKE '%s/%%'",
+            FileBrowser,Cod,ZoneUsrCod,Path);
    DB_QueryDELETE (Query,"can not remove paths from database");
   }
 
@@ -9908,16 +9852,16 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char *Path)
 
 static void Brw_RenameOneFolderInDB (const char *OldPath,const char *NewPath)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX*2];
 
    /***** Update file or folder in table of common files *****/
    sprintf (Query,"UPDATE files SET Path='%s'"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld' AND FileBrowser='%u' AND Path='%s'",
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld' AND Path='%s'",
             NewPath,
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             OldPath);
    DB_QueryUPDATE (Query,"can not update folder name in a common zone");
   }
@@ -9928,18 +9872,18 @@ static void Brw_RenameOneFolderInDB (const char *OldPath,const char *NewPath)
 
 static void Brw_RenameChildrenFilesOrFoldersInDB (const char *OldPath,const char *NewPath)
   {
+   long Cod = Brw_GetCodForFiles ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
    char Query[512+PATH_MAX*2];
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
    /***** Update children of a folder in table of files *****/
    sprintf (Query,"UPDATE files SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                  " WHERE CrsCod='%ld' AND GrpCod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND FileBrowser='%u' AND Path LIKE '%s/%%'",
+                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " AND Path LIKE '%s/%%'",
             NewPath,StartFinalSubpathNotChanged,
-            Brw_GetCrsCod (),
-            Brw_GetGrpCod (),
-            Brw_GetZoneUsrCod (),
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,ZoneUsrCod,
             OldPath);
    DB_QueryUPDATE (Query,"can not rename file or folder names in a common zone");
   }
@@ -9959,11 +9903,11 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
      {
       case Brw_FILE_BRW_COMMON_CRS:
          // Check if I am the publisher of the folder
-         return (Level ? Brw_CheckIfIHavePermissionFileOrFolderCommon (-1L) :
+         return (Level ? Brw_CheckIfIHavePermissionFileOrFolderCommon () :
                          false);
       case Brw_FILE_BRW_COMMON_GRP:
          // Check if I am the publisher of the folder
-         return (Level ? Brw_CheckIfIHavePermissionFileOrFolderCommon (Gbl.CurrentCrs.Grps.GrpCod) :
+         return (Level ? Brw_CheckIfIHavePermissionFileOrFolderCommon () :
                          false);
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
@@ -10013,8 +9957,9 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 // A user can remove or rename a file if he's the publisher
 // A user can remove or rename a folder if he's the unique publisher of all the files and folders in the subtree starting there
 
-static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (long GrpCod)	// Use GrpCod = -1L to select commons files for the whole course
+static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void)
   {
+   long Cod = Brw_GetCodForFiles ();
    char Query[512+PATH_MAX*2];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -10026,11 +9971,10 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (long GrpCod)	// Use Gr
       case Rol_ROLE_STUDENT:	// If I am a student, I can modify the file/folder if I am the publisher
          /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
          sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
-                        " WHERE CrsCod='%ld' AND GrpCod='%ld' AND FileBrowser='%u'"
+                        " WHERE FileBrowser='%u' AND Cod='%ld'"
                         " AND (Path='%s' OR Path LIKE '%s/%%')",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  GrpCod,
-                  (unsigned) Gbl.FileBrowser.Type,
+                  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+                  Cod,
                   Gbl.FileBrowser.Priv.FullPathInTree,
                   Gbl.FileBrowser.Priv.FullPathInTree);
          NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get publishers of files");
@@ -10122,10 +10066,10 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    Brw_RemoveTree (PathGrpFileZones);
 
    /***** Set notifications about files in this group zone as removed *****/
-   Ntf_SetNotifFilesInGroupAsRemoved (CrsCod,GrpCod);
+   Ntf_SetNotifFilesInGroupAsRemoved (GrpCod);
 
-   /***** Remove files in the course from database *****/
-   Brw_RemoveFilesFromDB (-1L,-1L,-1L,CrsCod,GrpCod,-1L);
+   /***** Remove files in the group from database *****/
+   Brw_RemoveFilesFromDB (-1L,-1L,-1L,-1L,GrpCod,-1L);
 
    /***** Remove size of file zones in the group from database *****/
    Brw_RemoveSizeOfFileTreeFromDB (CrsCod,GrpCod,-1L);
@@ -10368,6 +10312,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Go_to_X;
    struct FileMetadata FileMetadata;
    long DegCod;
+   long CrsCod;
+   long GrpCod;
    const char *BgColor;
    const char *Title;
    char PathUntilFileName[PATH_MAX+1];
@@ -10380,9 +10326,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
    if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
      {
-      BgColor = (FileMetadata.CrsCod > 0 &&
-	         FileMetadata.CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? VERY_LIGHT_BLUE :
-							             Gbl.ColorRows[Gbl.RowEvenOdd];
+      BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
+      Brw_GetCrsGrpFromFileMetadata (&FileMetadata,&CrsCod,&GrpCod);
+      if (CrsCod > 0 && CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
+	 BgColor = VERY_LIGHT_BLUE;
 
       /***** Get degree code (row[2]) *****/
       DegCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -10417,10 +10364,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
-      if (FileMetadata.CrsCod > 0)
+      if (CrsCod > 0)
 	{
 	 Act_FormGoToStart (ActSeeCrsInf);
-	 Crs_PutParamCrsCod (FileMetadata.CrsCod);
+	 Crs_PutParamCrsCod (CrsCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,row[5]);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%s</a>"
@@ -10478,16 +10425,15 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
 
       /* Form start */
-      if (FileMetadata.CrsCod > 0 &&
-	  FileMetadata.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+      if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	{
          Act_FormGoToStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);	// Go to another course
-	 Crs_PutParamCrsCod (FileMetadata.CrsCod);
+	 Crs_PutParamCrsCod (CrsCod);
 	}
       else
          Act_FormStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);
-      if (FileMetadata.GrpCod > 0)
-	 Grp_PutParamGrpCod (FileMetadata.GrpCod);
+      if (GrpCod > 0)
+	 Grp_PutParamGrpCod (GrpCod);
       Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
 
       Act_LinkFormSubmit (FileNameToShow,"DAT_N");

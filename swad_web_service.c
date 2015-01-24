@@ -3867,8 +3867,9 @@ int swad__getFile (struct soap *soap,
 	                        "The file requested does not exists");
 
    /***** Set course and group codes *****/
-   Gbl.CurrentCrs.Crs.CrsCod  = FileMetadata.CrsCod;
-   Gbl.CurrentCrs.Grps.GrpCod = FileMetadata.GrpCod;
+   Brw_GetCrsGrpFromFileMetadata (&FileMetadata,
+                                  &Gbl.CurrentCrs.Crs.CrsCod,
+                                  &Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Get some of my data *****/
    if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
@@ -4002,14 +4003,10 @@ int swad__getMarks (struct soap *soap,
 	                          "Bad file code",
 	                          "You can not get marks from this file");
 
-   if (FileMetadata.FileBrowser != Brw_FILE_BRW_ADMIN_MARKS_CRS &&
-       FileMetadata.GrpCod > 0)
-      return soap_receiver_fault (Gbl.soap,
-	                          "Bad file code",
-	                          "You can not get marks from this file");
-
-   Gbl.CurrentCrs.Crs.CrsCod  = FileMetadata.CrsCod;
-   Gbl.CurrentCrs.Grps.GrpCod = FileMetadata.GrpCod;
+   /***** Set course and group codes *****/
+   Brw_GetCrsGrpFromFileMetadata (&FileMetadata,
+                                  &Gbl.CurrentCrs.Crs.CrsCod,
+                                  &Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Check course and group codes *****/
    if ((ReturnCode = Svc_CheckCourseAndGroupCodes (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod)) != SOAP_OK)
