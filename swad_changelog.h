@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.66 (2015/01/24)"
+#define Log_PLATFORM_VERSION	"SWAD 14.66.1 (2015/01/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.66.1:  Jan 24, 2015	Fixed bug in clipboard. (175404 lines)
         Version 14.66:    Jan 24, 2015	Changes in clipboard table. (175401 lines)
 					13 changes necessary in database:
 DROP INDEX FileBrowser ON clipboard;

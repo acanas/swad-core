@@ -5918,6 +5918,8 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Grps.GrpCod)
                return true;		// I am in the group of the clipboard
             break;
+	 case Brw_FILE_BRW_BRIEFCASE_USR:
+	    return true;
 	 default:
 	    break;
 	}
