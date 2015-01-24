@@ -10482,3 +10482,4 @@ CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TI
 INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
 ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
 
+

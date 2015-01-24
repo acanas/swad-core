@@ -39,27 +39,59 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.64 (2015/01/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.66 (2015/01/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.66:    Jan 24, 2015	Changes in clipboard table. (175401 lines)
+					13 changes necessary in database:
+DROP INDEX FileBrowser ON clipboard;
+ALTER TABLE clipboard ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (FileBrowser,Cod);
+CREATE INDEX WorksUsrCod ON clipboard (WorksUsrCod);
+UPDATE clipboard SET Cod=InsCod WHERE InsCod>'0';
+UPDATE clipboard SET Cod=CtrCod WHERE CtrCod>'0';
+UPDATE clipboard SET Cod=DegCod WHERE DegCod>'0';
+UPDATE clipboard SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE clipboard SET Cod=GrpCod WHERE GrpCod>'0';
+ALTER TABLE clipboard DROP COLUMN InsCod;
+ALTER TABLE clipboard DROP COLUMN CtrCod;
+ALTER TABLE clipboard DROP COLUMN DegCod;
+ALTER TABLE clipboard DROP COLUMN CrsCod;
+ALTER TABLE clipboard DROP COLUMN GrpCod;
+
+        Version 14.65:    Jan 24, 2015	Changes in expanded_folders table. (175394 lines)
+					13 changes necessary in database:
+DROP INDEX UsrCod ON expanded_folders;
+ALTER TABLE expanded_folders ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (UsrCod,FileBrowser,Cod), ADD INDEX (FileBrowser,Cod);
+CREATE INDEX WorksUsrCod ON expanded_folders (WorksUsrCod);
+UPDATE expanded_folders SET Cod=InsCod WHERE InsCod>'0';
+UPDATE expanded_folders SET Cod=CtrCod WHERE CtrCod>'0';
+UPDATE expanded_folders SET Cod=DegCod WHERE DegCod>'0';
+UPDATE expanded_folders SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE expanded_folders SET Cod=GrpCod WHERE GrpCod>'0';
+ALTER TABLE expanded_folders DROP COLUMN InsCod;
+ALTER TABLE expanded_folders DROP COLUMN CtrCod;
+ALTER TABLE expanded_folders DROP COLUMN DegCod;
+ALTER TABLE expanded_folders DROP COLUMN CrsCod;
+ALTER TABLE expanded_folders DROP COLUMN GrpCod;
+
         Version 14.64:    Jan 22, 2015	Changes in last accesses to group file browsers. (175510 lines)
 					6 changes necessary in database:
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'11',GrpCod,LastAccDownloadGrp FROM crs_grp_usr WHERE LastAccDownloadGrp>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'5',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccCommonGrp>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'13',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccMarksGrp>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'11',GrpCod,LastAccDownloadGrp FROM crs_grp_usr WHERE LastAccDownloadGrp>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'5',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccCommonGrp>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'13',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccMarksGrp>0;
 ALTER TABLE crs_grp_usr DROP COLUMN LastAccDownloadGrp;
 ALTER TABLE crs_grp_usr DROP COLUMN LastAccCommonGrp;
 ALTER TABLE crs_grp_usr DROP COLUMN LastAccMarksGrp;
 
         Version 14.63.6:  Jan 22, 2015	Changes in last accesses to course file browsers. (175588 lines)
 					10 changes necessary in database:
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'3',CrsCod,LastAccDownloadCrs FROM crs_usr WHERE LastAccDownloadCrs>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'4',CrsCod,LastAccCommonCrs FROM crs_usr WHERE LastAccCommonCrs>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'8',CrsCod,LastAccMarksCrs FROM crs_usr WHERE LastAccMarksCrs>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'14',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccMyWorks>0;
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'15',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccCrsWorks>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'3',CrsCod,LastAccDownloadCrs FROM crs_usr WHERE LastAccDownloadCrs>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'4',CrsCod,LastAccCommonCrs FROM crs_usr WHERE LastAccCommonCrs>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'8',CrsCod,LastAccMarksCrs FROM crs_usr WHERE LastAccMarksCrs>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'14',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccMyWorks>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'15',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccCrsWorks>0;
 ALTER TABLE crs_usr DROP COLUMN LastAccDownloadCrs;
 ALTER TABLE crs_usr DROP COLUMN LastAccCommonCrs;
 ALTER TABLE crs_usr DROP COLUMN LastAccMarksCrs;
@@ -68,7 +100,7 @@ ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;
 
         Version 14.63.5:  Jan 22, 2015	Changes in last accesses to file browsers (briefcases). (? lines)
 					2 changes necessary in database:
-INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
 ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
 
         Version 14.63.4:  Jan 21, 2015	Fixed bug in listing of degree administrators, reported by Antonio Fernández Ares. (175548 lines)

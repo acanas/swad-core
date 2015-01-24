@@ -435,31 +435,23 @@ mysql> DESCRIBE clipboard;
 +-------------+------------+------+-----+-------------------+-----------------------------+
 | UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
 | FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
-| InsCod      | int(11)    | NO   | MUL | -1                |                             |
-| CtrCod      | int(11)    | NO   | MUL | -1                |                             |
-| DegCod      | int(11)    | NO   | MUL | -1                |                             |
-| CrsCod      | int(11)    | NO   | MUL | -1                |                             |
-| GrpCod      | int(11)    | NO   |     | NULL              |                             |
-| WorksUsrCod | int(11)    | NO   |     | NULL              |                             |
+| Cod         | int(11)    | NO   |     | -1                |                             |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
 | FileType    | tinyint(4) | NO   |     | 0                 |                             |
 | Path        | text       | NO   |     | NULL              |                             |
 | CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
 +-------------+------------+------+-----+-------------------+-----------------------------+
-11 rows in set (0.00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS clipboard ("
                    "UsrCod INT NOT NULL,"
                    "FileBrowser TINYINT NOT NULL,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "GrpCod INT NOT NULL,"
+                   "Cod INT NOT NULL DEFAULT -1,"
                    "WorksUsrCod INT NOT NULL,"
                    "FileType TINYINT NOT NULL DEFAULT 0,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "CopyTime TIMESTAMP,"
-                   "UNIQUE INDEX(UsrCod),INDEX(FileBrowser),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod))");
+                   "UNIQUE INDEX(UsrCod),INDEX(FileBrowser,Cod),INDEX(WorksUsrCod))");
 
    /***** Table connected *****/
 /*
@@ -957,30 +949,22 @@ mysql> DESCRIBE expanded_folders;
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
 | UsrCod      | int(11)    | NO   | MUL | NULL    |       |
-| FileBrowser | tinyint(4) | NO   |     | NULL    |       |
-| InsCod      | int(11)    | NO   | MUL | -1      |       |
-| CtrCod      | int(11)    | NO   | MUL | -1      |       |
-| DegCod      | int(11)    | NO   | MUL | -1      |       |
-| CrsCod      | int(11)    | NO   | MUL | -1      |       |
-| GrpCod      | int(11)    | NO   |     | NULL    |       |
-| WorksUsrCod | int(11)    | NO   |     | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | MUL | NULL    |       |
+| Cod         | int(11)    | NO   |     | -1      |       |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL    |       |
 | Path        | text       | NO   |     | NULL    |       |
 | ClickTime   | datetime   | NO   |     | NULL    |       |
 +-------------+------------+------+-----+---------+-------+
-10 rows in set (0.00 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS expanded_folders ("
                    "UsrCod INT NOT NULL,"
                    "FileBrowser TINYINT NOT NULL,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "GrpCod INT NOT NULL,"
+                   "Cod INT NOT NULL DEFAULT -1,"
                    "WorksUsrCod INT NOT NULL,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "ClickTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod,FileBrowser),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod))");
+                   "INDEX(UsrCod,FileBrowser,Cod),INDEX(FileBrowser,Cod),INDEX(WorksUsrCod))");
 
    /***** Table file_browser_last *****/
 /*

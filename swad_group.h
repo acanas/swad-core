@@ -54,6 +54,7 @@ struct GroupData
   {
    long GrpCod;
    long GrpTypCod;
+   long CrsCod;
    char GrpTypName[MAX_LENGTH_GROUP_TYPE_NAME+1];
    char GrpName[MAX_LENGTH_GROUP_NAME+1];
    unsigned MaxStudents;

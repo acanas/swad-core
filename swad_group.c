@@ -2627,10 +2627,13 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    unsigned long NumRows;
 
    /***** Get data of a group from database *****/
-   sprintf (Query,"SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,crs_grp_types.Multiple,"
-	          "crs_grp.GrpName,crs_grp.MaxStudents,crs_grp.Open,crs_grp.FileZones"
-	          " FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod AND crs_grp.GrpCod='%ld'",
+   sprintf (Query,"SELECT crs_grp_types.GrpTypCod,crs_grp_types.CrsCod,"
+	          "crs_grp_types.GrpTypName,crs_grp_types.Multiple,"
+	          "crs_grp.GrpName,crs_grp.MaxStudents,"
+	          "crs_grp.Open,crs_grp.FileZones"
+	          " FROM crs_grp,crs_grp_types"
+                  " WHERE crs_grp.GrpCod='%ld'"
+                  " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
             GrpDat->GrpCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a group");
 
@@ -2639,21 +2642,32 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 
    /***** Get data of group *****/
    row = mysql_fetch_row (mysql_res);
+
    /* Get the code of the group type (row[0]) */
-   if ((GrpDat->GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+   if ((GrpDat->GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of type of group.");
-   /* Get the name of the group type (row[1]) */
-   strcpy (GrpDat->GrpTypName,row[1]);
-   /* Get whether a student may be in one or multiple groups (row[2]) */
-   GrpDat->MultipleEnrollment = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-   /* Get the name of the group (row[3]) */
-   strcpy (GrpDat->GrpName,row[3]);
-   /* Get maximum number of students (row[4]) */
-   GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
-   /* Get whether group is open or closed (row[5]) */
-   GrpDat->Open = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
-   /* Get whether group has file zones (row[6]) */
-   GrpDat->FileZones = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+
+   /* Get the code of the course (row[1]) */
+   if ((GrpDat->CrsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of course.");
+
+   /* Get the name of the group type (row[2]) */
+   strcpy (GrpDat->GrpTypName,row[2]);
+
+   /* Get whether a student may be in one or multiple groups (row[3]) */
+   GrpDat->MultipleEnrollment = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+
+   /* Get the name of the group (row[4]) */
+   strcpy (GrpDat->GrpName,row[4]);
+
+   /* Get maximum number of students (row[5]) */
+   GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[5]);
+
+   /* Get whether group is open or closed (row[6]) */
+   GrpDat->Open = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+
+   /* Get whether group has file zones (row[7]) */
+   GrpDat->FileZones = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

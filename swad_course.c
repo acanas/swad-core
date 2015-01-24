@@ -2431,9 +2431,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    DB_QueryDELETE (Query,"can not remove clipboards in a course");
 
    /* Remove expanded folders in the course */
-   sprintf (Query,"DELETE FROM expanded_folders WHERE CrsCod='%ld'",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders in a course");
+   Brw_RemoveExpandedFoldersInCrs (CrsCod);
 
    /* Remove format of files of marks of the course */
    sprintf (Query,"DELETE FROM marks_properties"

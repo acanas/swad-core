@@ -172,21 +172,14 @@ CREATE TABLE IF NOT EXISTS clicks_without_photo (
 CREATE TABLE IF NOT EXISTS clipboard (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
-	InsCod INT NOT NULL DEFAULT -1,
-	CtrCod INT NOT NULL DEFAULT -1,
-	DegCod INT NOT NULL DEFAULT -1,
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpCod INT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
 	WorksUsrCod INT NOT NULL,
 	FileType TINYINT NOT NULL DEFAULT 0,
 	Path TEXT COLLATE latin1_bin NOT NULL,
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod),
-	INDEX(FileBrowser),
-	INDEX(InsCod),
-	INDEX(CtrCod),
-	INDEX(DegCod),
-	INDEX(CrsCod));
+	INDEX(FileBrowser,Cod),
+	INDEX(WorksUsrCod));
 --
 -- Table connected: users currently connected to the platform
 --
@@ -451,19 +444,13 @@ CREATE TABLE IF NOT EXISTS exam_announcements (
 CREATE TABLE IF NOT EXISTS expanded_folders (
 	UsrCod INT NOT NULL,
 	FileBrowser TINYINT NOT NULL,
-	InsCod INT NOT NULL DEFAULT -1,
-	CtrCod INT NOT NULL DEFAULT -1,
-	DegCod INT NOT NULL DEFAULT -1,
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpCod INT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
 	WorksUsrCod INT NOT NULL,
 	Path TEXT COLLATE latin1_bin NOT NULL,
 	ClickTime DATETIME NOT NULL,
-	INDEX(UsrCod,FileBrowser),
-	INDEX(InsCod),
-	INDEX(CtrCod),
-	INDEX(DegCod),
-	INDEX(CrsCod));
+	INDEX(UsrCod,FileBrowser,Cod),
+	INDEX(FileBrowser,Cod),
+	INDEX(WorksUsrCod));
 --
 -- Table file_browser_last: stores the last click of every user in each file browser zone
 --

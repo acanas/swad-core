@@ -157,7 +157,6 @@ void Brw_RemFolderFromTree (void);
 void Brw_ExpandFileTree (void);
 void Brw_ContractFileTree (void);
 void Brw_CopyFromFileBrowser (void);
-void Brw_RemoveExpiredExpandedFolders (void);
 void Brw_PasteIntoFileBrowser (void);
 void Brw_RemSubtreeInFileBrowser (void);
 void Brw_ShowFormFileBrowser (void);
@@ -182,6 +181,9 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *Path,bool IsPublic,Brw_License_t License);
+
+void Brw_RemoveExpandedFoldersInCrs (long CrsCod);
+void Brw_RemoveExpiredExpandedFolders (void);
 
 void Brw_RemoveUsrClipboard (long UsrCod);
 void Brw_RemoveGrpClipboards (long GrpCod);

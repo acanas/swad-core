@@ -93,8 +93,20 @@ const char *Brw_FileTypeParamName[Brw_NUM_FILE_TYPES] =
    "BrwFol",	// Brw_IS_FOLDER
    "BrwLnk",	// Brw_IS_LINK
   };
-
-static long Brw_FileBrowserForDB[Brw_NUM_TYPES_FILE_BROWSER] =
+/*
+const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
+  {
+   "all_rights_reserved",	// All Rights Reserved
+   "cc_by",			// CC Attribution License
+   "cc_by_sa",			// CC Attribution-ShareAlike License
+   "cc_by_nd",			// CC Attribution-NoDerivs License
+   "cc_by_nc",			// CC Attribution-NonCommercial License
+   "cc_by_nc_sa",		// CC Attribution-NonCommercial-ShareAlike License
+   "cc_by_nc_nd",		// CC Attribution-NonCommercial-NoDerivs License
+  };
+*/
+// Brosers types for database "files" table
+static const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN             =  0,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
@@ -119,7 +131,8 @@ static long Brw_FileBrowserForDB[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   };
-static long Brw_FileBrowserForLastAccess[Brw_NUM_TYPES_FILE_BROWSER] =
+// Brosers types for database "clipboard" table
+static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN             =  0,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
@@ -127,8 +140,8 @@ static long Brw_FileBrowserForLastAccess[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS =  3,
    Brw_FILE_BRW_COMMON_CRS,		// Brw_FILE_BRW_COMMON_CRS          =  4,
    Brw_FILE_BRW_COMMON_GRP,		// Brw_FILE_BRW_COMMON_GRP          =  5,
-   Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_WORKS_USR           =  6,
-   Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_WORKS_CRS           =  7,
+   Brw_FILE_BRW_WORKS_USR,		// Brw_FILE_BRW_WORKS_USR           =  6,
+   Brw_FILE_BRW_WORKS_CRS,		// Brw_FILE_BRW_WORKS_CRS           =  7,
    Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_ADMIN_MARKS_CRS     =  8,
    Brw_FILE_BRW_BRIEFCASE_USR,		// Brw_FILE_BRW_BRIEFCASE_USR       =  9,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP   = 10,
@@ -144,21 +157,8 @@ static long Brw_FileBrowserForLastAccess[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   };
-/*
-const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
-  {
-   "all_rights_reserved",	// All Rights Reserved
-   "cc_by",			// CC Attribution License
-   "cc_by_sa",			// CC Attribution-ShareAlike License
-   "cc_by_nd",			// CC Attribution-NoDerivs License
-   "cc_by_nc",			// CC Attribution-NonCommercial License
-   "cc_by_nc_sa",		// CC Attribution-NonCommercial-ShareAlike License
-   "cc_by_nc_nd",		// CC Attribution-NonCommercial-NoDerivs License
-  };
-*/
-
-// Brosers types for expanded folders
-const Brw_FileBrowser_t Brw_FileBrowserForExpandedFolders[Brw_NUM_TYPES_FILE_BROWSER] =
+// Brosers types for database "expanded_folders" table
+static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN
    Brw_FILE_BRW_SEE_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -182,6 +182,32 @@ const Brw_FileBrowser_t Brw_FileBrowserForExpandedFolders[Brw_NUM_TYPES_FILE_BRO
    Brw_FILE_BRW_SEE_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
    Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+  };
+// Brosers types for database "file_browser_last" table
+static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN             =  0,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_SEE_MARKS_CRS       =  2,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS =  3,
+   Brw_FILE_BRW_COMMON_CRS,		// Brw_FILE_BRW_COMMON_CRS          =  4,
+   Brw_FILE_BRW_COMMON_GRP,		// Brw_FILE_BRW_COMMON_GRP          =  5,
+   Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_WORKS_USR           =  6,
+   Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_WORKS_CRS           =  7,
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_ADMIN_MARKS_CRS     =  8,
+   Brw_FILE_BRW_BRIEFCASE_USR,		// Brw_FILE_BRW_BRIEFCASE_USR       =  9,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP   = 10,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP = 11,
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_SEE_MARKS_GRP       = 12,
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_ADMIN_MARKS_GRP     = 13,
+   Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_USR     = 14,
+   Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_ASSIGNMENTS_CRS     = 15,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG   = 16,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG = 17,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR   = 18,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR = 19,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
   };
 
 // Internal names of root folders
@@ -212,7 +238,7 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
   };
 
 // Number of columns of a file browser
-const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
+static const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    5,	// Brw_FILE_BRW_UNKNOWN
    5,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -237,7 +263,7 @@ const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
    5,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    8,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
+static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    false,	// Brw_FILE_BRW_UNKNOWN
    false,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -262,7 +288,7 @@ const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
    false,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    true,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -287,7 +313,7 @@ const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActChgToSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -312,7 +338,7 @@ const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActUnk,		// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -337,7 +363,7 @@ const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActShoDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -362,7 +388,7 @@ const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActHidDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActReqDatSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -387,7 +413,7 @@ const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqDatSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActReqDatAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActDowSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -412,7 +438,7 @@ const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActDowSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActDowAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -437,7 +463,7 @@ const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActReqRemFilDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -462,7 +488,7 @@ const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRemFilDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -487,7 +513,7 @@ const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRemFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -512,7 +538,7 @@ const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRemTreDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -537,7 +563,7 @@ const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActCopDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -562,7 +588,7 @@ const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActPasDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -587,7 +613,7 @@ const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActFrmCreDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -612,7 +638,7 @@ const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActCreFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -637,7 +663,7 @@ const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActCreLnkDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -662,7 +688,7 @@ const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRenFolDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -687,7 +713,7 @@ const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRcvFilDocInsDZ,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -712,7 +738,7 @@ const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActRcvFilDocInsCla,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -737,7 +763,7 @@ const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActExpSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -762,7 +788,7 @@ const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActExpAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActConSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -787,7 +813,7 @@ const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
    ActConAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
-const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_FILE_BRW_UNKNOWN
    ActUnk,		// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
@@ -1259,22 +1285,29 @@ static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
+
 static inline void Brw_GetAndWriteClipboard (void);
 static void Brw_WriteCurrentClipboard (void);
 static bool Brw_GetMyClipboard (void);
 static bool Brw_CheckIfClipboardIsInThisTree (void);
-static void Brw_SetCodes (struct Brw_Codes *Codes);
 static void Brw_AddPathToClipboards (Brw_FileType_t FileType,const char *Path);
 static void Brw_UpdatePathInClipboard (Brw_FileType_t FileType,const char *Path);
+static long Brw_GetCodForClipboard (void);
+static long Brw_GetWorksUsrCodForClipboard (void);
+
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char *Path);
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char *Path);
 static void Brw_InsertFolderInExpandedFolders (const char *Path);
 static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
 static void Brw_RemoveFolderFromExpandedFolders (const char *Path);
-static void Brw_RemoveExpiredClipboards (void);
-static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod);
 static void Brw_RemoveAffectedExpandedFolders (const char *Path);
 static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod,const char *OldPath,const char *NewPath);
+static bool Brw_GetIfExpandedTree (const char *Path);
+static long Brw_GetCodForExpandedFolders (void);
+static long Brw_GetWorksUsrCodForExpandedFolders (void);
+
+static void Brw_RemoveExpiredClipboards (void);
+static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod);
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char *Path);
 static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
@@ -1302,7 +1335,6 @@ static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
 static void Brw_UpdateFileViews (unsigned NumViews,long FilCod);
 static bool Brw_GetIfFolderHasPublicFiles (const char *Path);
-static bool Brw_GetIfExpandedTree (const char *Path);
 
 static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden);
 
@@ -3808,7 +3840,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    sprintf (Query,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
 		  " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (unsigned) Brw_FileBrowserForLastAccess[Gbl.FileBrowser.Type],
+	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get date-time of last access to a file browser");
 
@@ -3833,7 +3865,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    sprintf (Query,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
 		  " VALUES ('%ld','%u','%ld',NOW())",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (unsigned) Brw_FileBrowserForLastAccess[Gbl.FileBrowser.Type],
+	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
    DB_QueryUPDATE (Query,"can not update date of last access to a file browser");
   }
@@ -3848,7 +3880,7 @@ void Brw_RemoveFileBrowserLast (Brw_FileBrowser_t FileBrowser,long Cod)
 
    sprintf (Query,"DELETE FROM file_browser_last"
 	          " WHERE FileBrowser='%u' AND Cod='%ld'",
-            (unsigned) Brw_FileBrowserForDB[FileBrowser],Cod);
+            (unsigned) Brw_FileBrowserForDB_file_browser_last[FileBrowser],Cod);
    DB_QueryDELETE (Query,"can not remove last accesses to file browsers");
   }
 
@@ -5604,89 +5636,85 @@ static void Brw_WriteCurrentClipboard (void)
    const char *Ptr;
    char FileNameToShow[NAME_MAX+1];
 
-   if (Gbl.FileBrowser.Clipboard.FileBrowser != Brw_FILE_BRW_BRIEFCASE_USR)
-     {
-      if (Gbl.FileBrowser.Clipboard.CrsCod > 0)
-	{
-	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
-	}
-      else if (Gbl.FileBrowser.Clipboard.DegCod > 0)
-	{
-	 Deg.DegCod = Gbl.FileBrowser.Clipboard.DegCod;
-	 Deg_GetDataOfDegreeByCod (&Deg);
-	}
-      else if (Gbl.FileBrowser.Clipboard.CtrCod > 0)
-	{
-	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&Ctr);
-	}
-      else if (Gbl.FileBrowser.Clipboard.InsCod > 0)
-	{
-	 Ins.InsCod = Gbl.FileBrowser.Clipboard.InsCod;
-	 Ins_GetDataOfInstitutionByCod (&Ins,false);
-	}
-     }
-
    fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"text-align:center;\">"
 	              "%s: ",
             Txt_Copy_source);
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
      {
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ins_GetDataOfInstitutionByCod (&Ins,false);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_zone,
                   Txt_institution,Ins.ShortName);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_zone,
                   Txt_centre,Ctr.ShortName);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_zone,
                   Txt_degree,Deg.ShortName);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_zone,
                   Txt_course,Crs.ShortName);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.GrpCod;
+         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
+	 Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_documents_management_zone,
                   Txt_course,Crs.ShortName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_FILE_BRW_COMMON_CRS:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_common_zone,
                   Txt_course,Crs.ShortName);
          break;
       case Brw_FILE_BRW_COMMON_GRP:
-         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.GrpCod;
+         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
+	 Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_common_zone,
                   Txt_course,Crs.ShortName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_assignments_zone,
                   Txt_course,Crs.ShortName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_FILE_BRW_WORKS_USR:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_works_zone,
                   Txt_course,Crs.ShortName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
@@ -5697,6 +5725,8 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_FILE_BRW_WORKS_CRS:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
@@ -5707,13 +5737,17 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataDestructor (&UsrDat);
          break;
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_marks_management_zone,
                   Txt_course,Crs.ShortName);
          break;
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.GrpCod;
+         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
          Grp_GetDataOfGroupByCod (&GrpDat);
+	 Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_marks_management_zone,
                   Txt_course,Crs.ShortName,
@@ -5778,7 +5812,7 @@ static bool Brw_GetMyClipboard (void)
    unsigned UnsignedNum;
 
    /***** Get my current clipboard from database *****/
-   sprintf (Query,"SELECT FileBrowser,InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,FileType,Path"
+   sprintf (Query,"SELECT FileBrowser,Cod,WorksUsrCod,FileType,Path"
 	          " FROM clipboard WHERE UsrCod='%ld'",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get source of copy from clipboard");
@@ -5788,11 +5822,7 @@ static bool Brw_GetMyClipboard (void)
      {
       /***** Clear clipboard data *****/
       Gbl.FileBrowser.Clipboard.FileBrowser = Brw_FILE_BRW_UNKNOWN;
-      Gbl.FileBrowser.Clipboard.InsCod      = -1L;
-      Gbl.FileBrowser.Clipboard.CtrCod      = -1L;
-      Gbl.FileBrowser.Clipboard.DegCod      = -1L;
-      Gbl.FileBrowser.Clipboard.CrsCod      = -1L;
-      Gbl.FileBrowser.Clipboard.GrpCod      = -1L;
+      Gbl.FileBrowser.Clipboard.Cod         = -1L;
       Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
       Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
       Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
@@ -5808,33 +5838,20 @@ static bool Brw_GetMyClipboard (void)
         {
          Gbl.FileBrowser.Clipboard.FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-         /* Get institution code (row[1]) */
-         Gbl.FileBrowser.Clipboard.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+         /* Get institution/centre/degree/course/group code (row[1]) */
+         Gbl.FileBrowser.Clipboard.Cod = Str_ConvertStrCodToLongCod (row[1]);
 
-         /* Get centre code (row[2]) */
-         Gbl.FileBrowser.Clipboard.CtrCod = Str_ConvertStrCodToLongCod (row[2]);
+         /* Get works user's code (row[2]) */
+         Gbl.FileBrowser.Clipboard.WorksUsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-         /* Get degree code (row[3]) */
-         Gbl.FileBrowser.Clipboard.DegCod = Str_ConvertStrCodToLongCod (row[3]);
-
-         /* Get course code (row[4]) */
-         Gbl.FileBrowser.Clipboard.CrsCod = Str_ConvertStrCodToLongCod (row[4]);
-
-         /* Get group code (row[5]) */
-         if (sscanf (row[5],"%ld",&Gbl.FileBrowser.Clipboard.GrpCod) != 1)
-            Gbl.FileBrowser.Clipboard.GrpCod = -1L;
-
-         /* Get works user's code (row[6]) */
-         Gbl.FileBrowser.Clipboard.WorksUsrCod = Str_ConvertStrCodToLongCod (row[6]);
-
-         /* Get file type (row[7]) */
+         /* Get file type (row[3]) */
          Gbl.FileBrowser.Clipboard.FileType = Brw_IS_UNKNOWN;	// default
-         if (sscanf (row[7],"%u",&UnsignedNum) == 1)
+         if (sscanf (row[3],"%u",&UnsignedNum) == 1)
             if (UnsignedNum < Brw_NUM_FILE_TYPES)
                Gbl.FileBrowser.Clipboard.FileType = (Brw_FileType_t) UnsignedNum;
 
-         /* Get file path (row[8]) */
-         strcpy (Gbl.FileBrowser.Clipboard.Path,row[8]);
+         /* Get file path (row[4]) */
+         strcpy (Gbl.FileBrowser.Clipboard.Path,row[4]);
          Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.Path,
                                                PathUntilFileName,
                                                Gbl.FileBrowser.Clipboard.FileName);
@@ -5842,11 +5859,7 @@ static bool Brw_GetMyClipboard (void)
       else
         {
          Gbl.FileBrowser.Clipboard.FileBrowser = Brw_FILE_BRW_UNKNOWN;
-	 Gbl.FileBrowser.Clipboard.InsCod      = -1L;
-	 Gbl.FileBrowser.Clipboard.CtrCod      = -1L;
-	 Gbl.FileBrowser.Clipboard.DegCod      = -1L;
-         Gbl.FileBrowser.Clipboard.CrsCod      = -1L;
-         Gbl.FileBrowser.Clipboard.GrpCod      = -1L;
+	 Gbl.FileBrowser.Clipboard.Cod         = -1L;
          Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
          Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
          Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
@@ -5865,119 +5878,51 @@ static bool Brw_GetMyClipboard (void)
 /*****************************************************************************/
 /********* Check if the clipboard is in the current file browser *************/
 /*****************************************************************************/
-// Asigna false o true a Gbl.FileBrowser.Clipboard.IsThisTree
 
 static bool Brw_CheckIfClipboardIsInThisTree (void)
   {
-   bool IsThisTree = false;
-
-   if (Gbl.FileBrowser.Clipboard.FileBrowser == Gbl.FileBrowser.Type)
+   if (Gbl.FileBrowser.Clipboard.FileBrowser == Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
      {
-      switch (Gbl.FileBrowser.Type)
+      switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
 	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-            if (Gbl.FileBrowser.Clipboard.InsCod == Gbl.CurrentIns.Ins.InsCod)
-               IsThisTree = true;		// I am in the institution of the clipboard
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentIns.Ins.InsCod)
+               return true;		// I am in the institution of the clipboard
             break;
 	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-            if (Gbl.FileBrowser.Clipboard.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
-               IsThisTree = true;		// I am in the centre of the clipboard
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCtr.Ctr.CtrCod)
+               return true;		// I am in the centre of the clipboard
             break;
 	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-            if (Gbl.FileBrowser.Clipboard.DegCod == Gbl.CurrentDeg.Deg.DegCod)
-               IsThisTree = true;		// I am in the degree of the clipboard
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentDeg.Deg.DegCod)
+               return true;		// I am in the degree of the clipboard
             break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_CRS:
-         case Brw_FILE_BRW_COMMON_GRP:
          case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
          case Brw_FILE_BRW_ASSIGNMENTS_USR:
          case Brw_FILE_BRW_WORKS_USR:
-         case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-         case Brw_FILE_BRW_WORKS_CRS:
-            if (Gbl.FileBrowser.Clipboard.CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-               IsThisTree = true;		// I am in the course of the clipboard
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Crs.CrsCod)
+               return true;		// I am in the course of the clipboard
             break;
-         case Brw_FILE_BRW_BRIEFCASE_USR:
-            IsThisTree = true;
+	 case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+	 case Brw_FILE_BRW_WORKS_CRS:
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Crs.CrsCod &&
+	        Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
+               return true;		// I am in the course of the clipboard
+						// I am in the student's works of the clipboard
+	    break;
+	 case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+	 case Brw_FILE_BRW_COMMON_GRP:
+	 case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCrs.Grps.GrpCod)
+               return true;		// I am in the group of the clipboard
             break;
-         default:
-            break;
-        }
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-         case Brw_FILE_BRW_COMMON_GRP:
-         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-            if (Gbl.FileBrowser.Clipboard.GrpCod != Gbl.CurrentCrs.Grps.GrpCod)
-               IsThisTree = false;	// We are not in the group zone of the clipboard
-            break;
-         case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-         case Brw_FILE_BRW_WORKS_CRS:
-            if (Gbl.FileBrowser.Clipboard.WorksUsrCod != Gbl.Usrs.Other.UsrDat.UsrCod)
-               IsThisTree = false;	// We are not in the student's works of the clipboard
-            break;
-         default:
-            break;
-        }
+	 default:
+	    break;
+	}
      }
-   return IsThisTree;
-  }
-
-/*****************************************************************************/
-/************* Set ins/ctr/deg/crs/grp code and works user code **************/
-/*****************************************************************************/
-
-static void Brw_SetCodes (struct Brw_Codes *Codes)
-  {
-   /***** Set default codes *****/
-   Codes->InsCod = -1L;
-   Codes->CtrCod = -1L;
-   Codes->DegCod = -1L;
-   Codes->CrsCod = -1L;
-   Codes->GrpCod = -1L;
-   Codes->WorksUsrCod = -1L;
-
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-	 Codes->InsCod = Gbl.CurrentIns.Ins.InsCod;
-	 break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-	 Codes->CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
-	 break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-	 Codes->DegCod = Gbl.CurrentDeg.Deg.DegCod;
-	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-	 Codes->WorksUsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
-	 /* no break */
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-	 Codes->CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
-	 break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-	 Codes->CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
-         Codes->GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
-	 break;
-      default:
-	 break;
-     }
+   return false;
   }
 
 /*****************************************************************************/
@@ -5986,27 +5931,20 @@ static void Brw_SetCodes (struct Brw_Codes *Codes)
 
 static void Brw_AddPathToClipboards (Brw_FileType_t FileType,const char *Path)
   {
+   long Cod = Brw_GetCodForClipboard ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
    char Query[512+PATH_MAX];
-   struct Brw_Codes Codes;
 
    /***** Add path to clipboards *****/
-   Brw_SetCodes (&Codes);
    sprintf (Query,"INSERT INTO clipboard (UsrCod,FileBrowser,"
-	          "InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,"
+	          "Cod,WorksUsrCod,"
 	          "FileType,Path)"
                   " VALUES ('%ld','%u',"
-                  "'%ld','%ld','%ld','%ld','%ld','%ld',"
+                  "'%ld','%ld',"
                   "'%u','%s')",
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) Gbl.FileBrowser.Type,
-	    Codes.InsCod,
-	    Codes.CtrCod,
-	    Codes.DegCod,
-	    Codes.CrsCod,
-	    Codes.GrpCod,
-	    Codes.WorksUsrCod,
-            (unsigned) FileType,
-            Path);
+            Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Gbl.FileBrowser.Type,
+            Cod,WorksUsrCod,
+            (unsigned) FileType,Path);
    DB_QueryINSERT (Query,"can not add source of copy to clipboard");
   }
 
@@ -6016,27 +5954,66 @@ static void Brw_AddPathToClipboards (Brw_FileType_t FileType,const char *Path)
 
 static void Brw_UpdatePathInClipboard (Brw_FileType_t FileType,const char *Path)
   {
+   long Cod = Brw_GetCodForClipboard ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
    char Query[512+PATH_MAX];
-   struct Brw_Codes Codes;
 
    /***** Update path in my clipboard *****/
-   Brw_SetCodes (&Codes);
    sprintf (Query,"UPDATE clipboard SET FileBrowser='%u',"
-	          "InsCod='%ld',CtrCod='%ld',DegCod='%ld',"
-                  "CrsCod='%ld',GrpCod='%ld',WorksUsrCod='%ld',"
-                  "FileType='%u',Path='%s'"
+	          "Cod='%ld',WorksUsrCod='%ld',"
+	          "FileType='%u',Path='%s'"
                   " WHERE UsrCod='%ld'",
 	    (unsigned) Gbl.FileBrowser.Type,
-	    Codes.InsCod,
-	    Codes.CtrCod,
-	    Codes.DegCod,
-	    Codes.CrsCod,
-	    Codes.GrpCod,
-	    Codes.WorksUsrCod,
-            (unsigned) FileType,
-            Path,
+	    Cod,WorksUsrCod,(unsigned) FileType,Path,
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update source of copy in clipboard");
+  }
+
+/*****************************************************************************/
+/**** Get code of institution, degree, course, group for expanded folders ****/
+/*****************************************************************************/
+
+static long Brw_GetCodForClipboard (void)
+  {
+   switch (Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
+     {
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
+	 return Gbl.CurrentIns.Ins.InsCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
+	 return Gbl.CurrentCtr.Ctr.CtrCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
+	 return Gbl.CurrentDeg.Deg.DegCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_COMMON_CRS:
+      case Brw_FILE_BRW_ASSIGNMENTS_USR:
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_USR:
+      case Brw_FILE_BRW_WORKS_CRS:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+	 return Gbl.CurrentCrs.Crs.CrsCod;
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+	 return Gbl.CurrentCrs.Grps.GrpCod;
+      default:
+         return -1L;
+     }
+  }
+
+/*****************************************************************************/
+/******** Get code of user in assignment / works for expanded folders ********/
+/*****************************************************************************/
+
+static long Brw_GetWorksUsrCodForClipboard (void)
+  {
+   switch (Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
+     {
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
+      case Brw_FILE_BRW_WORKS_CRS:
+	 return Gbl.Usrs.Other.UsrDat.UsrCod;
+      default:
+         return -1L;
+     }
   }
 
 /*****************************************************************************/
@@ -6099,24 +6076,18 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char *
 
 static void Brw_InsertFolderInExpandedFolders (const char *Path)
   {
+   long Cod = Brw_GetCodForExpandedFolders ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
    char Query[512+PATH_MAX];
-   struct Brw_Codes Codes;
 
-   /***** Add path to expanded folders *****/
-   Brw_SetCodes (&Codes);
-
+   /***** Update path time in table of expanded folders *****/
    // Path must be stored with final '/'
-   sprintf (Query,"INSERT INTO expanded_folders (UsrCod,FileBrowser,"
-	          "InsCod,CtrCod,DegCod,CrsCod,GrpCod,WorksUsrCod,Path,ClickTime)"
-                  " VALUES ('%ld','%u','%ld','%ld','%ld','%ld','%ld','%ld','%s/',NOW())",
+   sprintf (Query,"INSERT INTO expanded_folders"
+	          " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
+                  " VALUES ('%ld','%u','%ld','%ld','%s/',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) Brw_FileBrowserForExpandedFolders[Gbl.FileBrowser.Type],
-            Codes.InsCod,
-	    Codes.CtrCod,
-	    Codes.DegCod,
-	    Codes.CrsCod,
-	    Codes.GrpCod,
-	    Codes.WorksUsrCod,
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
+            Cod,WorksUsrCod,
             Path);
    DB_QueryINSERT (Query,"can not expand the content of a folder");
   }
@@ -6127,78 +6098,35 @@ static void Brw_InsertFolderInExpandedFolders (const char *Path)
 
 static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
   {
-   char Query[512+PATH_MAX];
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForExpandedFolders[Gbl.FileBrowser.Type];
+   long Cod = Brw_GetCodForExpandedFolders ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   char Query[512];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
-   /***** Update path in table of expanded folders *****/
-   switch (FileBrowserForExpandedFolders)
+   /***** Update click time in table of expanded folders *****/
+   if (Cod > 0)
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND InsCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentIns.Ins.InsCod);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CtrCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND DegCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentDeg.Deg.DegCod);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND GrpCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND WorksUsrCod='%ld'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Other.UsrDat.UsrCod);
-         break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders);
-         break;
-      default:
-         break;
+      if (WorksUsrCod > 0)
+	 sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
+			" WHERE UsrCod='%ld' AND FileBrowser='%u'"
+			" AND Cod='%ld' AND WorksUsrCod='%ld'",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) FileBrowserForExpandedFolders,
+		  Cod,
+		  WorksUsrCod);
+      else
+	 sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
+			" WHERE UsrCod='%ld' AND FileBrowser='%u'"
+			" AND Cod='%ld'",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) FileBrowserForExpandedFolders,
+		  Cod);
      }
+   else	// Briefcase
+      sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
+		     " WHERE UsrCod='%ld' AND FileBrowser='%u'",
+	       Gbl.Usrs.Me.UsrDat.UsrCod,
+	       (unsigned) FileBrowserForExpandedFolders);
    DB_QueryUPDATE (Query,"can not update expanded folder");
   }
 
@@ -6208,76 +6136,315 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
 
 static void Brw_RemoveFolderFromExpandedFolders (const char *Path)
   {
+   long Cod = Brw_GetCodForExpandedFolders ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
    char Query[512+PATH_MAX];
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForExpandedFolders[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+
+   /***** Remove expanded folders associated to a file browser *****/
+   if (Cod > 0)
+     {
+      if (WorksUsrCod > 0)
+         sprintf (Query,"DELETE FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld' AND WorksUsrCod='%ld' AND Path='%s/'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
+                  Cod,WorksUsrCod,Path);
+      else
+         sprintf (Query,"DELETE FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld' AND Path='%s/'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) FileBrowserForExpandedFolders,
+                  Cod,Path);
+     }
+   else	// Briefcase
+      sprintf (Query,"DELETE FROM expanded_folders"
+		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " AND Path='%s/'",
+	       Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
+	       Path);
+   DB_QueryDELETE (Query,"can not contract the content of a folder");
+  }
+
+/*****************************************************************************/
+/***** Remove expanded folders with paths from a course or from a user *******/
+/*****************************************************************************/
+
+static void Brw_RemoveAffectedExpandedFolders (const char *Path)
+  {
+   long Cod = Brw_GetCodForExpandedFolders ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   char Query[512+PATH_MAX];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Remove expanded folders associated to a file browser from a course or from a user *****/
-   switch (FileBrowserForExpandedFolders)
+   if (Cod > 0)
+     {
+      if (WorksUsrCod > 0)
+         sprintf (Query,"DELETE FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld' AND WorksUsrCod='%ld' AND Path LIKE '%s/%%'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
+                  Cod,WorksUsrCod,Path);
+      else
+         sprintf (Query,"DELETE FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld' AND Path LIKE '%s/%%'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) FileBrowserForExpandedFolders,
+                  Cod,Path);
+     }
+   else	// Briefcase
+         sprintf (Query,"DELETE FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Path LIKE '%s/%%'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
+                  Path);
+   DB_QueryDELETE (Query,"can not remove expanded folders");
+  }
+
+/*****************************************************************************/
+/***** Remove expanded folders with paths from a course or from a user *******/
+/*****************************************************************************/
+
+static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod,const char *OldPath,const char *NewPath)
+  {
+   long Cod = Brw_GetCodForExpandedFolders ();
+   char Query[512+PATH_MAX*2];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[FileBrowser];
+   unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
+
+   /***** Update expanded folders associated to a file browser from a course or from a user *****/
+   if (Cod > 0)
+     {
+      if (MyUsrCod > 0)
+	{
+	 if (WorksUsrCod > 0)
+	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			   " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+			   " AND Cod='%ld' AND WorksUsrCod='%ld'"
+			   " AND Path LIKE '%s/%%'",
+		     NewPath,StartFinalSubpathNotChanged,
+		     MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
+		     Cod,WorksUsrCod,
+		     OldPath);
+	 else
+	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			   " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+			   " AND Cod='%ld'"
+			   " AND Path LIKE '%s/%%'",
+		     NewPath,StartFinalSubpathNotChanged,
+		     MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
+		     Cod,
+		     OldPath);
+	}
+      else	// MyUsrCod <= 0 means expanded folders for any user
+	{
+	 if (WorksUsrCod > 0)
+	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			   " WHERE FileBrowser='%u' AND Cod='%ld'"
+			   " AND WorksUsrCod='%ld'"
+			   " AND Path LIKE '%s/%%'",
+		     NewPath,StartFinalSubpathNotChanged,
+		     (unsigned) FileBrowserForExpandedFolders,Cod,
+		     WorksUsrCod,
+		     OldPath);
+	 else
+	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+			   " WHERE FileBrowser='%u' AND Cod='%ld'"
+			   " AND Path LIKE '%s/%%'",
+		     NewPath,StartFinalSubpathNotChanged,
+		     (unsigned) FileBrowserForExpandedFolders,Cod,
+		     OldPath);
+	}
+     }
+   else	// Briefcase
+      sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " AND Path LIKE '%s/%%'",
+	       NewPath,StartFinalSubpathNotChanged,
+	       MyUsrCod,
+	       (unsigned) FileBrowserForExpandedFolders,
+	       OldPath);
+   DB_QueryUPDATE (Query,"can not update expanded folders");
+  }
+
+/*****************************************************************************/
+/************* Check if a folder from a file browser is expanded *************/
+/*****************************************************************************/
+
+static bool Brw_GetIfExpandedTree (const char *Path)
+  {
+   long Cod = Brw_GetCodForExpandedFolders ();
+   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   char Query[512+PATH_MAX];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+
+   /***** Get if a folder is expanded from database *****/
+   if (Cod > 0)
+     {
+      if (WorksUsrCod > 0)
+         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld' AND WorksUsrCod='%ld'"
+                        " AND Path='%s/'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) FileBrowserForExpandedFolders,
+                  Cod,WorksUsrCod,
+                  Path);
+      else
+         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " AND Cod='%ld'"
+                        " AND Path='%s/'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  (unsigned) FileBrowserForExpandedFolders,
+                  Cod,
+                  Path);
+     }
+   else	// Briefcase
+      sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
+		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " AND Path='%s/'",
+	       Gbl.Usrs.Me.UsrDat.UsrCod,
+	       (unsigned) FileBrowserForExpandedFolders,
+	       Path);
+   return (DB_QueryCOUNT (Query,"can not get check if a folder is expanded") != 0);
+  }
+
+/*****************************************************************************/
+/**** Get code of institution, degree, course, group for expanded folders ****/
+/*****************************************************************************/
+
+static long Brw_GetCodForExpandedFolders (void)
+  {
+   switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
      {
       case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND InsCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentIns.Ins.InsCod,Path);
-         break;
+	 return Gbl.CurrentIns.Ins.InsCod;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CtrCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCtr.Ctr.CtrCod,Path);
-         break;
+	 return Gbl.CurrentCtr.Ctr.CtrCod;
       case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND DegCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentDeg.Deg.DegCod,Path);
-         break;
+	 return Gbl.CurrentDeg.Deg.DegCod;
       case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
+      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
       case Brw_FILE_BRW_WORKS_USR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Path);
-         break;
+      case Brw_FILE_BRW_WORKS_CRS:
+      case Brw_FILE_BRW_SEE_MARKS_CRS:
+	 return Gbl.CurrentCrs.Crs.CrsCod;
       case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
       case Brw_FILE_BRW_SEE_MARKS_GRP:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND GrpCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod,Path);
-         break;
+	 return Gbl.CurrentCrs.Grps.GrpCod;
+      default:
+         return -1L;
+     }
+  }
+
+/*****************************************************************************/
+/******** Get code of user in assignment / works for expanded folders ********/
+/*****************************************************************************/
+
+static long Brw_GetWorksUsrCodForExpandedFolders (void)
+  {
+   switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
+     {
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
       case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND WorksUsrCod='%ld' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod,Path);
-         break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
-                  Path);
-         break;
+	 return Gbl.Usrs.Other.UsrDat.UsrCod;
       default:
-         break;
+         return -1L;
      }
-   DB_QueryDELETE (Query,"can not contract the content of a folder");
+  }
+
+/*****************************************************************************/
+/******************* Remove expanded folders of a course *********************/
+/*****************************************************************************/
+
+void Brw_RemoveExpandedFoldersInCrs (long CrsCod)
+  {
+   char Query[512];
+
+   /***** Remove all the expanded folders related to the course *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+                  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')"
+                  " AND Cod='%ld'",
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_SEE_DOCUMENTS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_COMMON_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_ASSIGNMENTS_USR],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_ASSIGNMENTS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_WORKS_USR],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_WORKS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_SEE_MARKS_CRS],
+	    CrsCod);
+   DB_QueryDELETE (Query,"can not remove expanded folders in a course");
+  }
+
+/*****************************************************************************/
+/******************* Remove all expanded folders of a user *******************/
+/*****************************************************************************/
+
+void Brw_RemoveUsrExpandedFolders (long UsrCod)
+  {
+   char Query[512];
+
+   /***** Remove expanded folders of specified user *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+	          " WHERE UsrCod='%ld' OR WorksUsrCod='%ld'",
+	    UsrCod,UsrCod);
+   DB_QueryDELETE (Query,"can not remove expanded folders for a user");
+  }
+
+/*****************************************************************************/
+/********** Remove all expanded folders of a user in this course *************/
+/*****************************************************************************/
+
+void Brw_RemoveUsrExpandedFoldersInCrs (long UsrCod,long CrsCod)
+  {
+   char Query[512];
+
+   /***** Remove expanded folders of specified user in course *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+                  " WHERE UsrCod='%ld'"
+                  " AND FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')"
+                  " AND Cod='%ld'",
+            UsrCod,
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_SEE_DOCUMENTS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_COMMON_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_ASSIGNMENTS_USR],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_ASSIGNMENTS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_WORKS_USR],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_WORKS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_SEE_MARKS_CRS],
+	    CrsCod);
+   DB_QueryDELETE (Query,"can not remove expanded folders for a user in a course");
+
+   /***** Remove expanded folders related to user's assignments or works in course *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+                  " WHERE FileBrowser IN ('%u','%u')"
+                  " AND Cod='%ld' AND WorksUsrCod='%ld'",
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_ASSIGNMENTS_CRS],
+            (unsigned) Brw_FileBrowserForDB_expanded_folders[Brw_FILE_BRW_WORKS_CRS],
+	    CrsCod,UsrCod);
+   DB_QueryDELETE (Query,"can not remove expanded folders for a user in a course");
+  }
+
+/*****************************************************************************/
+/************* Remove expired expanded folders (from all users) **************/
+/*****************************************************************************/
+
+void Brw_RemoveExpiredExpandedFolders (void)
+  {
+   char Query[512];
+
+   /***** Remove all expired clipboards *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
+                  " WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+%ld",
+            Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
+   DB_QueryDELETE (Query,"can not remove old expanded folders");
   }
 
 /*****************************************************************************/
@@ -6302,7 +6469,13 @@ void Brw_RemoveGrpClipboards (long GrpCod)
    char Query[512];
 
    /***** Remove clipboard of specified user *****/
-   sprintf (Query,"DELETE FROM clipboard WHERE GrpCod='%ld'",GrpCod);
+   sprintf (Query,"DELETE FROM clipboard"
+	          " WHERE FileBrowser IN ('%u','%u','%u')"
+	          " AND Cod='%ld'",
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+	    (unsigned) Brw_FILE_BRW_COMMON_GRP,
+	    (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+	    GrpCod);
    DB_QueryDELETE (Query,"can not remove source of copy for a group");
   }
 
@@ -6315,37 +6488,20 @@ void Brw_RemoveUsrClipboardInCrs (long UsrCod,long CrsCod)
    char Query[512];
 
    /***** Remove clipboard of specified user *****/
-   sprintf (Query,"DELETE FROM clipboard WHERE UsrCod='%ld' AND CrsCod='%ld'",
-            UsrCod,CrsCod);
+   sprintf (Query,"DELETE FROM clipboard"
+                  " WHERE UsrCod='%ld'"
+	          " AND FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')"
+                  " AND CrsCod='%ld'",
+            UsrCod,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+	    (unsigned) Brw_FILE_BRW_COMMON_CRS,
+	    (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+	    (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
+	    (unsigned) Brw_FILE_BRW_WORKS_USR,
+	    (unsigned) Brw_FILE_BRW_ASSIGNMENTS_CRS,
+	    (unsigned) Brw_FILE_BRW_WORKS_CRS,
+            CrsCod);
    DB_QueryDELETE (Query,"can not remove source of copy for a user and a course");
-  }
-
-/*****************************************************************************/
-/******************* Remove all expanded folders of a user *******************/
-/*****************************************************************************/
-
-void Brw_RemoveUsrExpandedFolders (long UsrCod)
-  {
-   char Query[512];
-
-   /***** Remove expanded folders of specified user *****/
-   sprintf (Query,"DELETE FROM expanded_folders WHERE UsrCod='%ld'",UsrCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders for a user");
-  }
-
-/*****************************************************************************/
-/********** Remove all expanded folders of a user in this course *************/
-/*****************************************************************************/
-
-void Brw_RemoveUsrExpandedFoldersInCrs (long UsrCod,long CrsCod)
-  {
-   char Query[512];
-
-   /***** Remove expanded folders of specified user *****/
-   sprintf (Query,"DELETE FROM expanded_folders"
-                  " WHERE UsrCod='%ld' AND CrsCod='%ld'",
-            UsrCod,CrsCod);
-   DB_QueryDELETE (Query,"can not remove expanded folders for a user in a course");
   }
 
 /*****************************************************************************/
@@ -6364,21 +6520,6 @@ static void Brw_RemoveExpiredClipboards (void)
   }
 
 /*****************************************************************************/
-/************* Remove expired expanded folders (from all users) **************/
-/*****************************************************************************/
-
-void Brw_RemoveExpiredExpandedFolders (void)
-  {
-   char Query[512];
-
-   /***** Remove all expired clipboards *****/
-   sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-                  " WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+%ld",
-            Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
-   DB_QueryDELETE (Query,"can not remove old expanded folders");
-  }
-
-/*****************************************************************************/
 /********* Remove clipboards with paths from a course or from a user *********/
 /*****************************************************************************/
 
@@ -6392,43 +6533,43 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
      {
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND InsCod='%ld'",
+                        " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND CtrCod='%ld'",
+                        " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND DegCod='%ld'",
+                        " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND CrsCod='%ld'",
+                        " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
          break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND CrsCod='%ld' AND GrpCod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod);
+                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                  (unsigned) FileBrowser,Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
       case Brw_FILE_BRW_WORKS_USR:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u' AND CrsCod='%ld'",
+                        " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
                   MyUsrCod,(unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
          break;
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
       case Brw_FILE_BRW_WORKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND CrsCod='%ld' AND WorksUsrCod='%ld'",
+                        " WHERE FileBrowser='%u' AND Cod='%ld' AND WorksUsrCod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod);
          break;
       case Brw_FILE_BRW_BRIEFCASE_USR:
@@ -6440,177 +6581,6 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
          break;
      }
    DB_QueryDELETE (Query,"can not remove source of copy");
-  }
-
-/*****************************************************************************/
-/***** Remove expanded folders with paths from a course or from a user *******/
-/*****************************************************************************/
-
-static void Brw_RemoveAffectedExpandedFolders (const char *Path)
-  {
-   char Query[512+PATH_MAX];
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForExpandedFolders[Gbl.FileBrowser.Type];
-
-   /***** Remove expanded folders associated to a file browser from a course or from a user *****/
-   switch (FileBrowserForExpandedFolders)
-     {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND InsCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentIns.Ins.InsCod,Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND CtrCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCtr.Ctr.CtrCod,Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND DegCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentDeg.Deg.DegCod,Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND GrpCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod,Path);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND Path LIKE '%s/%%'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Path);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND WorksUsrCod='%ld' AND Path LIKE '%s/%%'",
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod,Path);
-         break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Path LIKE '%s/%%'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Path);
-         break;
-      default:
-         break;
-     }
-   DB_QueryDELETE (Query,"can not remove expanded folders");
-  }
-
-/*****************************************************************************/
-/***** Remove expanded folders with paths from a course or from a user *******/
-/*****************************************************************************/
-
-static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod,const char *OldPath,const char *NewPath)
-  {
-   char Query[512+PATH_MAX*2];
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForExpandedFolders[FileBrowser];
-   unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
-
-   /***** Update expanded folders associated to a file browser from a course or from a user *****/
-   switch (FileBrowserForExpandedFolders)
-     {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND InsCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentIns.Ins.InsCod,OldPath);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND CtrCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCtr.Ctr.CtrCod,OldPath);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND DegCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentDeg.Deg.DegCod,OldPath);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,OldPath);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND GrpCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod,OldPath);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,OldPath);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND WorksUsrCod='%ld' AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod,OldPath);
-         break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Path LIKE '%s/%%'",
-                  NewPath,StartFinalSubpathNotChanged,MyUsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  OldPath);
-         break;
-      default:
-         break;
-     }
-   DB_QueryUPDATE (Query,"can not remove expanded folders");
   }
 
 /*****************************************************************************/
@@ -6627,10 +6597,16 @@ void Brw_PasteIntoFileBrowser (void)
 
    if (Brw_GetMyClipboard ())
      {
-      if (Gbl.FileBrowser.Clipboard.GrpCod > 0)	// Clipboard in a group zone
+      switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
-         GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.GrpCod;
-	 Brw_GetSelectedGroupData (&GrpDat,true);
+         case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+         case Brw_FILE_BRW_COMMON_GRP:
+         case Brw_FILE_BRW_ADMIN_MARKS_GRP:	// Clipboard in a group zone
+	    GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
+	    Brw_GetSelectedGroupData (&GrpDat,true);
+	    break;
+         default:
+            break;
         }
 
       /***** Write the origin of the copy *****/
@@ -6682,7 +6658,7 @@ static void Brw_PasteClipboard (void)
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
-   char PathAboveRootFolderOrg[PATH_MAX+1];
+   struct GroupData GrpDat;
    char PathOrg[PATH_MAX+1];
    unsigned NumFilesPasted = 0;
    unsigned NumFoldsPasted = 0;
@@ -6698,90 +6674,87 @@ static void Brw_PasteClipboard (void)
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-            Ins.InsCod = Gbl.FileBrowser.Clipboard.InsCod;
+            Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ins_GetDataOfInstitutionByCod (&Ins,false))
-               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
 		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
 		        (unsigned) (Ins.InsCod % 100),
-		        (unsigned) Ins.InsCod);
+		        (unsigned) Ins.InsCod,
+			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The institution of copy source does not exist.");
             break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-            Ctr.CtrCod = Gbl.FileBrowser.Clipboard.CtrCod;
+            Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ctr_GetDataOfCentreByCod (&Ctr))
-               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
 		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
 		        (unsigned) (Ctr.CtrCod % 100),
-		        (unsigned) Ctr.CtrCod);
+		        (unsigned) Ctr.CtrCod,
+			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The centre of copy source does not exist.");
             break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-            Deg.DegCod = Gbl.FileBrowser.Clipboard.DegCod;
+            Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Deg_GetDataOfDegreeByCod (&Deg))
-               sprintf (PathAboveRootFolderOrg,"%s/%s/%02u/%u",
+	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
 		        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
 		        (unsigned) (Deg.DegCod % 100),
-		        (unsigned) Deg.DegCod);
+		        (unsigned) Deg.DegCod,
+			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The degree of copy source does not exist.");
             break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_CRS:
-         case Brw_FILE_BRW_COMMON_GRP:
          case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-         case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-         case Brw_FILE_BRW_ASSIGNMENTS_USR:
-         case Brw_FILE_BRW_WORKS_USR:
-         case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-         case Brw_FILE_BRW_WORKS_CRS:
-            Crs.CrsCod = Gbl.FileBrowser.Clipboard.CrsCod;
+            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
-               sprintf (PathAboveRootFolderOrg,"%s/%s/%ld",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod);
+	       sprintf (PathOrg,"%s/%s/%ld/%s",
+                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+			Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The course of copy source does not exist.");
             break;
-         default:
-            break;
-        }
-      switch (Gbl.FileBrowser.Clipboard.FileBrowser)
-        {
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
-         case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-         case Brw_FILE_BRW_COMMON_CRS:
-         case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-            sprintf (PathOrg,"%s/%s",
-        	     PathAboveRootFolderOrg,
-        	     Gbl.FileBrowser.Clipboard.Path);
-            break;
          case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
          case Brw_FILE_BRW_COMMON_GRP:
          case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-            sprintf (PathOrg,"%s/grp/%ld/%s",
-        	     PathAboveRootFolderOrg,
-        	     Gbl.FileBrowser.Clipboard.GrpCod,
-        	     Gbl.FileBrowser.Clipboard.Path);
+	    GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
+	    Grp_GetDataOfGroupByCod (&GrpDat);
+            Crs.CrsCod = GrpDat.CrsCod;
+            if (Crs_GetDataOfCourseByCod (&Crs))
+	       sprintf (PathOrg,"%s/%s/%ld/grp/%ld/%s",
+                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+			Gbl.FileBrowser.Clipboard.Cod,
+			Gbl.FileBrowser.Clipboard.Path);
+            else
+               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
             break;
          case Brw_FILE_BRW_ASSIGNMENTS_USR:
          case Brw_FILE_BRW_WORKS_USR:
-            sprintf (PathOrg,"%s/usr/%02u/%ld/%s",
-        	     PathAboveRootFolderOrg,
-        	     (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-        	     Gbl.Usrs.Me.UsrDat.UsrCod,
-        	     Gbl.FileBrowser.Clipboard.Path);
+            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Crs))
+	       sprintf (PathOrg,"%s/%s/%ld/usr/%02u/%ld/%s",
+                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+			(unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			Gbl.FileBrowser.Clipboard.Path);
+            else
+               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
             break;
          case Brw_FILE_BRW_ASSIGNMENTS_CRS:
          case Brw_FILE_BRW_WORKS_CRS:
-            sprintf (PathOrg,"%s/usr/%02u/%ld/%s",
-        	     PathAboveRootFolderOrg,
-        	     (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
-        	     Gbl.FileBrowser.Clipboard.WorksUsrCod,
-        	     Gbl.FileBrowser.Clipboard.Path);
+            Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
+            if (Crs_GetDataOfCourseByCod (&Crs))
+	       sprintf (PathOrg,"%s/%s/%ld/usr/%02u/%ld/%s",
+			Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+			(unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
+			Gbl.FileBrowser.Clipboard.WorksUsrCod,
+			Gbl.FileBrowser.Clipboard.Path);
+            else
+               Lay_ShowErrorAndExit ("The course of copy source does not exist.");
+            break;
             break;
          case Brw_FILE_BRW_BRIEFCASE_USR:
             sprintf (PathOrg,"%s/%s",
@@ -8139,7 +8112,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Path);
    if (DB_QuerySELECT (Query,&mysql_res,"can not check if a file is hidden"))
      {
@@ -9116,7 +9089,7 @@ long Brw_GetFilCodByPath (const char *Path)
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Path);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file code"))
      {
@@ -9161,7 +9134,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Gbl.FileBrowser.Priv.FullPathInTree);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
@@ -9646,104 +9619,9 @@ static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Path);
    return (DB_QueryCOUNT (Query,"can not check if a folder contains public files") != 0);
-  }
-
-/*****************************************************************************/
-/************* Check if a folder from a file browser is expanded *************/
-/*****************************************************************************/
-
-static bool Brw_GetIfExpandedTree (const char *Path)
-  {
-   char Query[512+PATH_MAX];
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForExpandedFolders[Gbl.FileBrowser.Type];
-
-   /***** Get if a folder is expanded from database *****/
-   switch (FileBrowserForExpandedFolders)
-     {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND InsCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CtrCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND DegCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
-      case Brw_FILE_BRW_ASSIGNMENTS_USR:
-      case Brw_FILE_BRW_WORKS_USR:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND GrpCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.CurrentCrs.Grps.GrpCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND CrsCod='%ld' AND WorksUsrCod='%ld'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Other.UsrDat.UsrCod,
-                  Path);
-         break;
-      case Brw_FILE_BRW_BRIEFCASE_USR:
-         sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Path='%s/'",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  (unsigned) FileBrowserForExpandedFolders,
-                  Path);
-         break;
-      default:
-         break;
-     }
-   return (DB_QueryCOUNT (Query,"can not get check if a folder is expanded") != 0);
   }
 
 /*****************************************************************************/
@@ -9767,7 +9645,7 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden)
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Path);
    DB_QueryUPDATE (Query,"can not change status of a file in database");
   }
@@ -9796,7 +9674,7 @@ static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Path);
    DB_QueryUPDATE (Query,"can not change metadata of a file in database");
   }
@@ -9894,7 +9772,7 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             PublisherUsrCod,
             (unsigned) FileType,
             Path,
@@ -9917,7 +9795,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
    long CrsCod = Brw_GetCrsCod ();
    long GrpCod = Brw_GetGrpCod ();
    long ZoneUsrCod = Brw_GetZoneUsrCod ();
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
           Important: do this before removing from files *****/
@@ -9976,7 +9854,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char *Path)
    long CrsCod = Brw_GetCrsCod ();
    long GrpCod = Brw_GetGrpCod ();
    long ZoneUsrCod = Brw_GetZoneUsrCod ();
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
           Important: do this before removing from files *****/
@@ -10037,7 +9915,7 @@ static void Brw_RenameOneFolderInDB (const char *OldPath,const char *NewPath)
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             OldPath);
    DB_QueryUPDATE (Query,"can not update folder name in a common zone");
   }
@@ -10059,7 +9937,7 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char *OldPath,const char
             Brw_GetCrsCod (),
             Brw_GetGrpCod (),
             Brw_GetZoneUsrCod (),
-            (unsigned) Brw_FileBrowserForDB[Gbl.FileBrowser.Type],
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             OldPath);
    DB_QueryUPDATE (Query,"can not rename file or folder names in a common zone");
   }
