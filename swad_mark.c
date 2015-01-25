@@ -273,8 +273,6 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
                Gbl.FileBrowser.Priv.FullPathInTree);
       DB_QueryUPDATE (Query,"can not update properties of marks");
 
-      Lay_ShowAlert (Lay_INFO,Query);
-
       /***** Write message of success *****/
       sprintf (Gbl.Message,Txt_The_number_of_rows_is_now_X,
                NumRows);

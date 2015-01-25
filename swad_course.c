@@ -2425,27 +2425,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    DB_QueryDELETE (Query,"can not remove users from a course");
 
    /***** Remove information related to files in course *****/
-   /* Remove clipboards related to the course */
-   sprintf (Query,"DELETE FROM clipboard WHERE CrsCod='%ld'",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove clipboards in a course");
-
-   /* Remove expanded folders in the course */
-   Brw_RemoveExpandedFoldersInCrs (CrsCod);
-
-   /* Remove format of files of marks of the course */
-   sprintf (Query,"DELETE FROM marks_properties"
-	          " USING files,marks_properties"
-	          " WHERE files.CrsCod='%ld'"
-	          " AND files.FilCod=marks_properties.FilCod",
-	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove the properties of marks associated to a course");
-
-   /* Remove files in the course from database */
-   Brw_RemoveFilesFromDB (-1L,-1L,-1L,CrsCod,-1L,-1L);
-
-   /* Remove size of file zones in the course from database */
-   Brw_RemoveSizeOfFileTreeFromDB (CrsCod,-1L,-1L);
+   Brw_RemoveCrsFilesFromDB (CrsCod);
 
    /***** Remove directories of the course *****/
    sprintf (PathRelCrs,"%s/%s/%ld",

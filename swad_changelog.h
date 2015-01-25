@@ -39,11 +39,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.67.1 (2015/01/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.68 (2015/01/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.68:    Jan 25, 2015	Changes in file_browser_size table. (175606 lines)
+					8 changes necessary in database:
+DROP INDEX FileBrowser ON file_browser_size;
+DROP INDEX UsrCod ON file_browser_size;
+ALTER TABLE file_browser_size CHANGE COLUMN UsrCod ZoneUsrCod INT NOT NULL DEFAULT -1,ADD INDEX (ZoneUsrCod);
+ALTER TABLE file_browser_size ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD UNIQUE INDEX (FileBrowser,Cod,ZoneUsrCod);
+UPDATE file_browser_size SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';
+UPDATE file_browser_size SET Cod=GrpCod WHERE GrpCod>'0';
+ALTER TABLE file_browser_size DROP COLUMN CrsCod;
+ALTER TABLE file_browser_size DROP COLUMN GrpCod;
+
         Version 14.67.1:  Jan 25, 2015	Fixed bugs in file browsers. (175395 lines)
         Version 14.67:    Jan 25, 2015	Changes in files table. (175369 lines)
 					16 changes necessary in database:
@@ -56,7 +67,7 @@ CREATE INDEX ZoneUsrCod ON files (ZoneUsrCod);
 UPDATE files SET Cod=InsCod WHERE InsCod>'0';
 UPDATE files SET Cod=CtrCod WHERE CtrCod>'0';
 UPDATE files SET Cod=DegCod WHERE DegCod>'0';
-UPDATE files SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE files SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';
 UPDATE files SET Cod=GrpCod WHERE GrpCod>'0';
 ALTER TABLE files DROP COLUMN InsCod;
 ALTER TABLE files DROP COLUMN CtrCod;
@@ -73,7 +84,7 @@ CREATE INDEX WorksUsrCod ON clipboard (WorksUsrCod);
 UPDATE clipboard SET Cod=InsCod WHERE InsCod>'0';
 UPDATE clipboard SET Cod=CtrCod WHERE CtrCod>'0';
 UPDATE clipboard SET Cod=DegCod WHERE DegCod>'0';
-UPDATE clipboard SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE clipboard SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';
 UPDATE clipboard SET Cod=GrpCod WHERE GrpCod>'0';
 ALTER TABLE clipboard DROP COLUMN InsCod;
 ALTER TABLE clipboard DROP COLUMN CtrCod;
@@ -89,7 +100,7 @@ CREATE INDEX WorksUsrCod ON expanded_folders (WorksUsrCod);
 UPDATE expanded_folders SET Cod=InsCod WHERE InsCod>'0';
 UPDATE expanded_folders SET Cod=CtrCod WHERE CtrCod>'0';
 UPDATE expanded_folders SET Cod=DegCod WHERE DegCod>'0';
-UPDATE expanded_folders SET Cod=CrsCod WHERE CrsCod>'0';
+UPDATE expanded_folders SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';
 UPDATE expanded_folders SET Cod=GrpCod WHERE GrpCod>'0';
 ALTER TABLE expanded_folders DROP COLUMN InsCod;
 ALTER TABLE expanded_folders DROP COLUMN CtrCod;

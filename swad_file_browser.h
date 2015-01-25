@@ -142,10 +142,17 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
-void Brw_RemoveSizeOfFileTreeFromDB (long CrsCod,long GrpCod,long UsrCod);
-void Brw_RemoveFilesFromDB (long InsCod,long CtrCod,long DegCod,long CrsCod,long GrpCod,long UsrCod);
+
+void Brw_RemoveInsFilesFromDB (long InsCod);
+void Brw_RemoveCtrFilesFromDB (long CtrCod);
+void Brw_RemoveDegFilesFromDB (long DegCod);
+void Brw_RemoveCrsFilesFromDB (long CrsCod);
+void Brw_RemoveGrpFilesFromDB (long GrpCod);
+void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod);
+void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
+void Brw_RemoveUsrFilesFromDB (long UsrCod);
+
 void Brw_CreateDirDownloadTmp (void);
-void Brw_RemoveFileBrowserLast (Brw_FileBrowser_t FileBrowser,long Cod);
 void Brw_AskEditWorksCrs (void);
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);
@@ -183,14 +190,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *Path,bool IsPublic,Brw_License_t License);
 
-void Brw_RemoveExpandedFoldersInCrs (long CrsCod);
 void Brw_RemoveExpiredExpandedFolders (void);
-
-void Brw_RemoveUsrClipboard (long UsrCod);
-void Brw_RemoveGrpClipboards (long GrpCod);
-void Brw_RemoveUsrClipboardInCrs (long UsrCod,long CrsCod);
-void Brw_RemoveUsrExpandedFolders (long UsrCod);
-void Brw_RemoveUsrExpandedFoldersInCrs (long UsrCod,long CrsCod);
 
 void Brw_RemoveTree (const char *Path);
 void Brw_CalcSizeOfDir (char *Path);

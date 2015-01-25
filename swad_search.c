@@ -764,7 +764,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			"centres.ShortName,courses.ShortName"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.CrsCod=courses.CrsCod"
+	                " AND files.FileBrowser IN ('%u','%u')"
+			" AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -773,6 +774,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			" HAVING PathFromRoot<>''"
 			" ORDER BY degrees.ShortName,courses.ShortName,PathFromRoot",
 		  SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
@@ -805,11 +808,13 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		It is necessary to speed up the second query *****/
 	 sprintf (Query,"CREATE TEMPORARY TABLE my_files (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_usr,files"
-			" WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=files.CrsCod"
+			" WHERE crs_usr.UsrCod='%ld'"
+			" AND crs_usr.CrsCod=files.Cod"
 			" AND files.FileBrowser IN ('%u','%u','%u')"
 			" UNION"
 			" SELECT files.FilCod FROM crs_grp_usr,files"
-			" WHERE crs_grp_usr.UsrCod='%ld' AND crs_grp_usr.GrpCod=files.GrpCod"
+			" WHERE crs_grp_usr.UsrCod='%ld'"
+			" AND crs_grp_usr.GrpCod=files.Cod"
 			" AND files.FileBrowser IN ('%u','%u','%u')",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
@@ -829,9 +834,18 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			"degrees.DegCod,degrees.ShortName,"
 			"centres.ShortName,courses.ShortName"
-			" FROM files,courses,degrees,centres,institutions,countries"
+			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			" WHERE files.FilCod IN (SELECT FilCod FROM my_files) AND %s"
-			" AND files.CrsCod=courses.CrsCod"
+	                " AND "
+	                "("
+	                "(files.FileBrowser IN ('%u','%u','%u')"
+	                " AND files.Cod=courses.CrsCod)"
+	                " OR "
+	                "(files.FileBrowser IN ('%u','%u','%u')"
+	                " AND files.Cod=crs_grp.GrpCod"
+	                " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+	                " AND crs_grp.types.CrsCod=courses.CrsCod)"
+	                ")"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -840,6 +854,12 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" HAVING PathFromRoot<>''"
 			" ORDER BY degrees.ShortName,courses.ShortName,PathFromRoot",
 		  SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+		  (unsigned) Brw_FILE_BRW_COMMON_GRP,
+		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
@@ -883,9 +903,18 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			   "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			   "degrees.DegCod,degrees.ShortName AS DegShortName,"
 			   "centres.ShortName,courses.ShortName AS CrsShortName"
-			   " FROM files,courses,degrees,centres,institutions,countries"
+			   " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			   " WHERE files.PublisherUsrCod='%ld' AND %s"
-			   " AND files.CrsCod=courses.CrsCod"
+	             	   " AND "
+			   "("
+			   "(files.FileBrowser IN ('%u','%u','%u')"
+			   " AND files.Cod=courses.CrsCod)"
+			   " OR "
+			   "(files.FileBrowser IN ('%u','%u','%u')"
+			   " AND files.Cod=crs_grp.GrpCod"
+			   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			   " AND crs_grp.types.CrsCod=courses.CrsCod)"
+			   ")"
 			   " AND courses.DegCod=degrees.DegCod"
 			   " AND degrees.CtrCod=centres.CtrCod"
 			   " AND centres.InsCod=institutions.InsCod"
@@ -900,17 +929,33 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			   ") AS my_files"
 			   " WHERE PathFromRoot<>''"
 			   " ORDER BY DegShortName,CrsShortName,PathFromRoot",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,RangeQuery,
+		     Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		     (unsigned) Brw_FILE_BRW_COMMON_CRS,
+		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+		     (unsigned) Brw_FILE_BRW_COMMON_GRP,
+		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+		     RangeQuery,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Brw_FILE_BRW_BRIEFCASE_USR,SearchQuery);
 	 else
 	    sprintf (Query,"SELECT files.FilCod,"
 			   "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			   "degrees.DegCod,degrees.ShortName,"
 			   "centres.ShortName,courses.ShortName"
-			   " FROM files,courses,degrees,centres,institutions,countries"
+			   " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			   " WHERE files.PublisherUsrCod='%ld' AND %s"
-			   " AND files.CrsCod=courses.CrsCod"
-			   " AND courses.DegCod=degrees.DegCod"
+	             	   " AND "
+			   "("
+			   "(files.FileBrowser IN ('%u','%u','%u')"
+			   " AND files.Cod=courses.CrsCod)"
+			   " OR "
+			   "(files.FileBrowser IN ('%u','%u','%u')"
+			   " AND files.Cod=crs_grp.GrpCod"
+			   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			   " AND crs_grp.types.CrsCod=courses.CrsCod)"
+			   ")"
+	                   " AND courses.DegCod=degrees.DegCod"
 			   " AND degrees.CtrCod=centres.CtrCod"
 			   " AND centres.InsCod=institutions.InsCod"
 			   " AND institutions.CtyCod=countries.CtyCod"
@@ -918,6 +963,12 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			   " HAVING PathFromRoot<>''"
 			   " ORDER BY degrees.ShortName,courses.ShortName,PathFromRoot",
 		     Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		     (unsigned) Brw_FILE_BRW_COMMON_CRS,
+		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+		     (unsigned) Brw_FILE_BRW_COMMON_GRP,
+		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
 		     RangeQuery);
 
 	 /***** Query database and list documents found *****/

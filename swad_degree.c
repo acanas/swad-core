@@ -3122,6 +3122,7 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
    long CrsCod;
+   char PathDeg[PATH_MAX+1];
 
    /***** Get courses of a degree from database *****/
    sprintf (Query,"SELECT CrsCod FROM courses"
@@ -3183,16 +3184,14 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
    DB_QueryDELETE (Query,"can not remove threads in forums of a degree");
 
    /***** Remove information related to files in degree *****/
-   /* Remove clipboards related to the degree */
-   sprintf (Query,"DELETE FROM clipboard WHERE DegCod='%ld'",
-	    DegCod);
-   DB_QueryDELETE (Query,"can not remove clipboards in a degree");
+   Brw_RemoveDegFilesFromDB (DegCod);
 
-   /* Remove last accesses to file browsers related with this degree */
-   Brw_RemoveFileBrowserLast (Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,DegCod);
-
-   /* Remove files in the degree from database */
-   Brw_RemoveFilesFromDB (-1L,-1L,DegCod,-1L,-1L,-1L);
+   /***** Remove directories of the degree *****/
+   sprintf (PathDeg,"%s/%s/%02u/%u",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+	    (unsigned) (DegCod % 100),
+	    (unsigned) DegCod);
+   Brw_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
    sprintf (Query,"DELETE FROM deg_admin WHERE DegCod='%ld'",

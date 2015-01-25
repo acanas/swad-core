@@ -4994,10 +4994,13 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=files.CrsCod"
+                        " AND courses.CrsCod=files.Cod"
+	                " AND files.FileBrowser IN ('%u','%u')"
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentIns.Ins.InsCod,
+                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_CENTRE:
@@ -5005,20 +5008,26 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " FROM degrees,courses,files"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=files.CrsCod"
+                        " AND courses.CrsCod=files.Cod"
+	                " AND files.FileBrowser IN ('%u','%u')"
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentCtr.Ctr.CtrCod,
+                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_DEGREE:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM courses,files"
                         " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=files.CrsCod"
+                        " AND courses.CrsCod=files.Cod"
+	                " AND files.FileBrowser IN ('%u','%u')"
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentDeg.Deg.DegCod,
+                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_COURSE:

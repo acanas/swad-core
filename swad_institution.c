@@ -1364,6 +1364,7 @@ void Ins_RemoveInstitution (void)
    extern const char *Txt_Institution_X_removed;
    char Query[512];
    struct Institution Ins;
+   char PathIns[PATH_MAX+1];
 
    /***** Get institution code *****/
    if ((Ins.InsCod = Ins_GetParamOtherInsCod ()) < 0)
@@ -1379,16 +1380,14 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove information related to files in institution *****/
-      /* Remove clipboards related to the institution */
-      sprintf (Query,"DELETE FROM clipboard WHERE InsCod='%ld'",
-	       Ins.InsCod);
-      DB_QueryDELETE (Query,"can not remove clipboards in an institution");
+      Brw_RemoveInsFilesFromDB (Ins.InsCod);
 
-      /* Remove last accesses to file browsers related with this institution */
-      Brw_RemoveFileBrowserLast (Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,Ins.InsCod);
-
-      /* Remove files in the institution from database */
-      Brw_RemoveFilesFromDB (Ins.InsCod,-1L,-1L,-1L,-1L,-1L);
+      /***** Remove directories of the institution *****/
+      sprintf (PathIns,"%s/%s/%02u/%u",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	       (unsigned) (Ins.InsCod % 100),
+	       (unsigned) Ins.InsCod);
+      Brw_RemoveTree (PathIns);
 
       /***** Remove institution *****/
       sprintf (Query,"DELETE FROM institutions WHERE InsCod='%ld'",

@@ -689,12 +689,20 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
-   /***** Remove user's clipboards *****/
-   Brw_RemoveUsrClipboard (UsrDat->UsrCod);
+   /***** Remove user's clipboard in forums *****/
    For_RemoveUsrFromThrClipboard (UsrDat->UsrCod);
 
-   /***** Remove user's expanded folders *****/
-   Brw_RemoveUsrExpandedFolders (UsrDat->UsrCod);
+   /***** Remove some files of the user's from database *****/
+   Brw_RemoveUsrFilesFromDB (UsrDat->UsrCod);
+
+   /***** Remove the file tree of a user *****/
+   Acc_RemoveUsrBriefcase (UsrDat);
+   if (QuietOrVerbose == Cns_VERBOSE)
+     {
+      sprintf (Gbl.Message,Txt_Virtual_pendrive_of_THE_USER_X_has_been_removed,
+               UsrDat->FullName);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
 
    /***** Remove exams made by user in all courses *****/
    Tst_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
@@ -734,15 +742,6 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove the user from the list of users without photo *****/
    Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-   /***** Remove the file tree of a user *****/
-   Acc_RemoveUsrBriefcase (UsrDat);
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Message,Txt_Virtual_pendrive_of_THE_USER_X_has_been_removed,
-               UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-     }
-
    /***** Remove user's photo *****/
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
    if (PhotoRemoved && QuietOrVerbose == Cns_VERBOSE)
@@ -770,15 +769,9 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
   {
    char PathRelUsr[PATH_MAX+1];
 
-   /***** Remove the briefcase of the user *****/
+   /***** Remove files of the user's briefcase from disc *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
    Brw_RemoveTree (PathRelUsr);
-
-   /***** Remove files in the course from database *****/
-   Brw_RemoveFilesFromDB (-1L,-1L,-1L,-1L,-1L,UsrDat->UsrCod);
-
-   /***** Remove size of the briefcase of the user from database *****/
-   Brw_RemoveSizeOfFileTreeFromDB (-1L,-1L,UsrDat->UsrCod);
   }
 
 /*****************************************************************************/

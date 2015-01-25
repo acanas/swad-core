@@ -1409,6 +1409,7 @@ void Ctr_RemoveCentre (void)
    extern const char *Txt_Centre_X_removed;
    char Query[512];
    struct Centre Ctr;
+   char PathCtr[PATH_MAX+1];
 
    /***** Get centre code *****/
    if ((Ctr.CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
@@ -1424,16 +1425,14 @@ void Ctr_RemoveCentre (void)
    else	// Centre has no teachers ==> remove it
      {
       /***** Remove information related to files in centre *****/
-      /* Remove clipboards related to the centre */
-      sprintf (Query,"DELETE FROM clipboard WHERE CtrCod='%ld'",
-	       Ctr.CtrCod);
-      DB_QueryDELETE (Query,"can not remove clipboards in a centre");
+      Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
 
-      /* Remove last accesses to file browsers related with this centre */
-      Brw_RemoveFileBrowserLast (Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,Ctr.CtrCod);
-
-      /* Remove files in the centre from database */
-      Brw_RemoveFilesFromDB (-1L,Ctr.CtrCod,-1L,-1L,-1L,-1L);
+      /***** Remove directories of the centre *****/
+      sprintf (PathCtr,"%s/%s/%02u/%u",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (Ctr.CtrCod % 100),
+	       (unsigned) Ctr.CtrCod);
+      Brw_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
       sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",
