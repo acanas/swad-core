@@ -1392,6 +1392,7 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
 
 static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileBrowser,long CrsCod)
   {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1400,8 +1401,8 @@ static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileB
    /***** Get number of files in a file browser from database *****/
    sprintf (Query,"SELECT SUM(NumFiles)"
                   " FROM file_browser_size"
-                  " WHERE FileBrowser='%u' AND CrsCod='%ld'",
-            (unsigned) FileBrowser,CrsCod);
+                  " WHERE FileBrowser='%u' AND Cod='%ld'",
+            (unsigned) Brw_FileBrowserForDB_files[FileBrowser],CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files in a file browser");
 
    /***** Get row *****/

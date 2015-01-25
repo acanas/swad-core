@@ -39,15 +39,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.68.1 (2015/01/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.68.2 (2015/01/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-TODO: Chequear que no debe haber documentos abiertos en los grupos (no tiene sentido)
-Comprobar que no se pueden crear
 Comprobar que se pueden buscar documentos abiertos en titulaciones, centros e instituciones
 
+        Version 14.68.2:  Jan 25, 2015	Fixed bugs in search of documents.
+					Search of user's documents now extended to institution, centre and degree. (175644 lines)
         Version 14.68.1:  Jan 25, 2015	Changes in codes stores in expanded_folders table. (175618 lines)
 					7 changes necessary in database:
 UPDATE expanded_folders SET FileBrowser='3' WHERE FileBrowser='1';

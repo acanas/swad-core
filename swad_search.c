@@ -844,7 +844,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                "(files.FileBrowser IN ('%u','%u','%u')"
 	                " AND files.Cod=crs_grp.GrpCod"
 	                " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-	                " AND crs_grp.types.CrsCod=courses.CrsCod)"
+	                " AND crs_grp_types.CrsCod=courses.CrsCod)"
 	                ")"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -886,7 +886,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
   {
    extern const char *Txt_My_documents;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
+   char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*5];
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
@@ -895,81 +895,106 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Build the query *****/
-	 if (Gbl.Scope.Current == Sco_SCOPE_PLATFORM)
-	    /* Show also documents in private zone */
-	    sprintf (Query,"SELECT * FROM "
-			   "("
-			   "SELECT files.FilCod,"
-			   "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			   "degrees.DegCod,degrees.ShortName AS DegShortName,"
-			   "centres.ShortName,courses.ShortName AS CrsShortName"
-			   " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
-			   " WHERE files.PublisherUsrCod='%ld' AND %s"
-	             	   " AND "
-			   "("
-			   "(files.FileBrowser IN ('%u','%u','%u')"
-			   " AND files.Cod=courses.CrsCod)"
-			   " OR "
-			   "(files.FileBrowser IN ('%u','%u','%u')"
-			   " AND files.Cod=crs_grp.GrpCod"
-			   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			   " AND crs_grp.types.CrsCod=courses.CrsCod)"
-			   ")"
-			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " UNION "
-			   "SELECT files.FilCod,"
-			   "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			   "'-1','' AS DegShortName,'','' AS CrsShortName"
-			   " FROM files"
-			   " WHERE files.PublisherUsrCod='%ld' AND files.FileBrowser='%u' AND %s"
-			   ") AS my_files"
-			   " WHERE PathFromRoot<>''"
-			   " ORDER BY DegShortName,CrsShortName,PathFromRoot",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		     (unsigned) Brw_FILE_BRW_COMMON_CRS,
-		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
-		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-		     (unsigned) Brw_FILE_BRW_COMMON_GRP,
-		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
-		     RangeQuery,
-		     Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Brw_FILE_BRW_BRIEFCASE_USR,SearchQuery);
-	 else
-	    sprintf (Query,"SELECT files.FilCod,"
-			   "SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			   "degrees.DegCod,degrees.ShortName,"
-			   "centres.ShortName,courses.ShortName"
-			   " FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
-			   " WHERE files.PublisherUsrCod='%ld' AND %s"
-	             	   " AND "
-			   "("
-			   "(files.FileBrowser IN ('%u','%u','%u')"
-			   " AND files.Cod=courses.CrsCod)"
-			   " OR "
-			   "(files.FileBrowser IN ('%u','%u','%u')"
-			   " AND files.Cod=crs_grp.GrpCod"
-			   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-			   " AND crs_grp.types.CrsCod=courses.CrsCod)"
-			   ")"
-	                   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod=countries.CtyCod"
-			   "%s"
-			   " HAVING PathFromRoot<>''"
-			   " ORDER BY degrees.ShortName,courses.ShortName,PathFromRoot",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		     (unsigned) Brw_FILE_BRW_COMMON_CRS,
-		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
-		     (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-		     (unsigned) Brw_FILE_BRW_COMMON_GRP,
-		     (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
-		     RangeQuery);
+	 sprintf (Query,"SELECT * FROM "
+			"("
+			"SELECT files.FilCod,"	// Institution
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"'-1','' AS DegShortName,'','' AS CrsShortName"
+			" FROM files,degrees,centres,institutions,countries"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser='%u'"
+			" AND files.Cod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" UNION "
+			"SELECT files.FilCod,"	// Centre
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"'-1','' AS DegShortName,"
+			"centres.ShortName,'' AS CrsShortName"
+			" FROM files,degrees,centres,institutions,countries"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser='%u'"
+			" AND files.Cod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" UNION "
+			"SELECT files.FilCod,"	// Degree
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"degrees.DegCod,degrees.ShortName AS DegShortName,"
+			"centres.ShortName,'' AS CrsShortName"
+			" FROM files,degrees,centres,institutions,countries"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser='%u'"
+			" AND files.Cod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" UNION "
+			"SELECT files.FilCod,"	// Course
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"degrees.DegCod,degrees.ShortName AS DegShortName,"
+			"centres.ShortName,courses.ShortName AS CrsShortName"
+			" FROM files,courses,degrees,centres,institutions,countries"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser IN ('%u','%u','%u')"
+			" AND files.Cod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" UNION "
+			"SELECT files.FilCod,"	// Group
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"degrees.DegCod,degrees.ShortName AS DegShortName,"
+			"centres.ShortName,courses.ShortName AS CrsShortName"
+			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser IN ('%u','%u','%u')"
+			" AND files.Cod=crs_grp.GrpCod"
+			" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
+			" AND crs_grp_types.CrsCod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod=countries.CtyCod"
+			"%s"
+			" UNION "
+			"SELECT files.FilCod,"	// Briefcase
+			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
+			"'-1','' AS DegShortName,'','' AS CrsShortName"
+			" FROM files"
+			" WHERE files.PublisherUsrCod='%ld' AND %s"
+			" AND files.FileBrowser='%u'"
+			") AS my_files"
+			" WHERE PathFromRoot<>''"
+			" ORDER BY DegShortName,CrsShortName,PathFromRoot",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
+		  RangeQuery,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
+		  RangeQuery,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
+		  RangeQuery,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
+		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  RangeQuery,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
+		  (unsigned) Brw_FILE_BRW_COMMON_GRP,
+		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+		  RangeQuery,
+		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
+		  (unsigned) Brw_FILE_BRW_BRIEFCASE_USR);
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
