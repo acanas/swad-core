@@ -96,7 +96,7 @@ const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
   };
 */
 // Brosers types for database "files" table
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
+const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN             =  0,
    Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
@@ -1331,7 +1331,6 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char *Path,bool IsHidden);
 static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
                                       bool IsPublic,Brw_License_t License);
 
-static long Brw_GetCodForFiles (void);
 static long Brw_GetZoneUsrCodForFiles (void);
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char *Path);
@@ -6899,6 +6898,8 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
    char PathDstWithFile[PATH_MAX+1];
    struct stat FileStatus;
    struct dirent **FileList;
+   bool AdminMarks;
+   struct MarksProperties Marks;
    int NumFileInThisDir;
    int NumFilesInThisDir;
    unsigned NumLevls;
@@ -6972,16 +6973,21 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
         }
 
       /***** If the target file browser is that of marks, only HTML files are allowed *****/
-      if (Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_CRS ||
-          Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP)
+      AdminMarks = Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_CRS ||
+                   Gbl.FileBrowser.Type == Brw_FILE_BRW_ADMIN_MARKS_GRP;
+      if (AdminMarks)
+	{
          /* Check extension of the file */
-         if (!Str_FileIsHTML (FileNameOrg))
+         if (Str_FileIsHTML (FileNameOrg))
+            Mrk_CheckFileOfMarks (PathOrg,&Marks);	// Gbl.Message contains feedback text
+         else
            {
             sprintf (Gbl.Message,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
                      FileNameToShow);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
             return false;
            }
+	}
 
       /***** Update and check the quota before copying the file *****/
       Gbl.FileBrowser.Size.NumFiles++;
@@ -7003,6 +7009,10 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
                                 PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
       if (*FirstFilCod <= 0)
 	 *FirstFilCod = FilCod;
+
+      /* Add a new entry of marks into database */
+      if (AdminMarks)
+	 Mrk_AddMarksToDB (FilCod,&Marks);
 
       if (FileType == Brw_IS_FILE)
 	 (*NumFilesPasted)++;
@@ -9262,7 +9272,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 
    /***** Get metadata of a file from database *****/
    sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
-	          ",PublisherUsrCod,FileType,Path,Hidden,Public,License"
+	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
                   " WHERE FilCod='%ld'",
             FileMetadata->FilCod);
@@ -9655,7 +9665,7 @@ static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
 /**** Get code of institution, degree, course, group for expanded folders ****/
 /*****************************************************************************/
 
-static long Brw_GetCodForFiles (void)
+long Brw_GetCodForFiles (void)
   {
    switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
      {
@@ -9705,24 +9715,25 @@ static long Brw_GetZoneUsrCodForFiles (void)
 /******** Get code of user in assignment / works for expanded folders ********/
 /*****************************************************************************/
 
-void Brw_GetCrsGrpFromFileMetadata (struct FileMetadata *FileMetadata,long *CrsCod,long *GrpCod)
+void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
+                                    long *CrsCod,long *GrpCod)
   {
    struct GroupData GrpDat;
 
-   switch (FileMetadata->FileBrowser)
+   switch (FileBrowser)
      {
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
       case Brw_FILE_BRW_WORKS_USR:
       case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-	 *CrsCod = FileMetadata->Cod;
+	 *CrsCod = Cod;
 	 *GrpCod = -1L;
 	 break;
       case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
       case Brw_FILE_BRW_ADMIN_MARKS_GRP:
-	 *GrpCod = GrpDat.GrpCod = FileMetadata->Cod;
+	 *GrpCod = GrpDat.GrpCod = Cod;
 	 Grp_GetDataOfGroupByCod (&GrpDat);
 	 *CrsCod = GrpDat.CrsCod;
 	 break;
@@ -10327,7 +10338,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
      {
       BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
-      Brw_GetCrsGrpFromFileMetadata (&FileMetadata,&CrsCod,&GrpCod);
+      Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
       if (CrsCod > 0 && CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
 	 BgColor = VERY_LIGHT_BLUE;
 

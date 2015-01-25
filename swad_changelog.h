@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.67 (2015/01/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.67.1 (2015/01/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.67.1:  Jan 25, 2015	Fixed bugs in file browsers. (175395 lines)
         Version 14.67:    Jan 25, 2015	Changes in files table. (175369 lines)
 					16 changes necessary in database:
 ALTER TABLE files ADD COLUMN ZoneUsrCod2 INT NOT NULL DEFAULT -1 AFTER FileBrowser;

@@ -38450,17 +38450,17 @@ const char *Txt_The_email_address_X_matches_the_one_you_had_previously_registere
 
 const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Necessita traduccio
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";	// Necessita traduccio
 #elif L==1
 	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Need Übersetzung
 #elif L==2
 	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";
 #elif L==3
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";
 #elif L==4
 	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Besoin de traduction
 #elif L==5
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora obligatoria.";	// Okoteve traducción
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";	// Okoteve traducción
 #elif L==6
 	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora obbligatoria.";
 #elif L==7
@@ -38471,17 +38471,17 @@ const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandator
 
 const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Necessita traduccio
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";	// Necessita traduccio
 #elif L==1
 	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Need Übersetzung
 #elif L==2
 	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";
 #elif L==3
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";
 #elif L==4
 	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Besoin de traduction
 #elif L==5
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> es ahora voluntaria.";	// Okoteve traducción
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";	// Okoteve traducción
 #elif L==6
 	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora volontaria.";
 #elif L==7
@@ -39546,7 +39546,7 @@ const char *Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed =	
 const char *Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
 #if   L==0
 	"El n&ordm; m&aacute;ximo de estudiantes"
-	" del grupo <strong>%s</strong> es ahora <strong>%u</strong>.";	// Necessita traduccio
+	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";	// Necessita traduccio
 #elif L==1
 	"The maximum number of students"
 	" in the group <strong>%s</strong> is now <strong>%u</strong>.";	// Need Übersetzung
@@ -39555,13 +39555,13 @@ const char *Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y =	// Warn
 	" in the group <strong>%s</strong> is now <strong>%u</strong>.";
 #elif L==3
 	"El n&ordm; m&aacute;ximo de estudiantes"
-	" del grupo <strong>%s</strong> es ahora <strong>%u</strong>.";
+	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";
 #elif L==4
 	"The maximum number of students"
 	" in the group <strong>%s</strong> is now <strong>%u</strong>.";	// Besoin de traduction
 #elif L==5
 	"El n&ordm; m&aacute;ximo de estudiantes"
-	" del grupo <strong>%s</strong> es ahora <strong>%u</strong>.";		// Okoteve traducción
+	" del grupo <strong>%s</strong> ahora es <strong>%u</strong>.";		// Okoteve traducción
 #elif L==6
 	"Il numero massimo di studenti"
 	" nel gruppo <strong>%s</strong> &egrave; ora <strong>%u</strong>.";
@@ -40517,17 +40517,17 @@ const char *Txt_The_number_of_questions_must_be_in_the_interval_X =	// Warning: 
 
 const char *Txt_The_number_of_rows_is_now_X =	// Warning: it is very important to include %u in the following sentences
 #if   L==0
-	"El n&uacute;mero de filas es ahora <strong>%u</strong>.";	// Necessita traduccio
+	"El n&uacute;mero de filas ahora es <strong>%u</strong>.";	// Necessita traduccio
 #elif L==1
 	"Die Anzahl der Zeilen ist jetzt <strong>%u</strong>.";
 #elif L==2
 	"The number of rows is now <strong>%u</strong>.";
 #elif L==3
-	"El n&uacute;mero de filas es ahora <strong>%u</strong>.";
+	"El n&uacute;mero de filas ahora es <strong>%u</strong>.";
 #elif L==4
 	"The number of rows is now <strong>%u</strong>.";		// Besoin de traduction
 #elif L==5
-	"El n&uacute;mero de filas es ahora <strong>%u</strong>.";	// Okoteve traducción
+	"El n&uacute;mero de filas ahora es <strong>%u</strong>.";	// Okoteve traducción
 #elif L==6
 	"Il numero di righe &egrave; ora <strong>%u</strong>.";
 #elif L==7

@@ -3867,7 +3867,7 @@ int swad__getFile (struct soap *soap,
 	                        "The file requested does not exists");
 
    /***** Set course and group codes *****/
-   Brw_GetCrsGrpFromFileMetadata (&FileMetadata,
+   Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
                                   &Gbl.CurrentCrs.Crs.CrsCod,
                                   &Gbl.CurrentCrs.Grps.GrpCod);
 
@@ -4004,7 +4004,7 @@ int swad__getMarks (struct soap *soap,
 	                          "You can not get marks from this file");
 
    /***** Set course and group codes *****/
-   Brw_GetCrsGrpFromFileMetadata (&FileMetadata,
+   Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
                                   &Gbl.CurrentCrs.Crs.CrsCod,
                                   &Gbl.CurrentCrs.Grps.GrpCod);
 

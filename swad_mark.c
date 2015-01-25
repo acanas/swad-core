@@ -180,6 +180,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
   {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFiles ();
    char Query[512+PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -188,12 +190,12 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    /***** Get number of rows of header and footer from database *****/
    sprintf (Query,"SELECT marks_properties.%s,marks_properties.%s"
 	          " FROM files,marks_properties"
-                  " WHERE files.CrsCod='%ld' AND files.GrpCod='%ld' AND files.Path='%s'"
+                  " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.Path='%s'"
                   " AND files.FilCod=marks_properties.FilCod",
             Mrk_HeadOrFootStr[Brw_HEADER],
             Mrk_HeadOrFootStr[Brw_FOOTER],
-            Gbl.CurrentCrs.Crs.CrsCod,
-	    Gbl.CurrentCrs.Grps.GrpCod,
+            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+            Cod,
 	    Gbl.FileBrowser.Priv.FullPathInTree);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the number of rows in header and footer");
 
@@ -245,8 +247,10 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[10+1];
+   long Cod;
    char Query[512+PATH_MAX];
    unsigned NumRows;
 
@@ -258,15 +262,18 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/
+      Cod = Brw_GetCodForFiles ();
       sprintf (Query,"UPDATE marks_properties,files"
 	             " SET marks_properties.%s='%u'"
-	             " WHERE files.CrsCod='%ld' AND files.GrpCod='%ld' AND files.Path='%s'"
+	             " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.Path='%s'"
 	             " AND files.FilCod=marks_properties.FilCod",
                Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-               Gbl.CurrentCrs.Crs.CrsCod,
-               Gbl.CurrentCrs.Grps.GrpCod,
+               (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+               Cod,
                Gbl.FileBrowser.Priv.FullPathInTree);
       DB_QueryUPDATE (Query,"can not update properties of marks");
+
+      Lay_ShowAlert (Lay_INFO,Query);
 
       /***** Write message of success *****/
       sprintf (Gbl.Message,Txt_The_number_of_rows_is_now_X,
@@ -648,6 +655,9 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData UsrDat;
+   unsigned UnsignedNum;
+   Brw_FileBrowser_t FileBrowser;
+   long Cod;
    long CrsCod;
    long GrpCod;
    struct MarksProperties Marks;
@@ -672,7 +682,7 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
    ID_GetListIDsFromUsrCod (&UsrDat);
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT files.CrsCod,files.GrpCod,files.Path,"
+   sprintf (Query,"SELECT files.FileBrowser,files.Cod,files.Path,"
 	          "marks_properties.Header,marks_properties.Footer"
 	          " FROM files,marks_properties"
 	          " WHERE files.FilCod='%ld'"
@@ -687,11 +697,15 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
             /***** Get data of this file of marks *****/
             row = mysql_fetch_row (mysql_res);
 
-            /* Course code (row[0]) */
-            CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /* Get file browser type in database (row[0]) */
+	    FileBrowser = Brw_FILE_BRW_UNKNOWN;
+	    if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	       if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
+		  FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
 
-            /* Group code (row[1]) */
-            GrpCod = Str_ConvertStrCodToLongCod (row[1]);
+            /* Course/group code (row[1]) */
+            Cod = Str_ConvertStrCodToLongCod (row[1]);
+            Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,&CrsCod,&GrpCod);
 
             /* Path (row[2]) */
             strncpy (FullPathInTreeFromDBMarksTable,row[2],PATH_MAX);

@@ -621,7 +621,7 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    FileMetadata.FilCod = Cod;
             Brw_GetFileMetadataByCod (&FileMetadata);
-            Brw_GetCrsGrpFromFileMetadata (&FileMetadata,&CrsCod,&GrpCod);
+            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
 	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
 						  PathUntilFileName,
 						  FileName);
