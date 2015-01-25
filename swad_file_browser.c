@@ -151,27 +151,27 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    Brw_FILE_BRW_UNKNOWN,		// Brw_FILE_BRW_UNKNOWN
-   Brw_FILE_BRW_SEE_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
-   Brw_FILE_BRW_SEE_MARKS_CRS,		// Brw_FILE_BRW_SEE_MARKS_CRS
-   Brw_FILE_BRW_SEE_DOCUMENTS_CRS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_SEE_MARKS_CRS
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
    Brw_FILE_BRW_COMMON_CRS,		// Brw_FILE_BRW_COMMON_CRS
    Brw_FILE_BRW_COMMON_GRP,		// Brw_FILE_BRW_COMMON_GRP
    Brw_FILE_BRW_WORKS_USR,		// Brw_FILE_BRW_WORKS_USR
    Brw_FILE_BRW_WORKS_CRS,		// Brw_FILE_BRW_WORKS_CRS
-   Brw_FILE_BRW_SEE_MARKS_CRS,		// Brw_FILE_BRW_ADMIN_MARKS_CRS
+   Brw_FILE_BRW_ADMIN_MARKS_CRS,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
    Brw_FILE_BRW_BRIEFCASE_USR,		// Brw_FILE_BRW_BRIEFCASE_USR
-   Brw_FILE_BRW_SEE_DOCUMENTS_GRP,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
-   Brw_FILE_BRW_SEE_DOCUMENTS_GRP,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
-   Brw_FILE_BRW_SEE_MARKS_GRP,		// Brw_FILE_BRW_SEE_MARKS_GRP
-   Brw_FILE_BRW_SEE_MARKS_GRP,		// Brw_FILE_BRW_ADMIN_MARKS_GRP
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_SEE_MARKS_GRP
+   Brw_FILE_BRW_ADMIN_MARKS_GRP,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
    Brw_FILE_BRW_ASSIGNMENTS_USR,	// Brw_FILE_BRW_ASSIGNMENTS_USR
    Brw_FILE_BRW_ASSIGNMENTS_CRS,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
-   Brw_FILE_BRW_SEE_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   Brw_FILE_BRW_SEE_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
-   Brw_FILE_BRW_SEE_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   Brw_FILE_BRW_SEE_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
-   Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   Brw_FILE_BRW_SEE_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
+   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
   };
 // Browsers types for database "file_browser_last" table
 // Assignments and works are stored as one in file_browser_last...
@@ -3513,7 +3513,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser='%u' AND Cod='%ld'",
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_INS,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of an institution");
 
@@ -3565,7 +3565,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser='%u' AND Cod='%ld'",
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_CTR,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a centre");
 
@@ -3617,7 +3617,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser='%u' AND Cod='%ld'",
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_DEG,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a degree");
 
@@ -3685,13 +3685,13 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')"
 		  " AND Cod='%ld'",
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_CRS,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
 	    (unsigned) Brw_FILE_BRW_COMMON_CRS,
 	    (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
 	    (unsigned) Brw_FILE_BRW_ASSIGNMENTS_CRS,
 	    (unsigned) Brw_FILE_BRW_WORKS_USR,
 	    (unsigned) Brw_FILE_BRW_WORKS_CRS,
-	    (unsigned) Brw_FILE_BRW_SEE_MARKS_CRS,
+	    (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a course");
 
@@ -3779,9 +3779,9 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
 		  " WHERE FileBrowser IN ('%u','%u','%u')"
 		  " AND Cod='%ld'",
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_GRP,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
 	    (unsigned) Brw_FILE_BRW_COMMON_GRP,
-	    (unsigned) Brw_FILE_BRW_SEE_MARKS_GRP,
+	    (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
 	    GrpCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a group");
 
@@ -3844,17 +3844,17 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod)
                   " AND Cod IN (SELECT GrpCod FROM crs_grp WHERE CrsCod='%ld'))"
                   ")",
             UsrCod,
-            (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_CRS,
+            (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
             (unsigned) Brw_FILE_BRW_COMMON_CRS,
             (unsigned) Brw_FILE_BRW_ASSIGNMENTS_USR,
             (unsigned) Brw_FILE_BRW_ASSIGNMENTS_CRS,
             (unsigned) Brw_FILE_BRW_WORKS_USR,
             (unsigned) Brw_FILE_BRW_WORKS_CRS,
-            (unsigned) Brw_FILE_BRW_SEE_MARKS_CRS,
+            (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
 	    CrsCod,
-	    (unsigned) Brw_FILE_BRW_SEE_DOCUMENTS_GRP,
+	    (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
             (unsigned) Brw_FILE_BRW_COMMON_GRP,
-            (unsigned) Brw_FILE_BRW_SEE_MARKS_GRP,
+            (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove expanded folders for a user in a course");
 
@@ -6683,23 +6683,23 @@ static long Brw_GetCodForExpandedFolders (void)
   {
    switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_INS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_INS:
 	 return Gbl.CurrentIns.Ins.InsCod;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CTR:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR:
 	 return Gbl.CurrentCtr.Ctr.CtrCod;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_DEG:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG:
 	 return Gbl.CurrentDeg.Deg.DegCod;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_CRS:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
       case Brw_FILE_BRW_COMMON_CRS:
       case Brw_FILE_BRW_ASSIGNMENTS_USR:
       case Brw_FILE_BRW_ASSIGNMENTS_CRS:
       case Brw_FILE_BRW_WORKS_USR:
       case Brw_FILE_BRW_WORKS_CRS:
-      case Brw_FILE_BRW_SEE_MARKS_CRS:
+      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
 	 return Gbl.CurrentCrs.Crs.CrsCod;
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
+      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
       case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
+      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
 	 return Gbl.CurrentCrs.Grps.GrpCod;
       default:
          return -1L;
