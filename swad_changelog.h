@@ -44,7 +44,6 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-TODO: Change the way of computing total sizes of file browsers.
         Version 14.70:    Jan 26, 2015	Fixed bugs in statistics about sizes of file browsers.
                                         Statistics about sizes of group zones.
                                         New scope (country) in statistics about sizes of file browsers. (176181 lines)
