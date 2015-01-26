@@ -1,7 +1,7 @@
-// swad_convert_briefcases.c
+// swad_convert_BRIEFs.c
 // Created on: 26/11/2013
 // Author: Antonio Cañas Vargas
-// Compile with: gcc -Wall -O1 swad_convert_briefcases.c -o swad_convert_briefcases -lmysqlclient -L/usr/lib64/mysql
+// Compile with: gcc -Wall -O1 swad_convert_BRIEFs.c -o swad_convert_BRIEFs -lmysqlclient -L/usr/lib64/mysql
 
 #include <mysql/mysql.h>
 #include <limits.h>

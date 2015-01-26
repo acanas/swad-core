@@ -210,7 +210,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_My_documents;
-   extern const char *Txt_Documents_in_my_courses;
+   extern const char *Txt_DOCUM_in_my_courses;
    extern const char *Txt_Open_documents;
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
@@ -224,7 +224,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],// Sch_SEARCH_STUDENTS
         Txt_ROLES_PLURAL_Abc[Rol_ROLE_GUEST  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
 	Txt_Open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
-	Txt_Documents_in_my_courses,				// Sch_SEARCH_DOCUMENTS_IN_MY_COURSES
+	Txt_DOCUM_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
 	Txt_My_documents,					// Sch_SEARCH_MY_DOCUMENTS
      };
    Sch_WhatToSearch_t WhatToSearch;
@@ -300,7 +300,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x100,	// Sch_SEARCH_STUDENTS			Only for superusers
       0x100,	// Sch_SEARCH_GUESTS			Only for superusers
       0x1FF,	// Sch_SEARCH_OPEN_DOCUMENTS
-      0x1FE,	// Sch_SEARCH_DOCUMENTS_IN_MY_COURSES	Only if I am logged
+      0x1FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
       0x1FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
      };
 
@@ -571,7 +571,7 @@ static void Sch_SearchInDB (void)
       case Sch_SEARCH_OPEN_DOCUMENTS:
 	 NumResults = Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 break;
-      case Sch_SEARCH_DOCUMENTS_IN_MY_COURSES:
+      case Sch_SEARCH_DOCUM_IN_MY_COURSES:
 	 NumResults = Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_MY_DOCUMENTS:
@@ -825,17 +825,17 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			" WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
+		  (unsigned) Brw_ADMI_DOCUM_INS,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
+		  (unsigned) Brw_ADMI_DOCUM_CTR,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
+		  (unsigned) Brw_ADMI_DOCUM_DEG,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
@@ -853,13 +853,13 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
   {
-   extern const char *Txt_Documents_in_my_courses;
+   extern const char *Txt_DOCUM_in_my_courses;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
    char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*2];
    unsigned NumDocs;
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DOCUMENTS_IN_MY_COURSES))
+   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DOCUM_IN_MY_COURSES))
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(files.Path,'/',-1)",
 				"_latin1 "," COLLATE latin1_general_ci"))
@@ -872,9 +872,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" AND crs_usr.CrsCod=files.Cod"
 			" AND files.FileBrowser IN ('%u','%u','%u')",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS);
+		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
+		  (unsigned) Brw_ADMI_MARKS_CRS);
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
 	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_grp (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
@@ -883,9 +883,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" AND crs_grp_usr.GrpCod=files.Cod"
 			" AND files.FileBrowser IN ('%u','%u','%u')",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-		  (unsigned) Brw_FILE_BRW_COMMON_GRP,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP);
+		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_SHARE_GRP,
+		  (unsigned) Brw_ADMI_MARKS_GRP);
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 if (mysql_query (&Gbl.mysql,Query))
@@ -933,20 +933,20 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                " WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
+		  (unsigned) Brw_ADMI_MARKS_CRS,
 		  RangeQuery,
 		  SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-		  (unsigned) Brw_FILE_BRW_COMMON_GRP,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_SHARE_GRP,
+		  (unsigned) Brw_ADMI_MARKS_GRP,
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 NumDocs = Brw_ListDocsFound (Query,Txt_Documents_in_my_courses);
+	 NumDocs = Brw_ListDocsFound (Query,Txt_DOCUM_in_my_courses);
 
 	 /***** Drop temporary table *****/
 	 sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
@@ -1073,26 +1073,26 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			" WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_INS,
+		  (unsigned) Brw_ADMI_DOCUM_INS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR,
+		  (unsigned) Brw_ADMI_DOCUM_CTR,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG,
+		  (unsigned) Brw_ADMI_DOCUM_DEG,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_CRS,
+		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
+		  (unsigned) Brw_ADMI_MARKS_CRS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-		  (unsigned) Brw_FILE_BRW_COMMON_GRP,
-		  (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_SHARE_GRP,
+		  (unsigned) Brw_ADMI_MARKS_GRP,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
-		  (unsigned) Brw_FILE_BRW_BRIEFCASE_USR);
+		  (unsigned) Brw_ADMI_BRIEF_USR);
 
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
@@ -1134,7 +1134,7 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
       switch (Gbl.Search.WhatToSearch)
         {
 	 case Sch_SEARCH_OPEN_DOCUMENTS:
-	 case Sch_SEARCH_DOCUMENTS_IN_MY_COURSES:
+	 case Sch_SEARCH_DOCUM_IN_MY_COURSES:
 	 case Sch_SEARCH_MY_DOCUMENTS:
 	    SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWord);
 	    break;

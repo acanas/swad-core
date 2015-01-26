@@ -4462,15 +4462,15 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    extern const char *Txt_Virtual_pendrives;
    static const Brw_FileBrowser_t StatCrsFileZones[Sta_NUM_STAT_CRS_FILE_ZONES] =
      {
-      Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-      Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-      Brw_FILE_BRW_COMMON_CRS,
-      Brw_FILE_BRW_COMMON_GRP,
-      Brw_FILE_BRW_ADMIN_MARKS_CRS,
-      Brw_FILE_BRW_ADMIN_MARKS_GRP,
-      Brw_FILE_BRW_ASSIGNMENTS_USR,
-      Brw_FILE_BRW_WORKS_USR,
-      Brw_FILE_BRW_UNKNOWN,
+      Brw_ADMI_DOCUM_CRS,
+      Brw_ADMI_DOCUM_GRP,
+      Brw_ADMI_SHARE_CRS,
+      Brw_ADMI_SHARE_GRP,
+      Brw_ADMI_MARKS_CRS,
+      Brw_ADMI_MARKS_GRP,
+      Brw_ADMI_ASSIG_USR,
+      Brw_ADMI_WORKS_USR,
+      Brw_UNKNOWN,
      };
    unsigned NumStat;
 
@@ -4490,7 +4490,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    Sta_WriteStatsExpTreesTableHead ();
 
    /***** Write size of briefcases *****/
-   Sta_WriteRowStatsExpTrees (Brw_FILE_BRW_BRIEFCASE_USR,Txt_Virtual_pendrives);
+   Sta_WriteRowStatsExpTrees (Brw_ADMI_BRIEF_USR,Txt_Virtual_pendrives);
 
    /***** End table *****/
    Lay_EndRoundFrameTable10 ();
@@ -4582,9 +4582,9 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
    char StrNumFilesPerCrs[10+1];
    char StrNumFilesPerUsr[10+1];
    struct Sta_SizeOfFileZones SizeOfFileZones;
-   char *ClassData = (FileZone == Brw_FILE_BRW_UNKNOWN) ? "DAT_N" :
+   char *ClassData = (FileZone == Brw_UNKNOWN) ? "DAT_N" :
 	                                                  "DAT";
-   char *StyleTableCell = (FileZone == Brw_FILE_BRW_UNKNOWN) ? " border-style:solid none none none;"
+   char *StyleTableCell = (FileZone == Brw_UNKNOWN) ? " border-style:solid none none none;"
 	                                                       " border-width:1px;" :
 	                                                       "";
 
@@ -4705,18 +4705,18 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
    switch (Scope)
      {
       case Sco_SCOPE_PLATFORM:
-         if (FileBrowser == Brw_FILE_BRW_UNKNOWN)
+         if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),'-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser<>'%u'",
-                     (unsigned) Brw_FILE_BRW_BRIEFCASE_USR);
-         else if (FileBrowser == Brw_FILE_BRW_BRIEFCASE_USR)
+                     (unsigned) Brw_ADMI_BRIEF_USR);
+         else if (FileBrowser == Brw_ADMI_BRIEF_USR)
             sprintf (Query,"SELECT '-1',COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'",
                      (unsigned) FileBrowser);
-         else if (FileBrowser == Brw_FILE_BRW_ASSIGNMENTS_USR ||
-                  FileBrowser == Brw_FILE_BRW_WORKS_USR)
+         else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
+                  FileBrowser == Brw_ADMI_WORKS_USR)
             sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'",
@@ -4728,7 +4728,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                      (unsigned) FileBrowser);
          break;
       case Sco_SCOPE_INSTITUTION:
-         if (FileBrowser == Brw_FILE_BRW_UNKNOWN)
+         if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM centres,degrees,courses,file_browser_size"
                            " WHERE centres.InsCod='%ld'"
@@ -4736,7 +4736,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=file_browser_size.CrsCod",
                      Gbl.CurrentIns.Ins.InsCod);
-         else if (FileBrowser == Brw_FILE_BRW_BRIEFCASE_USR)
+         else if (FileBrowser == Brw_ADMI_BRIEF_USR)
             sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,centres,degrees,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4746,8 +4746,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND file_browser_size.UsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
-         else if (FileBrowser == Brw_FILE_BRW_ASSIGNMENTS_USR ||
-                  FileBrowser == Brw_FILE_BRW_WORKS_USR)
+         else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
+                  FileBrowser == Brw_ADMI_WORKS_USR)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,centres,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4767,14 +4767,14 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                      (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CENTRE:
-         if (FileBrowser == Brw_FILE_BRW_UNKNOWN)
+         if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM degrees,courses,file_browser_size"
                            " WHERE degrees.CtrCod='%ld'"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=file_browser_size.CrsCod",
                      Gbl.CurrentCtr.Ctr.CtrCod);
-         else if (FileBrowser == Brw_FILE_BRW_BRIEFCASE_USR)
+         else if (FileBrowser == Brw_ADMI_BRIEF_USR)
             sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,degrees,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4783,8 +4783,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND file_browser_size.UsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
-         else if (FileBrowser == Brw_FILE_BRW_ASSIGNMENTS_USR ||
-                  FileBrowser == Brw_FILE_BRW_WORKS_USR)
+         else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
+                  FileBrowser == Brw_ADMI_WORKS_USR)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4802,12 +4802,12 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                      (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEGREE:
-         if (FileBrowser == Brw_FILE_BRW_UNKNOWN)
+         if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses"
                            " WHERE courses.DegCod='%ld' AND courses.CrsCod=file_browser_size.CrsCod",
                      Gbl.CurrentDeg.Deg.DegCod);
-         else if (FileBrowser == Brw_FILE_BRW_BRIEFCASE_USR)
+         else if (FileBrowser == Brw_ADMI_BRIEF_USR)
             sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4815,8 +4815,8 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND file_browser_size.UsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
-         else if (FileBrowser == Brw_FILE_BRW_ASSIGNMENTS_USR ||
-                  FileBrowser == Brw_FILE_BRW_WORKS_USR)
+         else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
+                  FileBrowser == Brw_ADMI_WORKS_USR)
             sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
@@ -4832,20 +4832,20 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
                      (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_COURSE:
-         if (FileBrowser == Brw_FILE_BRW_UNKNOWN)
+         if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT '1','-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE CrsCod='%ld'",
                      Gbl.CurrentCrs.Crs.CrsCod);
-         else if (FileBrowser == Brw_FILE_BRW_BRIEFCASE_USR)
+         else if (FileBrowser == Brw_ADMI_BRIEF_USR)
             sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND crs_usr.CrsCod='%ld'"
                            " AND file_browser_size.UsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
-         else if (FileBrowser == Brw_FILE_BRW_ASSIGNMENTS_USR ||
-                  FileBrowser == Brw_FILE_BRW_WORKS_USR)
+         else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
+                  FileBrowser == Brw_ADMI_WORKS_USR)
             sprintf (Query,"SELECT '1',COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'"
@@ -4999,8 +4999,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+                  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_CENTRE:
@@ -5013,8 +5013,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+                  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_DEGREE:
@@ -5026,8 +5026,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " AND files.License='%u'"
                         " GROUP BY files.Public",
                   Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,
-		  (unsigned) Brw_FILE_BRW_COMMON_CRS,
+                  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
       case Sco_SCOPE_COURSE:
@@ -5077,7 +5077,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
-   extern const char *Txt_Average_number_BR_of_assignments_BR_per_course;
+   extern const char *Txt_Average_number_BR_of_ASSIG_BR_per_course;
    extern const char *Txt_Number_of_BR_notifications;
    unsigned NumAssignments;
    unsigned NumNotif;
@@ -5110,7 +5110,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
                       "</tr>",
             Txt_Number_of_BR_assignments,
             Txt_Number_of_BR_courses_with_BR_assignments,
-            Txt_Average_number_BR_of_assignments_BR_per_course,
+            Txt_Average_number_BR_of_ASSIG_BR_per_course,
             Txt_Number_of_BR_notifications);
 
    /***** Write number of assignments *****/

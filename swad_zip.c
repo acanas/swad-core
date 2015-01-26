@@ -54,28 +54,28 @@
 
 const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   ActUnk,		// Brw_FILE_BRW_UNKNOWN
-   ActZIPSeeDocCrs,	// Brw_FILE_BRW_SEE_DOCUMENTS_CRS
-   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_CRS
-   ActZIPAdmDocCrs,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
-   ActZIPComCrs,	// Brw_FILE_BRW_COMMON_CRS
-   ActZIPComGrp,	// Brw_FILE_BRW_COMMON_GRP
-   ActZIPWrkUsr,	// Brw_FILE_BRW_WORKS_USR
-   ActZIPWrkCrs,	// Brw_FILE_BRW_WORKS_CRS
-   ActZIPAdmMrkCrs,	// Brw_FILE_BRW_ADMIN_MARKS_CRS
-   ActZIPBrf,		// Brw_FILE_BRW_BRIEFCASE_USR
-   ActZIPSeeDocGrp,	// Brw_FILE_BRW_SEE_DOCUMENTS_GRP
-   ActZIPAdmDocGrp,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
-   ActUnk,		// Brw_FILE_BRW_SEE_MARKS_GRP
-   ActZIPAdmMrkGrp,	// Brw_FILE_BRW_ADMIN_MARKS_GRP
-   ActZIPAsgUsr,	// Brw_FILE_BRW_ASSIGNMENTS_USR
-   ActZIPAsgCrs,	// Brw_FILE_BRW_ASSIGNMENTS_CRS
-   ActZIPSeeDocDeg,	// Brw_FILE_BRW_SEE_DOCUMENTS_DEG
-   ActZIPAdmDocDeg,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
-   ActZIPSeeDocCtr,	// Brw_FILE_BRW_SEE_DOCUMENTS_CTR
-   ActZIPAdmDocCtr,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
-   ActZIPSeeDocIns,	// Brw_FILE_BRW_SEE_DOCUMENTS_INS
-   ActZIPAdmDocIns,	// Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+   ActUnk,		// Brw_UNKNOWN
+   ActZIPSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
+   ActUnk,		// Brw_SHOW_MARKS_CRS
+   ActZIPAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
+   ActZIPComCrs,	// Brw_ADMI_SHARE_CRS
+   ActZIPComGrp,	// Brw_ADMI_SHARE_GRP
+   ActZIPWrkUsr,	// Brw_ADMI_WORKS_USR
+   ActZIPWrkCrs,	// Brw_ADMI_WORKS_CRS
+   ActZIPAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
+   ActZIPBrf,		// Brw_ADMI_BRIEF_USR
+   ActZIPSeeDocGrp,	// Brw_SHOW_DOCUM_GRP
+   ActZIPAdmDocGrp,	// Brw_ADMI_DOCUM_GRP
+   ActUnk,		// Brw_SHOW_MARKS_GRP
+   ActZIPAdmMrkGrp,	// Brw_ADMI_MARKS_GRP
+   ActZIPAsgUsr,	// Brw_ADMI_ASSIG_USR
+   ActZIPAsgCrs,	// Brw_ADMI_ASSIG_CRS
+   ActZIPSeeDocDeg,	// Brw_SHOW_DOCUM_DEG
+   ActZIPAdmDocDeg,	// Brw_ADMI_DOCUM_DEG
+   ActZIPSeeDocCtr,	// Brw_SHOW_DOCUM_CTR
+   ActZIPAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
+   ActZIPSeeDocIns,	// Brw_SHOW_DOCUM_INS
+   ActZIPAdmDocIns,	// Brw_ADMI_DOCUM_INS
   };
 
 /*****************************************************************************/
@@ -286,15 +286,15 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    Act_FormStart (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_FILE_BRW_SEE_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_SEE_MARKS_GRP:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+      case Brw_SHOW_DOCUM_GRP:
+      case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_SHARE_GRP:
+      case Brw_SHOW_MARKS_GRP:
+      case Brw_ADMI_MARKS_GRP:
 	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
 	 break;
-      case Brw_FILE_BRW_ASSIGNMENTS_CRS:
-      case Brw_FILE_BRW_WORKS_CRS:
+      case Brw_ADMI_ASSIG_CRS:
+      case Brw_ADMI_WORKS_CRS:
 	 Usr_PutHiddenParUsrCodAll (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
@@ -449,13 +449,13 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    struct stat FileStatus;
    Brw_FileType_t FileType;
    bool Hidden;
-   bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_INS ||
-                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CTR ||
-                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_DEG ||
-                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_CRS ||
-                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_DOCUMENTS_GRP;
-   bool SeeMarks    = Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_MARKS_CRS ||
-                      Gbl.FileBrowser.Type == Brw_FILE_BRW_SEE_MARKS_GRP;
+   bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_INS ||
+                      Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CTR ||
+                      Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_DEG ||
+                      Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CRS ||
+                      Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_GRP;
+   bool SeeMarks    = Gbl.FileBrowser.Type == Brw_SHOW_MARKS_CRS ||
+                      Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP;
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/

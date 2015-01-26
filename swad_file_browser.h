@@ -39,28 +39,28 @@
 // The following types are stored in clipboard, expanded_folders, file_browser_size tables as numeric fields, so don't change numbers!
 typedef enum
   {
-   Brw_FILE_BRW_UNKNOWN             =  0,
-   Brw_FILE_BRW_SEE_DOCUMENTS_CRS   =  1,
-   Brw_FILE_BRW_SEE_MARKS_CRS       =  2,
-   Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS =  3,
-   Brw_FILE_BRW_COMMON_CRS          =  4,
-   Brw_FILE_BRW_COMMON_GRP          =  5,
-   Brw_FILE_BRW_WORKS_USR           =  6,
-   Brw_FILE_BRW_WORKS_CRS           =  7,
-   Brw_FILE_BRW_ADMIN_MARKS_CRS     =  8,
-   Brw_FILE_BRW_BRIEFCASE_USR       =  9,
-   Brw_FILE_BRW_SEE_DOCUMENTS_GRP   = 10,
-   Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP = 11,
-   Brw_FILE_BRW_SEE_MARKS_GRP       = 12,
-   Brw_FILE_BRW_ADMIN_MARKS_GRP     = 13,
-   Brw_FILE_BRW_ASSIGNMENTS_USR     = 14,
-   Brw_FILE_BRW_ASSIGNMENTS_CRS     = 15,
-   Brw_FILE_BRW_SEE_DOCUMENTS_DEG   = 16,
-   Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG = 17,
-   Brw_FILE_BRW_SEE_DOCUMENTS_CTR   = 18,
-   Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR = 19,
-   Brw_FILE_BRW_SEE_DOCUMENTS_INS   = 20,
-   Brw_FILE_BRW_ADMIN_DOCUMENTS_INS = 21,
+   Brw_UNKNOWN        =  0,
+   Brw_SHOW_DOCUM_CRS =  1,
+   Brw_SHOW_MARKS_CRS =  2,
+   Brw_ADMI_DOCUM_CRS =  3,
+   Brw_ADMI_SHARE_CRS =  4,
+   Brw_ADMI_SHARE_GRP =  5,
+   Brw_ADMI_WORKS_USR =  6,
+   Brw_ADMI_WORKS_CRS =  7,
+   Brw_ADMI_MARKS_CRS =  8,
+   Brw_ADMI_BRIEF_USR =  9,
+   Brw_SHOW_DOCUM_GRP = 10,
+   Brw_ADMI_DOCUM_GRP = 11,
+   Brw_SHOW_MARKS_GRP = 12,
+   Brw_ADMI_MARKS_GRP = 13,
+   Brw_ADMI_ASSIG_USR = 14,
+   Brw_ADMI_ASSIG_CRS = 15,
+   Brw_SHOW_DOCUM_DEG = 16,
+   Brw_ADMI_DOCUM_DEG = 17,
+   Brw_SHOW_DOCUM_CTR = 18,
+   Brw_ADMI_DOCUM_CTR = 19,
+   Brw_SHOW_DOCUM_INS = 20,
+   Brw_ADMI_DOCUM_INS = 21,
   } Brw_FileBrowser_t;
 
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
@@ -124,11 +124,11 @@ struct FileMetadata
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be "doc"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_COMMON		"comun"			// TODO: It should be "sha"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED		"comun"			// TODO: It should be "sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS		"trabajos"		// TODO: It should be "wrk"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"	// TODO: It should be "mrk"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEFCASE		"maletin"		// TODO: It should be "brf"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF		"maletin"		// TODO: It should be "brf"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

@@ -696,7 +696,7 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
             row = mysql_fetch_row (mysql_res);
 
 	    /* Get file browser type in database (row[0]) */
-	    FileBrowser = Brw_FILE_BRW_UNKNOWN;
+	    FileBrowser = Brw_UNKNOWN;
 	    if (sscanf (row[0],"%u",&UnsignedNum) == 1)
 	       if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
 		  FileBrowser = (Brw_FileBrowser_t) UnsignedNum;

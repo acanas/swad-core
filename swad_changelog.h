@@ -39,13 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.69 (2015/01/26)"
+#define Log_PLATFORM_VERSION	"SWAD 14.69.1 (2015/01/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-Comprobar que se pueden buscar documentos abiertos en titulaciones, centros e instituciones
-
+        Version 14.69.1:  Jan 26, 2015	Code refactoring related to file browsers. (175822 lines)
         Version 14.69:    Jan 26, 2015	Changes in search of documents. (175818 lines)
         Version 14.68.2:  Jan 25, 2015	Fixed bugs in search of documents.
 					Search of user's documents now extended to institution, centre and degree. (175644 lines)
@@ -1223,7 +1222,7 @@ Check if all works fine.
 
 	Version 13.17:    Nov 26, 2013	User's private briefcase is stored using user's code instead of user's ID. (158598 lines)
 Important change necessary to move old briefcases to new briefcases:
-Configure swad_convert_briefcases.c (change defines), compile it and execute swad_convert_briefcases as root.
+Configure swad_convert_BRIEFs.c (change defines), compile it and execute swad_convert_BRIEFs as root.
 Check if all works fine, and then remove usr_backup private directory.
 
 	Version 13.16:    Nov 26, 2013	User's private photo is stored using user's code instead of user's ID. (158473 lines)
@@ -2302,7 +2301,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 11.56:   Apr 21, 2012	All the folders/files are stored in database, including the creator. (132920 lines)
 	Version 11.55.10:Apr 20, 2012	Internal optimizations in functions related to file browsers. (132889 lines)
 	Version 11.55.10:Apr 19, 2012	New field 'FileBrowser' in database table 'files'. (132853 lines)
-	Version 11.55.9: Apr 19, 2012	Database table 'crs_common_files' is renamed to files. (132829 lines)
+	Version 11.55.9: Apr 19, 2012	Database table 'crs_SHARE_files' is renamed to files. (132829 lines)
 	Version 11.55.8: Apr 19, 2012	File licenses translated to several languages. (132828 lines)
 	Version 11.55.7: Apr 19, 2012	Changes in web service function getCourses. (132827 lines)
 	Version 11.55.6: Apr 18, 2012	Changes in selection of languages. (132657 lines)

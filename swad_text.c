@@ -2800,7 +2800,7 @@ const char *Txt_ASG_ATT_OR_SVY_ORDER[2] =
 #endif
 	};
 
-const char *Txt_Assignments_zone =
+const char *Txt_Assignments_area =
 #if   L==0
 	"Zona d'activitats";
 #elif L==1
@@ -2821,7 +2821,7 @@ const char *Txt_Assignments_zone =
 	"Zona de atividades";
 #endif
 
-const char *Txt_assignments_zone =
+const char *Txt_assignments_area =
 #if   L==0
 	"zona d'activitats";	// Necessita traduccio
 #elif L==1
@@ -2905,7 +2905,7 @@ const char *Txt_Availability =
 	"Disponibilidade";
 #endif
 
-const char *Txt_Average_number_BR_of_assignments_BR_per_course =
+const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #if   L==0
 	"Nombre mitj&acute;<br />d'activitats<br />per assignatura";
 #elif L==1
@@ -4603,27 +4603,6 @@ const char *Txt_Teachers_comment =
 	"Komentarz nauczycieli";
 #elif L==8
 	"Coment&aacute;rio dos professores";
-#endif
-
-const char *Txt_common_zone =
-#if   L==0
-	"zona d'arxius compartits";
-#elif L==1
-	"Freigegebene Dateien-Bereich";
-#elif L==2
-	"shared files area";
-#elif L==3
-	"zona de archivos compartidos";
-#elif L==4
-	"zone de fichiers partag&eacute;s";
-#elif L==5
-	"zona de archivos compartidos";	// Okoteve traducción
-#elif L==6
-	"zona di file condivisi";
-#elif L==7
-	"Powierzchnia udost&eogon;pnionych plik&oacute;w";
-#elif L==8
-	"zona de arquivos compartilhados";
 #endif
 
 const char *Txt_Completely_eliminate_user =
@@ -8871,7 +8850,7 @@ const char *Txt_documents =
 	"documentos";
 #endif
 
-const char *Txt_Documents_in_my_courses =
+const char *Txt_DOCUM_in_my_courses =
 #if   L==0
 	"Documents en les meves assignatures";
 #elif L==1
@@ -8892,7 +8871,7 @@ const char *Txt_Documents_in_my_courses =
 	"Documentos em minha disciplinas";
 #endif
 
-const char *Txt_documents_hidden =
+const char *Txt_DOCUM_hidden =
 #if   L==0
 	"documents ocults";
 #elif L==1
@@ -8913,7 +8892,7 @@ const char *Txt_documents_hidden =
 	"documentos ocultos";
 #endif
 
-const char *Txt_Documents_zone =
+const char *Txt_Documents_area =
 #if   L==0
 	"Zona de documents";
 #elif L==1
@@ -8934,7 +8913,7 @@ const char *Txt_Documents_zone =
 	"Zona de documentos";
 #endif
 
-const char *Txt_Documents_management_zone =
+const char *Txt_Documents_management_area =
 #if   L==0
 	"Zona d'administraci&oacute; de documents";
 #elif L==1
@@ -8955,7 +8934,7 @@ const char *Txt_Documents_management_zone =
 	"Zona de gest&atilde;o de documentos";
 #endif
 
-const char *Txt_documents_management_zone =
+const char *Txt_documents_management_area =
 #if   L==0
 	"zona de administraci&oacute;n de documentos";	// Necessita traduccio
 #elif L==1
@@ -15538,7 +15517,7 @@ const char *Txt_Mark_all_notifications_as_read =
 	"Marcar todas as notifica&ccedil;&otilde;es como lidas";
 #endif
 
-const char *Txt_Marks_management_zone =
+const char *Txt_Marks_management_area =
 #if   L==0
 	"Zona d'administraci&oacute; de qualificacions";
 #elif L==1
@@ -15559,7 +15538,7 @@ const char *Txt_Marks_management_zone =
 	"Zona de gest&atilde;o de notas";
 #endif
 
-const char *Txt_marks_management_zone =
+const char *Txt_marks_management_area =
 #if   L==0
 	"zona de administraci&oacute;n de calificaciones";	// Necessita traduccio
 #elif L==1
@@ -15580,7 +15559,7 @@ const char *Txt_marks_management_zone =
 	"zona de gest&atilde;o de notas";
 #endif
 
-const char *Txt_Marks_zone =
+const char *Txt_Marks_area =
 #if   L==0
 	"Zona de qualificacions";
 #elif L==1
@@ -22749,7 +22728,7 @@ const char *Txt_No_of_files =
 	"N&ordm; de arquivos";
 #endif
 
-const char *Txt_No_of_files_in_common_zones =
+const char *Txt_No_of_files_in_SHARE_zones =
 #if   L==0
 	"Nombre d'arxius compartits";
 #elif L==1
@@ -22770,7 +22749,7 @@ const char *Txt_No_of_files_in_common_zones =
 	"N&ordm; de arquivos compartilhados";
 #endif
 
-const char *Txt_No_of_files_in_documents_zones =
+const char *Txt_No_of_files_in_DOCUM_zones =
 #if   L==0
 	"N&ordm; de archivos en zonas de documentos";	// Necessita traduccio
 #elif L==1
@@ -26537,7 +26516,7 @@ const char *Txt_Private_Photo =
 	"Foto privada";
 #endif
 
-const char *Txt_Private_storage_zone =
+const char *Txt_Private_storage_area =
 #if   L==0
 	"Zona d'emmagatzematge privada";
 #elif L==1
@@ -26558,7 +26537,7 @@ const char *Txt_Private_storage_zone =
 	"Zona privada de armazenamento";
 #endif
 
-const char *Txt_private_storage_zone =
+const char *Txt_private_storage_area =
 #if   L==0
 	"zona de almacenamiento privada";	// Necessita traduccio
 #elif L==1
@@ -31916,9 +31895,9 @@ const char *Txt_Rooms_with_users =
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
    {
-	 // Brw_FILE_BRW_UNKNOWN
+	 // Brw_UNKNOWN
 	 "",
-	 // Brw_FILE_BRW_SEE_DOCUMENTS_CRS
+	 // Brw_SHOW_DOCUM_CRS
 #if   L==0
 	 "documents"
 #elif L==1
@@ -31939,7 +31918,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_MARKS_CRS
+	 // Brw_SHOW_MARKS_CRS
 #if   L==0
 	 "qualificacions"
 #elif L==1
@@ -31960,7 +31939,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+	 // Brw_ADMI_DOCUM_CRS
 #if   L==0
 	 "documents"
 #elif L==1
@@ -31981,7 +31960,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_COMMON_CRS
+	 // Brw_ADMI_SHARE_CRS
 #if   L==0
 	 "compartits"
 #elif L==1
@@ -32002,7 +31981,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_FILE_BRW_COMMON_GRP
+	 // Brw_ADMI_SHARE_GRP
 #if   L==0
 	 "compartits"
 #elif L==1
@@ -32023,7 +32002,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "comum"
 #endif
 	 ,
-	 // Brw_FILE_BRW_WORKS_USR
+	 // Brw_ADMI_WORKS_USR
 #if   L==0
 	 "treballs"
 #elif L==1
@@ -32044,7 +32023,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "trabalhos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_WORKS_CRS
+	 // Brw_ADMI_WORKS_CRS
 #if   L==0
 	 "treballs"
 #elif L==1
@@ -32065,7 +32044,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "trabalhos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_MARKS_CRS
+	 // Brw_ADMI_MARKS_CRS
 #if   L==0
 	 "qualificacions"
 #elif L==1
@@ -32086,7 +32065,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_FILE_BRW_BRIEFCASE_USR
+	 // Brw_ADMI_BRIEF_USR
 #if   L==0
 	 "maleti"
 #elif L==1
@@ -32107,7 +32086,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "pasta"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_DOCUMENTS_GRP
+	 // Brw_SHOW_DOCUM_GRP
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32128,7 +32107,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+	 // Brw_ADMI_DOCUM_GRP
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32149,7 +32128,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_MARKS_GRP
+	 // Brw_SHOW_MARKS_GRP
 #if   L==0
 	 "qualificacions"	// Necessita traduccio
 #elif L==1
@@ -32170,7 +32149,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_MARKS_GRP
+	 // Brw_ADMI_MARKS_GRP
 #if   L==0
 	 "qualificacions"
 #elif L==1
@@ -32191,7 +32170,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "notas"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ASSIGNMENTS_USR
+	 // Brw_ADMI_ASSIG_USR
 #if   L==0
 	 "activitats"
 #elif L==1
@@ -32212,7 +32191,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "atividades"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ASSIGNMENTS_CRS
+	 // Brw_ADMI_ASSIG_CRS
 #if   L==0
 	 "activitats"
 #elif L==1
@@ -32233,7 +32212,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "atividades"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_DOCUMENTS_DEG
+	 // Brw_SHOW_DOCUM_DEG
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32254,7 +32233,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_DEG
+	 // Brw_ADMI_DOCUM_DEG
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32275,7 +32254,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_DOCUMENTS_CTR
+	 // Brw_SHOW_DOCUM_CTR
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32296,7 +32275,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_CTR
+	 // Brw_ADMI_DOCUM_CTR
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32317,7 +32296,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_SEE_DOCUMENTS_INS
+	 // Brw_SHOW_DOCUM_INS
 #if   L==0
 	 "documents"
 #elif L==1
@@ -32338,7 +32317,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documentos"
 #endif
 	 ,
-	 // Brw_FILE_BRW_ADMIN_DOCUMENTS_INS
+	 // Brw_ADMI_DOCUM_INS
 #if   L==0
 	 "documents"
 #elif L==1
@@ -33354,6 +33333,27 @@ const char *Txt_Shared_files_area =
 	"Wsp&oacute;lnej dla";
 #elif L==8
 	"Zona comum";
+#endif
+
+const char *Txt_shared_files_area =
+#if   L==0
+	"zona d'arxius compartits";
+#elif L==1
+	"Freigegebene Dateien-Bereich";
+#elif L==2
+	"shared files area";
+#elif L==3
+	"zona de archivos compartidos";
+#elif L==4
+	"zone de fichiers partag&eacute;s";
+#elif L==5
+	"zona de archivos compartidos";	// Okoteve traducción
+#elif L==6
+	"zona di file condivisi";
+#elif L==7
+	"Powierzchnia udost&eogon;pnionych plik&oacute;w";
+#elif L==8
+	"zona de arquivos compartilhados";
 #endif
 
 const char *Txt_Short_Name =
@@ -34622,7 +34622,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 
 const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
 	 {
-#if   L==0	// Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS
+#if   L==0	// Brw_ADMI_DOCUM_CRS
 	   "Documents&nbsp;(ass.)"
 #elif L==1
 	   "Dokumente&nbsp;(Ver.)"
@@ -34642,7 +34642,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Documentos&nbsp;(crs.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP
+#if   L==0	// Brw_ADMI_DOCUM_GRP
 	   "Documents&nbsp;(grp.)"
 #elif L==1
 	   "Dokumente&nbsp;(Grp.)"
@@ -34662,7 +34662,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Documentos&nbsp;(grp.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_COMMON_CRS
+#if   L==0	// Brw_ADMI_SHARE_CRS
 	   "Compartits&nbsp;(asg.)"
 #elif L==1
 	   "Freigegebene&nbsp;(Ver.)"
@@ -34682,7 +34682,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Compartilhados&nbsp;(crs.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_COMMON_GRP
+#if   L==0	// Brw_ADMI_SHARE_GRP
 	   "Compartits&nbsp;(grp.)"
 #elif L==1
 	   "Freigegebene&nbsp;(Grp.)"
@@ -34702,7 +34702,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Compartilhados&nbsp;(grp.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_ADMIN_MARKS_CRS
+#if   L==0	// Brw_ADMI_MARKS_CRS
 	   "Qualific.&nbsp;(ass.)"
 #elif L==1
 	   "Bewertungen&nbsp;(Ver.)"
@@ -34722,7 +34722,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Notas&nbsp;(crs.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_ADMIN_MARKS_GRP
+#if   L==0	// Brw_ADMI_MARKS_GRP
 	   "Calific.&nbsp;(grp.)"		// Necessita traduccio
 #elif L==1
 	   "Bewertungen&nbsp;(Grp.)"
@@ -34742,7 +34742,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Notas&nbsp;(grp.)"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_ASSIGNMENTS_USR
+#if   L==0	// Brw_ADMI_ASSIG_USR
 	   "Activitats"
 #elif L==1
 	   "Aufgaben"
@@ -34762,7 +34762,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Atividades"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_WORKS_USR
+#if   L==0	// Brw_ADMI_WORKS_USR
 	   "Treballs"
 #elif L==1
 	   "Hausarbeiten"
@@ -34782,7 +34782,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Trabalhos"
 #endif
 	   ,
-#if   L==0	// Brw_FILE_BRW_UNKNOWN
+#if   L==0	// Brw_UNKNOWN
 	   "Total"
 #elif L==1
 	   "Gesamtzahl"
@@ -43281,7 +43281,7 @@ const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: 
 	" (this field is filled in the records of %u students)";		// Necessita de tradução
 #endif
 
-const char *Txt_This_option_is_now_in_Documents_Edit =
+const char *Txt_This_option_is_now_in_DOCUM_Edit =
 #if   L==0
 	"Aquesta opci&oacute; est&agrave; ara en Documents &gt; Editar";
 #elif L==1
@@ -47125,7 +47125,7 @@ const char *Txt_Works_of_X_in_Y_removed =	// Warning: it is very important to in
 	" in <strong>%s</strong> removed.";		// Necessita de tradução
 #endif
 
-const char *Txt_Works_zone =
+const char *Txt_Works_area =
 #if   L==0
 	"Zona d'altres treballs";
 #elif L==1
@@ -47146,7 +47146,7 @@ const char *Txt_Works_zone =
 	"Zona de trabalhos";
 #endif
 
-const char *Txt_works_zone =
+const char *Txt_works_area =
 #if   L==0
 	"zona de trabajos";	// Necessita traduccio
 #elif L==1

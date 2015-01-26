@@ -1881,7 +1881,7 @@ void Rec_ShowFormMyCommRecord (void)
 
    /***** My record *****/
    Act_FormStart (ActChgMyData);
-   Rec_ShowCommonRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowCommonRecord (Rec_FORM_MY_SHARE_RECORD,&Gbl.Usrs.Me.UsrDat);
    Lay_PutSendButton (Txt_Save_changes);
    Rec_WriteLinkToDataProtectionClause ();
    fprintf (Gbl.F.Out,"</form>"
@@ -1957,7 +1957,7 @@ void Rec_ShowMyCommonRecordUpd (void)
 
    /***** Show my record for checking *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Rec_ShowCommonRecord (Rec_MY_COMMON_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowCommonRecord (Rec_MY_SHARE_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1973,7 +1973,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Rec_ShowCommonRecord (Rec_OTHER_USR_COMMON_RECORD_CHECK,UsrDat);
+   Rec_ShowCommonRecord (Rec_OTHER_USR_SHARE_RECORD_CHECK,UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2012,7 +2012,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Local_address;
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
-   unsigned RecordWidth = Rec_WIDTH_COMMON_RECORD_BIG;
+   unsigned RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
    char StrRecordWidth[10+1];
    unsigned FrameWidth = 10;
    unsigned Col1Width = 140;
@@ -2028,31 +2028,31 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);	// My current role is superuser
    bool HeIsTeacher  = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
-	            TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
+	            TypeOfView == Rec_FORM_MY_SHARE_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR);
-   bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
+   bool DataForm = (TypeOfView == Rec_FORM_MY_SHARE_RECORD ||
                   TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                   (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                    !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
    bool MsgForm = (Gbl.Usrs.Me.Logged &&
 	           !(RoleForm || DataForm));
    bool ShowEmail = (IAmDegAdmin || IAmSuperuser || DataForm ||
-	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+	             TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
+		     TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
 		     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
 		     TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
                      (UsrDat->Accepted &&
-		      (TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK ||
+		      (TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK ||
 		       ((TypeOfView == Rec_RECORD_LIST || TypeOfView == Rec_RECORD_PRINT) &&
 		        (IAmTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
    bool ShowID = (IAmDegAdmin || IAmSuperuser || DataForm ||
-	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+	          TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
+		  TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
 		  TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
 		  TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
                   (UsrDat->Accepted &&
-		   ((TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK &&
+		   ((TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK &&
                      !(IAmTeacher && HeIsTeacher)) ||	// A teacher can not see another teacher's ID
 		    ((TypeOfView == Rec_RECORD_LIST || TypeOfView == Rec_RECORD_PRINT) &&
 		     IAmTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
@@ -2073,8 +2073,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    switch (TypeOfView)
      {
       case Rec_FORM_SIGN_UP:
-      case Rec_FORM_MY_COMMON_RECORD:
-	 RecordWidth = Rec_WIDTH_COMMON_RECORD_BIG;
+      case Rec_FORM_MY_SHARE_RECORD:
+	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
          Col3Width = 160;
 	 ClassHead = "HEAD_REC";
@@ -2093,17 +2093,17 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_FormStart (ActUpdOthUsrDat);
             Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);	// Existing user
 	   }
-	 RecordWidth = Rec_WIDTH_COMMON_RECORD_BIG;
+	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
          Col3Width = 160;
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
 	 break;
-      case Rec_MY_COMMON_RECORD_CHECK:
-      case Rec_OTHER_USR_COMMON_RECORD_CHECK:
+      case Rec_MY_SHARE_RECORD_CHECK:
+      case Rec_OTHER_USR_SHARE_RECORD_CHECK:
       case Rec_RECORD_LIST:
-	 RecordWidth = Rec_WIDTH_COMMON_RECORD_SMALL;
+	 RecordWidth = Rec_WIDTH_SHARE_RECORD_SMALL;
          FrameWidth = 10;
          Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
@@ -2111,7 +2111,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	 ClassData = "DAT_REC_SMALL_BOLD";
 	 break;
       case Rec_RECORD_PRINT:
-	 RecordWidth = Rec_WIDTH_COMMON_RECORD_PRINT;
+	 RecordWidth = Rec_WIDTH_SHARE_RECORD_PRINT;
          FrameWidth = 1;
          Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
@@ -2164,7 +2164,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Button to admin user *****/
    if ((TypeOfView == Rec_RECORD_LIST ||
-	TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK) &&
+	TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK) &&
        (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER))
      {
       Act_FormStart (ActReqMdfUsr);
@@ -2218,7 +2218,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"%s\" style=\"width:%upx;"
                       " text-align:center; vertical-align:top;\">",
-            TypeOfView == Rec_FORM_MY_COMMON_RECORD ? ClassForm :
+            TypeOfView == Rec_FORM_MY_SHARE_RECORD ? ClassForm :
         	                                      ClassData,
 	    Col3Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -2229,14 +2229,14 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    if (ShowData)
      {
       fprintf (Gbl.F.Out,"<br />");
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+      if (TypeOfView == Rec_FORM_MY_SHARE_RECORD)
         {
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
          if (UsrDat->PublicPhoto)
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," /> %s",Txt_Public_photo);
         }
-      else if (TypeOfView == Rec_MY_COMMON_RECORD_CHECK)
+      else if (TypeOfView == Rec_MY_SHARE_RECORD_CHECK)
          fprintf (Gbl.F.Out,"%s",
                   UsrDat->PublicPhoto ? Txt_Public_photo :
                                         Txt_Private_Photo);
@@ -2333,7 +2333,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                          "<td class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
                ClassForm,Col1Width);
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+      if (TypeOfView == Rec_FORM_MY_SHARE_RECORD)
          fprintf (Gbl.F.Out,"%s*",Txt_Sex);
       else
          fprintf (Gbl.F.Out,"%s",Txt_Role);
@@ -2359,7 +2359,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
               }
             fprintf (Gbl.F.Out,"</select>");
 	    break;
-         case Rec_FORM_MY_COMMON_RECORD:	// It's me, change my data
+         case Rec_FORM_MY_SHARE_RECORD:	// It's me, change my data
             for (Sex = Usr_SEX_FEMALE;
         	 Sex <= Usr_SEX_MALE;
         	 Sex++)
@@ -2464,10 +2464,10 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                          "</td>"
                          "</tr>",
                ClassForm,Col1Width,
-               TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
+               TypeOfView == Rec_MY_SHARE_RECORD_CHECK ? Txt_Sex :
                                                           Txt_Role,
                ClassData,Col2Width,
-               TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
+               TypeOfView == Rec_MY_SHARE_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
                                                           Txt_ROLES_SINGULAR_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
 
    /***** Name *****/
@@ -2476,7 +2476,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                       "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
                       "%s",
             ClassForm,Col1Width,Txt_Surname_1);
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+   if (TypeOfView == Rec_FORM_MY_SHARE_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
                       "<td colspan=\"2\" class=\"%s\""
@@ -2516,7 +2516,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                       "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
                       "%s",
             ClassForm,Col1Width,Txt_First_name);
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+   if (TypeOfView == Rec_FORM_MY_SHARE_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
                       "<td class=\"%s\" colspan=\"2\""
@@ -2531,8 +2531,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-       TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+   if (TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
+       TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
        TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
        TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
        ((TypeOfView == Rec_RECORD_LIST          ||
@@ -2547,7 +2547,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 			 " style=\"width:%upx; text-align:left;\">"
 			 "%s",
 	       ClassForm,Col1Width,Txt_Country);
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+      if (TypeOfView == Rec_FORM_MY_SHARE_RECORD)
 	 fprintf (Gbl.F.Out,"*");
       fprintf (Gbl.F.Out,":</td>"
 			 "<td colspan=\"2\" class=\"%s\""
@@ -2754,8 +2754,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      }
 
    /***** Institution, centre, department, office, etc. *****/
-   if (((TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-         TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+   if (((TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
+         TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
          TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
          TypeOfView == Rec_MY_COURSE_RECORD_CHECK) &&
         (UsrDat->Roles & (1 << Rol_ROLE_TEACHER))) ||		// He/she (me, really) is a teacher in any course

@@ -49,7 +49,7 @@ typedef enum
    Sch_SEARCH_STUDENTS			=  6,
    Sch_SEARCH_GUESTS			=  7,
    Sch_SEARCH_OPEN_DOCUMENTS		=  8,
-   Sch_SEARCH_DOCUMENTS_IN_MY_COURSES	=  9,
+   Sch_SEARCH_DOCUM_IN_MY_COURSES	=  9,
    Sch_SEARCH_MY_DOCUMENTS		= 10,
   } Sch_WhatToSearch_t;
 

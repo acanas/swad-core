@@ -477,8 +477,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Syllabus_of_the_course;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_of_files_in_common_zones;
-   extern const char *Txt_No_of_files_in_documents_zones;
+   extern const char *Txt_No_of_files_in_SHARE_zones;
+   extern const char *Txt_No_of_files_in_DOCUM_zones;
    extern const char *Txt_Guided_academic_assignments;
    extern const char *Txt_Assignments;
    extern const char *Txt_Files_assignments;
@@ -839,8 +839,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
                   Gbl.ColorRows[0],Txt_YES,
                   Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_No_of_files_in_documents_zones,
-                  Gbl.ColorRows[0],Txt_No_of_files_in_common_zones,
+                  Gbl.ColorRows[0],Txt_No_of_files_in_DOCUM_zones,
+                  Gbl.ColorRows[0],Txt_No_of_files_in_SHARE_zones,
 
                   Gbl.ColorRows[0],Txt_YES,
                   Gbl.ColorRows[0],Txt_NO,
@@ -1330,11 +1330,11 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    Indicators->CountIndicators = 0;
 
    /* Get whether download zones are empty or not */
-   Indicators->NumFilesInDownloadZonesCrs = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS,CrsCod);
-   Indicators->NumFilesInDownloadZonesGrp = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,CrsCod);
+   Indicators->NumFilesInDownloadZonesCrs = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_CRS,CrsCod);
+   Indicators->NumFilesInDownloadZonesGrp = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_GRP,CrsCod);
    Indicators->NumFilesInDownloadZones    = Indicators->NumFilesInDownloadZonesCrs + Indicators->NumFilesInDownloadZonesGrp;
-   Indicators->NumFilesInCommonZonesCrs   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_COMMON_CRS,CrsCod);
-   Indicators->NumFilesInCommonZonesGrp   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_COMMON_GRP,CrsCod);
+   Indicators->NumFilesInCommonZonesCrs   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_CRS,CrsCod);
+   Indicators->NumFilesInCommonZonesGrp   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_GRP,CrsCod);
    Indicators->NumFilesInCommonZones      = Indicators->NumFilesInCommonZonesCrs + Indicators->NumFilesInCommonZonesGrp;
 
    /* Indicator #1: information about syllabus */
@@ -1349,8 +1349,8 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
 
    /* Indicator #2: information about assignments */
    Indicators->NumAssignments = Asg_GetNumAssignmentsInCrs (CrsCod);
-   Indicators->NumFilesAssignments = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_ASSIGNMENTS_USR,CrsCod);
-   Indicators->NumFilesWorks       = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FILE_BRW_WORKS_USR      ,CrsCod);
+   Indicators->NumFilesAssignments = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_ASSIG_USR,CrsCod);
+   Indicators->NumFilesWorks       = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_WORKS_USR      ,CrsCod);
    Indicators->ThereAreAssignments = (Indicators->NumAssignments      != 0) ||
                                      (Indicators->NumFilesAssignments != 0) ||
                                      (Indicators->NumFilesWorks       != 0);

@@ -853,16 +853,16 @@ void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
    /***** Set notify event depending on browser zone *****/
    switch (FileBrowser)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
 	 NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
 	 break;
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_SHARE_GRP:
 	 NotifyEvent = Ntf_EVENT_SHARED_FILE;
 	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+      case Brw_ADMI_MARKS_CRS:
+      case Brw_ADMI_MARKS_GRP:
 	 NotifyEvent = Ntf_EVENT_MARKS_FILE;
 	 break;
       default:
@@ -872,12 +872,12 @@ void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
    /***** Set notification as removed *****/
    switch (FileBrowser)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_SHARE_GRP:
+      case Brw_ADMI_MARKS_CRS:
+      case Brw_ADMI_MARKS_GRP:
 	 sprintf (SubQuery,"SELECT FilCod FROM files"
 			   " WHERE FileBrowser='%u' AND Cod='%ld' AND Path='%s'",
 		  (unsigned) FileBrowser,Cod,Path);
@@ -906,16 +906,16 @@ void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
    /***** Set notify event depending on browser zone *****/
    switch (FileBrowser)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
 	 NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
 	 break;
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_COMMON_GRP:
+      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_SHARE_GRP:
 	 NotifyEvent = Ntf_EVENT_SHARED_FILE;
 	 break;
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+      case Brw_ADMI_MARKS_CRS:
+      case Brw_ADMI_MARKS_GRP:
 	 NotifyEvent = Ntf_EVENT_MARKS_FILE;
 	 break;
       default:
@@ -925,12 +925,12 @@ void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
    /***** Set notification as removed *****/
    switch (FileBrowser)
      {
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-      case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-      case Brw_FILE_BRW_COMMON_CRS:
-      case Brw_FILE_BRW_COMMON_GRP:
-      case Brw_FILE_BRW_ADMIN_MARKS_CRS:
-      case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_SHARE_CRS:
+      case Brw_ADMI_SHARE_GRP:
+      case Brw_ADMI_MARKS_CRS:
+      case Brw_ADMI_MARKS_GRP:
 	 sprintf (SubQuery,"SELECT FilCod FROM files"
 			   " WHERE FileBrowser='%u' AND Cod='%ld' AND Path LIKE '%s/%%'",
 		  (unsigned) FileBrowser,Cod,Path);
@@ -962,9 +962,9 @@ void Ntf_SetNotifFilesInGroupAsRemoved (long GrpCod)
             (unsigned) Ntf_EVENT_DOCUMENT_FILE,
             (unsigned) Ntf_EVENT_SHARED_FILE,
             (unsigned) Ntf_EVENT_MARKS_FILE,
-            (unsigned) Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP,
-            (unsigned) Brw_FILE_BRW_COMMON_GRP,
-            (unsigned) Brw_FILE_BRW_ADMIN_MARKS_GRP,
+            (unsigned) Brw_ADMI_DOCUM_GRP,
+            (unsigned) Brw_ADMI_SHARE_GRP,
+            (unsigned) Brw_ADMI_MARKS_GRP,
             GrpCod);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
   }
@@ -996,18 +996,18 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_MARKS_FILE:
          switch (Gbl.FileBrowser.Type)
            {
-            case Brw_FILE_BRW_ADMIN_DOCUMENTS_CRS:
-            case Brw_FILE_BRW_COMMON_CRS:
-            case Brw_FILE_BRW_ADMIN_MARKS_CRS:
+            case Brw_ADMI_DOCUM_CRS:
+            case Brw_ADMI_SHARE_CRS:
+            case Brw_ADMI_MARKS_CRS:
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
                               " WHERE CrsCod='%ld'"
                               " AND UsrCod<>'%ld'",
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
-            case Brw_FILE_BRW_ADMIN_DOCUMENTS_GRP:
-            case Brw_FILE_BRW_COMMON_GRP:
-            case Brw_FILE_BRW_ADMIN_MARKS_GRP:
+            case Brw_ADMI_DOCUM_GRP:
+            case Brw_ADMI_SHARE_GRP:
+            case Brw_ADMI_MARKS_GRP:
                sprintf (Query,"SELECT UsrCod FROM crs_grp_usr"
                               " WHERE crs_grp_usr.GrpCod='%ld'"
                               " AND crs_grp_usr.UsrCod<>'%ld'",

@@ -423,7 +423,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 
    /* File browser */
-   Gbl.FileBrowser.Type = Brw_FILE_BRW_UNKNOWN;
+   Gbl.FileBrowser.Type = Brw_UNKNOWN;
    Gbl.FileBrowser.FileType = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
