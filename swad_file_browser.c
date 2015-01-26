@@ -10413,6 +10413,8 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
   {
    extern const char *Txt_document;
    extern const char *Txt_documents;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_File_zone;
@@ -10435,7 +10437,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 
       /* Write header with number of documents found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\" class=\"TIT_TBL\""
+			 "<td colspan=\"7\" class=\"TIT_TBL\""
 			 " style=\"text-align:center;\">");
       if (NumDocs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_document);
@@ -10453,6 +10455,12 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
 			 "%s"
 			 "</th>"
+                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
 			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
 			 "%s"
 			 "</th>"
@@ -10460,6 +10468,8 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 			 "%s"
 			 "</th>"
 			 "</tr>",
+	       Txt_Institution,
+	       Txt_Centre,
 	       Txt_Degree,
 	       Txt_Course,
 	       Txt_File_zone,
@@ -10480,7 +10490,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /***** Write footer *****/
       /* Number of documents not hidden found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\" class=\"TIT_TBL\""
+			 "<td colspan=\"7\" class=\"TIT_TBL\""
 			 " style=\"text-align:center;\">"
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
@@ -10516,28 +10526,62 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Private_storage_zone;
    extern const char *Txt_Go_to_X;
    struct FileMetadata FileMetadata;
+   long InsCod;
+   long CtrCod;
    long DegCod;
    long CrsCod;
    long GrpCod;
+   const char *InsShortName;
+   const char *CtrShortName;
+   const char *DegShortName;
+   const char *CrsShortName;
    const char *BgColor;
    const char *Title;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
    char FileNameToShow[NAME_MAX+1];
-
+/*
+   row[ 0] = FilCod
+   row[ 1] = PathFromRoot
+   row[ 2] = InsCod
+   row[ 3] = InsShortName
+   row[ 4] = CtrCod
+   row[ 5] = CtrShortName
+   row[ 6] = DegCod
+   row[ 7] = DegShortName
+   row[ 8] = CrsCod
+   row[ 9] = CrsShortName
+   row[10] = GrpCod
+*/
    /***** Get file code (row[0]) and metadata *****/
    FileMetadata.FilCod = Str_ConvertStrCodToLongCod (row[0]);
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
      {
+      /***** Get institution code (row[2]) *****/
+      InsCod = Str_ConvertStrCodToLongCod (row[2]);
+      InsShortName = row[3];
+
+      /***** Get centre code (row[4]) *****/
+      CtrCod = Str_ConvertStrCodToLongCod (row[4]);
+      CtrShortName = row[5];
+
+      /***** Get degree code (row[6]) *****/
+      DegCod = Str_ConvertStrCodToLongCod (row[6]);
+      DegShortName = row[7];
+
+      /***** Get course code (row[8]) *****/
+      CrsCod = Str_ConvertStrCodToLongCod (row[8]);
+      CrsShortName = row[9];
+
+      /***** Get group code (row[8]) *****/
+      GrpCod = Str_ConvertStrCodToLongCod (row[10]);
+
+      /***** Set row color *****/
       BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
-      Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
       if (CrsCod > 0 && CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
 	 BgColor = VERY_LIGHT_BLUE;
-
-      /***** Get degree code (row[2]) *****/
-      DegCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /***** Write number of document in this search *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -10547,7 +10591,43 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));
 
-      /***** Write degree logo, degree short name (row[3]) and centre short name (row[4]) *****/
+      /***** Write institution logo, institution short name *****/
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+	                 " vertical-align:top; background-color:%s;\">",
+	       BgColor);
+      if (InsCod > 0)
+	{
+         Act_FormGoToStart (ActSeeInsInf);
+         Deg_PutParamDegCod (InsCod);
+         sprintf (Gbl.Title,Txt_Go_to_X,InsShortName);
+         Act_LinkFormSubmit (Gbl.Title,"DAT");
+         Log_DrawLogo (Sco_SCOPE_INSTITUTION,InsCod,InsShortName,
+                       16,"vertical-align:top;",true);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
+			    "</form>",
+		  InsShortName);
+	}
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Write centre logo, centre short name *****/
+      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
+	                 " vertical-align:top; background-color:%s;\">",
+	       BgColor);
+      if (CtrCod > 0)
+	{
+         Act_FormGoToStart (ActSeeCtrInf);
+         Deg_PutParamDegCod (CtrCod);
+         sprintf (Gbl.Title,Txt_Go_to_X,CtrShortName);
+         Act_LinkFormSubmit (Gbl.Title,"DAT");
+         Log_DrawLogo (Sco_SCOPE_CENTRE,CtrCod,CtrShortName,
+                       16,"vertical-align:top;",true);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
+			    "</form>",
+		  CtrShortName);
+	}
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Write degree logo, degree short name *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
@@ -10555,17 +10635,17 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	{
          Act_FormGoToStart (ActSeeDegInf);
          Deg_PutParamDegCod (DegCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,row[5]);
+         sprintf (Gbl.Title,Txt_Go_to_X,DegShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,row[4],
+         Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,DegShortName,
                        16,"vertical-align:top;",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>"
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
 			    "</form>",
-		  row[3],row[4]);
+		  DegShortName);
 	}
       fprintf (Gbl.F.Out,"</td>");
 
-      /***** Write course short name (row[5]) *****/
+      /***** Write course short name *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
@@ -10573,11 +10653,11 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	{
 	 Act_FormGoToStart (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (CrsCod);
-	 sprintf (Gbl.Title,Txt_Go_to_X,row[5]);
+	 sprintf (Gbl.Title,Txt_Go_to_X,CrsShortName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%s</a>"
 	                    "</form>",
-		  row[5]);
+		  CrsShortName);
 	}
       fprintf (Gbl.F.Out,"</td>");
 

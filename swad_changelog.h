@@ -39,13 +39,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.68.2 (2015/01/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.69 (2015/01/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
 Comprobar que se pueden buscar documentos abiertos en titulaciones, centros e instituciones
 
+        Version 14.69:    Jan 26, 2015	Changes in search of documents. (175818 lines)
         Version 14.68.2:  Jan 25, 2015	Fixed bugs in search of documents.
 					Search of user's documents now extended to institution, centre and degree. (175644 lines)
         Version 14.68.1:  Jan 25, 2015	Changes in codes stores in expanded_folders table. (175618 lines)
