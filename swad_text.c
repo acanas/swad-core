@@ -22770,27 +22770,6 @@ const char *Txt_No_of_files_in_DOCUM_zones =
 	"N&ordm; de arquivos em zonas de documentos";
 #endif
 
-const char *Txt_No_of_folders =
-#if   L==0
-	"Nombre de carpetes";
-#elif L==1
-	"Anzahl der Verzeichnisse";
-#elif L==2
-	"No. of folders";
-#elif L==3
-	"N&ordm; de carpetas";
-#elif L==4
-	"Nombre de r&eacute;pertoires";
-#elif L==5
-	"N&ordm; de carpetas";	// Okoteve traducción
-#elif L==6
-	"Numero di cartelle";
-#elif L==7
-	"Liczba folder&oacute;w";
-#elif L==8
-	"N&ordm; de diret&oacute;rios";
-#endif
-
 const char *Txt_No_of_forums =
 #if   L==0
 	"N&ordm; de foros";	// Necessita traduccio
@@ -24556,27 +24535,6 @@ const char *Txt_Number_of_BR_assignments =
 	"Number of<br />assignments";	// Potrzebujesz tlumaczenie
 #elif L==8
 	"N&ordm; de<br />atividades";
-#endif
-
-const char *Txt_Number_of_courses =
-#if   L==0
-	"Nombre d'assignat.";
-#elif L==1
-	"Anzahl der Kursen";
-#elif L==2
-	"Number of courses";
-#elif L==3
-	"N&ordm; de asignat.";
-#elif L==4
-	"Nombre de mati&egrave;res";
-#elif L==5
-	"N&ordm; de asignat.";	// Okoteve traducción
-#elif L==6
-	"Numero di corsi";
-#elif L==7
-	"Liczba kurs&oacute;w";
-#elif L==8
-	"N&ordm; de disciplinas";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
