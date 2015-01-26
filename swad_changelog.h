@@ -39,11 +39,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.69.1 (2015/01/26)"
+#define Log_PLATFORM_VERSION	"SWAD 14.69.2 (2015/01/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+TODO: Change the way of computing total sizes of file browsers.
+        Version 14.69.2:  Jan 26, 2015	Fixed bugs in statistics about sizes of file browsers. (175864 lines)
         Version 14.69.1:  Jan 26, 2015	Code refactoring related to file browsers. (175822 lines)
         Version 14.69:    Jan 26, 2015	Changes in search of documents. (175818 lines)
         Version 14.68.2:  Jan 25, 2015	Fixed bugs in search of documents.
@@ -59,19 +61,20 @@ UPDATE expanded_folders SET FileBrowser='19' WHERE FileBrowser='18';
 UPDATE expanded_folders SET FileBrowser='21' WHERE FileBrowser='20';
 
         Version 14.68:    Jan 25, 2015	Changes in file_browser_size table. (175606 lines)
-					8 changes necessary in database:
+					9 changes necessary in database:
 DROP INDEX FileBrowser ON file_browser_size;
 DROP INDEX UsrCod ON file_browser_size;
 ALTER TABLE file_browser_size CHANGE COLUMN UsrCod ZoneUsrCod INT NOT NULL DEFAULT -1,ADD INDEX (ZoneUsrCod);
-ALTER TABLE file_browser_size ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD UNIQUE INDEX (FileBrowser,Cod,ZoneUsrCod);
+ALTER TABLE file_browser_size ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser;
 UPDATE file_browser_size SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';
 UPDATE file_browser_size SET Cod=GrpCod WHERE GrpCod>'0';
 ALTER TABLE file_browser_size DROP COLUMN CrsCod;
 ALTER TABLE file_browser_size DROP COLUMN GrpCod;
+CREATE UNIQUE INDEX FileBrowser ON file_browser_size (FileBrowser,Cod,ZoneUsrCod);
 
         Version 14.67.1:  Jan 25, 2015	Fixed bugs in file browsers. (175395 lines)
         Version 14.67:    Jan 25, 2015	Changes in files table. (175369 lines)
-					16 changes necessary in database:
+					17 changes necessary in database:
 ALTER TABLE files ADD COLUMN ZoneUsrCod2 INT NOT NULL DEFAULT -1 AFTER FileBrowser;
 UPDATE files SET ZoneUsrCod2=ZoneUsrCod;
 ALTER TABLE files DROP COLUMN ZoneUsrCod;
@@ -88,6 +91,7 @@ ALTER TABLE files DROP COLUMN CtrCod;
 ALTER TABLE files DROP COLUMN DegCod;
 ALTER TABLE files DROP COLUMN CrsCod;
 ALTER TABLE files DROP COLUMN GrpCod;
+DROP INDEX Location ON files;
 
         Version 14.66.1:  Jan 24, 2015	Fixed bug in clipboard. (175404 lines)
         Version 14.66:    Jan 24, 2015	Changes in clipboard table. (175401 lines)

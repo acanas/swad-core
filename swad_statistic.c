@@ -4583,10 +4583,10 @@ static void Sta_WriteRowStatsExpTrees (Brw_FileBrowser_t FileZone,const char *Na
    char StrNumFilesPerUsr[10+1];
    struct Sta_SizeOfFileZones SizeOfFileZones;
    char *ClassData = (FileZone == Brw_UNKNOWN) ? "DAT_N" :
-	                                                  "DAT";
+	                                         "DAT";
    char *StyleTableCell = (FileZone == Brw_UNKNOWN) ? " border-style:solid none none none;"
-	                                                       " border-width:1px;" :
-	                                                       "";
+	                                              " border-width:1px;" :
+	                                              "";
 
    Sta_GetSizeOfFileZoneFromDB (Gbl.Scope.Current,FileZone,&SizeOfFileZones);
    if (SizeOfFileZones.NumCrss == -1)
@@ -4706,156 +4706,194 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,Brw_FileBrowser_t Fil
      {
       case Sco_SCOPE_PLATFORM:
          if (FileBrowser == Brw_UNKNOWN)
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),'-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT Cod),'-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
-                           " WHERE FileBrowser<>'%u'",
-                     (unsigned) Brw_ADMI_BRIEF_USR);
+                           " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')",
+                     (unsigned) Brw_ADMI_DOCUM_CRS,
+                     (unsigned) Brw_ADMI_SHARE_CRS,
+                     (unsigned) Brw_ADMI_ASSIG_USR,
+                     (unsigned) Brw_ADMI_ASSIG_CRS,
+                     (unsigned) Brw_ADMI_WORKS_USR,
+                     (unsigned) Brw_ADMI_WORKS_CRS,
+                     (unsigned) Brw_ADMI_MARKS_CRS);
          else if (FileBrowser == Brw_ADMI_BRIEF_USR)
-            sprintf (Query,"SELECT '-1',COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
+            sprintf (Query,"SELECT '-1',COUNT(DISTINCT ZoneUsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'",
                      (unsigned) FileBrowser);
          else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
                   FileBrowser == Brw_ADMI_WORKS_USR)
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT Cod),COUNT(DISTINCT ZoneUsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'",
                      (unsigned) FileBrowser);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),'-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT Cod),'-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'",
                      (unsigned) FileBrowser);
          break;
       case Sco_SCOPE_INSTITUTION:
          if (FileBrowser == Brw_UNKNOWN)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM centres,degrees,courses,file_browser_size"
                            " WHERE centres.InsCod='%ld'"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
-                     Gbl.CurrentIns.Ins.InsCod);
+                           " AND courses.CrsCod=file_browser_size.Cod"
+                           " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')",
+                     Gbl.CurrentIns.Ins.InsCod,
+                     (unsigned) Brw_ADMI_DOCUM_CRS,
+                     (unsigned) Brw_ADMI_SHARE_CRS,
+                     (unsigned) Brw_ADMI_ASSIG_USR,
+                     (unsigned) Brw_ADMI_ASSIG_CRS,
+                     (unsigned) Brw_ADMI_WORKS_USR,
+                     (unsigned) Brw_ADMI_WORKS_CRS,
+                     (unsigned) Brw_ADMI_MARKS_CRS);
          else if (FileBrowser == Brw_ADMI_BRIEF_USR)
-            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,centres,degrees,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND centres.InsCod='%ld'"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND file_browser_size.UsrCod=crs_usr.UsrCod",
+                           " AND file_browser_size.ZoneUsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
                   FileBrowser == Brw_ADMI_WORKS_USR)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,centres,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND centres.InsCod='%ld'"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,centres,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND centres.InsCod='%ld'"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CENTRE:
          if (FileBrowser == Brw_UNKNOWN)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM degrees,courses,file_browser_size"
                            " WHERE degrees.CtrCod='%ld'"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
+                           " AND courses.CrsCod=file_browser_size.Cod"
+                           " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')",
+                     Gbl.CurrentCtr.Ctr.CtrCod,
+                     (unsigned) Brw_ADMI_DOCUM_CRS,
+                     (unsigned) Brw_ADMI_SHARE_CRS,
+                     (unsigned) Brw_ADMI_ASSIG_USR,
+                     (unsigned) Brw_ADMI_ASSIG_CRS,
+                     (unsigned) Brw_ADMI_WORKS_USR,
+                     (unsigned) Brw_ADMI_WORKS_CRS,
+                     (unsigned) Brw_ADMI_MARKS_CRS);
          else if (FileBrowser == Brw_ADMI_BRIEF_USR)
-            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,degrees,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND degrees.CtrCod='%ld'"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND file_browser_size.UsrCod=crs_usr.UsrCod",
+                           " AND file_browser_size.ZoneUsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
                   FileBrowser == Brw_ADMI_WORKS_USR)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND degrees.CtrCod='%ld'"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,degrees,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND degrees.CtrCod='%ld'"
                            " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEGREE:
          if (FileBrowser == Brw_UNKNOWN)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses"
-                           " WHERE courses.DegCod='%ld' AND courses.CrsCod=file_browser_size.CrsCod",
-                     Gbl.CurrentDeg.Deg.DegCod);
+                           " WHERE courses.DegCod='%ld' AND courses.CrsCod=file_browser_size.Cod"
+                           " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')",
+                     Gbl.CurrentDeg.Deg.DegCod,
+                     (unsigned) Brw_ADMI_DOCUM_CRS,
+                     (unsigned) Brw_ADMI_SHARE_CRS,
+                     (unsigned) Brw_ADMI_ASSIG_USR,
+                     (unsigned) Brw_ADMI_ASSIG_CRS,
+                     (unsigned) Brw_ADMI_WORKS_USR,
+                     (unsigned) Brw_ADMI_WORKS_CRS,
+                     (unsigned) Brw_ADMI_MARKS_CRS);
          else if (FileBrowser == Brw_ADMI_BRIEF_USR)
-            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND courses.DegCod='%ld'"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND file_browser_size.UsrCod=crs_usr.UsrCod",
+                           " AND file_browser_size.ZoneUsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
          else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
                   FileBrowser == Brw_ADMI_WORKS_USR)
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND courses.DegCod='%ld'"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
          else
-            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.CrsCod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),'-1',MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,courses"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND courses.DegCod='%ld'"
-                           " AND courses.CrsCod=file_browser_size.CrsCod",
+                           " AND courses.CrsCod=file_browser_size.Cod",
                      (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_COURSE:
          if (FileBrowser == Brw_UNKNOWN)
             sprintf (Query,"SELECT '1','-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
-                           " WHERE CrsCod='%ld'",
-                     Gbl.CurrentCrs.Crs.CrsCod);
+                           " WHERE Cod='%ld'"
+                           " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u')",
+                     Gbl.CurrentCrs.Crs.CrsCod,
+                     (unsigned) Brw_ADMI_DOCUM_CRS,
+                     (unsigned) Brw_ADMI_SHARE_CRS,
+                     (unsigned) Brw_ADMI_ASSIG_USR,
+                     (unsigned) Brw_ADMI_ASSIG_CRS,
+                     (unsigned) Brw_ADMI_WORKS_USR,
+                     (unsigned) Brw_ADMI_WORKS_CRS,
+                     (unsigned) Brw_ADMI_MARKS_CRS);
          else if (FileBrowser == Brw_ADMI_BRIEF_USR)
-            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.UsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
+            sprintf (Query,"SELECT '-1',COUNT(DISTINCT file_browser_size.ZoneUsrCod),MAX(file_browser_size.NumLevels),SUM(file_browser_size.NumFolders),SUM(file_browser_size.NumFiles),SUM(file_browser_size.TotalSize)"
                            " FROM file_browser_size,crs_usr"
                            " WHERE file_browser_size.FileBrowser='%u'"
                            " AND crs_usr.CrsCod='%ld'"
-                           " AND file_browser_size.UsrCod=crs_usr.UsrCod",
+                           " AND file_browser_size.ZoneUsrCod=crs_usr.UsrCod",
                      (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
          else if (FileBrowser == Brw_ADMI_ASSIG_USR ||
                   FileBrowser == Brw_ADMI_WORKS_USR)
-            sprintf (Query,"SELECT '1',COUNT(DISTINCT UsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
+            sprintf (Query,"SELECT '1',COUNT(DISTINCT ZoneUsrCod),MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'"
-                           " AND CrsCod='%ld'",
+                           " AND Cod='%ld'",
                      (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT '1','-1',MAX(NumLevels),SUM(NumFolders),SUM(NumFiles),SUM(TotalSize)"
                            " FROM file_browser_size"
                            " WHERE FileBrowser='%u'"
-                           " AND CrsCod='%ld'",
+                           " AND Cod='%ld'",
                      (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:

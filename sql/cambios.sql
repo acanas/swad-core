@@ -10482,4 +10482,19 @@ CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TI
 INSERT INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;
 ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
 
+----- 2015-01-26, swad14.69.1
+
+CREATE TABLE files_backup LIKE files;
+INSERT INTO files_backup SELECT * FROM files;
+
+CREATE TABLE file_browser_size_backup LIKE file_browser_size;
+INSERT INTO file_browser_size_backup SELECT * FROM file_browser_size;
+
+CREATE TABLE expanded_folders_backup LIKE expanded_folders;
+INSERT INTO expanded_folders_backup SELECT * FROM expanded_folders;
+
+CREATE TABLE clipboard_backup LIKE clipboard;
+INSERT INTO clipboard_backup SELECT * FROM clipboard;
+
+
 
