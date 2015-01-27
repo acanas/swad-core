@@ -3843,7 +3843,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod)
                   " AND Cod='%ld')"
                   " OR "
                   "(FileBrowser IN ('%u','%u','%u')"
-                  " AND Cod IN (SELECT GrpCod FROM crs_grp WHERE CrsCod='%ld'))"
+                  " AND Cod IN"
+                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
             (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -3867,7 +3870,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod)
                   " AND Cod='%ld')"
                   " OR "
                   "(FileBrowser IN ('%u','%u','%u')"
-                  " AND Cod IN (SELECT GrpCod FROM crs_grp WHERE CrsCod='%ld'))"
+                  " AND Cod IN"
+                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
             (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -3893,7 +3899,10 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod)
                   " AND Cod='%ld')"
                   " OR "
                   "(FileBrowser IN ('%u','%u','%u')"
-                  " AND Cod IN (SELECT GrpCod FROM crs_grp WHERE CrsCod='%ld'))"
+                  " AND Cod IN"
+                  " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
+                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
             (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -3943,16 +3952,6 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 	    (unsigned) Brw_ADMI_WORKS_CRS,
 	    CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove clipboards");
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   // Assignments and works are stored as one in file_browser_last...
-   // ...because a user views them at the same time
-   sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser='%u'"
-		  " AND Cod='%ld' AND ZoneUsrCod='%ld'",
-	    (unsigned) Brw_ADMI_ASSIG_USR,
-	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove file last visits");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"

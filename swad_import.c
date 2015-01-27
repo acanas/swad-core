@@ -501,8 +501,10 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
    unsigned NumStds,NumStd;
 
    /***** Get data of imported groups from database *****/
-   sprintf (Query,"SELECT GrpCod,ExternalCrsCod,DegName,CrsName,GrpName,GrpType FROM imported_groups"
-                  " WHERE SessionId='%s' ORDER BY DegName,CrsName,GrpName,GrpType",
+   sprintf (Query,"SELECT GrpCod,ExternalCrsCod,DegName,CrsName,GrpName,GrpType"
+	          " FROM imported_groups"
+                  " WHERE SessionId='%s'"
+                  " ORDER BY DegName,CrsName,GrpName,GrpType",
             Gbl.Session.Id);
    NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res_grp,"can not get imported groups");
 

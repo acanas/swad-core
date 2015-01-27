@@ -993,15 +993,14 @@ mysql> DESCRIBE file_browser_size;
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
 | FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
-| CrsCod      | int(11)    | NO   | PRI | -1      |       |
-| GrpCod      | int(11)    | NO   | PRI | -1      |       |
-| UsrCod      | int(11)    | NO   | PRI | -1      |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| ZoneUsrCod  | int(11)    | NO   | PRI | -1      |       |
 | NumLevels   | int(11)    | NO   |     | NULL    |       |
 | NumFolders  | int(11)    | NO   |     | NULL    |       |
 | NumFiles    | int(11)    | NO   |     | NULL    |       |
 | TotalSize   | bigint(20) | NO   |     | NULL    |       |
 +-------------+------------+------+-----+---------+-------+
-8 rows in set (0.00 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_size ("
                    "FileBrowser TINYINT NOT NULL,"

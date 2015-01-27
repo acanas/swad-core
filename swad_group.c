@@ -2548,7 +2548,10 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
 
    /***** Get groups of a type from database *****/
    sprintf (Query,"SELECT GrpCod,GrpName,MaxStudents,Open,FileZones"
-                  " FROM crs_grp WHERE GrpTypCod='%ld' ORDER BY GrpName",GrpTypCod);
+                  " FROM crs_grp"
+                  " WHERE GrpTypCod='%ld'"
+                  " ORDER BY GrpName",
+            GrpTypCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get groups of a type");
   }
 
@@ -2911,7 +2914,8 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
    /***** Get groups which a user belong to from database *****/
    if (CrsCod < 0)		// Query the groups from all the user's courses
       sprintf (Query,"SELECT GrpCod FROM crs_grp_usr"
-                     " WHERE UsrCod='%ld'",UsrCod);	// Groups will be unordered
+                     " WHERE UsrCod='%ld'",	// Groups will be unordered
+               UsrCod);
    else if (GrpTypCod < 0)	// Query the groups of any type in the course
       sprintf (Query,"SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp,crs_grp_usr"
                      " WHERE crs_grp_types.CrsCod='%ld' AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
@@ -3399,7 +3403,8 @@ static void Grp_RemoveGroupTypeCompletely (void)
 
    /***** Change all groups of this type in course timetable *****/
    sprintf (Query,"UPDATE timetable_crs SET GrpCod='-1'"
-                  " WHERE GrpCod IN (SELECT GrpCod FROM crs_grp WHERE GrpTypCod='%ld')",
+                  " WHERE GrpCod IN"
+                  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod='%ld')",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryUPDATE (Query,"can not update all groups of a type in course timetable");
 

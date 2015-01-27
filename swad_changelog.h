@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.70 (2015/01/26)"
+#define Log_PLATFORM_VERSION	"SWAD 14.70.1 (2015/01/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.70.1:  Jan 27, 2015	Fixed bug when removing a user from a course. (176187 lines)
         Version 14.70:    Jan 26, 2015	Fixed bugs in statistics about sizes of file browsers.
                                         Statistics about sizes of group zones.
                                         New scope (country) in statistics about sizes of file browsers. (176181 lines)
