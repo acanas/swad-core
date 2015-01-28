@@ -539,7 +539,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " background-color:%s;\">",
 	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeCtr);
+   Act_FormGoToStart (ActSeeInsInf);
    Ins_PutParamInsCod (Ins->InsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);

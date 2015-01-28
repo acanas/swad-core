@@ -613,7 +613,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 		      " vertical-align:middle; background-color:%s;\">",
 	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeDeg);
+   Act_FormGoToStart (ActSeeCtrInf);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);

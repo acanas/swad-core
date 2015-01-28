@@ -1282,7 +1282,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:middle; background-color:%s;\">",
 	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeCrs);
+   Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg->DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);
