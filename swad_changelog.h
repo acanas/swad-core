@@ -39,12 +39,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.70.5 (2015/01/28)"
+#define Log_PLATFORM_VERSION	"SWAD 14.70.6 (2015/01/28)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.70.5:  Jan 28, 2015	Links in list of institutions, centres and degrees now go to information options. (176219 lines)
+        Version 14.70.6:  Jan 28, 2015	Buttons to view list of institutions, centres, degrees and courses in information options. (176242 lines)
+        Version 14.70.5:  Jan 28, 2015	Links in list of countries, institutions, centres and degrees now go to information options. (176219 lines)
         Version 14.70.4:  Jan 28, 2015	Links in breadcrumbs now go to information options. (176218 lines)
         Version 14.70.3:  Jan 28, 2015	Some button messages changed.
 					Buttons to view when editing. (176217 lines)

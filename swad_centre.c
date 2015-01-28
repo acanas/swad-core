@@ -237,11 +237,11 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Degrees;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_Name;
    extern const char *Txt_Shortcut_to_this_centre;
    extern const char *Txt_QR_code;
-   extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char PathPhoto[PATH_MAX+1];
@@ -259,11 +259,18 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      /***** Links to print view, upload logo and upload photo *****/
+      /***** Links to show degrees, to print view
+             and to upload photo and logo *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /* Link to show degrees */
+      Act_FormStart (ActSeeDeg);
+      Act_LinkFormSubmit (Txt_Degrees,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
+      fprintf (Gbl.F.Out,"</form>");
+
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
 	  /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
 	 Lay_PutLinkToPrintView2 ();
@@ -274,9 +281,9 @@ static void Ctr_Configuration (bool PrintView)
 	    Log_PutFormToChangeLogo (Sco_SCOPE_CENTRE);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 	   }
-
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);

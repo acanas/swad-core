@@ -217,10 +217,10 @@ void Cty_PrintConfiguration (void)
 static void Cty_Configuration (bool PrintView)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut_to_this_country;
    extern const char *Txt_QR_code;
-   extern const char *Txt_Institutions;
    extern const char *Txt_Centres;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
@@ -230,14 +230,23 @@ static void Cty_Configuration (bool PrintView)
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      /***** Link to print view *****/
+      /***** Links to show institutions and to print view  *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /* Link to show institutions */
+      Act_FormStart (ActSeeIns);
+      Act_LinkFormSubmit (Txt_Institutions,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("ins",Txt_Institutions,Txt_Institutions);
+      fprintf (Gbl.F.Out,"</form>");
+
+      /* Link to print view */
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 	 Lay_PutLinkToPrintView1 (ActPrnCtyInf);
 	 Lay_PutLinkToPrintView2 ();
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -559,7 +568,7 @@ void Cty_ListCountries2 (void)
       if (Cty_CheckIfCountryMapExists (&Gbl.Ctys.Lst[NumCty]))
 	{
 	 /* Map image */
-	 Act_FormGoToStart (ActSeeIns);
+	 Act_FormGoToStart (ActSeeCtyInf);
 	 Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,
 		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
@@ -574,7 +583,7 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
 	                 " style=\"text-align:left; background-color:%s;\">",
 	       BgColor);
-      Act_FormGoToStart (ActSeeIns);
+      Act_FormGoToStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
       sprintf (Gbl.Title,Txt_Go_to_X,
 	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);

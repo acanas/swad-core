@@ -287,21 +287,27 @@ void Deg_PrintConfiguration (void)
 static void Deg_Configuration (bool PrintView)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Short_Name;
    extern const char *Txt_Shortcut_to_this_degree;
    extern const char *Txt_QR_code;
-   extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
-      /***** Links to print view and upload logo *****/
+      /***** Links to show courses, to print view and to upload logo *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /* Link to show courses */
+      Act_FormStart (ActSeeCrs);
+      Act_LinkFormSubmit (Txt_Courses,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("deg",Txt_Courses,Txt_Courses);
+      fprintf (Gbl.F.Out,"</form>");
+
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
 	  /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnDegInf);
 	 Lay_PutLinkToPrintView2 ();
@@ -309,9 +315,9 @@ static void Deg_Configuration (bool PrintView)
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
 	    Log_PutFormToChangeLogo (Sco_SCOPE_DEGREE);
-
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);

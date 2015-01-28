@@ -226,11 +226,11 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_Name;
    extern const char *Txt_Shortcut_to_this_institution;
    extern const char *Txt_QR_code;
-   extern const char *Txt_Centres;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_Departments;
@@ -239,11 +239,17 @@ static void Ins_Configuration (bool PrintView)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      /***** Links to print view and upload logo *****/
+      /***** Links to show centres, to print view and to upload logo *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /* Link to show centres */
+      Act_FormStart (ActSeeCtr);
+      Act_LinkFormSubmit (Txt_Centres,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
+      fprintf (Gbl.F.Out,"</form>");
+
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
 	 /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
 	 Lay_PutLinkToPrintView2 ();
@@ -251,9 +257,9 @@ static void Ins_Configuration (bool PrintView)
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
 	    Log_PutFormToChangeLogo (Sco_SCOPE_INSTITUTION);
-
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);
