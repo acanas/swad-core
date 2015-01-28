@@ -39,11 +39,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.70.2 (2015/01/27)"
+#define Log_PLATFORM_VERSION	"SWAD 14.70.3 (2015/01/28)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.70.3:  Jan 28, 2015	Some button messages changed.
+					Buttons to view when editing. (176217 lines)
         Version 14.70.2:  Jan 27, 2015	Changed permissions in documents zones of institution, centre and degree. (176188 lines)
         Version 14.70.1:  Jan 27, 2015	Fixed bug when removing a user from a course. (176187 lines)
         Version 14.70:    Jan 26, 2015	Fixed bugs in statistics about sizes of file browsers.

@@ -685,6 +685,9 @@ void Ins_EditInstitutions (void)
   {
    extern const char *Txt_No_institutions_have_been_created_in_this_country;
 
+   /***** Put link (form) to view institutions *****/
+   Lay_PutFormToView (ActSeeIns);
+
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 

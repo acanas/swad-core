@@ -2913,7 +2913,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Print_view;
+   extern const char *Txt_Print;
 
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -2924,8 +2924,8 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
    Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
    if (StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</form>"
 	              "</div>");
   }

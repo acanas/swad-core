@@ -26411,25 +26411,25 @@ const char *Txt_Presents =
 	"Presentes";
 #endif
 
-const char *Txt_Print_view =
+const char *Txt_Print =
 #if   L==0
-	"Vista d'impressi&oacute;";
+	"Imprimir";
 #elif L==1
-	"Druckansicht";
+	"Ausdrucken";
 #elif L==2
-	"Print view";
+	"Print";
 #elif L==3
-	"Vista de impresi&oacute;n";
+	"Imprimir";
 #elif L==4
-	"Vue d'impression";
+	"Imprimer";
 #elif L==5
-	"Vista de impresi&oacute;n";	// Okoteve traducción
+	"Imprimir";	// Okoteve traducción
 #elif L==6
-	"Anteprima di stampa";
+	"Stampare";
 #elif L==7
-	"Widok do druku";
+	"Wydrukuj";
 #elif L==8
-	"Impress&atilde;o vista";
+	"Imprimir";
 #endif
 
 const char *Txt_Private_available_to_certain_users_identified =
@@ -46153,6 +46153,27 @@ const char *Txt_Vacants =
 	"Desocupados";
 #endif
 
+const char *Txt_View =
+#if   L==0
+	"Veure";
+#elif L==1
+	"Anzeigen";
+#elif L==2
+	"View";
+#elif L==3
+	"Ver";
+#elif L==4
+	"Voir";
+#elif L==5
+	"Ver";	// Okoteve traducción
+#elif L==6
+	"Vedi";
+#elif L==7
+	"Wy&sacute;wietl";
+#elif L==8
+	"Ver";
+#endif
+
 const char *Txt_View_all_recipients =
 #if   L==0
 	"Ver todos los destinatarios";	// Necessita traduccio
@@ -46172,27 +46193,6 @@ const char *Txt_View_all_recipients =
 	"View all recipients";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Ver todos os estinat&aacute;rios";
-#endif
-
-const char *Txt_View_as_a_student =
-#if   L==0
-	"Veure com estudiant";
-#elif L==1
-	"Anzeigen als Student";
-#elif L==2
-	"View as a student";
-#elif L==3
-	"Ver como estudiante";
-#elif L==4
-	"Voir comme &eacute;tudiant/e";
-#elif L==5
-	"Ver como estudiante";	// Okoteve traducción
-#elif L==6
-	"Vedi come studente";
-#elif L==7
-	"Wy&sacute;wietl jako student";
-#elif L==8
-	"Ver como estudante";
 #endif
 
 const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences

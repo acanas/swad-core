@@ -677,6 +677,9 @@ void Ctr_EditCentres (void)
    extern const char *Txt_There_is_no_list_of_institutions;
    extern const char *Txt_You_must_create_at_least_one_institution_before_creating_centres;
 
+   /***** Put link (form) to view centres *****/
+   Lay_PutFormToView (ActSeeCtr);
+
    /***** Get list of institutions of the current country *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_MINIMAL_DATA);
    if (Gbl.Inss.Num)

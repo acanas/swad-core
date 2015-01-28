@@ -1280,12 +1280,12 @@ void Rec_ListRecordsTchsCrs (void)
 void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Print_view;
+   extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\"> (</span>"
 	              "<select name=\"RecsPerPag\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);

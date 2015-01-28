@@ -1021,6 +1021,9 @@ static void Deg_EditDegreeTypes (void)
   {
    extern const char *Txt_There_are_no_types_of_degree;
 
+   /***** Put link (form) to view degree types *****/
+   Lay_PutFormToView (ActSeeDegTyp);
+
    /***** Help message *****/
    if (!Gbl.Degs.DegTypes.Num)
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
@@ -1734,7 +1737,7 @@ static void Deg_PutFormToCreateDegType (void)
                       "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
                       "%s"
                       "</th>"
-                      "<th lass=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2235,6 +2238,9 @@ void Deg_EditDegrees (void)
    extern const char *Txt_You_must_create_at_least_one_centre_before_creating_degrees;
    extern const char *Txt_There_is_no_list_of_types_of_degree;
    extern const char *Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees;
+
+   /***** Put link (form) to view degrees *****/
+   Lay_PutFormToView (ActSeeDeg);
 
    /***** Get list of degrees in the current centre *****/
    Deg_GetListDegsOfCurrentCtr ();

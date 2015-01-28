@@ -909,6 +909,23 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
+/************************* Put a link (form) to view *************************/
+/*****************************************************************************/
+
+void Lay_PutFormToView (Act_Action_t Action)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_View;
+
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   Act_FormStart (Action);
+   Act_LinkFormSubmit (Txt_View,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("visible_on",Txt_View,Txt_View);
+   fprintf (Gbl.F.Out,"</form>"
+	              "</div>");
+  }
+
+/*****************************************************************************/
 /************************* Put a link (form) to edit *************************/
 /*****************************************************************************/
 
@@ -1438,10 +1455,10 @@ void Lay_PutLinkToPrintView1 (Act_Action_t NextAction)
 void Lay_PutLinkToPrintView2 (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Print_view;
+   extern const char *Txt_Print;
 
-   Act_LinkFormSubmit (Txt_Print_view,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print_view,Txt_Print_view);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</form>");
   }
 

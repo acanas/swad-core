@@ -819,6 +819,9 @@ void Cty_EditCountries (void)
   {
    extern const char *Txt_No_countries_have_been_created;
 
+   /***** Put link (form) to view countries *****/
+   Lay_PutFormToView (ActSeeCty);
+
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
