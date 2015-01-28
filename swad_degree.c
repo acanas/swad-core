@@ -632,7 +632,7 @@ void Deg_WriteCtyInsCtrDeg (void)
 	       The_ClassDegree[Gbl.Prefs.Theme]);
 
       /***** Form to go to the country *****/
-      Act_FormGoToStart (ActSeeIns);
+      Act_FormGoToStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
       Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
 	                  The_ClassDegree[Gbl.Prefs.Theme]);
@@ -647,7 +647,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                   The_ClassDegree[Gbl.Prefs.Theme]);
 
          /***** Form to go to the institution *****/
-         Act_FormGoToStart (ActSeeCtr);
+         Act_FormGoToStart (ActSeeInsInf);
          Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
          Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
                              The_ClassDegree[Gbl.Prefs.Theme]);
@@ -662,7 +662,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                      The_ClassDegree[Gbl.Prefs.Theme]);
 
             /***** Form to go to the centre *****/
-            Act_FormGoToStart (ActSeeDeg);
+            Act_FormGoToStart (ActSeeCtrInf);
             Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
             Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
         	                The_ClassDegree[Gbl.Prefs.Theme]);
@@ -677,7 +677,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                         The_ClassDegree[Gbl.Prefs.Theme]);
 
                /***** Form to go to the degree *****/
-               Act_FormGoToStart (ActSeeCrs);
+               Act_FormGoToStart (ActSeeDegInf);
                Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
                Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
         	                   The_ClassDegree[Gbl.Prefs.Theme]);
