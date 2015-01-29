@@ -39,11 +39,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.70.6 (2015/01/28)"
+#define Log_PLATFORM_VERSION	"SWAD 14.71 (2015/01/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.71:    Jan 29, 2015	New table admin to store system, institution, centre or degree admins. (176255 lines)
+					4 changes necessary in database:
+CREATE TABLE IF NOT EXISTS admin (UsrCod INT NOT NULL,Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,Cod INT NOT NULL,UNIQUE INDEX(UsrCod,Scope,Cod));
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Deg',DegCod FROM deg_admin WHERE DegCod>'0';
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Sys',DegCod FROM deg_admin WHERE DegCod='-2';
+DROP TABLE IF EXISTS deg_admin;
+
         Version 14.70.6:  Jan 28, 2015	Buttons to view list of institutions, centres, degrees and courses in information options. (176242 lines)
         Version 14.70.5:  Jan 28, 2015	Links in list of countries, institutions, centres and degrees now go to information options. (176219 lines)
         Version 14.70.4:  Jan 28, 2015	Links in breadcrumbs now go to information options. (176218 lines)

@@ -677,7 +677,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   sprintf (Query,"DELETE FROM deg_admin"
+   sprintf (Query,"DELETE FROM admin"
                   " WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user as administrator");

@@ -811,9 +811,7 @@ bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_DEG_ADMIN:
-	 if (Usr_CheckIfUsrIsAdmOfAllDegs (Gbl.Usrs.Me.UsrDat.UsrCod))        // If I am admin of all degrees
-	    return true;
-	 /* If I am an administrator of current degree, but not of all degrees,
+	 /* If I am an administrator of current degree,
 	    I only can change the password of users from current degree */
 	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod);
       case Rol_ROLE_SUPERUSER:

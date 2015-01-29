@@ -80,10 +80,6 @@ const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
    "list"
   };
 
-/* Special codes for global administrator and superuser deg_admin table */
-#define Usr_SPECIAL_CODE_GLOBAL_ADMIN	-1L
-#define Usr_SPECIAL_CODE_SUPERUSER	-2L
-
 #define Usr_NUM_MAIN_FIELDS_DATA_USR	 9
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 8
 #define Usr_NUM_ALL_FIELDS_DATA_INV	17
@@ -695,7 +691,7 @@ void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars)
   }
 
 /*****************************************************************************/
-/********** Check if a user is an administrator of current degree ************/
+/************* Check if a user is an administrator of a degree ***************/
 /*****************************************************************************/
 
 bool Usr_CheckIfUsrIsAdmOfDeg (long UsrCod,long DegCod)
@@ -703,25 +699,10 @@ bool Usr_CheckIfUsrIsAdmOfDeg (long UsrCod,long DegCod)
    char Query[512];
 
    /***** Get if a user is administrator of a degree from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM deg_admin"
-                  " WHERE UsrCod='%ld' AND DegCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM admin"
+                  " WHERE UsrCod='%ld' AND Scope='Deg' AND Cod='%ld'",
             UsrCod,DegCod);
    return (DB_QueryCOUNT (Query,"can not check if a user is administrator of a degree") != 0);
-  }
-
-/*****************************************************************************/
-/********** Check if a user is an administrator of current degree ************/
-/*****************************************************************************/
-
-bool Usr_CheckIfUsrIsAdmOfAllDegs (long UsrCod)
-  {
-   char Query[512];
-
-   /***** Get if a user is administrator of all degrees from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM deg_admin"
-                  " WHERE UsrCod='%ld' AND DegCod='%ld'",
-            UsrCod,Usr_SPECIAL_CODE_GLOBAL_ADMIN);
-   return (DB_QueryCOUNT (Query,"can not check if a user is administrator of all degrees") != 0);
   }
 
 /*****************************************************************************/
@@ -733,9 +714,9 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
    char Query[512];
 
    /***** Get if a user is superuser from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM deg_admin"
-                  " WHERE UsrCod='%ld' AND DegCod='%ld'",
-            UsrCod,Usr_SPECIAL_CODE_SUPERUSER);
+   sprintf (Query,"SELECT COUNT(*) FROM admin"
+                  " WHERE UsrCod='%ld' AND Scope='Sys'",
+            UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
   }
 
@@ -2241,8 +2222,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       /* Check if I am and administrator of current degree */
       ICanBeAdmin = Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-   if (!ICanBeAdmin)
-      ICanBeAdmin = Usr_CheckIfUsrIsAdmOfAllDegs (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Check if I belong to current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
@@ -3964,41 +3943,48 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_PLATFORM:
-         strcpy (Query,"SELECT DISTINCT deg_admin.UsrCod,'Y',usr_data.Sex"
-                       " FROM deg_admin,usr_data"
-                       " WHERE deg_admin.UsrCod=usr_data.UsrCod "
+         strcpy (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
+                       " FROM admin,usr_data"
+                       " WHERE (admin.Scope='Deg'"
+                       " OR admin.Scope='Sys')"
+                       " AND admin.UsrCod=usr_data.UsrCod "
                        " ORDER BY usr_data.Surname1,usr_data.Surname2,"
                        "usr_data.FirstName,usr_data.UsrCod");
          break;
       case Sco_SCOPE_INSTITUTION:
-         sprintf (Query,"SELECT DISTINCT deg_admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM centres,degrees,deg_admin,usr_data"
-                        " WHERE ((centres.InsCod='%ld' AND centres.CtrCod=degrees.CtrCod AND degrees.DegCod=deg_admin.DegCod) OR deg_admin.DegCod='%ld')"
-                        " AND deg_admin.UsrCod=usr_data.UsrCod "
+         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
+                        " FROM centres,degrees,admin,usr_data"
+                        " WHERE ((centres.InsCod='%ld'"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=admin.Cod"
+                        " AND admin.Scope='Deg')"
+                        " OR admin.Scope='Sys')"
+                        " AND admin.UsrCod=usr_data.UsrCod "
                         " ORDER BY usr_data.Surname1,usr_data.Surname2,"
                         "usr_data.FirstName,usr_data.UsrCod",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Usr_SPECIAL_CODE_GLOBAL_ADMIN);
+                  Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CENTRE:
-         sprintf (Query,"SELECT DISTINCT deg_admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM degrees,deg_admin,usr_data"
-                        " WHERE ((degrees.CtrCod='%ld' AND degrees.DegCod=deg_admin.DegCod) OR deg_admin.DegCod='%ld')"
-                        " AND deg_admin.UsrCod=usr_data.UsrCod "
+         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
+                        " FROM degrees,admin,usr_data"
+                        " WHERE ((degrees.CtrCod='%ld'"
+                        " AND degrees.DegCod=admin.Cod"
+                        " AND admin.Scope='Deg')"
+                        " OR admin.Scope='Sys')"
+                        " AND admin.UsrCod=usr_data.UsrCod "
                         " ORDER BY usr_data.Surname1,usr_data.Surname2,"
                         "usr_data.FirstName,usr_data.UsrCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Usr_SPECIAL_CODE_GLOBAL_ADMIN);
+                  Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEGREE:
-         sprintf (Query,"SELECT DISTINCT deg_admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM deg_admin,usr_data"
-                        " WHERE (deg_admin.DegCod='%ld' OR deg_admin.DegCod='%ld')"
-                        " AND deg_admin.UsrCod=usr_data.UsrCod "
+         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
+                        " FROM admin,usr_data"
+                        " WHERE ((admin.Scope='Deg' AND admin.Cod='%ld')"
+                        " OR admin.Scope='Sys')"
+                        " AND admin.UsrCod=usr_data.UsrCod "
                         " ORDER BY usr_data.Surname1,usr_data.Surname2,"
                         "usr_data.FirstName,usr_data.UsrCod",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Usr_SPECIAL_CODE_GLOBAL_ADMIN);
+                  Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
          return;

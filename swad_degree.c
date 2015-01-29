@@ -164,12 +164,13 @@ void Deg_SeeDegWithPendingCrss (void)
      {
       case Rol_ROLE_DEG_ADMIN:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
-                        " FROM courses,deg_admin,degrees"
-                        " WHERE (courses.Status & %u)<>0"
-                        " AND courses.DegCod=deg_admin.DegCod AND deg_admin.UsrCod='%ld'"
+                        " FROM admin,courses,degrees"
+                        " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                        " AND admin.Cod=courses.DegCod"
+                        " AND (courses.Status & %u)<>0"
                         " AND courses.DegCod=degrees.DegCod"
                         " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                  (unsigned) Crs_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
+                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_ROLE_SUPERUSER:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
@@ -303,7 +304,7 @@ static void Deg_Configuration (bool PrintView)
       /* Link to show courses */
       Act_FormStart (ActSeeCrs);
       Act_LinkFormSubmit (Txt_Courses,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("deg",Txt_Courses,Txt_Courses);
+      Lay_PutSendIcon ("crs",Txt_Courses,Txt_Courses);
       fprintf (Gbl.F.Out,"</form>");
 
       if (!PrintView)
@@ -2507,8 +2508,9 @@ void Deg_GetListDegsAdminByMe (void)
    else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN
       sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
                      "degrees.ShortName,degrees.FullName,degrees.FirstYear,degrees.LastYear,degrees.OptYear,degrees.WWW"
-                     " FROM deg_admin,degrees"
-                     " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod<>'-1' AND deg_admin.DegCod=degrees.DegCod"
+                     " FROM admin,degrees"
+                     " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                     " AND admin.Cod=degrees.DegCod"
                      " ORDER BY degrees.ShortName",
                Gbl.Usrs.Me.UsrDat.UsrCod);
    Gbl.Usrs.Me.MyAdminDegs.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
@@ -3206,7 +3208,7 @@ static void Deg_RemoveDegreeCompletely (long DegCod)
    Brw_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   sprintf (Query,"DELETE FROM deg_admin WHERE DegCod='%ld'",
+   sprintf (Query,"DELETE FROM admin WHERE Scope='Deg' AND Cod='%ld'",
             DegCod);
    DB_QueryDELETE (Query,"can not remove administrators of a degree");
 
@@ -3904,14 +3906,14 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
    long DegCod;
 
    /***** Get degrees admin by a user from database *****/
-   sprintf (Query,"(SELECT DegCod,'' AS ShortName,''"
-	          " FROM deg_admin"
-	          " WHERE UsrCod='%ld' AND DegCod<'0')"
+   sprintf (Query,"(SELECT -1 AS DegCod,'' AS ShortName,''"
+	          " FROM admin"
+	          " WHERE UsrCod='%ld' AND Scope='Sys')"
                   " UNION "
                   "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName"
-                  " FROM deg_admin,degrees"
-                  " WHERE deg_admin.UsrCod='%ld' AND deg_admin.DegCod>='0'"
-                  " AND deg_admin.DegCod=degrees.DegCod)"
+                  " FROM admin,degrees"
+                  " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                  " AND admin.Cod=degrees.DegCod)"
                   " ORDER BY ShortName",
             UsrCod,UsrCod);
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by a user"))) // If degrees found for this administrator

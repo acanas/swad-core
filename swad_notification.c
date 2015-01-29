@@ -1061,8 +1061,14 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // and I want to be a teacher (checked before calling this function
 	    // to not send requests to be a student to admins)
 	    // ==> send notification to administrators or superusers
-	    sprintf (Query,"SELECT UsrCod FROM deg_admin"
-	 		   " WHERE (DegCod='%ld' OR DegCod<=0) AND UsrCod<>'%ld'",
+	    sprintf (Query,"SELECT UsrCod FROM admin"
+	 		   " WHERE (Scope='Sys'"
+	 		   " OR (Scope='Ins' AND Cod='%ld')"
+	 		   " OR (Scope='Ctr' AND Cod='%ld')"
+	 		   " OR (Scope='Deg' AND Cod='%ld'))"
+	 		   " AND UsrCod<>'%ld'",
+	 	     Gbl.CurrentIns.Ins.InsCod,
+	 	     Gbl.CurrentCtr.Ctr.CtrCod,
 	 	     Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;

@@ -520,9 +520,17 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current centre
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
          if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+            return;
+         break;
+      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+            return;
+         break;
+      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
             return;
          break;
       case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
@@ -589,9 +597,17 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
          if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+            return;
+         break;
+      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+            return;
+         break;
+      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
             return;
          break;
       case Sco_SCOPE_DEGREE:		// Show connected users in the current degree

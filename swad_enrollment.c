@@ -2075,9 +2075,9 @@ void Enr_ShowEnrollmentRequests (void)
                break;
             case Rol_ROLE_DEG_ADMIN:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
-                              " FROM deg_admin,courses,crs_usr_requests"
-                              " WHERE deg_admin.UsrCod='%ld'"
-                              " AND deg_admin.DegCod=courses.DegCod"
+                              " FROM admin,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                              " AND admin.Cod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2115,11 +2115,11 @@ void Enr_ShowEnrollmentRequests (void)
                break;
             case Rol_ROLE_DEG_ADMIN:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
-                              " FROM deg_admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE deg_admin.UsrCod='%ld'"
+                              " FROM admin,centres,degrees,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
                               " AND centres.InsCod='%ld'"
-                              " AND deg_admin.DegCod=degrees.DegCod"
-                              " AND deg_admin.DegCod=courses.DegCod"
+                              " AND admin.Cod=degrees.DegCod"
+                              " AND admin.Cod=courses.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2164,11 +2164,11 @@ void Enr_ShowEnrollmentRequests (void)
                break;
             case Rol_ROLE_DEG_ADMIN:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
-                              " FROM deg_admin,degrees,courses,crs_usr_requests"
-                              " WHERE deg_admin.UsrCod='%ld'"
+                              " FROM admin,degrees,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
                               " AND degrees.CtrCod='%ld'"
-                              " AND deg_admin.DegCod=degrees.DegCod"
-                              " AND deg_admin.DegCod=courses.DegCod"
+                              " AND admin.Cod=degrees.DegCod"
+                              " AND admin.Cod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -3294,8 +3294,8 @@ static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat)
    if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))        // User is administrator of current degree
      {
       /***** Remove user from the table of courses-users *****/
-      sprintf (Query,"DELETE FROM deg_admin"
-                     " WHERE UsrCod='%ld' AND DegCod='%ld'",
+      sprintf (Query,"DELETE FROM admin"
+                     " WHERE UsrCod='%ld' AND Scope='Deg' AND Cod='%ld'",
                UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
       DB_QueryDELETE (Query,"can not remove an administrator from a degree");
 

@@ -169,6 +169,24 @@ mysql> DESCRIBE actions_MFU;
                    "LastClick DATETIME NOT NULL,"
                    "UNIQUE INDEX(UsrCod,ActCod))");
 
+/***** Table admin *****/
+/*
+mysql> DESCRIBE admin;
++--------+-------------------------------+------+-----+---------+-------+
+| Field  | Type                          | Null | Key | Default | Extra |
++--------+-------------------------------+------+-----+---------+-------+
+| UsrCod | int(11)                       | NO   | PRI | NULL    |       |
+| Scope  | enum('Sys','Ins','Ctr','Deg') | NO   | PRI | NULL    |       |
+| Cod    | int(11)                       | NO   | PRI | NULL    |       |
++--------+-------------------------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS admin ("
+	           "UsrCod INT NOT NULL,"
+	           "Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
+	           "Cod INT NOT NULL,"
+	           "UNIQUE INDEX(UsrCod,Scope,Cod))");
+
    /***** Table ann_seen *****/
 /*
 mysql> DESCRIBE ann_seen;
@@ -184,7 +202,6 @@ mysql> DESCRIBE ann_seen;
 		   "AnnCod INT NOT NULL,"
 		   "UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(AnnCod,UsrCod))");
-
 
    /***** Table announcements *****/
 /*
@@ -805,22 +822,6 @@ mysql> DESCRIBE crs_usr_requests;
 	           "Role TINYINT NOT NULL DEFAULT 0,"
 	           "RequestTime DATETIME NOT NULL,"
 	           "UNIQUE INDEX(ReqCod),UNIQUE INDEX(CrsCod,UsrCod),INDEX(UsrCod))");
-
-   /***** Table deg_admin *****/
-/*
-mysql> DESCRIBE deg_admin;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-| DegCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_admin ("
-                   "UsrCod INT NOT NULL,"
-                   "DegCod INT NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,DegCod))");
 
    /***** Table deg_types *****/
 /*

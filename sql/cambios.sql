@@ -10496,5 +10496,9 @@ INSERT INTO expanded_folders_backup SELECT * FROM expanded_folders;
 CREATE TABLE clipboard_backup LIKE clipboard;
 INSERT INTO clipboard_backup SELECT * FROM clipboard;
 
+----- 2015-01-29, swad14.71
 
-
+CREATE TABLE IF NOT EXISTS admin (UsrCod INT NOT NULL,Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,Cod INT NOT NULL,UNIQUE INDEX(UsrCod,Scope,Cod));
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Deg',DegCod FROM deg_admin WHERE DegCod>'0';
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Sys',DegCod FROM deg_admin WHERE DegCod='-2';
+DROP TABLE deg_admin;
