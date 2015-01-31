@@ -110,6 +110,8 @@ static void Usr_GetMyLastData (void);
 static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
+static bool Usr_CheckIfUsrIsAdmOf (long UsrCod,const char *Scope,long Cod);
+
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
 
@@ -691,18 +693,48 @@ void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars)
   }
 
 /*****************************************************************************/
+/*********** Check if a user is an administrator of an institution ***********/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrIsAdmOfIns (long UsrCod,long InsCod)
+  {
+   /***** Get if a user is administrator of an institution from database *****/
+   return Usr_CheckIfUsrIsAdmOf (UsrCod,"Ins",InsCod);
+  }
+
+/*****************************************************************************/
+/************* Check if a user is an administrator of a centre ***************/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrIsAdmOfCtr (long UsrCod,long CtrCod)
+  {
+   /***** Get if a user is administrator of a centre from database *****/
+   return Usr_CheckIfUsrIsAdmOf (UsrCod,"Ctr",CtrCod);
+  }
+
+/*****************************************************************************/
 /************* Check if a user is an administrator of a degree ***************/
 /*****************************************************************************/
 
 bool Usr_CheckIfUsrIsAdmOfDeg (long UsrCod,long DegCod)
   {
-   char Query[512];
+   /***** Get if a user is administrator of a degree from database *****/
+   return Usr_CheckIfUsrIsAdmOf (UsrCod,"Deg",DegCod);
+  }
+
+/*****************************************************************************/
+/*********** Check if a user is an administrator of an institution ***********/
+/*****************************************************************************/
+
+static bool Usr_CheckIfUsrIsAdmOf (long UsrCod,const char *Scope,long Cod)
+  {
+   char Query[128];
 
    /***** Get if a user is administrator of a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM admin"
-                  " WHERE UsrCod='%ld' AND Scope='Deg' AND Cod='%ld'",
-            UsrCod,DegCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user is administrator of a degree") != 0);
+                  " WHERE UsrCod='%ld' AND Scope='%s' AND Cod='%ld'",
+            UsrCod,Scope,Cod);
+   return (DB_QueryCOUNT (Query,"can not check if a user is administrator") != 0);
   }
 
 /*****************************************************************************/

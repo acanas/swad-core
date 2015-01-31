@@ -861,8 +861,8 @@ Users:
 	710. ActReqAccEnrCrs		Confirm acceptation / refusion of enrollment in current course
 	711. ActAccEnrCrs		Accept enrollment in current course
 	712. ActRemMeCrs		Refuse enrollment in current course
-	713. ActNewAdm			Register an administrador in this degree
-	714. ActRemAdm			Remove an administrador of this degree
+	713. ActNewAdmDeg		Register an administrador in this degree
+	714. ActRemAdmDeg		Remove an administrador of this degree
 	715. ActRcvFrmMdfUsrCrs		Receive a form with IDs of users to be registeres/removed to/from current course
 	716. ActFrmIDOthUsr		Show form to the change of the IDs of another user
 	717. ActRemIDOth		Remove one of the IDs of another user
@@ -2156,8 +2156,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActRemMeCrs	*/{ 559,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
 
-   /* ActNewAdm		*/{ 586,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
-   /* ActRemAdm		*/{ 584,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdm			,NULL},
+   /* ActNewAdmDeg	*/{ 586,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
+   /* ActRemAdmDeg	*/{ 584,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmDeg			,NULL},
 
    /* ActRcvFrmMdfUsrCrs*/{ 799,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormUsrsCrs		,NULL},
 
@@ -3082,9 +3082,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #581 (obsolete action)
 	-1,			// #582 (obsolete action)
 	-1,			// #583 (obsolete action)
-	ActRemAdm,		// #584
+	ActRemAdmDeg,		// #584
 	-1,			// #585 (obsolete action)
-	ActNewAdm,		// #586
+	ActNewAdmDeg,		// #586
 	ActLstAdm,		// #587
 	-1,			// #588 (obsolete action)
 	ActChgMyRol,		// #589

@@ -110,15 +110,24 @@ static void Enr_ShowFormToEditOtherUsr (void);
 static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat);
 static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
 static void Enr_ReqRemAdmOfDeg (void);
-static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
+static void Enr_ReqRemOrRemAdmIns (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
+static void Enr_ReqRemOrRemAdmCtr (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
+static void Enr_ReqRemOrRemAdmDeg (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
 
+static void Enr_ReqAddAdmOfIns (void);
+static void Enr_ReqAddAdmOfCtr (void);
 static void Enr_ReqAddAdmOfDeg (void);
 
 static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
 
+static void Enr_AskIfRemAdmFromIns (bool ItsMe);
+static void Enr_AskIfRemAdmFromCtr (bool ItsMe);
 static void Enr_AskIfRemAdmFromDeg (bool ItsMe);
+
+static void Enr_EffectivelyRemAdmFromIns (struct UsrData *UsrDat);
+static void Enr_EffectivelyRemAdmFromCtr (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat);
 
 /*****************************************************************************/
@@ -789,26 +798,53 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *Txt_Register_me_in_the_course_X;
    extern const char *Txt_Register_user_in_the_course_X;
    extern const char *Txt_Register_user_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Register_user_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Register_user_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_me_from_the_course_X;
    extern const char *Txt_Remove_user_from_the_course_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_user_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_user_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Remove_user_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Completely_eliminate_me;
    extern const char *Txt_Completely_eliminate_user;
    unsigned NumOptionsShown = 0;
    bool UsrBelongsToCrs = false;
    bool UsrIsDegAdmin = false;
+   bool UsrIsCtrAdmin = false;
+   bool UsrIsInsAdmin = false;
    bool OptionChecked = false;
 
    /***** Check if the other user belongs to the current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
       UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Check if the other user is administrator of the current degree *****/
-   if (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-      ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
-        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
-      UsrIsDegAdmin = Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentDeg.Deg.DegCod);
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /***** Check if the other user is administrator of the current institution *****/
+      if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN && ItsMe) ||
+	   Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 UsrIsInsAdmin = Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                           Gbl.CurrentIns.Ins.InsCod);
+
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	{
+	 /***** Check if the other user is administrator of the current centre *****/
+	 if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN && ItsMe) ||
+	      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	    UsrIsCtrAdmin = Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                              Gbl.CurrentCtr.Ctr.CtrCod);
+
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    /***** Check if the other user is administrator of the current degree *****/
+	    if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
+		 Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	       UsrIsDegAdmin = Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                                 Gbl.CurrentDeg.Deg.DegCod);
+	}
+     }
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
@@ -840,24 +876,68 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       NumOptionsShown++;
      }
 
-   /***** Register user as administrator of degree *****/
-   if (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-       !UsrIsDegAdmin &&
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_degree_X,
-	       Gbl.CurrentDeg.Deg.ShortName);
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
-	       (unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
-      if (!OptionChecked)
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	{
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-         OptionChecked = true;
-	}
-      fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    /***** Register user as administrator of degree *****/
+	    if (!UsrIsDegAdmin &&
+		Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	      {
+	       sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_degree_X,
+			Gbl.CurrentDeg.Deg.ShortName);
+	       fprintf (Gbl.F.Out,"<li>"
+				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
+	       if (!OptionChecked)
+		 {
+		  fprintf (Gbl.F.Out," checked=\"checked\"");
+		  OptionChecked = true;
+		 }
+	       fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
 
-      NumOptionsShown++;
+	       NumOptionsShown++;
+	      }
+
+	 /***** Register user as administrator of centre *****/
+	 if (!UsrIsCtrAdmin &&
+	     Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	   {
+	    sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_centre_X,
+		     Gbl.CurrentCtr.Ctr.ShortName);
+	    fprintf (Gbl.F.Out,"<li>"
+			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
+	    if (!OptionChecked)
+	      {
+	       fprintf (Gbl.F.Out," checked=\"checked\"");
+	       OptionChecked = true;
+	      }
+	    fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+
+	    NumOptionsShown++;
+	   }
+	}
+
+      /***** Register user as administrator of institution *****/
+      if (!UsrIsInsAdmin &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	{
+	 sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_institution_X,
+		  Gbl.CurrentIns.Ins.ShortName);
+	 fprintf (Gbl.F.Out,"<li>"
+			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
+	 if (!OptionChecked)
+	   {
+	    fprintf (Gbl.F.Out," checked=\"checked\"");
+	    OptionChecked = true;
+	   }
+	 fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+
+	 NumOptionsShown++;
+	}
      }
 
    /***** Remove user from the course *****/
@@ -880,27 +960,77 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       NumOptionsShown++;
      }
 
-   /***** Remove user as an administrator of the degree *****/
-   if (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-       UsrIsDegAdmin &&
-       ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
-         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      sprintf (Gbl.Message,
-               ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-		       Txt_Remove_user_as_an_administrator_of_the_degree_X,
-	       Gbl.CurrentDeg.Deg.ShortName);
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
-	       (unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
-      if (!OptionChecked)
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	{
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-         OptionChecked = true;
-	}
-      fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	 if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    /***** Remove user as an administrator of the degree *****/
+	    if (UsrIsDegAdmin &&
+		((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+	      {
+	       sprintf (Gbl.Message,
+			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
+				Txt_Remove_user_as_an_administrator_of_the_degree_X,
+			Gbl.CurrentDeg.Deg.ShortName);
+	       fprintf (Gbl.F.Out,"<li>"
+				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
+	       if (!OptionChecked)
+		 {
+		  fprintf (Gbl.F.Out," checked=\"checked\"");
+		  OptionChecked = true;
+		 }
+	       fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
 
-      NumOptionsShown++;
+	       NumOptionsShown++;
+	      }
+
+          /***** Remove user as an administrator of the centre *****/
+	  if (UsrIsCtrAdmin &&
+	     ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN && ItsMe) ||
+	       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+	   {
+	    sprintf (Gbl.Message,
+		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
+			     Txt_Remove_user_as_an_administrator_of_the_centre_X,
+		     Gbl.CurrentCtr.Ctr.ShortName);
+	    fprintf (Gbl.F.Out,"<li>"
+			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
+	    if (!OptionChecked)
+	      {
+	       fprintf (Gbl.F.Out," checked=\"checked\"");
+	       OptionChecked = true;
+	      }
+	    fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+
+	    NumOptionsShown++;
+	   }
+	}
+
+      /***** Remove user as an administrator of the institution *****/
+      if (UsrIsInsAdmin &&
+	  ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN && ItsMe) ||
+	    Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+	{
+	 sprintf (Gbl.Message,
+		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
+			  Txt_Remove_user_as_an_administrator_of_the_institution_X,
+		  Gbl.CurrentDeg.Deg.ShortName);
+	 fprintf (Gbl.F.Out,"<li>"
+			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
+	 if (!OptionChecked)
+	   {
+	    fprintf (Gbl.F.Out," checked=\"checked\"");
+	    OptionChecked = true;
+	   }
+	 fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+
+	 NumOptionsShown++;
+	}
      }
 
    /***** Eliminate user completely from platform *****/
@@ -2837,28 +2967,166 @@ static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
   }
 
 /*****************************************************************************/
+/******* Ask for remove of an administrator from current institution *********/
+/*****************************************************************************/
+
+static void Enr_ReqRemAdmOfIns (void)
+  {
+   Enr_ReqRemOrRemAdmIns (Enr_REQUEST_REMOVE_USR);
+  }
+
+/*****************************************************************************/
+/********* Ask for remove of an administrator from current centre ************/
+/*****************************************************************************/
+
+static void Enr_ReqRemAdmOfCtr (void)
+  {
+   Enr_ReqRemOrRemAdmCtr (Enr_REQUEST_REMOVE_USR);
+  }
+
+/*****************************************************************************/
 /********* Ask for remove of an administrator from current degree ************/
 /*****************************************************************************/
 
 static void Enr_ReqRemAdmOfDeg (void)
   {
-   Enr_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR);
+   Enr_ReqRemOrRemAdmDeg (Enr_REQUEST_REMOVE_USR);
   }
 
 /*****************************************************************************/
-/********************* Remove a user from current course *********************/
+/************ Remove an administrator from current institution ***************/
 /*****************************************************************************/
 
-void Enr_RemAdm (void)
+void Enr_RemAdmIns (void)
   {
-   Enr_ReqRemOrRemAdm (Enr_REMOVE_USR);
+   Enr_ReqRemOrRemAdmIns (Enr_REMOVE_USR);
   }
 
 /*****************************************************************************/
-/******************** Remove of a user from current course *******************/
+/*************** Remove an administrator from current centre *****************/
 /*****************************************************************************/
 
-static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
+void Enr_RemAdmCtr (void)
+  {
+   Enr_ReqRemOrRemAdmCtr (Enr_REMOVE_USR);
+  }
+
+/*****************************************************************************/
+/*************** Remove an administrator from current degree *****************/
+/*****************************************************************************/
+
+void Enr_RemAdmDeg (void)
+  {
+   Enr_ReqRemOrRemAdmDeg (Enr_REMOVE_USR);
+  }
+
+/*****************************************************************************/
+/***************** Remove an admin from current institution ******************/
+/*****************************************************************************/
+
+static void Enr_ReqRemOrRemAdmIns (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
+  {
+   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
+   bool ICanRemove;
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /***** Get user to be removed *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's forbidden remove that administrator */
+         // A superuser can remove any administrator
+         // An administrator only can remove itself
+         ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+         ICanRemove = (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
+         if (ICanRemove)
+           {
+            /* Check if the other user is and admin of the current institution */
+            if (Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentIns.Ins.InsCod))
+              {                // The other user is an administrator of current degree ==> ask for removing or remove him
+               switch (ReqDelOrDelUsr)
+                 {
+                  case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
+                     Enr_AskIfRemAdmFromIns (ItsMe);
+                     break;
+                  case Enr_REMOVE_USR:             // Remove administrator from current institution
+                     Enr_EffectivelyRemAdmFromIns (&Gbl.Usrs.Other.UsrDat);
+                     break;
+                 }
+              }
+            else        // The other user is not an administrator of current institution
+              {
+               sprintf (Gbl.Message,Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentIns.Ins.FullName);
+               Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+              }
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Remove an admin from current centre ********************/
+/*****************************************************************************/
+
+static void Enr_ReqRemOrRemAdmCtr (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
+  {
+   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
+   bool ICanRemove;
+
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      /***** Get user to be removed *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's forbidden remove that administrator */
+         // A superuser can remove any administrator
+         // An administrator only can remove itself
+         ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+         ICanRemove = (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
+         if (ICanRemove)
+           {
+            /* Check if the other user is and admin of the current centre */
+            if (Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))
+              {                // The other user is an administrator of current centre ==> ask for removing or remove him
+               switch (ReqDelOrDelUsr)
+                 {
+                  case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current centre
+                     Enr_AskIfRemAdmFromCtr (ItsMe);
+                     break;
+                  case Enr_REMOVE_USR:             // Remove administrator from current centre
+                     Enr_EffectivelyRemAdmFromCtr (&Gbl.Usrs.Other.UsrDat);
+                     break;
+                 }
+              }
+            else        // The other user is not an administrator of current centre
+              {
+               sprintf (Gbl.Message,Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCtr.Ctr.FullName);
+               Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+              }
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Remove an admin from current degree ********************/
+/*****************************************************************************/
+
+static void Enr_ReqRemOrRemAdmDeg (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
   {
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_degree_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
@@ -2877,7 +3145,7 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
          ICanRemove = (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
          if (ICanRemove)
            {
-            /* Check if the other user belong to current course */
+            /* Check if the other user is and admin of the current degree */
             if (Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentDeg.Deg.DegCod))
               {                // The other user is an administrator of current degree ==> ask for removing or remove him
                switch (ReqDelOrDelUsr)
@@ -2895,6 +3163,106 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
                sprintf (Gbl.Message,Txt_THE_USER_X_is_not_an_administrator_of_the_degree_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentDeg.Deg.FullName);
                Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+              }
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
+/**** Ask if really wanted to add an administrator to current institution ****/
+/*****************************************************************************/
+
+static void Enr_ReqAddAdmOfIns (void)
+  {
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y;
+   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /***** Get user's identificator of the user to register as admin *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's allowed to register this administrator in institution */
+         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+           {
+            if (Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is yet an administrator of current institution
+              {
+               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentIns.Ins.FullName);
+               Lay_ShowAlert (Lay_INFO,Gbl.Message);
+               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+              }
+            else
+              {
+               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_institution_X,
+                        Gbl.CurrentIns.Ins.FullName);
+               Lay_ShowAlert (Lay_INFO,Gbl.Message);
+               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+               Act_FormStart (ActNewAdmIns);
+               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+        	                  "<input type=\"submit\" value=\"%s\" />"
+        	                  "</div>"
+        	                  "</form>",
+                        Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+              }
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
+/****** Ask if really wanted to add an administrator to current centre *******/
+/*****************************************************************************/
+
+static void Enr_ReqAddAdmOfCtr (void)
+  {
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y;
+   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      /***** Get user's identificator of the user to register as admin *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's allowed to register this administrator in centre */
+         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+           {
+            if (Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is yet an administrator of current centre
+              {
+               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCtr.Ctr.FullName);
+               Lay_ShowAlert (Lay_INFO,Gbl.Message);
+               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+              }
+            else
+              {
+               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_centre_X,
+                        Gbl.CurrentCtr.Ctr.FullName);
+               Lay_ShowAlert (Lay_INFO,Gbl.Message);
+               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+               Act_FormStart (ActNewAdmCtr);
+               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+        	                  "<input type=\"submit\" value=\"%s\" />"
+        	                  "</div>"
+        	                  "</form>",
+                        Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
          else
@@ -2938,7 +3306,7 @@ static void Enr_ReqAddAdmOfDeg (void)
                Lay_ShowAlert (Lay_INFO,Gbl.Message);
                Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-               Act_FormStart (ActNewAdm);
+               Act_FormStart (ActNewAdmDeg);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
         	                  "<input type=\"submit\" value=\"%s\" />"
@@ -3104,6 +3472,18 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 		  else
 		     Error = true;
 		  break;
+	       case Enr_REGISTER_ONE_CENTRE_ADMIN:
+		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+		     Enr_ReqAddAdmOfCtr ();
+		  else
+		     Error = true;
+		  break;
+	       case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
+		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+		     Enr_ReqAddAdmOfIns ();
+		  else
+		     Error = true;
+		  break;
 	       case Enr_REMOVE_ONE_USR_FROM_CRS:
 		  if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER || ItsMe)
 		     Enr_ReqRemUsrFromCrs ();
@@ -3114,6 +3494,20 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 		  if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
 		      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
 		     Enr_ReqRemAdmOfDeg ();
+		  else
+		     Error = true;
+		  break;
+	       case Enr_REMOVE_ONE_CENTRE_ADMIN:
+		  if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN && ItsMe) ||
+		      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+		     Enr_ReqRemAdmOfCtr ();
+		  else
+		     Error = true;
+		  break;
+	       case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
+		  if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN && ItsMe) ||
+		      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+		     Enr_ReqRemAdmOfIns ();
 		  else
 		     Error = true;
 		  break;
@@ -3248,6 +3642,74 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
   }
 
 /*****************************************************************************/
+/** Ask if really wanted to remove an administrator from current institution */
+/*****************************************************************************/
+
+static void Enr_AskIfRemAdmFromIns (bool ItsMe)
+  {
+   extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Remove_me_as_an_administrator;
+   extern const char *Txt_Remove_user_as_an_administrator;
+
+   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      sprintf (Gbl.Message,
+               ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_the_institution_X :
+                       Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_institution_X,
+               Gbl.CurrentIns.Ins.FullName);
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+      Act_FormStart (ActRemAdmIns);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	                 "<input type=\"submit\" value=\"%s\" />"
+	                 "</div>"
+	                 "</form>",
+               ItsMe ? Txt_Remove_me_as_an_administrator :
+                       Txt_Remove_user_as_an_administrator);
+     }
+   else
+      Lay_ShowErrorAndExit ("User doesn't exist.");
+  }
+
+/*****************************************************************************/
+/**** Ask if really wanted to remove an administrator from current centre ****/
+/*****************************************************************************/
+
+static void Enr_AskIfRemAdmFromCtr (bool ItsMe)
+  {
+   extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_me_as_an_administrator;
+   extern const char *Txt_Remove_user_as_an_administrator;
+
+   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      sprintf (Gbl.Message,
+               ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_the_centre_X :
+                       Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X,
+               Gbl.CurrentCtr.Ctr.FullName);
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+      Act_FormStart (ActRemAdmCtr);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	                 "<input type=\"submit\" value=\"%s\" />"
+	                 "</div>"
+	                 "</form>",
+               ItsMe ? Txt_Remove_me_as_an_administrator :
+                       Txt_Remove_user_as_an_administrator);
+     }
+   else
+      Lay_ShowErrorAndExit ("User doesn't exist.");
+  }
+
+/*****************************************************************************/
 /**** Ask if really wanted to remove an administrator from current degree ****/
 /*****************************************************************************/
 
@@ -3268,7 +3730,7 @@ static void Enr_AskIfRemAdmFromDeg (bool ItsMe)
 
       Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-      Act_FormStart (ActRemAdm);
+      Act_FormStart (ActRemAdmDeg);
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<input type=\"submit\" value=\"%s\" />"
@@ -3278,7 +3740,67 @@ static void Enr_AskIfRemAdmFromDeg (bool ItsMe)
                        Txt_Remove_user_as_an_administrator);
      }
    else
-      Lay_ShowErrorAndExit ("User doen't exist.");
+      Lay_ShowErrorAndExit ("User doesn't exist.");
+  }
+
+/*****************************************************************************/
+/*********** Remove an administrator from current institution ****************/
+/*****************************************************************************/
+
+static void Enr_EffectivelyRemAdmFromIns (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_the_institution_Y;
+   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y;
+   char Query[1024];
+
+   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is administrator of current institution
+     {
+      /***** Remove user from the table of admins *****/
+      sprintf (Query,"DELETE FROM admin"
+                     " WHERE UsrCod='%ld' AND Scope='Ins' AND Cod='%ld'",
+               UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod);
+      DB_QueryDELETE (Query,"can not remove an administrator from an institution");
+
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_removed_as_administrator_of_the_institution_Y,
+               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+   else        // User is not an administrator of the current institution
+     {
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y,
+               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
+      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+     }
+  }
+
+/*****************************************************************************/
+/************* Remove an administrator from current centre *******************/
+/*****************************************************************************/
+
+static void Enr_EffectivelyRemAdmFromCtr (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_the_centre_Y;
+   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y;
+   char Query[1024];
+
+   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is administrator of current centre
+     {
+      /***** Remove user from the table of admins *****/
+      sprintf (Query,"DELETE FROM admin"
+                     " WHERE UsrCod='%ld' AND Scope='Ctr' AND Cod='%ld'",
+               UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod);
+      DB_QueryDELETE (Query,"can not remove an administrator from a centre");
+
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_removed_as_administrator_of_the_centre_Y,
+               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+   else        // User is not an administrator of the current centre
+     {
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y,
+               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
+      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+     }
   }
 
 /*****************************************************************************/
@@ -3293,7 +3815,7 @@ static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat)
 
    if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))        // User is administrator of current degree
      {
-      /***** Remove user from the table of courses-users *****/
+      /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
                      " WHERE UsrCod='%ld' AND Scope='Deg' AND Cod='%ld'",
                UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);

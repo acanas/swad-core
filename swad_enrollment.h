@@ -49,14 +49,18 @@ typedef enum
    Enr_SET_ACCEPTED_TO_TRUE,
   } Enr_KeepOrSetAccepted_t;
 
-#define Enr_NUM_ACTIONS_REG_REM_ONE_USR 5
+#define Enr_NUM_ACTIONS_REG_REM_ONE_USR 9
 typedef enum
   {
    Enr_REGISTER_MODIFY_ONE_USR_IN_CRS  = 0,
    Enr_REGISTER_ONE_DEGREE_ADMIN       = 1,
-   Enr_REMOVE_ONE_USR_FROM_CRS         = 2,
-   Enr_REMOVE_ONE_DEGREE_ADMIN         = 3,
-   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM = 4,
+   Enr_REGISTER_ONE_CENTRE_ADMIN       = 2,
+   Enr_REGISTER_ONE_INSTITUTION_ADMIN  = 3,
+   Enr_REMOVE_ONE_USR_FROM_CRS         = 4,
+   Enr_REMOVE_ONE_DEGREE_ADMIN         = 5,
+   Enr_REMOVE_ONE_CENTRE_ADMIN         = 6,
+   Enr_REMOVE_ONE_INSTITUTION_ADMIN    = 7,
+   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM = 8,
   } Enr_RegRemOneUsrAction_t;
 
 /*****************************************************************************/
@@ -106,7 +110,9 @@ void Enr_AddAdmToDeg (void);
 void Enr_ReqRemMeFromCrs (void);
 void Enr_ReqRemUsrFromCrs (void);
 void Enr_RemUsrFromCrs (void);
-void Enr_RemAdm (void);
+void Enr_RemAdmIns (void);
+void Enr_RemAdmCtr (void);
+void Enr_RemAdmDeg (void);
 
 void Enr_AcceptRegisterMeInCrs (void);
 void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void);
