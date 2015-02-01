@@ -39,11 +39,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.72.2 (2015/02/01)"
+#define Log_PLATFORM_VERSION	"SWAD 14.72.3 (2015/02/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.72.3:  Feb 01, 2015	Refactoring of registering and removing admins. (177139 lines)
         Version 14.72.2:  Feb 01, 2015	Refactoring of registering and removing admins. (177496 lines)
         Version 14.72.1:  Feb 01, 2015	New options to register and remove institution and centre admins. (177477 lines)
 					6 changes necessary in database:
