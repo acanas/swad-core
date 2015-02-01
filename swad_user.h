@@ -206,9 +206,7 @@ void Usr_BuildFullName (struct UsrData *UsrDat);
 
 void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars);
 
-bool Usr_CheckIfUsrIsAdmOfIns (long UsrCod,long InsCod);
-bool Usr_CheckIfUsrIsAdmOfCtr (long UsrCod,long CtrCod);
-bool Usr_CheckIfUsrIsAdmOfDeg (long UsrCod,long DegCod);
+bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
 void Usr_GetMyInstitutions (void);

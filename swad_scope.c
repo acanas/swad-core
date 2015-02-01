@@ -34,6 +34,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES] =
+  {
+   NULL,	// Sco_SCOPE_NONE
+   NULL,	// Sco_SCOPE_PLATFORM,
+   NULL,	// Sco_SCOPE_COUNTRY,
+   "Ins",	// Sco_SCOPE_INSTITUTION,
+   "Ctr",	// Sco_SCOPE_CENTRE,
+   "Deg",	// Sco_SCOPE_DEGREE,
+   NULL,	// Sco_SCOPE_COURSE,
+  };
+
 /*****************************************************************************/
 /***************************** Internal constants ****************************/
 /*****************************************************************************/

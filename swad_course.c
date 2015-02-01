@@ -2523,7 +2523,9 @@ void Crs_ChangeCrsDegree (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
       ICanChangeCrsToNewDeg = true;
    else	if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN)
-      ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Me.UsrDat.UsrCod,NewDeg.DegCod);
+      ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                   Sco_SCOPE_DEGREE,
+                                                   NewDeg.DegCod);
    else
       ICanChangeCrsToNewDeg = false;
 

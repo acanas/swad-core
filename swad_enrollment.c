@@ -828,23 +828,26 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       /***** Check if the other user is administrator of the current institution *****/
       if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN && ItsMe) ||
 	   Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	 UsrIsInsAdmin = Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                           Gbl.CurrentIns.Ins.InsCod);
+	 UsrIsInsAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                      Sco_SCOPE_INSTITUTION,
+	                                      Gbl.CurrentIns.Ins.InsCod);
 
       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current centre *****/
 	 if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN && ItsMe) ||
 	      Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	    UsrIsCtrAdmin = Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                              Gbl.CurrentCtr.Ctr.CtrCod);
+	    UsrIsCtrAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                         Sco_SCOPE_CENTRE,
+	                                         Gbl.CurrentCtr.Ctr.CtrCod);
 
 	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
 	    if ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN && ItsMe) ||
 		 Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-	       UsrIsDegAdmin = Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                                 Gbl.CurrentDeg.Deg.DegCod);
+	       UsrIsDegAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                            Sco_SCOPE_DEGREE,
+	                                            Gbl.CurrentDeg.Deg.DegCod);
 	}
      }
 
@@ -2946,7 +2949,9 @@ static void Enr_RegisterAdminInCurrentIns (struct UsrData *UsrDat)
    char Query[512];
 
    /***** Check if user was and administrator of current institution *****/
-   if (Usr_CheckIfUsrIsAdmOfIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_INSTITUTION,
+                            Gbl.CurrentIns.Ins.InsCod))
       sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
                UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
    else        // User was not administrator of current institution
@@ -2974,7 +2979,9 @@ static void Enr_RegisterAdminInCurrentCtr (struct UsrData *UsrDat)
    char Query[512];
 
    /***** Check if user was and administrator of current centre *****/
-   if (Usr_CheckIfUsrIsAdmOfCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_CENTRE,
+                            Gbl.CurrentCtr.Ctr.CtrCod))
       sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
                UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
    else        // User was not administrator of current centre
@@ -3002,7 +3009,9 @@ static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat)
    char Query[512];
 
    /***** Check if user was and administrator of current degree *****/
-   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_DEGREE,
+                            Gbl.CurrentDeg.Deg.DegCod))
       sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
                UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
    else        // User was not administrator of current degree
@@ -3162,7 +3171,9 @@ static void Enr_ReqRemOrRemAdmIns (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
          if (ICanRemove)
            {
             /* Check if the other user is and admin of the current institution */
-            if (Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentIns.Ins.InsCod))
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_INSTITUTION,
+                                     Gbl.CurrentIns.Ins.InsCod))
               {                // The other user is an administrator of current degree ==> ask for removing or remove him
                switch (ReqDelOrDelUsr)
                  {
@@ -3213,7 +3224,9 @@ static void Enr_ReqRemOrRemAdmCtr (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
          if (ICanRemove)
            {
             /* Check if the other user is and admin of the current centre */
-            if (Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_CENTRE,
+                                     Gbl.CurrentCtr.Ctr.CtrCod))
               {                // The other user is an administrator of current centre ==> ask for removing or remove him
                switch (ReqDelOrDelUsr)
                  {
@@ -3264,7 +3277,9 @@ static void Enr_ReqRemOrRemAdmDeg (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
          if (ICanRemove)
            {
             /* Check if the other user is and admin of the current degree */
-            if (Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentDeg.Deg.DegCod))
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_DEGREE,
+                                     Gbl.CurrentDeg.Deg.DegCod))
               {                // The other user is an administrator of current degree ==> ask for removing or remove him
                switch (ReqDelOrDelUsr)
                  {
@@ -3310,7 +3325,9 @@ static void Enr_ReqAddAdmOfIns (void)
          /* Check if it's allowed to register this administrator in institution */
          if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
            {
-            if (Usr_CheckIfUsrIsAdmOfIns (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is yet an administrator of current institution
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_INSTITUTION,
+                                     Gbl.CurrentIns.Ins.InsCod))        // User is yet an administrator of current institution
               {
                sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentIns.Ins.FullName);
@@ -3360,7 +3377,9 @@ static void Enr_ReqAddAdmOfCtr (void)
          /* Check if it's allowed to register this administrator in centre */
          if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
            {
-            if (Usr_CheckIfUsrIsAdmOfCtr (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is yet an administrator of current centre
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_CENTRE,
+                                     Gbl.CurrentCtr.Ctr.CtrCod))        // User is yet an administrator of current centre
               {
                sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCtr.Ctr.FullName);
@@ -3410,7 +3429,9 @@ static void Enr_ReqAddAdmOfDeg (void)
          /* Check if it's allowed to register this administrator in degree */
          if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
            {
-            if (Usr_CheckIfUsrIsAdmOfDeg (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentDeg.Deg.DegCod))        // User is yet an administrator of current degree
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Sco_SCOPE_DEGREE,
+                                     Gbl.CurrentDeg.Deg.DegCod))        // User is yet an administrator of current degree
               {
                sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentDeg.Deg.FullName);
@@ -3871,7 +3892,9 @@ static void Enr_EffectivelyRemAdmFromIns (struct UsrData *UsrDat)
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y;
    char Query[1024];
 
-   if (Usr_CheckIfUsrIsAdmOfIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is administrator of current institution
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_INSTITUTION,
+                            Gbl.CurrentIns.Ins.InsCod))        // User is administrator of current institution
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
@@ -3901,7 +3924,9 @@ static void Enr_EffectivelyRemAdmFromCtr (struct UsrData *UsrDat)
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y;
    char Query[1024];
 
-   if (Usr_CheckIfUsrIsAdmOfCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is administrator of current centre
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_CENTRE,
+                            Gbl.CurrentCtr.Ctr.CtrCod))        // User is administrator of current centre
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
@@ -3931,7 +3956,9 @@ static void Enr_EffectivelyRemAdmFromDeg (struct UsrData *UsrDat)
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_degree_Y;
    char Query[1024];
 
-   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))        // User is administrator of current degree
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
+                            Sco_SCOPE_DEGREE,
+                            Gbl.CurrentDeg.Deg.DegCod))        // User is administrator of current degree
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
