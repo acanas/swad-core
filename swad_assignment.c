@@ -99,7 +99,7 @@ void Asg_SeeAssignments (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          Asg_PutFormToCreateNewAsg ();
          break;
       default:
@@ -317,7 +317,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
          break;
       default:
@@ -578,7 +578,7 @@ void Asg_GetListAssignments (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          HiddenSubQuery[0] = '\0';
          break;
       default:
@@ -1785,12 +1785,12 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
    /***** Get number of courses with assignments from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM assignments"
                         " WHERE CrsCod>'0'");
          break;
-       case Sco_SCOPE_INSTITUTION:
+       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT (assignments.CrsCod))"
                         " FROM centres,degrees,courses,assignments"
                         " WHERE centres.InsCod='%ld'"
@@ -1800,7 +1800,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT (assignments.CrsCod))"
                         " FROM degrees,courses,assignments"
                         " WHERE degrees.CtrCod='%ld'"
@@ -1809,7 +1809,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT (assignments.CrsCod))"
                         " FROM courses,assignments"
                         " WHERE courses.DegCod='%ld'"
@@ -1817,7 +1817,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM assignments"
                         " WHERE CrsCod='%ld'",
@@ -1856,12 +1856,12 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
    /***** Get number of assignments from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM assignments"
                         " WHERE CrsCod>'0'");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM centres,degrees,courses,assignments"
                         " WHERE centres.InsCod='%ld'"
@@ -1870,7 +1870,7 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM degrees,courses,assignments"
                         " WHERE degrees.CtrCod='%ld'"
@@ -1878,14 +1878,14 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM courses,assignments"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM assignments"
                         " WHERE CrsCod='%ld'",

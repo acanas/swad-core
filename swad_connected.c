@@ -81,8 +81,8 @@ void Con_ShowConnectedUsrs (void)
    /***** Put form to update connected users *****/
    Act_FormStart (ActLstCon);
    /* Users connected belonging to the platform, current degree or current course */
-   Gbl.Scope.Current = Sco_SCOPE_COURSE;
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   Gbl.Scope.Current = Sco_SCOPE_CRS;
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
 	       The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
@@ -335,8 +335,8 @@ void Con_ShowGlobalConnectedUsrs (void)
                          "</td>"
                          "</tr>",
                WithoutCoursesTotal,
-               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGULAR_abc[Rol_ROLE_GUEST][Usr_SEX_UNKNOWN] :
-                                            Txt_ROLES_PLURAL_abc  [Rol_ROLE_GUEST][Usr_SEX_UNKNOWN]);
+               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGULAR_abc[Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN] :
+                                            Txt_ROLES_PLURAL_abc  [Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN]);
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>"
@@ -372,21 +372,21 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
 
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
          if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
             return;
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
          if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
             return;
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
          if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
             return;
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
             return;
          break;
@@ -398,19 +398,19 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
    /***** Number of connected users who belong to current course *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          strcpy (LocationName,Cfg_PLATFORM_SHORT_NAME);
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
          strcpy (LocationName,Gbl.CurrentIns.Ins.ShortName);
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
          strcpy (LocationName,Gbl.CurrentCtr.Ctr.ShortName);
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
          strcpy (LocationName,Gbl.CurrentDeg.Deg.ShortName);
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          strcpy (LocationName,Gbl.CurrentCrs.Crs.ShortName);
          break;
       default:
@@ -472,7 +472,7 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
 
 static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role)
   {
-   Gbl.Scope.Current = Sco_SCOPE_COURSE;
+   Gbl.Scope.Current = Sco_SCOPE_CRS;
 
    /***** Get number of connected users who belong to current course *****/
    switch (Role)
@@ -489,7 +489,7 @@ static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role
 
    /***** List connected users belonging to this course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
   }
 
@@ -519,28 +519,28 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    /***** List connected users belonging to this location *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
-         if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+         if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
             return;
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
       default:
@@ -596,28 +596,28 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    /***** List connected users belonging to this location *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
-         if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+         if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
             return;
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
       default:
@@ -635,7 +635,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\" style=\"text-align:center;\">");
       Act_FormStartId (ActLstCon,Gbl.FormId);
-      Sco_PutParamScope (Sco_SCOPE_COURSE);
+      Sco_PutParamScope (Sco_SCOPE_CRS);
       Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" class=\"ICON32x32\" /></a>"
@@ -696,7 +696,7 @@ static unsigned Con_GetConnectedGuestsTotal (void)
    /***** Get number of connected users not belonging to any course *****/
    sprintf (Query,"SELECT COUNT(*) FROM connected"
 	          " WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_ROLE_GUEST);
+            (unsigned) Rol_ROLE_GUEST__);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected users who not belong to any course");
   }
 
@@ -752,7 +752,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
    /***** Get number of connected users who belong to current course from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM connected,usr_data"
@@ -765,7 +765,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                            " AND connected.UsrCod=usr_data.UsrCod",
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM centres,degrees,courses,crs_usr,connected,usr_data"
@@ -789,7 +789,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      Gbl.CurrentIns.Ins.InsCod,
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM degrees,courses,crs_usr,connected,usr_data"
@@ -811,7 +811,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      Gbl.CurrentCtr.Ctr.CtrCod,
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM courses,crs_usr,connected,usr_data"
@@ -831,7 +831,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      Gbl.CurrentDeg.Deg.DegCod,
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM crs_usr,connected,usr_data"
@@ -1058,12 +1058,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    unsigned Minutes;
    unsigned Seconds;
    bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-	                   Gbl.Scope.Current == Sco_SCOPE_COURSE);
+	                   Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get connected users who belong to current location from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:		// Show connected users in the whole platform
+      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM connected,crs_usr,usr_data"
@@ -1072,7 +1072,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                         " AND connected.UsrCod=usr_data.UsrCod ORDER BY Dif",
                   (unsigned) Role);
          break;
-      case Sco_SCOPE_INSTITUTION:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:	// Show connected users in the current institution
          sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM centres,degrees,courses,crs_usr,connected,usr_data"
@@ -1086,7 +1086,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                   Gbl.CurrentIns.Ins.InsCod,
                   (unsigned) Role);
          break;
-      case Sco_SCOPE_CENTRE:		// Show connected users in the current centre
+      case Sco_SCOPE_CTR:		// Show connected users in the current centre
          sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM degrees,courses,crs_usr,connected,usr_data"
@@ -1099,7 +1099,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   (unsigned) Role);
          break;
-      case Sco_SCOPE_DEGREE:		// Show connected users in the current degree
+      case Sco_SCOPE_DEG:		// Show connected users in the current degree
          sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM courses,crs_usr,connected,usr_data"
@@ -1111,7 +1111,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                   Gbl.CurrentDeg.Deg.DegCod,
                   (unsigned) Role);
          break;
-      case Sco_SCOPE_COURSE:		// Show connected users in the current course
+      case Sco_SCOPE_CRS:		// Show connected users in the current course
          sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM crs_usr,connected,usr_data"

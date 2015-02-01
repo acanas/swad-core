@@ -254,7 +254,7 @@ void Tst_ShowFormAskTst (void)
    /***** Put form to go to test edition and configuration *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
@@ -581,7 +581,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    unsigned Year,Month,Day,Hour,Minute,Second;
 
    /***** Superusers are allowed to do all test they want *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
@@ -2335,7 +2335,7 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    sprintf (StrNumQsts,"%u",Gbl.Test.NumQsts);
    strcat (Query,StrNumQsts);
    /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
    */
    /* Make the query */
@@ -5510,7 +5510,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
    /***** Get number of test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions");
@@ -5520,7 +5520,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                            " WHERE AnsType='%s'",
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM centres,degrees,courses,tst_questions"
@@ -5540,7 +5540,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                      Gbl.CurrentIns.Ins.InsCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM degrees,courses,tst_questions"
@@ -5558,7 +5558,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                      Gbl.CurrentCtr.Ctr.CtrCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM courses,tst_questions"
@@ -5574,7 +5574,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                      Gbl.CurrentDeg.Deg.DegCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
@@ -5636,7 +5636,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
         	           " FROM tst_questions");
@@ -5646,7 +5646,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                            " WHERE AnsType='%s'",
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM centres,degrees,courses,tst_questions"
@@ -5666,7 +5666,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                      Gbl.CurrentIns.Ins.InsCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM degrees,courses,tst_questions"
@@ -5684,7 +5684,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                      Gbl.CurrentCtr.Ctr.CtrCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM courses,tst_questions"
@@ -5700,7 +5700,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                      Gbl.CurrentDeg.Deg.DegCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
         	           " FROM tst_questions"
@@ -5747,7 +5747,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
@@ -5763,7 +5763,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                      Tst_StrAnswerTypesDB[AnsType],
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM centres,degrees,courses,tst_questions,tst_config"
@@ -5789,7 +5789,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                      Tst_StrAnswerTypesDB[AnsType],
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM degrees,courses,tst_questions,tst_config"
@@ -5813,7 +5813,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                      Tst_StrAnswerTypesDB[AnsType],
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
         	           " FROM courses,tst_questions,tst_config"
@@ -5835,7 +5835,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                      Tst_StrAnswerTypesDB[AnsType],
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
@@ -5891,8 +5891,8 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
    Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_COURSE,NULL,false);
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)

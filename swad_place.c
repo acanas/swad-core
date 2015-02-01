@@ -93,7 +93,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Put link (form) to edit places *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	 Plc_PutFormToEditPlcs ();
 
       /***** Table head *****/

@@ -96,7 +96,7 @@ void Dpt_SeeDepts (void)
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Put link (form) to edit departments *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	  Dpt_PutFormToEditDpts ();
 
       /***** Table head *****/
@@ -178,7 +178,7 @@ void Dpt_SeeDepts (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Department_unspecified,
-	       Sta_GetTotalNumberOfUsers (Sco_SCOPE_INSTITUTION,
+	       Sta_GetTotalNumberOfUsers (Sco_SCOPE_INS,
 					  Rol_ROLE_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/

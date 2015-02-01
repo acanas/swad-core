@@ -67,7 +67,7 @@ unsigned Rol_GetNumAvailableRoles (void)
    Rol_Role_t Role;
    unsigned NumAvailableRoles = 0;
 
-   for (Role = Rol_ROLE_GUEST;
+   for (Role = Rol_ROLE_GUEST__;
         Role < Rol_NUM_ROLES;
         Role++)
       if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -86,7 +86,7 @@ Rol_Role_t Rol_GetMaxRole (unsigned Roles)
       return Rol_ROLE_TEACHER;
    if (Roles & (1 << Rol_ROLE_STUDENT))
       return Rol_ROLE_STUDENT;
-   return Rol_ROLE_GUEST;
+   return Rol_ROLE_GUEST__;
   }
 
 /*****************************************************************************/
@@ -108,7 +108,7 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
            NumMyIns++)
          if (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod == InsCod)
             return Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].MaxRole;
-      return Rol_ROLE_GUEST;
+      return Rol_ROLE_GUEST__;
      }
    return Rol_ROLE_UNKNOWN;   // No degree
   }
@@ -132,7 +132,7 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
            NumMyCtr++)
          if (Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].CtrCod == CtrCod)
             return Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].MaxRole;
-      return Rol_ROLE_GUEST;
+      return Rol_ROLE_GUEST__;
      }
    return Rol_ROLE_UNKNOWN;   // No centre
   }
@@ -156,7 +156,7 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
            NumMyDeg++)
          if (Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].DegCod == DegCod)
             return Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].MaxRole;
-      return Rol_ROLE_GUEST;
+      return Rol_ROLE_GUEST__;
      }
    return Rol_ROLE_UNKNOWN;   // No degree
   }
@@ -180,7 +180,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
            NumMyCrs++)
          if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == CrsCod)
             return Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].Role;
-      return Rol_ROLE_GUEST;
+      return Rol_ROLE_GUEST__;
      }
    return Rol_ROLE_UNKNOWN;   // No course
   }
@@ -301,7 +301,7 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
       fprintf (Gbl.F.Out," style=\"width:%upx;\"",SelectorWidth[Gbl.Prefs.Layout]);
    fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\">",
             Gbl.FormId);
-   for (Role = Rol_ROLE_GUEST;
+   for (Role = Rol_ROLE_GUEST__;
         Role < Rol_NUM_ROLES;
         Role++)
      if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -423,8 +423,8 @@ static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    switch (Gbl.Usrs.Me.LoggedRole)      // Can I select type of user?
      {
-      case Rol_ROLE_DEG_ADMIN:
-      case Rol_ROLE_SUPERUSER:                // Yes, I can
+      case Rol_ROLE_DEG_ADM:
+      case Rol_ROLE_SYS_ADM:                // Yes, I can
          break;
       default:                                // No, I can not
          fprintf (Gbl.F.Out," disabled=\"disabled\"");

@@ -332,13 +332,13 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT Web,COUNT(*) AS N"
                         " FROM usr_webs"
                         " GROUP BY Web"
                         " ORDER BY N DESC,Web");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_webs"
                         " WHERE centres.InsCod='%ld'"
@@ -350,7 +350,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
                         " ORDER BY N DESC,usr_webs.Web",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM degrees,courses,crs_usr,usr_webs"
                         " WHERE degrees.CtrCod='%ld'"
@@ -361,7 +361,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
                         " ORDER BY N DESC,usr_webs.Web",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM courses,crs_usr,usr_webs"
                         " WHERE courses.DegCod='%ld'"
@@ -371,7 +371,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
                         " ORDER BY N DESC,usr_webs.Web",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM crs_usr,usr_webs"
                         " WHERE crs_usr.CrsCod='%ld'"

@@ -77,7 +77,7 @@ void Ann_ShowAllAnnouncements (void)
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Put link (form) to create a new announcement *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       Act_FormStart (ActWriAnn);
       Act_LinkFormSubmit (Txt_New_announcement,The_ClassFormul[Gbl.Prefs.Theme]);

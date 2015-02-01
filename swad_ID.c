@@ -836,8 +836,8 @@ void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
 
 bool ID_ICanSeeTeacherID (struct UsrData *UsrDat)
   {
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM)
       // If I am an administrator of current degree, I only can see the users' IDs from current degree
       return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-   return (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
+   return (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);
   }

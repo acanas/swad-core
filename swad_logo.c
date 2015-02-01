@@ -73,15 +73,15 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 Folder = Cfg_FOLDER_INS;
 	 Icon = "ins";
 	 break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 Folder = Cfg_FOLDER_CTR;
 	 Icon = "ctr";
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 Folder = Cfg_FOLDER_DEG;
 	 Icon = "deg";
 	 break;
@@ -145,19 +145,19 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 Action = ActReqInsLog;
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 Icon = "ins";
 	 break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 Action = ActReqCtrLog;
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 Icon = "ctr";
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 Action = ActReqDegLog;
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
@@ -199,13 +199,13 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    /***** Set action depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 Action = ActRecInsLog;
 	 break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 Action = ActRecCtrLog;
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 Action = ActRecDegLog;
 	 break;
       default:
@@ -260,17 +260,17 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 FunctionConfiguration = Ins_ShowConfiguration;
 	 break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 FunctionConfiguration = Ctr_ShowConfiguration;
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 FunctionConfiguration = Deg_ShowConfiguration;

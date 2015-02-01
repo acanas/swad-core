@@ -619,7 +619,7 @@ static void Lay_WritePageTopHeading (void)
 	             (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
 	             (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
 	                                              ActSysSch)))));
-      Sco_PutParamScope (Sco_SCOPE_PLATFORM);
+      Sco_PutParamScope (Sco_SCOPE_SYS);
       Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
       fprintf (Gbl.F.Out,"</form>"
 	                 "</td>");
@@ -875,7 +875,7 @@ static void Lay_ShowRightColumn (void)
    fprintf (Gbl.F.Out,"<div id=\"courseconnected\">");	// Used for AJAX based refresh
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// There is a course selected
      {
-      Gbl.Scope.Current = Sco_SCOPE_COURSE;
+      Gbl.Scope.Current = Sco_SCOPE_CRS;
       Con_ShowConnectedUsrsBelongingToScope ();
      }
    fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
@@ -1163,7 +1163,7 @@ void Lay_RefreshNotifsAndConnected (void)
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)
      {
-      Gbl.Scope.Current = Sco_SCOPE_COURSE;
+      Gbl.Scope.Current = Sco_SCOPE_CRS;
       Con_ShowConnectedUsrsBelongingToScope ();
      }
    fprintf (Gbl.F.Out,"|");
@@ -1305,7 +1305,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
                     Size,NULL,true);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
@@ -1355,7 +1355,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,Size,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,Size,NULL,true);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }

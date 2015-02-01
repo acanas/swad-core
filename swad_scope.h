@@ -41,13 +41,13 @@
 #define Sco_NUM_SCOPES	7
 typedef enum
   {
-   Sco_SCOPE_NONE,
-   Sco_SCOPE_PLATFORM,
-   Sco_SCOPE_COUNTRY,
-   Sco_SCOPE_INSTITUTION,
-   Sco_SCOPE_CENTRE,
-   Sco_SCOPE_DEGREE,
-   Sco_SCOPE_COURSE,
+   Sco_SCOPE_UNK,	// Unknown
+   Sco_SCOPE_SYS,	// System
+   Sco_SCOPE_CTY,	// Country
+   Sco_SCOPE_INS,	// Institution
+   Sco_SCOPE_CTR,	// Centre
+   Sco_SCOPE_DEG,	// Degree
+   Sco_SCOPE_CRS,	// Course
   } Sco_Scope_t;
 
 /*****************************************************************************/

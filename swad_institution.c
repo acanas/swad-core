@@ -103,7 +103,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    /***** Get institutions with pending centres *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_INS_ADMIN:
+      case Rol_ROLE_INS_ADM:
          sprintf (Query,"SELECT centres.InsCod,COUNT(*)"
                         " FROM centres,ins_admin,institutions"
                         " WHERE (centres.Status & %u)<>0"
@@ -112,7 +112,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                         " GROUP BY centres.InsCod ORDER BY institutions.ShortName",
                   (unsigned) Ctr_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          sprintf (Query,"SELECT centres.InsCod,COUNT(*)"
                         " FROM centres,institutions"
                         " WHERE (centres.Status & %u)<>0"
@@ -163,7 +163,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
-         Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+         Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
                        16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
@@ -255,8 +255,8 @@ static void Ins_Configuration (bool PrintView)
 	 Lay_PutLinkToPrintView2 ();
 
 	 /* Link to upload logo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
-	    Log_PutFormToChangeLogo (Sco_SCOPE_INSTITUTION);
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+	    Log_PutFormToChangeLogo (Sco_SCOPE_INS);
 	}
 
       fprintf (Gbl.F.Out,"</div>");
@@ -273,7 +273,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
+      Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
                     Gbl.CurrentIns.Ins.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
       if (PutLink)
@@ -468,7 +468,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActUnk,ActUnk,ActUnk);
 
       /***** Put link (form) to edit institutions *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
           Lay_PutFormToEdit (ActEdiIns);
 
       /***** List institutions *****/
@@ -536,7 +536,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
                  16,NULL,true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
@@ -1124,14 +1124,14 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ins->FullName);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins->InsCod,Ins->ShortName,
+      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
                     16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Country */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	{
 	 Act_FormStart (ActChgInsCty);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
@@ -1235,7 +1235,7 @@ static void Ins_ListInstitutionsForEdition (void)
       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER &&
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgInsSta);
@@ -1285,7 +1285,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 static bool Ins_CheckIfICanEdit (struct Institution *Ins)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||		// I am a superuser
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM ||		// I am a superuser
                   ((Ins->Status & Ins_STATUS_BIT_PENDING) != 0 &&		// Institution is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod));		// I am the requester
   }
@@ -1698,7 +1698,7 @@ void Ins_ChangeInsStatus (void)
 
 void Ins_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_INSTITUTION);
+   Log_RequestLogo (Sco_SCOPE_INS);
   }
 
 /*****************************************************************************/
@@ -1707,7 +1707,7 @@ void Ins_RequestLogo (void)
 
 void Ins_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_INSTITUTION);
+   Log_ReceiveLogo (Sco_SCOPE_INS);
   }
 
 /*****************************************************************************/
@@ -1728,9 +1728,9 @@ static void Ins_PutFormToCreateInstitution (void)
    Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Act_FormStart (ActNewIns);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
       Act_FormStart (ActReqIns);
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");
@@ -1756,7 +1756,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_INS,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/

@@ -189,7 +189,7 @@ static void Crs_Configuration (bool PrintView)
       Lay_PutLinkToPrintView2 ();
 
       /* Link to request enrollment in the current course */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST ||
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST__ ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_VISITOR)
          Enr_PutLinkToRequestSignUp ();
 
@@ -212,7 +212,7 @@ static void Crs_Configuration (bool PrintView)
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
 	       Gbl.CurrentDeg.Deg.WWW,
 	       Gbl.CurrentDeg.Deg.FullName);
-   Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+   Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
                  Gbl.CurrentDeg.Deg.ShortName,64,NULL,true);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
@@ -670,7 +670,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassFormul[Gbl.Prefs.Theme]);
-	 Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
 	               16,NULL,true);
 	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
@@ -708,7 +708,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassFormul[Gbl.Prefs.Theme]);
-	    Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,
+	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
 	                  16,NULL,true);
 	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
@@ -746,7 +746,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassFormul[Gbl.Prefs.Theme]);
-	       Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
 	                     16,NULL,true);
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
@@ -957,7 +957,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActSeeDeg,ActSeeCrs);
 
       /***** Put link (form) to edit courses in current degree *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
          Lay_PutFormToEdit (ActEdiCrs);
 
       /***** Show list of courses *****/
@@ -1415,7 +1415,7 @@ static void Crs_ListCoursesForEdition (void)
             /* Degree */
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
         	               " vertical-align:middle;\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
               {
                Act_FormStart (ActChgCrsDeg);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
@@ -1539,7 +1539,7 @@ static void Crs_ListCoursesForEdition (void)
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
         	               " vertical-align:middle;\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN &&
+            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM &&
         	StatusTxt == Crs_STATUS_PENDING)
               {
                Act_FormStart (ActChgCrsSta);
@@ -1588,7 +1588,7 @@ static void Crs_ListCoursesForEdition (void)
 
 static bool Crs_CheckIfICanEdit (struct Course *Crs)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN ||		// I am a degree administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||		// I am a degree administrator or higher
                   ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&		// Course is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));		// I am the requester
   }
@@ -1651,9 +1651,9 @@ static void Crs_PutFormToCreateCourse (void)
    unsigned Semester;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
       Act_FormStart (ActNewCrs);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
       Act_FormStart (ActReqCrs);
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
@@ -2520,11 +2520,11 @@ void Crs_ChangeCrsDegree (void)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    /* Check if I have permission to change course to this degree */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       ICanChangeCrsToNewDeg = true;
-   else	if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN)
+   else	if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM)
       ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                   Sco_SCOPE_DEGREE,
+                                                   Sco_SCOPE_DEG,
                                                    NewDeg.DegCod);
    else
       ICanChangeCrsToNewDeg = false;
@@ -2996,7 +2996,7 @@ static void Crs_PutLinkToSearchCourses (void)
 		  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
 		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
 						   ActSysReqSch)))));
-   Sco_PutParamScope (Sco_SCOPE_PLATFORM);
+   Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
    Act_LinkFormSubmit (Txt_Search_courses,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("search",Txt_Search_courses,Txt_Search_courses);
@@ -3313,7 +3313,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
-   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
                  16,"vertical-align:top;",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>"

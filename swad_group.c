@@ -1519,7 +1519,7 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
             fprintf (Gbl.F.Out," checked=\"checked\"");
         }
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+            Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" /></td>");
 
@@ -1545,7 +1545,7 @@ void Grp_ReqRegisterInGrps (void)
 
    /***** Put link (form) to edit groups *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_PutFormToEdit (ActReqEdiGrp);
 
    /***** Check if this course has groups *****/
@@ -1799,7 +1799,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
       if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+            Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," /></td>");
 

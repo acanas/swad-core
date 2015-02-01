@@ -882,14 +882,14 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   {
 	            0,	// Rol_ROLE_UNKNOWN
-	            0,	// Rol_ROLE_GUEST
+	            0,	// Rol_ROLE_GUEST__
 	            0,	// Rol_ROLE_VISITOR
 	32ULL*Brw_GiB,	// Rol_ROLE_STUDENT
 	64ULL*Brw_GiB,	// Rol_ROLE_TEACHER
-	            0,	// Rol_ROLE_DEG_ADMIN
-	            0,	// Rol_ROLE_CTR_ADMIN
-	            0,	// Rol_ROLE_INS_ADMIN
-	            0,	// Rol_ROLE_SUPERUSER
+	            0,	// Rol_ROLE_DEG_ADM
+	            0,	// Rol_ROLE_CTR_ADM
+	            0,	// Rol_ROLE_INS_ADM
+	            0,	// Rol_ROLE_SYS_ADM
   };
 #define Brw_MAX_FILES_BRIEF			5000
 #define Brw_MAX_FOLDS_BRIEF		1000
@@ -1362,7 +1362,7 @@ void Brw_GetParAndInitFileBrowser (void)
      {
       /***** Documents of institution *****/
       case ActSeeAdmDocIns:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
 	    /* These roles can edit documents of institution */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_INS;
 	 else
@@ -1405,7 +1405,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of centre *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
 	    /* These roles can edit documents of centre */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_CTR;
 	 else
@@ -1448,7 +1448,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of degree *****/
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
 	    /* These roles can edit documents of degree */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_DEG;
 	 else
@@ -1495,7 +1495,7 @@ void Brw_GetParAndInitFileBrowser (void)
 	 switch (Gbl.Usrs.Me.LoggedRole)
 	   {
 	    case Rol_ROLE_TEACHER:
-	    case Rol_ROLE_SUPERUSER:
+	    case Rol_ROLE_SYS_ADM:
 	       /* These roles can edit documents of course/groups */
 	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_ADMI_DOCUM_GRP :
 								         Brw_ADMI_DOCUM_CRS;
@@ -1892,7 +1892,7 @@ void Brw_GetParAndInitFileBrowser (void)
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
    Gbl.FileBrowser.ShowOnlyPublicFiles = false;
-   if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
@@ -2643,8 +2643,8 @@ void Brw_AskEditWorksCrs (void)
    Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_COURSE,NULL,false);
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)
@@ -3123,7 +3123,7 @@ static void Brw_ShowFileBrowser (void)
 static void Brw_WriteTopBeforeShowingFileBrowser (void)
   {
    bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER  );
-   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);
+   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);
 
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
@@ -3132,27 +3132,27 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocIns);
 	 break;
       case Brw_ADMI_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocIns);
 	 break;
       case Brw_SHOW_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCtr);
 	 break;
       case Brw_ADMI_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCtr);
 	 break;
       case Brw_SHOW_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocDeg);
 	 break;
       case Brw_ADMI_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocDeg);
 	 break;
       case Brw_SHOW_DOCUM_CRS:
@@ -8463,15 +8463,15 @@ void Brw_ShowFileMetadata (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
@@ -8880,15 +8880,15 @@ void Brw_DownloadFile (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADMIN)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
@@ -9026,7 +9026,7 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 	    else									// The file has no publisher
 	      {
 	       ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
+	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 		  return true;
 	      }
@@ -10209,8 +10209,8 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void)
 
          return (Gbl.Usrs.Me.UsrDat.UsrCod == PublisherUsrCod);	// Am I the publisher of subtree?
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_DEG_ADMIN:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_DEG_ADM:
+      case Rol_ROLE_SYS_ADM:
          return true;
       default:
          return false;
@@ -10604,7 +10604,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (InsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,InsShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_INSTITUTION,InsCod,InsShortName,
+         Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,
                        16,"vertical-align:top;",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
 			    "</form>",
@@ -10622,7 +10622,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (CtrCod);
          sprintf (Gbl.Title,Txt_Go_to_X,CtrShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_CENTRE,CtrCod,CtrShortName,
+         Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,
                        16,"vertical-align:top;",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
 			    "</form>",
@@ -10640,7 +10640,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (DegCod);
          sprintf (Gbl.Title,Txt_Go_to_X,DegShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,DegShortName,
+         Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,
                        16,"vertical-align:top;",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
 			    "</form>",

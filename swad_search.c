@@ -97,7 +97,7 @@ void Sch_ReqSysSearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_PLATFORM);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_SYS);
   }
 
 /*****************************************************************************/
@@ -116,7 +116,7 @@ void Sch_ReqCtySearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_COUNTRY);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_CTY);
   }
 
 /*****************************************************************************/
@@ -135,7 +135,7 @@ void Sch_ReqInsSearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INSTITUTION);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INS);
   }
 
 /*****************************************************************************/
@@ -154,7 +154,7 @@ void Sch_ReqCtrSearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CENTRE);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CTR);
   }
 
 /*****************************************************************************/
@@ -173,7 +173,7 @@ void Sch_ReqDegSearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEGREE);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEG);
   }
 
 /*****************************************************************************/
@@ -192,7 +192,7 @@ void Sch_ReqCrsSearch (void)
 
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_COURSE);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_CRS);
   }
 
 /*****************************************************************************/
@@ -222,7 +222,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_Courses,						// Sch_SEARCH_COURSES
 	Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],// Sch_SEARCH_TEACHERS
 	Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_Abc[Rol_ROLE_GUEST  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
+        Txt_ROLES_PLURAL_Abc[Rol_ROLE_GUEST__  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
 	Txt_Open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
 	Txt_DOCUM_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
 	Txt_My_documents,					// Sch_SEARCH_MY_DOCUMENTS
@@ -240,12 +240,12 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               1 << Sco_SCOPE_COUNTRY     |
-		       1 << Sco_SCOPE_INSTITUTION |
-		       1 << Sco_SCOPE_CENTRE      |
-		       1 << Sco_SCOPE_DEGREE      |
-		       1 << Sco_SCOPE_COURSE;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               1 << Sco_SCOPE_CTY     |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR      |
+		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ();
    Sco_PutSelectorScope (false);
@@ -387,7 +387,7 @@ void Sch_SysSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_PLATFORM);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSysSch,Sco_SCOPE_SYS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -406,7 +406,7 @@ void Sch_CtySearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_COUNTRY);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtySch,Sco_SCOPE_CTY);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -425,7 +425,7 @@ void Sch_InsSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INSTITUTION);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActInsSch,Sco_SCOPE_INS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -444,7 +444,7 @@ void Sch_CtrSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CENTRE);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCtrSch,Sco_SCOPE_CTR);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -464,7 +464,7 @@ void Sch_DegSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEGREE);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActDegSch,Sco_SCOPE_DEG);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -483,7 +483,7 @@ void Sch_CrsSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_COURSE);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActCrsSch,Sco_SCOPE_CRS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -506,28 +506,28 @@ static void Sch_SearchInDB (void)
    /***** Select courses in all the degrees or in current degree *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_NONE:
+      case Sco_SCOPE_UNK:
 	 // Not aplicable
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          RangeQuery[0] = '\0';
          break;
-      case Sco_SCOPE_COUNTRY:
+      case Sco_SCOPE_CTY:
          sprintf (RangeQuery," AND institutions.CtyCod='%ld'",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (RangeQuery," AND institutions.InsCod='%ld'",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (RangeQuery," AND centres.CtrCod='%ld'",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (RangeQuery," AND degrees.DegCod='%ld'",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (RangeQuery," AND courses.CrsCod='%ld'",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -542,7 +542,7 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_TEACHER);
 	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_STUDENT);
-	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_GUEST);
+	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_GUEST__);
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
@@ -566,7 +566,7 @@ static void Sch_SearchInDB (void)
 	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_STUDENT);
 	 break;
       case Sch_SEARCH_GUESTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_GUEST);
+	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_GUEST__);
 	 break;
       case Sch_SEARCH_OPEN_DOCUMENTS:
 	 NumResults = Sch_SearchOpenDocumentsInDB (RangeQuery);
@@ -595,9 +595,9 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
    char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_CENTRE &&
-       Gbl.Scope.Current != Sco_SCOPE_DEGREE &&
-       Gbl.Scope.Current != Sco_SCOPE_COURSE)
+   if (Gbl.Scope.Current != Sco_SCOPE_CTR &&
+       Gbl.Scope.Current != Sco_SCOPE_DEG &&
+       Gbl.Scope.Current != Sco_SCOPE_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITUTIONS))
 	 /***** Split institutions string into words *****/
@@ -629,8 +629,8 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
    char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_DEGREE &&
-       Gbl.Scope.Current != Sco_SCOPE_COURSE)
+   if (Gbl.Scope.Current != Sco_SCOPE_DEG &&
+       Gbl.Scope.Current != Sco_SCOPE_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTRES))
 	 /***** Split centre string into words *****/
@@ -662,7 +662,7 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
    char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_COURSE)
+   if (Gbl.Scope.Current != Sco_SCOPE_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DEGREES))
 	 /***** Split degree string into words *****/
@@ -839,7 +839,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,Txt_Open_documents);
 	}
@@ -886,7 +886,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_DOCUM_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP);
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
@@ -944,7 +944,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 NumDocs = Brw_ListDocsFound (Query,Txt_DOCUM_in_my_courses);
 
@@ -1095,7 +1095,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_BRIEF_USR);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,Txt_My_documents);
 	}

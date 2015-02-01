@@ -162,7 +162,7 @@ void Deg_SeeDegWithPendingCrss (void)
    /***** Get degrees with pending courses *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_DEG_ADMIN:
+      case Rol_ROLE_DEG_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
                         " FROM admin,courses,degrees"
                         " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
@@ -172,7 +172,7 @@ void Deg_SeeDegWithPendingCrss (void)
                         " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Crs_STATUS_BIT_PENDING);
          break;
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
                         " FROM courses,degrees"
                         " WHERE (courses.Status & %u)<>0"
@@ -224,7 +224,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
-         Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+         Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
                        16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
@@ -314,8 +314,8 @@ static void Deg_Configuration (bool PrintView)
 	 Lay_PutLinkToPrintView2 ();
 
 	 /* Link to upload logo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
-	    Log_PutFormToChangeLogo (Sco_SCOPE_DEGREE);
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+	    Log_PutFormToChangeLogo (Sco_SCOPE_DEG);
 	}
 
       fprintf (Gbl.F.Out,"</div>");
@@ -332,7 +332,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.FullName);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+      Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
                     Gbl.CurrentDeg.Deg.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",
                Gbl.CurrentDeg.Deg.FullName);
@@ -739,15 +739,15 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
       if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+	    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
 	                  Gbl.CurrentDeg.Deg.ShortName,32,
 	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
+	    Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
 	                  Gbl.CurrentCtr.Ctr.ShortName,32,
 	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
+	    Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
 	                  Gbl.CurrentIns.Ins.ShortName,32,
 	                  "vertical-align:top; margin-right:8px;",false);
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
@@ -949,7 +949,7 @@ void Deg_WriteSelectorDegTypes (void)
 void Deg_SeeDegTypes (void)
   {
    /***** Put link (form) to edit degree types *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_PutFormToEdit (ActEdiDegTyp);
 
    /***** Get list of degree types *****/
@@ -994,7 +994,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActSeeDeg,ActUnk);
 
       /***** Put link (form) to edit degrees of the current centre *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
          Lay_PutFormToEdit (ActEdiDeg);
 
       /***** Show list of degrees *****/
@@ -1280,7 +1280,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Deg->WWW,Deg->FullName);
-   Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
                  16,"vertical-align:top;",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
@@ -1424,13 +1424,13 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Deg->FullName);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg->DegCod,Deg->ShortName,16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
 	                 " style=\"text-align:left; vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)	// I can select centre
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)	// I can select centre
 	{
 	 Act_FormStart (ActChgDegCtr);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
@@ -1627,7 +1627,7 @@ static void Deg_ListDegreesForEdition (void)
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN &&
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgDegSta);
@@ -1675,7 +1675,7 @@ static void Deg_ListDegreesForEdition (void)
 
 static bool Deg_CheckIfICanEdit (struct Degree *Deg)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN ||		// I am a centre administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM ||		// I am a centre administrator or higher
                   ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&		// Degree is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));		// I am the requester
   }
@@ -1798,9 +1798,9 @@ static void Deg_PutFormToCreateDegree (void)
    unsigned Year;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
       Act_FormStart (ActNewDeg);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
       Act_FormStart (ActReqDeg);
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
@@ -1831,7 +1831,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_DEGREE,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/
@@ -2497,7 +2497,7 @@ void Deg_GetListDegsAdminByMe (void)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                      "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
                      " FROM degrees"
@@ -2505,7 +2505,7 @@ void Deg_GetListDegsAdminByMe (void)
                      " ORDER BY ShortName",
                Gbl.CurrentCtr.Ctr.CtrCod);
    // TODO: put an if to select all degrees for admins of all degrees !!!!!!!!!!!!!
-   else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN
+   else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM
       sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
                      "degrees.ShortName,degrees.FullName,degrees.FirstYear,degrees.LastYear,degrees.OptYear,degrees.WWW"
                      " FROM admin,degrees"
@@ -3770,7 +3770,7 @@ void Deg_ChangeDegStatus (void)
 
 void Deg_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_DEGREE);
+   Log_RequestLogo (Sco_SCOPE_DEG);
   }
 
 /*****************************************************************************/
@@ -3779,7 +3779,7 @@ void Deg_RequestLogo (void)
 
 void Deg_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_DEGREE);
+   Log_ReceiveLogo (Sco_SCOPE_DEG);
   }
 
 /*****************************************************************************/
@@ -3951,7 +3951,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Deg_PutParamDegCod (DegCod);
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
-            Log_DrawLogo (Sco_SCOPE_DEGREE,DegCod,row[1],
+            Log_DrawLogo (Sco_SCOPE_DEG,DegCod,row[1],
                           16,"vertical-align:top;",true);
             fprintf (Gbl.F.Out,"&nbsp;%s</a>"
                                "</form>",

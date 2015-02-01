@@ -123,7 +123,7 @@ void Att_SeeAttEvents (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          Att_PutFormToCreateNewAttEvent ();
 	 Att_PutFormToListStds ();
          break;
@@ -335,7 +335,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          Att_PutFormsToRemEditOneAttEvent (Att->AttCod,Att->Hidden);
          break;
       default:
@@ -563,7 +563,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          HiddenSubQuery[0] = '\0';
          break;
       default:
@@ -1714,12 +1714,12 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
    /***** Get number of courses with attendance events from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM att_events"
                         " WHERE CrsCod>'0'");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
                         " FROM centres,degrees,courses,att_events"
                         " WHERE centres.InsCod='%ld'"
@@ -1729,7 +1729,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
                         " FROM degrees,courses,att_events"
                         " WHERE degrees.CtrCod='%ld'"
@@ -1738,7 +1738,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
                         " FROM courses,att_events"
                         " WHERE courses.DegCod='%ld'"
@@ -1746,7 +1746,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM att_events"
                         " WHERE CrsCod='%ld'",
@@ -1785,12 +1785,12 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
    /***** Get number of attendance events from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM att_events"
                         " WHERE CrsCod>'0'");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
                         " FROM centres,degrees,courses,att_events"
                         " WHERE centres.InsCod='%ld'"
@@ -1799,7 +1799,7 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
                         " FROM degrees,courses,att_events"
                         " WHERE degrees.CtrCod='%ld'"
@@ -1807,14 +1807,14 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(att_events.NumNotif)"
                         " FROM courses,att_events"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=att_events.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM att_events"
                         " WHERE CrsCod='%ld'",
@@ -1876,7 +1876,7 @@ void Att_SeeOneAttEvent (void)
 	 Att_ListAttOnlyMeAsStudent (&Att);
 	 break;
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
 	 /***** Show list of students *****/
          Att_ListAttStudents (&Att);
          break;
@@ -1963,7 +1963,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -2294,7 +2294,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstStds *****/
    /* Get list of students in the groups selected */
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)	// If there are students in the groups selected...
      {
@@ -2637,7 +2637,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
    Usr_ShowFormsToSelectUsrListType (ActReqLstAttStd);
 
    /***** Get and order lists of users from current course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {

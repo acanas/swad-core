@@ -1530,7 +1530,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
                       "<tr>"
                       "<td style=\"width:%upx; text-align:left;\">",
             Rec_DEGREE_LOGO_SIZE);
-   Log_DrawLogo (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+   Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
                  Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL,true);
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"%s\" style=\"text-align:center;\">"
@@ -2024,8 +2024,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);	// My current role is teacher
-   bool IAmDegAdmin  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN);	// My current role is degree administrator
-   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER);	// My current role is superuser
+   bool IAmDegAdmin  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM);	// My current role is degree administrator
+   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
    bool HeIsTeacher  = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
 	            TypeOfView == Rec_FORM_MY_SHARE_RECORD ||
@@ -2143,7 +2143,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
      {
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-      Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.ShortName,
+      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       fprintf (Gbl.F.Out,"</td>"
                          "<td class=\"%s\" style=\"text-align:left;"
@@ -2389,7 +2389,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             fprintf (Gbl.F.Out,"<select name=\"Role\">");
             switch (Gbl.Usrs.Me.LoggedRole)
               {
-               case Rol_ROLE_GUEST:
+               case Rol_ROLE_GUEST__:
                case Rol_ROLE_VISITOR:
                case Rol_ROLE_STUDENT:
 		  fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
@@ -2410,8 +2410,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                                  Txt_ROLES_SINGULAR_Abc[Role][UsrDat->Sex]);
                        }
                   break;
-               case Rol_ROLE_DEG_ADMIN:
-               case Rol_ROLE_SUPERUSER:
+               case Rol_ROLE_DEG_ADM:
+               case Rol_ROLE_SYS_ADM:
                   for (Role = Rol_ROLE_STUDENT;
                        Role <= Rol_ROLE_TEACHER;
                        Role++)
@@ -2436,8 +2436,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	          fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
                            (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 	          break;
-	       case Rol_ROLE_DEG_ADMIN:	// An administrator or a superuser can create students and teachers
-	       case Rol_ROLE_SUPERUSER:
+	       case Rol_ROLE_DEG_ADM:	// An administrator or a superuser can create students and teachers
+	       case Rol_ROLE_SYS_ADM:
 	          fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
                                      "<option value=\"%u\">%s</option>",
                            (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
@@ -2538,7 +2538,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
        ((TypeOfView == Rec_RECORD_LIST          ||
          TypeOfView == Rec_RECORD_PRINT) &&
         (IAmTeacher || IAmSuperuser) &&
-        (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_GUEST ||
+        (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_GUEST__ ||
          UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT)))
      {
       /* Country */
@@ -2761,7 +2761,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
         (UsrDat->Roles & (1 << Rol_ROLE_TEACHER))) ||		// He/she (me, really) is a teacher in any course
        ((TypeOfView == Rec_RECORD_LIST ||
          TypeOfView == Rec_RECORD_PRINT) &&
-	(UsrDat->RoleInCurrentCrsDB == Rol_ROLE_GUEST ||
+	(UsrDat->RoleInCurrentCrsDB == Rol_ROLE_GUEST__ ||
          UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER)))	// He/she is a teacher in the current course
      {
       /* Institution */

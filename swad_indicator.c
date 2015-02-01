@@ -101,13 +101,13 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               1 << Sco_SCOPE_COUNTRY     |
-		       1 << Sco_SCOPE_INSTITUTION |
-		       1 << Sco_SCOPE_CENTRE      |
-		       1 << Sco_SCOPE_DEGREE      |
-		       1 << Sco_SCOPE_COURSE;
-   Gbl.Scope.Default = Sco_SCOPE_COURSE;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               1 << Sco_SCOPE_CTY     |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR      |
+		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</td>"
@@ -213,17 +213,17 @@ void Ind_ShowIndicatorsCourses (void)
    unsigned NumCrss;
 
    /***** Get users range for statistics of courses *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               1 << Sco_SCOPE_COUNTRY     |
-		       1 << Sco_SCOPE_INSTITUTION |
-		       1 << Sco_SCOPE_CENTRE      |
-		       1 << Sco_SCOPE_DEGREE      |
-		       1 << Sco_SCOPE_COURSE;
-   Gbl.Scope.Default = Sco_SCOPE_COURSE;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               1 << Sco_SCOPE_CTY     |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR      |
+		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
 
    /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_PLATFORM) ? Deg_GetParamOtherDegTypCod () :
+   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Deg_GetParamOtherDegTypCod () :
                                                                     -1L;
 
    /***** Get department code *****/
@@ -266,7 +266,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          if (Gbl.Stat.DptCod > 0)
            {
             if (Gbl.Stat.DegTypCod > 0)
@@ -310,7 +310,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                               " ORDER BY degrees.FullName,courses.FullName");
            }
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
@@ -334,7 +334,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
@@ -356,7 +356,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
@@ -378,7 +378,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"

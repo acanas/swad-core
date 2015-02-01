@@ -113,7 +113,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    /***** Get centres with pending degrees *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_CTR_ADMIN:
+      case Rol_ROLE_CTR_ADM:
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
                         " FROM degrees,ctr_admin,centres"
                         " WHERE (degrees.Status & %u)<>0"
@@ -122,7 +122,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                         " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
                   (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
                         " FROM degrees,centres"
                         " WHERE (degrees.Status & %u)<>0"
@@ -173,7 +173,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	                    " vertical-align:middle; background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
-         Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr.CtrCod,Ctr.ShortName,
+         Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
                        16,"vertical-align:top;",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
@@ -276,9 +276,9 @@ static void Ctr_Configuration (bool PrintView)
 	 Lay_PutLinkToPrintView2 ();
 
 	 /* Links to upload logo and photo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADMIN)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
 	   {
-	    Log_PutFormToChangeLogo (Sco_SCOPE_CENTRE);
+	    Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 	   }
 	}
@@ -297,7 +297,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
-      Log_DrawLogo (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
+      Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
                     Gbl.CurrentCtr.Ctr.ShortName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
       if (PutLink)
@@ -331,7 +331,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "</tr>");
 
 	 /* Photo attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER && !PrintView)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\""
@@ -514,7 +514,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActUnk,ActUnk);
 
       /***** Put link (form) to edit centres in current institution *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
          Lay_PutFormToEdit (ActEdiCtr);
 
       /***** List centres *****/
@@ -602,7 +602,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
-   Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
                  16,"vertical-align:top;",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
@@ -1149,13 +1149,13 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\""
 	                 " style=\"width:20px; text-align:left;\">",
                Ctr->FullName);
-      Log_DrawLogo (Sco_SCOPE_CENTRE,Ctr->CtrCod,Ctr->ShortName,16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
 	                 " style=\"text-align:left; vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)	// I can select institution
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)	// I can select institution
 	{
 	 Act_FormStart (ActChgCtrIns);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
@@ -1283,7 +1283,7 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left; vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN &&
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgCtrSta);
@@ -1331,7 +1331,7 @@ static void Ctr_ListCentresForEdition (void)
 
 static bool Ctr_CheckIfICanEdit (struct Centre *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN ||		// I am an institution administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM ||		// I am an institution administrator or higher
                   ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&		// Centre is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));		// I am the requester
   }
@@ -1745,7 +1745,7 @@ void Ctr_ChangeCtrStatus (void)
 
 void Ctr_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_CENTRE);
+   Log_RequestLogo (Sco_SCOPE_CTR);
   }
 
 /*****************************************************************************/
@@ -1754,7 +1754,7 @@ void Ctr_RequestLogo (void)
 
 void Ctr_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_CENTRE);
+   Log_ReceiveLogo (Sco_SCOPE_CTR);
   }
 
 /*****************************************************************************/
@@ -1918,9 +1918,9 @@ static void Ctr_PutFormToCreateCentre (void)
    Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADMIN)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
       Act_FormStart (ActNewCtr);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
       Act_FormStart (ActReqCtr);
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");
@@ -1946,7 +1946,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
-   Log_DrawLogo (Sco_SCOPE_CENTRE,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/

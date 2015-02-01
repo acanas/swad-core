@@ -399,8 +399,8 @@ void Sta_AskSeeCrsAccesses (void)
    Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_COURSE,NULL,false);
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)
@@ -539,7 +539,7 @@ void Sta_AskSeeGblAccesses (void)
    /***** Put form to go to test edition and configuration *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER))
+        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
      {
       fprintf (Gbl.F.Out,"<div style=\"padding-bottom:10px; text-align:center;\">");
       Sta_PutFormToRequestAccessesCrs ();
@@ -586,13 +586,13 @@ void Sta_AskSeeGblAccesses (void)
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               1 << Sco_SCOPE_COUNTRY     |
-		       1 << Sco_SCOPE_INSTITUTION |
-		       1 << Sco_SCOPE_CENTRE      |
-		       1 << Sco_SCOPE_DEGREE      |
-		       1 << Sco_SCOPE_COURSE;
-   Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               1 << Sco_SCOPE_CTY     |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR      |
+		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</td>"
@@ -929,19 +929,19 @@ static bool Sta_SeeAccesses (void)
         }
 
       /***** Get users range for access statistics *****/
-      Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	                  1 << Sco_SCOPE_COUNTRY     |
-		          1 << Sco_SCOPE_INSTITUTION |
-	                  1 << Sco_SCOPE_CENTRE      |
-                          1 << Sco_SCOPE_DEGREE      |
-                          1 << Sco_SCOPE_COURSE;
-      Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
+      Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	                  1 << Sco_SCOPE_CTY     |
+		          1 << Sco_SCOPE_INS |
+	                  1 << Sco_SCOPE_CTR      |
+                          1 << Sco_SCOPE_DEG      |
+                          1 << Sco_SCOPE_CRS;
+      Gbl.Scope.Default = Sco_SCOPE_SYS;
       Sco_GetScope ();
      }
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd);
-   if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER ||
+   if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM ||
          (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER && StatsGlobalOrCourse == STAT_COURSE)))
       if (NumDays > Cfg_DAYS_IN_RECENT_LOG)
         {
@@ -1056,7 +1056,7 @@ static bool Sta_SeeAccesses (void)
      {
       case STAT_GLOBAL:
 	 /* Scope */
-         if (Gbl.Scope.Current == Sco_SCOPE_INSTITUTION &&
+         if (Gbl.Scope.Current == Sco_SCOPE_INS &&
              Gbl.CurrentIns.Ins.InsCod > 0)
            {
 	    sprintf (QueryAux," AND %s.DegCod IN"
@@ -1067,7 +1067,7 @@ static bool Sta_SeeAccesses (void)
                      LogTable,Gbl.CurrentIns.Ins.InsCod);
             strcat (Query,QueryAux);
            }
-         else if (Gbl.Scope.Current == Sco_SCOPE_CENTRE &&
+         else if (Gbl.Scope.Current == Sco_SCOPE_CTR &&
              Gbl.CurrentCtr.Ctr.CtrCod > 0)
            {
 	    sprintf (QueryAux," AND %s.DegCod"
@@ -1077,14 +1077,14 @@ static bool Sta_SeeAccesses (void)
                      LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
             strcat (Query,QueryAux);
            }
-         else if (Gbl.Scope.Current == Sco_SCOPE_DEGREE &&
+         else if (Gbl.Scope.Current == Sco_SCOPE_DEG &&
              Gbl.CurrentDeg.Deg.DegCod > 0)
            {
 	    sprintf (QueryAux," AND %s.DegCod='%ld'",
                      LogTable,Gbl.CurrentDeg.Deg.DegCod);
             strcat (Query,QueryAux);
            }
-         else if (Gbl.Scope.Current == Sco_SCOPE_COURSE &&
+         else if (Gbl.Scope.Current == Sco_SCOPE_CRS &&
                   Gbl.CurrentCrs.Crs.CrsCod > 0)
            {
 	    sprintf (QueryAux," AND %s.CrsCod='%ld'",
@@ -1115,15 +1115,15 @@ static bool Sta_SeeAccesses (void)
 	       break;
 	    case Sta_INS_ADMINS:
                sprintf (StrRole," AND %s.Role='%u'",
-                        LogTable,(unsigned) Rol_ROLE_INS_ADMIN);
+                        LogTable,(unsigned) Rol_ROLE_INS_ADM);
 	       break;
 	    case Sta_CTR_ADMINS:
                sprintf (StrRole," AND %s.Role='%u'",
-                        LogTable,(unsigned) Rol_ROLE_CTR_ADMIN);
+                        LogTable,(unsigned) Rol_ROLE_CTR_ADM);
 	       break;
 	    case Sta_DEG_ADMINS:
                sprintf (StrRole," AND %s.Role='%u'",
-                        LogTable,(unsigned) Rol_ROLE_DEG_ADMIN);
+                        LogTable,(unsigned) Rol_ROLE_DEG_ADM);
 	       break;
 	    case Sta_TEACHERS:
                sprintf (StrRole," AND %s.Role='%u'",
@@ -1139,7 +1139,7 @@ static bool Sta_SeeAccesses (void)
                break;
 	    case Sta_GUESTS:
                sprintf (StrRole," AND %s.Role='%u'",
-                        LogTable,(unsigned) Rol_ROLE_GUEST);
+                        LogTable,(unsigned) Rol_ROLE_GUEST__);
                break;
 	    case Sta_UNKNOWN_USRS:
                sprintf (StrRole," AND %s.Role='%u'",
@@ -1264,7 +1264,7 @@ static bool Sta_SeeAccesses (void)
      }
    /***** Write query for debug *****/
 /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Make the query *****/
@@ -1302,22 +1302,22 @@ static bool Sta_SeeAccesses (void)
             default:
                switch (Gbl.Scope.Current)
                  {
-                  case Sco_SCOPE_PLATFORM:
+                  case Sco_SCOPE_SYS:
                      strcpy (Gbl.Message,Txt_Statistics_of_all_visits);
                      break;
-                  case Sco_SCOPE_INSTITUTION:
+                  case Sco_SCOPE_INS:
                      sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_institution_X,
                               Gbl.CurrentIns.Ins.ShortName);
                      break;
-                  case Sco_SCOPE_CENTRE:
+                  case Sco_SCOPE_CTR:
                      sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_centre_X,
                               Gbl.CurrentCtr.Ctr.ShortName);
                      break;
-                  case Sco_SCOPE_DEGREE:
+                  case Sco_SCOPE_DEG:
                      sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_degree_X,
                               Gbl.CurrentDeg.Deg.ShortName);
                      break;
-                  case Sco_SCOPE_COURSE:
+                  case Sco_SCOPE_CRS:
                      sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_course_X,
                               Gbl.CurrentCrs.Crs.ShortName);
                      break;
@@ -3490,7 +3490,7 @@ static void Sta_WriteDegree (long DegCod)
       fprintf (Gbl.F.Out,"%s\">"
                          "<a href=\"%s\" class=\"LOG\" target=\"_blank\">",
                Deg.FullName,Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
                     16,"vertical-align:top;",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
                Deg.ShortName);
@@ -3637,13 +3637,13 @@ void Sta_ReqUseOfPlatform (void)
    fprintf (Gbl.F.Out,"<div class=\"%s\">"
 	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               1 << Sco_SCOPE_COUNTRY     |
-	               1 << Sco_SCOPE_INSTITUTION |
-		       1 << Sco_SCOPE_CENTRE      |
-		       1 << Sco_SCOPE_DEGREE      |
-		       1 << Sco_SCOPE_COURSE;
-   Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               1 << Sco_SCOPE_CTY     |
+	               1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR      |
+		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();
    Sco_PutSelectorScope (false);
 
@@ -3859,7 +3859,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    /***** Get number of countries *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 NumCtysTotal = Cty_GetNumCtysTotal ();
          NumCtysWithInss = Cty_GetNumCtysWithInss ("");
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs ("");
@@ -3869,7 +3869,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
          sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
@@ -3880,7 +3880,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
@@ -3891,7 +3891,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
@@ -3902,7 +3902,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-     case Sco_SCOPE_COURSE:
+     case Sco_SCOPE_CRS:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
@@ -3973,7 +3973,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    /***** Get number of institutions *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 NumInssTotal = Ins_GetNumInssTotal ();
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs ("");
 	 NumInssWithDegs = Ins_GetNumInssWithDegs ("");
@@ -3982,7 +3982,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 NumInssTotal = 1;
          sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
@@ -3992,7 +3992,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
          sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
@@ -4002,7 +4002,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
@@ -4012,7 +4012,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-     case Sco_SCOPE_COURSE:
+     case Sco_SCOPE_CRS:
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
@@ -4078,7 +4078,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    /***** Get number of centres *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 NumCtrsTotal = Ctr_GetNumCtrsTotal ();
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs ("");
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss ("");
@@ -4086,7 +4086,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 NumCtrsTotal = Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod);
          sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
@@ -4095,7 +4095,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 NumCtrsTotal = 1;
          sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
@@ -4104,7 +4104,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
          sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
@@ -4113,7 +4113,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-     case Sco_SCOPE_COURSE:
+     case Sco_SCOPE_CRS:
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
 	 NumCtrsWithCrss = 1;
@@ -4174,14 +4174,14 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    /***** Get number of degrees *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 NumDegsTotal = Deg_GetNumDegsTotal ();
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss ("");
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,"");
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 NumDegsTotal = Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod);
          sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
@@ -4189,7 +4189,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 NumDegsTotal = Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
          sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
@@ -4197,7 +4197,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 NumDegsTotal = 1;
          sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
@@ -4205,7 +4205,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-     case Sco_SCOPE_COURSE:
+     case Sco_SCOPE_CRS:
 	 NumDegsTotal = 1;
 	 NumDegsWithCrss = 1;
          sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
@@ -4261,34 +4261,34 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    /***** Get number of degrees *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 NumCrssTotal = Crs_GetNumCrssTotal ();
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,"");
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 NumCrssTotal = Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod);
          sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 NumCrssTotal = Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
          sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 NumCrssTotal = Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod);
          sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
-     case Sco_SCOPE_COURSE:
+     case Sco_SCOPE_CRS:
 	 NumCrssTotal = 1;
          sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
@@ -4336,7 +4336,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
    /***** Get number of users from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
             sprintf (Query,"SELECT COUNT(*) FROM usr_data");
          else
@@ -4344,7 +4344,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
         	           " FROM crs_usr WHERE Role='%u'",
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr"
@@ -4363,7 +4363,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                            " AND crs_usr.Role='%u'",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM degrees,courses,crs_usr"
@@ -4380,7 +4380,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                            " AND crs_usr.Role='%u'",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM courses,crs_usr"
@@ -4395,7 +4395,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                            " AND crs_usr.Role='%u'",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
                            " WHERE CrsCod='%ld'",
@@ -4448,7 +4448,7 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_Average_number_of_users_belonging_to_a_course);
    Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_STUDENT);
    Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_TEACHER);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_GUEST);	// Users not beloging to any course
+   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_GUEST__);	// Users not beloging to any course
 
    Lay_EndRoundFrameTable10 ();
   }
@@ -4726,7 +4726,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
    switch (Scope)
      {
       /* Scope = the whole platform */
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -4796,7 +4796,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       /* Scope = the current country */
-      case Sco_SCOPE_COUNTRY:
+      case Sco_SCOPE_CTY:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -4899,7 +4899,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       /* Scope = the current institution */
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -4996,7 +4996,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       /* Scope = the current centre */
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -5087,7 +5087,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       /* Scope = the current degree */
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -5172,7 +5172,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	   }
          break;
       /* Scope = the current course */
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -5376,14 +5376,14 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
    /***** Get the size of a file browser *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT Public,COUNT(*)"
                         " FROM files"
                         " WHERE License='%u'"
                         " GROUP BY Public",
                   (unsigned) License);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM centres,degrees,courses,files"
                         " WHERE centres.InsCod='%ld'"
@@ -5398,7 +5398,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM degrees,courses,files"
                         " WHERE degrees.CtrCod='%ld'"
@@ -5412,7 +5412,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM courses,files"
                         " WHERE courses.DegCod='%ld'"
@@ -5425,7 +5425,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT Public,COUNT(*)"
                         " FROM files"
                         " WHERE CrsCod='%ld'"
@@ -5970,7 +5970,7 @@ static void Sta_GetAndShowForumStats (void)
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_SWAD_USRS       ,-1L,-1L,-1L,-1L,&StatsForum);
@@ -5984,7 +5984,7 @@ static void Sta_GetAndShowForumStats (void)
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
@@ -5994,7 +5994,7 @@ static void Sta_GetAndShowForumStats (void)
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
@@ -6002,13 +6002,13 @@ static void Sta_GetAndShowForumStats (void)
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
          Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
          break;
@@ -6370,12 +6370,12 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
       /***** Get the number of users who have chosen this language from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM usr_data WHERE Language='%s'",
         	     Txt_STR_LANG_ID[Lan]);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6387,7 +6387,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
                      Gbl.CurrentIns.Ins.InsCod,
                      Txt_STR_LANG_ID[Lan]);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -6398,7 +6398,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
                      Gbl.CurrentCtr.Ctr.CtrCod,
                      Txt_STR_LANG_ID[Lan]);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -6408,7 +6408,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
                      Gbl.CurrentDeg.Deg.DegCod,
                      Txt_STR_LANG_ID[Lan]);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -6493,12 +6493,12 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
       /***** Get number of users who have chosen this layout from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data"
         	           " WHERE Layout='%u'",
                      (unsigned) Layout);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6509,7 +6509,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
                            " AND usr_data.Layout='%u'",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Layout);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -6519,7 +6519,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
                            " AND usr_data.Layout='%u'",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Layout);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -6528,7 +6528,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
                            " AND usr_data.Layout='%u'",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Layout);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -6613,12 +6613,12 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
       /***** Get number of users who have chosen this theme from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data"
         	           " WHERE Theme='%s'",
                      The_ThemeId[Theme]);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6629,7 +6629,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                            " AND usr_data.Theme='%s'",
                      Gbl.CurrentIns.Ins.InsCod,The_ThemeId[Theme]);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -6639,7 +6639,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                            " AND usr_data.Theme='%s'",
                      Gbl.CurrentCtr.Ctr.CtrCod,The_ThemeId[Theme]);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -6648,7 +6648,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                            " AND usr_data.Theme='%s'",
                      Gbl.CurrentDeg.Deg.DegCod,The_ThemeId[Theme]);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -6734,11 +6734,11 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
       /***** Get the number of users who have chosen this icon set from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE IconSet='%s'",
         	     Ico_IconSetId[IconSet]);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6749,7 +6749,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                            " AND usr_data.IconSet='%s'",
                      Gbl.CurrentIns.Ins.InsCod,Ico_IconSetId[IconSet]);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -6759,7 +6759,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                            " AND usr_data.IconSet='%s'",
                      Gbl.CurrentCtr.Ctr.CtrCod,Ico_IconSetId[IconSet]);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -6768,7 +6768,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                            " AND usr_data.IconSet='%s'",
                      Gbl.CurrentDeg.Deg.DegCod,Ico_IconSetId[IconSet]);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -6858,12 +6858,12 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
       /***** Get number of users who have chosen this menu from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data"
         	           " WHERE Menu='%u'",
                      (unsigned) Menu);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6874,7 +6874,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                            " AND usr_data.Menu='%u'",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Menu);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -6884,7 +6884,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                            " AND usr_data.Menu='%u'",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Menu);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -6893,7 +6893,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                            " AND usr_data.Menu='%u'",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Menu);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -6977,11 +6977,11 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
       /***** Get the number of users who have chosen this layout of columns from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",
                      SideCols);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -6992,7 +6992,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                            " AND usr_data.SideCols='%u'",
                      Gbl.CurrentIns.Ins.InsCod,SideCols);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -7002,7 +7002,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                            " AND usr_data.SideCols='%u'",
                      Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -7011,7 +7011,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                            " AND usr_data.SideCols='%u'",
                      Gbl.CurrentDeg.Deg.DegCod,SideCols);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -7115,10 +7115,10 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    /***** Get total number of users who want to be notified by e-mail on some event, from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE EmailNtfEvents<>0");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM centres,degrees,courses,crs_usr,usr_data"
                         " WHERE centres.InsCod='%ld'"
@@ -7129,7 +7129,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                         " AND usr_data.EmailNtfEvents<>0",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM degrees,courses,crs_usr,usr_data"
                         " WHERE degrees.CtrCod='%ld'"
@@ -7139,7 +7139,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                         " AND usr_data.EmailNtfEvents<>0",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM courses,crs_usr,usr_data"
                         " WHERE courses.DegCod='%ld'"
@@ -7148,7 +7148,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                         " AND usr_data.EmailNtfEvents<>0",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM crs_usr,usr_data"
                         " WHERE crs_usr.CrsCod='%ld'"
@@ -7170,11 +7170,11 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       /***** Get the number of users who want to be notified by e-mail on this event, from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE ((EmailNtfEvents & %u)<>0)",
                      (1 << NotifyEvent));
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -7185,7 +7185,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                            " AND ((usr_data.EmailNtfEvents & %u)<>0)",
                      Gbl.CurrentIns.Ins.InsCod,(1 << NotifyEvent));
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -7195,7 +7195,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                            " AND ((usr_data.EmailNtfEvents & %u)<>0)",
                      Gbl.CurrentCtr.Ctr.CtrCod,(1 << NotifyEvent));
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -7204,7 +7204,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                            " AND ((usr_data.EmailNtfEvents & %u)<>0)",
                      Gbl.CurrentDeg.Deg.DegCod,(1 << NotifyEvent));
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -7221,13 +7221,13 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       /***** Get number of notifications by e-mail from database *****/
       switch (Gbl.Scope.Current)
         {
-         case Sco_SCOPE_PLATFORM:
+         case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
                            " WHERE NotifyEvent='%u'",
                      (unsigned) NotifyEvent);
             break;
-	 case Sco_SCOPE_INSTITUTION:
+	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
                            " FROM centres,degrees,sta_notif"
                            " WHERE centres.InsCod='%ld'"
@@ -7236,7 +7236,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                            " AND sta_notif.NotifyEvent='%u'",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
             break;
-         case Sco_SCOPE_CENTRE:
+         case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
                            " FROM degrees,sta_notif"
                            " WHERE degrees.CtrCod='%ld'"
@@ -7244,14 +7244,14 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                            " AND sta_notif.NotifyEvent='%u'",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
             break;
-         case Sco_SCOPE_DEGREE:
+         case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
                            " WHERE DegCod='%ld'"
                            " AND NotifyEvent='%u'",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
             break;
-         case Sco_SCOPE_COURSE:
+         case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
                            " WHERE CrsCod='%ld'"

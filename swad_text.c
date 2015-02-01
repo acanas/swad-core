@@ -23435,7 +23435,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum utilizador encontrado."
 #endif
 	 ,
-#if   L==0	// Rol_ROLE_GUEST
+#if   L==0	// Rol_ROLE_GUEST__
 	 "No hi ha convidats."
 #elif L==1
 	 "Keine Eingeladen gefunden."
@@ -23515,7 +23515,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum professor encontrado."
 #endif
 	 ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN
+#if   L==0	// Rol_ROLE_DEG_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==1
 	 "Keine Administratoren gefunden."
@@ -23535,7 +23535,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN
+#if   L==0	// Rol_ROLE_CTR_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==1
 	 "Keine Administratoren gefunden."
@@ -23555,7 +23555,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==0	// Rol_ROLE_INS_ADMIN
+#if   L==0	// Rol_ROLE_INS_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==1
 	 "Keine Administratoren gefunden."
@@ -23575,7 +23575,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==0	// Rol_ROLE_SUPERUSER
+#if   L==0	// Rol_ROLE_SYS_ADM
 	 "No hay superusuarios."	// Necessita traduccio
 #elif L==1
 	 "Keine Superuser gefunden."
@@ -29263,7 +29263,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
 	   "Invitado/a"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -29283,7 +29283,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidado/a"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
 	   "Invitada"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -29303,7 +29303,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidada"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
 	   "Invitado"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -29323,7 +29323,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidado"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
 	   "Invitado/a"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -29587,250 +29587,250 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_UNKNOWN
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
+	   "Administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "Administrator"
+	   "Administrator of degree"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de titulaci&oacute;n"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se d'&eacute;tude"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di laurea"
 #elif L==7
-	   "Administrator"
+	   "Administrator stopien"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_FEMALE
-	   "Administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
+	   "Administradora de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "Administrator"
+	   "Administrator of degree"
 #elif L==3
-	   "Administradora"
+	   "Administradora de titulaci&oacute;n"
 #elif L==4
-	   "Administrateuse"
+	   "Administrateuse d'&eacute;tude"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administradora de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di laurea"
 #elif L==7
-	   "Administratorka"
+	   "Administratorka stopien"
 #elif L==8
-	   "Administradora"
+	   "Administradora de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_MALE
-	   "Administrador"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
+	   "Administrador de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "Administrator"
+	   "Administrator of degree"
 #elif L==3
-	   "Administrador"
+	   "Administrador de titulaci&oacute;n"
 #elif L==4
-	   "Administrateur"
+	   "Administrateur d'&eacute;tude"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di laurea"
 #elif L==7
-	   "Administrator"
+	   "Administrator stopien"
 #elif L==8
-	   "Administrador"
+	   "Administrador de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_ALL
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
+	   "Administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "Administrator"
+	   "Administrator of degree"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de titulaci&oacute;n"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se d'&eacute;tude"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di laurea"
 #elif L==7
-	   "Administratorzy"
+	   "Administratorzy stopien"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de titula&ccedil;&atilde;o"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_UNKNOWN
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
+	   "Administrador/a de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "Administrator"
+	   "Administrator of centre"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de centro"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se de centre"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de centro"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di centro"
 #elif L==7
-	   "Administrator"
+	   "Administrator centrum"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_FEMALE
-	   "Administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
+	   "Administradora de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "Administrator"
+	   "Administrator of centre"
 #elif L==3
-	   "Administradora"
+	   "Administradora de centro"
 #elif L==4
-	   "Administrateuse"
+	   "Administrateuse de centre"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administradora de centro"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di centro"
 #elif L==7
-	   "Administratorka"
+	   "Administratorka centrum"
 #elif L==8
-	   "Administradora"
+	   "Administradora de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_MALE
-	   "Administrador"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
+	   "Administrador de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "Administrator"
+	   "Administrator of centre"
 #elif L==3
-	   "Administrador"
+	   "Administrador de centro"
 #elif L==4
-	   "Administrateur"
+	   "Administrateur de centre"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador de centro"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di centro"
 #elif L==7
-	   "Administrator"
+	   "Administrator centrum"
 #elif L==8
-	   "Administrador"
+	   "Administrador de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_ALL
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
+	   "Administrador/a de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "Administrator"
+	   "Administrator of centre"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de centro"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se de centre"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de centro"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di centro"
 #elif L==7
-	   "Administratorzy"
+	   "Administratorzy centrum"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de centro"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_UNKNOWN
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
+	   "Administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "Administrator"
+	   "Administrator of institution"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de instituci&oacute;n"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se d'&eacute;tablissement"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di istituzione"
 #elif L==7
-	   "Administrator"
+	   "Administrator instytucji"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_FEMALE
-	   "Administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
+	   "Administradora de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "Administrator"
+	   "Administrator of institution"
 #elif L==3
-	   "Administradora"
+	   "Administradora de instituci&oacute;n"
 #elif L==4
-	   "Administrateuse"
+	   "Administrateuse d'&eacute;tablissement"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administradora de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di istituzione"
 #elif L==7
-	   "Administratorka"
+	   "Administratorka instytucji"
 #elif L==8
-	   "Administradora"
+	   "Administradora de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_MALE
-	   "Administrador"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
+	   "Administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "Administrator"
+	   "Administrator of institution"
 #elif L==3
-	   "Administrador"
+	   "Administrador de instituci&oacute;n"
 #elif L==4
-	   "Administrateur"
+	   "Administrateur d'&eacute;tablissement"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di istituzione"
 #elif L==7
-	   "Administrator"
+	   "Administrator instytucji"
 #elif L==8
-	   "Administrador"
+	   "Administrador de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_ALL
-	   "Administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
+	   "Administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "Administrator"
+	   "Administrator of institution"
 #elif L==3
-	   "Administrador/a"
+	   "Administrador/a de instituci&oacute;n"
 #elif L==4
-	   "Administrateur/se"
+	   "Administrateur/se d'&eacute;tablissement"
 #elif L==5
-	   "&Ntilde;angarekoh&aacute;ra"
+	   "Administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "Amministratore"
+	   "Amministratore di istituzione"
 #elif L==7
-	   "Administratorzy"
+	   "Administratorzy instytucji"
 #elif L==8
-	   "Administrador/a"
+	   "Administrador/a de institu&ccedil;&atilde;o"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
 	   "Superusuari/&agrave;ria"
 #elif L==1
 	   "Superuser"
@@ -29850,7 +29850,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizador/a"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
 	   "Superusuaria"	// Necessita traduccio
 #elif L==1
 	   "Superuser"
@@ -29870,7 +29870,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizadora"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
 	   "Superusuari"
 #elif L==1
 	   "Superuser"
@@ -29890,7 +29890,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizador"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
 	   "Superusuari/&agrave;ria"	// Necessita traduccio
 #elif L==1
 	   "Superuser"
@@ -29995,7 +29995,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
 	   "invitado/a"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -30015,7 +30015,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidado/a"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
 	   "invitada"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -30035,7 +30035,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidada"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
 	   "invitado"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -30055,7 +30055,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidado"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
 	   "invitado/a"	// Necessita traduccio
 #elif L==1
 	   "Gast"
@@ -30319,250 +30319,250 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_UNKNOWN
-	   "administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
+	   "administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "administrator"
+	   "administrator of degree"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de titulaci&oacute;n"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se d'&eacute;tude"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di laurea"
 #elif L==7
-	   "administrator"
+	   "administrator stopien"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_FEMALE
-	   "administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
+	   "administradora de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "administrator"
+	   "administrator of degree"
 #elif L==3
-	   "administradora"
+	   "administradora de titulaci&oacute;n"
 #elif L==4
-	   "administrateuse"
+	   "administrateuse d'&eacute;tude"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administradora de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di laurea"
 #elif L==7
-	   "administratorka"
+	   "administratorka stopien"
 #elif L==8
-	   "administradora"
+	   "administradora de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_MALE
-	   "administrador"		// Necessita traduccio
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
+	   "administrador de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "administrator"
+	   "administrator of degree"
 #elif L==3
-	   "administrador"
+	   "administrador de titulaci&oacute;n"
 #elif L==4
-	   "administrateur"
+	   "administrateur d'&eacute;tude"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di laurea"
 #elif L==7
-	   "administrator"
+	   "administrator stopien"
 #elif L==8
-	   "administrador"
+	   "administrador de titula&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_ALL
-	   "administrador/a"
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
+	   "administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Studiengang"
 #elif L==2
-	   "administrator"
+	   "administrator of degree"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de titulaci&oacute;n"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se d'&eacute;tude"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di laurea"
 #elif L==7
-	   "administratorzy"
+	   "administratorzy stopien"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de titula&ccedil;&atilde;o"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_UNKNOWN
-	   "administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
+	   "administrador/a de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "administrator"
+	   "administrator of centre"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de centro"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se de centre"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de centro"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di centro"
 #elif L==7
-	   "administrator"
+	   "administrator centrum"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_FEMALE
-	   "administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
+	   "administradora de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "administrator"
+	   "administrator of centre"
 #elif L==3
-	   "administradora"
+	   "administradora de centro"
 #elif L==4
-	   "administrateuse"
+	   "administrateuse de centre"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administradora de centro"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di centro"
 #elif L==7
-	   "administratorka"
+	   "administratorka centrum"
 #elif L==8
-	   "administradora"
+	   "administradora de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_MALE
-	   "administrador"		// Necessita traduccio
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
+	   "administrador de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "administrator"
+	   "administrator of centre"
 #elif L==3
-	   "administrador"
+	   "administrador de centro"
 #elif L==4
-	   "administrateur"
+	   "administrateur de centre"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador de centro"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di centro"
 #elif L==7
-	   "administrator"
+	   "administrator centrum"
 #elif L==8
-	   "administrador"
+	   "administrador de centro"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_ALL
-	   "administrador/a"
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
+	   "administrador/a de centro"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Lehrinstitut"
 #elif L==2
-	   "administrator"
+	   "administrator of centre"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de centro"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se de centre"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de centro"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di centro"
 #elif L==7
-	   "administratorzy"
+	   "administratorzy centrum"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de centro"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_UNKNOWN
-	   "administrador/a"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
+	   "administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "administrator"
+	   "administrator of institution"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de instituci&oacute;n"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se d'&eacute;tablissement"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di istituzione"
 #elif L==7
-	   "administrator"
+	   "administrator instytucji"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_FEMALE
-	   "administradora"	// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
+	   "administradora de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "administrator"
+	   "administrator of institution"
 #elif L==3
-	   "administradora"
+	   "administradora de instituci&oacute;n"
 #elif L==4
-	   "administrateuse"
+	   "administrateuse d'&eacute;tablissement"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administradora de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di istituzione"
 #elif L==7
-	   "administratorka"
+	   "administratorka instytucji"
 #elif L==8
-	   "administradora"
+	   "administradora de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_MALE
-	   "administrador"		// Necessita traduccio
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
+	   "administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "administrator"
+	   "administrator of institution"
 #elif L==3
-	   "administrador"
+	   "administrador de instituci&oacute;n"
 #elif L==4
-	   "administrateur"
+	   "administrateur d'&eacute;tablissement"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di istituzione"
 #elif L==7
-	   "administrator"
+	   "administrator instytucji"
 #elif L==8
-	   "administrador"
+	   "administrador de institu&ccedil;&atilde;o"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_ALL
-	   "administrador/a"
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
+	   "administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==1
-	   "Administrator"
+	   "Administrator der Hochschule"
 #elif L==2
-	   "administrator"
+	   "administrator of institution"
 #elif L==3
-	   "administrador/a"
+	   "administrador/a de instituci&oacute;n"
 #elif L==4
-	   "administrateur/se"
+	   "administrateur/se d'&eacute;tablissement"
 #elif L==5
-	   "&ntilde;angarekoh&aacute;ra"
+	   "administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==6
-	   "amministratore"
+	   "amministratore di istituzione"
 #elif L==7
-	   "administratorzy"
+	   "administratorzy instytucji"
 #elif L==8
-	   "administrador/a"
+	   "administrador/a de institu&ccedil;&atilde;o"
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
 	   "superusuari/&agrave;ria"
 #elif L==1
 	   "Superuser"
@@ -30582,7 +30582,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizador/a"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
 	   "superusuaria"		// Necessita traduccio
 #elif L==1
 	   "Superuser"
@@ -30602,7 +30602,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizadora"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
 	   "superusuari"
 #elif L==1
 	   "Superuser"
@@ -30622,7 +30622,7 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizador"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
 	   "superusuari/&agrave;ria"
 #elif L==1
 	   "Superuser"
@@ -30641,7 +30641,8 @@ const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==8
 	   "superutilizador/a"
 #endif
-	 } };
+	 }
+   };
 
 const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
@@ -30727,7 +30728,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
 	   "Convidats"
 #elif L==1
 	   "Eingeladen"
@@ -30747,7 +30748,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidados"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
 	   "Invitadas"	// Necessita traduccio
 #elif L==1
 	   "Eingeladen"
@@ -30767,7 +30768,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidadas"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
 	   "Convidats"
 #elif L==1
 	   "Eingeladen"
@@ -30787,7 +30788,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Convidados"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
 	   "Convidats"
 #elif L==1
 	   "Eingeladen"
@@ -31051,7 +31052,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31071,7 +31072,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
 	   "Administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31091,7 +31092,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31111,7 +31112,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31132,7 +31133,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31152,7 +31153,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
 	   "Administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31172,7 +31173,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31192,7 +31193,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31213,7 +31214,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31233,7 +31234,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
 	   "Administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31253,7 +31254,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31273,7 +31274,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
 	   "Administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31294,7 +31295,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
 	   "Superusuaris"
 #elif L==1
 	   "Superuser"
@@ -31314,7 +31315,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizadores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
 	   "Superusuarias"	// Necessita traduccio
 #elif L==1
 	   "Superuser"
@@ -31334,7 +31335,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizadoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
 	   "Superusuaris"
 #elif L==1
 	   "Superuser"
@@ -31354,7 +31355,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "Superutilizadores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
 	   "Superusuaris"
 #elif L==1
 	   "Superuser"
@@ -31459,7 +31460,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
 	   "convidats"
 #elif L==1
 	   "Eingeladen"
@@ -31479,7 +31480,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidados"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
 	   "invitadas"	// Necessita traduccio
 #elif L==1
 	   "Eingeladen"
@@ -31499,7 +31500,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidadas"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
 	   "convidats"
 #elif L==1
 	   "Eingeladen"
@@ -31519,7 +31520,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "convidados"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_GUEST - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
 	   "convidats"
 #elif L==1
 	   "Eingeladen"
@@ -31783,7 +31784,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31803,7 +31804,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
 	   "administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31823,7 +31824,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31843,7 +31844,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_DEG_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31864,7 +31865,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31884,7 +31885,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
 	   "administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31904,7 +31905,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31924,7 +31925,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_CTR_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31945,7 +31946,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31965,7 +31966,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
 	   "administradoras"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -31985,7 +31986,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -32005,7 +32006,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "administradores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_INS_ADMIN - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
 	   "administradores"	// Necessita traduccio
 #elif L==1
 	   "Administratoren"
@@ -32026,7 +32027,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_UNKNOWN
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
 	   "superusuaris"
 #elif L==1
 	   "Superuser"
@@ -32046,7 +32047,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizadores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_FEMALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
 	   "superusuarias"		// Necessita traduccio
 #elif L==1
 	   "Superuser"
@@ -32066,7 +32067,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizadoras"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_MALE
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
 	   "superusuaris"
 #elif L==1
 	   "Superuser"
@@ -32086,7 +32087,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	   "superutilizadores"
 #endif
 	   ,
-#if   L==0	// Rol_ROLE_SUPERUSER - Usr_SEX_ALL
+#if   L==0	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
 	   "superusuaris"
 #elif L==1
 	   "Superuser"

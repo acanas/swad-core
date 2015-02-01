@@ -403,7 +403,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Stat.RowsPerPage    = 50;
    Gbl.Stat.UseStatType    = Sta_DEGREES_AND_COURSES;
 
-   Gbl.Scope.Current = Sco_SCOPE_COURSE;
+   Gbl.Scope.Current = Sco_SCOPE_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 

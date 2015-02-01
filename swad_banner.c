@@ -86,7 +86,7 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Put banner (form) to edit banners *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Ban_PutFormToEditBanners ();
 
    /***** Table head *****/

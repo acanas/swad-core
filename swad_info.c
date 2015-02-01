@@ -325,7 +325,7 @@ void Inf_ShowInfo (void)
             Inf_PutFormToConfirmIHaveReadInfo (InfoType);
          break;
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          /* Put link (form) to edit this course info */
          Inf_PutFormToEditInfo (InfoType);
 
@@ -351,7 +351,7 @@ void Inf_ShowInfo (void)
 	       // TODO: Remove the following lines, here only for debug purposes
 
                /*
-               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
         	 {
                   char QueryDebug[512*1024];
         	  char *HTMLBuffer;
@@ -382,7 +382,7 @@ void Inf_ShowInfo (void)
 	       // TODO: Remove the following lines, here only for debug purposes
 
                /*
-               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
         	 {
                   char QueryDebug[512*1024];
         	  char *HTMLBuffer;

@@ -36,13 +36,13 @@
 
 const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES] =
   {
-   NULL,	// Sco_SCOPE_NONE
-   NULL,	// Sco_SCOPE_PLATFORM,
-   NULL,	// Sco_SCOPE_COUNTRY,
-   "Ins",	// Sco_SCOPE_INSTITUTION,
-   "Ctr",	// Sco_SCOPE_CENTRE,
-   "Deg",	// Sco_SCOPE_DEGREE,
-   NULL,	// Sco_SCOPE_COURSE,
+   NULL,	// Sco_SCOPE_UNK
+   NULL,	// Sco_SCOPE_SYS,
+   NULL,	// Sco_SCOPE_CTY,
+   "Ins",	// Sco_SCOPE_INS,
+   "Ctr",	// Sco_SCOPE_CTR,
+   "Deg",	// Sco_SCOPE_DEG,
+   NULL,	// Sco_SCOPE_CRS,
   };
 
 /*****************************************************************************/
@@ -97,26 +97,26 @@ void Sco_PutSelectorScope (bool SendOnChange)
 	 WriteScope = false;
 	 switch (Scope)
 	   {
-	    case Sco_SCOPE_PLATFORM:
+	    case Sco_SCOPE_SYS:
 	       WriteScope = true;
 	       break;
-	    case Sco_SCOPE_COUNTRY:
+	    case Sco_SCOPE_CTY:
 	       if (Gbl.CurrentCty.Cty.CtyCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_INSTITUTION:
+	    case Sco_SCOPE_INS:
 	       if (Gbl.CurrentIns.Ins.InsCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_CENTRE:
+	    case Sco_SCOPE_CTR:
 	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_DEGREE:
+	    case Sco_SCOPE_DEG:
 	       if (Gbl.CurrentDeg.Deg.DegCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_COURSE:
+	    case Sco_SCOPE_CRS:
 	       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 		  WriteScope = true;
 	       break;
@@ -134,31 +134,31 @@ void Sco_PutSelectorScope (bool SendOnChange)
 	    fprintf (Gbl.F.Out,">");
 	    switch (Scope)
 	      {
-	       case Sco_SCOPE_PLATFORM:
+	       case Sco_SCOPE_SYS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_System,Cfg_PLATFORM_PAGE_TITLE);
 		  break;
-	       case Sco_SCOPE_COUNTRY:
+	       case Sco_SCOPE_CTY:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Country,
 			   Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
 		  break;
-	       case Sco_SCOPE_INSTITUTION:
+	       case Sco_SCOPE_INS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Institution,
 			   Gbl.CurrentIns.Ins.ShortName);
 		  break;
-	       case Sco_SCOPE_CENTRE:
+	       case Sco_SCOPE_CTR:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Centre,
 			   Gbl.CurrentCtr.Ctr.ShortName);
 		  break;
-	       case Sco_SCOPE_DEGREE:
+	       case Sco_SCOPE_DEG:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Degree,
 			   Gbl.CurrentDeg.Deg.ShortName);
 		  break;
-	       case Sco_SCOPE_COURSE:
+	       case Sco_SCOPE_CRS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Course,
 			   Gbl.CurrentCrs.Crs.ShortName);
@@ -201,24 +201,24 @@ void Sco_GetScope (void)
          Gbl.Scope.Current = (Sco_Scope_t) UnsignedNum;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Sco_SCOPE_COURSE      && Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_DEGREE;
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS      && Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_DEG;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_DEGREE      && Gbl.CurrentDeg.Deg.DegCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_CENTRE;
+   if (Gbl.Scope.Current == Sco_SCOPE_DEG      && Gbl.CurrentDeg.Deg.DegCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTR;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CENTRE      && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_INSTITUTION;
+   if (Gbl.Scope.Current == Sco_SCOPE_CTR      && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_INS;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_INSTITUTION && Gbl.CurrentIns.Ins.InsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_COUNTRY;
+   if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTY;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_COUNTRY     && Gbl.CurrentCty.Cty.CtyCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_PLATFORM;
+   if (Gbl.Scope.Current == Sco_SCOPE_CTY     && Gbl.CurrentCty.Cty.CtyCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_SYS;
 
    /***** Avoid forbidden scopes *****/
    if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-      Gbl.Scope.Current = Sco_SCOPE_NONE;
+      Gbl.Scope.Current = Sco_SCOPE_UNK;
   }
 
 /*****************************************************************************/
@@ -229,25 +229,25 @@ void Sco_SetScopesForListingGuests (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_CTR_ADMIN:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CENTRE;
-	 Gbl.Scope.Default = Sco_SCOPE_CENTRE;
+      case Rol_ROLE_CTR_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
+	 Gbl.Scope.Default = Sco_SCOPE_CTR;
 	 break;
-      case Rol_ROLE_INS_ADMIN:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INSTITUTION |
-		             1 << Sco_SCOPE_CENTRE;
-	 Gbl.Scope.Default = Sco_SCOPE_INSTITUTION;
+      case Rol_ROLE_INS_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS |
+		             1 << Sco_SCOPE_CTR;
+	 Gbl.Scope.Default = Sco_SCOPE_INS;
 	 break;
-      case Rol_ROLE_SUPERUSER:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	                     1 << Sco_SCOPE_COUNTRY     |
-		             1 << Sco_SCOPE_INSTITUTION |
-		             1 << Sco_SCOPE_CENTRE;
-	 Gbl.Scope.Default = Sco_SCOPE_INSTITUTION;
+      case Rol_ROLE_SYS_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	                     1 << Sco_SCOPE_CTY     |
+		             1 << Sco_SCOPE_INS |
+		             1 << Sco_SCOPE_CTR;
+	 Gbl.Scope.Default = Sco_SCOPE_INS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Sco_SCOPE_NONE;
+      	 Gbl.Scope.Default = Sco_SCOPE_UNK;
 	 break;
      }
   }
@@ -262,25 +262,25 @@ void Sco_SetScopesForListingStudents (void)
      {
       case Rol_ROLE_STUDENT:
       case Rol_ROLE_TEACHER:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_COURSE;
-	 Gbl.Scope.Default = Sco_SCOPE_COURSE;
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Default = Sco_SCOPE_CRS;
 	 break;
-      case Rol_ROLE_DEG_ADMIN:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEGREE;
-	 Gbl.Scope.Default = Sco_SCOPE_DEGREE;
+      case Rol_ROLE_DEG_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
+	 Gbl.Scope.Default = Sco_SCOPE_DEG;
 	 break;
-      case Rol_ROLE_SUPERUSER:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	                     1 << Sco_SCOPE_COUNTRY     |
-		             1 << Sco_SCOPE_INSTITUTION |
-		             1 << Sco_SCOPE_CENTRE      |
-		             1 << Sco_SCOPE_DEGREE      |
-		             1 << Sco_SCOPE_COURSE;
-	 Gbl.Scope.Default = Sco_SCOPE_COURSE;
+      case Rol_ROLE_SYS_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	                     1 << Sco_SCOPE_CTY     |
+		             1 << Sco_SCOPE_INS |
+		             1 << Sco_SCOPE_CTR      |
+		             1 << Sco_SCOPE_DEG      |
+		             1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Default = Sco_SCOPE_CRS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Sco_SCOPE_NONE;
+      	 Gbl.Scope.Default = Sco_SCOPE_UNK;
 	 break;
      }
   }

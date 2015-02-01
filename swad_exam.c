@@ -442,8 +442,8 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_DEG_ADMIN:
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_DEG_ADM:
+      case Rol_ROLE_SYS_ADM:
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Act_FormStart (ActEdiExaAnn);
          Act_LinkFormSubmit (Txt_New_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
@@ -791,7 +791,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    else
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
-   Log_DrawLogo (Sco_SCOPE_INSTITUTION,Ins.InsCod,Ins.FullName,64,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s%s" \
                       "</td>" \
 	              "</tr>",
@@ -1197,8 +1197,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          switch (Gbl.Usrs.Me.LoggedRole)
            {
             case Rol_ROLE_TEACHER:
-            case Rol_ROLE_DEG_ADMIN:
-            case Rol_ROLE_SUPERUSER:
+            case Rol_ROLE_DEG_ADM:
+            case Rol_ROLE_SYS_ADM:
                /***** Create link to edit this exam announcement *****/
                fprintf (Gbl.F.Out,"<tr>" \
         	                  "<td style=\"text-align:left;\">");

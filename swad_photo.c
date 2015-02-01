@@ -124,11 +124,11 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
      {
       case Rol_ROLE_TEACHER:
 	 return Usr_CheckIfUsrBelongsToCrs (UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
-      case Rol_ROLE_DEG_ADMIN:
+      case Rol_ROLE_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */
 	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
 	 return true;
       default:
 	 return false;
@@ -777,13 +777,13 @@ bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
 
    /***** Check if I can see the other's photo *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod ||	// It's me
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       // I always can see my photo
       // A superuser always can see any user's photo
       ICanSeePhoto = true;
    else if (Gbl.Usrs.Me.MaxRole == Rol_ROLE_STUDENT ||
             Gbl.Usrs.Me.MaxRole == Rol_ROLE_TEACHER ||
-            Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADMIN)
+            Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
      {
       // If the maximum role of both users is student
       if (Gbl.Usrs.Me.MaxRole == Rol_ROLE_STUDENT &&	// My maximum role is student
@@ -1982,7 +1982,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       if (SeeOrPrint == Pho_DEGREES_SEE)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   Deg.WWW,Deg.FullName);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
                     16,"vertical-align:top;",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
                Deg.ShortName);

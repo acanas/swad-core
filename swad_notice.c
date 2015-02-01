@@ -307,7 +307,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       ICanEditNotices = (
                          TypeNoticesListing == Not_LIST_FULL_NOTICES &&
                          (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-                         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+                         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
                         );
 
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -670,13 +670,13 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices"
                         " WHERE Status='%u'",
                         NoticeStatus);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM centres,degrees,courses,notices"
                         " WHERE centres.InsCod='%ld'"
@@ -687,7 +687,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                   Gbl.CurrentIns.Ins.InsCod,
                   NoticeStatus);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM degrees,courses,notices"
                         " WHERE degrees.CtrCod='%ld'"
@@ -697,7 +697,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   NoticeStatus);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM courses,notices"
                         " WHERE courses.DegCod='%ld'"
@@ -706,7 +706,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                   Gbl.CurrentDeg.Deg.DegCod,
                   NoticeStatus);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices"
                         " WHERE CrsCod='%ld'"
@@ -756,11 +756,11 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices_deleted");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM centres,degrees,courses,notices_deleted"
                         " WHERE centres.InsCod='%ld'"
@@ -769,7 +769,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=notices_deleted.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM degrees,courses,notices_deleted"
                         " WHERE degrees.CtrCod='%ld'"
@@ -777,14 +777,14 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=notices_deleted.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM courses,notices_deleted"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=notices_deleted.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices_deleted"
                         " WHERE CrsCod='%ld'",

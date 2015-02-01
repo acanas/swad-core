@@ -135,7 +135,7 @@ void Msg_ListEMails (void)
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -270,7 +270,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
    /***** Get list of users belonging to the current course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       /***** Get and update type of list, number of columns in class photo
              and preference about view photos *****/
@@ -283,8 +283,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_COURSE,NULL,false);
-      Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_COURSE,NULL,false);
+      Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
+      Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
       if (Gbl.Usrs.LstTchs.NumUsrs ||
           Gbl.Usrs.LstStds.NumUsrs)
@@ -374,7 +374,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 	              " background-color:%s;\"",
             VERY_LIGHT_BLUE);
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\">%s:",
 	       Colspan,Txt_Other_recipients);
    else
@@ -387,7 +387,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
                       "<td",
             Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," style=\"text-align:left;\">"
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
@@ -1795,11 +1795,11 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
      }
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*) FROM %s",
                   Table);
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,%s"
                         " WHERE centres.InsCod='%ld'"
@@ -1810,7 +1810,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                   Gbl.CurrentIns.Ins.InsCod,
                   Table);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM degrees,courses,%s"
                         " WHERE degrees.CtrCod='%ld'"
@@ -1820,7 +1820,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Table);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM courses,%s"
                         " WHERE courses.DegCod='%ld'"
@@ -1829,7 +1829,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                   Gbl.CurrentDeg.Deg.DegCod,
                   Table);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM %s"
                         " WHERE CrsCod='%ld'",
@@ -1863,11 +1863,11 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                                                  "msg_rcv_deleted";
          switch (Scope)
            {
-            case Sco_SCOPE_PLATFORM:
+            case Sco_SCOPE_SYS:
                sprintf (Query,"SELECT COUNT(*) FROM %s",
         	        Table);
                break;
-            case Sco_SCOPE_INSTITUTION:
+            case Sco_SCOPE_INS:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM centres,degrees,courses,%s,msg_snt"
                                " WHERE centres.InsCod='%ld'"
@@ -1879,7 +1879,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentIns.Ins.InsCod,
                         Table);
                break;
-            case Sco_SCOPE_CENTRE:
+            case Sco_SCOPE_CTR:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM degrees,courses,%s,msg_snt"
                                " WHERE degrees.CtrCod='%ld'"
@@ -1890,7 +1890,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         Table);
                break;
-            case Sco_SCOPE_DEGREE:
+            case Sco_SCOPE_DEG:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM courses,%s,msg_snt"
                                " WHERE courses.DegCod='%ld'"
@@ -1900,7 +1900,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentDeg.Deg.DegCod,
                         Table);
                break;
-            case Sco_SCOPE_COURSE:
+            case Sco_SCOPE_CRS:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM msg_snt,%s"
                               " WHERE msg_snt.CrsCod='%ld'"
@@ -1917,7 +1917,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Msg_STATUS_NOTIFIED:
          switch (Scope)
            {
-            case Sco_SCOPE_PLATFORM:
+            case Sco_SCOPE_SYS:
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM msg_rcv"
@@ -1927,7 +1927,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                               " FROM msg_rcv_deleted"
                               " WHERE Notified='Y')");
                break;
-            case Sco_SCOPE_INSTITUTION:
+            case Sco_SCOPE_INS:
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM centres,degrees,courses,msg_snt,msg_rcv"
@@ -1949,7 +1949,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentIns.Ins.InsCod,
                         Gbl.CurrentIns.Ins.InsCod);
                break;
-            case Sco_SCOPE_CENTRE:
+            case Sco_SCOPE_CTR:
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM degrees,courses,msg_snt,msg_rcv"
@@ -1969,7 +1969,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         Gbl.CurrentCtr.Ctr.CtrCod);
                break;
-            case Sco_SCOPE_DEGREE:
+            case Sco_SCOPE_DEG:
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM courses,msg_snt,msg_rcv"
@@ -1987,7 +1987,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                         Gbl.CurrentDeg.Deg.DegCod,
                         Gbl.CurrentDeg.Deg.DegCod);
                break;
-            case Sco_SCOPE_COURSE:
+            case Sco_SCOPE_CRS:
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM msg_snt,msg_rcv"

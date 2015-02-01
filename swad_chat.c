@@ -81,7 +81,7 @@ void Cht_ShowChatRooms (void)
    /***** List available chat rooms *****/
    Cht_ShowListOfAvailableChatRooms ();
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();
   }
 
@@ -185,7 +185,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       sprintf (ThisRoomShortName,"%s",Deg.ShortName);
       sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShortName);
       Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,1,IsLastItemInLevel);
-      Log_DrawLogo (Sco_SCOPE_DEGREE,Deg.DegCod,Deg.ShortName,16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,16,NULL,true);
       Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
       /* Get my courses in this degree from database */

@@ -574,7 +574,7 @@ static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
          UsrDat->RoleInCurrentCrsDB = Rol_ROLE_UNKNOWN;
      }
    else
-      UsrDat->RoleInCurrentCrsDB = Rol_ROLE_GUEST;
+      UsrDat->RoleInCurrentCrsDB = Rol_ROLE_GUEST__;
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -590,7 +590,7 @@ static int Svc_GetRoleFromInternalRole (Rol_Role_t Role)
   {
    switch (Role)
      {
-      case Rol_ROLE_GUEST:
+      case Rol_ROLE_GUEST__:
       case Rol_ROLE_VISITOR:
 	 return 1;	// guest or visitor
       case Rol_ROLE_STUDENT:

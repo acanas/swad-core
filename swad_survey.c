@@ -265,9 +265,9 @@ static bool Svy_CheckIfICanCreateSvy (void)
      {
       case Rol_ROLE_TEACHER:
          return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case Rol_ROLE_DEG_ADMIN:
+      case Rol_ROLE_DEG_ADM:
          return (Gbl.CurrentDeg.Deg.DegCod > 0);
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          return true;
       default:
          return false;
@@ -825,7 +825,7 @@ void Svy_GetListSurveys (void)
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_SUPERUSER:
+         case Rol_ROLE_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -840,12 +840,12 @@ void Svy_GetListSurveys (void)
                OrderBySubQuery);
      }
    else if ((Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.CurrentCrs.Crs.CrsCod < 0) ||		// If degree selected, but no course selected
-             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADMIN)				// or if I am a degree administrator
+             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM)				// or if I am a degree administrator
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_DEG_ADMIN:
-         case Rol_ROLE_SUPERUSER:
+         case Rol_ROLE_DEG_ADM:
+         case Rol_ROLE_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -862,12 +862,12 @@ void Svy_GetListSurveys (void)
                OrderBySubQuery);
      }
    else	if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-            Gbl.Usrs.Me.LoggedRole != Rol_ROLE_DEG_ADMIN)
+            Gbl.Usrs.Me.LoggedRole != Rol_ROLE_DEG_ADM)
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
          case Rol_ROLE_TEACHER:
-         case Rol_ROLE_SUPERUSER:
+         case Rol_ROLE_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -1048,13 +1048,13 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
             Svy->Status.ICanEdit = Svy->CrsCod > 0 &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
-         case Rol_ROLE_DEG_ADMIN:
+         case Rol_ROLE_DEG_ADM:
             Svy->Status.ICanViewResults = false;
             Svy->Status.ICanEdit = Svy->DegCod > 0 &&
                                    Svy->CrsCod < 0 &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
-         case Rol_ROLE_SUPERUSER:
+         case Rol_ROLE_SYS_ADM:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0);
             Svy->Status.ICanEdit = true;
             break;
@@ -1721,7 +1721,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
 static bool Svy_SetDefaultAndAllowedForEdition (void)
   {
-   Gbl.Scope.Default = Sco_SCOPE_NONE;
+   Gbl.Scope.Default = Sco_SCOPE_UNK;
    Gbl.Scope.Allowed = 0;
 
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -1729,27 +1729,27 @@ static bool Svy_SetDefaultAndAllowedForEdition (void)
       case Rol_ROLE_TEACHER:
          if (Gbl.CurrentCrs.Crs.CrsCod > 0)
            {
-            Gbl.Scope.Default = Sco_SCOPE_COURSE;
-            Gbl.Scope.Allowed = 1 << Sco_SCOPE_COURSE;
+            Gbl.Scope.Default = Sco_SCOPE_CRS;
+            Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
             return true;
            }
          return false;
-       case Rol_ROLE_DEG_ADMIN:
+       case Rol_ROLE_DEG_ADM:
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
            {
-            Gbl.Scope.Default = Sco_SCOPE_DEGREE;
-            Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEGREE;
+            Gbl.Scope.Default = Sco_SCOPE_DEG;
+            Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
             return true;
            }
          return false;
-      case Rol_ROLE_SUPERUSER:
-         Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
-         Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	                     // 1 << Sco_SCOPE_COUNTRY     |	// TODO: Add this scope
-	                     // 1 << Sco_SCOPE_INSTITUTION |	// TODO: Add this scope
-	                     // 1 << Sco_SCOPE_CENTRE      |	// TODO: Add this scope
-                             1 << Sco_SCOPE_DEGREE      |
-                             1 << Sco_SCOPE_COURSE;
+      case Rol_ROLE_SYS_ADM:
+         Gbl.Scope.Default = Sco_SCOPE_SYS;
+         Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	                     // 1 << Sco_SCOPE_CTY     |	// TODO: Add this scope
+	                     // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
+	                     // 1 << Sco_SCOPE_CTR      |	// TODO: Add this scope
+                             1 << Sco_SCOPE_DEG      |
+                             1 << Sco_SCOPE_CRS;
          return true;
       default:
          return false;
@@ -1837,22 +1837,22 @@ void Svy_RecFormSurvey (void)
      }
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_PLATFORM    |
-	               // 1 << Sco_SCOPE_COUNTRY     |	// TODO: Add this scope
-	               // 1 << Sco_SCOPE_INSTITUTION |	// TODO: Add this scope
-	               // 1 << Sco_SCOPE_CENTRE      |	// TODO: Add this scope
-                       1 << Sco_SCOPE_DEGREE      |
-                       1 << Sco_SCOPE_COURSE;
-   Gbl.Scope.Default = Sco_SCOPE_PLATFORM;
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
+	               // 1 << Sco_SCOPE_CTY     |	// TODO: Add this scope
+	               // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
+	               // 1 << Sco_SCOPE_CTR      |	// TODO: Add this scope
+                       1 << Sco_SCOPE_DEG      |
+                       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();
 
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          NewSvy.DegCod = -1L;
          NewSvy.CrsCod = -1L;
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
            {
             NewSvy.DegCod = Gbl.CurrentDeg.Deg.DegCod;
@@ -1861,7 +1861,7 @@ void Svy_RecFormSurvey (void)
          else
             Lay_ShowErrorAndExit ("Wrong survey location.");
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          if (Gbl.CurrentCrs.Crs.CrsCod > 0)
            {
             NewSvy.DegCod = -1L;	// DegCod doen't mind when CrsCod > 0
@@ -3508,12 +3508,12 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
    /***** Get number of courses with surveys from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM surveys"
                         " WHERE CrsCod>'0'");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
                         " FROM centres,degrees,courses,surveys"
                         " WHERE centres.InsCod='%ld'"
@@ -3522,7 +3522,7 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
                         " FROM degrees,courses,surveys"
                         " WHERE degrees.CtrCod='%ld'"
@@ -3530,14 +3530,14 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
                         " FROM courses,surveys"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
                         " FROM surveys"
                         " WHERE CrsCod='%ld'",
@@ -3576,12 +3576,12 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
    /***** Get number of surveys from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM surveys"
                         " WHERE CrsCod>'0'");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM centres,degrees,courses,surveys"
                         " WHERE centres.InsCod='%ld'"
@@ -3590,7 +3590,7 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM degrees,courses,surveys"
                         " WHERE degrees.CtrCod='%ld'"
@@ -3598,14 +3598,14 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM courses,surveys"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=surveys.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM surveys"
                         " WHERE CrsCod='%ld'",
@@ -3651,7 +3651,7 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
    /***** Get number of courses per user from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_PLATFORM:
+      case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"
@@ -3659,7 +3659,7 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable");
          break;
-      case Sco_SCOPE_INSTITUTION:
+      case Sco_SCOPE_INS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM centres,degrees,courses,surveys,svy_questions"
@@ -3671,7 +3671,7 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CENTRE:
+      case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM degrees,courses,surveys,svy_questions"
@@ -3682,7 +3682,7 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEGREE:
+      case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM courses,surveys,svy_questions"
@@ -3692,7 +3692,7 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
-      case Sco_SCOPE_COURSE:
+      case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"

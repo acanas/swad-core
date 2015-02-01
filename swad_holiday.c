@@ -92,7 +92,7 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Put link (form) to edit holidays *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	 Hld_PutFormToEditHlds ();
 
       /***** Table head *****/

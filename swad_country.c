@@ -99,7 +99,7 @@ void Cty_SeeCtyWithPendingInss (void)
    /***** Get countries with pending institutions *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_SUPERUSER:
+      case Rol_ROLE_SYS_ADM:
          sprintf (Query,"SELECT institutions.CtyCod,COUNT(*)"
                         " FROM institutions,countries"
                         " WHERE (institutions.Status & %u)<>0"
@@ -287,7 +287,7 @@ static void Cty_Configuration (bool PrintView)
 			    "</tr>");
 
 	 /* Map attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER && !PrintView)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\""
@@ -513,7 +513,7 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Put link (form) to edit countries *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_PutFormToEdit (ActEdiCty);
 
    /***** Table head *****/
@@ -665,9 +665,9 @@ void Cty_ListCountries2 (void)
    NumInssWithCountry += NumInssInOtherCtys;
 
    /***** Write institutions with no country *****/
-   NumStds = Sta_GetTotalNumberOfUsers (Sco_SCOPE_PLATFORM,Rol_ROLE_STUDENT);
-   NumTchs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_PLATFORM,Rol_ROLE_TEACHER);
-   NumUsrs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_PLATFORM,Rol_ROLE_UNKNOWN);	// NumUsrs >= NumStds + NumTchs
+   NumStds = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_STUDENT);
+   NumTchs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_TEACHER);
+   NumUsrs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_UNKNOWN);	// NumUsrs >= NumStds + NumTchs
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
                       "<td class=\"DAT\" style=\"text-align:left;\">"
