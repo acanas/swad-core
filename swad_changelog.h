@@ -39,11 +39,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.72 (2015/01/31)"
+#define Log_PLATFORM_VERSION	"SWAD 14.72.1 (2015/02/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.72.1:  Feb 01, 2015	New options to register and remove institution and centre admins. (177477 lines)
+					6 changes necessary in database:
+UPDATE actions SET Txt='A&ntilde;adir administrador de titulaci&oacute;n' WHERE ActCod='586' AND Language='es';
+UPDATE actions SET Txt='Eliminar administrador de titulaci&oacute;n' WHERE ActCod='584' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1337','es','N','A&ntilde;adir administrador de instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1338','es','N','Eliminar administrador de instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1339','es','N','A&ntilde;adir administrador de centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1340','es','N','Eliminar administrador de centro');
+
         Version 14.72:    Jan 31, 2015	New options to register and remove institution and centre admins (not finished). (176934 lines)
         Version 14.71:    Jan 29, 2015	New table admin to store system, institution, centre or degree admins. (176255 lines)
 					4 changes necessary in database:

@@ -105,6 +105,8 @@ void Enr_ShowEnrollmentRequests (void);
 
 void Enr_ReqRegRemUsr (void);
 void Enr_AskIfRegRemAnotherUsr (void);
+void Enr_AddAdmToIns (void);
+void Enr_AddAdmToCtr (void);
 void Enr_AddAdmToDeg (void);
 
 void Enr_ReqRemMeFromCrs (void);

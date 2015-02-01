@@ -861,6 +861,10 @@ Users:
 	710. ActReqAccEnrCrs		Confirm acceptation / refusion of enrollment in current course
 	711. ActAccEnrCrs		Accept enrollment in current course
 	712. ActRemMeCrs		Refuse enrollment in current course
+	---. ActNewAdmIns		Register an administrador in this institution
+	---. ActRemAdmIns		Remove an administrador of this institution
+	---. ActNewAdmCtr		Register an administrador in this centre
+	---. ActRemAdmCtr		Remove an administrador of this centre
 	713. ActNewAdmDeg		Register an administrador in this degree
 	714. ActRemAdmDeg		Remove an administrador of this degree
 	715. ActRcvFrmMdfUsrCrs		Receive a form with IDs of users to be registeres/removed to/from current course
@@ -2155,6 +2159,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqAccEnrCrs	*/{ 592,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActRemMeCrs	*/{ 559,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+
+   /* ActNewAdmIns	*/{1337,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToIns		,NULL},
+   /* ActRemAdmIns	*/{1338,-1,TabUsr,ActReqMdfSevUsr	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmIns			,NULL},
+
+   /* ActNewAdmCtr	*/{1339,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToCtr		,NULL},
+   /* ActRemAdmCtr	*/{1340,-1,TabUsr,ActReqMdfSevUsr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmCtr			,NULL},
 
    /* ActNewAdmDeg	*/{ 586,-1,TabUsr,ActReqMdfSevUsr	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
    /* ActRemAdmDeg	*/{ 584,-1,TabUsr,ActReqMdfSevUsr	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmDeg			,NULL},
@@ -3838,6 +3848,10 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqDatAdmDocIns,	// #1334
 	ActChgDatAdmDocIns,	// #1335
 	ActDowAdmDocIns,	// #1336
+	ActNewAdmIns,		// #1337
+	ActRemAdmIns,		// #1338
+	ActNewAdmCtr,		// #1339
+	ActRemAdmCtr,		// #1340
 	};
 
 /*****************************************************************************/

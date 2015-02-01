@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+70+53+48+204+184+94+168+28+75)
+#define Act_NUM_ACTIONS	(7+52+15+70+53+48+204+184+98+168+28+75)
 
-#define Act_MAX_ACTION_COD 1336
+#define Act_MAX_ACTION_COD 1340
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -893,23 +893,27 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActAccEnrCrs		(ActChgNumRowFooGrp+79)
 #define ActRemMeCrs		(ActChgNumRowFooGrp+80)
 
-#define ActNewAdmDeg		(ActChgNumRowFooGrp+81)
-#define ActRemAdmDeg		(ActChgNumRowFooGrp+82)
+#define ActNewAdmIns		(ActChgNumRowFooGrp+81)
+#define ActRemAdmIns		(ActChgNumRowFooGrp+82)
+#define ActNewAdmCtr		(ActChgNumRowFooGrp+83)
+#define ActRemAdmCtr		(ActChgNumRowFooGrp+84)
+#define ActNewAdmDeg		(ActChgNumRowFooGrp+85)
+#define ActRemAdmDeg		(ActChgNumRowFooGrp+86)
 
-#define ActRcvFrmMdfUsrCrs	(ActChgNumRowFooGrp+83)
-#define ActFrmIDsOthUsr		(ActChgNumRowFooGrp+84)
-#define ActRemIDOth		(ActChgNumRowFooGrp+85)
-#define ActNewIDOth		(ActChgNumRowFooGrp+86)
-#define ActFrmPwdOthUsr		(ActChgNumRowFooGrp+87)
-#define ActChgPwdOthUsr		(ActChgNumRowFooGrp+88)
-#define ActRemUsrCrs		(ActChgNumRowFooGrp+89)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp+90)
+#define ActRcvFrmMdfUsrCrs	(ActChgNumRowFooGrp+87)
+#define ActFrmIDsOthUsr		(ActChgNumRowFooGrp+88)
+#define ActRemIDOth		(ActChgNumRowFooGrp+89)
+#define ActNewIDOth		(ActChgNumRowFooGrp+90)
+#define ActFrmPwdOthUsr		(ActChgNumRowFooGrp+91)
+#define ActChgPwdOthUsr		(ActChgNumRowFooGrp+92)
+#define ActRemUsrCrs		(ActChgNumRowFooGrp+93)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp+94)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+91)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp+92)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+95)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp+96)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp+93)
-#define ActRemOldUsr		(ActChgNumRowFooGrp+94)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp+97)
+#define ActRemOldUsr		(ActChgNumRowFooGrp+98)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/

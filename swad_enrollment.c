@@ -107,6 +107,8 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
+static void Enr_RegisterAdminInCurrentIns (struct UsrData *UsrDat);
+static void Enr_RegisterAdminInCurrentCtr (struct UsrData *UsrDat);
 static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat);
 static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
 static void Enr_ReqRemAdmOfDeg (void);
@@ -1018,7 +1020,7 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 sprintf (Gbl.Message,
 		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
 			  Txt_Remove_user_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentDeg.Deg.ShortName);
+		  Gbl.CurrentIns.Ins.ShortName);
 	 fprintf (Gbl.F.Out,"<li>"
 			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
@@ -2844,6 +2846,66 @@ static void Enr_ShowFormToEditOtherUsr (void)
   }
 
 /*****************************************************************************/
+/*************** Add an administrator to current institution *****************/
+/*****************************************************************************/
+
+void Enr_AddAdmToIns (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /***** Get plain user's ID of the user to add/modify *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's allowed to register this administrator in institution */
+         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+           {
+            /***** Register administrator in current institution in database *****/
+            Enr_RegisterAdminInCurrentIns (&Gbl.Usrs.Other.UsrDat);
+
+            /***** Show user's record *****/
+            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
+/******************* Add an administrator to current centre ******************/
+/*****************************************************************************/
+
+void Enr_AddAdmToCtr (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      /***** Get plain user's ID of the user to add/modify *****/
+      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+        {
+         /* Check if it's allowed to register this administrator in centre */
+         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
+           {
+            /***** Register administrator in current centre in database *****/
+            Enr_RegisterAdminInCurrentCtr (&Gbl.Usrs.Other.UsrDat);
+
+            /***** Show user's record *****/
+            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+           }
+         else
+            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+        }
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+  }
+
+/*****************************************************************************/
 /******************* Add an administrator to current degree ******************/
 /*****************************************************************************/
 
@@ -2874,6 +2936,62 @@ void Enr_AddAdmToDeg (void)
   }
 
 /*****************************************************************************/
+/**************** Register administrator in current institution **************/
+/*****************************************************************************/
+
+static void Enr_RegisterAdminInCurrentIns (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y;
+   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_institution_Y;
+   char Query[512];
+
+   /***** Check if user was and administrator of current institution *****/
+   if (Usr_CheckIfUsrIsAdmOfIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
+               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
+   else        // User was not administrator of current institution
+     {
+      /***** Insert or replace administrator in current institution *****/
+      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
+                     " VALUES ('%ld','Ins','%ld')",
+               UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod);
+      DB_QueryREPLACE (Query,"can not create administrator of institution");
+
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_institution_Y,
+               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
+     }
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+  }
+
+/*****************************************************************************/
+/******************* Register administrator in current centre ****************/
+/*****************************************************************************/
+
+static void Enr_RegisterAdminInCurrentCtr (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y;
+   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_centre_Y;
+   char Query[512];
+
+   /***** Check if user was and administrator of current centre *****/
+   if (Usr_CheckIfUsrIsAdmOfCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
+               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
+   else        // User was not administrator of current centre
+     {
+      /***** Insert or replace administrator in current centre *****/
+      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
+                     " VALUES ('%ld','Ctr','%ld')",
+               UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod);
+      DB_QueryREPLACE (Query,"can not create administrator of centre");
+
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_centre_Y,
+               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
+     }
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+  }
+
+/*****************************************************************************/
 /******************* Register administrator in current degree ****************/
 /*****************************************************************************/
 
@@ -2890,8 +3008,8 @@ static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat)
    else        // User was not administrator of current degree
      {
       /***** Insert or replace administrator in current degree *****/
-      sprintf (Query,"REPLACE INTO deg_admin (UsrCod,DegCod)"
-                     " VALUES ('%ld','%ld')",
+      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
+                     " VALUES ('%ld','Deg','%ld')",
                UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
       DB_QueryREPLACE (Query,"can not create administrator of degree");
 
@@ -3753,7 +3871,7 @@ static void Enr_EffectivelyRemAdmFromIns (struct UsrData *UsrDat)
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_institution_Y;
    char Query[1024];
 
-   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is administrator of current institution
+   if (Usr_CheckIfUsrIsAdmOfIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))        // User is administrator of current institution
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
@@ -3783,7 +3901,7 @@ static void Enr_EffectivelyRemAdmFromCtr (struct UsrData *UsrDat)
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_the_centre_Y;
    char Query[1024];
 
-   if (Usr_CheckIfUsrIsAdmOfDeg (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is administrator of current centre
+   if (Usr_CheckIfUsrIsAdmOfCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))        // User is administrator of current centre
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
