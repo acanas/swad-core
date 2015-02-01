@@ -107,18 +107,15 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
-static void Enr_RegisterAdminInCurrentIns (struct UsrData *UsrDat);
-static void Enr_RegisterAdminInCurrentCtr (struct UsrData *UsrDat);
-static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat);
+static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName);
+static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,
+                               long Cod,const char *InsCtrDegName);
 static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr);
 static void Enr_ReqRemAdmOfDeg (void);
 static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t Scope,
                                 long Cod,const char *InsCtrDegName);
 
-static void Enr_ReqAddAdmOfIns (void);
-static void Enr_ReqAddAdmOfCtr (void);
-static void Enr_ReqAddAdmOfDeg (void);
-
+static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName);
 static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
@@ -2849,28 +2846,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
 
 void Enr_AddAdmToIns (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      /***** Get plain user's ID of the user to add/modify *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's allowed to register this administrator in institution */
-         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-           {
-            /***** Register administrator in current institution in database *****/
-            Enr_RegisterAdminInCurrentIns (&Gbl.Usrs.Other.UsrDat);
-
-            /***** Show user's record *****/
-            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-           }
-         else
-            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-        }
-      else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+   Enr_AddAdm (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentIns.Ins.FullName);
   }
 
 /*****************************************************************************/
@@ -2879,28 +2855,7 @@ void Enr_AddAdmToIns (void)
 
 void Enr_AddAdmToCtr (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      /***** Get plain user's ID of the user to add/modify *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's allowed to register this administrator in centre */
-         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-           {
-            /***** Register administrator in current centre in database *****/
-            Enr_RegisterAdminInCurrentCtr (&Gbl.Usrs.Other.UsrDat);
-
-            /***** Show user's record *****/
-            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-           }
-         else
-            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-        }
-      else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+   Enr_AddAdm (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,Gbl.CurrentCtr.Ctr.FullName);
   }
 
 /*****************************************************************************/
@@ -2909,9 +2864,18 @@ void Enr_AddAdmToCtr (void)
 
 void Enr_AddAdmToDeg (void)
   {
+   Enr_AddAdm (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentDeg.Deg.FullName);
+  }
+
+/*****************************************************************************/
+/******************* Add an administrator to current degree ******************/
+/*****************************************************************************/
+
+static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
+  {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Cod > 0)
      {
       /***** Get plain user's ID of the user to add/modify *****/
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -2920,7 +2884,8 @@ void Enr_AddAdmToDeg (void)
          if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
            {
             /***** Register administrator in current degree in database *****/
-            Enr_RegisterAdminInCurrentDeg (&Gbl.Usrs.Other.UsrDat);
+            Enr_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,Scope,
+                               Cod,InsCtrDegName);
 
             /***** Show user's record *****/
             Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -2937,88 +2902,27 @@ void Enr_AddAdmToDeg (void)
 /**************** Register administrator in current institution **************/
 /*****************************************************************************/
 
-static void Enr_RegisterAdminInCurrentIns (struct UsrData *UsrDat)
+static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_institution_Y;
+   extern const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES];
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
+   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y;
    char Query[512];
 
-   /***** Check if user was and administrator of current institution *****/
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
-                            Sco_SCOPE_INSTITUTION,
-                            Gbl.CurrentIns.Ins.InsCod))
-      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
-               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
-   else        // User was not administrator of current institution
+   /***** Check if user was and administrator of current institution/centre/degree *****/
+   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
+      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_Y,
+               UsrDat->FullName,InsCtrDegName);
+   else        // User was not administrator of current institution/centre/degree
      {
-      /***** Insert or replace administrator in current institution *****/
+      /***** Insert or replace administrator in current institution/centre/degree *****/
       sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
-                     " VALUES ('%ld','Ins','%ld')",
-               UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod);
-      DB_QueryREPLACE (Query,"can not create administrator of institution");
+                     " VALUES ('%ld','%s','%ld')",
+               UsrDat->UsrCod,Sco_ScopeAdminDB[Scope],Cod);
+      DB_QueryREPLACE (Query,"can not create administrator");
 
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_institution_Y,
-               UsrDat->FullName,Gbl.CurrentIns.Ins.FullName);
-     }
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-  }
-
-/*****************************************************************************/
-/******************* Register administrator in current centre ****************/
-/*****************************************************************************/
-
-static void Enr_RegisterAdminInCurrentCtr (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_centre_Y;
-   char Query[512];
-
-   /***** Check if user was and administrator of current centre *****/
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
-                            Sco_SCOPE_CENTRE,
-                            Gbl.CurrentCtr.Ctr.CtrCod))
-      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
-               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
-   else        // User was not administrator of current centre
-     {
-      /***** Insert or replace administrator in current centre *****/
-      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
-                     " VALUES ('%ld','Ctr','%ld')",
-               UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod);
-      DB_QueryREPLACE (Query,"can not create administrator of centre");
-
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_centre_Y,
-               UsrDat->FullName,Gbl.CurrentCtr.Ctr.FullName);
-     }
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-  }
-
-/*****************************************************************************/
-/******************* Register administrator in current degree ****************/
-/*****************************************************************************/
-
-static void Enr_RegisterAdminInCurrentDeg (struct UsrData *UsrDat)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y;
-   char Query[512];
-
-   /***** Check if user was and administrator of current degree *****/
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,
-                            Sco_SCOPE_DEGREE,
-                            Gbl.CurrentDeg.Deg.DegCod))
-      sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
-               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
-   else        // User was not administrator of current degree
-     {
-      /***** Insert or replace administrator in current degree *****/
-      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
-                     " VALUES ('%ld','Deg','%ld')",
-               UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-      DB_QueryREPLACE (Query,"can not create administrator of degree");
-
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y,
-               UsrDat->FullName,Gbl.CurrentDeg.Deg.FullName);
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y,
+               UsrDat->FullName,InsCtrDegName);
      }
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
@@ -3205,142 +3109,46 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
 /**** Ask if really wanted to add an administrator to current institution ****/
 /*****************************************************************************/
 
-static void Enr_ReqAddAdmOfIns (void)
+static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y;
-   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
+   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   static const Act_Action_t Enr_ActNewAdm[Sco_NUM_SCOPES] =
+     {
+      ActUnk,		// Sco_SCOPE_NONE
+      ActUnk,		// Sco_SCOPE_PLATFORM,
+      ActUnk,		// Sco_SCOPE_COUNTRY,
+      ActNewAdmIns,	// Sco_SCOPE_INSTITUTION,
+      ActNewAdmCtr,	// Sco_SCOPE_CENTRE,
+      ActNewAdmDeg,	// Sco_SCOPE_DEGREE,
+      ActUnk,		// Sco_SCOPE_COURSE,
+     };
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Cod > 0)
      {
       /***** Get user's identificator of the user to register as admin *****/
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
-         /* Check if it's allowed to register this administrator in institution */
+         /* Check if it's allowed to register this administrator in institution/centre/degree */
          if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
            {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                     Sco_SCOPE_INSTITUTION,
-                                     Gbl.CurrentIns.Ins.InsCod))        // User is yet an administrator of current institution
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is yet an administrator of current institution/centre/degree
               {
-               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentIns.Ins.FullName);
+               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_Y,
+                        Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
                Lay_ShowAlert (Lay_INFO,Gbl.Message);
                Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
               }
             else
               {
-               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_institution_X,
-                        Gbl.CurrentIns.Ins.FullName);
+               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
+                        InsCtrDegName);
                Lay_ShowAlert (Lay_INFO,Gbl.Message);
                Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-               Act_FormStart (ActNewAdmIns);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-        	                  "<input type=\"submit\" value=\"%s\" />"
-        	                  "</div>"
-        	                  "</form>",
-                        Txt_Register_user_IN_A_COURSE_OR_DEGREE);
-              }
-           }
-         else
-            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-        }
-      else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
-  }
-
-/*****************************************************************************/
-/****** Ask if really wanted to add an administrator to current centre *******/
-/*****************************************************************************/
-
-static void Enr_ReqAddAdmOfCtr (void)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y;
-   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      /***** Get user's identificator of the user to register as admin *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's allowed to register this administrator in centre */
-         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-           {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                     Sco_SCOPE_CENTRE,
-                                     Gbl.CurrentCtr.Ctr.CtrCod))        // User is yet an administrator of current centre
-              {
-               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCtr.Ctr.FullName);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-              }
-            else
-              {
-               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_centre_X,
-                        Gbl.CurrentCtr.Ctr.FullName);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-               Act_FormStart (ActNewAdmCtr);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-        	                  "<input type=\"submit\" value=\"%s\" />"
-        	                  "</div>"
-        	                  "</form>",
-                        Txt_Register_user_IN_A_COURSE_OR_DEGREE);
-              }
-           }
-         else
-            Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-        }
-      else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
-  }
-
-/*****************************************************************************/
-/****** Ask if really wanted to add an administrator to current degree *******/
-/*****************************************************************************/
-
-static void Enr_ReqAddAdmOfDeg (void)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y;
-   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
-     {
-      /***** Get user's identificator of the user to register as admin *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's allowed to register this administrator in degree */
-         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-           {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                     Sco_SCOPE_DEGREE,
-                                     Gbl.CurrentDeg.Deg.DegCod))        // User is yet an administrator of current degree
-              {
-               sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentDeg.Deg.FullName);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-              }
-            else
-              {
-               sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_degree_X,
-                        Gbl.CurrentDeg.Deg.FullName);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-               Act_FormStart (ActNewAdmDeg);
+               Act_FormStart (Enr_ActNewAdm[Scope]);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
         	                  "<input type=\"submit\" value=\"%s\" />"
@@ -3502,19 +3310,22 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 		  break;
 	       case Enr_REGISTER_ONE_DEGREE_ADMIN:
 		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-		     Enr_ReqAddAdmOfDeg ();
+		     Enr_ReqAddAdm (Sco_SCOPE_DEGREE,Gbl.CurrentDeg.Deg.DegCod,
+		                    Gbl.CurrentDeg.Deg.FullName);
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_CENTRE_ADMIN:
 		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-		     Enr_ReqAddAdmOfCtr ();
+		     Enr_ReqAddAdm (Sco_SCOPE_CENTRE,Gbl.CurrentCtr.Ctr.CtrCod,
+		                    Gbl.CurrentCtr.Ctr.FullName);
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
 		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SUPERUSER)
-		     Enr_ReqAddAdmOfIns ();
+		     Enr_ReqAddAdm (Sco_SCOPE_INSTITUTION,Gbl.CurrentIns.Ins.InsCod,
+		                    Gbl.CurrentIns.Ins.FullName);
 		  else
 		     Error = true;
 		  break;

@@ -8247,94 +8247,34 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 	" from %s from %s related to <strong>%s</strong>?";		// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador del centro <strong>%s</strong>?";			// Necessita traduccio
+	" como administrador de <strong>%s</strong>?";		// Necessita traduccio
 #elif L==1
 	"Do you really want to register the following user"
-	" as an administrator of the centre <strong>%s</strong>?";		// Need Übersetzung
+	" as an administrator of <strong>%s</strong>?";		// Need Übersetzung
 #elif L==2
 	"Do you really want to register the following user"
-	" as an administrator of the centre <strong>%s</strong>?";
+	" as an administrator of <strong>%s</strong>?";
 #elif L==3
 	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador del centro <strong>%s</strong>?";
+	" como administrador de <strong>%s</strong>?";
 #elif L==4
 	"Do you really want to register the following user"
-	" as an administrator of the centre <strong>%s</strong>?";		// Besoin de traduction
+	" as an administrator of <strong>%s</strong>?";		// Besoin de traduction
 #elif L==5
 	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador del centro <strong>%s</strong>?";			// Okoteve traducción
+	" como administrador de <strong>%s</strong>?";		// Okoteve traducción
 #elif L==6
 	"Vuoi realmente registrare il seguente utente"
-	" come amministratore del centro <strong>%s</strong>?";
+	" come amministratore de <strong>%s</strong>?";
 #elif L==7
 	"Czy na pewno chcesz sie zarejestrowac nastepujace u&zdot;ytkownika"
-	" jako administratora centrum <strong>%s</strong>?";
+	" jako administratora <strong>%s</strong>?";
 #elif L==8
 	"Do you really want to register the following user"
-	" as an administrator of the centre <strong>%s</strong>?";		// Necessita de tradução
-#endif
-
-const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la titulaci&oacute;n <strong>%s</strong>?";	// Necessita traduccio
-#elif L==1
-	"Do you really want to register the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Need Übersetzung
-#elif L==2
-	"Do you really want to register the following user"
-	" as an administrator of the degree <strong>%s</strong>?";
-#elif L==3
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la titulaci&oacute;n <strong>%s</strong>?";
-#elif L==4
-	"Do you really want to register the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Besoin de traduction
-#elif L==5
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la titulaci&oacute;n <strong>%s</strong>?";	// Okoteve traducción
-#elif L==6
-	"Vuoi realmente registrare il seguente utente"
-	" come amministratore della laurea <strong>%s</strong>?";
-#elif L==7
-	"Czy na pewno chcesz sie zarejestrowac nastepujace u&zdot;ytkownika"
-	" jako administratora stopnia <strong>%s</strong>?";
-#elif L==8
-	"Do you really want to register the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Necessita de tradução
-#endif
-
-const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la instituci&oacute;n <strong>%s</strong>?";	// Necessita traduccio
-#elif L==1
-	"Do you really want to register the following user"
-	" as an administrator of the institution <strong>%s</strong>?";		// Need Übersetzung
-#elif L==2
-	"Do you really want to register the following user"
-	" as an administrator of the institution <strong>%s</strong>?";
-#elif L==3
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la instituci&oacute;n <strong>%s</strong>?";
-#elif L==4
-	"Do you really want to register the following user"
-	" as an administrator of the institution <strong>%s</strong>?";		// Besoin de traduction
-#elif L==5
-	"&iquest;Realmente desea inscribir el siguiente usuario"
-	" como administrador de la instituci&oacute;n <strong>%s</strong>?";	// Okoteve traducción
-#elif L==6
-	"Vuoi realmente registrare il seguente utente"
-	" come amministratore della istituzione <strong>%s</strong>?";
-#elif L==7
-	"Czy na pewno chcesz sie zarejestrowac nastepujace u&zdot;ytkownika"
-	" jako administratora instytucji <strong>%s</strong>?";
-#elif L==8
-	"Do you really want to register the following user"
-	" as an administrator of the institution <strong>%s</strong>?";		// Necessita de tradução
+	" as an administrator of <strong>%s</strong>?";		// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warning: it is very important to include three %s in the following sentences
@@ -41842,94 +41782,34 @@ const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_co
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_centre_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==0
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" del centro <strong>%s</strong>.";			// Necessita traduccio
+	"<strong>%s</strong> ha sido a&ntilde;adido/a"
+	" como administrador/a de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==1
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the centre <strong>%s</strong>.";			// Übersetzung notwendig
+	"<strong>%s</strong> has been enrolled"
+	" as administrator of <strong>%s</strong>.";		// Übersetzung notwendig
 #elif L==2
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the centre <strong>%s</strong>.";
+	"<strong>%s</strong> has been enrolled"
+	" as administrator of <strong>%s</strong>.";
 #elif L==3
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" del centro <strong>%s</strong>.";
+	"<strong>%s</strong> ha sido a&ntilde;adido/a"
+	" como administrador/a de <strong>%s</strong>.";
 #elif L==4
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the centre <strong>%s</strong>.";			// Besoin de traduction
+	"<strong>%s</strong> has been enrolled"
+	" as administrator of <strong>%s</strong>.";		// Besoin de traduction
 #elif L==5
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" del centro <strong>%s</strong>.";			// Okoteve traducción
+	"<strong>%s</strong> ha sido a&ntilde;adido/a"
+	" como administrador/a de <strong>%s</strong>.";	// Okoteve traducción
 #elif L==6
-	"<strong>%s</strong> &egrave; stato registrato come amministratore"
-	" del centro <strong>%s</strong>.";
+	"<strong>%s</strong> &egrave; stato registrato"
+	" come amministratore de <strong>%s</strong>.";
 #elif L==7
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the centre <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"<strong>%s</strong> has been enrolled"
+	" as administrator of <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the centre <strong>%s</strong>.";			// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==0
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
-#elif L==1
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the degree <strong>%s</strong>.";			// Übersetzung notwendig
-#elif L==2
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the degree <strong>%s</strong>.";
-#elif L==3
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the degree <strong>%s</strong>.";			// Besoin de traduction
-#elif L==5
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
-#elif L==6
-	"<strong>%s</strong> &egrave; stato registrato come amministratore"
-	" della laurea <strong>%s</strong>.";
-#elif L==7
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the degree <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the degree <strong>%s</strong>.";			// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==0
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";		// Necessita traduccio
-#elif L==1
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the institution <strong>%s</strong>.";			// Übersetzung notwendig
-#elif L==2
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the institution <strong>%s</strong>.";
-#elif L==3
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the institution <strong>%s</strong>.";			// Besoin de traduction
-#elif L==5
-	"<strong>%s</strong> ha sido a&ntilde;adido/a como administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";		// Okoteve traducción
-#elif L==6
-	"<strong>%s</strong> &egrave; stato registrato come amministratore"
-	" della istituzione <strong>%s</strong>.";
-#elif L==7
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the institution <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"<strong>%s</strong> has been enrolled as administrator"
-	" of the institution <strong>%s</strong>.";			// Necessita de tradução
+	"<strong>%s</strong> has been enrolled"
+	" as administrator of <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
 const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -42256,94 +42136,25 @@ const char *Txt_THE_USER_X_has_not_been_removed_from_any_group =	// Warning: it 
 	" from any group.";		// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_is_already_an_administrator_of_the_centre_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==0
-	"<strong>%s</strong> ya es administrador/a"
-	" del centro <strong>%s</strong>.";	// Necessita traduccio
+	"<strong>%s</strong> ya es administrador/a de <strong>%s</strong>.";		// Necessita traduccio
 #elif L==1
-	"<strong>%s</strong> is already an administrator"
-	" of the centre <strong>%s</strong>.";			// Übersetzung notwendig
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Übersetzung notwendig
 #elif L==2
-	"<strong>%s</strong> is already an administrator"
-	" of the centre <strong>%s</strong>.";
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";
 #elif L==3
-	"<strong>%s</strong> ya es administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";
+	"<strong>%s</strong> ya es administrador/a de <strong>%s</strong>.";
 #elif L==4
-	"<strong>%s</strong> is already an administrator"
-	" of the centre <strong>%s</strong>.";			// Besoin de traduction
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Besoin de traduction
 #elif L==5
-	"<strong>%s</strong> ya es administrador/a"
-	" del centro <strong>%s</strong>.";	// Okoteve traducción
+	"<strong>%s</strong> ya es administrador/a de <strong>%s</strong>.";		// Okoteve traducción
 #elif L==6
-	"<strong>%s</strong> &egrave; gi&agrave; un amministratore"
-	" del centro <strong>%s</strong>.";
+	"<strong>%s</strong> &egrave; gi&agrave; un amministratore de <strong>%s</strong>.";
 #elif L==7
-	"<strong>%s</strong> is already an administrator"
-	" of the centre <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==8
-	"<strong>%s</strong> is already an administrator"
-	" of the centre <strong>%s</strong>.";			// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_is_already_an_administrator_of_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==0
-	"<strong>%s</strong> ya es administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
-#elif L==1
-	"<strong>%s</strong> is already an administrator"
-	" of the degree <strong>%s</strong>.";			// Übersetzung notwendig
-#elif L==2
-	"<strong>%s</strong> is already an administrator"
-	" of the degree <strong>%s</strong>.";
-#elif L==3
-	"<strong>%s</strong> ya es administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> is already an administrator"
-	" of the degree <strong>%s</strong>.";			// Besoin de traduction
-#elif L==5
-	"<strong>%s</strong> ya es administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
-#elif L==6
-	"<strong>%s</strong> &egrave; gi&agrave; un amministratore"
-	" della laurea <strong>%s</strong>.";
-#elif L==7
-	"<strong>%s</strong> is already an administrator"
-	" of the degree <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"<strong>%s</strong> is already an administrator"
-	" of the degree <strong>%s</strong>.";			// Necessita de tradução
-#endif
-
-const char *Txt_THE_USER_X_is_already_an_administrator_of_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==0
-	"<strong>%s</strong> ya es administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
-#elif L==1
-	"<strong>%s</strong> is already an administrator"
-	" of the institution <strong>%s</strong>.";			// Übersetzung notwendig
-#elif L==2
-	"<strong>%s</strong> is already an administrator"
-	" of the institution <strong>%s</strong>.";
-#elif L==3
-	"<strong>%s</strong> ya es administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";
-#elif L==4
-	"<strong>%s</strong> is already an administrator"
-	" of the institution <strong>%s</strong>.";			// Besoin de traduction
-#elif L==5
-	"<strong>%s</strong> ya es administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
-#elif L==6
-	"<strong>%s</strong> &egrave; gi&agrave; un amministratore"
-	" della istituzione <strong>%s</strong>.";
-#elif L==7
-	"<strong>%s</strong> is already an administrator"
-	" of the institution <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"<strong>%s</strong> is already an administrator"
-	" of the institution <strong>%s</strong>.";			// Necessita de tradução
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
 const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrollment =	// Warning: it is very important to include %s in the following sentences
