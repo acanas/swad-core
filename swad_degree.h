@@ -139,6 +139,7 @@ unsigned Deg_CountNumDegsInCtr (long CtrCod);
 bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg);
+long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RenameDegreeType (void);
 void Deg_RenameDegreeShort (void);

@@ -945,6 +945,36 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
   }
 
 /*****************************************************************************/
+/*********** Get the institution code of a centre from its code **************/
+/*****************************************************************************/
+
+long Ctr_GetInsCodOfCentreByCod (long CtrCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long InsCod = -1L;
+
+   if (CtrCod > 0)
+     {
+      /***** Get the institution code of a centre from database *****/
+      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod ='%ld'",
+               CtrCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a centre") == 1)
+	{
+	 /***** Get the institution code of this centre *****/
+	 row = mysql_fetch_row (mysql_res);
+	 CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return InsCod;
+  }
+
+/*****************************************************************************/
 /******************* Get photo attribution from database *********************/
 /*****************************************************************************/
 

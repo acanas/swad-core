@@ -65,56 +65,81 @@ extern struct Globals Gbl;
 void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Style,bool PutIconIfNotExists)
   {
-   const char *Folder;
-   const char *Icon;
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
-
-   /***** Set variables depending on scope *****/
-   switch (Scope)
+   static const char *Icon[Sco_NUM_SCOPES] =
      {
-      case Sco_SCOPE_INS:
-	 Folder = Cfg_FOLDER_INS;
-	 Icon = "ins";
-	 break;
-      case Sco_SCOPE_CTR:
-	 Folder = Cfg_FOLDER_CTR;
-	 Icon = "ctr";
-	 break;
-      case Sco_SCOPE_DEG:
-	 Folder = Cfg_FOLDER_DEG;
-	 Icon = "deg";
-	 break;
-      default:
-	 return;	// Nothing to do
-     }
+      NULL,		// Sco_SCOPE_UNK
+      NULL,		// Sco_SCOPE_SYS
+      NULL,		// Sco_SCOPE_CTY
+      Cfg_FOLDER_INS,	// Sco_SCOPE_INS
+      Cfg_FOLDER_CTR,	// Sco_SCOPE_CTR
+      Cfg_FOLDER_DEG,	// Sco_SCOPE_DEG
+      NULL,		// Sco_SCOPE_CRS
+     };
+   const char *Folder;
+   char PathLogo[PATH_MAX+1];
+   bool LogoFound = false;
 
    /***** Path to logo *****/
    if (Cod > 0)
      {
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_PATH_SWAD_PUBLIC,Folder,
-	       (unsigned) (Cod % 100),
-	       (unsigned) Cod,
-	       (unsigned) Cod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
+      /* Degree */
+      if (Scope == Sco_SCOPE_DEG)
+	{
+	 Folder = Cfg_FOLDER_DEG;
+	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		  Cfg_PATH_SWAD_PUBLIC,Folder,
+		  (unsigned) (Cod % 100),
+		  (unsigned) Cod,
+		  (unsigned) Cod);
+	 LogoFound = Fil_CheckIfPathExists (PathLogo);
+	}
+
+      /* Centre */
+      if (!LogoFound || Scope == Sco_SCOPE_CTR)
+	{
+	 Folder = Cfg_FOLDER_CTR;
+	 if (Scope == Sco_SCOPE_DEG)
+	    Cod = Deg_GetCtrCodOfDegreeByCod (Cod);
+	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		  Cfg_PATH_SWAD_PUBLIC,Folder,
+		  (unsigned) (Cod % 100),
+		  (unsigned) Cod,
+		  (unsigned) Cod);
+	 LogoFound = Fil_CheckIfPathExists (PathLogo);
+	}
+
+      /* Institution */
+      if (!LogoFound || Scope == Sco_SCOPE_INS)
+	{
+	 Folder = Cfg_FOLDER_INS;
+	 if (Scope == Sco_SCOPE_DEG)
+	    Cod = Deg_GetInsCodOfDegreeByCod (Cod);
+	 else if (Scope == Sco_SCOPE_CTR)
+	    Cod = Ctr_GetInsCodOfCentreByCod (Cod);
+	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		  Cfg_PATH_SWAD_PUBLIC,Folder,
+		  (unsigned) (Cod % 100),
+		  (unsigned) Cod,
+		  (unsigned) Cod);
+	 LogoFound = Fil_CheckIfPathExists (PathLogo);
+	}
      }
    else
-      LogoExists = false;
+      LogoFound = false;
 
-   if (LogoExists || PutIconIfNotExists)
+   if (LogoFound || PutIconIfNotExists)
      {
       /***** Draw logo *****/
       fprintf (Gbl.F.Out,"<img src=\"");
-      if (LogoExists)
+      if (LogoFound)
 	 fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
 		  Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
 		  (unsigned) (Cod % 100),
 		  (unsigned) Cod,
 		  (unsigned) Cod);
-      else
+      else if (Icon[Scope])
 	 fprintf (Gbl.F.Out,"%s/%s64x64.gif",
-		  Gbl.Prefs.IconsURL,Icon);
+		  Gbl.Prefs.IconsURL,Icon[Scope]);
       fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
 	       AltText,Size,Size);
       if (Style)

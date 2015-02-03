@@ -3054,25 +3054,55 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
   }
 
 /*****************************************************************************/
+/************* Get the centre code of a degree from its code *****************/
+/*****************************************************************************/
+
+long Deg_GetCtrCodOfDegreeByCod (long DegCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long CtrCod = -1L;
+
+   if (DegCod > 0)
+     {
+      /***** Get the centre code of a degree from database *****/
+      sprintf (Query,"SELECT CtrCod FROM degrees WHERE DegCod ='%ld'",
+	       DegCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get the centre of a degree") == 1)
+	{
+	 /***** Get the centre code of this degree *****/
+	 row = mysql_fetch_row (mysql_res);
+	 CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return CtrCod;
+  }
+
+/*****************************************************************************/
 /********** Get the institution code of a degree from its code ***************/
 /*****************************************************************************/
 
 long Deg_GetInsCodOfDegreeByCod (long DegCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long InsCod = -1L;
 
    if (DegCod > 0)
      {
-      /***** Get the short name of a degree from database *****/
+      /***** Get the institution code of a degree from database *****/
       sprintf (Query,"SELECT centres.InsCod FROM degrees,centres"
 		     " WHERE degrees.DegCod ='%ld' AND degrees.CtrCod=centres.CtrCod",
 	       DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a degree") == 1)
 	{
-	 /***** Get the institution of this degree *****/
+	 /***** Get the institution code of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
 	 InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
