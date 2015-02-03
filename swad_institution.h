@@ -112,6 +112,7 @@ void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_RequestLogo (void);
 void Ins_ReceiveLogo (void);
+void Ins_RemoveLogo (void);
 void Ins_RecFormReqIns (void);
 void Ins_RecFormNewIns (void);
 

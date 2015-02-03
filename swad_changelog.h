@@ -39,11 +39,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.72.6 (2015/02/03)"
+#define Log_PLATFORM_VERSION	"SWAD 14.73 (2015/02/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.73:    Feb 03, 2015	New options to remove institution, centre and degree icons. (177007 lines)
+					3 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1341','es','N','Eliminar logo de instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1342','es','N','Eliminar logo de centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1343','es','N','Eliminar logo de titulaci&oacute;n');
+
         Version 14.72.6:  Feb 03, 2015	Changes in icons for degrees and centres. (176883 lines)
         Version 14.72.5:  Feb 01, 2015	Changed related to administrators. (176805 lines)
         Version 14.72.4:  Feb 01, 2015	Refactoring of registering and removing admins. (176787 lines)
@@ -251,7 +257,7 @@ ALTER TABLE institutions DROP COLUMN Logo;
 	Version 14.55:    Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
 					3 changes necessary in database:
 UPDATE actions SET Txt='Cambiar logo de centro' WHERE ActCod='1051' AND Language='es';
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de logo cde entro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de logo de centro');
 ALTER TABLE centres DROP COLUMN Logo;
 
 	Version 14.54.7:  Jan 13, 2015	Fixed bug in edition of centres. (173349 lines)

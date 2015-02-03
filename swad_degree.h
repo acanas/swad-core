@@ -154,6 +154,7 @@ void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_RequestLogo (void);
 void Deg_ReceiveLogo (void);
+void Deg_RemoveLogo (void);
 
 unsigned Deg_GetNumDegsTotal (void);
 unsigned Deg_GetNumDegsInCty (long InsCod);

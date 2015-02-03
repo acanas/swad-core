@@ -28041,6 +28041,27 @@ const char *Txt_Remove_link =
 	"Remover liga&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Remove_logo =
+#if   L==0
+	"Eliminar logo";
+#elif L==1
+	"Entfernen Logo";
+#elif L==2
+	"Remove logo";
+#elif L==3
+	"Eliminar logo";
+#elif L==4
+	"Supprimer logo";
+#elif L==5
+	"Eliminar logo";	// Okoteve traducción
+#elif L==6
+	"Rimuovere logo";
+#elif L==7
+	"Usu&nacute; logo";
+#elif L==8
+	"Remover logotipo";
+#endif
+
 const char *Txt_Remove_mail_domain =
 #if   L==0
 	"Eliminar dominio de correo";	// Necessita traduccio

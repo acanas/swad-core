@@ -1711,7 +1711,16 @@ void Ins_ReceiveLogo (void)
   }
 
 /*****************************************************************************/
-/******************* Put a form to create a new institution ******************/
+/*************** Remove the logo of the current institution ******************/
+/*****************************************************************************/
+
+void Ins_RemoveLogo (void)
+  {
+   Log_RemoveLogo (Sco_SCOPE_INS);
+  }
+
+/*****************************************************************************/
+/****************** Put a form to create a new institution *******************/
 /*****************************************************************************/
 
 static void Ins_PutFormToCreateInstitution (void)

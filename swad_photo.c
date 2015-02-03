@@ -176,7 +176,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Remove_photo;
 
-   /***** Link for changing / uploading the photo *****/
+   /***** Link for removing the photo *****/
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Act_FormStart (ActRemMyPho);
    else							// Not me

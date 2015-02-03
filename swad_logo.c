@@ -58,6 +58,8 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Log_PutLinkToRemoveLogo (Act_Action_t Action);
+
 /*****************************************************************************/
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
@@ -75,7 +77,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
       Cfg_FOLDER_DEG,	// Sco_SCOPE_DEG
       NULL,		// Sco_SCOPE_CRS
      };
-   const char *Folder;
+   const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX+1];
    bool LogoFound = false;
 
@@ -219,22 +221,49 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
    extern const char *Txt_Upload_logo;
-   Act_Action_t Action;
+   long Cod;
+   const char *Folder;
+   Act_Action_t ActionRec;
+   Act_Action_t ActionRem;
+   char PathLogo[PATH_MAX+1];
 
    /***** Set action depending on scope *****/
    switch (Scope)
      {
       case Sco_SCOPE_INS:
-	 Action = ActRecInsLog;
+	 Cod = Gbl.CurrentIns.Ins.InsCod;
+	 Folder = Cfg_FOLDER_INS;
+	 ActionRec = ActRecInsLog;
+	 ActionRem = ActRemInsLog;
 	 break;
       case Sco_SCOPE_CTR:
-	 Action = ActRecCtrLog;
+	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 Folder = Cfg_FOLDER_CTR;
+	 ActionRec = ActRecCtrLog;
+	 ActionRem = ActRemCtrLog;
 	 break;
       case Sco_SCOPE_DEG:
-	 Action = ActRecDegLog;
+	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+	 Folder = Cfg_FOLDER_DEG;
+	 ActionRec = ActRecDegLog;
+	 ActionRem = ActRemDegLog;
 	 break;
       default:
 	 return;	// Nothing to do
+     }
+
+   /***** Check if logo exists *****/
+   sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+	    Cfg_PATH_SWAD_PUBLIC,Folder,
+	    (unsigned) (Cod % 100),
+	    (unsigned) Cod,
+	    (unsigned) Cod);
+   if (Fil_CheckIfPathExists (PathLogo))
+     {
+      /***** Form to remove photo *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      Log_PutLinkToRemoveLogo (ActionRem);
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Write help message *****/
@@ -243,7 +272,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Write a form to send logo *****/
-   Act_FormStart (Action);
+   Act_FormStart (ActionRec);
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s\" style=\"text-align:right;\">"
@@ -267,6 +296,22 @@ void Log_RequestLogo (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
+/************************ Put a link to remove logo **************************/
+/*****************************************************************************/
+
+static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Remove_logo;
+
+   /***** Link for removing the photo *****/
+   Act_FormStart (Action);
+   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("delon",Txt_Remove_logo,Txt_Remove_logo);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
 /******* Receive the logo of the current institution, centre or degree *******/
 /*****************************************************************************/
 
@@ -275,7 +320,6 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    extern const char *Txt_The_file_is_not_X;
    long Cod;
    const char *Folder;
-   void (*FunctionConfiguration) (void);
    char Path[PATH_MAX+1];
    char FileNameLogoSrc[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
@@ -288,17 +332,14 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
       case Sco_SCOPE_INS:
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
-	 FunctionConfiguration = Ins_ShowConfiguration;
 	 break;
       case Sco_SCOPE_CTR:
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
-	 FunctionConfiguration = Ctr_ShowConfiguration;
 	 break;
       case Sco_SCOPE_DEG:
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
-	 FunctionConfiguration = Deg_ShowConfiguration;
 	 break;
       default:
 	 return;	// Nothing to do
@@ -337,21 +378,54 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
      {
       sprintf (Gbl.Message,Txt_The_file_is_not_X,"png");
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      return;
+     }
+   else
+     {
+      /* End the reception of logo in a temporary file */
+      sprintf (FileNameLogo,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Folder,
+	       (unsigned) (Cod % 100),
+	       (unsigned) Cod,
+	       (unsigned) Cod);
+      if (!Fil_EndReceptionOfFile (FileNameLogo))
+	 Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+     }
+  }
+
+/*****************************************************************************/
+/******* Remove the logo of the current institution, centre or degree ********/
+/*****************************************************************************/
+
+void Log_RemoveLogo (Sco_Scope_t Scope)
+  {
+   long Cod;
+   const char *Folder;
+   char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
+
+   /***** Set variables depending on scope *****/
+   switch (Scope)
+     {
+      case Sco_SCOPE_INS:
+	 Cod = Gbl.CurrentIns.Ins.InsCod;
+	 Folder = Cfg_FOLDER_INS;
+	 break;
+      case Sco_SCOPE_CTR:
+	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 Folder = Cfg_FOLDER_CTR;
+	 break;
+      case Sco_SCOPE_DEG:
+	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+	 Folder = Cfg_FOLDER_DEG;
+	 break;
+      default:
+	 return;	// Nothing to do
      }
 
-   /* End the reception of logo in a temporary file */
+   /***** Remove logo *****/
    sprintf (FileNameLogo,"%s/%s/%02u/%u/logo/%u.png",
 	    Cfg_PATH_SWAD_PUBLIC,Folder,
 	    (unsigned) (Cod % 100),
 	    (unsigned) Cod,
 	    (unsigned) Cod);
-   if (!Fil_EndReceptionOfFile (FileNameLogo))
-     {
-      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
-      return;
-     }
-
-   /***** Show the institution/centre/degree information again *****/
-   FunctionConfiguration ();
+   Brw_RemoveTree (FileNameLogo);
   }

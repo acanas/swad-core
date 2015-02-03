@@ -107,6 +107,7 @@ void Ctr_ChangeCtrStatus (void);
 
 void Ctr_RequestLogo (void);
 void Ctr_ReceiveLogo (void);
+void Ctr_RemoveLogo (void);
 void Ctr_RequestPhoto (void);
 void Ctr_ReceivePhoto (void);
 void Ctr_ChangeCtrPhotoAttribution (void);

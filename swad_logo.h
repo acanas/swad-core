@@ -44,5 +44,6 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 void Log_PutFormToChangeLogo (Sco_Scope_t Scope);
 void Log_RequestLogo (Sco_Scope_t Scope);
 void Log_ReceiveLogo (Sco_Scope_t Scope);
+void Log_RemoveLogo (Sco_Scope_t Scope);
 
 #endif
