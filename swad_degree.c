@@ -644,17 +644,17 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
 void Deg_WriteCtyInsCtrDeg (void)
   {
    extern const char *The_ClassDegree[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_System;
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
 
    /***** Form to go to the system *****/
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[TabSys],
+   Act_LinkFormSubmit (Txt_System,
 	               The_ClassDegree[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s</a>"
                       "</form>",
-            Txt_TABS_FULL_TXT[TabSys]);
+            Txt_System);
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If country selected...
      {

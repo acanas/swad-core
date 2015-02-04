@@ -13245,6 +13245,36 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 	" you should indicate her/his ID.";		// Necessita de tradução
 #endif
 
+const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them =
+#if   L==0
+	"Si no trobes la seva instituci&oacute;, el seu centre,"
+	" la seva titulaci&oacute; o les seves assignatures, pot crear-los.";
+#elif L==1
+	"Wenn Sie Ihre Institution, Ihre Zentrum, Ihr Studium"
+	" oder Ihre Kurse nicht finden k&oacute;nnen, k&oacute;nnen Sie sie erstellen.";
+#elif L==2
+	"If you can not find your institution, your centre,"
+	" your degree or your courses, you can create them.";
+#elif L==3
+	"Si no encuentra su instituci&oacute;n, su centro,"
+	" su titulaci&oacute;n o sus asignaturas, puede crearlos.";
+#elif L==4
+	"Si vous ne trouvez pas votre &eacute;tablissement, votre centre,"
+	" votre &eacute;tude ou de vos mati&egrave;res, vous pouvez les cr&eacute;er.";
+#elif L==5
+	"Si no encuentra su instituci&oacute;n, su centro,"
+	" su titulaci&oacute;n o sus asignaturas, puede crearlos.";	// Okoteve traducción
+#elif L==6
+	"Se non riesci a trovare il vostro istituto, il centro,"
+	" il vostro grado o vostri corsi, &egrave; possibile creare.";
+#elif L==7
+	"Je&sacute;li nie mo&zdot;esz znale&zacute;&cacute; instytucj&eogo, Centrum,"
+	" studia lub kursy swoich, mo&zdot;na je tworzy&cacute;.";
+#elif L==8
+	"Se voc&ecirc; n&atilde;o consegue encontrar a sua institui&ccedil;&atilde;o, o seu centro,"
+	" o seu grau ou seus disciplinas, voc&ecirc; pode cri&aacute;-los.";
+#endif
+
 const char *Txt_If_you_have_an_Android_device_try_SWADroid =
 #if   L==0
 	"Si teniu un dispositiu Android, provi SWADroid";
@@ -36912,7 +36942,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 
 const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS] =
    {
-   // TabUnk
+	 // TabUnk
 	 NULL,
 	 // TabSys
 #if   L==0
@@ -49160,6 +49190,36 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 #elif L==8
 	"You can register voluntarily"
 	" in one or more groups of type %s.";		// Necessita de tradução
+#endif
+
+const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them =
+#if   L==0
+	"Podeu cercar assignatures, seleccionar-les"
+	" i sol·licitar la seva inscripci&oacute; en elles.";
+#elif L==1
+	"Sie k&ouml;nnen f&uuml;r Kurse zu suchen, w&auml;hlen Sie sie aus"
+	" und fordern Sie Ihre Anmeldung in ihnen.";
+#elif L==2
+	"You can search for courses, select them"
+	" and request your enrollment in them.";
+#elif L==3
+	"Puede buscar asignaturas, seleccionarlas"
+	" y solicitar su inscripci&oacute;n en ellas.";
+#elif L==4
+	"Vous pouvez rechercher des cours, s&eacute;lectionnez-les"
+	" et demander votre inscription en eux.";
+#elif L==5
+	"Puede buscar asignaturas, seleccionarlas"
+	" y solicitar su inscripci&oacute;n en ellas.";		// Okoteve traducción"
+#elif L==6
+	"&Egrave; possibile cercare corsi, selezionarli"
+	" e richiedere l'iscrizione in loro.";
+#elif L==7
+	"Mo&zdot;esz szuka&cacute; kurs&oacute;w, zaznacz je"
+	" i poprosi&cacute; o rejestracj&eogon; w nich.";
+#elif L==8
+	"Voc&ecirc; pode procurar por cursos, selecion&aacute;-los"
+	" e solicitar a sua inscri&ccedil;&atilde;o nos mesmos.";
 #endif
 
 const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences

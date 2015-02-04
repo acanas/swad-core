@@ -546,7 +546,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_My_courses;
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
    struct Country Cty;
    struct Institution Ins;
@@ -587,18 +587,18 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[TabSys],
+   Act_LinkFormSubmit (Txt_System,
 		       The_ClassFormul[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\" alt=\"%s\" title=\"%s\""
 		      " style=\"width:16px; height:16px;"
 		      " vertical-align:middle;\" />",
 	    Gbl.Prefs.IconsURL,
-	    Txt_TABS_FULL_TXT[TabSys],
-	    Txt_TABS_FULL_TXT[TabSys]);
+	    Txt_System,
+	    Txt_System);
    Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
    if (Highlight)
       fprintf (Gbl.F.Out,"<strong>");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TABS_FULL_TXT[TabSys]);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_System);
    if (Highlight)
       fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>"
@@ -2964,6 +2964,8 @@ static void Crs_PutLinkToGoToCrs (struct Course *Crs)
 void Crs_ReqSelectOneOfMyCourses (void)
   {
    extern const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS];
+   extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them;
+   extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
 
    /***** Search / select more courses *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -2977,7 +2979,13 @@ void Crs_ReqSelectOneOfMyCourses (void)
    if (Gbl.Usrs.Me.MyCourses.Num)
       Crs_WriteListMyCoursesToSelectOne ();
    else
-      Lay_ShowAlert (Lay_INFO,Txt_You_are_not_enrolled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex]);
+     {
+      sprintf (Gbl.Message,"%s<br />%s<br />%s",
+               Txt_You_are_not_enrolled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them,
+               Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+     }
   }
 
 /*****************************************************************************/

@@ -41,11 +41,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.73.4 (2015/02/04)"
+#define Log_PLATFORM_VERSION	"SWAD 14.73.4 (2015/02/05)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.73.5:  Feb 05, 2015	New message when user does not belong to any course. (177170 lines)
         Version 14.73.4:  Feb 04, 2015	Changes in institution configuration. (177103 lines)
         Version 14.73.3:  Feb 04, 2015	Changes in degree configuration. (177080 lines)
         Version 14.73.2:  Feb 04, 2015	Changes in centre configuration. (177057 lines)
