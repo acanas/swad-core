@@ -229,6 +229,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
+   extern const char *Txt_Web;
    extern const char *Txt_Shortcut_to_this_institution;
    extern const char *Txt_QR_code;
    extern const char *Txt_Degrees;
@@ -240,16 +241,16 @@ static void Ins_Configuration (bool PrintView)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Links to show centres, to print view and to upload logo *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
-      /* Link to show centres */
-      Act_FormStart (ActSeeCtr);
-      Act_LinkFormSubmit (Txt_Centres,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
-      fprintf (Gbl.F.Out,"</form>");
-
       if (!PrintView)
 	{
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+	 /* Link to show centres */
+	 Act_FormStart (ActSeeCtr);
+	 Act_LinkFormSubmit (Txt_Centres,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
+	 fprintf (Gbl.F.Out,"</form>");
+
 	 /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
 	 Lay_PutLinkToPrintView2 ();
@@ -257,9 +258,9 @@ static void Ins_Configuration (bool PrintView)
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
 	    Log_PutFormToChangeLogo (Sco_SCOPE_INS);
-	}
 
-      fprintf (Gbl.F.Out,"</div>");
+	 fprintf (Gbl.F.Out,"</div>");
+	}
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -318,7 +319,29 @@ static void Ins_Configuration (bool PrintView)
 	       Txt_Short_name,
 	       Gbl.CurrentIns.Ins.ShortName);
 
-      /***** Link to the institution *****/
+      /***** Institution WWW *****/
+      if (Gbl.CurrentIns.Ins.WWW[0])
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"text-align:right; vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\""
+			    " style=\"text-align:left; vertical-align:middle;\">"
+			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
+		  The_ClassFormul[Gbl.Prefs.Theme],
+		  Txt_Web,
+		  Gbl.CurrentIns.Ins.WWW);
+	 Str_LimitLengthHTMLStr (Gbl.CurrentIns.Ins.WWW,20);
+	 fprintf (Gbl.F.Out,"%s"
+			    "</a>"
+			    "</td>"
+			    "</tr>",
+		  Gbl.CurrentIns.Ins.WWW);
+	}
+
+      /***** Shortcut to the institution *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\" style=\"text-align:right;"
 	                 " vertical-align:middle;\">"

@@ -41,11 +41,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.73.3 (2015/02/04)"
+#define Log_PLATFORM_VERSION	"SWAD 14.73.4 (2015/02/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.73.4:  Feb 04, 2015	Changes in institution configuration. (177103 lines)
         Version 14.73.3:  Feb 04, 2015	Changes in degree configuration. (177080 lines)
         Version 14.73.2:  Feb 04, 2015	Changes in centre configuration. (177057 lines)
         Version 14.73.1:  Feb 04, 2015	Fixed bug in logo of centre. (177012 lines)
