@@ -958,13 +958,13 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Get the institution code of a centre from database *****/
-      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod ='%ld'",
+      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod='%ld'",
                CtrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a centre") == 1)
 	{
 	 /***** Get the institution code of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
-	 CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
 
       /***** Free structure that stores the query result *****/

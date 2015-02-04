@@ -31,19 +31,22 @@
 // TODO: When notifications are marked as seen, do it in a priori function
 // TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
 // TODO: [Ceferino Bustos Valdivia]:
-//	Enhorabuena por esta nueva aplicación. La he utilizado con los códigos QR y va muy bien.
-//	Me genera las listas de alumnos y es bastante rápida la lectura del código QR.
-//	Sería completa esta aplicación, si la asistencia se incluyera, automáticamente, en el apartado de evaluación de cada alumno. De esta forma podríamos ver sus trabajos y asistencias de forma personalizada.
+//	 Enhorabuena por esta nueva aplicación. La he utilizado con los códigos QR y va muy bien.
+//	 Me genera las listas de alumnos y es bastante rápida la lectura del código QR.
+//	 Sería completa esta aplicación, si la asistencia se incluyera, automáticamente, en el apartado de evaluación de cada alumno. De esta forma podríamos ver sus trabajos y asistencias de forma personalizada.
+// TODO: OpenSWAD.org: ¿Qué debería tener una buena gestión de grupos? Es para tomar ideas ;)
+//       José Raúl Canay @raulcanay: por ejemplo, que puedas sacar un listado exportable de en qué grupos está una persona de quienes están en un grupo.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.73 (2015/02/03)"
+#define Log_PLATFORM_VERSION	"SWAD 14.73.1 (2015/02/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.73.1:  Feb 04, 2015	Fixed bug in logo of centre. (177012 lines)
         Version 14.73:    Feb 03, 2015	New options to remove institution, centre and degree icons. (177007 lines)
 					3 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1341','es','N','Eliminar logo de instituci&oacute;n');

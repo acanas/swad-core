@@ -3098,7 +3098,7 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
      {
       /***** Get the institution code of a degree from database *****/
       sprintf (Query,"SELECT centres.InsCod FROM degrees,centres"
-		     " WHERE degrees.DegCod ='%ld' AND degrees.CtrCod=centres.CtrCod",
+		     " WHERE degrees.DegCod='%ld' AND degrees.CtrCod=centres.CtrCod",
 	       DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a degree") == 1)
 	{
