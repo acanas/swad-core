@@ -793,8 +793,8 @@ static void Ban_PutFormToCreateBanner (void)
 static void Ban_PutHeadBanners (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_Image;
    extern const char *Txt_WWW;
 
@@ -808,8 +808,8 @@ static void Ban_PutHeadBanners (void)
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">%s</td>"
                       "</tr>",
             Txt_Code,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_Image,
             Txt_WWW);
   }

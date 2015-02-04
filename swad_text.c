@@ -12093,7 +12093,7 @@ const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning
 	"From this time, you will not receive messages from %s.";	// Necessita de tradução
 #endif
 
-const char *Txt_Full_Name =
+const char *Txt_Full_name =
 #if   L==0
 	"Nombre completo";	// Necessita traduccio
 #elif L==1
@@ -33613,7 +33613,7 @@ const char *Txt_shared_files_area =
 	"zona de arquivos compartilhados";
 #endif
 
-const char *Txt_Short_Name =
+const char *Txt_Short_name =
 #if   L==0
 	"Nombre breve";		// Necessita traduccio
 #elif L==1
@@ -46810,6 +46810,27 @@ const char *Txt_Visits_to_course =
 	"Wizyty w trakcie";
 #elif L==8
 	"Visitas disciplina";
+#endif
+
+const char *Txt_Web =
+#if   L==0
+	"Web";
+#elif L==1
+	"Web";
+#elif L==2
+	"Web";
+#elif L==3
+	"Web";
+#elif L==4
+	"Web";
+#elif L==5
+	"Web";	// Okoteve traducción
+#elif L==6
+	"Web";
+#elif L==7
+	"Web";
+#elif L==8
+	"Web";
 #endif
 
 const char *Txt_Web_page =

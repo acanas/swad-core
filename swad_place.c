@@ -675,8 +675,8 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 static void Plc_PutFormToCreatePlace (void)
   {
    extern const char *Txt_New_place;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_Create_place;
    struct Place *Plc;
 
@@ -697,8 +697,8 @@ static void Plc_PutFormToCreatePlace (void)
                       "%s"
                       "</td>"
                       "</tr>",
-            Txt_Short_Name,
-            Txt_Full_Name);
+            Txt_Short_name,
+            Txt_Full_name);
 
    /***** Place short name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -737,8 +737,8 @@ static void Plc_PutFormToCreatePlace (void)
 static void Plc_PutHeadPlaces (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_Centres;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -757,8 +757,8 @@ static void Plc_PutHeadPlaces (void)
                       "</td>"
                       "</tr>",
             Txt_Code,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_Centres);
   }
 

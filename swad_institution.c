@@ -228,7 +228,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Centres;
    extern const char *Txt_Institution;
-   extern const char *Txt_Short_Name;
+   extern const char *Txt_Short_name;
    extern const char *Txt_Shortcut_to_this_institution;
    extern const char *Txt_QR_code;
    extern const char *Txt_Degrees;
@@ -315,7 +315,7 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Short_Name,
+	       Txt_Short_name,
 	       Gbl.CurrentIns.Ins.ShortName);
 
       /***** Link to the institution *****/
@@ -1848,8 +1848,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Country;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Centres_ABBREVIATION;
@@ -1889,8 +1889,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "</tr>",
             Txt_Code,
             Txt_Country,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_WWW,
             Txt_Users,
             Txt_Centres_ABBREVIATION,

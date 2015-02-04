@@ -290,7 +290,7 @@ static void Deg_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Degree;
-   extern const char *Txt_Short_Name;
+   extern const char *Txt_Short_name;
    extern const char *Txt_Shortcut_to_this_degree;
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -375,7 +375,7 @@ static void Deg_Configuration (bool PrintView)
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Short_Name,
+	       Txt_Short_name,
 	       Gbl.CurrentDeg.Deg.ShortName);
 
       /***** Link to the degree *****/

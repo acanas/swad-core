@@ -866,8 +866,8 @@ static void Dpt_PutFormToCreateDepartment (void)
   {
    extern const char *Txt_New_department;
    extern const char *Txt_Institution;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
    extern const char *Txt_Another_institution;
    extern const char *Txt_Create_department;
@@ -898,8 +898,8 @@ static void Dpt_PutFormToCreateDepartment (void)
                       "</th>"
                       "</tr>",
             Txt_Institution,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_WWW);
 
    /***** Institution *****/
@@ -963,8 +963,8 @@ static void Dpt_PutHeadDepartments (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Institution;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
    extern const char *Txt_Teachers_ABBREVIATION;
 
@@ -992,8 +992,8 @@ static void Dpt_PutHeadDepartments (void)
                       "</tr>",
             Txt_Code,
             Txt_Institution,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_WWW,
             Txt_Teachers_ABBREVIATION);
   }

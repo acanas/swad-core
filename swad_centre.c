@@ -239,7 +239,8 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Centre;
-   extern const char *Txt_Short_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Web;
    extern const char *Txt_Shortcut_to_this_centre;
    extern const char *Txt_QR_code;
    extern const char *Txt_Courses;
@@ -261,17 +262,17 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Links to show degrees, to print view
              and to upload photo and logo *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
-      /* Link to show degrees */
-      Act_FormStart (ActSeeDeg);
-      Act_LinkFormSubmit (Txt_Degrees,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
-      fprintf (Gbl.F.Out,"</form>");
-
       if (!PrintView)
 	{
-	  /* Link to print view */
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+	 /* Link to show degrees */
+	 Act_FormStart (ActSeeDeg);
+	 Act_LinkFormSubmit (Txt_Degrees,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
+	 fprintf (Gbl.F.Out,"</form>");
+
+         /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
 	 Lay_PutLinkToPrintView2 ();
 
@@ -281,9 +282,10 @@ static void Ctr_Configuration (bool PrintView)
 	    Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 	   }
+
+         fprintf (Gbl.F.Out,"</div>");
 	}
 
-      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -391,10 +393,32 @@ static void Ctr_Configuration (bool PrintView)
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Short_Name,
+	       Txt_Short_name,
 	       Gbl.CurrentCtr.Ctr.ShortName);
 
-      /***** Link to the centre *****/
+      /***** Centre WWW *****/
+      if (Gbl.CurrentCtr.Ctr.WWW[0])
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"text-align:right; vertical-align:middle;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT\""
+			    " style=\"text-align:left; vertical-align:middle;\">"
+			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
+		  The_ClassFormul[Gbl.Prefs.Theme],
+		  Txt_Web,
+		  Gbl.CurrentCtr.Ctr.WWW);
+	 Str_LimitLengthHTMLStr (Gbl.CurrentCtr.Ctr.WWW,20);
+	 fprintf (Gbl.F.Out,"%s"
+			    "</a>"
+			    "</td>"
+			    "</tr>",
+		  Gbl.CurrentCtr.Ctr.WWW);
+	}
+
+      /***** Shortcut to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
 			 " style=\"text-align:right; vertical-align:middle;\">"
@@ -2141,8 +2165,8 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_Code;
    extern const char *Txt_Institution;
    extern const char *Txt_Place;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -2186,8 +2210,8 @@ static void Ctr_PutHeadCentresForEdition (void)
             Txt_Code,
             Txt_Institution,
             Txt_Place,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_WWW,
             Txt_Teachers_ABBREVIATION,
             Txt_Degrees_ABBREVIATION,

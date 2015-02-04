@@ -140,7 +140,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Show_more_details;
    extern const char *Txt_NO;
    extern const char *Txt_Course;
-   extern const char *Txt_Short_Name;
+   extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Semester;
@@ -248,7 +248,7 @@ static void Crs_Configuration (bool PrintView)
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Short_Name,
+            Txt_Short_name,
             Gbl.CurrentCrs.Crs.ShortName);
 
    /***** Course year *****/
@@ -1841,8 +1841,8 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Semester_ABBREVIATION;
-   extern const char *Txt_Short_Name;
-   extern const char *Txt_Full_Name;
+   extern const char *Txt_Short_name;
+   extern const char *Txt_Full_name;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Status;
@@ -1889,8 +1889,8 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Degree,
             Txt_Year_OF_A_DEGREE,
             Txt_Semester_ABBREVIATION,
-            Txt_Short_Name,
-            Txt_Full_Name,
+            Txt_Short_name,
+            Txt_Full_name,
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
             Txt_Status,
