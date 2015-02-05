@@ -35,7 +35,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Brw_NUM_TYPES_FILE_BROWSER 22
+#define Brw_NUM_TYPES_FILE_BROWSER 25
 // The following types are stored in clipboard, expanded_folders, file_browser_size tables as numeric fields, so don't change numbers!
 typedef enum
   {
@@ -61,6 +61,9 @@ typedef enum
    Brw_ADMI_DOCUM_CTR = 19,
    Brw_SHOW_DOCUM_INS = 20,
    Brw_ADMI_DOCUM_INS = 21,
+   Brw_ADMI_SHARE_DEG = 22,
+   Brw_ADMI_SHARE_CTR = 23,
+   Brw_ADMI_SHARE_INS = 24,
   } Brw_FileBrowser_t;
 
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
@@ -123,6 +126,7 @@ struct FileMetadata
 #define Brw_MAX_BYTES_MIME_TYPE	256	// Maximum length of "image/jpeg", "text/html", etc.
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES	"sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be "doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED		"comun"			// TODO: It should be "sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"

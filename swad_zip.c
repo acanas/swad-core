@@ -76,6 +76,9 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActZIPSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActZIPAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActZIPComDeg,	// Brw_ADMI_SHARE_DEG
+   ActZIPComCtr,	// Brw_ADMI_SHARE_CTR
+   ActZIPComIns,	// Brw_ADMI_SHARE_INS
   };
 
 /*****************************************************************************/

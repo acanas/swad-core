@@ -98,108 +98,120 @@ const char *Brw_Licenses_DB[Brw_NUM_LICENSES] =
 // Browsers types for database "files" and "file_browser_size" tables
 const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0,
-   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1,
-   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2,
-   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3,
-   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4,
-   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5,
-   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6,
-   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_CRS =  7,
-   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8,
-   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9,
-   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10,
-   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11,
-   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12,
-   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13,
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14,
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_CRS = 15,
-   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16,
-   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17,
-   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18,
-   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19,
-   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20,
-   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21,
+   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
+   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1
+   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2
+   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3
+   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4
+   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_CRS =  7
+   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8
+   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9
+   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10
+   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11
+   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12
+   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_CRS = 15
+   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16
+   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17
+   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18
+   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19
+   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20
+   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21
+   Brw_ADMI_SHARE_DEG,	// Brw_ADMI_SHARE_DEG = 22
+   Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
+   Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
   };
 // Browsers types for database "clipboard" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0,
-   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1,
-   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2,
-   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3,
-   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4,
-   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5,
-   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6,
-   Brw_ADMI_WORKS_CRS,	// Brw_ADMI_WORKS_CRS =  7,
-   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8,
-   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9,
-   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10,
-   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11,
-   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12,
-   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13,
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14,
-   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 15,
-   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16,
-   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17,
-   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18,
-   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19,
-   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20,
-   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21,
+   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
+   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1
+   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2
+   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3
+   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4
+   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6
+   Brw_ADMI_WORKS_CRS,	// Brw_ADMI_WORKS_CRS =  7
+   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8
+   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9
+   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10
+   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11
+   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12
+   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14
+   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 15
+   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16
+   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17
+   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18
+   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19
+   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20
+   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21
+   Brw_ADMI_SHARE_DEG,	// Brw_ADMI_SHARE_DEG = 22
+   Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
+   Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
   };
 // Browsers types for database "expanded_folders" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  1
-   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  2
-   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  3
-   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  4
-   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  5
-   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  6
-   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  7
-   Brw_ADMI_WORKS_CRS,	// Brw_ADMI_WORKS_CRS =  8
-   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  9
-   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR = 10
-   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 11
-   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 12
-   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 13
-   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 14
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 15
-   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 16
-   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 17
-   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 18
-   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 19
-   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 20
-   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 21
-   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 22
+   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
+   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1
+   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2
+   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3
+   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4
+   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6
+   Brw_ADMI_WORKS_CRS,	// Brw_ADMI_WORKS_CRS =  7
+   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8
+   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9
+   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10
+   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11
+   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12
+   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14
+   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 15
+   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16
+   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17
+   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18
+   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19
+   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20
+   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21
+   Brw_ADMI_SHARE_DEG,	// Brw_ADMI_SHARE_DEG = 22
+   Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
+   Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
   };
 // Browsers types for database "file_browser_last" table
 // Assignments and works are stored as one in file_browser_last...
 // ...because a user views them at the same time
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0,
-   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1,
-   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2,
-   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3,
-   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4,
-   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5,
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_WORKS_USR =  6,
-   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_WORKS_CRS =  7,
-   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8,
-   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9,
-   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10,
-   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11,
-   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12,
-   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13,
-   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14,
-   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 15,
-   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16,
-   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17,
-   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18,
-   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19,
-   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20,
-   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21,
+   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
+   Brw_ADMI_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1
+   Brw_ADMI_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2
+   Brw_ADMI_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3
+   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4
+   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_WORKS_USR =  6
+   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_WORKS_CRS =  7
+   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8
+   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9
+   Brw_ADMI_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10
+   Brw_ADMI_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11
+   Brw_ADMI_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12
+   Brw_ADMI_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14
+   Brw_ADMI_ASSIG_CRS,	// Brw_ADMI_ASSIG_CRS = 15
+   Brw_ADMI_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16
+   Brw_ADMI_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17
+   Brw_ADMI_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18
+   Brw_ADMI_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19
+   Brw_ADMI_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20
+   Brw_ADMI_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21
+   Brw_ADMI_SHARE_DEG,	// Brw_ADMI_SHARE_DEG = 22
+   Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
+   Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
   };
 
 // Internal names of root folders
@@ -214,7 +226,7 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,		// Brw_ADMI_WORKS_USR
    Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS,		// Brw_ADMI_WORKS_CRS
    Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,		// Brw_ADMI_MARKS_CRS
-   Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,	// Brw_ADMI_BRIEF_USR
+   Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF,		// Brw_ADMI_BRIEF_USR
    Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,	// Brw_SHOW_DOCUM_GRP
    Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD,	// Brw_ADMI_DOCUM_GRP
    Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS,		// Brw_SHOW_MARKS_GRP
@@ -227,6 +239,9 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_ADMI_DOCUM_CTR
    Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_SHOW_DOCUM_INS
    Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS,	// Brw_ADMI_DOCUM_INS
+   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,	// Brw_ADMI_SHARE_DEG
+   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,	// Brw_ADMI_SHARE_CTR
+   Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES,	// Brw_ADMI_SHARE_INS
   };
 
 // Number of columns of a file browser
@@ -254,6 +269,9 @@ static const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
    8,	// Brw_ADMI_DOCUM_CTR
    5,	// Brw_SHOW_DOCUM_INS
    8,	// Brw_ADMI_DOCUM_INS
+   8,	// Brw_ADMI_SHARE_DEG
+   8,	// Brw_ADMI_SHARE_CTR
+   8,	// Brw_ADMI_SHARE_INS
   };
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -279,6 +297,9 @@ static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
    true,	// Brw_ADMI_DOCUM_CTR
    false,	// Brw_SHOW_DOCUM_INS
    true,	// Brw_ADMI_DOCUM_INS
+   true,	// Brw_ADMI_SHARE_DEG
+   true,	// Brw_ADMI_SHARE_CTR
+   true,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -304,6 +325,9 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActAdmComDeg,	// Brw_ADMI_SHARE_DEG
+   ActAdmComCtr,	// Brw_ADMI_SHARE_CTR
+   ActAdmComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -329,6 +353,9 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActUnk,		// Brw_ADMI_DOCUM_INS
+   ActUnk,		// Brw_ADMI_SHARE_DEG
+   ActUnk,		// Brw_ADMI_SHARE_CTR
+   ActUnk,		// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -354,6 +381,9 @@ static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
    ActShoDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActShoDocIns,	// Brw_ADMI_DOCUM_INS
+   ActUnk,		// Brw_ADMI_SHARE_DEG
+   ActUnk,		// Brw_ADMI_SHARE_CTR
+   ActUnk,		// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -379,6 +409,9 @@ static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
    ActHidDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActHidDocIns,	// Brw_ADMI_DOCUM_INS
+   ActUnk,		// Brw_ADMI_SHARE_DEG
+   ActUnk,		// Brw_ADMI_SHARE_CTR
+   ActUnk,		// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -404,6 +437,9 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqDatAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActReqDatSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActReqDatAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActReqDatComDeg,	// Brw_ADMI_SHARE_DEG
+   ActReqDatComCtr,	// Brw_ADMI_SHARE_CTR
+   ActReqDatComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -429,6 +465,9 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActDowAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActDowSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActDowAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActDowComDeg,	// Brw_ADMI_SHARE_DEG
+   ActDowComCtr,	// Brw_ADMI_SHARE_CTR
+   ActDowComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -454,6 +493,9 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqRemFilDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActReqRemFilDocIns,	// Brw_ADMI_DOCUM_INS
+   ActReqRemFilComDeg,	// Brw_ADMI_SHARE_DEG
+   ActReqRemFilComCtr,	// Brw_ADMI_SHARE_CTR
+   ActReqRemFilComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -479,6 +521,9 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFilDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemFilDocIns,	// Brw_ADMI_DOCUM_INS
+   ActRemFilComDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemFilComCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemFilComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -504,6 +549,9 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemFolDocIns,	// Brw_ADMI_DOCUM_INS
+   ActRemFolComDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemFolComCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemFolComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -529,6 +577,9 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    ActRemTreDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemTreDocIns,	// Brw_ADMI_DOCUM_INS
+   ActRemTreComDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemTreComCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemTreComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -554,6 +605,9 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCopDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCopDocIns,	// Brw_ADMI_DOCUM_INS
+   ActCopComDeg,	// Brw_ADMI_SHARE_DEG
+   ActCopComCtr,	// Brw_ADMI_SHARE_CTR
+   ActCopComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -579,6 +633,9 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActPasDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActPasDocIns,	// Brw_ADMI_DOCUM_INS
+   ActPasComDeg,	// Brw_ADMI_SHARE_DEG
+   ActPasComCtr,	// Brw_ADMI_SHARE_CTR
+   ActPasComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -604,6 +661,9 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActFrmCreDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActFrmCreDocIns,	// Brw_ADMI_DOCUM_INS
+   ActFrmCreComDeg,	// Brw_ADMI_SHARE_DEG
+   ActFrmCreComCtr,	// Brw_ADMI_SHARE_CTR
+   ActFrmCreComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -629,6 +689,9 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCreFolDocIns,	// Brw_ADMI_DOCUM_INS
+   ActCreFolComDeg,	// Brw_ADMI_SHARE_DEG
+   ActCreFolComCtr,	// Brw_ADMI_SHARE_CTR
+   ActCreFolComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -654,6 +717,9 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreLnkDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCreLnkDocIns,	// Brw_ADMI_DOCUM_INS
+   ActCreLnkComDeg,	// Brw_ADMI_SHARE_DEG
+   ActCreLnkComCtr,	// Brw_ADMI_SHARE_CTR
+   ActCreLnkComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -679,6 +745,9 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRenFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRenFolDocIns,	// Brw_ADMI_DOCUM_INS
+   ActRenFolComDeg,	// Brw_ADMI_SHARE_DEG
+   ActRenFolComCtr,	// Brw_ADMI_SHARE_CTR
+   ActRenFolComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -704,6 +773,9 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    ActRcvFilDocCtrDZ,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRcvFilDocInsDZ,	// Brw_ADMI_DOCUM_INS
+   ActRcvFilComDegDZ,	// Brw_ADMI_SHARE_DEG
+   ActRcvFilComCtrDZ,	// Brw_ADMI_SHARE_CTR
+   ActRcvFilComInsDZ,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -729,6 +801,9 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilDocCtrCla,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRcvFilDocInsCla,	// Brw_ADMI_DOCUM_INS
+   ActRcvFilComDegCla,	// Brw_ADMI_SHARE_DEG
+   ActRcvFilComCtrCla,	// Brw_ADMI_SHARE_CTR
+   ActRcvFilComInsCla,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -754,6 +829,9 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    ActAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActAdmComDeg,	// Brw_ADMI_SHARE_DEG
+   ActAdmComCtr,	// Brw_ADMI_SHARE_CTR
+   ActAdmComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -779,6 +857,9 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActExpSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActExpAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActExpComDeg,	// Brw_ADMI_SHARE_DEG
+   ActExpComCtr,	// Brw_ADMI_SHARE_CTR
+   ActExpComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -804,6 +885,9 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActConSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActConAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActConComDeg,	// Brw_ADMI_SHARE_DEG
+   ActConComCtr,	// Brw_ADMI_SHARE_CTR
+   ActConComIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -829,6 +913,9 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActChgDatAdmDocIns,	// Brw_ADMI_DOCUM_INS
+   ActChgDatComDeg,	// Brw_ADMI_SHARE_DEG
+   ActChgDatComCtr,	// Brw_ADMI_SHARE_CTR
+   ActChgDatComIns,	// Brw_ADMI_SHARE_INS
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
@@ -854,6 +941,18 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 #define Brw_MAX_QUOTA_DOCUM_GRP		( 1ULL*Brw_GiB)
 #define Brw_MAX_FILES_DOCUM_GRP		1000
 #define Brw_MAX_FOLDS_DOCUM_GRP		500
+
+#define Brw_MAX_QUOTA_SHARE_INS		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_SHARE_INS		5000
+#define Brw_MAX_FOLDS_SHARE_INS		1000	// Many, because every student can create his own directories
+
+#define Brw_MAX_QUOTA_SHARE_CTR		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_SHARE_CTR		5000
+#define Brw_MAX_FOLDS_SHARE_CTR		1000	// Many, because every student can create his own directories
+
+#define Brw_MAX_QUOTA_SHARE_DEG		(64ULL*Brw_GiB)
+#define Brw_MAX_FILES_SHARE_DEG		5000
+#define Brw_MAX_FOLDS_SHARE_DEG		1000	// Many, because every student can create his own directories
 
 #define Brw_MAX_QUOTA_SHARE_CRS		(64ULL*Brw_GiB)
 #define Brw_MAX_FILES_SHARE_CRS		5000
@@ -1403,6 +1502,29 @@ void Brw_GetParAndInitFileBrowser (void)
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_INS;
          break;
 
+      /***** Shared files of institution *****/
+      case ActAdmComIns:
+      case ActReqRemFilComIns:
+      case ActRemFilComIns:
+      case ActRemFolComIns:
+      case ActCopComIns:
+      case ActPasComIns:
+      case ActRemTreComIns:
+      case ActFrmCreComIns:
+      case ActCreFolComIns:
+      case ActCreLnkComIns:
+      case ActRenFolComIns:
+      case ActRcvFilComInsDZ:
+      case ActRcvFilComInsCla:
+      case ActExpComIns:
+      case ActConComIns:
+      case ActZIPComIns:
+      case ActReqDatComIns:
+      case ActChgDatComIns:
+      case ActDowComIns:
+         Gbl.FileBrowser.Type = Brw_ADMI_SHARE_INS;
+         break;
+
       /***** Documents of centre *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
@@ -1446,6 +1568,29 @@ void Brw_GetParAndInitFileBrowser (void)
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_CTR;
          break;
 
+      /***** Shared files of centre *****/
+      case ActAdmComCtr:
+      case ActReqRemFilComCtr:
+      case ActRemFilComCtr:
+      case ActRemFolComCtr:
+      case ActCopComCtr:
+      case ActPasComCtr:
+      case ActRemTreComCtr:
+      case ActFrmCreComCtr:
+      case ActCreFolComCtr:
+      case ActCreLnkComCtr:
+      case ActRenFolComCtr:
+      case ActRcvFilComCtrDZ:
+      case ActRcvFilComCtrCla:
+      case ActExpComCtr:
+      case ActConComCtr:
+      case ActZIPComCtr:
+      case ActReqDatComCtr:
+      case ActChgDatComCtr:
+      case ActDowComCtr:
+         Gbl.FileBrowser.Type = Brw_ADMI_SHARE_CTR;
+         break;
+
       /***** Documents of degree *****/
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
@@ -1487,6 +1632,29 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgDatAdmDocDeg:
       case ActDowAdmDocDeg:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_DEG;
+         break;
+
+      /***** Shared files of degree *****/
+      case ActAdmComDeg:
+      case ActReqRemFilComDeg:
+      case ActRemFilComDeg:
+      case ActRemFolComDeg:
+      case ActCopComDeg:
+      case ActPasComDeg:
+      case ActRemTreComDeg:
+      case ActFrmCreComDeg:
+      case ActCreFolComDeg:
+      case ActCreLnkComDeg:
+      case ActRenFolComDeg:
+      case ActRcvFilComDegDZ:
+      case ActRcvFilComDegCla:
+      case ActExpComDeg:
+      case ActConComDeg:
+      case ActZIPComDeg:
+      case ActReqDatComDeg:
+      case ActChgDatComDeg:
+      case ActDowComDeg:
+         Gbl.FileBrowser.Type = Brw_ADMI_SHARE_DEG;
          break;
 
       /***** Documents of course/group *****/
@@ -1853,25 +2021,38 @@ void Brw_GetParAndInitFileBrowser (void)
    switch (Gbl.CurrentAct)
      {
       case ActCreFolDocIns:	case ActRenFolDocIns:
+      case ActCreFolComIns:	case ActRenFolComIns:
+
       case ActCreFolDocCtr:	case ActRenFolDocCtr:
+      case ActCreFolComCtr:	case ActRenFolComCtr:
+
       case ActCreFolDocDeg:	case ActRenFolDocDeg:
+      case ActCreFolComDeg:	case ActRenFolComDeg:
+
       case ActCreFolDocCrs:	case ActRenFolDocCrs:
       case ActCreFolDocGrp:	case ActRenFolDocGrp:
+
       case ActCreFolComCrs:	case ActRenFolComCrs:
       case ActCreFolComGrp:	case ActRenFolComGrp:
+
       case ActCreFolMrkCrs:	case ActRenFolMrkCrs:
       case ActCreFolMrkGrp:	case ActRenFolMrkGrp:
+
       case ActCreFolAsgCrs:	case ActRenFolAsgCrs:
       case ActCreFolWrkCrs:	case ActRenFolWrkCrs:
       case ActCreFolAsgUsr:	case ActRenFolAsgUsr:
       case ActCreFolWrkUsr:	case ActRenFolWrkUsr:
+
       case ActCreFolBrf:	case ActRenFolBrf:
 	 /* Get the name of the new folder */
 	 Par_GetParToText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
       case ActCreLnkDocIns:
+      case ActCreLnkComIns:
       case ActCreLnkDocCtr:
+      case ActCreLnkComCtr:
       case ActCreLnkDocDeg:
+      case ActCreLnkComDeg:
       case ActCreLnkDocCrs:
       case ActCreLnkDocGrp:
       case ActCreLnkComCrs:
@@ -1897,14 +2078,17 @@ void Brw_GetParAndInitFileBrowser (void)
 	{
 	 case Brw_SHOW_DOCUM_INS:
 	 case Brw_ADMI_DOCUM_INS:
+	 case Brw_ADMI_SHARE_INS:
 	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentIns;
 	    break;
 	 case Brw_SHOW_DOCUM_CTR:
 	 case Brw_ADMI_DOCUM_CTR:
+	 case Brw_ADMI_SHARE_CTR:
 	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentCtr;
 	    break;
 	 case Brw_SHOW_DOCUM_DEG:
 	 case Brw_ADMI_DOCUM_DEG:
+	 case Brw_ADMI_SHARE_DEG:
 	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentDeg;
 	    break;
 	 case Brw_SHOW_DOCUM_CRS:
@@ -2135,6 +2319,7 @@ static void Brw_SetPathFileBrowser (void)
      {
       case Brw_SHOW_DOCUM_INS:
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
 	 Fil_CreateDirIfNotExists (Path);
@@ -2149,6 +2334,7 @@ static void Brw_SetPathFileBrowser (void)
          break;
       case Brw_SHOW_DOCUM_CTR:
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
 	 Fil_CreateDirIfNotExists (Path);
@@ -2163,6 +2349,7 @@ static void Brw_SetPathFileBrowser (void)
 	 break;
       case Brw_SHOW_DOCUM_DEG:
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
 	 sprintf (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
 	 Fil_CreateDirIfNotExists (Path);
@@ -2541,18 +2728,33 @@ static void Brw_SetMaxQuota (void)
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_INS;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_INS;
          break;
+      case Brw_ADMI_SHARE_INS:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_INS;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_INS;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_INS;
+	 break;
       case Brw_SHOW_DOCUM_CTR:
       case Brw_ADMI_DOCUM_CTR:
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_CTR;
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_CTR;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_CTR;
          break;
+      case Brw_ADMI_SHARE_CTR:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_CTR;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_CTR;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_CTR;
+	 break;
       case Brw_SHOW_DOCUM_DEG:
       case Brw_ADMI_DOCUM_DEG:
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_DEG;
          Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_DEG;
          Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_DEG;
          break;
+      case Brw_ADMI_SHARE_DEG:
+	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_DEG;
+         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_DEG;
+         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_DEG;
+	 break;
       case Brw_SHOW_DOCUM_CRS:
       case Brw_ADMI_DOCUM_CRS:
 	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_CRS;
@@ -3077,6 +3279,9 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_DOCUM_CTR] = Txt_Documents_management_area;	// Brw_ADMI_DOCUM_CTR
    Brw_TitleOfFileBrowser[Brw_SHOW_DOCUM_INS] = Txt_Documents_area;		// Brw_SHOW_DOCUM_INS
    Brw_TitleOfFileBrowser[Brw_ADMI_DOCUM_INS] = Txt_Documents_management_area;	// Brw_ADMI_DOCUM_INS
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_DEG] = Txt_Shared_files_area;		// Brw_ADMI_SHARE_DEG
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_CTR] = Txt_Shared_files_area;		// Brw_ADMI_SHARE_CTR
+   Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_INS] = Txt_Shared_files_area;		// Brw_ADMI_SHARE_INS
 
    /***** Check if the maximum quota has been exceeded *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -3293,10 +3498,13 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
   {
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution;
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre;
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree;
    extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course;
    extern const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course;
    extern const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course;
@@ -3340,6 +3548,10 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution);
 	 break;
+      case Brw_ADMI_SHARE_INS:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution);
+	 break;
       case Brw_SHOW_DOCUM_CTR:
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_centre);
@@ -3348,6 +3560,10 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre);
 	 break;
+      case Brw_ADMI_SHARE_CTR:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre);
+	 break;
       case Brw_SHOW_DOCUM_DEG:
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree);
@@ -3355,6 +3571,10 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
       case Brw_ADMI_DOCUM_DEG:
          sprintf (Subtitle,"(%s)",
                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree);
+	 break;
+      case Brw_ADMI_SHARE_DEG:
+         sprintf (Subtitle,"(%s)",
+                  Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree);
 	 break;
       case Brw_SHOW_DOCUM_CRS:
          sprintf (Subtitle,"(%s)",
@@ -3506,44 +3726,52 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove file views to files of an institution");
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of an institution");
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove clipboards related to files of an institution");
 
-   /***** Remove from database the entries that store the last time users visited file zones *****/
+   /***** Remove from database the entries that store
+          the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove file last visits to files of an institution");
 
-   /***** Remove from database the entries that store the sizes of the file zones *****/
+   /***** Remove from database the entries that store
+          the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove sizes of file zones of an institution");
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
+	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
    DB_QueryDELETE (Query,"can not remove files of an institution");
   }
@@ -3558,44 +3786,50 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove file views to files of a centre");
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a centre");
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove clipboards related to files of a centre");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove file last visits to files of a centre");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove sizes of file zones of a centre");
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
+	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
    DB_QueryDELETE (Query,"can not remove files of a centre");
   }
@@ -3610,44 +3844,50 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove file views to files of a degree");
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove expanded folders of a degree");
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove clipboards related to files of a degree");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove file last visits to files of a degree");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove sizes of file zones of a degree");
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
+	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
    DB_QueryDELETE (Query,"can not remove files of a degree");
   }
@@ -4074,10 +4314,13 @@ static void Brw_WriteFormFullTree (void)
      {
       case Brw_SHOW_DOCUM_INS:
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
       case Brw_SHOW_DOCUM_CTR:
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
       case Brw_SHOW_DOCUM_DEG:
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
       case Brw_SHOW_DOCUM_CRS:
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
@@ -4178,14 +4421,17 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
      {
       case Brw_SHOW_DOCUM_INS:
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
          break;
       case Brw_SHOW_DOCUM_CTR:
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
          break;
       case Brw_SHOW_DOCUM_DEG:
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
          break;
       case Brw_SHOW_DOCUM_CRS:
@@ -4452,7 +4698,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
                           Gbl.FileBrowser.Type == Brw_ADMI_DOCUM_DEG ||
                           Gbl.FileBrowser.Type == Brw_ADMI_DOCUM_CRS ||
                           Gbl.FileBrowser.Type == Brw_ADMI_DOCUM_GRP;
-   bool CommonZone      = Gbl.FileBrowser.Type == Brw_ADMI_SHARE_CRS ||
+   bool CommonZone      = Gbl.FileBrowser.Type == Brw_ADMI_SHARE_INS ||
+                          Gbl.FileBrowser.Type == Brw_ADMI_SHARE_CTR ||
+                          Gbl.FileBrowser.Type == Brw_ADMI_SHARE_DEG ||
+                          Gbl.FileBrowser.Type == Brw_ADMI_SHARE_CRS ||
                           Gbl.FileBrowser.Type == Brw_ADMI_SHARE_GRP;
    bool AssignmentsZone = Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_USR ||
                           Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_CRS;
@@ -6009,6 +6258,13 @@ static void Brw_WriteCurrentClipboard (void)
                   Txt_documents_management_area,
                   Txt_institution,Ins.ShortName);
          break;
+      case Brw_ADMI_SHARE_INS:
+	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ins_GetDataOfInstitutionByCod (&Ins,false);
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_shared_files_area,
+                  Txt_institution,Ins.ShortName);
+         break;
       case Brw_ADMI_DOCUM_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
@@ -6016,11 +6272,25 @@ static void Brw_WriteCurrentClipboard (void)
                   Txt_documents_management_area,
                   Txt_centre,Ctr.ShortName);
          break;
+      case Brw_ADMI_SHARE_CTR:
+	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_shared_files_area,
+                  Txt_centre,Ctr.ShortName);
+         break;
       case Brw_ADMI_DOCUM_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
+                  Txt_degree,Deg.ShortName);
+         break;
+      case Brw_ADMI_SHARE_DEG:
+	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
+         fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
+                  Txt_shared_files_area,
                   Txt_degree,Deg.ShortName);
          break;
       case Brw_ADMI_DOCUM_CRS:
@@ -6247,14 +6517,17 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
 	 case Brw_ADMI_DOCUM_INS:
+         case Brw_ADMI_SHARE_INS:
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentIns.Ins.InsCod)
                return true;		// I am in the institution of the clipboard
             break;
 	 case Brw_ADMI_DOCUM_CTR:
+         case Brw_ADMI_SHARE_CTR:
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentCtr.Ctr.CtrCod)
                return true;		// I am in the centre of the clipboard
             break;
 	 case Brw_ADMI_DOCUM_DEG:
+         case Brw_ADMI_SHARE_DEG:
             if (Gbl.FileBrowser.Clipboard.Cod == Gbl.CurrentDeg.Deg.DegCod)
                return true;		// I am in the degree of the clipboard
             break;
@@ -6341,10 +6614,13 @@ static long Brw_GetCodForClipboard (void)
    switch (Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
      {
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
 	 return Gbl.CurrentIns.Ins.InsCod;
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
 	 return Gbl.CurrentCtr.Ctr.CtrCod;
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
 	 return Gbl.CurrentDeg.Deg.DegCod;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
@@ -6687,10 +6963,13 @@ static long Brw_GetCodForExpandedFolders (void)
    switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
      {
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
 	 return Gbl.CurrentIns.Ins.InsCod;
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
 	 return Gbl.CurrentCtr.Ctr.CtrCod;
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
 	 return Gbl.CurrentDeg.Deg.DegCod;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
@@ -6768,16 +7047,19 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
    switch (FileBrowser)
      {
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
                   (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
@@ -6910,6 +7192,7 @@ static void Brw_PasteClipboard (void)
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
         {
          case Brw_ADMI_DOCUM_INS:
+         case Brw_ADMI_SHARE_INS:
             Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ins_GetDataOfInstitutionByCod (&Ins,false))
 	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
@@ -6921,6 +7204,7 @@ static void Brw_PasteClipboard (void)
                Lay_ShowErrorAndExit ("The institution of copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_CTR:
+         case Brw_ADMI_SHARE_CTR:
             Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ctr_GetDataOfCentreByCod (&Ctr))
 	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
@@ -6932,6 +7216,7 @@ static void Brw_PasteClipboard (void)
                Lay_ShowErrorAndExit ("The centre of copy source does not exist.");
             break;
          case Brw_ADMI_DOCUM_DEG:
+         case Brw_ADMI_SHARE_DEG:
             Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Deg_GetDataOfDegreeByCod (&Deg))
 	       sprintf (PathOrg,"%s/%s/%02u/%u/%s",
@@ -8532,8 +8817,11 @@ void Brw_ShowFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOCUM_INS:
+	       case Brw_ADMI_SHARE_INS:
 	       case Brw_ADMI_DOCUM_CTR:
+	       case Brw_ADMI_SHARE_CTR:
 	       case Brw_ADMI_DOCUM_DEG:
+	       case Brw_ADMI_SHARE_DEG:
 	       case Brw_ADMI_DOCUM_CRS:
 	       case Brw_ADMI_SHARE_CRS:
 		  ICanChangePublic  = true;
@@ -9218,8 +9506,11 @@ void Brw_ChgFileMetadata (void)
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_ADMI_DOCUM_INS:
+         case Brw_ADMI_SHARE_INS:
          case Brw_ADMI_DOCUM_CTR:
+         case Brw_ADMI_SHARE_CTR:
          case Brw_ADMI_DOCUM_DEG:
+         case Brw_ADMI_SHARE_DEG:
          case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
             PublicFile = Brw_GetParamPublicFile ();
@@ -9405,10 +9696,14 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       /* File is hidden? (row[7]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_SHOW_DOCUM_INS:	case Brw_ADMI_DOCUM_INS:
-         case Brw_SHOW_DOCUM_CTR:	case Brw_ADMI_DOCUM_CTR:
-         case Brw_SHOW_DOCUM_DEG:	case Brw_ADMI_DOCUM_DEG:
-         case Brw_SHOW_DOCUM_CRS:	case Brw_ADMI_DOCUM_CRS:
+         case Brw_SHOW_DOCUM_INS:
+         case Brw_ADMI_DOCUM_INS:
+         case Brw_SHOW_DOCUM_CTR:
+         case Brw_ADMI_DOCUM_CTR:
+         case Brw_SHOW_DOCUM_DEG:
+         case Brw_ADMI_DOCUM_DEG:
+         case Brw_SHOW_DOCUM_CRS:
+         case Brw_ADMI_DOCUM_CRS:
             FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
             break;
          default:
@@ -9419,10 +9714,17 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       /* Is a public file? (row[8]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_SHOW_DOCUM_INS:	case Brw_ADMI_DOCUM_INS:
-         case Brw_SHOW_DOCUM_CTR:	case Brw_ADMI_DOCUM_CTR:
-         case Brw_SHOW_DOCUM_DEG:	case Brw_ADMI_DOCUM_DEG:
-         case Brw_SHOW_DOCUM_CRS:	case Brw_ADMI_DOCUM_CRS:
+         case Brw_SHOW_DOCUM_INS:
+         case Brw_ADMI_DOCUM_INS:
+         case Brw_ADMI_SHARE_INS:
+         case Brw_SHOW_DOCUM_CTR:
+         case Brw_ADMI_DOCUM_CTR:
+         case Brw_ADMI_SHARE_CTR:
+         case Brw_SHOW_DOCUM_DEG:
+         case Brw_ADMI_DOCUM_DEG:
+         case Brw_ADMI_SHARE_DEG:
+         case Brw_SHOW_DOCUM_CRS:
+         case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
             FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
             break;
@@ -9519,10 +9821,14 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Is a hidden file? (row[7]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_SHOW_DOCUM_INS:	case Brw_ADMI_DOCUM_INS:
-         case Brw_SHOW_DOCUM_CTR:	case Brw_ADMI_DOCUM_CTR:
-         case Brw_SHOW_DOCUM_DEG:	case Brw_ADMI_DOCUM_DEG:
-         case Brw_SHOW_DOCUM_CRS:	case Brw_ADMI_DOCUM_CRS:
+         case Brw_SHOW_DOCUM_INS:
+         case Brw_ADMI_DOCUM_INS:
+         case Brw_SHOW_DOCUM_CTR:
+         case Brw_ADMI_DOCUM_CTR:
+         case Brw_SHOW_DOCUM_DEG:
+         case Brw_ADMI_DOCUM_DEG:
+         case Brw_SHOW_DOCUM_CRS:
+         case Brw_ADMI_DOCUM_CRS:
             FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
             break;
          default:
@@ -9533,10 +9839,17 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Is a public file? (row[8]) */
       switch (Gbl.FileBrowser.Type)
         {
-         case Brw_SHOW_DOCUM_INS:	case Brw_ADMI_DOCUM_INS:
-         case Brw_SHOW_DOCUM_CTR:	case Brw_ADMI_DOCUM_CTR:
-         case Brw_SHOW_DOCUM_DEG:	case Brw_ADMI_DOCUM_DEG:
-         case Brw_SHOW_DOCUM_CRS:	case Brw_ADMI_DOCUM_CRS:
+         case Brw_SHOW_DOCUM_INS:
+         case Brw_ADMI_DOCUM_INS:
+         case Brw_ADMI_SHARE_INS:
+         case Brw_SHOW_DOCUM_CTR:
+         case Brw_ADMI_DOCUM_CTR:
+         case Brw_ADMI_SHARE_CTR:
+         case Brw_SHOW_DOCUM_DEG:
+         case Brw_ADMI_DOCUM_DEG:
+         case Brw_ADMI_SHARE_DEG:
+         case Brw_SHOW_DOCUM_CRS:
+         case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
             FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
             break;
@@ -9877,10 +10190,13 @@ long Brw_GetCodForFiles (void)
    switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
      {
       case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
 	 return Gbl.CurrentIns.Ins.InsCod;
       case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
 	 return Gbl.CurrentCtr.Ctr.CtrCod;
       case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
 	 return Gbl.CurrentDeg.Deg.DegCod;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
@@ -10674,6 +10990,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 case Brw_ADMI_DOCUM_GRP:
 	    Title = Txt_Documents_area;
 	    break;
+         case Brw_ADMI_SHARE_INS:
+         case Brw_ADMI_SHARE_CTR:
+         case Brw_ADMI_SHARE_DEG:
 	 case Brw_ADMI_SHARE_CRS:
 	 case Brw_ADMI_SHARE_GRP:
 	    Title = Txt_Shared_files_area;

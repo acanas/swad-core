@@ -186,8 +186,11 @@ void Lay_WriteStartOfPage (void)
    // images/spritemap@2x.png
    // images/spritemap.png
    if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
+       Gbl.CurrentAct == ActFrmCreComIns ||	// Brw_ADMI_SHARE_INS
        Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
+       Gbl.CurrentAct == ActFrmCreComCtr ||	// Brw_ADMI_SHARE_CTR
        Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
+       Gbl.CurrentAct == ActFrmCreComDeg ||	// Brw_ADMI_SHARE_DEG
        Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
        Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
        Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_ADMI_SHARE_CRS
@@ -435,8 +438,11 @@ static void Lay_WriteScripts (void)
    // images/spritemap@2x.png
    // images/spritemap.png
    if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
+       Gbl.CurrentAct == ActFrmCreComIns ||	// Brw_ADMI_SHARE_INS
        Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
+       Gbl.CurrentAct == ActFrmCreComCtr ||	// Brw_ADMI_SHARE_CTR
        Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
+       Gbl.CurrentAct == ActFrmCreComDeg ||	// Brw_ADMI_SHARE_DEG
        Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
        Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
        Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_ADMI_SHARE_CRS

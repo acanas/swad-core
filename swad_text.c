@@ -1537,6 +1537,27 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_inst
 	"acess&iacute;vel para leitura e escrita pelos administradores da institui&ccedil;&atilde;o";
 #endif
 
+const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_centre =
+#if   L==0
+	"accessible per a lectura i escriptura per estudiants i professors del centre";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Lehrinstitut";
+#elif L==2
+	"accessible for reading and writing by students and teachers of the centre";
+#elif L==3
+	"accesible para lectura y escritura por estudiantes y profesores del centro";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants du centre";
+#elif L==5
+	"accesible para lectura y escritura por estudiantes y profesores del centro";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte degli studenti e dei professori del centro";
+#elif L==7
+	"dostep do odczytu i zapisu przez uczni&oacute;w i nauczycieli centrum";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos alunos e professores do centro";
+#endif
+
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course =
 #if   L==0
 	"accessible per a lectura i escriptura per estudiants i professors de l'assignatura";
@@ -1556,6 +1577,48 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 	"dostep do odczytu i zapisu przez uczni&oacute;w i nauczycieli zajec";
 #elif L==8
 	"acess&iacute;vel para leitura e escrita pelos alunos e professores da disciplina";
+#endif
+
+const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree =
+#if   L==0
+	"accessible per a lectura i escriptura per estudiants i professors de la titulaci&oacute;";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Studiengang";
+#elif L==2
+	"accessible for reading and writing by students and teachers of the degree";
+#elif L==3
+	"accesible para lectura y escritura por estudiantes y profesores de la titulaci&oacute;n";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants de l'&eacute;tude";
+#elif L==5
+	"accesible para lectura y escritura por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte degli studenti e dei professori della laurea";
+#elif L==7
+	"dostep do odczytu i zapisu przez uczni&oacute;w i nauczycieli stopnia";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos alunos e professores da titula&ccedil;&atilde;o";
+#endif
+
+const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution =
+#if   L==0
+	"accessible per a lectura i escriptura per estudiants i professors de la instituci&oacute;";
+#elif L==1
+	"zum Schreiben zug&auml;nglich f&uuml;r Studenten und Lehrkr&auml;fte der Hochschule";
+#elif L==2
+	"accessible for reading and writing by students and teachers of the institution";
+#elif L==3
+	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";
+#elif L==4
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
+#elif L==5
+	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"accessibile per la lettura e la scrittura da parte degli studenti e dei professori della istituzione";
+#elif L==7
+	"dostep do odczytu i zapisu przez uczni&oacute;w i nauczycieli instytucji";
+#elif L==8
+	"acess&iacute;vel para leitura e escrita pelos alunos e professores da institui&ccedil;&atilde;o";
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course =
@@ -16377,7 +16440,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComIns
+#if   L==0
+	"Compartits"
+#elif L==1
+	"Freigegebene"
+#elif L==2
+	"Shared"
+#elif L==3
+	"Compartidos"
+#elif L==4
+	"Partag&eacute;s"
+#elif L==5
+	"Compartidos"	// Okoteve traducción
+#elif L==6
+	"Condivisi"
+#elif L==7
+	"Udost&eogon;pnione"
+#elif L==8
+	"Compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -16477,7 +16560,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComCtr
+#if   L==0
+	"Compartits"
+#elif L==1
+	"Freigegebene"
+#elif L==2
+	"Shared"
+#elif L==3
+	"Compartidos"
+#elif L==4
+	"Partag&eacute;s"
+#elif L==5
+	"Compartidos"	// Okoteve traducción
+#elif L==6
+	"Condivisi"
+#elif L==7
+	"Udost&eogon;pnione"
+#elif L==8
+	"Compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -16580,7 +16683,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComDeg
+#if   L==0
+	"Compartits"
+#elif L==1
+	"Freigegebene"
+#elif L==2
+	"Shared"
+#elif L==3
+	"Compartidos"
+#elif L==4
+	"Partag&eacute;s"
+#elif L==5
+	"Compartidos"	// Okoteve traducción
+#elif L==6
+	"Condivisi"
+#elif L==7
+	"Udost&eogon;pnione"
+#elif L==8
+	"Compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -18255,7 +18378,31 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComIns
+#if   L==0
+	"Arxius compartits per professors i estudiants"
+	" de l'instituci&oacute;"
+#elif L==1
+	"Freigegebene Dateien"
+#elif L==2
+	"Files shared by teachers and students"
+	" of the institution"
+#elif L==3
+	"Archivos compartidos por profesores y estudiantes"
+	" de la instituci&oacute;n"
+#elif L==4
+	"Fichiers partag&eacute;s"
+#elif L==5
+	"Archivos compartidos por profesores y estudiantes"
+	" de la instituci&oacute;n"	// Okoteve traducción
+#elif L==6
+	"File condivisi"
+#elif L==7
+	"Pliki udost&eogon;pnione"
+#elif L==8
+	"Arquivos compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -18355,7 +18502,31 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComCtr
+#if   L==0
+	"Arxius compartits per professors i estudiants"
+	" del centre"
+#elif L==1
+	"Freigegebene Dateien"
+#elif L==2
+	"Files shared by teachers and students"
+	" of the centre"
+#elif L==3
+	"Archivos compartidos por profesores y estudiantes"
+	" del centro"
+#elif L==4
+	"Fichiers partag&eacute;s"
+#elif L==5
+	"Archivos compartidos por profesores y estudiantes"
+	" del centro"	// Okoteve traducción
+#elif L==6
+	"File condivisi"
+#elif L==7
+	"Pliki udost&eogon;pnione"
+#elif L==8
+	"Arquivos compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -18458,7 +18629,31 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	NULL,
+	// ActAdmComDeg
+#if   L==0
+	"Arxius compartits per professors i estudiants"
+	" de la titulaci&oacute;"
+#elif L==1
+	"Freigegebene Dateien"
+#elif L==2
+	"Files shared by teachers and students"
+	" of the degree"
+#elif L==3
+	"Archivos compartidos por profesores y estudiantes"
+	" de la titulaci&oacute;n"
+#elif L==4
+	"Fichiers partag&eacute;s"
+#elif L==5
+	"Archivos compartidos por profesores y estudiantes"
+	" de la titulaci&oacute;n"	// Okoteve traducción
+#elif L==6
+	"File condivisi"
+#elif L==7
+	"Pliki udost&eogon;pnione"
+#elif L==8
+	"Arquivos compartilhados"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -32623,6 +32818,69 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 	 "documents"		// Potrzebujesz tlumaczenie
 #elif L==8
 	 "documentos"
+#endif
+	 ,
+	 // Brw_ADMI_SHARE_DEG
+#if   L==0
+	 "compartits"
+#elif L==1
+	 "Freigegebene"
+#elif L==2
+	 "shared"
+#elif L==3
+	 "compartidos"
+#elif L==4
+	 "partages"
+#elif L==5
+	 "compartidos"			// Okoteve traducción
+#elif L==6
+	 "condivisi"
+#elif L==7
+	 "shared"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "comum"
+#endif
+	 ,
+	 // Brw_ADMI_SHARE_CTR
+#if   L==0
+	 "compartits"
+#elif L==1
+	 "Freigegebene"
+#elif L==2
+	 "shared"
+#elif L==3
+	 "compartidos"
+#elif L==4
+	 "partages"
+#elif L==5
+	 "compartidos"			// Okoteve traducción
+#elif L==6
+	 "condivisi"
+#elif L==7
+	 "shared"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "comum"
+#endif
+	 ,
+	 // Brw_ADMI_SHARE_INS
+#if   L==0
+	 "compartits"
+#elif L==1
+	 "Freigegebene"
+#elif L==2
+	 "shared"
+#elif L==3
+	 "compartidos"
+#elif L==4
+	 "partages"
+#elif L==5
+	 "compartidos"			// Okoteve traducción
+#elif L==6
+	 "condivisi"
+#elif L==7
+	 "shared"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "comum"
 #endif
 	};
 

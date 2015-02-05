@@ -769,7 +769,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
 			"%s"
@@ -783,7 +783,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
@@ -798,7 +798,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 	                "'-1'"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -826,12 +826,15 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_INS,
+		  (unsigned) Brw_ADMI_SHARE_INS,
 		  RangeQuery,
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CTR,
+		  (unsigned) Brw_ADMI_SHARE_CTR,
 		  RangeQuery,
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_DEG,
+		  (unsigned) Brw_ADMI_SHARE_DEG,
 		  RangeQuery,
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -987,7 +990,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
 			"%s"
@@ -1001,7 +1004,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
@@ -1016,7 +1019,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,degrees,centres,institutions,countries"
 			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser='%u'"
+			" AND files.FileBrowser IN ('%u','%u')"
 			" AND files.Cod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -1074,12 +1077,15 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_INS,
+		  (unsigned) Brw_ADMI_SHARE_INS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CTR,
+		  (unsigned) Brw_ADMI_SHARE_CTR,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_DEG,
+		  (unsigned) Brw_ADMI_SHARE_DEG,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
