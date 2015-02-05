@@ -9291,18 +9291,27 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
    switch (Gbl.CurrentAct)	// Only in actions where edition is allowed
      {
       case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
+      case ActReqDatComIns:		case ActChgDatComIns:
+
       case ActReqDatAdmDocCtr:		case ActChgDatAdmDocCtr:
+      case ActReqDatComCtr:		case ActChgDatComCtr:
+
       case ActReqDatAdmDocDeg:		case ActChgDatAdmDocDeg:
+      case ActReqDatComDeg:		case ActChgDatComDeg:
+
       case ActReqDatAdmDocCrs:		case ActChgDatAdmDocCrs:
       case ActReqDatAdmDocGrp:		case ActChgDatAdmDocGrp:
       case ActReqDatComCrs:		case ActChgDatComCrs:
       case ActReqDatComGrp:		case ActChgDatComGrp:
+
       case ActReqDatAsgUsr:		case ActChgDatAsgUsr:
       case ActReqDatAsgCrs:		case ActChgDatAsgCrs:
       case ActReqDatWrkCrs:		case ActChgDatWrkCrs:
       case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
+
       case ActReqDatAdmMrkCrs:		case ActChgDatAdmMrkCrs:
       case ActReqDatAdmMrkGrp:		case ActChgDatAdmMrkGrp:
+
       case ActReqDatBrf:		case ActChgDatBrf:
 	 if (Gbl.Usrs.Me.Logged)							// I am logged
 	   {
