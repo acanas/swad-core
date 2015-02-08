@@ -36,17 +36,17 @@
 //	 Sería completa esta aplicación, si la asistencia se incluyera, automáticamente, en el apartado de evaluación de cada alumno. De esta forma podríamos ver sus trabajos y asistencias de forma personalizada.
 // TODO: OpenSWAD.org: ¿Qué debería tener una buena gestión de grupos? Es para tomar ideas ;)
 //       José Raúl Canay @raulcanay: por ejemplo, que puedas sacar un listado exportable de en qué grupos está una persona de quienes están en un grupo.
-// TODO: Remove debug in PRADO
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.6 (2015/02/08)"
+#define Log_PLATFORM_VERSION	"SWAD 14.74.7 (2015/02/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.74.7:  Feb 08, 2015	Link to register/remove several users. (178029 lines)
         Version 14.74.6:  Feb 08, 2015	Changes in layout of form to register/remove one user. (178009 lines)
         Version 14.74.5:  Feb 08, 2015	Changes in layout of form to register/remove users. (178038 lines)
         Version 14.74.4:  Feb 08, 2015	Changes in layout of form to register/remove users. (178000 lines)

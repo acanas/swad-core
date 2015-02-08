@@ -1873,25 +1873,25 @@ const char *Txt_Admin_user =
 	"Gerenciar utilizador";
 #endif
 
-const char *Txt_Admin_users =
+const char *Txt_Admin_several_users =
 #if   L==0
-	"Administrar usuaris";
+	"Administrar diversos usuaris";
 #elif L==1
-	"Verwalten Benutzern";
+	"Verwalten Sie mehrere Benutzer";
 #elif L==2
-	"Admin users";
+	"Admin several users";
 #elif L==3
-	"Administrar usuarios";
+	"Administrar varios usuarios";
 #elif L==4
-	"G&eacute;rer utilisateurs";
+	"G&eacute;rer plusieurs utilisateurs";
 #elif L==5
-	"Administrar usuarios";	// Okoteve traducción
+	"Administrar varios usuarios";	// Okoteve traducción
 #elif L==6
-	"Gestire utenti";
+	"Gestire pi&ugrave; utenti";
 #elif L==7
-	"Zarz&aogon;dzaj u&zdot;ytkownikow";
+	"Zarz&aogon;dzaj wielu u&zdot;ytkownik&oacute;w";
 #elif L==8
-	"Gerenciar utilizadores";
+	"Gerenciar v&aacute;rios utilizadores";
 #endif
 
 const char *Txt_All =

@@ -88,7 +88,7 @@ extern struct Globals Gbl;
 
 static void Enr_ShowFormRegRemSeveralUsrs (void);
 
-static void Enr_PutFormToRemOldUsrs (void);
+static void Enr_PutLinkToRemOldUsrs (void);
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
@@ -97,9 +97,10 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
 static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecifiedUsrs);
 
-static void Enr_PutFormToRemAllStdsThisCrs (void);
+static void Enr_PutLinkToRemAllStdsThisCrs (void);
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
-static void Enr_PutFormToAdminOneUsr (void);
+static void Enr_PutLinkToAdminOneUsr (void);
+static void Enr_PutLinkToAdminSeveralUsrs (void);
 
 static void Enr_ReqAnotherUsrIDToRegisterRemove (void);
 static void Enr_AskIfRegRemMe (void);
@@ -500,7 +501,7 @@ void Enr_ReqAdminUsrs (void)
 static void Enr_ShowFormRegRemSeveralUsrs (void)
   {
    extern const char *The_ClassTitle[The_NUM_THEMES];
-   extern const char *Txt_Admin_users;
+   extern const char *Txt_Admin_several_users;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Option_a_Import_students_from_the_official_lists;
    extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
@@ -515,21 +516,24 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *Txt_Confirm;
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
+   /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
-   /***** Put form to go to admin one user *****/
-   Enr_PutFormToAdminOneUsr ();
+   /* Put link to go to admin one user */
+   Enr_PutLinkToAdminOneUsr ();
 
-   /***** Put link to remove all the students in the current course *****/
+   /* Put link to remove all the students in the current course */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-      Enr_PutFormToRemAllStdsThisCrs ();
+      Enr_PutLinkToRemAllStdsThisCrs ();
 
-   /***** Put link to remove old users *****/
+   /* Put link to remove old users */
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-      Enr_PutFormToRemOldUsrs ();
+      Enr_PutLinkToRemOldUsrs ();
+
+   fprintf (Gbl.F.Out,"<div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_users);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_several_users);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td>");
 
@@ -614,8 +618,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Lay_PutSendButton (Txt_Confirm);
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</form>");
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -627,7 +630,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 /******************** Put a link (form) to remove old users ******************/
 /*****************************************************************************/
 
-static void Enr_PutFormToRemOldUsrs (void)
+static void Enr_PutLinkToRemOldUsrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Remove_old_users;
@@ -778,7 +781,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"UsrsIDs\" cols=\"80\" rows=\"20\">",
+                      "<textarea name=\"UsrsIDs\" cols=\"90\" rows=\"15\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
 
@@ -1711,7 +1714,7 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 /**** Put a link (form) to remove all the students in the current course *****/
 /*****************************************************************************/
 
-static void Enr_PutFormToRemAllStdsThisCrs (void)
+static void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Remove_all_students;
@@ -2575,7 +2578,7 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 /********************** Write a form to admin one user ***********************/
 /*****************************************************************************/
 
-static void Enr_PutFormToAdminOneUsr (void)
+static void Enr_PutLinkToAdminOneUsr (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Admin_one_user;
@@ -2583,6 +2586,21 @@ static void Enr_PutFormToAdminOneUsr (void)
    Act_FormStart (ActReqMdfOneUsr);
    Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Admin_one_user,Txt_Admin_one_user);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
+/******************* Write a form to admin several users *********************/
+/*****************************************************************************/
+
+static void Enr_PutLinkToAdminSeveralUsrs (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Admin_several_users;
+
+   Act_FormStart (ActReqMdfSevUsr);
+   Act_LinkFormSubmit (Txt_Admin_several_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("configtest",Txt_Admin_several_users,Txt_Admin_several_users);
    fprintf (Gbl.F.Out,"</form>");
   }
 
@@ -2642,11 +2660,19 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
   {
    extern const char *Txt_Admin_one_user;
 
-   /***** Put link to remove old users *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   /***** Put contextual links *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
+       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-      Enr_PutFormToRemOldUsrs ();
+
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+         /* Put link to go to admin several users */
+	 Enr_PutLinkToAdminSeveralUsrs ();
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+         /* Put link to remove old users */
+	 Enr_PutLinkToRemOldUsrs ();
+
       fprintf (Gbl.F.Out,"</div>");
      }
 
