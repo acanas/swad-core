@@ -243,8 +243,11 @@ void Dpt_EditDepartments (void)
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
-   /***** Help message *****/
-   if (!Gbl.Dpts.Num)
+   if (Gbl.Dpts.Num)
+      /***** Put link (form) to view departments *****/
+      Lay_PutFormToView (ActSeeDpt);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_departments);
 
    /***** Put a form to create a new department *****/

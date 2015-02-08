@@ -714,14 +714,14 @@ void Ins_EditInstitutions (void)
   {
    extern const char *Txt_No_institutions_have_been_created_in_this_country;
 
-   /***** Put link (form) to view institutions *****/
-   Lay_PutFormToView (ActSeeIns);
-
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
-   /***** Help message *****/
-   if (!Gbl.Inss.Num)
+   if (Gbl.Inss.Num)
+      /***** Put link (form) to view institutions *****/
+      Lay_PutFormToView (ActSeeIns);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
 
    /***** Put a form to create a new institution *****/

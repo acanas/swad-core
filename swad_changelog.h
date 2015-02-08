@@ -41,7 +41,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.2 (2015/02/08)"
+#define Log_PLATFORM_VERSION	"SWAD 14.74.3 (2015/02/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
@@ -49,6 +49,13 @@
 Mejorar formulario de inscripción de usuarios poniéndole marco blanco
 Quitar debug en llamada a PRADO
 
+        Version 14.74.3:  Feb 08, 2015	Button to view banners.
+					Button to view mail domains.
+					Button to view institutional links.
+					Button to view plugins.
+					Button to view departments.
+					Button to view holidays.
+					Button to view places. (178027 lines)
         Version 14.74.2:  Feb 08, 2015	Fixed bug in banners. (177994 lines)
         Version 14.74.1:  Feb 06, 2015	Fixed bug in shared files. (177986 lines)
         Version 14.74:    Feb 05, 2015	Shared files for institution, centre and degree. (177982 lines)

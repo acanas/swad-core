@@ -1052,11 +1052,11 @@ static void Deg_EditDegreeTypes (void)
   {
    extern const char *Txt_There_are_no_types_of_degree;
 
-   /***** Put link (form) to view degree types *****/
-   Lay_PutFormToView (ActSeeDegTyp);
-
-   /***** Help message *****/
-   if (!Gbl.Degs.DegTypes.Num)
+   if (Gbl.Degs.DegTypes.Num)
+      /***** Put link (form) to view degree types *****/
+      Lay_PutFormToView (ActSeeDegTyp);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
 
    /***** Put a form to create a new degree type *****/

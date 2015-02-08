@@ -708,9 +708,6 @@ void Ctr_EditCentres (void)
    extern const char *Txt_There_is_no_list_of_institutions;
    extern const char *Txt_You_must_create_at_least_one_institution_before_creating_centres;
 
-   /***** Put link (form) to view centres *****/
-   Lay_PutFormToView (ActSeeCtr);
-
    /***** Get list of institutions of the current country *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_MINIMAL_DATA);
    if (Gbl.Inss.Num)
@@ -721,8 +718,11 @@ void Ctr_EditCentres (void)
       /***** Get list of centres *****/
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
-      /***** Help message *****/
-      if (!Gbl.Ctrs.Num)
+      if (Gbl.Ctrs.Num)
+	 /***** Put link (form) to view centres *****/
+         Lay_PutFormToView (ActSeeCtr);
+      else
+         /***** Help message *****/
 	 Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
 
       /***** Put a form to create a new centre *****/

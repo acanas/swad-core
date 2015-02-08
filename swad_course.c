@@ -1180,11 +1180,11 @@ static void Crs_EditCourses (void)
   {
    extern const char *Txt_No_courses_have_been_created_in_this_degree;
 
-   /***** Put link (form) to view courses *****/
-   Lay_PutFormToView (ActSeeCrs);
-
-   /***** Help message *****/
-   if (!Gbl.CurrentDeg.Deg.NumCourses)	// There aren't courses
+   if (Gbl.CurrentDeg.Deg.NumCourses)
+      /***** Put link (form) to view courses *****/
+      Lay_PutFormToView (ActSeeCrs);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
 
    /***** Put a form to create or request a new course *****/

@@ -828,15 +828,15 @@ void Cty_EditCountries (void)
   {
    extern const char *Txt_No_countries_have_been_created;
 
-   /***** Put link (form) to view countries *****/
-   Lay_PutFormToView (ActSeeCty);
-
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
-   /***** Help message *****/
-   if (!Gbl.Ctys.Num)
+   if (Gbl.Ctys.Num)
+      /***** Put link (form) to view countries *****/
+      Lay_PutFormToView (ActSeeCty);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_No_countries_have_been_created);
 
    /***** Put a form to create a new country *****/

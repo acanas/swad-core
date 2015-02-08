@@ -220,8 +220,11 @@ void Hld_EditHolidays (void)
    /***** Get list of holidays *****/
    Hld_GetListHolidays ();
 
-   /***** Help message *****/
-   if (!Gbl.Hlds.Num)
+   if (Gbl.Hlds.Num)
+      /***** Put link (form) to view degree types *****/
+      Lay_PutFormToView (ActSeeHld);
+   else
+      /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_holidays);
 
    /***** Put a form to create a new holiday *****/
