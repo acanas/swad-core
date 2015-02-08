@@ -364,7 +364,6 @@ void Imp_ListMyImpGrpsAndStdsForm (void)
 
 static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
   {
-   extern const char *Txt_There_is_no_external_service_for_authentication_and_official_lists;
    extern const char *Txt_Could_not_get_the_official_list_of_your_groups_and_students_;
    extern const char *Txt_To_get_the_official_list_of_your_groups_and_students_;
    char PathRelParamsToCommandsPriv[PATH_MAX+1];
@@ -373,10 +372,8 @@ static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
    char Command[2048];
    int ReturnCode;
 
-   if (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] == '\0')
-      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_external_service_for_authentication_and_official_lists);
    /***** Try to get lists from database *****/
-   else if (!Imp_GetAndListImpGrpsAndStdsFromDB (ItsAFormToRegRemStds))
+   if (!Imp_GetAndListImpGrpsAndStdsFromDB (ItsAFormToRegRemStds))
      {
       /***** Remove old imported students and groups *****/
       Imp_RemoveOldImpStdsAndGrps ();

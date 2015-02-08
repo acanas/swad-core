@@ -502,7 +502,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *The_ClassTitle[The_NUM_THEMES];
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Option_a_Import_students_from_the_official_lists;
-   extern const char *Txt_There_is_no_external_service_for_authentication_and_official_lists;
    extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
    extern const char *Txt_Option_b_Type_or_paste_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
@@ -513,6 +512,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_5_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
+   bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
@@ -537,26 +537,25 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_1_Provide_a_list_of_users);
 
-   /* Option a: get students from official lists */
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
-                      "</div>",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Option_a_Import_students_from_the_official_lists);
-   if (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] == '\0')
-      Lay_ShowAlert (Lay_INFO,Txt_There_is_no_external_service_for_authentication_and_official_lists);
-   else
+   if (ExternalUsrsServiceAvailable)
      {
+      /* Option a: get students from official lists */
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+			 "<br />%s<br />&nbsp;"
+			 "</div>",
+	       The_ClassTitle[Gbl.Prefs.Theme],
+	       Txt_Option_a_Import_students_from_the_official_lists);
       Lay_ShowAlert (Lay_INFO,Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course);
       Imp_ListMyImpGrpsAndStdsForm ();
+
+      /* Option b: get students' IDs from pasted text */
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+			 "<br />%s<br />&nbsp;"
+			 "</div>",
+	       The_ClassTitle[Gbl.Prefs.Theme],
+	       Txt_Option_b_Type_or_paste_a_list_of_users);
      }
 
-   /* Option b: get students' IDs from pasted text */
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
-                      "</div>",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Option_b_Type_or_paste_a_list_of_users);
    Lay_ShowAlert (Lay_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
 

@@ -1967,7 +1967,6 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
   {
    extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
-   extern const char *Txt_There_is_no_external_service_for_authentication_and_official_lists;
    extern const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_;
    struct ListUsrCods ListUsrCods;
    bool ItSeemsANewUsrIsEnteringFromExternalSite = false;
@@ -2067,10 +2066,8 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
 
    /***** Validate session:
           the call to SWAD is really coming from external site? *****/
-   if (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] == '\0')
-      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_external_service_for_authentication_and_official_lists);
-   else if (Gbl.Imported.ExternalUsrId[0] &&
-	    Gbl.Imported.ExternalSesId[0])
+   if (Gbl.Imported.ExternalUsrId[0] &&
+       Gbl.Imported.ExternalSesId[0])
      {
       /***** Parameters to command used to import data are passed through a temporary file *****/
       /* If the private directory does not exist, create it */
@@ -6643,8 +6640,9 @@ static void Usr_PutLinkToListOfficialStudents (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Official_students;
+   bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
-   if (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] &&		// There is an external service for authentication and official lists
+   if (ExternalUsrsServiceAvailable &&				// There is an external service for authentication and official lists
        Gbl.Imported.ExternalUsrId[0] &&			// I was authenticated from external service...
        Gbl.Imported.ExternalSesId[0] &&
        Gbl.Imported.ExternalRole == Rol_ROLE_TEACHER)	// ...as a teacher

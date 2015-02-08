@@ -43301,27 +43301,6 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 	"There is already a non-empty folder named <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_There_is_no_external_service_for_authentication_and_official_lists =
-#if   L==0
-	"No hi ha cap servei extern d'autenticaci&oacute; i llistes oficials.";
-#elif L==1
-	"Es gibt keinen externen Dienstleister f&uuml;r die Authentifizierung und offiziellen Listen.";
-#elif L==2
-	"There is no external service for authentication and official lists.";
-#elif L==3
-	"No existe ning&uacute;n servicio externo de autenticaci&oacute;n y listas oficiales.";
-#elif L==4
-	"Il n'ya pas de service externe pour authentification et listes officiels.";
-#elif L==5
-	"No existe ning&uacute;n servicio externo de autenticaci&oacute;n y listas oficiales.";	// Okoteve traducción
-#elif L==6
-	"Non c'&egrave; nessun servizio esterno per autenticazione e liste ufficiale.";
-#elif L==7
-	"Nie ma zewn&eogon;trznych us&lstrok;ug uwierzytelniania.";
-#elif L==8
-	"N&atilde;o h&aacute; servi&ccedil;o externo de autentica&ccedil;&atilde;o e listas oficiales.";
-#endif
-
 const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
 #if   L==0
 	"No se puede saber cu&aacute;ntos usuarios distintos han accedido sin identificarse.";	// Necessita traduccio
