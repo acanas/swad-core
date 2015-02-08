@@ -42,11 +42,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.5 (2015/02/08)"
+#define Log_PLATFORM_VERSION	"SWAD 14.74.6 (2015/02/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.74.6:  Feb 08, 2015	Changes in layout of form to register/remove one user. (178009 lines)
         Version 14.74.5:  Feb 08, 2015	Changes in layout of form to register/remove users. (178038 lines)
         Version 14.74.4:  Feb 08, 2015	Changes in layout of form to register/remove users. (178000 lines)
         Version 14.74.3:  Feb 08, 2015	Button to view banners.

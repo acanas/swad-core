@@ -9948,45 +9948,6 @@ const char *Txt_Enter_from_X =	// Warning: it is very important to include %s in
 	"Digite partir %s";
 #endif
 
-const char *Txt_Enter_the_ID_of_the_user_you_want_to_register_remove_ =
-#if   L==0
-	"Escriu el @sobrenom, correu o ID (DNI/c&egrave;dula)"
-	" de l'usuari que desitja inscriure/eliminar"
-	" o les dades voleu modificar.";
-#elif L==1
-	"Enter the @nick, e-mail or ID"
-	" of the user you want to register/remove"
-	" or whose data you want to modify.";		// Need Übersetzung
-#elif L==2
-	"Enter the @nick, e-mail or ID"
-	" of the user you want to register/remove"
-	" or whose data you want to modify.";
-#elif L==3
-	"Escriba el @apodo, correo o ID (DNI/c&eacute;dula)"
-	" del usuario que desea inscribir/eliminar"
-	" o cuyos datos desea modificar.";
-#elif L==4
-	"Enter the @nick, e-mail or ID"
-	" of the user you want to register/remove"
-	" or whose data you want to modify.";		// Besoin de traduction
-#elif L==5
-	"Escriba el @apodo, correo o ID (DNI/c&eacute;dula)"
-	" del usuario que desea inscribir/eliminar"
-	" o cuyos datos desea modificar.";		// Okoteve traducción
-#elif L==6
-	"Introduci il @nome-utente, e-mail o ID"
-	" dell'utente che vuoi registrare/rimuovere"
-	" o la data di chi vuoi modificare.";
-#elif L==7
-	"Enter the @nick, e-mail or ID"
-	" of the user you want to register/remove"
-	" or whose data you want to modify.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Enter the @nick, e-mail or ID"
-	" of the user you want to register/remove"
-	" or whose data you want to modify.";		// Necessita de tradução
-#endif
-
 const char *Txt_Error_getting_data_from_a_recipient =
 #if   L==0
 	"Error obteniendo datos de un destinatario.";	// Necessita traduccio

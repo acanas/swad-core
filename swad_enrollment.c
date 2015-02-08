@@ -617,7 +617,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    fprintf (Gbl.F.Out,"</form>"
                       "</div>");
 
-   /***** Frame end *****/
+   /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
    Lay_EndRoundFrameTable10 ();
@@ -2640,7 +2640,7 @@ void Enr_ReqRegRemUsr (void)
 
 static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
   {
-   extern const char *Txt_Enter_the_ID_of_the_user_you_want_to_register_remove_;
+   extern const char *Txt_Admin_one_user;
 
    /***** Put link to remove old users *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
@@ -2650,9 +2650,18 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   Lay_ShowAlert (Lay_INFO,Txt_Enter_the_ID_of_the_user_you_want_to_register_remove_);
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_one_user);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>");
 
+   /***** Write form to request another user's ID *****/
    Enr_WriteFormToReqAnotherUsrID (ActReqMdfUsr);
+
+   /***** End frame *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
