@@ -1873,6 +1873,27 @@ const char *Txt_Admin_user =
 	"Gerenciar utilizador";
 #endif
 
+const char *Txt_Admin_users =
+#if   L==0
+	"Administrar usuaris";
+#elif L==1
+	"Verwalten Benutzern";
+#elif L==2
+	"Admin users";
+#elif L==3
+	"Administrar usuarios";
+#elif L==4
+	"G&eacute;rer utilisateurs";
+#elif L==5
+	"Administrar usuarios";	// Okoteve traducción
+#elif L==6
+	"Gestire utenti";
+#elif L==7
+	"Zarz&aogon;dzaj u&zdot;ytkownikow";
+#elif L==8
+	"Gerenciar utilizadores";
+#endif
+
 const char *Txt_All =
 #if   L==0
 	"Tot";

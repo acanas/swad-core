@@ -500,6 +500,7 @@ void Enr_ReqAdminUsrs (void)
 static void Enr_ShowFormRegRemSeveralUsrs (void)
   {
    extern const char *The_ClassTitle[The_NUM_THEMES];
+   extern const char *Txt_Admin_users;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Option_a_Import_students_from_the_official_lists;
    extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
@@ -527,12 +528,17 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Enr_PutFormToRemOldUsrs ();
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_users);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>");
+
    /***** Form to send students to be enrolled / removed *****/
    Act_FormStart (ActRcvFrmMdfUsrCrs);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s"
+                      "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_1_Provide_a_list_of_users);
@@ -541,7 +547,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
      {
       /* Option a: get students from official lists */
       fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-			 "<br />%s<br />&nbsp;"
+			 "%s"
 			 "</div>",
 	       The_ClassTitle[Gbl.Prefs.Theme],
 	       Txt_Option_a_Import_students_from_the_official_lists);
@@ -550,7 +556,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
       /* Option b: get students' IDs from pasted text */
       fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-			 "<br />%s<br />&nbsp;"
+			 "%s"
 			 "</div>",
 	       The_ClassTitle[Gbl.Prefs.Theme],
 	       Txt_Option_b_Type_or_paste_a_list_of_users);
@@ -561,7 +567,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    /***** Step 2: Select type of user to register/remove to/from current course *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
+                      "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_2_Select_the_type_of_user_to_register_remove);
@@ -570,7 +576,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    /***** Step 3: Put different actions to register/remove students to/from current course *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
+                      "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_3_Select_the_desired_action);
@@ -578,7 +584,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    /***** Step 4: Select groups in which register / remove students *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
+                      "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_4_Optionally_select_groups);
@@ -600,7 +606,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    /***** Step 5: Button to register / remove students *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
-                      "<br />%s<br />&nbsp;"
+                      "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_5_Confirm_the_enrollment_removing);
@@ -610,6 +616,11 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    /***** End of form *****/
    fprintf (Gbl.F.Out,"</form>"
                       "</div>");
+
+   /***** Frame end *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
@@ -767,7 +778,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"UsrsIDs\" cols=\"50\" rows=\"10\">",
+                      "<textarea name=\"UsrsIDs\" cols=\"80\" rows=\"20\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
 
@@ -2630,6 +2641,14 @@ void Enr_ReqRegRemUsr (void)
 static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
   {
    extern const char *Txt_Enter_the_ID_of_the_user_you_want_to_register_remove_;
+
+   /***** Put link to remove old users *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+     {
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      Enr_PutFormToRemOldUsrs ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    Lay_ShowAlert (Lay_INFO,Txt_Enter_the_ID_of_the_user_you_want_to_register_remove_);
 

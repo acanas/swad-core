@@ -1729,13 +1729,14 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
   {
+   extern const char *Txt_Groups;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in current course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Groups);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
