@@ -237,13 +237,14 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
    unsigned long NumRows;
 
    /***** Clear data *****/
+   Ban->IsHidden = false;
    Ban->ShortName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      sprintf (Query,"SELECT ShortName,FullName,Img,WWW"
+      sprintf (Query,"SELECT Hidden,ShortName,FullName,Img,WWW"
 	             " FROM banners WHERE BanCod='%ld'",
                Ban->BanCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a banner");
@@ -253,17 +254,20 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
          /* Get row */
          row = mysql_fetch_row (mysql_res);
 
-         /* Get the short name of the banner (row[0]) */
-         strcpy (Ban->ShortName,row[0]);
+         /* Get if the banner is hidden (row[0]) */
+         Ban->IsHidden = (row[0][0] == 'Y');
 
-         /* Get the full name of the banner (row[1]) */
-         strcpy (Ban->FullName,row[1]);
+         /* Get the short name of the banner (row[1]) */
+         strcpy (Ban->ShortName,row[1]);
 
-         /* Get the image of the banner (row[2]) */
-         strcpy (Ban->Img,row[2]);
+         /* Get the full name of the banner (row[2]) */
+         strcpy (Ban->FullName,row[2]);
 
-         /* Get the URL of the banner (row[3]) */
-         strcpy (Ban->WWW,row[3]);
+         /* Get the image of the banner (row[3]) */
+         strcpy (Ban->Img,row[3]);
+
+         /* Get the URL of the banner (row[4]) */
+         strcpy (Ban->WWW,row[4]);
         }
 
       /***** Free structure that stores the query result *****/

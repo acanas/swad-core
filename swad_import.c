@@ -414,7 +414,6 @@ static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
 
          /***** Write message depending on return code *****/
          ReturnCode = WEXITSTATUS(ReturnCode);
-
          switch (ReturnCode)
            {
             case 0:	// Success
@@ -496,9 +495,11 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
    MYSQL_RES *mysql_res_std;
    MYSQL_ROW row;
    char ExternalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
-   unsigned NumGrps,NumGrp;
+   unsigned NumGrps;
+   unsigned NumGrp;
    long GrpCod;
-   unsigned NumStds,NumStd;
+   unsigned NumStds;
+   unsigned NumStd;
 
    /***** Get data of imported groups from database *****/
    sprintf (Query,"SELECT GrpCod,ExternalCrsCod,DegName,CrsName,GrpName,GrpType"
