@@ -100,6 +100,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 		     (unsigned) DegCod,
 		     (unsigned) DegCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	    if (LogoFound)
+	       Cod = DegCod;
 	   }
 
 	 /* Centre */
@@ -116,6 +118,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 		     (unsigned) CtrCod,
 		     (unsigned) CtrCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	    if (LogoFound)
+	       Cod = CtrCod;
 	   }
 
 	 /* Institution */
@@ -134,6 +138,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 		     (unsigned) InsCod,
 		     (unsigned) InsCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	    if (LogoFound)
+	       Cod = InsCod;
 	   }
 	}
 

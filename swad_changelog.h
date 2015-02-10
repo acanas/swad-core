@@ -46,7 +46,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.74.8:  Feb 10, 2015	Fixed bug in degree logo. (178039 lines)
+        Version 14.74.8:  Feb 10, 2015	Fixed bug in degree logo. (178045 lines)
         Version 14.74.7:  Feb 08, 2015	Link to register/remove several users. (178029 lines)
         Version 14.74.6:  Feb 08, 2015	Changes in layout of form to register/remove one user. (178009 lines)
         Version 14.74.5:  Feb 08, 2015	Changes in layout of form to register/remove users. (178038 lines)
