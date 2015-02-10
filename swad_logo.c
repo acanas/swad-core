@@ -80,74 +80,83 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX+1];
    bool LogoFound = false;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
 
    /***** Path to logo *****/
-   if (Cod > 0)
+   if (Icon[Scope])	// Scope is correct
      {
-      /* Degree */
-      if (Scope == Sco_SCOPE_DEG)
+      if (Cod > 0)	// Institution, centre or degree exists
 	{
-	 Folder = Cfg_FOLDER_DEG;
-	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-		  Cfg_PATH_SWAD_PUBLIC,Folder,
-		  (unsigned) (Cod % 100),
-		  (unsigned) Cod,
-		  (unsigned) Cod);
-	 LogoFound = Fil_CheckIfPathExists (PathLogo);
-	}
-
-      /* Centre */
-      if (!LogoFound || Scope == Sco_SCOPE_CTR)
-	{
-	 Folder = Cfg_FOLDER_CTR;
+	 /* Degree */
 	 if (Scope == Sco_SCOPE_DEG)
-	    Cod = Deg_GetCtrCodOfDegreeByCod (Cod);
-	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-		  Cfg_PATH_SWAD_PUBLIC,Folder,
-		  (unsigned) (Cod % 100),
-		  (unsigned) Cod,
-		  (unsigned) Cod);
-	 LogoFound = Fil_CheckIfPathExists (PathLogo);
+	   {
+	    Folder = Cfg_FOLDER_DEG;
+	    DegCod = Cod;
+	    sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		     Cfg_PATH_SWAD_PUBLIC,Folder,
+		     (unsigned) (DegCod % 100),
+		     (unsigned) DegCod,
+		     (unsigned) DegCod);
+	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	   }
+
+	 /* Centre */
+	 if (!LogoFound && Scope != Sco_SCOPE_INS)
+	   {
+	    Folder = Cfg_FOLDER_CTR;
+	    if (Scope == Sco_SCOPE_DEG)	// && !LogoFound
+	       CtrCod = Deg_GetCtrCodOfDegreeByCod (Cod);
+	    else
+	       CtrCod = Cod;
+	    sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		     Cfg_PATH_SWAD_PUBLIC,Folder,
+		     (unsigned) (CtrCod % 100),
+		     (unsigned) CtrCod,
+		     (unsigned) CtrCod);
+	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	   }
+
+	 /* Institution */
+	 if (!LogoFound)
+	   {
+	    Folder = Cfg_FOLDER_INS;
+	    if (Scope == Sco_SCOPE_DEG)		// && !LogoFound
+	       InsCod = Deg_GetInsCodOfDegreeByCod (Cod);
+	    else if (Scope == Sco_SCOPE_CTR)	// && !LogoFound
+	       InsCod = Ctr_GetInsCodOfCentreByCod (Cod);
+	    else
+	       InsCod = Cod;
+	    sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+		     Cfg_PATH_SWAD_PUBLIC,Folder,
+		     (unsigned) (InsCod % 100),
+		     (unsigned) InsCod,
+		     (unsigned) InsCod);
+	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	   }
 	}
 
-      /* Institution */
-      if (!LogoFound || Scope == Sco_SCOPE_INS)
+      if (LogoFound || PutIconIfNotExists)
 	{
-	 Folder = Cfg_FOLDER_INS;
-	 if (Scope == Sco_SCOPE_DEG)
-	    Cod = Deg_GetInsCodOfDegreeByCod (Cod);
-	 else if (Scope == Sco_SCOPE_CTR)
-	    Cod = Ctr_GetInsCodOfCentreByCod (Cod);
-	 sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
-		  Cfg_PATH_SWAD_PUBLIC,Folder,
-		  (unsigned) (Cod % 100),
-		  (unsigned) Cod,
-		  (unsigned) Cod);
-	 LogoFound = Fil_CheckIfPathExists (PathLogo);
+	 /***** Draw logo *****/
+	 fprintf (Gbl.F.Out,"<img src=\"");
+	 if (LogoFound)
+	    fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+		     Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
+		     (unsigned) (Cod % 100),
+		     (unsigned) Cod,
+		     (unsigned) Cod);
+	 else if (Icon[Scope])
+	    fprintf (Gbl.F.Out,"%s/%s64x64.gif",
+		     Gbl.Prefs.IconsURL,Icon[Scope]);
+	 fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
+		  AltText,Size,Size);
+	 if (Style)
+	    if (Style[0])
+	       fprintf (Gbl.F.Out," style=\"%s\"",Style);
+	 fprintf (Gbl.F.Out," />");
 	}
-     }
-   else
-      LogoFound = false;
-
-   if (LogoFound || PutIconIfNotExists)
-     {
-      /***** Draw logo *****/
-      fprintf (Gbl.F.Out,"<img src=\"");
-      if (LogoFound)
-	 fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
-		  (unsigned) (Cod % 100),
-		  (unsigned) Cod,
-		  (unsigned) Cod);
-      else if (Icon[Scope])
-	 fprintf (Gbl.F.Out,"%s/%s64x64.gif",
-		  Gbl.Prefs.IconsURL,Icon[Scope]);
-      fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-	       AltText,Size,Size);
-      if (Style)
-	 if (Style[0])
-	    fprintf (Gbl.F.Out," style=\"%s\"",Style);
-      fprintf (Gbl.F.Out," />");
      }
   }
 
