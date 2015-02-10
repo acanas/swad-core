@@ -41,11 +41,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.8 (2015/02/10)"
+#define Log_PLATFORM_VERSION	"SWAD 14.74.9 (2015/02/10)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.74.9:  Feb 10, 2015	Description/keywords meta tags and canonical URL added to head. (178060 lines)
         Version 14.74.8:  Feb 10, 2015	Fixed bug in degree logo. (178045 lines)
         Version 14.74.7:  Feb 08, 2015	Link to register/remove several users. (178029 lines)
         Version 14.74.6:  Feb 08, 2015	Changes in layout of form to register/remove one user. (178009 lines)

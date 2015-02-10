@@ -28,9 +28,9 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+#define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
-#define SWAD_UGR_ES		// Comment this line if not applicable
+//#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define WWW_CEVUNA_UNA_PY	// Comment this line if not applicable
 
 /*****************************************************************************/
@@ -52,7 +52,6 @@
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD local"			// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
-#define Cfg_HTTP_SwAD_HOME_PAGE			"http://localhost"		// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://localhost/swad"	// Without ending slash
 #define Cfg_HTTP_URL_SWAD_PUBLIC		"http://localhost/swad"		// Without ending slash
@@ -99,7 +98,6 @@
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
-#define Cfg_HTTP_SwAD_HOME_PAGE			"http://openswad.org/swad"		// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://openswad.org/swad"		// Without ending slash
 #define Cfg_HTTP_URL_SWAD_PUBLIC		"http://openswad.org/swad"		// Without ending slash
@@ -163,7 +161,6 @@
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UGR"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
-#define Cfg_HTTP_SwAD_HOME_PAGE			"http://swad.ugr.es/swad"		// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://swad.ugr.es/swad"		// Without ending slash
 #define Cfg_HTTP_URL_SWAD_PUBLIC		"http://swad.ugr.es/swad"		// Without ending slash
@@ -217,7 +214,6 @@
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UNA"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"www.cevuna.una.py"			// Server name (main part of the URL)
-#define Cfg_HTTP_SwAD_HOME_PAGE			"http://www.cevuna.una.py/swad"		// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://www.cevuna.una.py/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://www.cevuna.una.py/swad"	// Without ending slash
 #define Cfg_HTTP_URL_SWAD_PUBLIC		"http://www.cevuna.una.py/swad"		// Without ending slash

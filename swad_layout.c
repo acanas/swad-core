@@ -161,11 +161,30 @@ void Lay_WriteStartOfPage (void)
    // WARNING: It is necessary to comment the line AddDefaultCharset UTF8 in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
-                      "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n",
-            Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+                      "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
+                      "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\" />\n"
+                      "<meta name=\"description\" content=\"SWAD is a free-software platform for learning and educational management\" />\n"
+                      "<meta name=\"keywords\" content=\""
+                      "%s,"
+                      "SWAD platform,shared workspace at a distance,sistema web de apoyo a la docencia,"
+                      "LMS,Learning Management System,"
+                      "VLE,Virtual Learning Environment,"
+                      "e-learning,b-learning,m-learning,"
+                      "platform,plataforma,"
+                      "teaching,docencia,"
+                      "learning,aprendizaje,"
+                      "open source,free software,software libre,"
+                      "virtual\" />\n",
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Cfg_PLATFORM_SHORT_NAME);
 
    /* Title */
    Lay_WritePageTitle ();
+
+   /* Canonical URL */
+   fprintf (Gbl.F.Out,"<link rel=\"canonical\""
+	              " href=\"%s\" />\n",
+	    Cfg_HTTPS_URL_SWAD_CGI);
 
    /* Favicon */
    fprintf (Gbl.F.Out,"<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n"
@@ -397,7 +416,7 @@ static void Lay_WritePageTitle (void)
       fprintf (Gbl.F.Out,"%s",
 	       Cfg_PLATFORM_PAGE_TITLE);
 
-   fprintf (Gbl.F.Out,"</title>");
+   fprintf (Gbl.F.Out,"</title>\n");
   }
 
 /*****************************************************************************/
@@ -602,7 +621,7 @@ static void Lay_WritePageTopHeading (void)
 	              " style=\"width:%upx; height:%upx;"
 	              " margin:0 auto; vertical-align:middle;\" />"
                       "</a>",
-            Cfg_HTTP_SwAD_HOME_PAGE,Gbl.Prefs.PathTheme,
+            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
             Cfg_PLATFORM_FULL_NAME,
             LogoLayout[Gbl.Prefs.Layout].Width,
