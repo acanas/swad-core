@@ -162,7 +162,6 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
-                      "<meta http-equiv=\"Content-Style-Type\" content=\"text/css\" />\n"
                       "<meta name=\"description\" content=\"SWAD is a free-software platform for learning and educational management\" />\n"
                       "<meta name=\"keywords\" content=\""
                       "%s,"
