@@ -166,6 +166,7 @@ void Lay_WriteStartOfPage (void)
                       "<meta name=\"keywords\" content=\""
                       "%s,"
                       "SWAD platform,shared workspace at a distance,sistema web de apoyo a la docencia,"
+                      "SWADroid,"
                       "LMS,Learning Management System,"
                       "VLE,Virtual Learning Environment,"
                       "e-learning,b-learning,m-learning,"

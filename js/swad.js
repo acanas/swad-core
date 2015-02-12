@@ -185,8 +185,8 @@ function readConnUsrsData() {
 				}
 			}
 
-			if (delay < 10000) delay = 10000;	// Don't refresh faster than 1 time each 10 seconds
-			setTimeout("refreshConnected()",delay);
+			if (delay >= 10000)	// If refresh slower than 1 time each 10 seconds, do refresh; else abort
+				setTimeout("refreshConnected()",delay);
 		}
 	}
 }
@@ -204,8 +204,8 @@ function readLastClicksData() {
 			var divLastClicks = document.getElementById('lastclicks');			// Access to last click DIV
 			if (divLastClicks)
 				divLastClicks.innerHTML = htmlLastClicks;				// Update global connected DIV
-			if (delay < 200) delay = 200;	// Don't refresh faster than 1 time each 0.2 seconds
-			setTimeout("refreshLastClicks()",delay);
+			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
+				setTimeout("refreshLastClicks()",delay);
 		}
 	}
 }
