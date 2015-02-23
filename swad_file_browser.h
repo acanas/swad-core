@@ -183,7 +183,7 @@ void Brw_ChgFileMetadata (void);
 long Brw_GetFilCodByPath (const char *Path);
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
-bool Brw_GetFileSizeAndDate (struct FileMetadata *FileMetadata);
+bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
 

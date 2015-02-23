@@ -4488,7 +4488,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
-   DB_QueryUPDATE (Query,"can not update date of last access to a file browser");
+   DB_QueryREPLACE (Query,"can not update date of last access to a file browser");
   }
 
 /*****************************************************************************/
@@ -4739,11 +4739,11 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
+   Brw_GetFileTypeSizeAndDate (&FileMetadata);
    if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
       /* Add entry to the table of files/folders */
       FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
                                              Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
-   Brw_GetFileSizeAndDate (&FileMetadata);
 
    /***** Is this row public or private? *****/
    if (SeeDocsZone || AdminDocsZone || CommonZone)
@@ -8730,7 +8730,7 @@ void Brw_ShowFileMetadata (void)
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Found = Brw_GetFileSizeAndDate (&FileMetadata);
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    if (Found)
      {
@@ -9150,7 +9150,7 @@ void Brw_DownloadFile (void)
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Found = Brw_GetFileSizeAndDate (&FileMetadata);
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    if (Found)
      {
@@ -9506,7 +9506,7 @@ void Brw_ChgFileMetadata (void)
 
    /***** Get file metadata from database *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
-   Brw_GetFileSizeAndDate (&FileMetadata);
+   Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Check if I can change file metadata *****/
    if (Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod))
@@ -9904,7 +9904,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 /*****************************************************************************/
 // Return true if file exists
 
-bool Brw_GetFileSizeAndDate (struct FileMetadata *FileMetadata)
+bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
   {
    char Path[PATH_MAX+1];
    struct stat FileStatus;
@@ -10210,9 +10210,7 @@ long Brw_GetCodForFiles (void)
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_ASSIG_USR:
-      case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_USR:
-      case Brw_ADMI_WORKS_CRS:
       case Brw_ADMI_MARKS_CRS:
 	 return Gbl.CurrentCrs.Crs.CrsCod;
       case Brw_ADMI_DOCUM_GRP:
@@ -10232,8 +10230,8 @@ static long Brw_GetZoneUsrCodForFiles (void)
   {
    switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
      {
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
+      case Brw_ADMI_ASSIG_USR:
+      case Brw_ADMI_WORKS_USR:
 	 return Gbl.Usrs.Other.UsrDat.UsrCod;
       case Brw_ADMI_BRIEF_USR:
 	 return Gbl.Usrs.Me.UsrDat.UsrCod;

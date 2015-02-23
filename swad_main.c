@@ -71,7 +71,7 @@ int main (int argc, char *argv[])
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
-
+/*
    fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n"
                    "Status: 503 Service Temporarily Unavailable\r\n\r\n"
                    "<html lang=\"es\">"
@@ -84,7 +84,7 @@ int main (int argc, char *argv[])
             Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_SHORT_NAME);
    exit (0);
-
+*/
    if (argc > 1)
      {
       fprintf (stdout,"Call %s without parameters",argv[0]);

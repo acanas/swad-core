@@ -28,8 +28,8 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
-#define OPENSWAD_ORG		// Comment this line if not applicable
+#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define WWW_CEVUNA_UNA_PY	// Comment this line if not applicable
 
@@ -112,7 +112,7 @@
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// E-mail address from where automatic e-mails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS	Txt_LANGUAGE_EN				// Default language for new users
+#define Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS	Txt_LANGUAGE_ES				// Default language for new users
 #define Cfg_LOG_START_YEAR			2012					// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed
@@ -497,7 +497,6 @@
 #define Cfg_TIME_TO_DELETE_OLD_NOTIF 			((time_t)(    30UL*24UL*60UL*60UL))	// Past these seconds, remove expired notifications
 
 #define Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO		((time_t)(         12UL*60UL*60UL))	// After these seconds, users can recompute the average photos of a degree
-
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

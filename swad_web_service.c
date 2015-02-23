@@ -3766,7 +3766,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
      {
       /* Get file metadata */
       Brw_GetFileMetadataByPath (&FileMetadata);
-      Brw_GetFileSizeAndDate (&FileMetadata);
+      Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
@@ -3926,7 +3926,7 @@ int swad__getFile (struct soap *soap,
    Brw_InitializeFileBrowser ();
 
    /***** Get file size and date *****/
-   Brw_GetFileSizeAndDate (&FileMetadata);
+   Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Update number of views *****/
    Brw_GetAndUpdateFileViews (&FileMetadata);

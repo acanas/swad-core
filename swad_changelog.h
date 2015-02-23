@@ -28,6 +28,7 @@
 /*********************************** TODO ************************************/
 /*****************************************************************************/
 
+// TODO: Is it necessary FileType in table "files"?
 // TODO: When notifications are marked as seen, do it in a priori function
 // TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
 // TODO: [Ceferino Bustos Valdivia]:
@@ -36,16 +37,78 @@
 //	 Sería completa esta aplicación, si la asistencia se incluyera, automáticamente, en el apartado de evaluación de cada alumno. De esta forma podríamos ver sus trabajos y asistencias de forma personalizada.
 // TODO: OpenSWAD.org: ¿Qué debería tener una buena gestión de grupos? Es para tomar ideas ;)
 //       José Raúl Canay @raulcanay: por ejemplo, que puedas sacar un listado exportable de en qué grupos está una persona de quienes están en un grupo.
+/* Propuestas de Fidel Rodríguez López:
 
+==========================================================
+1  @@ TUTORIAS GRUPALES/INDIVIDUALES "VIRTUALES"
+==========================================================
+        # Permite realizar grupos de chat, de uno o varios profesores con sus alumnos.
+        Útil para la resolución de ejercicios y dudas sencillas.
+        # Notificación, citas y aviso de tutorias virtuales.
+        # Permitir el envío de imágenes y fotos a través de la sala de Chat.s
+==========================================================
+2  @@ MEJORA DEL SISTEMA DE ANOTACIÓN DE ASISTENCIA
+==========================================================
+        # Sistema dinámico que permita la anotación de asistencia de los alumnos a las
+        clases prácticas y que facilite la administración de los mismos (notificación al
+        profesor cuando todos los alumnos sean registrados, por ejemplo). Implementación
+        vía AJAX para ser más agradable.
+==========================================================
+3  @@ GENERADOR DE CALIFICACIONES EN PDF
+==========================================================
+        # El servidor es capaz de generar un PDF para cualquier tarea (por ejemplo, con
+        las calificaciones de los alumnos para publicar en el tablón, con las convocatorias
+        de examen...). Para esto se puede usar alguna libreria libre tipo FPDF.
+        # Algunos profesores prefieren tener en papel anotadas las calificaciones.
+==========================================================
+4  @@ TUTORIAL INICIACIÓN
+==========================================================
+        # Es importante indicar tanto al profesor, Administrador y alumno de qué es capaz
+        SWAD, para poder así explotar todas sus posibilidades. Un tutorial amigable e inicial
+        a base de Tooltips o imágenes, puede ser bastante útil.
+==========================================================
+5  @@ MEJORA DE LA INTERFAZ
+==========================================================
+        # Botones, colores e iconos más modernos. Los iconos se pueden suprimir por iconos en
+        fuentes (como font-awesome, open-source). Los botones en CSS3 le darían un aire más
+        moderno y renovado (se podría basar en algún framework open-source).
+==========================================================
+6  @@ INCORPORACIÓN DE UN TABLÓN DE PROGRAMACIÓN DE ASIGNATURA
+==========================================================
+        # Hacer pequeñas modificaciones para ver la zona de Actividades de otra forma. Por ejemplo,
+        una estructura de árbol (como la zona de Documentos) pero con las tareas programadas para la
+        semana proporcionaría una visión más global (como una "agenda") de lo que hay que realizar.
+        # El tablón incorporaría solo los títulos de los ejercicios. Por ejemplo:
+
+        ==>Semana 16 Febr. -> 22 Marzo
+        ----------Prácticas
+        ----------------Entrega Práctica 2 [Fecha Límite] (Color verde o rojo, si ha pasado la fecha, como actualmente en Actividades)
+        ----------Teoría
+        ----------------Tema 2
+        ----------Otros
+        ----------------Entregar Relación de Ejercicios
+        ==>Semana 23 Febr.-> 1 Marzo
+        ----------Prácticas
+        ----------Teoría
+        ----------------Examen Tema 2
+        ----------Otros
+        ....Etc.....
+
+==========================================================
+7  @@ INSTALACIÓN DE EDITOR DE TEXTO ENRIQUECIDO
+==========================================================
+        # Completar el proyecto que empezó el antiguo alumno.
+ */
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.11 (2015/02/12)"
+#define Log_PLATFORM_VERSION	"SWAD 14.74.12 (2015/02/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.74.12: Feb 23, 2015	Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178119 lines)
         Version 14.74.11: Feb 10, 2015	Changes in swad.js. (178060 lines)
         Version 14.74.10: Feb 10, 2015	Removed meta tag. (178060 lines)
         Version 14.74.9:  Feb 10, 2015	Description/keywords meta tags and canonical URL added to head. (178060 lines)
