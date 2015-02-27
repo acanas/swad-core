@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.74.12 (2015/02/23)"
+#define Log_PLATFORM_VERSION	"SWAD 14.75 (2015/02/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.75:    Feb 27, 2015	Fixed bug when getting user's IDs from marks tables. (178172 lines)
         Version 14.74.12: Feb 23, 2015	Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178119 lines)
         Version 14.74.11: Feb 10, 2015	Changes in swad.js. (178060 lines)
         Version 14.74.10: Feb 10, 2015	Removed meta tag. (178060 lines)

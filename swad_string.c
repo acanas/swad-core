@@ -1585,7 +1585,7 @@ static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLCommen
 
 /*****************************************************************************/
 /****** Scan next string in file FileSrc until find </td>              *******/
-/****** ( skipping comments <!--...-->, directives <...>, and &nbsp; ) *******/
+/****** ( skipping comments <!--...--> and directives <...> )          *******/
 /****** and write string into Str (MaxLength characters as much)       *******/
 /*****************************************************************************/
 
@@ -1596,6 +1596,7 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
    long PosTD;
    int i = 0;
    int Ch;
+   bool SpaceFound;
    char StrAux[1+1];  // To find next "/td>" or "nbsp;"
 
    Str[0] = '\0';
@@ -1655,6 +1656,8 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 	 break; // If it's </td>
 	}
 
+      SpaceFound = false;
+
       /***** Skip &nbsp; *****/
       if (Ch == (int) '&')
 	{
@@ -1685,14 +1688,17 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
            }
 	 else	// It's &nbsp;
-	    continue;
+	    SpaceFound = true;
 	}
 
       /***** Skip spaces *****/
       if (isspace (Ch) || Ch == 0xA0)	 // Microsoft Excel uses A0 also as space!
-	  continue;
+	  SpaceFound = true;
 
-      if (i < MaxLength) // && isprint (Ch))
+      if (SpaceFound)
+	 Ch = (int) ' ';
+
+      if (i < MaxLength)
 	 Str[i++] = (char) Ch;
      }
    Str[i] = '\0';

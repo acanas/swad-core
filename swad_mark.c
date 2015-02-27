@@ -66,12 +66,15 @@ const char *Mrk_HeadOrFootStr[2] =	// Names of columns in database, so don't cha
   "Footer",
  };
 
+#define Mrk_MAX_BYTES_IN_CELL_CONTENT	1024	// Cell of a table containing one or several user's IDs
+
 /*****************************************************************************/
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
+static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
 static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
                              const char *PathFileAllMarks,
                              struct MarksProperties *Marks);
@@ -297,9 +300,11 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
    extern const char *Txt_There_are_more_than_one_table_in_the_file_of_marks;
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
    // extern const char *Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found;
+   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT+1];
    FILE *FileAllMarks;
-   char StrRead[ID_MAX_LENGTH_USR_ID+1];
-   bool EndOfHead = false,EndOfTable = false,FileIsCorrect = true;
+   bool EndOfHead = false;
+   bool EndOfTable = false;
+   bool FileIsCorrect = true;
    unsigned NumRowsStds = 0;
 
    Marks->Header = Marks->Footer = 0;
@@ -329,41 +334,46 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
             /* We assume that the structure of the table has several rows of header until the first row of students is found,
 	       then it has a number of rows of students, including some dummy rows without students,
                and finally it has several rows of footer from the last row of students until the end of the table */
-            /* Count rows of header */
+
+            /***** Count rows of header *****/
             while (!EndOfHead)
                if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
                  {
-                  // Every user's ID must be in the first column of the row
-        	  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,StrRead,ID_MAX_LENGTH_USR_ID);
-        	  // Users' IDs are always stored internally in capitals and without leading zeros
-		  Str_RemoveLeadingZeros (StrRead);
-		  Str_ConvertToUpperText (StrRead);
-                  if (ID_CheckIfUsrIDIsValid (StrRead))
-                    {
-	             EndOfHead = true;
-                     NumRowsStds++;
-                    }
-                  else
-                     Marks->Header++;
+        	  // All user's IDs must be in the first column of the row
+		  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+		  /* Check if only user's IDs
+		     or other stuff found in this table cell */
+		  if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+		    {
+		     // Only user's IDs found in this cell
+		     EndOfHead = true;
+		     NumRowsStds++;
+		    }
+		  else
+		     // Other stuff found ==> continue in header
+		     Marks->Header++;
                  }
                else
 	          EndOfHead = true;	// No more rows
 
-            /* Count rows of students and rows of footer */
+            /***** Count rows of students and rows of footer *****/
             while (!EndOfTable)
                if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
                  {
-                  // Each user's ID must be in the first column of the row
-        	  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,StrRead,ID_MAX_LENGTH_USR_ID);
-        	  // Users' IDs are always stored internally in capitals and without leading zeros
-		  Str_RemoveLeadingZeros (StrRead);
-		  Str_ConvertToUpperText (StrRead);
-                  if (ID_CheckIfUsrIDIsValid (StrRead))
-                    {
+        	  // All user's IDs must be in the first column of the row
+		  Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+		  /* Check if only user's IDs
+		     or other stuff found in this table cell */
+		  if (Mrk_CheckIfCellContainsOnlyIDs (CellContent))
+		    {
+		     // Only user's IDs found in this cell
                      NumRowsStds++;
                      Marks->Footer = 0;
-                    }
-                  else
+		    }
+		  else
+		     // Other stuff found ==> continue in header
                      Marks->Footer++;
                  }
                else
@@ -389,6 +399,38 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
   }
 
 /*****************************************************************************/
+/******* Check if only user's IDs or other stuff found in a table cell *******/
+/*****************************************************************************/
+
+static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
+  {
+   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID+1];
+   const char *Ptr = CellContent;
+   bool UsrIDFound = false;
+   bool StuffNotUsrIDFound = false;
+
+   /***** Get strings in this table cell
+          and check if they look like user's IDs or not *****/
+   while (*Ptr && !StuffNotUsrIDFound)
+     {
+      /* Find next string in text until space, comma or semicolon (leading and trailing spaces are removed) */
+      Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+
+      // Users' IDs are always stored internally in capitals and without leading zeros
+      Str_RemoveLeadingZeros (UsrIDFromTable);
+      Str_ConvertToUpperText (UsrIDFromTable);
+      if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	 UsrIDFound = true;
+      else
+	 StuffNotUsrIDFound = true;
+     }
+
+   /***** Check if only user's IDs
+          or other stuff found in this table cell *****/
+   return (UsrIDFound && !StuffNotUsrIDFound);
+  }
+
+/*****************************************************************************/
 /*************************** Show the marks of a user ************************/
 /*****************************************************************************/
 
@@ -398,14 +440,15 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
   {
    extern const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks;
    unsigned Row;
+   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT+1];
+   const char *Ptr;
    char UsrIDFromTable[ID_MAX_LENGTH_USR_ID+1];
    FILE *FileAllMarks;
    unsigned NumID;
-   const char *UsrID = NULL;	// Initialized to avoid warning
-   bool UsrIDFound = true;
-   bool EndOfTable = false;
+   bool UsrIDFound;
+   bool EndOfTable;
 
-   /***** Open file with the table of marks *****/
+   /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
       strcpy (Gbl.Message,"Can not open file of marks.");
@@ -428,26 +471,29 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    while (!UsrIDFound && !EndOfTable)
       if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
         {
-         // Each user's ID must be in the first column of the row
-	 Str_GetCellFromHTMLTableSkipComments (FileAllMarks,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
-	 // Users' IDs are always stored internally in capitals and without leading zeros
-	 Str_RemoveLeadingZeros (UsrIDFromTable);
-	 Str_ConvertToUpperText (UsrIDFromTable);
-         if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
-            // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-            // Possible final alpha letter is removed from it. TODO: In future versions, final alpha letter should not be removed
-           {
-            // Compare UsrIDFromTable with all the confirmed user's IDs in list
-            for (NumID = 0;
-        	 NumID < UsrDat->IDs.Num && !UsrIDFound;
-        	 NumID++)
-               if (UsrDat->IDs.List[NumID].Confirmed)
-		  if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
-		    {
-		     UsrIDFound = true;
-		     UsrID = UsrDat->IDs.List[NumID].ID;
-		    }
-           }
+         // All user's IDs must be in the first column of the row
+	 Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+	 /* Get user's IDs */
+         Ptr = CellContent;
+	 while (*Ptr && !UsrIDFound)
+	   {
+	    /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
+            Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+
+	    // Users' IDs are always stored internally in capitals and without leading zeros
+	    Str_RemoveLeadingZeros (UsrIDFromTable);
+	    Str_ConvertToUpperText (UsrIDFromTable);
+	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
+	       // Compare UsrIDFromTable with all the confirmed user's IDs in list
+	       for (NumID = 0;
+		    NumID < UsrDat->IDs.Num && !UsrIDFound;
+		    NumID++)
+		  if (UsrDat->IDs.List[NumID].Confirmed)
+		     if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
+			UsrIDFound = true;
+	   }
         }
       else
          EndOfTable = true;	// No more rows
@@ -474,16 +520,29 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
       while (!UsrIDFound && !EndOfTable)
 	 if (Str_FindStrInFile (FileAllMarks,"<tr",Str_NO_SKIP_HTML_COMMENTS))   // Go to the next row
 	   {
-	    // Each user's ID must be in the first column of the row
-	    Str_GetCellFromHTMLTableSkipComments (FileAllMarks,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
-	    // Users' IDs are always stored internally in capitals and without leading zeros
-	    Str_RemoveLeadingZeros (UsrIDFromTable);
-	    Str_ConvertToUpperText (UsrIDFromTable);
-	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
-	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-	       // Possible final alpha letter is removed from it
-	       if (!strcasecmp (UsrID,UsrIDFromTable))
-		  UsrIDFound = true;
+	    // All user's IDs must be in the first column of the row
+	    Str_GetCellFromHTMLTableSkipComments (FileAllMarks,CellContent,Mrk_MAX_BYTES_IN_CELL_CONTENT);
+
+	    /* Get user's IDs */
+	    Ptr = CellContent;
+	    while (*Ptr && !UsrIDFound)
+	      {
+	       /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
+	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+
+	       // Users' IDs are always stored internally in capitals and without leading zeros
+	       Str_RemoveLeadingZeros (UsrIDFromTable);
+	       Str_ConvertToUpperText (UsrIDFromTable);
+	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
+		  // Compare UsrIDFromTable with all the confirmed user's IDs in list
+		  for (NumID = 0;
+		       NumID < UsrDat->IDs.Num && !UsrIDFound;
+		       NumID++)
+		     if (UsrDat->IDs.List[NumID].Confirmed)
+			if (!strcasecmp (UsrDat->IDs.List[NumID].ID,UsrIDFromTable))
+			   UsrIDFound = true;
+	      }
 	   }
 	 else
 	    EndOfTable = true;	// No more rows
