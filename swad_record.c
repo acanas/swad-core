@@ -1992,6 +1992,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Write_a_message_to_X;
    extern const char *Txt_View_works;
    extern const char *Txt_See_exams;
+   extern const char *Txt_Attendance;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2034,11 +2035,9 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR);
    bool DataForm = (TypeOfView == Rec_FORM_MY_SHARE_RECORD ||
-                  TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
-                  (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
-                   !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
-   bool MsgForm = (Gbl.Usrs.Me.Logged &&
-	           !(RoleForm || DataForm));
+                    TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
+                    (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
+                     !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
    bool ShowEmail = (IAmDegAdmin || IAmSuperuser || DataForm ||
 	             TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
 		     TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
@@ -2164,29 +2163,91 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                       " text-align:center; vertical-align:top;\">",
 	    Rec_INSTITUTION_LOGO_SIZE + 8);
 
-   fprintf (Gbl.F.Out,"<div style=\"margin:9px 0;\"");
-
-   /***** Button to admin user *****/
-   if ((TypeOfView == Rec_RECORD_LIST ||
-	TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK) &&
-       (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER))
+   if (Gbl.Usrs.Me.Logged &&
+       (TypeOfView == Rec_RECORD_LIST ||
+        TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK))
      {
-      Act_FormStart (ActReqMdfUsr);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Admin_user,NULL);
-      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
-			 "<img src=\"%s/config16x16.gif\""
-			 " style=\"width:16px;height:16px;margin:0 3px;\" alt=\"%s\" />"
-			 "</div>"
-			 "</a>"
-			 "</form>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Admin_user);
-     }
+      fprintf (Gbl.F.Out,"<div style=\"width:22px; margin:6px auto 0 auto;\">");
 
-   /***** Button to send a message *****/
-   if (MsgForm)
-     {
+      /***** Button to admin user *****/
+      if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
+	{
+	 Act_FormStart (ActReqMdfUsr);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			    "<img src=\"%s/config16x16.gif\""
+			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>"
+			    "</form>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Admin_user);
+	}
+
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// A course is selected
+	  UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT &&	// He/she is a student in the current course
+	  (ItsMe || IAmTeacher || IAmSuperuser))		// I can view
+	{
+	 /***** Button to view user's assignments and works *****/
+	 if (ItsMe)	// I am a student
+	    Act_FormStart (ActAdmAsgWrkUsr);
+	 else		// I am a teacher or superuser
+	   {
+	    Act_FormStart (ActAdmAsgWrkCrs);
+	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
+	   }
+	 Grp_PutParamAllGroups ();
+	 Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+	 Act_LinkFormSubmit (Txt_View_works,ClassData);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			    "<img src=\"%s/folder16x16.gif\""
+			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>"
+			    "</form>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_View_works);
+
+	 /***** Button to view user's test exams *****/
+	 if (ItsMe)
+	    Act_FormStart (ActSeeMyTstExa);
+	 else
+	   {
+	    Act_FormStart (ActSeeUsrTstExa);
+	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
+	   }
+	 Grp_PutParamAllGroups ();
+	 Act_LinkFormSubmit (Txt_See_exams,ClassData);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			    "<img src=\"%s/file16x16.gif\""
+			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>"
+			    "</form>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_See_exams);
+
+	 /***** Button to view user's attendance *****/
+	 // TODO: A student should see her/his attendance
+	 if (IAmTeacher || IAmSuperuser)
+	   {
+	    Act_FormStart (ActSeeLstAttStd);
+	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
+	    Grp_PutParamAllGroups ();
+	    Act_LinkFormSubmit (Txt_Attendance,ClassData);
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			       "<img src=\"%s/rollcall16x16.gif\""
+			       " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			       "</div>"
+			       "</a>"
+			       "</form>",
+		     Gbl.Prefs.IconsURL,
+		     Txt_Attendance);
+	   }
+	}
+
+      /***** Button to send a message *****/
       Act_FormStart (ActReqMsgUsr);
       Grp_PutParamAllGroups ();
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -2194,59 +2255,15 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
       Act_LinkFormSubmit (Gbl.Title,ClassData);
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			 "<img src=\"%s/msg16x16.gif\""
-			 " style=\"width:16px;height:16px;margin:0 3px;\" alt=\"%s\" />"
+			 " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			 "</div>"
 			 "</a>"
 			 "</form>",
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title);
+
+      fprintf (Gbl.F.Out,"</div>");
      }
-
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
-       UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT &&	// He/she is a student in the current course
-       (ItsMe || IAmTeacher || IAmSuperuser))			// I can view
-     {
-      /***** Button to view user's assignments and works *****/
-      if (ItsMe)	// I am a student
-	 Act_FormStart (ActAdmAsgWrkUsr);
-      else		// I am a teacher or superuser
-	{
-	 Act_FormStart (ActAdmAsgWrkCrs);
-	 Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	}
-      Grp_PutParamAllGroups ();
-      Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
-      Act_LinkFormSubmit (Txt_View_works,ClassData);
-      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
-			 "<img src=\"%s/folder16x16.gif\""
-			 " style=\"width:16px;height:16px;margin:0 3px;\" alt=\"%s\" />"
-			 "</div>"
-			 "</a>"
-			 "</form>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_View_works);
-
-      /***** Button to view user's test exams *****/
-      if (ItsMe)
-         Act_FormStart (ActSeeMyTstExa);
-      else
-	{
-	 Act_FormStart (ActSeeUsrTstExa);
-	 Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	}
-      Grp_PutParamAllGroups ();
-      Act_LinkFormSubmit (Txt_See_exams,ClassData);
-      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
-			 "<img src=\"%s/file16x16.gif\""
-			 " style=\"width:16px;height:16px;margin:0 3px;\" alt=\"%s\" />"
-			 "</div>"
-			 "</a>"
-			 "</form>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_See_exams);
-     }
-
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Full name *****/
    fprintf (Gbl.F.Out,"</td>"
