@@ -1283,6 +1283,7 @@ const char *Brw_MIMETypesAllowed[] =
    "text/x-csrc",			// Source code in C
    "text/x-c++src",			// Source code in C++
    "text/x-latex",			// LateX
+   "text/x-objcsrc",			// Source code
    "text/x-pdf",			// PDF
    "video/3gpp",			// Video Android mobile
    "video/avi",				// AVI
