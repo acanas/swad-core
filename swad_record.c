@@ -2038,6 +2038,9 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                      !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
+   bool MsgForm = Gbl.Usrs.Me.Logged &&
+                  (TypeOfView == Rec_RECORD_LIST ||
+                   TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK);
    bool ShowEmail = (IAmDegAdmin || IAmSuperuser || DataForm ||
 	             TypeOfView == Rec_FORM_MY_SHARE_RECORD  ||
 		     TypeOfView == Rec_MY_SHARE_RECORD_CHECK ||
@@ -2163,9 +2166,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
                       " text-align:center; vertical-align:top;\">",
 	    Rec_INSTITUTION_LOGO_SIZE + 8);
 
-   if (Gbl.Usrs.Me.Logged &&
-       (TypeOfView == Rec_RECORD_LIST ||
-        TypeOfView == Rec_OTHER_USR_SHARE_RECORD_CHECK))
+   if (MsgForm)
      {
       fprintf (Gbl.F.Out,"<div style=\"width:22px; margin:6px auto 0 auto;\">");
 
