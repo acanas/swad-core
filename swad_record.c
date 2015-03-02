@@ -1990,6 +1990,7 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_ID;
    extern const char *Txt_Nickname;
    extern const char *Txt_Write_a_message_to_X;
+   extern const char *Txt_View_works;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2196,6 +2197,25 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 			 "</form>",
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title);
+     }
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
+       UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT)	// He/she is a student in the current course
+     {
+      /***** Button to view user's assignments and works *****/
+      Act_FormStart (ActAdmAsgWrkCrs);
+      Grp_PutParamAllGroups ();
+      Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+      Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_View_works,ClassData);
+      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			 "<img src=\"%s/folder16x16.gif\""
+			 " style=\"width:16px;height:16px;margin:6px 3px;\" alt=\"%s\" />"
+			 "</div>"
+			 "</a>"
+			 "</form>",
+	       Gbl.Prefs.IconsURL,
+	       Txt_View_works);
      }
 
    /***** Full name *****/
