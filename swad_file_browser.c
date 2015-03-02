@@ -10228,15 +10228,17 @@ long Brw_GetCodForFiles (void)
 
 static long Brw_GetZoneUsrCodForFiles (void)
   {
-   switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
+   switch (Gbl.FileBrowser.Type)
      {
-      case Brw_ADMI_ASSIG_USR:
-      case Brw_ADMI_WORKS_USR:
-	 return Gbl.Usrs.Other.UsrDat.UsrCod;
-      case Brw_ADMI_BRIEF_USR:
+      case Brw_ADMI_WORKS_USR:	// My works
+      case Brw_ADMI_ASSIG_USR:	// My assignments
+      case Brw_ADMI_BRIEF_USR:	// My briefcase
 	 return Gbl.Usrs.Me.UsrDat.UsrCod;
+      case Brw_ADMI_WORKS_CRS:	// Course works
+      case Brw_ADMI_ASSIG_CRS:	// Course assignments
+	 return Gbl.Usrs.Other.UsrDat.UsrCod;
       default:
-         return -1L;
+	 return -1L;
      }
   }
 
