@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.76 (2015/03/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.76.1 (2015/03/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.76.1:  Mar 02, 2015	Button in student record to view student's test exams. (178225 lines)
         Version 14.76:    Mar 02, 2015	Button in student record to view student's works. (178197 lines)
         Version 14.75.2:  Mar 02, 2015	New icon for new notifications. (178176 lines)
         Version 14.75.1:  Mar 02, 2015	Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178175 lines)
