@@ -196,7 +196,10 @@ void Gbl_InitializeGlobals (void)
    Gbl.LstExamAnnouncements.NumExamAnnounc = 0;
    Gbl.LstExamAnnouncements.Lst = NULL;
 
-   Gbl.Usrs.Select.All = Gbl.Usrs.Select.Std = Gbl.Usrs.Select.Tch = Gbl.Usrs.ListOtherRecipients = NULL;
+   Gbl.Usrs.Select.All =
+   Gbl.Usrs.Select.Std =
+   Gbl.Usrs.Select.Tch =
+   Gbl.Usrs.ListOtherRecipients = NULL;
 
    Gbl.Msg.Subject[0] = '\0';
    Gbl.Msg.ShowOnlyUnreadMsgs = false;

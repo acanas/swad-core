@@ -2030,6 +2030,8 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
    bool IAmDegAdmin  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM);	// My current role is degree administrator
    bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
    bool HeIsTeacher  = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
+   bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ||
+	                         UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER);
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
 	            TypeOfView == Rec_FORM_MY_SHARE_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
@@ -2251,7 +2253,10 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
       /***** Button to send a message *****/
       Act_FormStart (ActReqMsgUsr);
       Grp_PutParamAllGroups ();
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      if (HeBelongsToCurrentCrs)
+         Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      else
+	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
       sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
       Act_LinkFormSubmit (Gbl.Title,ClassData);
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
@@ -2331,9 +2336,11 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
 	    /* Put form to send a message */
 	    Act_FormStart (ActReqMsgUsr);
             Grp_PutParamAllGroups ();
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-            // Par_PutHiddenParamString ("UsrCodAll",UsrDat->EncryptedUsrCod);
-	    sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
+	    if (HeBelongsToCurrentCrs)
+	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    else
+	       Msg_PutHiddenParamAnotherRecipient (UsrDat);
+            sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
             Act_LinkFormSubmit (Gbl.Title,"HEAD_REC_BIG");
 	   }
 	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);

@@ -257,7 +257,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_Send_message;
    char YN[1+1];
 
-   Gbl.Usrs.LstTchs.NumUsrs = Gbl.Usrs.LstStds.NumUsrs = 0;
+   Gbl.Usrs.LstTchs.NumUsrs =
+   Gbl.Usrs.LstStds.NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
    Par_GetParToText ("IsReply",YN,1);
@@ -267,6 +268,9 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
    /***** Get user's code of possible preselected recipient *****/
    Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Get list of users' IDs or nicknames written explicitely *****/
+   Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 
    /***** Get list of users belonging to the current course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
@@ -290,12 +294,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
           Gbl.Usrs.LstStds.NumUsrs)
          /***** Get list of selected users *****/
          Usr_GetListSelectedUsrs ();
-      else
-         Usr_ShowWarningNoUsersFound (Rol_ROLE_UNKNOWN);
      }
-
-   /***** Get list of users' IDs or nicknames written explicitely *****/
-   Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                     Gbl.Usrs.LstStds.NumUsrs))
@@ -495,6 +494,29 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
    fprintf (Gbl.F.Out,"</textarea>"
 	              "</td>"
 	              "</tr>");
+  }
+
+/*****************************************************************************/
+/********* Put hidden parameter for another recipient (one nickname) *********/
+/*****************************************************************************/
+
+void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
+  {
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+
+   sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
+   Par_PutHiddenParamString ("OtherRecipients",NicknameWithArroba);
+  }
+
+/*****************************************************************************/
+/********* Put hidden parameter for another recipient (one nickname) *********/
+/*****************************************************************************/
+
+void Msg_PutHiddenParamOtherRecipients (void)
+  {
+   if (Gbl.Usrs.ListOtherRecipients)
+      if (Gbl.Usrs.ListOtherRecipients[0])
+         Par_PutHiddenParamString ("OtherRecipients",Gbl.Usrs.ListOtherRecipients);
   }
 
 /*****************************************************************************/

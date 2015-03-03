@@ -60,6 +60,8 @@ void Msg_ListEMails (void); // Creates an e-mail message to students
 
 void Msg_FormMsgUsrs (void);
 void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply);
+void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
+void Msg_PutHiddenParamOtherRecipients (void);
 void Msg_RecMsgFromUsr (void);
 
 void Msg_ReqDelAllRecMsgs (void);

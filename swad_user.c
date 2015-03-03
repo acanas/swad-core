@@ -4728,6 +4728,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
          break;
       case ActReqMsgUsr:
          Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select.All);
+         Msg_PutHiddenParamOtherRecipients ();
          if (Gbl.Msg.IsReply)
            {
             Par_PutHiddenParamChar ("IsReply",'Y');
