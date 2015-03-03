@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 21
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 23
 typedef enum
   {
    Net_WWW,		// Personal web page
