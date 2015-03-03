@@ -2329,31 +2329,26 @@ void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
             Col2Width);
    if (UsrDat->Nickname[0])
      {
-      if (ShowData)
+      if (MsgForm)
 	{
-	 if (MsgForm)
-	   {
-	    /* Put form to send a message */
-	    Act_FormStart (ActReqMsgUsr);
-            Grp_PutParamAllGroups ();
-	    if (HeBelongsToCurrentCrs)
-	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	    else
-	       Msg_PutHiddenParamAnotherRecipient (UsrDat);
-            sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
-            Act_LinkFormSubmit (Gbl.Title,"HEAD_REC_BIG");
-	   }
-	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
-	 if (MsgForm)
-	    fprintf (Gbl.F.Out,"</a>"
-			       "</form>");
-
-	 /* Link to QR code */
-	 if (!DataForm)
-            QR_PutLinkToPrintQRCode (QR_NICKNAME,UsrDat,false);
+	 /* Put form to send a message */
+	 Act_FormStart (ActReqMsgUsr);
+	 Grp_PutParamAllGroups ();
+	 if (HeBelongsToCurrentCrs)
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 else
+	    Msg_PutHiddenParamAnotherRecipient (UsrDat);
+	 sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
+	 Act_LinkFormSubmit (Gbl.Title,"HEAD_REC_BIG");
 	}
-      else
-	 fprintf (Gbl.F.Out,"********");
+      fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+      if (MsgForm)
+	 fprintf (Gbl.F.Out,"</a>"
+			    "</form>");
+
+      /* Link to QR code */
+      if (!DataForm)
+	 QR_PutLinkToPrintQRCode (QR_NICKNAME,UsrDat,false);
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

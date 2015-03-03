@@ -46,7 +46,9 @@ extern struct Globals Gbl;
 typedef enum
   {
    Net_WWW,		// Personal web page
+   Net_500PX,
    Net_DELICIOUS,
+   Net_DEVIANTART,
    Net_EDMODO,
    Net_FACEBOOK,
    Net_FLICKR,
@@ -71,7 +73,9 @@ typedef enum
 const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    "www",		// Net_WWW
+   "500px",		// Net_500PX
    "delicious",		// Net_DELICIOUS
+   "deviantart",	// Net_DEVIANTART
    "edmodo",		// Net_EDMODO
    "facebook",		// Net_FACEBOOK
    "flickr",		// Net_FLICKR
@@ -96,7 +100,9 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    "WWW",		// Net_WWW
+   "500px",		// Net_500PX
    "Delicious",		// Net_DELICIOUS
+   "DeviantArt",	// Net_DEVIANTART
    "Edmodo",		// Net_EDMODO
    "Facebook",		// Net_FACEBOOK
    "Flickr",		// Net_FLICKR

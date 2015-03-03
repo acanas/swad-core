@@ -2400,18 +2400,32 @@ mysql> DESCRIBE usr_nicknames;
 /***** Table usr_webs *****/
 /*
 mysql> DESCRIBE usr_webs;
-+--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field  | Type                                                                                                                                                                                                                                          | Null | Key | Default | Extra |
-+--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod | int(11)                                                                                                                                                                                                                                       | NO   | PRI | NULL    |       |
-| Web    | enum('www','delicious','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') | NO   | PRI | NULL    |       |
-| URL    | varchar(255)                                                                                                                                                                                                                                  | NO   |     | NULL    |       |
-+--------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
++--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field  | Type                                                                                                                                                                                                                                                               | Null | Key | Default | Extra |
++--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod | int(11)                                                                                                                                                                                                                                                            | NO   | PRI | NULL    |       |
+| Web    | enum('www','500px','delicious','deviantart','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') | NO   | PRI | NULL    |       |
+| URL    | varchar(255)                                                                                                                                                                                                                                                       | NO   |     | NULL    |       |
++--------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_webs ("
                    "UsrCod INT NOT NULL,"
-                   "Web ENUM('www','delicious','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL,"
+                   "Web ENUM("
+                   "'www',"
+                   "'500px',"
+                   "'delicious','deviantart',"
+                   "'edmodo',"
+                   "'facebook','flickr','foursquare',"
+                   "'github','googleplus','googlescholar',"
+                   "'instagram',"
+                   "'linkedin',"
+                   "'paperli','pinterest',"
+                   "'researchgate',"
+                   "'scoopit','slideshare','storify',"
+                   "'tumblr','twitter',"
+                   "'wikipedia',"
+                   "'youtube') NOT NULL,"
                    "URL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(UsrCod,Web))");
 
