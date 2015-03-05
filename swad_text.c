@@ -17339,7 +17339,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	NULL,
+	 // ActSeeUsr
+#if   L==0
+	 "Perfil"
+#elif L==1
+	 "Profil"
+#elif L==2
+	 "Profile"
+#elif L==3
+	 "Perfil"
+#elif L==4
+	 "Profil"
+#elif L==5
+	 "Che"
+#elif L==6
+	 "Profilo"
+#elif L==7
+	 "Profil"
+#elif L==8
+	 "Perfil"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -19315,7 +19335,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	NULL,
+	 // ActSeeUsr
+#if   L==0
+	 "Perfil"
+#elif L==1
+	 "Profil"
+#elif L==2
+	 "A user's profile"
+#elif L==3
+	 "Perfil de un usuario"
+#elif L==4
+	 "Profil"
+#elif L==5
+	 "Che"
+#elif L==6
+	 "Profilo"
+#elif L==7
+	 "Profil"
+#elif L==8
+	 "Perfil"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,

@@ -135,6 +135,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname)
 /*****************************************************************************/
 /************** Get user's code of a user from his/her nickname **************/
 /*****************************************************************************/
+// Nickname may have leading '@'
 // Returns true if nickname found in database
 
 long Nck_GetUsrCodFromNickname (const char *Nickname)

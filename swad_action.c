@@ -849,6 +849,7 @@ Users:
 	640. ActSeeSignUpReq		Show pending requests for inscription in the current course
 	641. ActReqMdfSevUsr		Request the enrollment/removing of several students to / from current course
 	642. ActLstCon			List connected users
+	---. ActSeeUsr			Show another user's profile
 
 	643. ActChgGrp			Change my groups
 	644. ActReqEdiGrp		Request the edition of groups
@@ -877,8 +878,8 @@ Users:
 	666. ActLstInvAll		List in another window the full data of guests
 	667. ActLstStdAll		List in another window the full data of students
 	668. ActLstTchAll		List in another window the full data of teachers
-	669. ActSeeRecOneStd		Show records of one selected student
-	670. ActSeeRecOneTch		Show records of one selected teacher
+	669. ActSeeRecOneStd		Show record of one selected student
+	670. ActSeeRecOneTch		Show record of one selected teacher
 	671. ActSeeRecSevInv		Show records of several selected guests
 	672. ActSeeRecSevStd		Show records of several selected students
 	673. ActSeeRecSevTch		Show records of several selected teachers
@@ -1335,7 +1336,8 @@ const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		{ActSeeSignUpReq	,false},
 		{ActReqMdfSevUsr	,true },
 
-		{ActLstCon		,true },
+		{ActLstCon		,false},
+		{ActSeeUsr		,true },
 		},
 		// TabMsg **********
 		{
@@ -2205,6 +2207,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeSignUpReq	*/{1057, 7,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowEnrollmentRequests	,"enrollmentrequest"	},
    /* ActReqMdfSevUsr	*/{ 797, 8,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminUsrs		,"configs"		},
    /* ActLstCon		*/{ 995, 9,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowConnectedUsrs		,"userplugged"		},
+   /* ActSeeUsr		*/{1401,10,TabUsr,ActSeeUsr		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ShowUser			,"prf"			},
 
    // Actions not in menu:
    /* ActChgGrp		*/{ 118,-1,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMyGrpsAndShowChanges	,NULL},
@@ -2238,8 +2241,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstStdAll	*/{  42,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAllDataStds		,NULL},
    /* ActLstTchAll	*/{ 578,-1,TabUsr,ActLstTch		,0x1F0,0x1F0,0x1E0,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAllDataTchs 		,NULL},
 
-   /* ActSeeRecOneStd	*/{1174,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordOneStdCrs	,NULL},
-   /* ActSeeRecOneTch	*/{1175,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordOneTchCrs	,NULL},
+   /* ActSeeRecOneStd	*/{1174,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_GetUsrAndShowRecordOneStdCrs	,NULL},
+   /* ActSeeRecOneTch	*/{1175,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_GetUsrAndShowRecordOneTchCrs	,NULL},
    /* ActSeeRecSevInv	*/{1187,-1,TabUsr,ActLstInv		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsInvs		,NULL},
    /* ActSeeRecSevStd	*/{  89,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsStdsCrs		,NULL},
    /* ActSeeRecSevTch	*/{  22,-1,TabUsr,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsTchsCrs		,NULL},
@@ -4042,6 +4045,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqDatComIns,	// #1398
 	ActChgDatComIns,	// #1399
 	ActDowComIns,		// #1400
+	ActSeeUsr,		// #1401
 	};
 
 /*****************************************************************************/

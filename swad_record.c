@@ -972,16 +972,32 @@ void Rec_ListRecordsInvs (void)
   }
 
 /*****************************************************************************/
+/********** Get user's data and draw record of one unique student ************/
+/*****************************************************************************/
+
+void Rec_GetUsrAndShowRecordOneStdCrs (void)
+  {
+   /***** Get the selected student *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
+      if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
+	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_ROLE_STUDENT)
+	 Rec_ShowRecordOneStdCrs ();
+  }
+
+/*****************************************************************************/
 /******************** Draw record of one unique student **********************/
 /*****************************************************************************/
 
-void Rec_ListRecordOneStdCrs (void)
+void Rec_ShowRecordOneStdCrs (void)
   {
+   /***** Get if student has accepted enrollment in current course *****/
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
-
-   /***** Get the selected student *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -1000,24 +1016,18 @@ void Rec_ListRecordOneStdCrs (void)
 		      "</div>");
 
    /***** Show the record *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
-      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
-	{
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+		      " margin-bottom:10px;\">");
 
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
-	                    " margin-bottom:10px;\">");
+   /* Common record */
+   Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-	 /* Common record */
-	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+   /* Record of the student in the course */
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
+       Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+      Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-	 /* Record of the student in the course */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
-	     Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
-	    Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1117,18 +1127,35 @@ void Rec_ListRecordsStdsCrs (void)
   }
 
 /*****************************************************************************/
+/********** Get user's data and draw record of one unique teacher ************/
+/*****************************************************************************/
+
+void Rec_GetUsrAndShowRecordOneTchCrs (void)
+  {
+   /***** Get the selected teacher *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Show the record *****/
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
+      if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
+	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_ROLE_TEACHER)
+	 Rec_ShowRecordOneTchCrs ();
+  }
+
+/*****************************************************************************/
 /******************** Draw record of one unique teacher **********************/
 /*****************************************************************************/
 
-void Rec_ListRecordOneTchCrs (void)
+void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
+   /***** Get if teacher has accepted enrollment in current course *****/
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
-
-   /***** Get the selected teacher *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
@@ -1144,29 +1171,22 @@ void Rec_ListRecordOneTchCrs (void)
    fprintf (Gbl.F.Out,"</form>"
 		      "</div>");
 
-   /***** Show the record *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
-      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
-	{
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
+		      " margin-bottom:10px;\">");
 
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
-	                    " margin-bottom:10px;\">");
+   /* Common record */
+   Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-	 /* Common record */
-	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+   /* Office hours */
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td style=\"text-align:center;\">");
+   TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+   Lay_EndRoundFrameTable10 ();
 
-	 /* Office hours */
-	 Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"text-align:center;\">");
-	 TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	 Lay_EndRoundFrameTable10 ();
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

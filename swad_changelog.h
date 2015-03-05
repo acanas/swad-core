@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.76.5 (2015/03/03)"
+#define Log_PLATFORM_VERSION	"SWAD 14.77 (2015/03/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.77  :  Mar 04, 2015	New parameter "UsrNick" to go to a user. (178406 lines)
         Version 14.76.5:  Mar 03, 2015	Added new social networks, suggested by Marta Gómez Macías. (178293 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;

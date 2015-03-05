@@ -7356,3 +7356,38 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
    return NumUsrsPerCrs;
   }
+
+/*****************************************************************************/
+/***************************** Show user's profile ***************************/
+/*****************************************************************************/
+
+void Usr_ShowUser (void)
+  {
+   /***** Get user *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)        // Check is user's code is valid
+      Usr_GetParamOtherUsrCodEncrypted ();
+
+   sprintf (Gbl.Message,"Gbl.Usrs.Other.UsrDat.UsrCod = %ld",Gbl.Usrs.Other.UsrDat.UsrCod);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+   /***** Check if user exists and get his data *****/
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
+     {
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	{
+         Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+
+         switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+           {
+            case Rol_ROLE_STUDENT:
+               Rec_ShowRecordOneStdCrs ();
+               break;
+            case Rol_ROLE_TEACHER:
+               Rec_ShowRecordOneTchCrs ();
+               break;
+            default:
+               break;
+           }
+	}
+     }
+  }

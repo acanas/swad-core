@@ -132,11 +132,14 @@ void Par_GetMainParameters (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
+   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
+   long OtherUsrCod;
    char LongStr[1+10+1];
    char YearStr[2+1];
    Lay_Layout_t LayoutFromForm;
 
-   /***** Reset codes of institution, degree and course *****/
+   /***** Reset codes of country, institution, centre, degree and course *****/
+   Gbl.CurrentCty.Cty.CtyCod =
    Gbl.CurrentIns.Ins.InsCod =
    Gbl.CurrentCtr.Ctr.CtrCod =
    Gbl.CurrentDeg.Deg.DegCod =
@@ -260,7 +263,6 @@ void Par_GetMainParameters (void)
      {
       Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.YearOK = false;
-      Gbl.CurrentIns.Ins.InsCod =
       Gbl.CurrentDeg.Deg.DegCod =
       Gbl.CurrentCrs.Crs.CrsCod = -1L;
      }
@@ -283,6 +285,7 @@ void Par_GetMainParameters (void)
          Gbl.CurrentCrs.Crs.CrsCod = -1L;	// Reset possible course from session
         }
       else
+         Gbl.CurrentCty.Cty.CtyCod =
          Gbl.CurrentIns.Ins.InsCod =
          Gbl.CurrentCtr.Ctr.CtrCod =
          Gbl.CurrentDeg.Deg.DegCod =
@@ -293,6 +296,20 @@ void Par_GetMainParameters (void)
    Par_GetParToText ("CrsCod",LongStr,1+10);
    if (LongStr[0])	// Parameter CrsCod available
       Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+
+   /***** Get user's nickname, if exists
+          (this nickname is used to go to a user's profile, not to get the logged user) *****/
+   Par_GetParToText ("UsrNick",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
+     {
+      Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
+      Gbl.CurrentAct = ActSeeUsr;
+      Gbl.CurrentCty.Cty.CtyCod =
+      Gbl.CurrentIns.Ins.InsCod =
+      Gbl.CurrentCtr.Ctr.CtrCod =
+      Gbl.CurrentDeg.Deg.DegCod =
+      Gbl.CurrentCrs.Crs.CrsCod = -1L;
+     }
 
    /***** Get tab to activate *****/
    Gbl.CurrentTab = TabUnk;
@@ -400,6 +417,7 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                 strcmp (ParamName,"CtrCod" ) &&	// To enter directly to a centre
         	strcmp (ParamName,"DegCod" ) &&	// To enter directly to a degree
                 strcmp (ParamName,"CrsCod" ) &&	// To enter directly to a course
+                strcmp (ParamName,"UsrNick") &&	// To enter directly to a user
                 strcmp (ParamName,"ActCod" ) &&	// To execute directly an action (allowed only for fully public actions)
                 strcmp (ParamName,"Layout" ) &&	// To change the layout of the page (wide or narrow)
                 strcmp (ParamName,"IdSes"  ) &&	// To use an open session when redirecting from one language to another
