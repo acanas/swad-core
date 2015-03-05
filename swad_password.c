@@ -746,7 +746,7 @@ void Pwd_ShowFormOthPwd (void)
 	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");
-	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 

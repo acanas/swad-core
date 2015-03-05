@@ -142,7 +142,7 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_URL+1];
 
-   fprintf (Gbl.F.Out,"<div style=\"width:144px; text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"width:144px; margin:0 auto;\">");
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;

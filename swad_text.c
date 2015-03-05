@@ -46452,6 +46452,27 @@ const char *Txt_User_ID =
 	"N&ordm; de identif. do utilizador";
 #endif
 
+const char *Txt_User_not_found =
+#if   L==0
+	"Usuari no trobat";
+#elif L==1
+	"Benutzer nicht gefunden.";
+#elif L==2
+	"User not found.";
+#elif L==3
+	"Usuario/a no encontrado/a.";
+#elif L==4
+	"Utilisateur introuvable.";
+#elif L==5
+	"Usuario/a no encontrado/a.";	// Okoteve traducción
+#elif L==6
+	"IUtente non trovato.";
+#elif L==7
+	"Nie znaleziono u&zdot;ytkownika.";
+#elif L==8
+	"Utilizador n&atilde;o encontrado.";
+#endif
+
 const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 #if   L==0
 	"Usuari no trobat"
@@ -46482,7 +46503,7 @@ const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 	" o non si dispone dell'autorizzazione"
 	" per eseguire questa azione.";
 #elif L==7
-	"Utilisateur introuvable"
+	"User not found"
 	" or you do not have permission"
 	" to perform this action.";		// Potrzebujesz tlumaczenie
 #elif L==8

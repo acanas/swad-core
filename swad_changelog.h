@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.77.1 (2015/03/05)"
+#define Log_PLATFORM_VERSION	"SWAD 14.77.2 (2015/03/05)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.77.2:  Mar 05, 2015	Changes in shared record. (? lines)
         Version 14.77.1:  Mar 05, 2015	New option to select the user and then go to his/her public user's profile. (178475 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1401','es','N','Solicitar perfil de usuario');

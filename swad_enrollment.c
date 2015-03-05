@@ -2859,7 +2859,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
       Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's photo
 
    /***** User's record *****/
-   Rec_ShowCommonRecord (Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,&Gbl.Usrs.Other.UsrDat);
 
    /***** Show list of groups to register/remove me/user *****/
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?

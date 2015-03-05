@@ -52,16 +52,21 @@
 typedef enum
   {
    Rec_FORM_SIGN_UP,
-   Rec_FORM_MY_SHARE_RECORD,
+
+   Rec_FORM_MY_COMMON_RECORD,
+   Rec_MY_COMMON_RECORD_CHECK,
+
    Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,
    Rec_FORM_NEW_RECORD_OTHER_NEW_USR,
-   Rec_MY_SHARE_RECORD_CHECK,
-   Rec_OTHER_USR_SHARE_RECORD_CHECK,
+   Rec_OTHER_USR_COMMON_RECORD_CHECK,
+
    Rec_FORM_MY_COURSE_RECORD,
    Rec_MY_COURSE_RECORD_CHECK,
    Rec_OTHER_USR_COURSE_RECORD_CHECK,
+
    Rec_RECORD_LIST,
    Rec_RECORD_PRINT,
+   Rec_RECORD_PUBLIC,
   } Rec_RecordViewType_t;
 
 typedef enum {
@@ -144,8 +149,8 @@ void Rec_ShowFormMyCommRecord (void);
 void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat);
 void Rec_ShowMyCommonRecordUpd (void);
 void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat);
-void Rec_ShowCommonRecord (Rec_RecordViewType_t TypeOfView,
-                           struct UsrData *UsrDat);
+void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
+                              struct UsrData *UsrDat);
 
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);

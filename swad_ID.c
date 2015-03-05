@@ -336,23 +336,22 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
   {
    unsigned NumID;
 
-   for (NumID = 0;
-	NumID < UsrDat->IDs.Num;
-	NumID++)
-     {
-      if (NumID)
-	 fprintf (Gbl.F.Out,"<br />");
-      if (ICanSeeUsrID)
-	{
+   if (ICanSeeUsrID)
+      for (NumID = 0;
+	   NumID < UsrDat->IDs.Num;
+	   NumID++)
+        {
+	 if (NumID)
+	    fprintf (Gbl.F.Out,"<br />");
+
 	 if (!UsrDat->IDs.List[NumID].Confirmed)
 	    fprintf (Gbl.F.Out,"<span style=\"color:#804040;\">");
 	 fprintf (Gbl.F.Out,"%s",UsrDat->IDs.List[NumID].ID);
 	 if (!UsrDat->IDs.List[NumID].Confirmed)
 	    fprintf (Gbl.F.Out,"</span>");
 	}
-      else
-	 fprintf (Gbl.F.Out,"********");
-     }
+   else
+      fprintf (Gbl.F.Out,"********");
   }
 
 /*****************************************************************************/
@@ -406,7 +405,7 @@ void ID_ShowFormOthIDs (void)
 	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");
-	 Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
@@ -591,7 +590,7 @@ void ID_RemoveOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -706,7 +705,7 @@ void ID_NewOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

@@ -7400,6 +7400,7 @@ void Usr_RequestUserProfile (void)
 
 void Usr_ShowUserProfile (void)
   {
+   extern const char *Txt_User_not_found;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
    long OtherUsrCod;
 
@@ -7416,9 +7417,6 @@ void Usr_ShowUserProfile (void)
 	 Usr_GetParamOtherUsrCodEncrypted ();
      }
 
-   sprintf (Gbl.Message,"Gbl.Usrs.Other.UsrDat.UsrCod = %ld",Gbl.Usrs.Other.UsrDat.UsrCod);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
    /***** Check if user exists and get his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
      {
@@ -7434,8 +7432,16 @@ void Usr_ShowUserProfile (void)
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /***** Common record *****/
-      Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
       fprintf (Gbl.F.Out,"</div>");
+     }
+   else
+     {
+      /***** Show error message *****/
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found);
+
+      /***** Request nickname again *****/
+      Usr_RequestUserProfile ();
      }
   }
