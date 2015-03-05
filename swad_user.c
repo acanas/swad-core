@@ -7358,14 +7358,63 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/***************************** Show user's profile ***************************/
+/************************** Request a user's profile *************************/
 /*****************************************************************************/
 
-void Usr_ShowUser (void)
+void Usr_RequestUserProfile (void)
   {
+   extern const char *Txt_View_a_user_profile;
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Nickname;
+   extern const char *Txt_Continue;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_a_user_profile);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>");
+
+   /***** Form to request user's @nickname *****/
+   Act_FormStart (ActSeePubPrf);
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+                      "%s: "
+                      "<input type=\"text\" name=\"UsrNick\""
+                      " size=\"20\" maxlength=\"%u\" />"
+                      "</div>",
+            The_ClassFormul[Gbl.Prefs.Theme],
+            Txt_Nickname,
+            Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+
+   /***** Send button*****/
+   Lay_PutSendButton (Txt_Continue);
+   fprintf (Gbl.F.Out,"</form>");
+
+   /***** End frame *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/*************************** Show a user's profile ***************************/
+/*****************************************************************************/
+
+void Usr_ShowUserProfile (void)
+  {
+   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
+   long OtherUsrCod;
+
    /***** Get user *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)        // Check is user's code is valid
-      Usr_GetParamOtherUsrCodEncrypted ();
+   if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
+     {
+      Par_GetParToText ("UsrNick",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+      if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
+	{
+	 Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
+	 Gbl.CurrentAct = ActSeePubPrf;
+	}
+      else
+	 Usr_GetParamOtherUsrCodEncrypted ();
+     }
 
    sprintf (Gbl.Message,"Gbl.Usrs.Other.UsrDat.UsrCod = %ld",Gbl.Usrs.Other.UsrDat.UsrCod);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
@@ -7375,19 +7424,18 @@ void Usr_ShowUser (void)
      {
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
+	 /* Get user's role in current course */
          Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-         switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
-           {
-            case Rol_ROLE_STUDENT:
-               Rec_ShowRecordOneStdCrs ();
-               break;
-            case Rol_ROLE_TEACHER:
-               Rec_ShowRecordOneTchCrs ();
-               break;
-            default:
-               break;
-           }
+	 /* Get if user has accepted enrollment in current course */
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 	}
+
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+      /***** Common record *****/
+      Rec_ShowCommonRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+
+      fprintf (Gbl.F.Out,"</div>");
      }
   }

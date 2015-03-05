@@ -68,6 +68,9 @@ extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
 static void Rec_WriteHeadingRecordFields (void);
 static void Rec_GetFieldByCod (long FieldCod,char *Name,unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
+static void Rec_ShowRecordOneStdCrs (void);
+static void Rec_ShowRecordOneTchCrs (void);
+
 static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
@@ -991,7 +994,7 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 /******************** Draw record of one unique student **********************/
 /*****************************************************************************/
 
-void Rec_ShowRecordOneStdCrs (void)
+static void Rec_ShowRecordOneStdCrs (void)
   {
    /***** Get if student has accepted enrollment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -1147,7 +1150,7 @@ void Rec_GetUsrAndShowRecordOneTchCrs (void)
 /******************** Draw record of one unique teacher **********************/
 /*****************************************************************************/
 
-void Rec_ShowRecordOneTchCrs (void)
+static void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 

@@ -103,12 +103,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.77 (2015/03/04)"
+#define Log_PLATFORM_VERSION	"SWAD 14.77.1 (2015/03/05)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.77  :  Mar 04, 2015	New parameter "UsrNick" to go to a user. (178406 lines)
+        Version 14.77.1:  Mar 05, 2015	New option to select the user and then go to his/her public user's profile. (178475 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1401','es','N','Solicitar perfil de usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver perfil de usuario');
+
+        Version 14.77  :  Mar 04, 2015	New parameter "UsrNick" to go to a public user's profile. (178406 lines)
         Version 14.76.5:  Mar 03, 2015	Added new social networks, suggested by Marta Gómez Macías. (178293 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;

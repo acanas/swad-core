@@ -321,6 +321,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role);
 
-void Usr_ShowUser (void);
+void Usr_RequestUserProfile (void);
+void Usr_ShowUserProfile (void);
 
 #endif

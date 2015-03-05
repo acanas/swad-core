@@ -303,12 +303,14 @@ void Par_GetMainParameters (void)
    if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
-      Gbl.CurrentAct = ActSeeUsr;
+      Gbl.CurrentAct = ActSeePubPrf;
+      /*
       Gbl.CurrentCty.Cty.CtyCod =
       Gbl.CurrentIns.Ins.InsCod =
       Gbl.CurrentCtr.Ctr.CtrCod =
       Gbl.CurrentDeg.Deg.DegCod =
       Gbl.CurrentCrs.Crs.CrsCod = -1L;
+      */
      }
 
    /***** Get tab to activate *****/

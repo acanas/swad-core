@@ -17339,7 +17339,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	 // ActSeeUsr
+	 // ActReqPubPrf
 #if   L==0
 	 "Perfil"
 #elif L==1
@@ -19335,7 +19335,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	 // ActSeeUsr
+	 // ActReqPubPrf
 #if   L==0
 	 "Perfil"
 #elif L==1
@@ -46742,6 +46742,27 @@ const char *Txt_View =
 	"Wy&sacute;wietl";
 #elif L==8
 	"Ver";
+#endif
+
+const char *Txt_View_a_user_profile =
+#if   L==0
+	"Veure el perfil d'un usuari";
+#elif L==1
+	"Benutzer-Profile anzeigen";
+#elif L==2
+	"View a user's profile";
+#elif L==3
+	"Ver el perfil de un usuario";
+#elif L==4
+	"Voir le profil d'un utilisateur";
+#elif L==5
+	"Ver el perfil de un usuario";	// Okoteve traducción
+#elif L==6
+	"Mostra il profilo di un utente";
+#elif L==7
+	"Zobacz profil u&zdot;ytkownika";
+#elif L==8
+	"Ver o perfil de um utilizador";
 #endif
 
 const char *Txt_View_all_recipients =
