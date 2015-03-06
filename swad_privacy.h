@@ -1,4 +1,4 @@
-// swad_privacy.h: Users' photo and public profile visibility
+// swad_privacy.h: users' photo and public profile visibility
 
 #ifndef _SWAD_PRI
 #define _SWAD_PRI
@@ -40,12 +40,19 @@ typedef enum
    Pri_VISIBILITY_COURSE = 1,	// Visible by users sharing courses with me
    Pri_VISIBILITY_SYSTEM = 2,	// Visible by any user logged in platform
    Pri_VISIBILITY_WORLD  = 3,	// Public, visible by all the people, even unlogged visitors
-  } Pri_VISIBILITY_t;
+  } Pri_Visibility_t;
 
 #define Pri_VISIBILITY_DEFAULT Pri_VISIBILITY_USER
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+void Pri_PutLinkToChangeMyPrivacy (void);
+void Pri_EditMyPrivacy (void);
+
+void Pri_PutFormVisibility (Act_Action_t Action,Pri_Visibility_t CurrentVisibilityInDB);
+Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
+bool Pri_GetParamVisibility (void);
 
 #endif

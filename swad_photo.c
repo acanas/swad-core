@@ -57,15 +57,6 @@ extern struct Globals Gbl;
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-/***** Photo visibility (who can see user's photo) *****/
-const char *Pri_VISIBILITYDB[Pri_NUM_OPTIONS_PRIVACY] =
-  {
-   "user",	// Pri_VISIBILITY_USER
-   "course",	// Pri_VISIBILITY_COURSE
-   "system",	// Pri_VISIBILITY_SYSTEM
-   "world",	// Pri_VISIBILITY_WORLD
-  };
-
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -248,7 +239,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       /***** Forms to remove photo and make it public *****/
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
-      Rec_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
+      Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
@@ -1019,105 +1010,22 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
   }
 
 /*****************************************************************************/
-/************************** Select photo visibility **************************/
-/*****************************************************************************/
-
-void Pho_PutFormPhotoVisibility (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Photo;
-   extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
-   Pri_VISIBILITY_t PhotoVisibility;
-
-   /***** Select photo visibility *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
-	              "%s:"
-	              "</td>"
-	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Photo);
-
-   /***** Form with list of options *****/
-   Act_FormStart (ActChgPubPho);
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-                      " padding:0; margin:10px auto;\">");
-   for (PhotoVisibility = (Pri_VISIBILITY_t) 0;
-	PhotoVisibility < Pri_NUM_OPTIONS_PRIVACY;
-	PhotoVisibility++)
-     {
-      fprintf (Gbl.F.Out,"<li class=\"DAT\">"
-                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
-               (unsigned) PhotoVisibility);
-      if (PhotoVisibility == Gbl.Usrs.Me.UsrDat.PhotoVisibility)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-	                 "%s"
-                         "</li>",
-               Gbl.FormId,Txt_PRIVACY_OPTIONS[PhotoVisibility]);
-     }
-
-   /***** End of list and form *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</form>"
-                      "</td>"
-                      "</tr>");
-  }
-
-/*****************************************************************************/
-/************************* Get icon set from string **************************/
-/*****************************************************************************/
-
-Pri_VISIBILITY_t Pho_GetPhotoVisibilityFromStr (const char *Str)
-  {
-   Pri_VISIBILITY_t PhotoVisibility;
-
-   for (PhotoVisibility = (Pri_VISIBILITY_t) 0;
-	PhotoVisibility < Pri_NUM_OPTIONS_PRIVACY;
-	PhotoVisibility++)
-      if (!strcasecmp (Str,Pri_VISIBILITYDB[PhotoVisibility]))
-	 return PhotoVisibility;
-
-   return Pri_VISIBILITY_DEFAULT;
-  }
-
-/*****************************************************************************/
-/************* Get parameter with photo visibility from form *****************/
-/*****************************************************************************/
-
-bool Pho_GetParamPhotoVisibility (void)
-  {
-   char UnsignedStr[10+1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("PhotoVisibility",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Photo visibility is missing.");
-      if (UnsignedNum >= Pri_NUM_OPTIONS_PRIVACY)
-         Lay_ShowErrorAndExit ("Photo visibility is missing.");
-      return (Pri_VISIBILITY_t) UnsignedNum;
-     }
-   return Pri_VISIBILITY_DEFAULT;
-  }
-
-/*****************************************************************************/
 /************************** Change photo visibility **************************/
 /*****************************************************************************/
 
 void Pho_ChangePhotoVisibility (void)
   {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_The_visibility_of_your_photo_has_changed;
    char Query[128];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pho_GetParamPhotoVisibility ();
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ();
 
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"
 	          " WHERE UsrCod='%ld'",
-            Pri_VISIBILITYDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
+            Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
 
@@ -1125,7 +1033,7 @@ void Pho_ChangePhotoVisibility (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_The_visibility_of_your_photo_has_changed);
 
    /***** Show form again *****/
-   Rec_EditMyPrivacy ();
+   Pri_EditMyPrivacy ();
   }
 
 /*****************************************************************************/

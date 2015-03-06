@@ -412,7 +412,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Pri_VISIBILITYDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char Query[2048];
@@ -449,7 +449,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    The_ThemeId[UsrDat->Prefs.Theme],
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-            Pri_VISIBILITYDB[UsrDat->PhotoVisibility],
+            Pri_VisibilityDB[UsrDat->PhotoVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress ,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,

@@ -127,7 +127,7 @@ struct UsrData
    char Email		[Cns_MAX_BYTES_STRING  +1];
    bool EmailConfirmed;
    char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
-   Pri_VISIBILITY_t PhotoVisibility;	// Who can see user's photo
+   Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    long CtyCod;		// Country
    char OriginPlace	[Cns_MAX_BYTES_STRING+1];
    struct Date Birthday;

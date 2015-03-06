@@ -468,7 +468,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get rest of data */
    strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo)-1);
-   UsrDat->PhotoVisibility = Pho_GetPhotoVisibilityFromStr (row[11]);
+   UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[12]);
    UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[13]);
    UsrDat->InsCod = Str_ConvertStrCodToLongCod (row[14]);

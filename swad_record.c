@@ -1901,7 +1901,7 @@ void Rec_ShowFormMyCommRecord (void)
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-   Rec_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
+   Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
 
    /***** My record *****/
    Act_FormStart (ActChgMyData);
@@ -3065,7 +3065,7 @@ void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
    /***** Get whether photo is public from form *****/
-   UsrDat->PhotoVisibility = Pho_GetParamPhotoVisibility ();
+   UsrDat->PhotoVisibility = Pri_GetParamVisibility ();
 
    /***** Get country code *****/
    Par_GetParToText ("OthCtyCod",LongStr,1+10);
@@ -3132,40 +3132,6 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
    fprintf (Gbl.F.Out,"</form>");
-  }
-
-/*****************************************************************************/
-/*************** Put a link to the action to edit my privacy *****************/
-/*****************************************************************************/
-
-void Rec_PutLinkToChangeMyPrivacy (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Privacy;
-
-   /***** Link to edit my social networks *****/
-   Act_FormStart (ActEdiPri);
-   Act_LinkFormSubmit (Txt_Privacy,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("padlock",Txt_Privacy,Txt_Privacy);
-   fprintf (Gbl.F.Out,"</form>");
-  }
-
-/*****************************************************************************/
-/******************************* Edit my privacy *****************************/
-/*****************************************************************************/
-
-void Rec_EditMyPrivacy (void)
-  {
-   extern const char *Txt_Privacy;
-
-   /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Privacy);
-
-   /***** Select photo visibility *****/
-   Pho_PutFormPhotoVisibility ();
-
-   /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
