@@ -1901,6 +1901,7 @@ void Rec_ShowFormMyCommRecord (void)
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+   Rec_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
 
    /***** My record *****/
    Act_FormStart (ActChgMyData);
@@ -3141,6 +3142,22 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    Act_FormStart (ActReqEdiMyNet);
    Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
+   fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
+/*************** Put a link to the action to edit my privacy *****************/
+/*****************************************************************************/
+
+void Rec_PutLinkToChangeMyPrivacy (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Privacy;
+
+   /***** Link to edit my social networks *****/
+   Act_FormStart (ActReqEdiMyNet);
+   Act_LinkFormSubmit (Txt_Privacy,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("padlock",Txt_Privacy,Txt_Privacy);
    fprintf (Gbl.F.Out,"</form>");
   }
 

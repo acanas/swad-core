@@ -103,12 +103,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.78 (2015/03/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.78.1 (2015/03/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.78:    Mar 06, 2015	Field PublicPhoto is replaced by field PhotoVisibility. (178577 lines)
+        Version 14.78.1:  Mar 06, 2015	New link to privacy options (unfinished). (178595 lines)
+        Version 14.78:    Mar 06, 2015	Four degrees of visibility in photos.
+					Field PublicPhoto is replaced by field PhotoVisibility in usr_data table. (178577 lines)
 					4 changes necessary in database:
 ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PublicPhoto;
 UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';
@@ -2465,7 +2467,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 11.55.4: Apr 15, 2012	Minor changes in web service. (132575 lines)
 	Version 11.55.3: Apr 15, 2012	New function getGroups in the web service. (132571 lines)
 	Version 11.55.2: Apr 14, 2012	New function getDirectoryTree in the web service. (132478 lines)
-	Version 11.55.1: Apr 13, 2012	Now the privacity of a file changes when receiving the form. (132443 lines)
+	Version 11.55.1: Apr 13, 2012	Now the privacy of a file changes when receiving the form. (132443 lines)
 	Version 11.55:   Apr 12, 2012	New options to edit metadata of a file. (132421 lines)
 	Version 11.54:   Apr 12, 2012	Documents are open to public not logged. (132323 lines)
 	Version 11.53.4: Apr 11, 2012	Changes in search of courses. (132258 lines)

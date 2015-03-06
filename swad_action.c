@@ -1180,7 +1180,7 @@ Profile:
 	951. ActDetMyPho		Receive my photo and detect faces on it
 	952. ActUpdMyPho		Update my photo
 	953. ActRemMyPho		Remove my photo
-	954. ActChgPubPho		Change photo privacity
+	954. ActChgPubPho		Change photo privacy
 
 	955. ActReqEdiMyIns		Request the edition of my institution, centre and department
 	956. ActChgCtyMyIns		Change the country of my institution

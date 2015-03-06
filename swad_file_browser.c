@@ -9512,7 +9512,7 @@ void Brw_ChgFileMetadata (void)
    /***** Check if I can change file metadata *****/
    if (Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod))
      {
-      /***** Get the new file privacity and license from form *****/
+      /***** Get the new file privacy and license from form *****/
       switch (Gbl.FileBrowser.Type)
         {
          case Brw_ADMI_DOCUM_INS:

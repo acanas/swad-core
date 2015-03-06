@@ -252,6 +252,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
       fprintf (Gbl.F.Out,"&nbsp;");
       Pho_PutFormPhotoVisibility ();
+      Rec_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */

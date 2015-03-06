@@ -26901,6 +26901,27 @@ const char *Txt_Print =
 	"Imprimir";
 #endif
 
+const char *Txt_Privacy =
+#if   L==0
+	"Privacitat";
+#elif L==1
+	"Geheimhaltung";
+#elif L==2
+	"Privacy";
+#elif L==3
+	"Privacidad";
+#elif L==4
+	"Privacit&eacute;";
+#elif L==5
+	"Privacidad";	// Okoteve traducción
+#elif L==6
+	"Privatezza";
+#elif L==7
+	"Prywatno&sacute;&cacute;";
+#elif L==8
+	"Privacidade";
+#endif
+
 const char *Txt_Private_available_to_certain_users_identified =
 #if   L==0
 	"Privat, disponible per a certs usuaris identificats";
@@ -26920,27 +26941,6 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Prywatne, dost&eogon;pne dla okre&sacute;lonych u&zdot;ytkownik&oacute;w zidentyfikowanych";
 #elif L==8
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
-#endif
-
-const char *Txt_Private_Photo =
-#if   L==0
-	"Foto privada";
-#elif L==1
-	"Private Foto";
-#elif L==2
-	"Private photo";
-#elif L==3
-	"Foto privada";
-#elif L==4
-	"Photo priv&eacute;e";
-#elif L==5
-	"Foto privada";	// Okoteve traducción
-#elif L==6
-	"Foto privata";
-#elif L==7
-	"Prywatne zdjecia";
-#elif L==8
-	"Foto privada";
 #endif
 
 const char *Txt_Private_storage_area =
