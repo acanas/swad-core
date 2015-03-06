@@ -776,29 +776,10 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 
 bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
   {
-   bool ICanSeePhoto = false;
-   bool ItsMe = Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod;
+   bool ICanSeePhoto;
 
    /***** Check if I can see the other's photo *****/
-   switch (UsrDat->PhotoVisibility)
-     {
-      case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
-         if (ItsMe ||						// I always can see my photo
-             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)	// A system admin always can see any user's photo
-            ICanSeePhoto = true;
-         else
-            ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);	// Both users share the same course but whit different role
-	 break;
-      case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
-         ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);	// Both users share the same course
-	 break;
-      case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
-         ICanSeePhoto = Gbl.Usrs.Me.Logged;
-	 break;
-      case Pri_VISIBILITY_WORLD:	// Public, visible by all the people, even unlogged visitors
-         ICanSeePhoto = true;
-	 break;
-     }
+   ICanSeePhoto = Pri_ShowIsAllowed (UsrDat->PhotoVisibility,UsrDat->UsrCod);
 
    /***** Photo is shown if I can see it, and it exists *****/
    return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL,true) :

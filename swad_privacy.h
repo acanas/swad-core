@@ -51,8 +51,9 @@ typedef enum
 void Pri_PutLinkToChangeMyPrivacy (void);
 void Pri_EditMyPrivacy (void);
 
-void Pri_PutFormVisibility (Act_Action_t Action,Pri_Visibility_t CurrentVisibilityInDB);
 Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
 bool Pri_GetParamVisibility (void);
+
+bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod);
 
 #endif

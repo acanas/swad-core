@@ -388,7 +388,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Layout='%u',Theme='%s',IconSet='%s',Language='%s',PhotoVisibility='%s',"
+		  "Layout='%u',Theme='%s',IconSet='%s',Language='%s',PhotoVisibility='%s',ProfileVisibility='%s',"
 		  "CtyCod='%ld',"
 		  "LocalAddress='%s',LocalPhone='%s',FamilyAddress='%s',FamilyPhone='%s',OriginPlace='%s',Birthday='%04u-%02u-%02u',Comments='%s'"
 		  " WHERE UsrCod='%ld'",
@@ -400,6 +400,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
             Pri_VisibilityDB[UsrDat->PhotoVisibility],
+            Pri_VisibilityDB[UsrDat->ProfileVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,

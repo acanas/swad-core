@@ -238,7 +238,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EmailConfirmed = false;
 
    UsrDat->Photo[0] = '\0';
-   UsrDat->PhotoVisibility = Pri_VISIBILITY_DEFAULT;
+   UsrDat->PhotoVisibility =
+   UsrDat->ProfileVisibility = Pri_VISIBILITY_DEFAULT;
 
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';
@@ -388,7 +389,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-                  "Layout,Theme,IconSet,Language,Photo,PhotoVisibility,"
+                  "Layout,Theme,IconSet,Language,Photo,PhotoVisibility,ProfileVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
@@ -468,36 +469,37 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get rest of data */
    strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo)-1);
-   UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[11]);
-   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[12]);
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[13]);
-   UsrDat->InsCod = Str_ConvertStrCodToLongCod (row[14]);
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
+   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[13]);
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
+   UsrDat->InsCod = Str_ConvertStrCodToLongCod (row[15]);
 
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[15]);
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[16]);
-   strncpy (UsrDat->Tch.Office     ,row[17],sizeof (UsrDat->Tch.Office     )-1);
-   strncpy (UsrDat->Tch.OfficePhone,row[18],sizeof (UsrDat->Tch.OfficePhone)-1);
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
+   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     )-1);
+   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone)-1);
 
-   strncpy (UsrDat->LocalAddress   ,row[19],sizeof (UsrDat->LocalAddress   )-1);
-   strncpy (UsrDat->LocalPhone     ,row[20],sizeof (UsrDat->LocalPhone     )-1);
-   strncpy (UsrDat->FamilyAddress  ,row[21],sizeof (UsrDat->FamilyAddress  )-1);
-   strncpy (UsrDat->FamilyPhone    ,row[22],sizeof (UsrDat->FamilyPhone    )-1);
-   strncpy (UsrDat->OriginPlace    ,row[23],sizeof (UsrDat->OriginPlace    )-1);
+   strncpy (UsrDat->LocalAddress   ,row[20],sizeof (UsrDat->LocalAddress   )-1);
+   strncpy (UsrDat->LocalPhone     ,row[21],sizeof (UsrDat->LocalPhone     )-1);
+   strncpy (UsrDat->FamilyAddress  ,row[22],sizeof (UsrDat->FamilyAddress  )-1);
+   strncpy (UsrDat->FamilyPhone    ,row[23],sizeof (UsrDat->FamilyPhone    )-1);
+   strncpy (UsrDat->OriginPlace    ,row[24],sizeof (UsrDat->OriginPlace    )-1);
    strcpy (StrBirthday,
-           row[24] ? row[24] :
+           row[25] ? row[25] :
 	             "0000-00-00");
-   Usr_GetUsrCommentsFromString (row[25] ? row[25] :
+   Usr_GetUsrCommentsFromString (row[26] ? row[26] :
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
 
    /* Get menu */
    UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
-   if (sscanf (row[26],"%u",&UnsignedNum) == 1)
+   if (sscanf (row[27],"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Mnu_NUM_MENUS)
          UsrDat->Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
 
    /* Get if user wants to show side columns */
-   if (sscanf (row[27],"%u",&UsrDat->Prefs.SideCols) == 1)
+   if (sscanf (row[28],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
          UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -506,10 +508,10 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified by e-mail */
-   if (sscanf (row[28],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
-   if (sscanf (row[29],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
@@ -7427,4 +7429,31 @@ void Usr_ShowUserProfile (void)
       /***** Request nickname again *****/
       Usr_RequestUserProfile ();
      }
+  }
+
+/*****************************************************************************/
+/******************** Change my public profile visibility ********************/
+/*****************************************************************************/
+
+void Usr_ChangeProfileVisibility (void)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *Txt_The_visibility_of_your_public_profile_has_changed;
+   char Query[128];
+
+   /***** Get param with public/private photo *****/
+   Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ();
+
+   /***** Store public/private photo in database *****/
+   sprintf (Query,"UPDATE usr_data SET ProfileVisibility='%s'"
+	          " WHERE UsrCod='%ld'",
+            Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
+            Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not update your preference about public profile visibility");
+
+   /***** Show alert *****/
+   Lay_ShowAlert (Lay_SUCCESS,Txt_The_visibility_of_your_public_profile_has_changed);
+
+   /***** Show form again *****/
+   Pri_EditMyPrivacy ();
   }

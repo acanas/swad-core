@@ -3064,9 +3064,6 @@ void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
       if (UnsignedNum <= Usr_SEX_MALE)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
-   /***** Get whether photo is public from form *****/
-   UsrDat->PhotoVisibility = Pri_GetParamVisibility ();
-
    /***** Get country code *****/
    Par_GetParToText ("OthCtyCod",LongStr,1+10);
    UsrDat->CtyCod = Str_ConvertStrCodToLongCod (LongStr);

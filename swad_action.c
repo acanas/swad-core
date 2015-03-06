@@ -1180,9 +1180,10 @@ Profile:
 	951. ActDetMyPho		Receive my photo and detect faces on it
 	952. ActUpdMyPho		Update my photo
 	953. ActRemMyPho		Remove my photo
-	954. ActChgPubPho		Change photo privacy
 
 	---. ActEdiPri			Edit my privacy
+	954. ActChgPriPho		Change privacy of my photo
+	---. ActChgPriPrf		Change privacy of my public profile
 
 	955. ActReqEdiMyIns		Request the edition of my institution, centre and department
 	956. ActChgCtyMyIns		Change the country of my institution
@@ -2593,9 +2594,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
    /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
    /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
-   /* ActChgPubPho	*/{ 774,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ChangePhotoVisibility	,NULL},
 
    /* ActEdiPri		*/{1403,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pri_EditMyPrivacy		,NULL},
+   /* ActChgPriPho	*/{ 774,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ChangePhotoVisibility	,NULL},
+   /* ActChgPriPrf	*/{1404,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ChangeProfileVisibility	,NULL},
 
    /* ActReqEdiMyIns	*/{1165,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,NULL},
    /* ActChgCtyMyIns	*/{1166,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChgCountryOfMyInstitution	,NULL},
@@ -3423,7 +3425,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #771 (obsolete action)
 	ActDelPstForInsTch,	// #772
 	ActRemOldUsr,		// #773
-	ActChgPubPho,		// #774
+	ActChgPriPho,		// #774
 	ActChgNtfPrf,		// #775
 	ActRemPlc,		// #776
 	ActLstPlg,		// #777
@@ -4056,6 +4058,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqPubPrf,		// #1401
 	ActSeePubPrf,		// #1402
 	ActEdiPri,		// #1403
+	ActChgPriPrf,		// #1404
 	};
 
 /*****************************************************************************/

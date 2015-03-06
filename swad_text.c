@@ -27049,6 +27049,27 @@ const char *Txt_Public_open_educational_resource_OER_for_everyone =
 	"P&uacute;blico, recurso educacional aberto (OER) para todos";
 #endif
 
+const char *Txt_Public_profile =
+#if   L==0
+	"Perfil p&uacute;blic";
+#elif L==1
+	"&Ouml;ffentliches Benutzer-Profile";
+#elif L==2
+	"Public profile";
+#elif L==3
+	"Perfil p&uacute;blico";
+#elif L==4
+	"Profil public";
+#elif L==5
+	"Perfil p&uacute;blico";	// Okoteve traducción
+#elif L==6
+	"Profilo pubblico";
+#elif L==7
+	"Profil publiczny";
+#elif L==8
+	"Perfil p&uacute;blico";
+#endif
+
 const char *Txt_Public_views =
 #if   L==0
 	"Accessos p&uacute;blics";
@@ -42724,6 +42745,27 @@ const char *Txt_The_visibility_of_your_photo_has_changed =
 	"The visibility of your photo has changed.";	// Potrzebujesz tlumaczenie
 #elif L==8
 	"The visibility of your photo has changed.";	// Necessita de tradução
+#endif
+
+const char *Txt_The_visibility_of_your_public_profile_has_changed =
+#if   L==0
+	"La visibilidad de su perfil p&uacute;blico ha cambiado.";	// Necessita traduccio
+#elif L==1
+	"The visibility of your public profile has changed.";	// Need Übersetzung
+#elif L==2
+	"The visibility of your public profile has changed.";
+#elif L==3
+	"La visibilidad de su perfil p&uacute;blico ha cambiado.";
+#elif L==4
+	"The visibility of your public profile has changed.";	// Besoin de traduction
+#elif L==5
+	"La visibilidad de su perfil p&uacute;blico ha cambiado.";	// Okoteve traducción
+#elif L==6
+	"The visibility of your public profile has changed.";	// Bisogno di traduzione
+#elif L==7
+	"The visibility of your public profile has changed.";	// Potrzebujesz tlumaczenie
+#elif L==8
+	"The visibility of your public profile has changed.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_whole_course =

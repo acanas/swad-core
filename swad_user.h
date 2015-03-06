@@ -128,6 +128,7 @@ struct UsrData
    bool EmailConfirmed;
    char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
+   Pri_Visibility_t ProfileVisibility;	// Who can see user's public profile
    long CtyCod;		// Country
    char OriginPlace	[Cns_MAX_BYTES_STRING+1];
    struct Date Birthday;
@@ -325,5 +326,6 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role);
 
 void Usr_RequestUserProfile (void);
 void Usr_ShowUserProfile (void);
+void Usr_ChangeProfileVisibility (void);
 
 #endif
