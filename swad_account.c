@@ -410,8 +410,9 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 
 void Acc_CreateNewUsr (struct UsrData *UsrDat)
   {
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *The_ThemeId[The_NUM_THEMES];
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern const char *Pho_VisibilityDB[Pho_NUM_VISIBILITIES];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char Query[2048];
@@ -431,12 +432,12 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
    /***** Insert new user in database *****/
    /* Insert user's data */
    sprintf (Query,"INSERT INTO usr_data (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-		  "Layout,Theme,IconSet,Language,PublicPhoto,"
+		  "Layout,Theme,IconSet,Language,PhotoVisibility,"
 		  "CtyCod,"
 		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
 		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 		  " VALUES ('%s','%s','%s','%s','%s','%s',"
-		  "'%u','%s','%s','%s','%c',"
+		  "'%u','%s','%s','%s','%s',"
 		  "'%ld',"
 		  "'%s','%s','%s','%s','%s','%04u-%02u-%02u','%s',"
 		  "'%u','%u','-1','0')",
@@ -448,8 +449,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    The_ThemeId[UsrDat->Prefs.Theme],
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-	    UsrDat->PublicPhoto ? 'Y' :
-		                  'N',
+            Pho_VisibilityDB[UsrDat->PhotoVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress ,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,

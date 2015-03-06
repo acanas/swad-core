@@ -238,7 +238,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EmailConfirmed = false;
 
    UsrDat->Photo[0] = '\0';
-   UsrDat->PublicPhoto = false;
+   UsrDat->PhotoVisibility = Pho_VISIBILITY_DEFAULT;
 
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';
@@ -383,13 +383,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    The_Theme_t Theme;
    Ico_IconSet_t IconSet;
    Txt_Language_t Lan;
-   char YN[1+1];
-   char StrBirthday[4+1+2+1+2+1];
    unsigned UnsignedNum;
+   char StrBirthday[4+1+2+1+2+1];
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-                  "Layout,Theme,IconSet,Language,Photo,PublicPhoto,"
+                  "Layout,Theme,IconSet,Language,Photo,PhotoVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
@@ -468,23 +467,22 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
         }
 
    /* Get rest of data */
-   strncpy (UsrDat->Photo            ,row[10],sizeof (UsrDat->Photo            )-1);
-   strncpy (YN                       ,row[11],1);
-   UsrDat->PublicPhoto = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo)-1);
+   UsrDat->PhotoVisibility = Pho_GetPhotoVisibilityFromStr (row[11]);
    UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[12]);
    UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[13]);
    UsrDat->InsCod = Str_ConvertStrCodToLongCod (row[14]);
 
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[15]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[16]);
-   strncpy (UsrDat->Tch.Office       ,row[17],sizeof (UsrDat->Tch.Office       )-1);
-   strncpy (UsrDat->Tch.OfficePhone  ,row[18],sizeof (UsrDat->Tch.OfficePhone  )-1);
+   strncpy (UsrDat->Tch.Office     ,row[17],sizeof (UsrDat->Tch.Office     )-1);
+   strncpy (UsrDat->Tch.OfficePhone,row[18],sizeof (UsrDat->Tch.OfficePhone)-1);
 
-   strncpy (UsrDat->LocalAddress ,row[19],sizeof (UsrDat->LocalAddress )-1);
-   strncpy (UsrDat->LocalPhone   ,row[20],sizeof (UsrDat->LocalPhone   )-1);
-   strncpy (UsrDat->FamilyAddress,row[21],sizeof (UsrDat->FamilyAddress)-1);
-   strncpy (UsrDat->FamilyPhone  ,row[22],sizeof (UsrDat->FamilyPhone  )-1);
-   strncpy (UsrDat->OriginPlace  ,row[23],sizeof (UsrDat->OriginPlace  )-1);
+   strncpy (UsrDat->LocalAddress   ,row[19],sizeof (UsrDat->LocalAddress   )-1);
+   strncpy (UsrDat->LocalPhone     ,row[20],sizeof (UsrDat->LocalPhone     )-1);
+   strncpy (UsrDat->FamilyAddress  ,row[21],sizeof (UsrDat->FamilyAddress  )-1);
+   strncpy (UsrDat->FamilyPhone    ,row[22],sizeof (UsrDat->FamilyPhone    )-1);
+   strncpy (UsrDat->OriginPlace    ,row[23],sizeof (UsrDat->OriginPlace    )-1);
    strcpy (StrBirthday,
            row[24] ? row[24] :
 	             "0000-00-00");
@@ -735,8 +733,27 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
 
    /***** Get if a user shares any course with me from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr WHERE UsrCod='%ld'"
-                  " AND CrsCod IN (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld')",
+                  " AND CrsCod IN"
+                  " (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld')",
             UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
+  }
+
+/*****************************************************************************/
+/*** Check if a user belongs to any of my courses but has a different role ***/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
+  {
+   char Query[512];
+
+   /***** Get if a user shares any course with me from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM"
+                  "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_courses,"
+                  "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS usr_courses"
+                  " WHERE my_courses.CrsCod=usr_courses.CrsCod"
+                  " AND my_courses.Role!=usr_courses.Role",
+            Gbl.Usrs.Me.UsrDat.UsrCod,UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
   }
 
@@ -6800,19 +6817,11 @@ void Usr_SeeTchClassPhotoPrn (void)
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t RoleInClassPhoto)
   {
-   extern const char *Txt_to_see_photos_of_others_you_have_to_allow_others_to_see_your_photo_you_can_do_it_in_X;
-   extern const char *Txt_to_see_photos_of_others_you_have_to_send_your_photo_you_can_do_it_in_X;
    struct ListUsers *LstUsrs;
    unsigned NumUsr;
    bool TRIsOpen = false;
-   bool IAmLoggedAsTeacherOrAbove = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER   ||
-                                     Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM ||
-                                     Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);
-   bool ICanSeePhotos = (IAmLoggedAsTeacherOrAbove ||
-                         (Gbl.Usrs.Me.MyPhotoExists &&
-                          Gbl.Usrs.Me.UsrDat.PublicPhoto));
    bool PutCheckBoxToSelectUsr = (ClassPhotoType == Usr_CLASS_PHOTO_SEL ||
-	               ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE);
+	                          ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE);
    bool PutOriginPlace = (RoleInClassPhoto == Rol_ROLE_STUDENT &&
                           (ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE ||
                            ClassPhotoType == Usr_CLASS_PHOTO_SEE ||
@@ -6824,7 +6833,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    const char *ClassPhoto = "PHOTO18x24";	// Default photo size
    int LengthUsrData = 10;	// Maximum number of characters of user data
    char PhotoURL[PATH_MAX+1];
-   char BreadcrumbStr[512];
    struct UsrData UsrDat;
 
    /***** Show guests, students or teachers? *****/
@@ -6970,31 +6978,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-
-   /***** Write message in case of the user can not view the photos of others *****/
-   if (!ICanSeePhotos && RoleInClassPhoto == Rol_ROLE_STUDENT &&
-       ClassPhotoType != Usr_CLASS_PHOTO_PRN)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"%d\" class=\"MSJ_AVISO\""
-	                 " style=\"text-align:center;\">"
-	                 "(",
-               Gbl.Usrs.ClassPhoto.Cols);
-      if (Gbl.Usrs.Me.MyPhotoExists)
-        {
-         Act_GetBreadcrumbStrForAction (ActEdiPrf,true,BreadcrumbStr);
-         fprintf (Gbl.F.Out,Txt_to_see_photos_of_others_you_have_to_allow_others_to_see_your_photo_you_can_do_it_in_X,
-                  BreadcrumbStr);
-        }
-      else
-        {
-         Act_GetBreadcrumbStrForAction (ActReqMyPho,true,BreadcrumbStr);
-         fprintf (Gbl.F.Out,Txt_to_see_photos_of_others_you_have_to_send_your_photo_you_can_do_it_in_X,
-                  BreadcrumbStr);
-        }
-      fprintf (Gbl.F.Out,")</td>"
-	                 "</tr>");
-     }
   }
 
 /*****************************************************************************/
@@ -7363,13 +7346,13 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
 void Usr_RequestUserProfile (void)
   {
-   extern const char *Txt_View_a_user_profile;
+   extern const char *Txt_View_a_user_public_profile;
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_a_user_profile);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_a_user_public_profile);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td>");
 

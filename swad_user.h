@@ -38,6 +38,7 @@
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
+#include "swad_photo_visibility.h"
 #include "swad_role.h"
 #include "swad_scope.h"
 #include "swad_search.h"
@@ -126,7 +127,7 @@ struct UsrData
    char Email		[Cns_MAX_BYTES_STRING  +1];
    bool EmailConfirmed;
    char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
-   bool PublicPhoto;	// User want his photo to be public?
+   Pho_Visibility_t PhotoVisibility;	// Who can see user's photo
    long CtyCod;		// Country
    char OriginPlace	[Cns_MAX_BYTES_STRING+1];
    struct Date Birthday;
@@ -209,6 +210,7 @@ void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars);
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
+bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 void Usr_GetMyInstitutions (void);
 void Usr_GetMyCentres (void);
 void Usr_GetMyDegrees (void);

@@ -10502,3 +10502,16 @@ CREATE TABLE IF NOT EXISTS admin (UsrCod INT NOT NULL,Scope ENUM('Sys','Ins','Ct
 INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Deg',DegCod FROM deg_admin WHERE DegCod>'0';
 INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Sys',DegCod FROM deg_admin WHERE DegCod='-2';
 DROP TABLE deg_admin;
+
+----- 2015-03-06, swad14.78
+
+ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PublicPhoto;
+UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';
+UPDATE usr_data SET PhotoVisibility='system' WHERE PublicPhoto='Y';
+
+
+
+
+
+
+

@@ -43,6 +43,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_photo_visibility.h"
 #include "swad_theme.h"
 #include "swad_user.h"
 
@@ -51,6 +52,19 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
+
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+/***** Photo visibility (who can see user's photo) *****/
+const char *Pho_VisibilityDB[Pho_NUM_VISIBILITIES] =
+  {
+   "user",	// Pho_VISIBILITY_USER
+   "course",	// Pho_VISIBILITY_COURSE
+   "system",	// Pho_VISIBILITY_SYSTEM
+   "world",	// Pho_VISIBILITY_WORLD
+  };
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -84,7 +98,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
 static void Pho_ClearPhotoName (long UsrCod);
 
-static void Pho_PutFormPublicPhoto (void);
+static void Pho_PutFormPhotoVisibility (void);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
@@ -236,7 +250,8 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       /***** Forms to remove photo and make it public *****/
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
-      Pho_PutFormPublicPhoto ();
+      fprintf (Gbl.F.Out,"&nbsp;");
+      Pho_PutFormPhotoVisibility ();
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
@@ -774,29 +789,27 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
   {
    bool ICanSeePhoto = false;
+   bool ItsMe = Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod;
 
    /***** Check if I can see the other's photo *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod ||	// It's me
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-      // I always can see my photo
-      // A superuser always can see any user's photo
-      ICanSeePhoto = true;
-   else if (Gbl.Usrs.Me.MaxRole == Rol_ROLE_STUDENT ||
-            Gbl.Usrs.Me.MaxRole == Rol_ROLE_TEACHER ||
-            Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+   switch (UsrDat->PhotoVisibility)
      {
-      // If the maximum role of both users is student
-      if (Gbl.Usrs.Me.MaxRole == Rol_ROLE_STUDENT &&	// My maximum role is student
-	   (UsrDat->Roles & (1 << Rol_ROLE_STUDENT)) &&	// He/she is a student in some courses...
-          !(UsrDat->Roles & (1 << Rol_ROLE_TEACHER)))	// ...but he/she is not a teacher in any course
-	 // A student only can see the photo of another student if both photos are public
-	 ICanSeePhoto = (Gbl.Usrs.Me.MyPhotoExists &&		// I have photo...
-			 Gbl.Usrs.Me.UsrDat.PublicPhoto &&	// ...and my photo is public...
-			 UsrDat->PublicPhoto);			// ...and the other student' photo is also public
-      else if (UsrDat->PublicPhoto)	// The photo of the other user is public
-	 ICanSeePhoto = true;
-      else
-	 ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);	// Both users share the same course
+      case Pho_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
+         if (ItsMe ||						// I always can see my photo
+             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)	// A system admin always can see any user's photo
+            ICanSeePhoto = true;
+         else
+            ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);	// Both users share the same course but whit different role
+	 break;
+      case Pho_VISIBILITY_COURSE:	// Visible by users sharing courses with me
+         ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);	// Both users share the same course
+	 break;
+      case Pho_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
+         ICanSeePhoto = Gbl.Usrs.Me.Logged;
+	 break;
+      case Pho_VISIBILITY_WORLD:	// Public, visible by all the people, even unlogged visitors
+         ICanSeePhoto = true;
+	 break;
      }
 
    /***** Photo is shown if I can see it, and it exists *****/
@@ -1009,59 +1022,105 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
   }
 
 /*****************************************************************************/
-/*********************** Select public / private photo ***********************/
+/************************** Select photo visibility **************************/
 /*****************************************************************************/
 
-static void Pho_PutFormPublicPhoto (void)
+static void Pho_PutFormPhotoVisibility (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Public_photo;
-
    /***** Start form *****/
    Act_FormStart (ActChgPubPho);
 
-   /***** Checkbox to select between public or private photo *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
-   if (Gbl.Usrs.Me.UsrDat.PublicPhoto)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                      "<span class=\"%s\">%s</span>",
-            Gbl.FormId,
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_photo);
+   /***** Select photo visibility *****/
+   Pho_PutSelectorPhotoVisibility (true);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</form>");
   }
 
 /*****************************************************************************/
-/********** Get parameter with public / private photo from form **************/
+/************************** Select photo visibility **************************/
 /*****************************************************************************/
 
-bool Pho_GetParamPublicPhoto (void)
+void Pho_PutSelectorPhotoVisibility (bool SendOnChange)
   {
-   char YN[1+1];
+   extern const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES];
+   Pho_Visibility_t PhotoVisibility;
 
-   Par_GetParToText ("PublicPhoto",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   /***** Select photo visibility *****/
+   fprintf (Gbl.F.Out,"<select name=\"PhotoVisibility\" style=\"width:150px;\"");
+   if (SendOnChange)
+      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+	       Gbl.FormId);
+   fprintf (Gbl.F.Out,">");
+
+   for (PhotoVisibility = (Pho_Visibility_t) 0;
+	PhotoVisibility < Pho_NUM_VISIBILITIES;
+	PhotoVisibility++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) PhotoVisibility);
+      if (PhotoVisibility == Gbl.Usrs.Me.UsrDat.PhotoVisibility)
+         fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",Txt_PHOTO_VISIBILITY[PhotoVisibility]);
+     }
+
+   fprintf (Gbl.F.Out,"</select>");
   }
 
 /*****************************************************************************/
-/*********************** Change public / private photo ***********************/
+/************************* Get icon set from string **************************/
 /*****************************************************************************/
 
-void Pho_ChangePublicPhoto (void)
+Pho_Visibility_t Pho_GetPhotoVisibilityFromStr (const char *Str)
   {
-   char Query[512];
+   Pho_Visibility_t PhotoVisibility;
+
+   for (PhotoVisibility = (Pho_Visibility_t) 0;
+	PhotoVisibility < Pho_NUM_VISIBILITIES;
+	PhotoVisibility++)
+      if (!strcasecmp (Str,Pho_VisibilityDB[PhotoVisibility]))
+	 return PhotoVisibility;
+
+   return Pho_VISIBILITY_DEFAULT;
+  }
+
+/*****************************************************************************/
+/************* Get parameter with photo visibility from form *****************/
+/*****************************************************************************/
+
+bool Pho_GetParamPhotoVisibility (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+
+   Par_GetParToText ("PhotoVisibility",UnsignedStr,10);
+   if (UnsignedStr[0])
+     {
+      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
+         Lay_ShowErrorAndExit ("Photo visibility is missing.");
+      if (UnsignedNum >= Pho_NUM_VISIBILITIES)
+         Lay_ShowErrorAndExit ("Photo visibility is missing.");
+      return (Pho_Visibility_t) UnsignedNum;
+     }
+   return Pho_VISIBILITY_DEFAULT;
+  }
+
+/*****************************************************************************/
+/************************** Change photo visibility **************************/
+/*****************************************************************************/
+
+void Pho_ChangePhotoVisibility (void)
+  {
+   char Query[128];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PublicPhoto = Pho_GetParamPublicPhoto ();
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pho_GetParamPhotoVisibility ();
 
    /***** Store public/private photo in database *****/
-   sprintf (Query,"UPDATE usr_data SET PublicPhoto='%c' WHERE UsrCod='%ld'",
-            Gbl.Usrs.Me.UsrDat.PublicPhoto ? 'Y' :
-        	                             'N',
+   sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"
+	          " WHERE UsrCod='%ld'",
+            Pho_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
             Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your preference about public photo");
+   DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
   }
 
 /*****************************************************************************/
@@ -1507,7 +1566,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) TypeOfAvg);
       if (TypeOfAvg == Gbl.Stat.DegPhotos.TypeOfAverage)
          fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
+      fprintf (Gbl.F.Out,">%s</option>",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</form>"
@@ -1577,7 +1636,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) PhoSi);
       if (PhoSi == Gbl.Stat.DegPhotos.HowComputePhotoSize)
          fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
+      fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</form>"
@@ -1647,7 +1706,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Order);
       if (Order == Gbl.Stat.DegPhotos.HowOrderDegrees)
          fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
+      fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</form>"

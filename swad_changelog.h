@@ -103,11 +103,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.77.3 (2015/03/05)"
+#define Log_PLATFORM_VERSION	"SWAD 14.78 (2015/03/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.78:    Mar 06, 2015	Field PublicPhoto is replaced by field PhotoVisibility. (178577 lines)
+					4 changes necessary in database:
+ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PublicPhoto;
+UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';
+UPDATE usr_data SET PhotoVisibility='system' WHERE PublicPhoto='Y';
+ALTER TABLE usr_data DROP COLUMN PublicPhoto;
+
         Version 14.77.3:  Mar 05, 2015	Changes in shared record. (178509 lines)
         Version 14.77.2:  Mar 05, 2015	Changes in shared record. (178504 lines)
         Version 14.77.1:  Mar 05, 2015	New option to select the user and then go to his/her public user's profile. (178475 lines)
@@ -115,7 +122,7 @@
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1401','es','N','Solicitar perfil de usuario');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver perfil de usuario');
 
-        Version 14.77  :  Mar 04, 2015	New parameter "UsrNick" to go to a public user's profile. (178406 lines)
+        Version 14.77:    Mar 04, 2015	New parameter "UsrNick" to go to a public user's profile. (178406 lines)
         Version 14.76.5:  Mar 03, 2015	Added new social networks, suggested by Marta Gómez Macías. (178293 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;

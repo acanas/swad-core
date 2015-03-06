@@ -2244,41 +2244,41 @@ mysql> DESCRIBE tst_tags;
    /***** Table usr_data *****/
 /*
 mysql> DESCRIBE usr_data;
-+-----------------+---------------------------------+------+-----+---------+----------------+
-| Field           | Type                            | Null | Key | Default | Extra          |
-+-----------------+---------------------------------+------+-----+---------+----------------+
-| UsrCod          | int(11)                         | NO   | PRI | NULL    | auto_increment |
-| EncryptedUsrCod | char(43)                        | NO   | UNI | NULL    |                |
-| Password        | char(86)                        | NO   |     | NULL    |                |
-| Surname1        | varchar(32)                     | NO   |     | NULL    |                |
-| Surname2        | varchar(32)                     | NO   |     | NULL    |                |
-| FirstName       | varchar(32)                     | NO   |     | NULL    |                |
-| Sex             | enum('unknown','female','male') | NO   |     | unknown |                |
-| Layout          | tinyint(4)                      | NO   | MUL | 0       |                |
-| Theme           | char(16)                        | NO   | MUL | NULL    |                |
-| IconSet         | char(16)                        | NO   | MUL | NULL    |                |
-| Language        | char(2)                         | NO   | MUL | NULL    |                |
-| Photo           | char(43)                        | NO   |     | NULL    |                |
-| PublicPhoto     | enum('N','Y')                   | NO   |     | N       |                |
-| CtyCod          | int(11)                         | NO   | MUL | -1      |                |
-| InsCtyCod       | int(11)                         | NO   | MUL | -1      |                |
-| InsCod          | int(11)                         | NO   | MUL | -1      |                |
-| DptCod          | int(11)                         | NO   | MUL | -1      |                |
-| CtrCod          | int(11)                         | NO   | MUL | -1      |                |
-| Office          | varchar(127)                    | NO   |     | NULL    |                |
-| OfficePhone     | char(16)                        | NO   |     | NULL    |                |
-| LocalAddress    | varchar(127)                    | NO   |     | NULL    |                |
-| LocalPhone      | char(16)                        | NO   |     | NULL    |                |
-| FamilyAddress   | varchar(127)                    | NO   |     | NULL    |                |
-| FamilyPhone     | char(16)                        | NO   |     | NULL    |                |
-| OriginPlace     | varchar(127)                    | NO   |     | NULL    |                |
-| Birthday        | date                            | NO   |     | NULL    |                |
-| Comments        | text                            | NO   |     | NULL    |                |
-| Menu            | tinyint(4)                      | NO   | MUL | 0       |                |
-| SideCols        | tinyint(4)                      | NO   | MUL | 3       |                |
-| NotifNtfEvents  | int(11)                         | NO   |     | 0       |                |
-| EmailNtfEvents  | int(11)                         | NO   |     | 0       |                |
-+-----------------+---------------------------------+------+-----+---------+----------------+
++-----------------+----------------------------------------+------+-----+---------+----------------+
+| Field           | Type                                   | Null | Key | Default | Extra          |
++-----------------+----------------------------------------+------+-----+---------+----------------+
+| UsrCod          | int(11)                                | NO   | PRI | NULL    | auto_increment |
+| EncryptedUsrCod | char(43)                               | NO   | UNI | NULL    |                |
+| Password        | char(86)                               | NO   |     | NULL    |                |
+| Surname1        | varchar(32)                            | NO   |     | NULL    |                |
+| Surname2        | varchar(32)                            | NO   |     | NULL    |                |
+| FirstName       | varchar(32)                            | NO   |     | NULL    |                |
+| Sex             | enum('unknown','female','male')        | NO   |     | unknown |                |
+| Layout          | tinyint(4)                             | NO   | MUL | 0       |                |
+| Theme           | char(16)                               | NO   | MUL | NULL    |                |
+| IconSet         | char(16)                               | NO   | MUL | NULL    |                |
+| Language        | char(2)                                | NO   | MUL | NULL    |                |
+| Photo           | char(43)                               | NO   |     | NULL    |                |
+| PhotoVisibility | enum('user','course','system','world') | NO   |     | user    |                |
+| CtyCod          | int(11)                                | NO   | MUL | -1      |                |
+| InsCtyCod       | int(11)                                | NO   | MUL | -1      |                |
+| InsCod          | int(11)                                | NO   | MUL | -1      |                |
+| DptCod          | int(11)                                | NO   | MUL | -1      |                |
+| CtrCod          | int(11)                                | NO   | MUL | -1      |                |
+| Office          | varchar(127)                           | NO   |     | NULL    |                |
+| OfficePhone     | char(16)                               | NO   |     | NULL    |                |
+| LocalAddress    | varchar(127)                           | NO   |     | NULL    |                |
+| LocalPhone      | char(16)                               | NO   |     | NULL    |                |
+| FamilyAddress   | varchar(127)                           | NO   |     | NULL    |                |
+| FamilyPhone     | char(16)                               | NO   |     | NULL    |                |
+| OriginPlace     | varchar(127)                           | NO   |     | NULL    |                |
+| Birthday        | date                                   | NO   |     | NULL    |                |
+| Comments        | text                                   | NO   |     | NULL    |                |
+| Menu            | tinyint(4)                             | NO   | MUL | 0       |                |
+| SideCols        | tinyint(4)                             | NO   | MUL | 3       |                |
+| NotifNtfEvents  | int(11)                                | NO   |     | 0       |                |
+| EmailNtfEvents  | int(11)                                | NO   |     | 0       |                |
++-----------------+----------------------------------------+------+-----+---------+----------------+
 31 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
@@ -2294,7 +2294,7 @@ mysql> DESCRIBE usr_data;
                    "IconSet CHAR(16) NOT NULL,"
                    "Language CHAR(2) NOT NULL,"
                    "Photo CHAR(43) NOT NULL,"
-                   "PublicPhoto ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user',"
                    "CtyCod INT NOT NULL DEFAULT -1,"
                    "InsCtyCod INT NOT NULL DEFAULT -1,"
                    "InsCod INT NOT NULL DEFAULT -1,"

@@ -19341,9 +19341,9 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	 "Profil"
 #elif L==2
-	 "A user's profile"
+	 "Public profile of a user"
 #elif L==3
-	 "Perfil de un usuario"
+	 "Perfil p&uacute;blico de un usuario"
 #elif L==4
 	 "Profil"
 #elif L==5
@@ -26240,6 +26240,89 @@ const char *Txt_Photo_removed =
 	"Photo removed.";		// Necessita de tradução
 #endif
 
+const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES] =
+   {		// Pho_VISIBILITY_USER
+#if   L==0
+	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
+#elif L==1
+	 "Photo visible by me and my teachers / my students"			// Need Übersetzung
+#elif L==2
+	 "Photo visible by me and my teachers / my students"
+#elif L==3
+	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"
+#elif L==4
+	 "Photo visible by me and my teachers / my students"			// Besoin de traduction
+#elif L==5
+	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"	// Okoteve traducción
+#elif L==6
+	 "Photo visible by me and my teachers / my students"			// Bisogno di traduzione
+#elif L==7
+	 "Photo visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Photo visible by me and my teachers / my students"			// Necessita de tradução
+#endif
+	 ,	// Pho_VISIBILITY_COURSE
+#if   L==0
+	 "Foto visible por usuarios de mis asignaturas"	// Necessita traduccio
+#elif L==1
+	 "Photo visible by users in my courses"		// Need Übersetzung
+#elif L==2
+	 "Photo visible by users in my courses"
+#elif L==3
+	 "Foto visible por usuarios de mis asignaturas"
+#elif L==4
+	 "Photo visible by users in my courses"		// Besoin de traduction
+#elif L==5
+	 "Foto visible por usuarios de mis asignaturas"	// Okoteve traducción
+#elif L==6
+	 "Photo visible by users in my courses"		// Bisogno di traduzione
+#elif L==7
+	 "Photo visible by users in my courses"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Photo visible by users in my courses"		// Necessita de tradução
+#endif
+	 ,	// Pho_VISIBILITY_SYSTEM
+#if   L==0
+	 "Foto visible por cualquier usuario identificado"	// Necessita traduccio
+#elif L==1
+	 "Photo visible by any logged user"			// Need Übersetzung
+#elif L==2
+	 "Photo visible by any logged user"
+#elif L==3
+	 "Foto visible por cualquier usuario identificado"
+#elif L==4
+	 "Photo visible by any logged user"			// Besoin de traduction
+#elif L==5
+	 "Foto visible por cualquier usuario identificado"	// Okoteve traducción
+#elif L==6
+	 "Photo visible by any logged user"			// Bisogno di traduzione
+#elif L==7
+	 "Photo visible by any logged user"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Photo visible by any logged user"			// Necessita de tradução
+#endif
+	 ,	// Pho_VISIBILITY_WORLD
+#if   L==0
+	 "Foto p&uacute;blica, visible por todo el mundo"	// Necessita traduccio
+#elif L==1
+	 "Public photo, visible by everyone"			// Need Übersetzung
+#elif L==2
+	 "Public photo, visible by everyone"
+#elif L==3
+	 "Foto p&uacute;blica, visible por todo el mundo"
+#elif L==4
+	 "Public photo, visible by everyone"			// Besoin de traduction
+#elif L==5
+	 "Foto p&uacute;blica, visible por todo el mundo"	// Okoteve traducción
+#elif L==6
+	 "Public photo, visible by everyone"			// Bisogno di traduzione
+#elif L==7
+	 "Public photo, visible by everyone"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Public photo, visible by everyone"			// Necessita de tradução
+#endif
+	};
+
 const char *Txt_photos =
 #if   L==0
 	"fotos";
@@ -26942,27 +27025,6 @@ const char *Txt_posts =
 	"posty";
 #elif L==8
 	"posts";
-#endif
-
-const char *Txt_Public_photo =
-#if   L==0
-	"Foto p&uacute;blica";
-#elif L==1
-	"&Ouml;ffentliches Foto";
-#elif L==2
-	"Public photo";
-#elif L==3
-	"Foto p&uacute;blica";
-#elif L==4
-	"Photo public";
-#elif L==5
-	"Foto p&uacute;blica";	// Okoteve traducción
-#elif L==6
-	"Foto pubblica";
-#elif L==7
-	"Zdj&eogon;cie publiczne";
-#elif L==8
-	"Foto p&uacute;blica";
 #endif
 
 const char *Txt_Public_open_educational_resource_OER_for_everyone =
@@ -44556,75 +44618,6 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_u
 	" all centres and users in the institution.";				// Necessita de tradução
 #endif
 
-const char *Txt_to_see_photos_of_others_you_have_to_allow_others_to_see_your_photo_you_can_do_it_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"para ver las fotos de otros,"
-	" tiene que permitir que otros vean la suya;"
-	" puede hacerlo en %s";		// Necessita traduccio
-#elif L==1
-	"to see photos of others,"
-	" you have to allow others to see your photo;"
-	" you can do it in %s";		// Need Übersetzung
-#elif L==2
-	"to see photos of others,"
-	" you have to allow others to see your photo;"
-	" you can do it in %s";
-#elif L==3
-	"para ver las fotos de otros,"
-	" tiene que permitir que otros vean la suya;"
-	" puede hacerlo en %s";
-#elif L==4
-	"to see photos of others,"
-	" you have to allow others to see your photo;"
-	" you can do it in %s";		// Besoin de traduction
-#elif L==5
-	"para ver las fotos de otros,"
-	" tiene que permitir que otros vean la suya;"
-	" puede hacerlo en %s";		// Okoteve traducción
-#elif L==6
-	"per vedere le foto di altri,"
-	" devi permettere agli altri di vedere la tua foto;"
-	" puoi farlo in %s";
-#elif L==7
-	"to see photos of others,"
-	" you have to allow others to see your photo;"
-	" you can do it in %s";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"to see photos of others,"
-	" you have to allow others to see your photo;"
-	" you can do it in %s";		// Necessita de tradução
-#endif
-
-const char *Txt_to_see_photos_of_others_you_have_to_send_your_photo_you_can_do_it_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"para ver las fotos de otros, tiene que enviar la suya;"
-	" puede hacerlo en %s";		// Necessita traduccio
-#elif L==1
-	"to see photos of others, you have to send your photo;"
-	" you can do it in %s";		// Need Übersetzung
-#elif L==2
-	"to see photos of others, you have to send your photo;"
-	" you can do it in %s";
-#elif L==3
-	"para ver las fotos de otros, tiene que enviar la suya;"
-	" puede hacerlo en %s";
-#elif L==4
-	"to see photos of others, you have to send your photo;"
-	" you can do it in %s";		// Besoin de traduction
-#elif L==5
-	"para ver las fotos de otros, tiene que enviar la suya;"
-	" puede hacerlo en %s";		// Okoteve traducción
-#elif L==6
-	"per vedere le foto di altri, devi inviare la tua foto;"
-	" puoi farlo in %s";
-#elif L==7
-	"to see photos of others, you have to send your photo;"
-	" you can do it in %s";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"to see photos of others, you have to send your photo;"
-	" you can do it in %s";		// Necessita de tradução
-#endif
-
 const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	// Warning: it is very important to include three %s in the following sentences
 #if   L==0
 	"Per utilitzar el xat cal tenir instal lat el programari"
@@ -46765,25 +46758,25 @@ const char *Txt_View =
 	"Ver";
 #endif
 
-const char *Txt_View_a_user_profile =
+const char *Txt_View_a_user_public_profile =
 #if   L==0
-	"Veure el perfil d'un usuari";
+	"Veure el perfil p&uacute;blic d'un usuari";
 #elif L==1
-	"Benutzer-Profile anzeigen";
+	"&Ouml;ffentliches Benutzer-Profile anzeigen";
 #elif L==2
-	"View a user's profile";
+	"View a user's public profile";
 #elif L==3
-	"Ver el perfil de un usuario";
+	"Ver el perfil p&uacute;blico de un usuario";
 #elif L==4
-	"Voir le profil d'un utilisateur";
+	"Voir le profil public d'un utilisateur";
 #elif L==5
-	"Ver el perfil de un usuario";	// Okoteve traducción
+	"Ver el perfil p&uacute;blico de un usuario";	// Okoteve traducción
 #elif L==6
-	"Mostra il profilo di un utente";
+	"Mostra il profilo pubblico di un utente";
 #elif L==7
-	"Zobacz profil u&zdot;ytkownika";
+	"Zobacz profil publiczny u&zdot;ytkownika";
 #elif L==8
-	"Ver o perfil de um utilizador";
+	"Ver o perfil p&uacute;blico de um utilizador";
 #endif
 
 const char *Txt_View_all_recipients =

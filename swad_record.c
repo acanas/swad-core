@@ -2024,8 +2024,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Private_Photo;
-   extern const char *Txt_Public_photo;
+   extern const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
@@ -2348,16 +2347,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       fprintf (Gbl.F.Out,"<br />");
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-        {
-         fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"PublicPhoto\" value=\"Y\"");
-         if (UsrDat->PublicPhoto)
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," /> %s",Txt_Public_photo);
-        }
+         /***** Select photo visibility *****/
+         Pho_PutSelectorPhotoVisibility (false);
       else if (TypeOfView == Rec_MY_COMMON_RECORD_CHECK)
-         fprintf (Gbl.F.Out,"%s",
-                  UsrDat->PublicPhoto ? Txt_Public_photo :
-                                        Txt_Private_Photo);
+         fprintf (Gbl.F.Out,"%s",Txt_PHOTO_VISIBILITY[UsrDat->PhotoVisibility]);
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -3082,7 +3075,7 @@ void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
    /***** Get whether photo is public from form *****/
-   UsrDat->PublicPhoto = Pho_GetParamPublicPhoto ();
+   UsrDat->PhotoVisibility = Pho_GetParamPhotoVisibility ();
 
    /***** Get country code *****/
    Par_GetParToText ("OthCtyCod",LongStr,1+10);

@@ -370,8 +370,9 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
 
 void Enr_UpdateUsrData (struct UsrData *UsrDat)
   {
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *The_ThemeId[The_NUM_THEMES];
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   extern const char *Pho_VisibilityDB[Pho_NUM_VISIBILITIES];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char Query[2048];
@@ -387,7 +388,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Layout='%u',Theme='%s',IconSet='%s',Language='%s',PublicPhoto='%c',"
+		  "Layout='%u',Theme='%s',IconSet='%s',Language='%s',PhotoVisibility='%s',"
 		  "CtyCod='%ld',"
 		  "LocalAddress='%s',LocalPhone='%s',FamilyAddress='%s',FamilyPhone='%s',OriginPlace='%s',Birthday='%04u-%02u-%02u',Comments='%s'"
 		  " WHERE UsrCod='%ld'",
@@ -398,8 +399,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	    The_ThemeId[UsrDat->Prefs.Theme],
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-	    UsrDat->PublicPhoto ? 'Y' :
-		                  'N',
+            Pho_VisibilityDB[UsrDat->PhotoVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,

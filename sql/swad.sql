@@ -1125,7 +1125,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	IconSet CHAR(16) NOT NULL,
 	Language CHAR(2) NOT NULL,
 	Photo CHAR(43) NOT NULL,
-	PublicPhoto ENUM('N','Y') NOT NULL DEFAULT 'N',
+	PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user',
 	CtyCod INT NOT NULL DEFAULT -1,
 	InsCtyCod INT NOT NULL DEFAULT -1,
 	InsCod INT NOT NULL DEFAULT -1,
