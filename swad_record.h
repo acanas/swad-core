@@ -158,6 +158,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
 void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 
 void Rec_PutLinkToChangeMyPrivacy (void);
+void Rec_EditMyPrivacy (void);
 
 void Rec_ShowFormMyInsCtrDpt (void);
 void Rec_ChgCountryOfMyInstitution (void);

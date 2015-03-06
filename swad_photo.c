@@ -98,8 +98,6 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
 static void Pho_ClearPhotoName (long UsrCod);
 
-static void Pho_PutFormPhotoVisibility (void);
-
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
 static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
@@ -250,8 +248,6 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       /***** Forms to remove photo and make it public *****/
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
-      fprintf (Gbl.F.Out,"&nbsp;");
-      Pho_PutFormPhotoVisibility ();
       Rec_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
       fprintf (Gbl.F.Out,"</div>");
 
@@ -1026,45 +1022,46 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 /************************** Select photo visibility **************************/
 /*****************************************************************************/
 
-static void Pho_PutFormPhotoVisibility (void)
+void Pho_PutFormPhotoVisibility (void)
   {
-   /***** Start form *****/
-   Act_FormStart (ActChgPubPho);
-
-   /***** Select photo visibility *****/
-   Pho_PutSelectorPhotoVisibility (true);
-
-   /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
-  }
-
-/*****************************************************************************/
-/************************** Select photo visibility **************************/
-/*****************************************************************************/
-
-void Pho_PutSelectorPhotoVisibility (bool SendOnChange)
-  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Photo;
    extern const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES];
    Pho_Visibility_t PhotoVisibility;
 
    /***** Select photo visibility *****/
-   fprintf (Gbl.F.Out,"<select name=\"PhotoVisibility\" style=\"width:150px;\"");
-   if (SendOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
-	       Gbl.FormId);
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s\" style=\"text-align:right;"
+	              " vertical-align:middle;\">"
+	              "%s:"
+	              "</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">",
+	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Photo);
 
+   /***** Form with list of options *****/
+   Act_FormStart (ActChgPubPho);
+   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
+                      " padding:0; margin:10px auto;\">");
    for (PhotoVisibility = (Pho_Visibility_t) 0;
 	PhotoVisibility < Pho_NUM_VISIBILITIES;
 	PhotoVisibility++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) PhotoVisibility);
+      fprintf (Gbl.F.Out,"<li class=\"DAT\">"
+                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
+               (unsigned) PhotoVisibility);
       if (PhotoVisibility == Gbl.Usrs.Me.UsrDat.PhotoVisibility)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_PHOTO_VISIBILITY[PhotoVisibility]);
+         fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+	                 "%s"
+                         "</li>",
+               Gbl.FormId,Txt_PHOTO_VISIBILITY[PhotoVisibility]);
      }
 
-   fprintf (Gbl.F.Out,"</select>");
+   /***** End of list and form *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</form>"
+                      "</td>"
+                      "</tr>");
   }
 
 /*****************************************************************************/
@@ -1111,6 +1108,7 @@ bool Pho_GetParamPhotoVisibility (void)
 
 void Pho_ChangePhotoVisibility (void)
   {
+   extern const char *Txt_The_visibility_of_your_photo_has_changed;
    char Query[128];
 
    /***** Get param with public/private photo *****/
@@ -1122,6 +1120,12 @@ void Pho_ChangePhotoVisibility (void)
             Pho_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
+
+   /***** Show alert *****/
+   Lay_ShowAlert (Lay_SUCCESS,Txt_The_visibility_of_your_photo_has_changed);
+
+   /***** Show form again *****/
+   Rec_EditMyPrivacy ();
   }
 
 /*****************************************************************************/

@@ -1182,6 +1182,8 @@ Profile:
 	953. ActRemMyPho		Remove my photo
 	954. ActChgPubPho		Change photo privacy
 
+	---. ActEdiPri			Edit my privacy
+
 	955. ActReqEdiMyIns		Request the edition of my institution, centre and department
 	956. ActChgCtyMyIns		Change the country of my institution
 	957. ActChgMyIns		Change my institution
@@ -2591,7 +2593,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
    /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
    /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
-   /* ActChgPubPho	*/{ 774,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_ChangePhotoVisibility	,Rec_ShowMyCommonRecordUpd	,NULL},
+   /* ActChgPubPho	*/{ 774,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ChangePhotoVisibility	,NULL},
+
+   /* ActEdiPri		*/{1403,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_EditMyPrivacy		,NULL},
 
    /* ActReqEdiMyIns	*/{1165,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,NULL},
    /* ActChgCtyMyIns	*/{1166,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChgCountryOfMyInstitution	,NULL},
@@ -4051,6 +4055,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActDowComIns,		// #1400
 	ActReqPubPrf,		// #1401
 	ActSeePubPrf,		// #1402
+	ActEdiPri,		// #1403
 	};
 
 /*****************************************************************************/

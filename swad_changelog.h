@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.78.1 (2015/03/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.78.2 (2015/03/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.78.2:  Mar 06, 2015	New action to edit privacy options. (178630 lines)
         Version 14.78.1:  Mar 06, 2015	New link to privacy options (unfinished). (178595 lines)
         Version 14.78:    Mar 06, 2015	Four degrees of visibility in photos.
 					Field PublicPhoto is replaced by field PhotoVisibility in usr_data table. (178577 lines)

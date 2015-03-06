@@ -2025,7 +2025,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
@@ -2343,16 +2342,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                 	                NULL,
 		     "PHOTO150x200",
 		     Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
-   /* Public / private photo */
-   if (ShowData)
-     {
-      fprintf (Gbl.F.Out,"<br />");
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-         /***** Select photo visibility *****/
-         Pho_PutSelectorPhotoVisibility (false);
-      else if (TypeOfView == Rec_MY_COMMON_RECORD_CHECK)
-         fprintf (Gbl.F.Out,"%s",Txt_PHOTO_VISIBILITY[UsrDat->PhotoVisibility]);
-     }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -3155,10 +3144,28 @@ void Rec_PutLinkToChangeMyPrivacy (void)
    extern const char *Txt_Privacy;
 
    /***** Link to edit my social networks *****/
-   Act_FormStart (ActReqEdiMyNet);
+   Act_FormStart (ActEdiPri);
    Act_LinkFormSubmit (Txt_Privacy,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("padlock",Txt_Privacy,Txt_Privacy);
    fprintf (Gbl.F.Out,"</form>");
+  }
+
+/*****************************************************************************/
+/******************************* Edit my privacy *****************************/
+/*****************************************************************************/
+
+void Rec_EditMyPrivacy (void)
+  {
+   extern const char *Txt_Privacy;
+
+   /***** Start table *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Privacy);
+
+   /***** Select photo visibility *****/
+   Pho_PutFormPhotoVisibility ();
+
+   /***** End table *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
