@@ -7385,9 +7385,10 @@ void Usr_RequestUserProfile (void)
 
 void Usr_ShowUserProfile (void)
   {
-   extern const char *Txt_User_not_found;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
    long OtherUsrCod;
+   bool Error = false;
 
    /***** Get user *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
@@ -7405,26 +7406,35 @@ void Usr_ShowUserProfile (void)
    /***** Check if user exists and get his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
      {
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+      /***** Check if I can see the public profile *****/
+      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 /* Get user's role in current course */
-         Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	   {
+	    /* Get user's role in current course */
+	    Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 /* Get if user has accepted enrollment in current course */
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	    /* Get if user has accepted enrollment in current course */
+	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	   }
+
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+
+	 /***** Common record *****/
+	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
+
+	 fprintf (Gbl.F.Out,"</div>");
 	}
-
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
-      /***** Common record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
-
-      fprintf (Gbl.F.Out,"</div>");
+      else
+	 Error = true;
      }
    else
+      Error = true;
+
+   if (Error)
      {
       /***** Show error message *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found);
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
       /***** Request nickname again *****/
       Usr_RequestUserProfile ();

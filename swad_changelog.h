@@ -103,12 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.79.1 (2015/03/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.79.2 (2015/03/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-
+        Version 14.79.2:  Mar 06, 2015	Public profile is shown depending on visibility. (178759 lines)
         Version 14.79.1:  Mar 06, 2015	Add options to change visibility of public profile. (178769 lines)
 					3 changes necessary in database:
 ALTER TABLE usr_data ADD COLUMN ProfileVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PhotoVisibility;
