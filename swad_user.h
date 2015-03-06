@@ -38,7 +38,7 @@
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
-#include "swad_photo_visibility.h"
+#include "swad_privacy.h"
 #include "swad_role.h"
 #include "swad_scope.h"
 #include "swad_search.h"
@@ -127,7 +127,7 @@ struct UsrData
    char Email		[Cns_MAX_BYTES_STRING  +1];
    bool EmailConfirmed;
    char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
-   Pho_Visibility_t PhotoVisibility;	// Who can see user's photo
+   Pri_VISIBILITY_t PhotoVisibility;	// Who can see user's photo
    long CtyCod;		// Country
    char OriginPlace	[Cns_MAX_BYTES_STRING+1];
    struct Date Birthday;

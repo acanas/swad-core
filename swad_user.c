@@ -238,7 +238,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EmailConfirmed = false;
 
    UsrDat->Photo[0] = '\0';
-   UsrDat->PhotoVisibility = Pho_VISIBILITY_DEFAULT;
+   UsrDat->PhotoVisibility = Pri_VISIBILITY_DEFAULT;
 
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';

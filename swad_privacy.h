@@ -1,7 +1,7 @@
-// swad_photo_visibility.h: Users' photo visibility
+// swad_privacy.h: Users' photo and public profile visibility
 
-#ifndef _SWAD_PHO_VISIBILITY
-#define _SWAD_PHO_VISIBILITY
+#ifndef _SWAD_PRI
+#define _SWAD_PRI
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -31,18 +31,18 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-/***** Photo visibility (who can see user's photo) *****/
-#define Pho_NUM_VISIBILITIES 4
+/***** Visibility (who can see user's photo / public profile) *****/
+#define Pri_NUM_OPTIONS_PRIVACY 4
 
 typedef enum
   {
-   Pho_VISIBILITY_USER   = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
-   Pho_VISIBILITY_COURSE = 1,	// Visible by users sharing courses with me
-   Pho_VISIBILITY_SYSTEM = 2,	// Visible by any user logged in platform
-   Pho_VISIBILITY_WORLD  = 3,	// Public, visible by all the people, even unlogged visitors
-  } Pho_Visibility_t;
+   Pri_VISIBILITY_USER   = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
+   Pri_VISIBILITY_COURSE = 1,	// Visible by users sharing courses with me
+   Pri_VISIBILITY_SYSTEM = 2,	// Visible by any user logged in platform
+   Pri_VISIBILITY_WORLD  = 3,	// Public, visible by all the people, even unlogged visitors
+  } Pri_VISIBILITY_t;
 
-#define Pho_VISIBILITY_DEFAULT Pho_VISIBILITY_USER
+#define Pri_VISIBILITY_DEFAULT Pri_VISIBILITY_USER
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

@@ -102,7 +102,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,bool Zoom);
 
 void Pho_PutFormPhotoVisibility (void);
-Pho_Visibility_t Pho_GetPhotoVisibilityFromStr (const char *Str);
+Pri_VISIBILITY_t Pho_GetPhotoVisibilityFromStr (const char *Str);
 bool Pho_GetParamPhotoVisibility (void);
 void Pho_ChangePhotoVisibility (void);
 

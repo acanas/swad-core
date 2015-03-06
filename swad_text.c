@@ -26240,89 +26240,6 @@ const char *Txt_Photo_removed =
 	"Photo removed.";		// Necessita de tradução
 #endif
 
-const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES] =
-   {		// Pho_VISIBILITY_USER
-#if   L==0
-	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
-#elif L==1
-	 "Photo visible by me and my teachers / my students"			// Need Übersetzung
-#elif L==2
-	 "Photo visible by me and my teachers / my students"
-#elif L==3
-	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"
-#elif L==4
-	 "Photo visible by me and my teachers / my students"			// Besoin de traduction
-#elif L==5
-	 "Foto visible por m&iacute; y mis profesores / mis estudiantes"	// Okoteve traducción
-#elif L==6
-	 "Photo visible by me and my teachers / my students"			// Bisogno di traduzione
-#elif L==7
-	 "Photo visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Photo visible by me and my teachers / my students"			// Necessita de tradução
-#endif
-	 ,	// Pho_VISIBILITY_COURSE
-#if   L==0
-	 "Foto visible por usuarios de mis asignaturas"	// Necessita traduccio
-#elif L==1
-	 "Photo visible by users in my courses"		// Need Übersetzung
-#elif L==2
-	 "Photo visible by users in my courses"
-#elif L==3
-	 "Foto visible por usuarios de mis asignaturas"
-#elif L==4
-	 "Photo visible by users in my courses"		// Besoin de traduction
-#elif L==5
-	 "Foto visible por usuarios de mis asignaturas"	// Okoteve traducción
-#elif L==6
-	 "Photo visible by users in my courses"		// Bisogno di traduzione
-#elif L==7
-	 "Photo visible by users in my courses"		// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Photo visible by users in my courses"		// Necessita de tradução
-#endif
-	 ,	// Pho_VISIBILITY_SYSTEM
-#if   L==0
-	 "Foto visible por cualquier usuario identificado"	// Necessita traduccio
-#elif L==1
-	 "Photo visible by any logged user"			// Need Übersetzung
-#elif L==2
-	 "Photo visible by any logged user"
-#elif L==3
-	 "Foto visible por cualquier usuario identificado"
-#elif L==4
-	 "Photo visible by any logged user"			// Besoin de traduction
-#elif L==5
-	 "Foto visible por cualquier usuario identificado"	// Okoteve traducción
-#elif L==6
-	 "Photo visible by any logged user"			// Bisogno di traduzione
-#elif L==7
-	 "Photo visible by any logged user"			// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Photo visible by any logged user"			// Necessita de tradução
-#endif
-	 ,	// Pho_VISIBILITY_WORLD
-#if   L==0
-	 "Foto p&uacute;blica, visible por todo el mundo"	// Necessita traduccio
-#elif L==1
-	 "Public photo, visible by everyone"			// Need Übersetzung
-#elif L==2
-	 "Public photo, visible by everyone"
-#elif L==3
-	 "Foto p&uacute;blica, visible por todo el mundo"
-#elif L==4
-	 "Public photo, visible by everyone"			// Besoin de traduction
-#elif L==5
-	 "Foto p&uacute;blica, visible por todo el mundo"	// Okoteve traducción
-#elif L==6
-	 "Public photo, visible by everyone"			// Bisogno di traduzione
-#elif L==7
-	 "Public photo, visible by everyone"			// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Public photo, visible by everyone"			// Necessita de tradução
-#endif
-	};
-
 const char *Txt_photos =
 #if   L==0
 	"fotos";
@@ -26921,6 +26838,90 @@ const char *Txt_Privacy =
 #elif L==8
 	"Privacidade";
 #endif
+
+
+const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
+   {		// Pri_VISIBILITY_USER
+#if   L==0
+	 "Visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
+#elif L==1
+	 "Visible by me and my teachers / my students"			// Need Übersetzung
+#elif L==2
+	 "Visible by me and my teachers / my students"
+#elif L==3
+	 "Visible por m&iacute; y mis profesores / mis estudiantes"
+#elif L==4
+	 "Visible by me and my teachers / my students"			// Besoin de traduction
+#elif L==5
+	 "Visible por m&iacute; y mis profesores / mis estudiantes"	// Okoteve traducción
+#elif L==6
+	 "Visible by me and my teachers / my students"			// Bisogno di traduzione
+#elif L==7
+	 "Visible by me and my teachers / my students"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Visible by me and my teachers / my students"			// Necessita de tradução
+#endif
+	 ,	// Pri_VISIBILITY_COURSE
+#if   L==0
+	 "Visible por usuarios con los que comparto asignaturas"	// Necessita traduccio
+#elif L==1
+	 "Visible by users with whom I share courses"			// Need Übersetzung
+#elif L==2
+	 "Visible by users with whom I share courses"
+#elif L==3
+	 "Visible por usuarios con los que comparto asignaturas"
+#elif L==4
+	 "Visible by users with whom I share courses"			// Besoin de traduction
+#elif L==5
+	 "Visible por usuarios con los que comparto asignaturas"	// Okoteve traducción
+#elif L==6
+	 "Visible by users with whom I share courses"			// Bisogno di traduzione
+#elif L==7
+	 "Visible by users with whom I share courses"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Visible by users with whom I share courses"			// Necessita de tradução
+#endif
+	 ,	// Pri_VISIBILITY_SYSTEM
+#if   L==0
+	 "Visible por cualquier usuario identificado"	// Necessita traduccio
+#elif L==1
+	 "Visible by any logged user"			// Need Übersetzung
+#elif L==2
+	 "Visible by any logged user"
+#elif L==3
+	 "Visible por cualquier usuario identificado"
+#elif L==4
+	 "Visible by any logged user"			// Besoin de traduction
+#elif L==5
+	 "Visible por cualquier usuario identificado"	// Okoteve traducción
+#elif L==6
+	 "Visible by any logged user"			// Bisogno di traduzione
+#elif L==7
+	 "Visible by any logged user"			// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Visible by any logged user"			// Necessita de tradução
+#endif
+	 ,	// Pri_VISIBILITY_WORLD
+#if   L==0
+	 "Visible por todo el mundo"	// Necessita traduccio
+#elif L==1
+	 "Visible by everyone"		// Need Übersetzung
+#elif L==2
+	 "Visible by everyone"
+#elif L==3
+	 "Visible por todo el mundo"
+#elif L==4
+	 "Visible by everyone"		// Besoin de traduction
+#elif L==5
+	 "Visible por todo el mundo"	// Okoteve traducción
+#elif L==6
+	 "Visible by everyone"		// Bisogno di traduzione
+#elif L==7
+	 "Visible by everyone"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Visible by everyone"		// Necessita de tradução
+#endif
+	};
 
 const char *Txt_Private_available_to_certain_users_identified =
 #if   L==0

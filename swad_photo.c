@@ -43,7 +43,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_photo_visibility.h"
+#include "swad_privacy.h"
 #include "swad_theme.h"
 #include "swad_user.h"
 
@@ -58,12 +58,12 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /***** Photo visibility (who can see user's photo) *****/
-const char *Pho_VisibilityDB[Pho_NUM_VISIBILITIES] =
+const char *Pri_VISIBILITYDB[Pri_NUM_OPTIONS_PRIVACY] =
   {
-   "user",	// Pho_VISIBILITY_USER
-   "course",	// Pho_VISIBILITY_COURSE
-   "system",	// Pho_VISIBILITY_SYSTEM
-   "world",	// Pho_VISIBILITY_WORLD
+   "user",	// Pri_VISIBILITY_USER
+   "course",	// Pri_VISIBILITY_COURSE
+   "system",	// Pri_VISIBILITY_SYSTEM
+   "world",	// Pri_VISIBILITY_WORLD
   };
 
 /*****************************************************************************/
@@ -791,20 +791,20 @@ bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
    /***** Check if I can see the other's photo *****/
    switch (UsrDat->PhotoVisibility)
      {
-      case Pho_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
+      case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
          if (ItsMe ||						// I always can see my photo
              Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)	// A system admin always can see any user's photo
             ICanSeePhoto = true;
          else
             ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);	// Both users share the same course but whit different role
 	 break;
-      case Pho_VISIBILITY_COURSE:	// Visible by users sharing courses with me
+      case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
          ICanSeePhoto = Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);	// Both users share the same course
 	 break;
-      case Pho_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
+      case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
          ICanSeePhoto = Gbl.Usrs.Me.Logged;
 	 break;
-      case Pho_VISIBILITY_WORLD:	// Public, visible by all the people, even unlogged visitors
+      case Pri_VISIBILITY_WORLD:	// Public, visible by all the people, even unlogged visitors
          ICanSeePhoto = true;
 	 break;
      }
@@ -1026,8 +1026,8 @@ void Pho_PutFormPhotoVisibility (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Photo;
-   extern const char *Txt_PHOTO_VISIBILITY[Pho_NUM_VISIBILITIES];
-   Pho_Visibility_t PhotoVisibility;
+   extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
+   Pri_VISIBILITY_t PhotoVisibility;
 
    /***** Select photo visibility *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1042,8 +1042,8 @@ void Pho_PutFormPhotoVisibility (void)
    Act_FormStart (ActChgPubPho);
    fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
                       " padding:0; margin:10px auto;\">");
-   for (PhotoVisibility = (Pho_Visibility_t) 0;
-	PhotoVisibility < Pho_NUM_VISIBILITIES;
+   for (PhotoVisibility = (Pri_VISIBILITY_t) 0;
+	PhotoVisibility < Pri_NUM_OPTIONS_PRIVACY;
 	PhotoVisibility++)
      {
       fprintf (Gbl.F.Out,"<li class=\"DAT\">"
@@ -1054,7 +1054,7 @@ void Pho_PutFormPhotoVisibility (void)
       fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
-               Gbl.FormId,Txt_PHOTO_VISIBILITY[PhotoVisibility]);
+               Gbl.FormId,Txt_PRIVACY_OPTIONS[PhotoVisibility]);
      }
 
    /***** End of list and form *****/
@@ -1068,17 +1068,17 @@ void Pho_PutFormPhotoVisibility (void)
 /************************* Get icon set from string **************************/
 /*****************************************************************************/
 
-Pho_Visibility_t Pho_GetPhotoVisibilityFromStr (const char *Str)
+Pri_VISIBILITY_t Pho_GetPhotoVisibilityFromStr (const char *Str)
   {
-   Pho_Visibility_t PhotoVisibility;
+   Pri_VISIBILITY_t PhotoVisibility;
 
-   for (PhotoVisibility = (Pho_Visibility_t) 0;
-	PhotoVisibility < Pho_NUM_VISIBILITIES;
+   for (PhotoVisibility = (Pri_VISIBILITY_t) 0;
+	PhotoVisibility < Pri_NUM_OPTIONS_PRIVACY;
 	PhotoVisibility++)
-      if (!strcasecmp (Str,Pho_VisibilityDB[PhotoVisibility]))
+      if (!strcasecmp (Str,Pri_VISIBILITYDB[PhotoVisibility]))
 	 return PhotoVisibility;
 
-   return Pho_VISIBILITY_DEFAULT;
+   return Pri_VISIBILITY_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -1095,11 +1095,11 @@ bool Pho_GetParamPhotoVisibility (void)
      {
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
          Lay_ShowErrorAndExit ("Photo visibility is missing.");
-      if (UnsignedNum >= Pho_NUM_VISIBILITIES)
+      if (UnsignedNum >= Pri_NUM_OPTIONS_PRIVACY)
          Lay_ShowErrorAndExit ("Photo visibility is missing.");
-      return (Pho_Visibility_t) UnsignedNum;
+      return (Pri_VISIBILITY_t) UnsignedNum;
      }
-   return Pho_VISIBILITY_DEFAULT;
+   return Pri_VISIBILITY_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -1117,7 +1117,7 @@ void Pho_ChangePhotoVisibility (void)
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"
 	          " WHERE UsrCod='%ld'",
-            Pho_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
+            Pri_VISIBILITYDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
 
