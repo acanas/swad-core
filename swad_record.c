@@ -2027,6 +2027,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_First_name;
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Institution;
@@ -2063,6 +2065,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                      !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
    bool GoToPublicProfileForm = (TypeOfView == Rec_RECORD_LIST ||
+	                         TypeOfView == Rec_RECORD_PUBLIC ||
                                  TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK);
    bool CommandForms = GoToPublicProfileForm && Gbl.Usrs.Me.Logged;
    bool ShowEmail = (IAmDegAdmin || IAmSuperuser || DataForm ||
@@ -2680,6 +2683,25 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
+
+   /***** Shortcut to the user's profile *****/
+   if (TypeOfView == Rec_RECORD_PUBLIC)
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\""
+			 " style=\"width:%upx; text-align:left;\">"
+			 "%s:"
+			 "</td>"
+			 "<td colspan=\"2\" class=\"%s\""
+			 " style=\"width:%upx; text-align:left;\">"
+			 "<a href=\"%s/%s?Usr=@%s\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?Usr=@%s"
+			 "</a>"
+			 "</td>"
+			 "</tr>",
+	       ClassForm,Col1Width,Txt_Shortcut,
+	       ClassData,Cols2and3Width,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
 
    if (ShowAddressRows)
      {

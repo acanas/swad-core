@@ -219,7 +219,8 @@ static void Cty_Configuration (bool PrintView)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions;
    extern const char *Txt_Country;
-   extern const char *Txt_Shortcut_to_this_country;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Centres;
    extern const char *Txt_Degrees;
@@ -343,13 +344,14 @@ static void Cty_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\""
 			 " style=\"text-align:left; vertical-align:middle;\">"
-			 "<a href=\"%s/?CtyCod=%ld\" class=\"DAT\" target=\"_blank\">%s/?CtyCod=%ld</a>"
+			 "<a href=\"%s/%s?CtyCod=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?CtyCod=%ld</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Shortcut_to_this_country,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCty.Cty.CtyCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCty.Cty.CtyCod);
+	       Txt_Shortcut,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod);
 
       if (PrintView)
 	{
@@ -363,7 +365,7 @@ static void Cty_Configuration (bool PrintView)
 			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkToCountry (200);
+	 QR_LinkTo (200,"CtyCod",Gbl.CurrentCty.Cty.CtyCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}

@@ -292,7 +292,8 @@ static void Deg_Configuration (bool PrintView)
    extern const char *Txt_Degree;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
-   extern const char *Txt_Shortcut_to_this_degree;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
@@ -410,15 +411,15 @@ static void Deg_Configuration (bool PrintView)
 	                 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">"
-			 "<a href=\"%s/?DegCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/?DegCod=%ld"
+			 "<a href=\"%s/%s?DegCod=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?DegCod=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Shortcut_to_this_degree,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentDeg.Deg.DegCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentDeg.Deg.DegCod);
+	       Txt_Shortcut,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod);
 
       if (PrintView)
 	{
@@ -432,7 +433,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkToDegree (200);
+	 QR_LinkTo (200,"DegCod",Gbl.CurrentDeg.Deg.DegCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}

@@ -7362,7 +7362,7 @@ void Usr_RequestUserProfile (void)
    Act_FormStart (ActSeePubPrf);
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
                       "%s: "
-                      "<input type=\"text\" name=\"UsrNick\""
+                      "<input type=\"text\" name=\"Usr\""
                       " size=\"20\" maxlength=\"%u\" />"
                       "</div>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -7393,7 +7393,7 @@ void Usr_ShowUserProfile (void)
    /***** Get user *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
      {
-      Par_GetParToText ("UsrNick",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+      Par_GetParToText ("Usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
       if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
 	{
 	 Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
@@ -7422,6 +7422,9 @@ void Usr_ShowUserProfile (void)
 
 	 /***** Common record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
+
+	 /***** Show details of user's profile *****/
+	 // Usr_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -7466,4 +7469,39 @@ void Usr_ChangeProfileVisibility (void)
 
    /***** Show form again *****/
    Pri_EditMyPrivacy ();
+  }
+
+/*****************************************************************************/
+/********************** Show details of user's profile ***********************/
+/*****************************************************************************/
+
+void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+
+   /***** Start table *****/
+   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+
+   /***** Shortcut to the user's profile *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">"
+		      "<a href=\"%s/%s?Usr=@%s\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?Usr=@%s"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Shortcut,
+	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
+	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
+
+   /***** End of table *****/
+   Lay_EndRoundFrameTable10 ();
   }

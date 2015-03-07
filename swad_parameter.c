@@ -299,18 +299,11 @@ void Par_GetMainParameters (void)
 
    /***** Get user's nickname, if exists
           (this nickname is used to go to a user's profile, not to get the logged user) *****/
-   Par_GetParToText ("UsrNick",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   Par_GetParToText ("Usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
    if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
       Gbl.CurrentAct = ActSeePubPrf;
-      /*
-      Gbl.CurrentCty.Cty.CtyCod =
-      Gbl.CurrentIns.Ins.InsCod =
-      Gbl.CurrentCtr.Ctr.CtrCod =
-      Gbl.CurrentDeg.Deg.DegCod =
-      Gbl.CurrentCrs.Crs.CrsCod = -1L;
-      */
      }
 
    /***** Get tab to activate *****/
@@ -419,7 +412,7 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                 strcmp (ParamName,"CtrCod" ) &&	// To enter directly to a centre
         	strcmp (ParamName,"DegCod" ) &&	// To enter directly to a degree
                 strcmp (ParamName,"CrsCod" ) &&	// To enter directly to a course
-                strcmp (ParamName,"UsrNick") &&	// To enter directly to a user
+                strcmp (ParamName,"Usr"    ) &&	// To enter directly to a user
                 strcmp (ParamName,"ActCod" ) &&	// To execute directly an action (allowed only for fully public actions)
                 strcmp (ParamName,"Layout" ) &&	// To change the layout of the page (wide or narrow)
                 strcmp (ParamName,"IdSes"  ) &&	// To use an open session when redirecting from one language to another

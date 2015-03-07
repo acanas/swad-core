@@ -147,7 +147,8 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
-   extern const char *Txt_Shortcut_to_this_course;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
@@ -352,13 +353,14 @@ static void Crs_Configuration (bool PrintView)
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">"
-                      "<a href=\"%s/?CrsCod=%ld\" class=\"DAT\" target=\"_blank\">%s/?CrsCod=%ld</a>"
+                      "<a href=\"%s/%s?CrsCod=%ld\" class=\"DAT\" target=\"_blank\">"
+                      "%s/%s?CrsCod=%ld</a>"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Shortcut_to_this_course,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod);
+            Txt_Shortcut,
+            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCrs.Crs.CrsCod,
+            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCrs.Crs.CrsCod);
 
    if (PrintView)
      {
@@ -372,7 +374,7 @@ static void Crs_Configuration (bool PrintView)
 			 " style=\"text-align:left; vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_QR_code);
-      QR_LinkToCourse (200);
+      QR_LinkTo (200,"CrsCod",Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

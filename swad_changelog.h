@@ -103,11 +103,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.79.2 (2015/03/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.79.3 (2015/03/07)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.79.3:  Mar 07, 2015	Parameter "UsrNick" is renamed to "Usr".
+					URL is shown in public profile.
+					Language in direct URLs. (178677 lines)
         Version 14.79.2:  Mar 06, 2015	Public profile is shown depending on visibility. (178759 lines)
         Version 14.79.1:  Mar 06, 2015	Add options to change visibility of public profile. (178769 lines)
 					3 changes necessary in database:

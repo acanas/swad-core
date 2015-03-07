@@ -230,7 +230,8 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
-   extern const char *Txt_Shortcut_to_this_institution;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
@@ -349,15 +350,15 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">"
-			 "<a href=\"%s/?InsCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/?InsCod=%ld"
+			 "<a href=\"%s/%s?InsCod=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?InsCod=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Shortcut_to_this_institution,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentIns.Ins.InsCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentIns.Ins.InsCod);
+	       Txt_Shortcut,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod);
 
       if (PrintView)
 	{
@@ -371,7 +372,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkToInstitution (200);
+	 QR_LinkTo (200,"InsCod",Gbl.CurrentIns.Ins.InsCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}

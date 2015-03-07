@@ -51,11 +51,7 @@ typedef enum
 void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool PrintText);
 void QR_PrintQRCode (void);
 
-void QR_LinkToCountry (unsigned Size);
-void QR_LinkToInstitution (unsigned Size);
-void QR_LinkToCentre (unsigned Size);
-void QR_LinkToDegree (unsigned Size);
-void QR_LinkToCourse (unsigned Size);
+void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);
 void QR_ExamAnnnouncement (void);
 
 #endif

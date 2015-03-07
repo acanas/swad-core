@@ -34049,109 +34049,25 @@ const char *Txt_Short_BR_Name =
 	"Nome<br />abreviado";
 #endif
 
-const char *Txt_Shortcut_to_this_course =
+const char *Txt_Shortcut =
 #if   L==0
-	"Acceso directo a la asignatura";	// Necessita traduccio
+	"Acc&eacute;s directe";
 #elif L==1
-	"Shortcut to this course";		// Need Übersetzung
+	"Direktzugriff";
 #elif L==2
-	"Shortcut to this course";
+	"Shortcut";
 #elif L==3
-	"Acceso directo a la asignatura";
+	"Acceso directo";
 #elif L==4
-	"Shortcut to this course";		// Besoin de traduction
+	"Acc&egrave;s direct";
 #elif L==5
-	"Acceso directo a la asignatura";	// Okoteve traducción
+	"Acceso directo";	// Okoteve traducción
 #elif L==6
-	"Accesso diretto al corso";
+	"Accesso diretto";
 #elif L==7
-	"Shortcut to this course";		// Potrzebujesz tlumaczenie
+	"Bezpo&sacute;redni dost&eogon;p";
 #elif L==8
-	"Shortcut to this course";		// Necessita de tradução
-#endif
-
-const char *Txt_Shortcut_to_this_degree =
-#if   L==0
-	"Acceso directo a la titulaci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Shortcut to this degree";			// Need Übersetzung
-#elif L==2
-	"Shortcut to this degree";
-#elif L==3
-	"Acceso directo a la titulaci&oacute;n";
-#elif L==4
-	"Shortcut to this degree";			// Besoin de traduction
-#elif L==5
-	"Acceso directo a la titulaci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Accesso diretto alla laurea";
-#elif L==7
-	"Shortcut to this degree";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"Shortcut to this degree";			// Necessita de tradução
-#endif
-
-const char *Txt_Shortcut_to_this_centre =
-#if   L==0
-	"Acceso directo al centro";		// Necessita traduccio
-#elif L==1
-	"Shortcut to this centre";		// Need Übersetzung
-#elif L==2
-	"Shortcut to this centre";
-#elif L==3
-	"Acceso directo al centro";
-#elif L==4
-	"Shortcut to this centre";		// Besoin de traduction
-#elif L==5
-	"Acceso directo al centro";		// Okoteve traducción
-#elif L==6
-	"Accesso diretto al centro";
-#elif L==7
-	"Shortcut to this centre";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Shortcut to this centre";		// Necessita de tradução
-#endif
-
-const char *Txt_Shortcut_to_this_country =
-#if   L==0
-	"Acceso directo al pa&iacute;s";	// Necessita traduccio
-#elif L==1
-	"Shortcut to this country";		// Need Übersetzung
-#elif L==2
-	"Shortcut to this country";
-#elif L==3
-	"Acceso directo al pa&iacute;s";
-#elif L==4
-	"Shortcut to this country";		// Besoin de traduction
-#elif L==5
-	"Acceso directo al pa&iacute;s";	// Okoteve traducción
-#elif L==6
-	"Accesso diretto al paese";
-#elif L==7
-	"Shortcut to this country";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Shortcut to this country";		// Necessita de tradução
-#endif
-
-const char *Txt_Shortcut_to_this_institution =
-#if   L==0
-	"Acceso directo a la instituci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Shortcut to this institution";			// Need Übersetzung
-#elif L==2
-	"Shortcut to this institution";
-#elif L==3
-	"Acceso directo a la instituci&oacute;n";
-#elif L==4
-	"Shortcut to this institution";			// Besoin de traduction
-#elif L==5
-	"Acceso directo a la instituci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Accesso diretto a l'istituzione";
-#elif L==7
-	"Shortcut to this institution";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"Shortcut to this institution";			// Necessita de tradução
+	"Acesso directo";
 #endif
 
 const char *Txt_Show =

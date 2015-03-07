@@ -241,7 +241,8 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
-   extern const char *Txt_Shortcut_to_this_centre;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -426,15 +427,15 @@ static void Ctr_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\""
 			 " style=\"text-align:left; vertical-align:middle;\">"
-			 "<a href=\"%s/?CtrCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/?CtrCod=%ld"
+			 "<a href=\"%s/%s?CtrCod=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?CtrCod=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
-	       Txt_Shortcut_to_this_centre,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCtr.Ctr.CtrCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCtr.Ctr.CtrCod);
+	       Txt_Shortcut,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod);
 
       if (PrintView)
 	{
@@ -448,7 +449,7 @@ static void Ctr_Configuration (bool PrintView)
 			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkToCentre (200);
+	 QR_LinkTo (200,"CtrCod",Gbl.CurrentCtr.Ctr.CtrCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}

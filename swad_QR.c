@@ -138,87 +138,20 @@ static void QR_ImageQRCode (const char *QRString)
   }
 
 /*****************************************************************************/
-/*********** Show QR code with direct link to the current country ************/
+/*************** Show QR code with direct link (shortcut URL) ****************/
 /*****************************************************************************/
 
-void QR_LinkToCountry (unsigned Size)
+void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
   {
-   extern const char *Txt_Shortcut_to_this_country;
+   extern const char *Txt_Shortcut;
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
    /***** Show QR code with direct link to the current centre *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?CtyCod=%ld\""
+   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""
                       " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
             Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCty.Cty.CtyCod,
-            Txt_Shortcut_to_this_country,
-            Size,Size);
-  }
-
-/*****************************************************************************/
-/********* Show QR code with direct link to the current institution **********/
-/*****************************************************************************/
-
-void QR_LinkToInstitution (unsigned Size)
-  {
-   extern const char *Txt_Shortcut_to_this_institution;
-
-   /***** Show QR code with direct link to the current institution *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?InsCod=%ld\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
-            Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentIns.Ins.InsCod,
-            Txt_Shortcut_to_this_institution,
-            Size,Size);
-  }
-
-/*****************************************************************************/
-/************ Show QR code with direct link to the current centre ************/
-/*****************************************************************************/
-
-void QR_LinkToCentre (unsigned Size)
-  {
-   extern const char *Txt_Shortcut_to_this_centre;
-
-   /***** Show QR code with direct link to the current centre *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?CtrCod=%ld\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
-            Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCtr.Ctr.CtrCod,
-            Txt_Shortcut_to_this_centre,
-            Size,Size);
-  }
-
-/*****************************************************************************/
-/************ Show QR code with direct link to the current degree ************/
-/*****************************************************************************/
-
-void QR_LinkToDegree (unsigned Size)
-  {
-   extern const char *Txt_Shortcut_to_this_degree;
-
-   /***** Show QR code with direct link to the current degree *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?DegCod=%ld\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
-            Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentDeg.Deg.DegCod,
-            Txt_Shortcut_to_this_degree,
-            Size,Size);
-  }
-
-/*****************************************************************************/
-/************ Show QR code with direct link to the current course ************/
-/*****************************************************************************/
-
-void QR_LinkToCourse (unsigned Size)
-  {
-   extern const char *Txt_Shortcut_to_this_course;
-
-   /***** Show QR code with direct link to the current course *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?CrsCod=%ld\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
-            Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,
-            Txt_Shortcut_to_this_course,
+            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
+            Txt_Shortcut,
             Size,Size);
   }
 
