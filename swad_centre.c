@@ -427,8 +427,8 @@ static void Ctr_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\""
 			 " style=\"text-align:left; vertical-align:middle;\">"
-			 "<a href=\"%s/%s?CtrCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?CtrCod=%ld"
+			 "<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?ctr=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
@@ -449,7 +449,7 @@ static void Ctr_Configuration (bool PrintView)
 			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"CtrCod",Gbl.CurrentCtr.Ctr.CtrCod);
+	 QR_LinkTo (200,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -1439,7 +1439,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt)
 
 void Ctr_PutParamCtrCod (long CtrCod)
   {
-   Par_PutHiddenParamLong ("CtrCod",CtrCod);
+   Par_PutHiddenParamLong ("ctr",CtrCod);
   }
 
 /*****************************************************************************/

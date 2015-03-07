@@ -350,8 +350,8 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">"
-			 "<a href=\"%s/%s?InsCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?InsCod=%ld"
+			 "<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?ins=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
@@ -372,7 +372,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"InsCod",Gbl.CurrentIns.Ins.InsCod);
+	 QR_LinkTo (200,"ins",Gbl.CurrentIns.Ins.InsCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -1362,7 +1362,7 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt)
 
 void Ins_PutParamInsCod (long InsCod)
   {
-   Par_PutHiddenParamLong ("InsCod",InsCod);
+   Par_PutHiddenParamLong ("ins",InsCod);
   }
 
 /*****************************************************************************/

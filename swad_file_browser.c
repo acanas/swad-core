@@ -7705,8 +7705,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Cfg_HTTPS_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Prefs.IconsURL);
-   Par_PutHiddenParamLong ("ActCod",Act_Actions[Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]].ActCod);
-   Par_PutHiddenParamString ("IdSes",Gbl.Session.Id);
+   Par_PutHiddenParamLong ("act",Act_Actions[Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]].ActCod);
+   Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOCUM_GRP:

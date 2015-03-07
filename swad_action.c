@@ -4205,10 +4205,10 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
    fprintf (Gbl.F.Out,">");
 
    if (NextAction != ActUnk)
-      Par_PutHiddenParamLong ("ActCod",Act_Actions[NextAction].ActCod);
+      Par_PutHiddenParamLong ("act",Act_Actions[NextAction].ActCod);
 
    if (Gbl.Session.Id[0])
-      Par_PutHiddenParamString ("IdSes",Gbl.Session.Id);
+      Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    else if (PutParameterLocationIfNoSesion)	// Extra parameters necessary when there's no open session
      {
       /* If session is open, course code will be get from session data,

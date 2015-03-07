@@ -103,11 +103,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.79.3 (2015/03/07)"
+#define Log_PLATFORM_VERSION	"SWAD 14.79.4 (2015/03/07)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.79.4:  Mar 07, 2015	Parameter "CtyCod" is renamed to "cty".
+					Parameter "InsCod" is renamed to "ins".
+					Parameter "CtrCod" is renamed to "ctr".
+					Parameter "DegCod" is renamed to "deg".
+					Parameter "CrsCod" is renamed to "crs", but "CrsCod" is allowed for compatibility with old links.
+					Parameter "Usr" is renamed to "usr".
+					Parameter "Layout" is not allowed with GET method.
+					Parameter "IdSes" is renamed to "ses".
+					Parameter "MailKey" is renamed to "key". (178699 lines)
         Version 14.79.3:  Mar 07, 2015	Parameter "UsrNick" is renamed to "Usr".
 					URL is shown in public profile.
 					Language in direct URLs. (178677 lines)

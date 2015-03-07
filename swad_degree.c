@@ -411,8 +411,8 @@ static void Deg_Configuration (bool PrintView)
 	                 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">"
-			 "<a href=\"%s/%s?DegCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?DegCod=%ld"
+			 "<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?deg=%ld"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
@@ -433,7 +433,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"DegCod",Gbl.CurrentDeg.Deg.DegCod);
+	 QR_LinkTo (200,"deg",Gbl.CurrentDeg.Deg.DegCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -2805,7 +2805,7 @@ static void Deg_PutParamOtherDegTypCod (long DegTypCod)
 
 void Deg_PutParamDegCod (long DegCod)
   {
-   Par_PutHiddenParamLong ("DegCod",DegCod);
+   Par_PutHiddenParamLong ("deg",DegCod);
   }
 
 /*****************************************************************************/

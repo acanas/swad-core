@@ -165,7 +165,7 @@ void QR_ExamAnnnouncement (void)
 
    /***** Show QR code with direct link to the exam announcement *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?CrsCod=%ld%%26ActCod=%ld\""
+                      "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
                       " alt=\"%s\" style=\"width:200px; height:200px;\" />"
                       "</div>",
             200,200,

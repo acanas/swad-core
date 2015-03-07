@@ -353,8 +353,8 @@ static void Crs_Configuration (bool PrintView)
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">"
-                      "<a href=\"%s/%s?CrsCod=%ld\" class=\"DAT\" target=\"_blank\">"
-                      "%s/%s?CrsCod=%ld</a>"
+                      "<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">"
+                      "%s/%s?crs=%ld</a>"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -374,7 +374,7 @@ static void Crs_Configuration (bool PrintView)
 			 " style=\"text-align:left; vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_QR_code);
-      QR_LinkTo (200,"CrsCod",Gbl.CurrentCrs.Crs.CrsCod);
+      QR_LinkTo (200,"crs",Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -420,7 +420,7 @@ static void Crs_Configuration (bool PrintView)
                          "</td>"
                          "<td class=\"DAT\""
                          " style=\"text-align:left; vertical-align:middle;\">"
-                         "<a href=\"%s/?CrsCod=%ld&amp;ActCod=%ld\" target=\"_blank\" class=\"DAT\">"
+                         "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\" class=\"DAT\">"
                          "%u %s %u "
                          "<img src=\"%s/%s16x16.gif\" alt=\"\""
                          " class=\"ICON16x16\" style=\"vertical-align:top;\"/>"
@@ -3035,7 +3035,7 @@ void Crs_PutFormToSelectMyCourses (void)
 
 void Crs_PutParamCrsCod (long CrsCod)
   {
-   Par_PutHiddenParamLong ("CrsCod",CrsCod);
+   Par_PutHiddenParamLong ("crs",CrsCod);
   }
 
 /*****************************************************************************/

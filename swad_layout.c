@@ -427,7 +427,7 @@ static void Lay_WriteRedirectionToMyLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\" content=\"0; url='%s/%s?ActCod=%ld&IdSes=%s'\">",
+   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\" content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
 	    Cfg_HTTPS_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
 	    Act_Actions[ActAutUsrChgLan].ActCod,
@@ -548,13 +548,13 @@ static void Lay_WriteScriptConnectedUsrs (void)
   {
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"ActCod=%ld\";\n",
+   fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
             Act_Actions[ActRefCon].ActCod);
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"ActCod=%ld\";\n",
+   fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
             Act_Actions[ActRefLstClk].ActCod);
-   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"IdSes=%s\";\n",
+   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n",
             Gbl.Session.Id);
-   fprintf (Gbl.F.Out,"var RefreshParamCrsCod = \"CrsCod=%ld\";\n",
+   fprintf (Gbl.F.Out,"var RefreshParamCrsCod = \"crs=%ld\";\n",
             Gbl.CurrentCrs.Crs.CrsCod);
 
    fprintf (Gbl.F.Out,"</script>\n");

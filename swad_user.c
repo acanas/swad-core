@@ -7393,7 +7393,7 @@ void Usr_ShowUserProfile (void)
    /***** Get user *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
      {
-      Par_GetParToText ("Usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+      Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
       if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
 	{
 	 Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
@@ -7492,8 +7492,8 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:middle;\">"
-		      "<a href=\"%s/%s?Usr=@%s\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?Usr=@%s"
+		      "<a href=\"%s/%s?usr=@%s\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?usr=@%s"
 		      "</a>"
 		      "</td>"
 		      "</tr>",

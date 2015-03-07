@@ -2693,8 +2693,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">"
-			 "<a href=\"%s/%s?Usr=@%s\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?Usr=@%s"
+			 "<a href=\"%s/%s?usr=@%s\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?usr=@%s"
 			 "</a>"
 			 "</td>"
 			 "</tr>",

@@ -1412,7 +1412,7 @@ void Mai_ConfirmEmail (void)
    bool Confirmed;
 
    /***** Get parameter Key *****/
-   Par_GetParToText ("MailKey",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
+   Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and e-mail from key *****/
    sprintf (Query,"SELECT UsrCod,E_mail FROM pending_emails"

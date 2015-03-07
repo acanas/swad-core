@@ -169,14 +169,14 @@ void Par_GetMainParameters (void)
    // SWAD is not called from external site
 
    Gbl.CurrentAct = ActUnk;
-   Par_GetParToText ("ActCod",UnsignedStr,10);
+   Par_GetParToText ("act",UnsignedStr,10);
    if (UnsignedStr[0])
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
          if (UnsignedNum <= Act_MAX_ACTION_COD)
             Gbl.CurrentAct = Act_FromActCodToAction[UnsignedNum];
 
    /***** Get session identifier, if exists *****/
-   Par_GetParToText ("IdSes",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
+   Par_GetParToText ("ses",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
    if (Gbl.Session.Id[0])
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
@@ -235,8 +235,8 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParToText ("CtyCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter CtyCod available
+   Par_GetParToText ("cty",LongStr,1+10);
+   if (LongStr[0])	// Parameter "cty" available
      {
       Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.YearOK = false;
@@ -247,8 +247,8 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParToText ("InsCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter InsCod available
+   Par_GetParToText ("ins",LongStr,1+10);
+   if (LongStr[0])	// Parameter "ins" available
      {
       Gbl.CurrentIns.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.YearOK = false;
@@ -258,8 +258,8 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get centre if exists (from menu) *****/
-   Par_GetParToText ("CtrCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter CtrCod available
+   Par_GetParToText ("ctr",LongStr,1+10);
+   if (LongStr[0])	// Parameter "ctr" available
      {
       Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.YearOK = false;
@@ -268,8 +268,8 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParToText ("DegCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter DegCod available
+   Par_GetParToText ("deg",LongStr,1+10);
+   if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
       if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -293,13 +293,20 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParToText ("CrsCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter CrsCod available
+   Par_GetParToText ("crs",LongStr,1+10);
+   if (LongStr[0])	// Parameter "crs" available
       Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+   else
+     {
+      // Try old parameter "CrsCod" (allowed for compatibility with old links, to be removed in 2016)
+      Par_GetParToText ("CrsCod",LongStr,1+10);
+      if (LongStr[0])	// Parameter "CrsCod" available
+	 Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+     }
 
    /***** Get user's nickname, if exists
           (this nickname is used to go to a user's profile, not to get the logged user) *****/
-   Par_GetParToText ("Usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
    if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
@@ -407,16 +414,17 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
       case Act_CONTENT_NORM:
          if (Gbl.GetMethod)			// Only some selected parameters can be passed by GET method
            {
-            if (strcmp (ParamName,"CtyCod" ) &&	// To enter directly to a country
-                strcmp (ParamName,"InsCod" ) &&	// To enter directly to an institution
-                strcmp (ParamName,"CtrCod" ) &&	// To enter directly to a centre
-        	strcmp (ParamName,"DegCod" ) &&	// To enter directly to a degree
-                strcmp (ParamName,"CrsCod" ) &&	// To enter directly to a course
-                strcmp (ParamName,"Usr"    ) &&	// To enter directly to a user
-                strcmp (ParamName,"ActCod" ) &&	// To execute directly an action (allowed only for fully public actions)
-                strcmp (ParamName,"Layout" ) &&	// To change the layout of the page (wide or narrow)
-                strcmp (ParamName,"IdSes"  ) &&	// To use an open session when redirecting from one language to another
-                strcmp (ParamName,"MailKey"))	// To verify an email address
+            if (strcmp (ParamName,"cty") &&	// To enter directly to a country
+                strcmp (ParamName,"ins") &&	// To enter directly to an institution
+                strcmp (ParamName,"ctr") &&	// To enter directly to a centre
+        	strcmp (ParamName,"deg") &&	// To enter directly to a degree
+                strcmp (ParamName,"crs") &&	// To enter directly to a course
+                strcmp (ParamName,"CrsCod") &&	// To enter directly to a course (allowed for compatibility with old links, to be removed in 2016)
+                strcmp (ParamName,"usr") &&	// To enter directly to a user
+                strcmp (ParamName,"act") &&	// To execute directly an action (allowed only for fully public actions)
+                strcmp (ParamName,"ses") &&	// To use an open session when redirecting from one language to another
+                strcmp (ParamName,"key"))	// To verify an email address
+                // strcmp (ParamName,"Layout") && // To change the layout of the page (wide or narrow)
 	       return 0;	// Return no-parameters-found when method is GET and parameter name is not one of these
            }
          PtrSrc = Gbl.QueryString;
@@ -427,7 +435,10 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	   {
             ParamFound = false;
             do
-               if ((PtrStartOfParam = strstr (PtrSrc,ParamName)) != NULL)
+              {
+               /* If method is GET ==> do case insensitive comparison */
+               PtrStartOfParam = strstr (PtrSrc,ParamName);
+               if (PtrStartOfParam)
                  {
 	          // String ParamName found inside Gbl.QueryString
                   if (*(PtrStartOfParam + ParamNameLength) == '=')
@@ -435,7 +446,7 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		     // Just after the name of the parameter, must be found a '=' symbol
                      if (PtrStartOfParam == Gbl.QueryString)	// The parameter is just at start
                         ParamFound = true;
-                     else if (*(PtrStartOfParam-1) == '&')		// The parameter is not at start, but just after an "&" separator
+                     else if (*(PtrStartOfParam - 1) == '&')		// The parameter is not at start, but just after an "&" separator
                         ParamFound = true;
                      else						// String has been found at the end of another parameter
                         PtrSrc = PtrStartOfParam + ParamNameLength;
@@ -443,6 +454,7 @@ static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                   else						// String has been found, but it is not a parameter
                      PtrSrc = PtrStartOfParam + ParamNameLength;
                  }
+              }
             while (PtrStartOfParam != NULL && !ParamFound);
             if (!ParamFound)	// Not found ==> PtrStartOfParam == NULL
                break;

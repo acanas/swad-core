@@ -344,8 +344,8 @@ static void Cty_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT\""
 			 " style=\"text-align:left; vertical-align:middle;\">"
-			 "<a href=\"%s/%s?CtyCod=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?CtyCod=%ld</a>"
+			 "<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
+			 "%s/%s?cty=%ld</a>"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
@@ -365,7 +365,7 @@ static void Cty_Configuration (bool PrintView)
 			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"CtyCod",Gbl.CurrentCty.Cty.CtyCod);
+	 QR_LinkTo (200,"cty",Gbl.CurrentCty.Cty.CtyCod);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -1402,7 +1402,7 @@ static void Cty_ListCountriesForEdition (void)
 
 void Cty_PutParamCtyCod (long CtyCod)
   {
-   Par_PutHiddenParamLong ("CtyCod",CtyCod);
+   Par_PutHiddenParamLong ("cty",CtyCod);
   }
 
 /*****************************************************************************/

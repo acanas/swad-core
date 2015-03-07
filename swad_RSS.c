@@ -86,7 +86,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
-   fprintf (FileRSS,"<link>%s/?CrsCod=%ld</link>\n",
+   fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
             Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<description>%s</description>\n",
             Crs->FullName);
@@ -100,7 +100,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
             Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_LOGO);
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
-   fprintf (FileRSS,"<link>%s/?CrsCod=%ld</link>\n",
+   fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
             Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<width>112</width>\n");
    fprintf (FileRSS,"<height>32</height>\n");
@@ -197,7 +197,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
          fprintf (FileRSS,"</title>\n");
 
          /* Write link to the notice */
-         fprintf (FileRSS,"<link>%s/?CrsCod=%ld</link>\n",
+         fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
                   Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
@@ -286,7 +286,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 	    fprintf (FileRSS,"<title>%s: %s</title>\n",Txt_Exam,row[2]);
 
 	    /* Write link to the notice */
-	    fprintf (FileRSS,"<link>%s/?CrsCod=%ld</link>\n",
+	    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
 		     Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
 
 	    /* Write full content of the exam announcement */
