@@ -404,7 +404,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Stat.Role           = Sta_IDENTIFIED_USRS;
    Gbl.Stat.NumAction      = ActAll;
    Gbl.Stat.RowsPerPage    = 50;
-   Gbl.Stat.UseStatType    = Sta_DEGREES_AND_COURSES;
+   Gbl.Stat.UseStatType    = Sta_USERS;
 
    Gbl.Scope.Current = Sco_SCOPE_CRS;
 

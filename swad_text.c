@@ -35745,26 +35745,6 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES] =
 const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
    {
 #if   L==0
-	 "Titulaciones y asignaturas"	// Necessita traducció
-#elif L==1
-	 "Studieng&auml;nge und Kursen"
-#elif L==2
-	 "Degrees and courses"
-#elif L==3
-	 "Titulaciones y asignaturas"
-#elif L==4
-	 "&Eacute;tudes et mati&egrave;res"
-#elif L==5
-	 "Titulaciones y asignaturas"	// Okoteve traducción
-#elif L==6
-	 "Lauree e corsi"
-#elif L==7
-	 "Degrees and courses"		// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Titula&ccedil;oes e disciplinas"
-#endif
-	 ,
-#if   L==0
 	 "Usuaris"
 #elif L==1
 	 "Benutzer"
@@ -35782,6 +35762,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "U&zdot;ytkownicy"
 #elif L==8
 	 "Utilizadores"
+#endif
+	 ,
+#if   L==0
+	 "Titulaciones y asignaturas"	// Necessita traducció
+#elif L==1
+	 "Studieng&auml;nge und Kursen"
+#elif L==2
+	 "Degrees and courses"
+#elif L==3
+	 "Titulaciones y asignaturas"
+#elif L==4
+	 "&Eacute;tudes et mati&egrave;res"
+#elif L==5
+	 "Titulaciones y asignaturas"	// Okoteve traducción
+#elif L==6
+	 "Lauree e corsi"
+#elif L==7
+	 "Degrees and courses"		// Potrzebujesz tlumaczenie
+#elif L==8
+	 "Titula&ccedil;oes e disciplinas"
 #endif
 	 ,
 #if   L==0
@@ -35982,6 +35982,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Badania"
 #elif L==8
 	 "Inqu&eacute;ritos"
+#endif
+	 ,
+#if   L==0
+	"Privacitat"
+#elif L==1
+	"Geheimhaltung"
+#elif L==2
+	"Privacy"
+#elif L==3
+	"Privacidad"
+#elif L==4
+	"Privacit&eacute;"
+#elif L==5
+	"Privacidad"	// Okoteve traducción
+#elif L==6
+	"Privatezza"
+#elif L==7
+	"Prywatno&sacute;&cacute;"
+#elif L==8
+	"Privacidade"
 #endif
 	 ,
 #if   L==0

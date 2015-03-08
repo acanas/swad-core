@@ -458,7 +458,7 @@
 #define Cfg_DAYS_IN_RECENT_LOG				  8	// Only accesses in these last days + 1 are stored in recent log.
 								// Important!!! Must be 1 <= Cfg_DAYS_IN_RECENT_LOG <= 29
 #define Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED		  3	// Execute this CGI to refresh connected users about these times per second
-#define Cfg_MIN_TIME_TO_REFRESH_CONNECTED		((time_t)(                   30UL))	// Refresh period of connected users in seconds
+#define Cfg_MIN_TIME_TO_REFRESH_CONNECTED		((time_t)(                   60UL))	// Refresh period of connected users in seconds
 #define Cfg_MAX_TIME_TO_REFRESH_CONNECTED		((time_t)(              15UL*60UL))	// Refresh period of connected users in seconds
 #define Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH	((time_t)(Cfg_MAX_TIME_TO_REFRESH_CONNECTED * 2))	// After these seconds without refresh of connected users, session is closed
 #define Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK	((time_t)(            2*60UL*60UL))	// After these seconds without user's clicks, session is closed

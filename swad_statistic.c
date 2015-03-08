@@ -159,6 +159,8 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
 static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum);
 
 static void Sta_GetAndShowSurveysStats (void);
+static void Sta_GetAndShowNumUsrsPerPrivacy (void);
+static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);
 static void Sta_GetAndShowNumUsrsPerLanguage (void);
 static void Sta_GetAndShowNumUsrsPerLayout (void);
 static void Sta_GetAndShowNumUsrsPerTheme (void);
@@ -3699,13 +3701,13 @@ void Sta_ShowUseOfPlatform (void)
    /***** Show the stat of use selected by user *****/
    switch (Gbl.Stat.UseStatType)
      {
-      case Sta_DEGREES_AND_COURSES:
-         /***** Number of degrees and courses *****/
-	 Sta_GetAndShowDegCrsStats ();
-         break;
       case Sta_USERS:
 	 /***** Number of users *****/
          Sta_GetAndShowUsersStats ();
+         break;
+      case Sta_DEGREES_AND_COURSES:
+         /***** Number of degrees and courses *****/
+	 Sta_GetAndShowDegCrsStats ();
          break;
       case Sta_SOCIAL_NETWORKS:
 	 /***** Number of users in social networks *****/
@@ -3747,6 +3749,10 @@ void Sta_ShowUseOfPlatform (void)
       case Sta_SURVEYS:
          /***** Number of surveys *****/
          Sta_GetAndShowSurveysStats ();
+         break;
+      case Sta_PRIVACY:
+         /***** Number of users who have chosen a privacy *****/
+         Sta_GetAndShowNumUsrsPerPrivacy ();
          break;
       case Sta_LANGUAGES:
          /***** Number of users who have chosen a language *****/
@@ -6326,6 +6332,164 @@ static void Sta_GetAndShowSurveysStats (void)
    /***** End table *****/
    Lay_EndRoundFrameTable10 ();
   }
+
+/*****************************************************************************/
+/********** Get and show number of users who have chosen a privacy ***********/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerPrivacy (void)
+  {
+   extern const char *Txt_Photo;
+   extern const char *Txt_Public_profile;
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY]);
+
+   /***** Privacy for photo *****/
+   Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,"PhotoVisibility");
+
+   /***** Privacy for public profile *****/
+   Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Public_profile,"ProfileVisibility");
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+
+/*****************************************************************************/
+/********** Get and show number of users who have chosen a privacy ***********/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName)
+  {
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
+   Pri_Visibility_t Visibility;
+   char Query[1024];
+   unsigned NumUsrs[Pri_NUM_OPTIONS_PRIVACY];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            TxtObject,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users);
+
+   /***** For each privacy option... *****/
+   for (Visibility = (Pri_Visibility_t) 0;
+	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+	Visibility++)
+     {
+      /***** Get the number of users who have chosen this privacy option from database *****/
+      switch (Gbl.Scope.Current)
+        {
+         case Sco_SCOPE_SYS:
+            sprintf (Query,"SELECT COUNT(*)"
+        	           " FROM usr_data WHERE %s='%s'",
+                     FieldName,
+        	     Pri_VisibilityDB[Visibility]);
+            break;
+	 case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.%s='%s'",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     FieldName,
+                     Pri_VisibilityDB[Visibility]);
+            break;
+         case Sco_SCOPE_INS:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE centres.InsCod='%ld'"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.%s='%s'",
+                     Gbl.CurrentIns.Ins.InsCod,
+                     FieldName,
+                     Pri_VisibilityDB[Visibility]);
+            break;
+         case Sco_SCOPE_CTR:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM degrees,courses,crs_usr,usr_data"
+                           " WHERE degrees.CtrCod='%ld'"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.%s='%s'",
+                     Gbl.CurrentCtr.Ctr.CtrCod,
+                     FieldName,
+                     Pri_VisibilityDB[Visibility]);
+            break;
+         case Sco_SCOPE_DEG:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM courses,crs_usr,usr_data"
+                           " WHERE courses.DegCod='%ld'"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.%s='%s'",
+                     Gbl.CurrentDeg.Deg.DegCod,
+                     FieldName,
+                     Pri_VisibilityDB[Visibility]);
+            break;
+         case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM crs_usr,usr_data"
+                           " WHERE crs_usr.CrsCod='%ld'"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.%s='%s'",
+                     Gbl.CurrentCrs.Crs.CrsCod,
+                     FieldName,
+                     Pri_VisibilityDB[Visibility]);
+            break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+        }
+      NumUsrs[Visibility] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a privacy");
+
+      /* Update total number of users */
+      NumUsrsTotal += NumUsrs[Visibility];
+     }
+
+   /***** Write number of users who have chosen each privacy option *****/
+   for (Visibility = (Pri_Visibility_t) 0;
+	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+	Visibility++)
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "</tr>",
+               Txt_PRIVACY_OPTIONS[Visibility],NumUsrs[Visibility],
+               NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0);
+   }
 
 /*****************************************************************************/
 /********* Get and show number of users who have chosen a language ***********/

@@ -171,9 +171,20 @@ void Par_GetMainParameters (void)
    Gbl.CurrentAct = ActUnk;
    Par_GetParToText ("act",UnsignedStr,10);
    if (UnsignedStr[0])
+     {
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
          if (UnsignedNum <= Act_MAX_ACTION_COD)
             Gbl.CurrentAct = Act_FromActCodToAction[UnsignedNum];
+     }
+   else
+     {
+      // Try old parameter "ActCod" (allowed for compatibility, to be removed soon)
+      Par_GetParToText ("ActCod",UnsignedStr,10);
+      if (UnsignedStr[0])
+	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+	    if (UnsignedNum <= Act_MAX_ACTION_COD)
+	       Gbl.CurrentAct = Act_FromActCodToAction[UnsignedNum];
+     }
 
    /***** Get session identifier, if exists *****/
    Par_GetParToText ("ses",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
@@ -189,6 +200,25 @@ void Par_GetMainParameters (void)
 	{
 	 Gbl.Session.HasBeenDisconnected = true;
 	 Gbl.Session.Id[0] = '\0';
+	}
+     }
+   else
+     {
+      // Try old parameter "IdSes" (allowed for compatibility, to be removed soon)
+      Par_GetParToText ("IdSes",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
+      if (Gbl.Session.Id[0])
+	{
+	 /***** Get user's code, password, current degree and current course from stored session *****/
+	 if (Ses_GetSessionData ())
+	   {
+	    Gbl.Session.IsOpen = true;
+	    Imp_GetImpSessionData ();
+	   }
+	 else
+	   {
+	    Gbl.Session.HasBeenDisconnected = true;
+	    Gbl.Session.Id[0] = '\0';
+	   }
 	}
      }
 

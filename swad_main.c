@@ -70,21 +70,28 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 int main (int argc, char *argv[])
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+   FILE *FileLock;
 
-/*
-   fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n"
-                   "Status: 503 Service Temporarily Unavailable\r\n\r\n"
-                   "<html lang=\"es\">"
-                   "<head><title>%s</title></head>"
-                   "<body><br /><br /><br /><br />"
-                   "<h1 style=\"text-align:center;\">%s est&aacute; parado por mantenimiento durante pocos minutos</h1>"
-                   "<h2 style=\"text-align:center;\">Intente acceder m&aacute;s tarde, por favor.</h2>"
-                   "</body>"
-                   "</html>",
-            Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_SHORT_NAME);
-   exit (0);
-*/
+   /*
+    "touch swad.lock" in CGI directory if you want to disable SWAD
+    "rm swad.lock" in CGI directory if you want to enable SWAD
+   */
+   if (Fil_CheckIfPathExists ("./swad.lock"))
+     {
+      fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n"
+		      "Status: 503 Service Temporarily Unavailable\r\n\r\n"
+		      "<html lang=\"es\">"
+		      "<head><title>%s</title></head>"
+		      "<body><br /><br /><br /><br />"
+		      "<h1 style=\"text-align:center;\">%s est&aacute; parado por mantenimiento durante pocos minutos</h1>"
+		      "<h2 style=\"text-align:center;\">Intente acceder m&aacute;s tarde, por favor.</h2>"
+		      "</body>"
+		      "</html>",
+	       Cfg_PLATFORM_FULL_NAME,
+	       Cfg_PLATFORM_SHORT_NAME);
+      exit (0);
+     }
+
    if (argc > 1)
      {
       fprintf (stdout,"Call %s without parameters",argv[0]);
