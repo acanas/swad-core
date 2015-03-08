@@ -3591,6 +3591,16 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                         " FROM surveys"
                         " WHERE CrsCod>'0'");
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
+                        " FROM institutions,centres,degrees,courses,surveys"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=surveys.CrsCod",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM centres,degrees,courses,surveys"
@@ -3668,6 +3678,19 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " WHERE surveys.CrsCod>'0'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT AVG(NumQsts) FROM"
+                        " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+                        " FROM institutions,centres,degrees,courses,surveys,svy_questions"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=surveys.CrsCod"
+                        " AND surveys.SvyCod=svy_questions.SvyCod"
+                        " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+                  Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
