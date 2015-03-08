@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.80.1 (2015/03/09)"
+#define Log_PLATFORM_VERSION	"SWAD 14.80.2 (2015/03/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.80.2:  Mar 09, 2015	Scope country for statistic of layout. (178936 lines)
         Version 14.80.1:  Mar 09, 2015	Scope country for statistic of language. (178923 lines)
         Version 14.80:    Mar 09, 2015	New statistic for privacy. (178909 lines)
         Version 14.79.6:  Mar 08, 2015	Check if file "swad.lock" exists to disable SWAD. (178736 lines)
