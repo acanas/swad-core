@@ -70,7 +70,6 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 int main (int argc, char *argv[])
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
-   FILE *FileLock;
 
    /*
     "touch swad.lock" in CGI directory if you want to disable SWAD
