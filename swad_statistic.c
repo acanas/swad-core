@@ -7076,6 +7076,18 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
         	           " WHERE Menu='%u'",
                      (unsigned) Menu);
             break;
+	 case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.Menu='%u'",
+                     Gbl.CurrentCty.Cty.CtyCod,(unsigned) Menu);
+            break;
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
