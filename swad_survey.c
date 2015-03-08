@@ -3513,6 +3513,16 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
                         " FROM surveys"
                         " WHERE CrsCod>'0'");
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
+                        " FROM institutions,centres,degrees,courses,surveys"
+			" WHERE institutions.CtyCod='%ld'"
+			" AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=surveys.CrsCod",
+                  Gbl.CurrentIns.Ins.InsCod);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
                         " FROM centres,degrees,courses,surveys"
