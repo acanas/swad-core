@@ -676,6 +676,18 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " WHERE Status='%u'",
                         NoticeStatus);
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
+                        " FROM institutions,centres,degrees,courses,notices"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=notices.CrsCod"
+                        " AND notices.Status='%u'",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  NoticeStatus);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM centres,degrees,courses,notices"
@@ -759,6 +771,16 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices_deleted");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
+                        " FROM institutions,centres,degrees,courses,notices_deleted"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=notices_deleted.CrsCod",
+                  Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"

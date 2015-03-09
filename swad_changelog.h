@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.80.9 (2015/03/09)"
+#define Log_PLATFORM_VERSION	"SWAD 14.80.10 (2015/03/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.80.10: Mar 09, 2015	Scope country for statistic of notices. (179211 lines)
         Version 14.80.9:  Mar 09, 2015	Scope country for statistic of messages. (179187 lines)
         Version 14.80.8:  Mar 09, 2015	Scope country for statistic of forums. (179138 lines)
         Version 14.80.7:  Mar 09, 2015	Scope country for statistic of surveys. (179021 lines)
