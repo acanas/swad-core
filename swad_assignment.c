@@ -1790,6 +1790,17 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
                         " FROM assignments"
                         " WHERE CrsCod>'0'");
          break;
+       case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(DISTINCT (assignments.CrsCod))"
+                        " FROM institutions,centres,degrees,courses,assignments"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.Status=0"
+                        " AND courses.CrsCod=assignments.CrsCod",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
        case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT (assignments.CrsCod))"
                         " FROM centres,degrees,courses,assignments"
@@ -1860,6 +1871,16 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM assignments"
                         " WHERE CrsCod>'0'");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
+                        " FROM institutions,centres,degrees,courses,assignments"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=assignments.CrsCod",
+                  Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
