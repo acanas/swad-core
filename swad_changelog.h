@@ -108,7 +108,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.81.3:  Mar 09, 2015	Information about number of files in user's public profile. (? lines)
+        Version 14.81.3:  Mar 09, 2015	Information about number of files in user's public profile. (179670 lines)
         Version 14.81.2:  Mar 09, 2015	Information about number of courses in user's public profile. (179641 lines)
         Version 14.81.1:  Mar 09, 2015	Information about number of messages sent in user's public profile. (179545 lines)
         Version 14.81:    Mar 09, 2015	Information about number of forum posts in user's public profile. (179512 lines)
