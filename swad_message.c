@@ -1821,6 +1821,18 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
          sprintf (Query,"SELECT COUNT(*) FROM %s",
                   Table);
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM institutions,centres,degrees,courses,%s"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=%s.CrsCod",
+                  Table,
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  Table);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,%s"
@@ -1889,6 +1901,19 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT COUNT(*) FROM %s",
         	        Table);
                break;
+            case Sco_SCOPE_CTY:
+               sprintf (Query,"SELECT COUNT(*)"
+        	              " FROM institutions,centres,degrees,courses,%s,msg_snt"
+                               " WHERE institutions.CtyCod='%ld'"
+                               " AND institutions.InsCod=centres.InsCod"
+                               " AND centres.CtrCod=degrees.CtrCod"
+                               " AND degrees.DegCod=courses.DegCod"
+                               " AND courses.CrsCod=msg_snt.CrsCod"
+                               " AND msg_snt.MsgCod=%s.MsgCod",
+                        Table,
+                        Gbl.CurrentCty.Cty.CtyCod,
+                        Table);
+               break;
             case Sco_SCOPE_INS:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM centres,degrees,courses,%s,msg_snt"
@@ -1948,6 +1973,30 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                               "(SELECT COUNT(*)"
                               " FROM msg_rcv_deleted"
                               " WHERE Notified='Y')");
+               break;
+            case Sco_SCOPE_CTY:
+               sprintf (Query,"SELECT "
+                              "(SELECT COUNT(*)"
+                              " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
+                              " WHERE institutions.CtyCod='%ld'"
+                              " AND institutions.InsCod=centres.InsCod"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=msg_snt.CrsCod"
+                              " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+                              " AND msg_rcv.Notified='Y')"
+                              " + "
+                              "(SELECT COUNT(*)"
+                              " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
+                              " WHERE institutions.CtyCod='%ld'"
+                              " AND institutions.InsCod=centres.InsCod"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=msg_snt.CrsCod"
+                              " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+                              " AND msg_rcv_deleted.Notified='Y')",
+                        Gbl.CurrentCty.Cty.CtyCod,
+                        Gbl.CurrentCty.Cty.CtyCod);
                break;
             case Sco_SCOPE_INS:
                sprintf (Query,"SELECT "
