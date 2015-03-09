@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.81.3 (2015/03/09)"
+#define Log_PLATFORM_VERSION	"SWAD 14.81.4 (2015/03/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.81.4:  Mar 09, 2015	Information about number of public files in user's public profile. (179733 lines)
         Version 14.81.3:  Mar 09, 2015	Information about number of files in user's public profile. (179670 lines)
         Version 14.81.2:  Mar 09, 2015	Information about number of courses in user's public profile. (179641 lines)
         Version 14.81.1:  Mar 09, 2015	Information about number of messages sent in user's public profile. (179545 lines)

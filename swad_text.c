@@ -10830,6 +10830,27 @@ const char *Txt_Field_BR_name =
 	"Nome<br />do campo";
 #endif
 
+const char *Txt_Figures =
+#if   L==0
+	"Xifres";
+#elif L==1
+	"Zahlen";
+#elif L==2
+	"Figures";
+#elif L==3
+	"Cifras";
+#elif L==4
+	"Chiffres";
+#elif L==5
+	"Cifras";	// Okoteve traducción
+#elif L==6
+	"Cifre";
+#elif L==7
+	"Cyfry";
+#elif L==8
+	"N&uacute;meros";
+#endif
+
 const char *Txt_File =
 #if   L==0
 	"Fitxer";
@@ -23326,7 +23347,7 @@ const char *Txt_No_of_messages_BR_per_thread =
 
 const char *Txt_No_of_private_files =
 #if   L==0
-	"N&ordm; de archivos privados";	// Necessita traduccio
+	"Nombre d'arxius privats";
 #elif L==1
 	"Anzahl der private Dateien";
 #elif L==2
@@ -23347,7 +23368,7 @@ const char *Txt_No_of_private_files =
 
 const char *Txt_No_of_public_files =
 #if   L==0
-	"N&ordm; de archivos p&uacute;blicos";	// Necessita traduccio
+	"Nombre d'arxius p&uacute;blics";
 #elif L==1
 	"Anzahl der &ouml;ffentliche Dateien";
 #elif L==2
@@ -27047,6 +27068,27 @@ const char *Txt_posts =
 	"posty";
 #elif L==8
 	"posts";
+#endif
+
+const char *Txt_public_files =
+#if   L==0
+	"arxius p&uacute;blics";
+#elif L==1
+	"&ouml;ffentliche Dateien";
+#elif L==2
+	"public files";
+#elif L==3
+	"archivos p&uacute;blicos";
+#elif L==4
+	"fichiers publics";
+#elif L==5
+	"archivos p&uacute;blicos";	// Okoteve traducción
+#elif L==6
+	"file pubblici";
+#elif L==7
+	"publicznych pliki";
+#elif L==8
+	"arquivos p&uacute;blicos";
 #endif
 
 const char *Txt_Public_open_educational_resource_OER_for_everyone =

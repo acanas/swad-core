@@ -10159,6 +10159,21 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
   }
 
 /*****************************************************************************/
+/******************* Get number of public files from a user ******************/
+/*****************************************************************************/
+
+unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Get number of posts from a user from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM files"
+	          " WHERE PublisherUsrCod='%ld' AND Public='Y'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not number of public files from a user");
+  }
+
+/*****************************************************************************/
 /***************** Change hiddeness of file in the database ******************/
 /*****************************************************************************/
 

@@ -7553,19 +7553,23 @@ void Usr_ChangeProfileVisibility (void)
 void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Figures;
    // extern const char *Txt_Shortcut;
    // extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Files;
+   extern const char *Txt_public_files;
    extern const char *Txt_Forum_posts;
    extern const char *Txt_Messages_sent;
-   unsigned NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER);
-   unsigned NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT);
+   unsigned NumCrssUsrIsTeacher;
+   unsigned NumCrssUsrIsStudent;
+   unsigned NumFiles;
+   unsigned NumPublicFiles;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
 
    /***** Shortcut to the user's profile *****/
    /*
@@ -7587,7 +7591,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
    */
    /***** Number of courses in which the user is teacher or student *****/
-   if (NumCrssUsrIsTeacher)
+   if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
@@ -7606,7 +7610,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT),
 	       Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
      }
-   if (NumCrssUsrIsStudent)
+   if ((NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT)))
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
@@ -7628,6 +7632,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      }
 
    /***** Number of files published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   else
+      NumPublicFiles = 0;
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:middle;\">"
@@ -7635,13 +7643,14 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:middle;\">"
-		      "%u"
+		      "%u (%u %s)"
 		      "</a>"
 		      "</td>"
 		      "</tr>",
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Files,
-	    Brw_GetNumFilesUsr (UsrDat->UsrCod));
+	    NumFiles,NumPublicFiles,
+	    Txt_public_files);
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
