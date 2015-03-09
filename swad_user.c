@@ -7558,6 +7558,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Files;
    extern const char *Txt_Forum_posts;
    extern const char *Txt_Messages_sent;
    unsigned NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER);
@@ -7625,6 +7626,22 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER),
 	       Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
      }
+
+   /***** Number of files published *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">"
+		      "%u"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Files,
+	    Brw_GetNumFilesUsr (UsrDat->UsrCod));
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"

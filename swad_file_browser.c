@@ -10145,6 +10145,20 @@ static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
   }
 
 /*****************************************************************************/
+/*********************** Get number of files from a user *********************/
+/*****************************************************************************/
+
+unsigned Brw_GetNumFilesUsr (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Get number of posts from a user from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM files WHERE PublisherUsrCod='%ld'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not number of files from a user");
+  }
+
+/*****************************************************************************/
 /***************** Change hiddeness of file in the database ******************/
 /*****************************************************************************/
 

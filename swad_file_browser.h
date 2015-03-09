@@ -186,6 +186,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
+unsigned Brw_GetNumFilesUsr (long UsrCod);
 
 long Brw_GetCodForFiles (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
