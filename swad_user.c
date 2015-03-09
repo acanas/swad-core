@@ -7146,6 +7146,18 @@ static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role)
                         " WHERE Role='%u'",
                   (unsigned) Role);
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role='%u'",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  (unsigned) Role);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
                         " FROM centres,degrees,courses,crs_usr"
@@ -7210,6 +7222,20 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
                         "(SELECT COUNT(CrsCod) AS NumCrss"
                         " FROM crs_usr"
                         " WHERE Role='%u' GROUP BY UsrCod) AS NumCrssTable",
+                  (unsigned) Role);
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT AVG(NumCrss) FROM "
+                        "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+                        " FROM institutions,centres,degrees,courses,crs_usr"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role='%u'"
+                        " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+                  Gbl.CurrentCty.Cty.CtyCod,
                   (unsigned) Role);
          break;
       case Sco_SCOPE_INS:
@@ -7285,6 +7311,20 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
                         "(SELECT COUNT(UsrCod) AS NumUsrs"
                         " FROM crs_usr"
                         " WHERE Role='%u' GROUP BY CrsCod) AS NumUsrsTable",
+                  (unsigned) Role);
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+                        "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+                        " FROM institutions,centres,degrees,courses,crs_usr"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role='%u'"
+                        " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+                  Gbl.CurrentCty.Cty.CtyCod,
                   (unsigned) Role);
          break;
       case Sco_SCOPE_INS:

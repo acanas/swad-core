@@ -3782,6 +3782,46 @@ void Sta_ShowUseOfPlatform (void)
   }
 
 /*****************************************************************************/
+/********************** Show stats about number of users *********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowUsersStats (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_Users;
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
+   extern const char *Txt_Average_number_of_users_belonging_to_a_course;
+
+   /***** Number of users *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS]);
+
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Users,
+            Txt_No_of_users,
+            Txt_Average_number_of_courses_to_which_a_user_belongs,
+            Txt_Average_number_of_users_belonging_to_a_course);
+   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_STUDENT);
+   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_TEACHER);
+   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_GUEST__);	// Users not beloging to any course
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
 /*************** Get and show stats about degrees and courses ****************/
 /*****************************************************************************/
 
@@ -4483,46 +4523,6 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
 	 break;
      }
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
-  }
-
-/*****************************************************************************/
-/********************** Show stats about number of users *********************/
-/*****************************************************************************/
-
-static void Sta_GetAndShowUsersStats (void)
-  {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
-   extern const char *Txt_Users;
-   extern const char *Txt_No_of_users;
-   extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
-   extern const char *Txt_Average_number_of_users_belonging_to_a_course;
-
-   /***** Number of users *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS]);
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Users,
-            Txt_No_of_users,
-            Txt_Average_number_of_courses_to_which_a_user_belongs,
-            Txt_Average_number_of_users_belonging_to_a_course);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_STUDENT);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_TEACHER);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_GUEST__);	// Users not beloging to any course
-
-   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
