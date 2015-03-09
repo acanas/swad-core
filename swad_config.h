@@ -29,7 +29,7 @@
 /*****************************************************************************/
 
 //#define LOCALHOST_UBUNTU	// Comment this line if not applicable
-//#define OPENSWAD_ORG		// Comment this line if not applicable
+#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define WWW_CEVUNA_UNA_PY	// Comment this line if not applicable
 

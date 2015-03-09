@@ -1771,19 +1771,19 @@ static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
       strcpy (Usr->userID,"********");
 
    /* Copy user's surname1 */
-   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME);
-   strncpy (Usr->userSurname1,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
-   Usr->userSurname1[Usr_MAX_BYTES_NAME] = '\0';
+   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,256);
+   strncpy (Usr->userSurname1,UsrDat->Surname1,255);
+   Usr->userSurname1[255] = '\0';
 
    /* Copy user's surname2 */
-   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME);
-   strncpy (Usr->userSurname2,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
-   Usr->userSurname2[Usr_MAX_BYTES_NAME] = '\0';
+   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,256);
+   strncpy (Usr->userSurname2,UsrDat->Surname2,255);
+   Usr->userSurname2[255] = '\0';
 
    /* Copy user's first name */
-   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME);
-   strncpy (Usr->userFirstname,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
-   Usr->userFirstname[Usr_MAX_BYTES_NAME] = '\0';
+   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,256);
+   strncpy (Usr->userFirstname,UsrDat->FirstName,255);
+   Usr->userFirstname[255] = '\0';
 
    /* User's photo URL */
    Pho_BuildLinkToPhoto (UsrDat,PhotoURL,false);
