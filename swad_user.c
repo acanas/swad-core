@@ -7521,6 +7521,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_Forum_posts;
+   extern const char *Txt_Messages_sent;
 
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -7558,6 +7559,22 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Forum_posts,
 	    For_GetNumPostsUsr (UsrDat->UsrCod));
+
+   /***** Number of messages sent *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">"
+		      "%u"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Messages_sent,
+	    Msg_GetNumMsgsSentByUsr (UsrDat->UsrCod));
 
    /***** End of table *****/
    Lay_EndRoundFrameTable10 ();

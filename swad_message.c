@@ -1794,6 +1794,24 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
   }
 
 /*****************************************************************************/
+/************** Get the number of unique messages sent by a user *************/
+/*****************************************************************************/
+
+unsigned Msg_GetNumMsgsSentByUsr (long UsrCod)
+  {
+   char Query[256];
+
+   /***** Get the number of unique messages sent by any teacher from this course *****/
+   sprintf (Query,"SELECT"
+                  " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod='%ld')"
+                  " +"
+                  " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod='%ld')",
+                  UsrCod,
+                  UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of messages sent by a user");
+  }
+
+/*****************************************************************************/
 /******** Get the number of unique messages sent from this location **********/
 /******** (all the platform, current degree or current course)      **********/
 /*****************************************************************************/
