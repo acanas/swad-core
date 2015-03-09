@@ -103,12 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.80.19 (2015/03/09)"
+#define Log_PLATFORM_VERSION	"SWAD 14.81 (2015/03/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
-        Version 14.80.19: Mar 09, 2015	Fixed bug in web service, reported by Juan Miguel Boyero. (179482 lines)
+        Version 14.81:    Mar 09, 2015	Information about number of forum posts in user's public profile. (179512 lines)
+        Version 14.80.19: Mar 09, 2015	Fixed bug in web service, reported by Juan Miguel Boyero Corral. (179482 lines)
         Version 14.80.18: Mar 09, 2015	Fixed bug in statistic of degrees and courses. (179481 lines)
         Version 14.80.17: Mar 09, 2015	Scope country for statistic of users. (179480 lines)
         Version 14.80.16: Mar 09, 2015	Scope country for statistic of degrees and courses. (179439 lines)

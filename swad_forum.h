@@ -110,6 +110,7 @@ unsigned For_GetNumOfReadersOfThr (long ThrCod);
 unsigned For_GetNumOfWritersInThr (long ThrCod);
 unsigned For_GetNumPstsInThr (long ThrCod);
 unsigned For_GetNumMyPstInThr (long ThrCod);
+unsigned For_GetNumPostsUsr (long UsrCod);
 void For_GetThrReadTime (long ThrCod,char *ReadTime);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);

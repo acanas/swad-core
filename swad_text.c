@@ -11759,17 +11759,17 @@ const char *Txt_Forum =
 
 const char *Txt_Forum_posts =
 #if   L==0
-	"Mensajes de foro";	// Necessita traduccio
+	"Mensajes en foros";	// Necessita traduccio
 #elif L==1
 	"Forum-Beitr&auml;ge";
 #elif L==2
 	"Forum posts";
 #elif L==3
-	"Mensajes de foro";
+	"Mensajes en foros";
 #elif L==4
 	"Messages de forum";
 #elif L==5
-	"Mensajes de foro";	// Okoteve traducción
+	"Mensajes en foros";	// Okoteve traducción
 #elif L==6
 	"Post del forum";
 #elif L==7

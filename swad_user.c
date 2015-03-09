@@ -7464,7 +7464,7 @@ void Usr_ShowUserProfile (void)
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Show details of user's profile *****/
-	 // Usr_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
+	 Usr_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -7520,6 +7520,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Forum_posts;
 
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
@@ -7541,6 +7542,22 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_Shortcut,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
+
+   /***** Number of posts in forums *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">"
+		      "%u"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Forum_posts,
+	    For_GetNumPostsUsr (UsrDat->UsrCod));
 
    /***** End of table *****/
    Lay_EndRoundFrameTable10 ();

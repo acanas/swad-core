@@ -757,7 +757,8 @@ unsigned For_GetNumPstsInThr (long ThrCod)
    char Query[512];
 
    /***** Get number of posts in a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod='%ld'",
+            ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a thread of a forum");
   }
 
@@ -767,13 +768,27 @@ unsigned For_GetNumPstsInThr (long ThrCod)
 
 unsigned For_GetNumMyPstInThr (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get if I have write posts in a thread from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post"
-                  " WHERE forum_post.ThrCod='%ld' AND forum_post.UsrCod='%ld'",
+                  " WHERE ThrCod='%ld' AND UsrCod='%ld'",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not check if you have written post in a thead of a forum");
+  }
+
+/*****************************************************************************/
+/*********************** Get number of posts from a user *********************/
+/*****************************************************************************/
+
+unsigned For_GetNumPostsUsr (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Get number of posts from a user from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE UsrCod='%ld'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not number of posts from a user");
   }
 
 /*****************************************************************************/
