@@ -344,6 +344,19 @@ void Net_ShowWebAndSocialNetworksStats (void)
                         " GROUP BY Web"
                         " ORDER BY N DESC,Web");
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+                        " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_webs.UsrCod"
+                        " GROUP BY usr_webs.Web"
+                        " ORDER BY N DESC,usr_webs.Web",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_webs"

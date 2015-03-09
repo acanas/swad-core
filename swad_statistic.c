@@ -3875,10 +3875,21 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
+      case Sco_SCOPE_CTY:
+	 NumCtysTotal = 1;
+	 NumCtysWithInss = 1;
+         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+                  Gbl.CurrentCty.Cty.CtyCod);
+	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
+	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
+	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,SubQuery);
+         break;
       case Sco_SCOPE_INS:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
-         sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
@@ -3890,7 +3901,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
-         sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
@@ -3902,7 +3913,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
 	 NumCtysWithDegs = 1;
-         sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -3914,7 +3925,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCtrs = 1;
 	 NumCtysWithDegs = 1;
 	 NumCtysWithCrss = 1;
-         sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_ROLE_STUDENT,SubQuery);
@@ -3988,9 +3999,19 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
+      case Sco_SCOPE_CTY:
+	 NumInssTotal = 1;
+         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+                  Gbl.CurrentCty.Cty.CtyCod);
+	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
+	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
+	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
+         break;
       case Sco_SCOPE_INS:
 	 NumInssTotal = 1;
-         sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
@@ -4001,7 +4022,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
       case Sco_SCOPE_CTR:
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
-         sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
@@ -4012,7 +4033,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
-         sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -4023,7 +4044,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
 	 NumInssWithCrss = 1;
-         sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
@@ -4092,9 +4113,18 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
+      case Sco_SCOPE_CTY:
+	 NumCtrsTotal = Ctr_GetNumCtrsInCty (Gbl.CurrentCty.Cty.CtyCod);
+         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+                  Gbl.CurrentCty.Cty.CtyCod);
+	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
+	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
+         break;
       case Sco_SCOPE_INS:
 	 NumCtrsTotal = Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
@@ -4103,7 +4133,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          break;
       case Sco_SCOPE_CTR:
 	 NumCtrsTotal = 1;
-         sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
@@ -4113,7 +4143,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
       case Sco_SCOPE_DEG:
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
-         sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -4123,7 +4153,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
 	 NumCtrsWithCrss = 1;
-         sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
@@ -4187,9 +4217,17 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
+      case Sco_SCOPE_CTY:
+	 NumDegsTotal = Deg_GetNumDegsInCty (Gbl.CurrentCty.Cty.CtyCod);
+         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+                  Gbl.CurrentCty.Cty.CtyCod);
+	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
+         break;
       case Sco_SCOPE_INS:
 	 NumDegsTotal = Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -4197,7 +4235,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          break;
       case Sco_SCOPE_CTR:
 	 NumDegsTotal = Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
-         sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -4205,7 +4243,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 	 break;
       case Sco_SCOPE_DEG:
 	 NumDegsTotal = 1;
-         sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
@@ -4214,7 +4252,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
      case Sco_SCOPE_CRS:
 	 NumDegsTotal = 1;
 	 NumDegsWithCrss = 1;
-         sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_ROLE_STUDENT,SubQuery);
@@ -4273,30 +4311,37 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,"");
          SubQuery[0] = '\0';
          break;
+      case Sco_SCOPE_CTY:
+	 NumCrssTotal = Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod);
+         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
+         break;
       case Sco_SCOPE_INS:
 	 NumCrssTotal = Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"institutions.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
                   Gbl.CurrentIns.Ins.InsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumCrssTotal = Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
-         sprintf (SubQuery,"centres.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumCrssTotal = Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod);
-         sprintf (SubQuery,"degrees.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumCrssTotal = 1;
-         sprintf (SubQuery,"courses.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_ROLE_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_ROLE_STUDENT,SubQuery);
