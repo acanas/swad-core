@@ -2609,7 +2609,7 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
 /*****************************************************************************/
 
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
-                                      long InsCod,long CtrCod,long DegCod,long CrsCod)
+                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -2629,7 +2629,14 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType='%u'"
         	           " AND Location='%ld'",
                      (unsigned) ForumType,InsCod);
-         else			// InsCod <= 0 ==> Number of institutions forums for the whole platform
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of institution forums for a country
+	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
+			   " FROM forum_thread,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
+         else			// CtyCod <= 0 ==> Number of institutions forums for the whole platform
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
         	           " WHERE ForumType='%u'",
@@ -2649,6 +2656,14 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " AND forum_thread.Location=centres.CtrCod"
 			   " AND centres.InsCod='%ld'",
 		     (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of centre forums for a country
+	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
+			   " FROM forum_thread,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of centre forums for the whole platform
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
@@ -2677,6 +2692,15 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " AND degrees.CtrCod=centres.CtrCod"
 			   " AND centres.InsCod='%ld'",
 		     (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of degree forums for a country
+	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
+			   " FROM forum_thread,degrees,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=degrees.DegCod"
+	                   " AND degrees.CtrCod=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of degree forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(DISTINCT Location)"
 			   " FROM forum_thread"
@@ -2714,6 +2738,16 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " AND degrees.CtrCod=centres.CtrCod"
 			   " AND centres.InsCod='%ld'",
 		     (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of course forums for a country
+	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
+			   " FROM forum_thread,courses,degrees,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=courses.CrsCod"
+			   " AND courses.DegCod=degrees.DegCod"
+	                   " AND degrees.CtrCod=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(DISTINCT Location)"
 			   " FROM forum_thread"
@@ -2741,7 +2775,7 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 /*****************************************************************************/
 
 unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
-                                            long InsCod,long CtrCod,long DegCod,long CrsCod)
+                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
    char Query[512];
 
@@ -2757,12 +2791,19 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                   (unsigned) ForumType);
          break;
       case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
-         if (InsCod > 0)	// InsCod > 0 ==> 0 <= number of threads in institution forums for an institution <= 1
+         if (InsCod > 0)	// InsCod > 0 ==> Number of threads in institution forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
         	           " WHERE ForumType='%u'"
         	           " AND Location='%ld'",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in institution forums for a country
+	    sprintf (Query,"SELECT COUNT(*)"
+			   " FROM forum_thread,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in institution forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2770,19 +2811,27 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= number of threads in centre forums for a centre <= 1
+         if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= Number of threads in centre forums for a centre <= 1
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
         	           " WHERE ForumType='%u'"
         	           " AND Location='%ld'",
                      (unsigned) ForumType,CtrCod);
-         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> 0 <= number of threads in centre forums for an institution <= 1
+         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in centre forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,centres"
         	           " WHERE forum_thread.ForumType='%u'"
         	           " AND forum_thread.Location=centres.CtrCod"
         	           " AND centres.InsCod='%ld'",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in centre forums for a country
+	    sprintf (Query,"SELECT COUNT(*)"
+			   " FROM forum_thread,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in centre forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2790,7 +2839,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         if (DegCod > 0)	// DegCod > 0 ==> number of threads in degree forums for a degree
+         if (DegCod > 0)	// DegCod > 0 ==> Number of threads in degree forums for a degree
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
         	           " WHERE ForumType='%u'"
@@ -2803,7 +2852,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " AND forum_thread.Location=degrees.DegCod"
         	           " AND degrees.CtrCod='%ld'",
                      (unsigned) ForumType,CtrCod);
-         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> 0 <= number of threads in degree forums for an institution <= 1
+         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in degree forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,degrees,centres"
         	           " WHERE forum_thread.ForumType='%u'"
@@ -2811,6 +2860,15 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " AND degrees.CtrCod=centres.CtrCod"
         	           " AND centres.InsCod='%ld'",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in degree forums for a country
+	    sprintf (Query,"SELECT COUNT(*)"
+			   " FROM forum_thread,degrees,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=degrees.DegCod"
+	                   " AND degrees.CtrCod=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in degree forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2818,7 +2876,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                      (unsigned) ForumType);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= number of threads in course forums for a course
+         if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= Number of threads in course forums for a course
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
         	           " WHERE ForumType='%u'"
@@ -2839,7 +2897,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " AND courses.DegCod=degrees.DegCod"
 			   " AND degrees.CtrCod='%ld'",
 		     (unsigned) ForumType,CtrCod);
-         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> 0 <= number of threads in course forums for an institution <= 1
+         else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in course forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,courses,degrees,centres"
         	           " WHERE forum_thread.ForumType='%u'"
@@ -2848,6 +2906,16 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " AND degrees.CtrCod=centres.CtrCod"
         	           " AND centres.InsCod='%ld'",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in course forums for a country
+	    sprintf (Query,"SELECT COUNT(*)"
+			   " FROM forum_thread,courses,degrees,centres,institutions"
+			   " WHERE forum_thread.ForumType='%u'"
+			   " AND forum_thread.Location=courses.CrsCod"
+			   " AND courses.DegCod=degrees.DegCod"
+	                   " AND degrees.CtrCod=centres.CtrCod"
+	                   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld'",
+		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread"
@@ -2896,7 +2964,7 @@ unsigned For_GetNumThrsInForum (For_ForumType_t ForumType)
 /*****************************************************************************/
 
 unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
-                                            long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                             unsigned *NumUsrsToBeNotifiedByEMail)
   {
    char Query[1024];
@@ -2924,6 +2992,14 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
         	           " AND forum_thread.Location='%ld'"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in institutions forums for a country
+            sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
+        	           " FROM forum_thread,institutions,forum_post"
+        	           " WHERE forum_thread.ForumType='%u'"
+        	           " AND forum_thread.Location=institutions.InsCod"
+                           " AND institutions.CtyCod='%ld'"
+        	           " AND forum_thread.ThrCod=forum_post.ThrCod",
+                     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in institution forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 			   " FROM forum_thread,forum_post "
@@ -2947,6 +3023,15 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
         	           " AND centres.InsCod='%ld'"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in centre forums for a country
+            sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
+        	           " FROM forum_thread,centres,institutions,forum_post"
+        	           " WHERE forum_thread.ForumType='%u'"
+        	           " AND forum_thread.Location=centres.CtrCod"
+                           " AND centres.InsCod=institutions.InsCod"
+        	           " AND institutions.CtyCod='%ld'"
+        	           " AND forum_thread.ThrCod=forum_post.ThrCod",
+                     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in centre forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 			   " FROM forum_thread,forum_post "
@@ -2979,6 +3064,16 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
         	           " AND centres.InsCod='%ld'"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in degree forums for a country
+            sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
+        	           " FROM forum_thread,degrees,centres,institutions,forum_post"
+        	           " WHERE forum_thread.ForumType='%u'"
+        	           " AND forum_thread.Location=degrees.DegCod"
+        	           " AND degrees.CtrCod=centres.CtrCod"
+                           " AND centres.InsCod=institutions.InsCod"
+        	           " AND institutions.CtyCod='%ld'"
+        	           " AND forum_thread.ThrCod=forum_post.ThrCod",
+                     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in degree forums for the whole platform
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
@@ -3021,6 +3116,17 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
         	           " AND centres.InsCod='%ld'"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
+         else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in course forums for a country
+            sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
+        	           " FROM forum_thread,courses,degrees,centres,institutions,forum_post"
+        	           " WHERE forum_thread.ForumType='%u'"
+        	           " AND forum_thread.Location=courses.CrsCod"
+        	           " AND courses.DegCod=degrees.DegCod"
+        	           " AND degrees.CtrCod=centres.CtrCod"
+                           " AND centres.InsCod=institutions.InsCod"
+        	           " AND institutions.CtyCod='%ld'"
+        	           " AND forum_thread.ThrCod=forum_post.ThrCod",
+                     (unsigned) ForumType,CtyCod);
          else			// CrsCod <= 0 && DegCod <= 0 && CtrCod <= 0 ==> Number of posts in course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 		           " FROM forum_thread,forum_post "

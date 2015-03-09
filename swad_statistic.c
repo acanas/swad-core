@@ -150,10 +150,10 @@ static void Sta_GetAndShowMsgsStats (void);
 
 static void Sta_GetAndShowForumStats (void);
 static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
-                                      long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                       struct Sta_StatsForum *StatsForum);
 static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
-                                         long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                         long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                          const char *Icon,struct Sta_StatsForum *StatsForum,
                                          const char *ForumName1,const char *ForumName2);
 static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum);
@@ -5977,46 +5977,56 @@ static void Sta_GetAndShowForumStats (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_SWAD_USRS       ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_SWAD_TCHS       ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_SWAD_USRS       ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_SWAD_TCHS       ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&StatsForum);
+         break;
+      case Sco_SCOPE_CTY:
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,Gbl.CurrentCty.Cty.CtyCod,-1L,-1L,-1L,-1L,&StatsForum);
          break;
       case Sco_SCOPE_INS:
-         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_USRS,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_INSTITUTION_TCHS,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,Gbl.CurrentIns.Ins.InsCod,-1L,-1L,-1L,&StatsForum);
          break;
       case Sco_SCOPE_CTR:
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.CurrentCtr.Ctr.CtrCod,-1L,-1L,&StatsForum);
          break;
       case Sco_SCOPE_DEG:
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.CurrentDeg.Deg.DegCod,-1L,&StatsForum);
          break;
       case Sco_SCOPE_CRS:
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
-         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
+         Sta_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.CurrentCrs.Crs.CrsCod,&StatsForum);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -6034,7 +6044,7 @@ static void Sta_GetAndShowForumStats (void)
 /*****************************************************************************/
 
 static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
-                                      long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                       struct Sta_StatsForum *StatsForum)
   {
    extern const char *Txt_Courses;
@@ -6047,62 +6057,62 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
    switch (ForumType)
      {
       case For_FORUM_COURSE_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "coursesdegree16x16.gif",StatsForum,
                                       Txt_Courses,"");
          break;
       case For_FORUM_COURSE_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "coursesdegree16x16.gif",StatsForum,
                                       Txt_Courses,Txt_only_teachers);
          break;
       case For_FORUM_DEGREE_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "grouptypes16x16.gif",StatsForum,
                                       Txt_Degrees,"");
          break;
       case For_FORUM_DEGREE_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "grouptypes16x16.gif",StatsForum,
                                       Txt_Degrees,Txt_only_teachers);
          break;
       case For_FORUM_CENTRE_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "house16x16.gif",StatsForum,
                                       Txt_Centres,"");
          break;
       case For_FORUM_CENTRE_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "house16x16.gif",StatsForum,
                                       Txt_Centres,Txt_only_teachers);
          break;
       case For_FORUM_INSTITUTION_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "institution16x16.gif",StatsForum,
                                       Txt_Institutions,"");
          break;
       case For_FORUM_INSTITUTION_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "institution16x16.gif",StatsForum,
                                       Txt_Institutions,Txt_only_teachers);
          break;
       case For_FORUM_GLOBAL_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "ballon16x16.gif",StatsForum,
                                       Txt_General,"");
          break;
       case For_FORUM_GLOBAL_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "ballon16x16.gif",StatsForum,
                                       Txt_General,Txt_only_teachers);
          break;
       case For_FORUM_SWAD_USRS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "swad16x16.gif",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,"");
          break;
       case For_FORUM_SWAD_TCHS:
-         Sta_WriteForumTitleAndStats (ForumType,InsCod,CtrCod,DegCod,CrsCod,
+         Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
                                       "swad16x16.gif",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,Txt_only_teachers);
          break;
@@ -6114,7 +6124,7 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
 /*****************************************************************************/
 
 static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
-                                         long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                         long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                          const char *Icon,struct Sta_StatsForum *StatsForum,
                                          const char *ForumName1,const char *ForumName2)
   {
@@ -6127,9 +6137,9 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
    float NumPostsPerForum;
 
    /***** Compute number of forums, number of threads and number of posts *****/
-   NumForums  = For_GetNumTotalForumsOfType       (ForumType,InsCod,CtrCod,DegCod,CrsCod);
-   NumThreads = For_GetNumTotalThrsInForumsOfType (ForumType,InsCod,CtrCod,DegCod,CrsCod);
-   NumPosts   = For_GetNumTotalPstsInForumsOfType (ForumType,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
+   NumForums  = For_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumThreads = For_GetNumTotalThrsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumPosts   = For_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
    NumThrsPerForum = (NumForums ? (float) NumThreads / (float) NumForums :
