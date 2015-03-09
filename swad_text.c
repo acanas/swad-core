@@ -5548,6 +5548,27 @@ const char *Txt_courses =
 	"disciplinas";
 #endif
 
+const char *Txt_Courses_as_a_ROLE =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Assignatures com %s";
+#elif L==1
+	"Kurse als %s";
+#elif L==2
+	"Courses as %s";
+#elif L==3
+	"Asignaturas como %s";
+#elif L==4
+	"Mati&egrave;res comme %s";
+#elif L==5
+	"Asignaturas como %s";		// Okoteve traducción
+#elif L==6
+	"Corsi come %s";
+#elif L==7
+	"Kursy jako %s";
+#elif L==8
+	"Disciplinas como %s";
+#endif
+
 const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==0
 	"Se ha(n) eliminado %u asignatura(s).";		// Necessita traduccio

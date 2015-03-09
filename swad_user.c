@@ -110,6 +110,9 @@ static void Usr_GetMyLastData (void);
 static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
+static unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
+static unsigned Usr_GetNumUsrsOtherRoleInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole);
+
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
 
@@ -716,13 +719,45 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
 
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get if a user is superuser from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM admin"
                   " WHERE UsrCod='%ld' AND Scope='Sys'",
             UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
+  }
+
+/*****************************************************************************/
+/********* Get number of courses in with a user have a given role ************/
+/*****************************************************************************/
+
+static unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
+  {
+   char Query[128];
+
+   /***** Get the number of teachers in a course from database ******/
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
+                  " WHERE UsrCod='%ld' AND Role='%u'",
+            UsrCod,(unsigned) Role);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user with a role");
+  }
+
+/*****************************************************************************/
+/********* Get number of students in courses of a user as teacher ************/
+/*****************************************************************************/
+
+static unsigned Usr_GetNumUsrsOtherRoleInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole)
+  {
+   char Query[256];
+
+   /***** Get the number of teachers in a course from database ******/
+   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
+                  " WHERE CrsCod IN"
+                  " (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld' AND Role='%u')"
+                  " AND Role='%u'",
+            UsrCod,(unsigned) UsrRole,(unsigned) OthersRole);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user with a role");
   }
 
 /*****************************************************************************/
@@ -7518,15 +7553,21 @@ void Usr_ChangeProfileVisibility (void)
 void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   // extern const char *Txt_Shortcut;
+   // extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Courses_as_a_ROLE;
+   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Forum_posts;
    extern const char *Txt_Messages_sent;
+   unsigned NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER);
+   unsigned NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT);
 
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
 
    /***** Shortcut to the user's profile *****/
+   /*
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:middle;\">"
@@ -7543,6 +7584,47 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_Shortcut,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
+   */
+   /***** Number of courses in which the user is teacher or student *****/
+   if (NumCrssUsrIsTeacher)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:middle;\">",
+	       The_ClassFormul[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
+	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_TEACHER][UsrDat->Sex]);
+      fprintf (Gbl.F.Out,":"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "%u (%u %s)"
+			 "</a>"
+			 "</td>",
+	       NumCrssUsrIsTeacher,
+	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT),
+	       Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+     }
+   if (NumCrssUsrIsStudent)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:middle;\">",
+	       The_ClassFormul[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
+	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_STUDENT][UsrDat->Sex]);
+      fprintf (Gbl.F.Out,":"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "%u (%u %s)"
+			 "</a>"
+			 "</td>"
+			 "</tr>",
+	       NumCrssUsrIsStudent,
+	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER),
+	       Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
+     }
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
