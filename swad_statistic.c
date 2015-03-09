@@ -5410,6 +5410,22 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
                         " GROUP BY Public",
                   (unsigned) License);
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT files.Public,COUNT(*)"
+                        " FROM institutions,centres,degrees,courses,files"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=files.Cod"
+	                " AND files.FileBrowser IN ('%u','%u')"
+                        " AND files.License='%u'"
+                        " GROUP BY files.Public",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
+                  (unsigned) License);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM centres,degrees,courses,files"
