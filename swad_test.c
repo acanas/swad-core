@@ -5520,6 +5520,28 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                            " WHERE AnsType='%s'",
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
+      case Sco_SCOPE_CTY:
+         if (AnsType == Tst_ANS_ALL)
+            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	           " FROM institutions,centres,degrees,courses,tst_questions"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod",
+                     Gbl.CurrentCty.Cty.CtyCod);
+         else
+            sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
+        	           " FROM institutions,centres,degrees,courses,tst_questions"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod"
+                           " AND tst_questions.AnsType='%s'",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     Tst_StrAnswerTypesDB[AnsType]);
+         break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -5646,6 +5668,28 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                            " WHERE AnsType='%s'",
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
+      case Sco_SCOPE_CTY:
+         if (AnsType == Tst_ANS_ALL)
+            sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
+        	           " FROM institutions,centres,degrees,courses,tst_questions"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod",
+                     Gbl.CurrentCty.Cty.CtyCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
+        	           " FROM institutions,centres,degrees,courses,tst_questions"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod"
+                           " AND tst_questions.AnsType='%s'",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     Tst_StrAnswerTypesDB[AnsType]);
+         break;
       case Sco_SCOPE_INS:
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
@@ -5760,6 +5804,34 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                            " WHERE tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
+                     Tst_StrAnswerTypesDB[AnsType],
+                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+         break;
+      case Sco_SCOPE_CTY:
+         if (AnsType == Tst_ANS_ALL)
+            sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
+        	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod"
+                           " AND tst_questions.CrsCod=tst_config.CrsCod"
+                           " AND tst_config.pluggable='%s'",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     Tst_PluggableDB[Tst_PLUGGABLE_YES]);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT (tst_questions.CrsCod))"
+        	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=tst_questions.CrsCod"
+                           " AND tst_questions.AnsType='%s'"
+                           " AND tst_questions.CrsCod=tst_config.CrsCod"
+                           " AND tst_config.pluggable='%s'",
+                     Gbl.CurrentCty.Cty.CtyCod,
                      Tst_StrAnswerTypesDB[AnsType],
                      Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
