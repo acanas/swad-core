@@ -4040,7 +4040,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
-	 NumInssTotal = 1;
+	 NumInssTotal = Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod);
          sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
