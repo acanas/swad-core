@@ -87,6 +87,8 @@ static void Msg_ExpandReceivedMsg (long MsgCod);
 static void Msg_ContractSentMsg (long MsgCod);
 static void Msg_ContractReceivedMsg (long MsgCod);
 
+static long Msg_InsertNewMsg (const char *Subject,const char *Content);
+
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery);
 static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEmail);
@@ -642,7 +644,7 @@ void Msg_RecMsgFromUsr (void)
             if (!MsgAlreadyInserted)
               {
                // The message is inserted only once in the table of messages sent
-               NewMsgCod = Msg_InsertNewMsg (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.Subject,Content);
+               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content);
                MsgAlreadyInserted = true;
               }
 
@@ -1163,7 +1165,7 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 /*****************************************************************************/
 // Return the code of the new inserted message
 
-long Msg_InsertNewMsg (long CrsCod,long UsrCod,const char *Subject,const char *Content)
+static long Msg_InsertNewMsg (const char *Subject,const char *Content)
   {
    char Query[128+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_LONG_TEXT];
    long MsgCod;
@@ -1177,8 +1179,13 @@ long Msg_InsertNewMsg (long CrsCod,long UsrCod,const char *Subject,const char *C
    /***** Insert message in sent messages *****/
    sprintf (Query,"INSERT INTO msg_snt (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
                   " VALUES ('%ld','%ld','%ld','N',NOW())",
-            MsgCod,CrsCod,UsrCod);
+            MsgCod,
+            Gbl.CurrentCrs.Crs.CrsCod,
+            Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not create message");
+
+   /***** Increment number of messages sent by me *****/
+   Usr_IncrementNumMsgSntUsr ();
 
    return MsgCod;
   }

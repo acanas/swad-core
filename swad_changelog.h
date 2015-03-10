@@ -103,11 +103,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.83 (2015/03/10)"
+#define Log_PLATFORM_VERSION	"SWAD 14.84 (2015/03/10)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.84:    Mar 10, 2015	Number of messages sent is stored in user's figures. (181374 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_figures ADD COLUMN NumMsgSnt INT NOT NULL DEFAULT -1;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1407','es','N','Calcular n&uacute;mero de mensajes enviados');
+
         Version 14.83:    Mar 10, 2015	New action to compute first click when not available in public profile. (181287 lines)
 					3 changes necessary in database:
 ALTER TABLE usr_figures CHANGE COLUMN NumClicks NumClicks INT NOT NULL DEFAULT -1;

@@ -947,6 +947,7 @@ Users:
 	793. ActSeePubPrf		Show a public user's profile
 	---. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	---. ActCalNumClk		Calculate number of clicks from log and store into user's figures
+	---. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 Messages:
 	794. ActSeeNtf			Show my recent notifications
 	795. ActSeeAnn			Show global announcements
@@ -2329,6 +2330,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePubPrf	*/{1402,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_CalculateFirstClickTime	,NULL},
    /* ActCalNumClk	*/{1406,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_CalculateNumClicks		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_CalculateNumMsgSnt		,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -4065,6 +4067,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgPriPrf,		// #1404
 	ActCal1stClkTim,	// #1405
 	ActCalNumClk,		// #1406
+	ActCalNumMsgSnt,	// #1407
 	};
 
 /*****************************************************************************/

@@ -80,8 +80,6 @@ void Msg_ConSntMsg (void);
 void Msg_ConRecMsg (void);
 void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod);
 
-long Msg_InsertNewMsg (long CrsCod,long UsrCod,const char *Subject,const char *Content);
-
 void Msg_DelAllRecAndSntMsgsUsr (long UsrCod);
 void Msg_MoveUnusedMsgsContentToDeleted (void);
 
