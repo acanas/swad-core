@@ -103,11 +103,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.82 (2015/03/10)"
+#define Log_PLATFORM_VERSION	"SWAD 14.82.1 (2015/03/10)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h | tail -1
 /*
+        Version 14.82.1:  Mar 10, 2015	Added new social networks. (179908 lines)
+					1 change necessary in database:
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','quitter','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
         Version 14.82:    Mar 10, 2015	New database table usr_figures. (179898 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATETIME NOT NULL,NumClicks INT NOT NULL DEFAULT 0,PRIMARY KEY(UsrCod));

@@ -42,13 +42,14 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 23
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 25
 typedef enum
   {
    Net_WWW,		// Personal web page
    Net_500PX,
    Net_DELICIOUS,
    Net_DEVIANTART,
+   Net_DIASPORA,
    Net_EDMODO,
    Net_FACEBOOK,
    Net_FLICKR,
@@ -60,6 +61,7 @@ typedef enum
    Net_LINKEDIN,
    Net_PAPERLI,
    Net_PINTEREST,
+   Net_QUITTER,
    Net_RESEARCH_GATE,
    Net_SCOOPIT,
    Net_SLIDESHARE,
@@ -76,6 +78,7 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "500px",		// Net_500PX
    "delicious",		// Net_DELICIOUS
    "deviantart",	// Net_DEVIANTART
+   "diaspora",		// Net_DIASPORA
    "edmodo",		// Net_EDMODO
    "facebook",		// Net_FACEBOOK
    "flickr",		// Net_FLICKR
@@ -87,6 +90,7 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "linkedin",		// Net_LINKEDIN
    "paperli",		// Net_PAPERLI
    "pinterest",		// Net_PINTEREST
+   "quitter",		// Net_QUITTER
    "researchgate",	// Net_RESEARCH_GATE
    "scoopit",		// Net_SCOOPIT
    "slideshare",	// Net_SLIDESHARE
@@ -103,6 +107,7 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "500px",		// Net_500PX
    "Delicious",		// Net_DELICIOUS
    "DeviantArt",	// Net_DEVIANTART
+   "Diaspora",		// Net_DIASPORA
    "Edmodo",		// Net_EDMODO
    "Facebook",		// Net_FACEBOOK
    "Flickr",		// Net_FLICKR
@@ -114,6 +119,7 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "LinkedIn",		// Net_LINKEDIN
    "Paper.li",		// Net_PAPERLI
    "Pinterest",		// Net_PINTEREST
+   "quitter",		// Net_QUITTER
    "Research Gate",	// Net_RESEARCH_GATE
    "Scoop.it",		// Net_SCOOPIT
    "Slideshare",	// Net_SLIDESHARE
