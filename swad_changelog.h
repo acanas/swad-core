@@ -108,7 +108,12 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.83:    Mar 10, 2015	New action to compute first click when not available in public profile. (181285 lines)
+        Version 14.83:    Mar 10, 2015	New action to compute first click when not available in public profile. (181287 lines)
+					3 changes necessary in database:
+ALTER TABLE usr_figures CHANGE COLUMN NumClicks NumClicks INT NOT NULL DEFAULT -1;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1405','es','N','Calcular fecha del primer clic');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1406','es','N','Calcular n&uacute;mero de clics');
+
         Version 14.82.1:  Mar 10, 2015	Added new social networks. (181143 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','paperli','pinterest','quitter','researchgate','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;

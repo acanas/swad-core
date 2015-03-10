@@ -1175,7 +1175,7 @@ CREATE TABLE IF NOT EXISTS usr_emails (
 CREATE TABLE IF NOT EXISTS usr_figures (
 	UsrCod INT NOT NULL,
 	FirstClickTime DATETIME NOT NULL,
-	NumClicks INT NOT NULL DEFAULT 0,
+	NumClicks INT NOT NULL DEFAULT -1,
 	PRIMARY KEY(UsrCod));
 --
 -- Table usr_last: stores some variable data related to users
