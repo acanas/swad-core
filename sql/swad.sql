@@ -1170,6 +1170,14 @@ CREATE TABLE IF NOT EXISTS usr_emails (
 	UNIQUE INDEX(UsrCod,E_mail),
 	UNIQUE INDEX(E_mail));
 --
+-- Table usr_figures: stores some figures (numbers) related to users to show in public profile
+--
+CREATE TABLE IF NOT EXISTS usr_figures (
+	UsrCod INT NOT NULL,
+	FirstClickTime DATETIME NOT NULL,
+	NumClicks INT NOT NULL DEFAULT 0,
+	PRIMARY KEY(UsrCod));
+--
 -- Table usr_last: stores some variable data related to users
 --
 CREATE TABLE IF NOT EXISTS usr_last (

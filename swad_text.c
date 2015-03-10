@@ -11484,6 +11484,27 @@ const char *Txt_Files_works =
 	"Arquivos trabalhos";
 #endif
 
+const char *Txt_First_access =
+#if   L==0
+	"Primer acc&eacute;s";
+#elif L==1
+	"Erster Zugang";
+#elif L==2
+	"First access";
+#elif L==3
+	"Primer acceso";
+#elif L==4
+	"Premier acc&egrave;s";
+#elif L==5
+	"Primer acceso";	// Okoteve traducción
+#elif L==6
+	"Primo accesso";
+#elif L==7
+	"Pierwszy dost&eogon;p";
+#elif L==8
+	"Primeiro acesso";
+#endif
+
 const char *Txt_first_message_not_allowed =
 #if   L==0
 	"primer mensaje no permitido";	// Necessita traduccio

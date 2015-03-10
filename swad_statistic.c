@@ -343,6 +343,10 @@ void Sta_LogAccess (const char *Comments)
 	       LogCod,Gbl.Banners.BanCodClicked);
       DB_QueryINSERT (Query,"can not log banner clicked");
      }
+
+   /***** Increment my number of clicks *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
+      Usr_IncrementNumClicksUsr ();
   }
 
 /*****************************************************************************/

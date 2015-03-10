@@ -2337,6 +2337,24 @@ mysql> DESCRIBE usr_emails;
                    "Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "UNIQUE INDEX(UsrCod,E_mail),UNIQUE INDEX(E_mail))");
 
+   /***** Table usr_figures *****/
+   /*
+mysql> DESCRIBE usr_figures;
++----------------+----------+------+-----+---------+-------+
+| Field          | Type     | Null | Key | Default | Extra |
++----------------+----------+------+-----+---------+-------+
+| UsrCod         | int(11)  | NO   | PRI | NULL    |       |
+| FirstClickTime | datetime | NO   |     | NULL    |       |
+| NumClicks      | int(11)  | NO   |     | 0       |       |
++----------------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+   */
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_figures ("
+	           "UsrCod INT NOT NULL,"
+	           "FirstClickTime DATETIME NOT NULL,"
+	           "NumClicks INT NOT NULL DEFAULT 0,"
+	           "PRIMARY KEY(UsrCod))");
+
 /***** Table usr_IDs *****/
 /*
 mysql> DESCRIBE usr_IDs;

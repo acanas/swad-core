@@ -328,5 +328,6 @@ void Usr_RequestUserProfile (void);
 void Usr_ShowUserProfile (void);
 void Usr_ChangeProfileVisibility (void);
 void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat);
+void Usr_IncrementNumClicksUsr (void);
 
 #endif

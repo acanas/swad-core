@@ -10509,7 +10509,9 @@ ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','w
 UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';
 UPDATE usr_data SET PhotoVisibility='system' WHERE PublicPhoto='Y';
 
+----- 2015-03-09, swad14.82
 
+CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATETIME NOT NULL,NumClicks INT NOT NULL DEFAULT 0,PRIMARY KEY(UsrCod));
 
 
 

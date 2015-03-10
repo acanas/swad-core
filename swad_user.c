@@ -91,6 +91,12 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
+struct UsrFigures
+  {
+   struct DateTime FirstClickTime;
+   unsigned long NumClicks;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -173,6 +179,8 @@ static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
 static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role);
 static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
+
+static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -7556,6 +7564,8 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Figures;
    // extern const char *Txt_Shortcut;
    // extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_First_access;
+   extern const char *Txt_Clicks;
    extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -7563,6 +7573,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_public_files;
    extern const char *Txt_Forum_posts;
    extern const char *Txt_Messages_sent;
+   struct UsrFigures UsrFigures;
    unsigned NumCrssUsrIsTeacher;
    unsigned NumCrssUsrIsStudent;
    unsigned NumFiles;
@@ -7590,6 +7601,48 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
    */
+
+   /***** First click time and number of clicks *****/
+   Usr_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
+
+   /* First click time */
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_First_access);
+   if (UsrFigures.FirstClickTime.Date.Year)
+     {
+      Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
+      fprintf (Gbl.F.Out,"&nbsp;");
+      Dat_WriteHourMinute (&(UsrFigures.FirstClickTime.YYYYMMDDHHMMSS[8]));
+     }
+   else
+      fprintf (Gbl.F.Out,"-");
+   fprintf (Gbl.F.Out,"</a>"
+		      "</td>"
+		      "</tr>");
+
+   /* Number of clicks */
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:middle;\">"
+		      "%lu"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Clicks,
+	    UsrFigures.NumClicks);
+
    /***** Number of courses in which the user is teacher or student *****/
    if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
      {
@@ -7686,4 +7739,91 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** End of table *****/
    Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/********************** Select values on user's figures **********************/
+/*****************************************************************************/
+
+static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+
+   /***** Get user's code from database *****/
+   sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),NumClicks"
+	          " FROM usr_figures WHERE UsrCod='%ld'",
+	    UsrCod);
+   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's figures")))
+     {
+      /***** Get user's figures *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
+      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
+	 Lay_ShowErrorAndExit ("Error when reading first click time.");
+
+      /* Get number of clicks */
+      if (sscanf (row[1],"%ld",&UsrFigures->NumClicks) != 1)
+	 UsrFigures->NumClicks = 0;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (!NumRows)
+     {
+      /***** Get first click from database *****/
+      sprintf (Query,"SELECT DATE_FORMAT(ClickTime,'%%Y%%m%%d%%H%%i%%S') FROM log"
+	             " WHERE UsrCod='%ld' ORDER BY ClickTime LIMIT 1",
+	       UsrCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's first click"))
+	{
+	 /* Get first click */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
+	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
+	    Lay_ShowErrorAndExit ("Error when reading first click time.");
+	}
+      else
+	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000")))
+	    Lay_ShowErrorAndExit ("Error when reading first click time.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Get first click from database *****/
+      sprintf (Query,"SELECT COUNT(*) FROM log WHERE UsrCod='%ld'",
+	       UsrCod);
+      UsrFigures->NumClicks = DB_QueryCOUNT (Query,"can not get user's first click");
+
+      /***** Insert new user's figures *****/
+      if (UsrFigures->FirstClickTime.Date.Year)	// If first click time found
+	{
+	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks)"
+			" VALUES ('%ld','%s','%ld')",
+		  UsrCod,
+		  UsrFigures->FirstClickTime.YYYYMMDDHHMMSS,
+		  UsrFigures->NumClicks);
+	 DB_QueryINSERT (Query,"can not insert user's figures");
+	}
+     }
+  }
+
+/*****************************************************************************/
+/********************** Select values on user's figures **********************/
+/*****************************************************************************/
+
+void Usr_IncrementNumClicksUsr (void)
+  {
+   char Query[512];
+
+   /***** Increment my number of clicks *****/
+   sprintf (Query,"UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
+	          " WHERE UsrCod='%ld'",
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryINSERT (Query,"can not increment user's clicks");
   }

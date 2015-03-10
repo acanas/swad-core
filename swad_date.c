@@ -27,6 +27,7 @@
 
 #include <string.h>		// For string functions
 
+#include "swad_config.h"
 #include "swad_date.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
