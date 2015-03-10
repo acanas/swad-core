@@ -93,8 +93,8 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
 struct UsrFigures
   {
-   struct DateTime FirstClickTime;
-   unsigned long NumClicks;
+   struct DateTime FirstClickTime;	//   0 ==> unknown first click time of user never logged
+   long NumClicks;			// -1L ==> unknown number of clicks
   };
 
 /*****************************************************************************/
@@ -180,7 +180,11 @@ static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role);
 static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
+static void Usr_ShowUserProfile (void);
 static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
+static void Usr_FetchFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
+static void Usr_FetchNumClicksFromLogAndStoreAsUsrFigure (long UsrCod);
+static bool Usr_CheckIfUsrFiguresExists (long UsrCod);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -7445,7 +7449,7 @@ void Usr_RequestUserProfile (void)
    Act_FormStart (ActSeePubPrf);
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
                       "%s: "
-                      "<input type=\"text\" name=\"Usr\""
+                      "<input type=\"text\" name=\"usr\""
                       " size=\"20\" maxlength=\"%u\" />"
                       "</div>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -7463,17 +7467,15 @@ void Usr_RequestUserProfile (void)
   }
 
 /*****************************************************************************/
-/*************************** Show a user's profile ***************************/
+/**************** Get user's code and show a user's profile ******************/
 /*****************************************************************************/
 
-void Usr_ShowUserProfile (void)
+void Usr_GetUsrCodAndShowUserProfile (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
    long OtherUsrCod;
-   bool Error = false;
 
-   /***** Get user *****/
+   /***** Get user from nickname *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
      {
       Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
@@ -7485,6 +7487,19 @@ void Usr_ShowUserProfile (void)
       else
 	 Usr_GetParamOtherUsrCodEncrypted ();
      }
+
+   /***** Show user's profile *****/
+   Usr_ShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/*************************** Show a user's profile ***************************/
+/*****************************************************************************/
+
+static void Usr_ShowUserProfile (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool Error = false;
 
    /***** Check if user exists and get his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
@@ -7565,6 +7580,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    // extern const char *Txt_Shortcut;
    // extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_First_access;
+   extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
    extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -7621,10 +7637,16 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"&nbsp;");
       Dat_WriteHourMinute (&(UsrFigures.FirstClickTime.YYYYMMDDHHMMSS[8]));
      }
-   else
-      fprintf (Gbl.F.Out,"-");
-   fprintf (Gbl.F.Out,"</a>"
-		      "</td>"
+   else	// First click time is unknown or user never logged
+     {
+      /***** Button to fetch and store first click time *****/
+      Act_FormStart (ActCal1stClkTim);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      fprintf (Gbl.F.Out,"</form>");
+     }
+   fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
    /* Number of clicks */
@@ -7634,14 +7656,22 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">"
-		      "%lu"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
+		      " style=\"text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Clicks,
-	    UsrFigures.NumClicks);
+	    Txt_Clicks);
+   if (UsrFigures.NumClicks >= 0)
+      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumClicks);
+   else	// Number of clicks is unknown
+     {
+      /***** Button to fetch and store number of clicks *****/
+      Act_FormStart (ActCalNumClk);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      fprintf (Gbl.F.Out,"</form>");
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Number of courses in which the user is teacher or student *****/
    if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
@@ -7767,17 +7797,54 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
       /* Get number of clicks */
       if (sscanf (row[1],"%ld",&UsrFigures->NumClicks) != 1)
-	 UsrFigures->NumClicks = 0;
+	 UsrFigures->NumClicks = -1L;
+     }
+   else
+     {
+      /***** Return special user's figures indicating "not present" *****/
+      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000")))
+	 Lay_ShowErrorAndExit ("Error when reading first click time.");
+
+      UsrFigures->NumClicks = -1L;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
 
-   if (!NumRows)
+/*****************************************************************************/
+/********* Calculate first click time and show user's profile again **********/
+/*****************************************************************************/
+
+void Usr_CalculateFirstClickTime (void)
+  {
+   /***** Get user's code *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Get first click time from log and store as user's figure *****/
+   Usr_FetchFirstClickFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Show user's profile again *****/
+   Usr_ShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/** Fetch first click of a user from log table and store in user's figures ***/
+/*****************************************************************************/
+
+static void Usr_FetchFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   struct DateTime FirstClickTime;
+   bool UsrIsInLog = false;
+
+   if (Usr_ChkIfUsrCodExists (UsrCod))
      {
-      /***** Get first click from database *****/
+      /***** Get first click from log table *****/
       sprintf (Query,"SELECT DATE_FORMAT(ClickTime,'%%Y%%m%%d%%H%%i%%S') FROM log"
-	             " WHERE UsrCod='%ld' ORDER BY ClickTime LIMIT 1",
+		     " WHERE UsrCod='%ld' ORDER BY ClickTime LIMIT 1",
 	       UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's first click"))
 	{
@@ -7785,32 +7852,96 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
-	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
-	    Lay_ShowErrorAndExit ("Error when reading first click time.");
-	}
-      else
-	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000")))
+	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&FirstClickTime,row[0])))
 	    Lay_ShowErrorAndExit ("Error when reading first click time.");
 
-      /***** Free structure that stores the query result *****/
+	 UsrIsInLog = true;
+	}
+      /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** Get first click from database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM log WHERE UsrCod='%ld'",
-	       UsrCod);
-      UsrFigures->NumClicks = DB_QueryCOUNT (Query,"can not get user's first click");
-
-      /***** Insert new user's figures *****/
-      if (UsrFigures->FirstClickTime.Date.Year)	// If first click time found
+      /***** Update first click time in user's figures *****/
+      if (UsrIsInLog)	// If first click time found
 	{
-	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks)"
-			" VALUES ('%ld','%s','%ld')",
-		  UsrCod,
-		  UsrFigures->FirstClickTime.YYYYMMDDHHMMSS,
-		  UsrFigures->NumClicks);
-	 DB_QueryINSERT (Query,"can not insert user's figures");
+	 if (Usr_CheckIfUsrFiguresExists (UsrCod))
+	   {
+	    sprintf (Query,"UPDATE usr_figures SET FirstClickTime='%s'"
+			   " WHERE UsrCod='%ld'",
+		     FirstClickTime.YYYYMMDDHHMMSS,UsrCod);
+	    DB_QueryUPDATE (Query,"can not update user's figures");
+	   }
+	 else			// User entry does not exist
+	   {
+	    sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks)"
+			   " VALUES ('%ld','%s','-1')",
+		     UsrCod,FirstClickTime.YYYYMMDDHHMMSS);
+	    DB_QueryINSERT (Query,"can not create user's figures");
+	   }
 	}
      }
+  }
+
+/*****************************************************************************/
+/********* Calculate number of clicks and show user's profile again **********/
+/*****************************************************************************/
+
+void Usr_CalculateNumClicks (void)
+  {
+   /***** Get user's code *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Get number of clicks from log and store as user's figure *****/
+   Usr_FetchNumClicksFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Show user's profile again *****/
+   Usr_ShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/** Fetch first click of a user from log table and store in user's figures ***/
+/*****************************************************************************/
+
+static void Usr_FetchNumClicksFromLogAndStoreAsUsrFigure (long UsrCod)
+  {
+   char Query[256];
+   unsigned long NumClicks;
+
+   if (Usr_ChkIfUsrCodExists (UsrCod))
+     {
+      /***** Get number of clicks from database *****/
+      sprintf (Query,"SELECT COUNT(*) FROM log WHERE UsrCod='%ld'",
+	       UsrCod);
+      NumClicks = (long) DB_QueryCOUNT (Query,"can not get number of clicks");
+
+      /***** Update number of clicks in user's figures *****/
+      if (Usr_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 sprintf (Query,"UPDATE usr_figures SET NumClicks='%ld'"
+			" WHERE UsrCod='%ld'",
+		  NumClicks,UsrCod);
+	 DB_QueryUPDATE (Query,"can not update user's figures");
+	}
+      else			// User entry does not exist
+	{
+	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks)"
+			" VALUES ('%ld','00000000000000','%ld')",
+		  UsrCod,NumClicks);
+	 DB_QueryINSERT (Query,"can not create user's figures");
+	}
+     }
+   }
+
+/*****************************************************************************/
+/*** Check if it exists an entry for this user in table of user's figures ****/
+/*****************************************************************************/
+
+static bool Usr_CheckIfUsrFiguresExists (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE UsrCod='%ld'",
+	    UsrCod);
+   return (DB_QueryCOUNT (Query,"can not get user's first click") != 0);
   }
 
 /*****************************************************************************/

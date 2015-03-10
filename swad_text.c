@@ -3623,6 +3623,27 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_
 	" incluindo o seu sexo.";
 #endif
 
+const char *Txt_Calculate =
+#if   L==0
+	"Calcular";
+#elif L==1
+	"Berechnen";
+#elif L==2
+	"Calculate";
+#elif L==3
+	"Calcular";
+#elif L==4
+	"Calculer";
+#elif L==5
+	"Calcular";	// Okoteve traducción
+#elif L==6
+	"Calcolare";
+#elif L==7
+	"Oblicza&cacute;";
+#elif L==8
+	"Calcular";
+#endif
+
 const char *Txt_Calculate_average_photo_of_a_degree =
 #if   L==0
 	"Calcular fotografia mitjana d'una titulaci&oacute;";
