@@ -710,12 +710,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .USR_ID			{color:#404040; font-size:14pt; font-weight:bold;}
 
-.DAT			{color:#707070; font-size:10pt;}
-.DAT_GREEN		{color:#008000; font-size:10pt;}
-.DAT_LIGHT		{color:#A0A0A0; font-size:10pt;}
-.DAT_NOBR		{color:#707070; font-size:10pt; white-space:nowrap;}
-.DAT_N			{color:#404040; font-size:10pt;}
-.DAT_NOBR_N		{color:#404040; font-size:10pt; white-space:nowrap;}
+.DAT			{color:#707070; font-size:11pt;}
+.DAT_GREEN		{color:#008000; font-size:11pt;}
+.DAT_LIGHT		{color:#A0A0A0; font-size:11pt;}
+.DAT_NOBR		{color:#707070; font-size:11pt; white-space:nowrap;}
+.DAT_N			{color:#404040; font-size:11pt;}
+.DAT_NOBR_N		{color:#404040; font-size:11pt; white-space:nowrap;}
 
 .DAT_SMALL		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:10pt;}
 .DAT_SMALL_LIGHT	{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#A0A0A0; font-size:10pt;}

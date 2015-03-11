@@ -7617,11 +7617,11 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /* First click time */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      " style=\"text-align:right; vertical-align:top;\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">",
+		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_First_access);
    if (UsrFigures.FirstClickTime.Date.Year)
@@ -7693,14 +7693,14 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">",
+			 " style=\"text-align:right; vertical-align:top;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
 	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_TEACHER][UsrDat->Sex]);
       fprintf (Gbl.F.Out,":"
 			 "</td>"
 			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:middle;\">"
+			 " style=\"text-align:left; vertical-align:top;\">"
 			 "%u (%u %s)"
 			 "</a>"
 			 "</td>",
@@ -7712,14 +7712,14 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">",
+			 " style=\"text-align:right; vertical-align:top;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
 	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_STUDENT][UsrDat->Sex]);
       fprintf (Gbl.F.Out,":"
 			 "</td>"
 			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:middle;\">"
+			 " style=\"text-align:left; vertical-align:top;\">"
 			 "%u (%u %s)"
 			 "</a>"
 			 "</td>"
@@ -7736,11 +7736,11 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       NumPublicFiles = 0;
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      " style=\"text-align:right; vertical-align:top;\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">"
+		      " style=\"text-align:left; vertical-align:top;\">"
 		      "%u (%u %s)"
 		      "</a>"
 		      "</td>"
@@ -7753,11 +7753,11 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      " style=\"text-align:right; vertical-align:top;\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">",
+		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Forum_posts);
    if (UsrFigures.NumForPst >= 0)
@@ -7768,7 +7768,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out," (");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of forum posts is unknown
@@ -7786,11 +7786,11 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of messages sent *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      " style=\"text-align:right; vertical-align:top;\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">",
+		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Messages_sent);
    if (UsrFigures.NumMsgSnt >= 0)
@@ -7801,7 +7801,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out," (");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of clicks is unknown
