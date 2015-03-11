@@ -332,6 +332,7 @@ void Usr_CalculateFirstClickTime (void);
 void Usr_CalculateNumClicks (void);
 void Usr_CalculateNumForPst (void);
 void Usr_CalculateNumMsgSnt (void);
+void Usr_RemoveUsrFigures (long UsrCod);
 void Usr_IncrementNumClicksUsr (long UsrCod);
 void Usr_IncrementNumForPstUsr (long UsrCod);
 void Usr_IncrementNumMsgSntUsr (long UsrCod);

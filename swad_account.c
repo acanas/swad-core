@@ -740,6 +740,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove sessions of a user");
 
+   /***** Remove user's figures *****/
+   Usr_RemoveUsrFigures (UsrDat->UsrCod);
+
    /***** Remove the user from the list of users without photo *****/
    Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 

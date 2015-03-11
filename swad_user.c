@@ -8055,7 +8055,21 @@ static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryINSERT (Query,"can not create user's figures");
 	}
      }
-   }
+  }
+
+/*****************************************************************************/
+/**************************** Remove user's figures **************************/
+/*****************************************************************************/
+
+void Usr_RemoveUsrFigures (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Remove user's figures *****/
+   sprintf (Query,"DELETE FROM usr_figures WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not delete user's figures");
+  }
 
 /*****************************************************************************/
 /*** Check if it exists an entry for this user in table of user's figures ****/
