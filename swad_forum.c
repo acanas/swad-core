@@ -3819,6 +3819,9 @@ void For_RecForumPst (void)
       For_UpdateThrFirstAndLastPst (ThrCod,PstCod,PstCod);
      }
 
+   /***** Increment number of forum posts in my user's figures *****/
+   Usr_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Post_sent);
    Lay_ShowAlert (Lay_INFO,Txt_Do_not_reload_this_page_because_the_post_will_be_sent_again_);

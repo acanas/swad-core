@@ -1185,7 +1185,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content)
    DB_QueryINSERT (Query,"can not create message");
 
    /***** Increment number of messages sent by me *****/
-   Usr_IncrementNumMsgSntUsr ();
+   Usr_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    return MsgCod;
   }

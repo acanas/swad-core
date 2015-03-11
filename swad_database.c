@@ -2346,14 +2346,16 @@ mysql> DESCRIBE usr_figures;
 | UsrCod         | int(11)  | NO   | PRI | NULL    |       |
 | FirstClickTime | datetime | NO   |     | NULL    |       |
 | NumClicks      | int(11)  | NO   |     | -1      |       |
+| NumForPst      | int(11)  | NO   |     | -1      |       |
 | NumMsgSnt      | int(11)  | NO   |     | -1      |       |
 +----------------+----------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
+5 rows in set (0.00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_figures ("
 	           "UsrCod INT NOT NULL,"
 	           "FirstClickTime DATETIME NOT NULL,"
 	           "NumClicks INT NOT NULL DEFAULT -1,"
+	           "NumForPst INT NOT NULL DEFAULT -1,"
 	           "NumMsgSnt INT NOT NULL DEFAULT -1,"
 	           "PRIMARY KEY(UsrCod))");
 

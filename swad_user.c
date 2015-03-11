@@ -95,6 +95,7 @@ struct UsrFigures
   {
    struct DateTime FirstClickTime;	//   0 ==> unknown first click time of user never logged
    long NumClicks;			// -1L ==> unknown number of clicks
+   long NumForPst;			// -1L ==> unknown number of forum posts
    long NumMsgSnt;			// -1L ==> unknown number of messages sent
   };
 
@@ -184,8 +185,9 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 static void Usr_ShowUserProfile (void);
 static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
-static void Usr_GetNumClicksFromLogAndStoreAsUsrFigure (long UsrCod);
-static void Usr_GetNumMsgSntFromLogAndStoreAsUsrFigure (long UsrCod);
+static void Usr_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
+static void Usr_GetNumForPstAndStoreAsUsrFigure (long UsrCod);
+static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod);
 static bool Usr_CheckIfUsrFiguresExists (long UsrCod);
 
 /*****************************************************************************/
@@ -7744,14 +7746,22 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">"
-		      "%u"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
+		      " style=\"text-align:left; vertical-align:middle;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Forum_posts,
-	    For_GetNumPostsUsr (UsrDat->UsrCod));
+	    Txt_Forum_posts);
+   if (UsrFigures.NumForPst >= 0)
+      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumForPst);
+   else	// Number of forum posts is unknown
+     {
+      /***** Button to fetch and store number of forum posts *****/
+      Act_FormStart (ActCalNumForPst);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      fprintf (Gbl.F.Out,"</form>");
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Number of messages sent *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7793,7 +7803,8 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
    unsigned NumRows;
 
    /***** Get user's code from database *****/
-   sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),NumClicks,NumMsgSnt"
+   sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),"
+	          "NumClicks,NumForPst,NumMsgSnt"
 	          " FROM usr_figures WHERE UsrCod='%ld'",
 	    UsrCod);
    if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's figures")))
@@ -7805,12 +7816,16 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
 	 Lay_ShowErrorAndExit ("Error when reading first click time.");
 
-      /* Get number of clicks */
+      /* Get number of clicks (row[1]) */
       if (sscanf (row[1],"%ld",&UsrFigures->NumClicks) != 1)
 	 UsrFigures->NumClicks = -1L;
 
-      /* Get number of messages sent */
-      if (sscanf (row[2],"%ld",&UsrFigures->NumMsgSnt) != 1)
+      /* Get number of forum posts (row[2]) */
+      if (sscanf (row[2],"%ld",&UsrFigures->NumForPst) != 1)
+	 UsrFigures->NumForPst = -1L;
+
+      /* Get number of messages sent (row[3]) */
+      if (sscanf (row[3],"%ld",&UsrFigures->NumMsgSnt) != 1)
 	 UsrFigures->NumMsgSnt = -1L;
      }
    else
@@ -7819,6 +7834,7 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000")))
 	 Lay_ShowErrorAndExit ("Error when reading first click time.");
       UsrFigures->NumClicks = -1L;
+      UsrFigures->NumForPst = -1L;
       UsrFigures->NumMsgSnt = -1L;
      }
 
@@ -7886,8 +7902,8 @@ static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 	   }
 	 else			// User entry does not exist
 	   {
-	    sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumMsgSnt)"
-			   " VALUES ('%ld','%s','-1','-1')",
+	    sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumForPst,NumMsgSnt)"
+			   " VALUES ('%ld','%s','-1','-1','-1')",
 		     UsrCod,FirstClickTime.YYYYMMDDHHMMSS);
 	    DB_QueryINSERT (Query,"can not create user's figures");
 	   }
@@ -7904,8 +7920,8 @@ void Usr_CalculateNumClicks (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncrypted ();
 
-   /***** Get number of clicks from log and store as user's figure *****/
-   Usr_GetNumClicksFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+   /***** Get number of clicks and store as user's figure *****/
+   Usr_GetNumClicksAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
    Usr_ShowUserProfile ();
@@ -7915,7 +7931,7 @@ void Usr_CalculateNumClicks (void)
 /* Get number of clicks of a user from log table and store in user's figures */
 /*****************************************************************************/
 
-static void Usr_GetNumClicksFromLogAndStoreAsUsrFigure (long UsrCod)
+static void Usr_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
   {
    char Query[256];
    unsigned long NumClicks;
@@ -7937,9 +7953,57 @@ static void Usr_GetNumClicksFromLogAndStoreAsUsrFigure (long UsrCod)
 	}
       else			// User entry does not exist
 	{
-	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumMsgSnt)"
-			" VALUES ('%ld','00000000000000','%ld','-1')",
+	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumForPst,NumMsgSnt)"
+			" VALUES ('%ld','00000000000000','%ld','-1','-1')",
 		  UsrCod,NumClicks);
+	 DB_QueryINSERT (Query,"can not create user's figures");
+	}
+     }
+   }
+
+/*****************************************************************************/
+/******* Calculate number of forum posts and show user's profile again *******/
+/*****************************************************************************/
+
+void Usr_CalculateNumForPst (void)
+  {
+   /***** Get user's code *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Get number of forum posts and store as user's figure *****/
+   Usr_GetNumForPstAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Show user's profile again *****/
+   Usr_ShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/**** Get number of forum posts sent by a user and store in user's figures ***/
+/*****************************************************************************/
+
+static void Usr_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
+  {
+   char Query[256];
+   unsigned long NumForPst;
+
+   if (Usr_ChkIfUsrCodExists (UsrCod))
+     {
+      /***** Get number of forum posts from database *****/
+      NumForPst = For_GetNumPostsUsr (UsrCod);
+
+      /***** Update number of forum posts in user's figures *****/
+      if (Usr_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 sprintf (Query,"UPDATE usr_figures SET NumForPst='%ld'"
+			" WHERE UsrCod='%ld'",
+		  NumForPst,UsrCod);
+	 DB_QueryUPDATE (Query,"can not update user's figures");
+	}
+      else			// User entry does not exist
+	{
+	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumForPst,NumMsgSnt)"
+			" VALUES ('%ld','00000000000000','-1','%ld','-1')",
+		  UsrCod,NumForPst);
 	 DB_QueryINSERT (Query,"can not create user's figures");
 	}
      }
@@ -7954,28 +8018,28 @@ void Usr_CalculateNumMsgSnt (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncrypted ();
 
-   /***** Get number of clicks from log and store as user's figure *****/
-   Usr_GetNumMsgSntFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+   /***** Get number of messages sent and store as user's figure *****/
+   Usr_GetNumMsgSntAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
    Usr_ShowUserProfile ();
   }
 
 /*****************************************************************************/
-/* Get number of clicks of a user from log table and store in user's figures */
+/***** Get number of messages sent by a user and store in user's figures *****/
 /*****************************************************************************/
 
-static void Usr_GetNumMsgSntFromLogAndStoreAsUsrFigure (long UsrCod)
+static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
   {
    char Query[256];
    unsigned long NumMsgSnt;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
-      /***** Get number of clicks from database *****/
+      /***** Get number of messages sent from database *****/
       NumMsgSnt = Msg_GetNumMsgsSentByUsr (UsrCod);
 
-      /***** Update number of clicks in user's figures *****/
+      /***** Update number of messages sent in user's figures *****/
       if (Usr_CheckIfUsrFiguresExists (UsrCod))
 	{
 	 sprintf (Query,"UPDATE usr_figures SET NumMsgSnt='%ld'"
@@ -7985,8 +8049,8 @@ static void Usr_GetNumMsgSntFromLogAndStoreAsUsrFigure (long UsrCod)
 	}
       else			// User entry does not exist
 	{
-	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumMsgSnt)"
-			" VALUES ('%ld','00000000000000','-1','%ld')",
+	 sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumForPst,NumMsgSnt)"
+			" VALUES ('%ld','00000000000000','-1','-1','-1','%ld')",
 		  UsrCod,NumMsgSnt);
 	 DB_QueryINSERT (Query,"can not create user's figures");
 	}
@@ -8007,33 +8071,49 @@ static bool Usr_CheckIfUsrFiguresExists (long UsrCod)
   }
 
 /*****************************************************************************/
-/********************** Select values on user's figures **********************/
+/*************** Increment number of clicks made by a user *******************/
 /*****************************************************************************/
 
-void Usr_IncrementNumClicksUsr (void)
+void Usr_IncrementNumClicksUsr (long UsrCod)
   {
    char Query[256];
 
-   /***** Increment my number of clicks *****/
+   /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
    sprintf (Query,"UPDATE IGNORE usr_figures SET NumClicks=NumClicks+1"
 	          " WHERE UsrCod='%ld' AND NumClicks>=0",
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    UsrCod);
    DB_QueryINSERT (Query,"can not increment user's clicks");
   }
 
 /*****************************************************************************/
-/********************** Select values on user's figures **********************/
+/************* Increment number of forum posts sent by a user ****************/
 /*****************************************************************************/
 
-void Usr_IncrementNumMsgSntUsr (void)
+void Usr_IncrementNumForPstUsr (long UsrCod)
   {
    char Query[256];
 
-   /***** Increment my number of messages sent *****/
+   /***** Increment number of forum posts *****/
+   // If NumForPst < 0 ==> not yet calculated, so do nothing
+   sprintf (Query,"UPDATE IGNORE usr_figures SET NumForPst=NumForPst+1"
+	          " WHERE UsrCod='%ld' AND NumForPst>=0",
+	    UsrCod);
+   DB_QueryINSERT (Query,"can not increment user's forum posts");
+  }
+
+/*****************************************************************************/
+/*************** Increment number of messages sent by a user *****************/
+/*****************************************************************************/
+
+void Usr_IncrementNumMsgSntUsr (long UsrCod)
+  {
+   char Query[256];
+
+   /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
    sprintf (Query,"UPDATE IGNORE usr_figures SET NumMsgSnt=NumMsgSnt+1"
 	          " WHERE UsrCod='%ld' AND NumMsgSnt>=0",
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    UsrCod);
    DB_QueryINSERT (Query,"can not increment user's messages sent");
   }

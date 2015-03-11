@@ -330,8 +330,10 @@ void Usr_ChangeProfileVisibility (void);
 void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 void Usr_CalculateFirstClickTime (void);
 void Usr_CalculateNumClicks (void);
+void Usr_CalculateNumForPst (void);
 void Usr_CalculateNumMsgSnt (void);
-void Usr_IncrementNumClicksUsr (void);
-void Usr_IncrementNumMsgSntUsr (void);
+void Usr_IncrementNumClicksUsr (long UsrCod);
+void Usr_IncrementNumForPstUsr (long UsrCod);
+void Usr_IncrementNumMsgSntUsr (long UsrCod);
 
 #endif

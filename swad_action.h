@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+184+103+168+28+77)
+#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+184+104+168+28+77)
 
-#define Act_MAX_ACTION_COD 1407
+#define Act_MAX_ACTION_COD 1408
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -982,7 +982,8 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeePubPrf		(ActChgNumRowFooGrp+100)
 #define ActCal1stClkTim		(ActChgNumRowFooGrp+101)
 #define ActCalNumClk		(ActChgNumRowFooGrp+102)
-#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+103)
+#define ActCalNumForPst		(ActChgNumRowFooGrp+103)
+#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+104)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/

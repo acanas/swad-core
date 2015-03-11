@@ -346,7 +346,7 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
-      Usr_IncrementNumClicksUsr ();
+      Usr_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
