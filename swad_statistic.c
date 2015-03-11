@@ -121,7 +121,6 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
 static void Sta_WriteDegree (long DegCod);
 static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPagesGenerated,float TotalPagesGenerated,unsigned MaxBarWidth);
 static void Sta_WriteSelectedRangeOfDates (unsigned NumDays);
-static void Sta_WriteFloatNum (float Number);
 
 static void Sta_GetAndShowDegCrsStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
@@ -1856,7 +1855,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 		  UsrDat.RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? 'c' :
 			                                          'v',
 		  BarWidth);
-      Sta_WriteFloatNum (NumPagesGenerated);
+      Str_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"&nbsp;</td>"
 	                 "</tr>");
      }
@@ -2339,14 +2338,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
 	                 " text-align:center; vertical-align:bottom;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      Sta_WriteFloatNum ((float) Interval * MaxPagesGenerated / 5.0);
+      Str_WriteFloatNum ((float) Interval * MaxPagesGenerated / 5.0);
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG\" style=\"width:%upx;"
 	              " text-align:right; vertical-align:bottom;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   Sta_WriteFloatNum (MaxPagesGenerated);
+   Str_WriteFloatNum (MaxPagesGenerated);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "<tr>");
@@ -2381,7 +2380,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumP
      {
       Sta_SetColor (ColorType,NumPagesGenerated[Hour],MaxPagesGenerated,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td class=\"LOG\" title=\"");
-      Sta_WriteFloatNum (NumPagesGenerated[Hour]);
+      Str_WriteFloatNum (NumPagesGenerated[Hour]);
       fprintf (Gbl.F.Out,"\" style=\"width:%upx; text-align:left;"
 	                 " background-color:#%02X%02X%02X;\">"
                          "</td>",
@@ -2767,7 +2766,7 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
       fprintf (Gbl.F.Out,"%u%%<br />",
 	       (unsigned) (((NumPagesGenerated * 100.0) /
 		            TotalPagesGenerated) + 0.5));
-      Sta_WriteFloatNum (NumPagesGenerated);
+      Str_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"<br />");
       AltoBarra = (unsigned) (((NumPagesGenerated * 400.0) / MaxPagesGenerated) + 0.5);
       if (AltoBarra == 0)
@@ -3531,7 +3530,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
       /* Write the number of clicks */
-      Sta_WriteFloatNum (NumPagesGenerated);
+      Str_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
                (unsigned) (((NumPagesGenerated * 100.0) /
         	            TotalPagesGenerated) + 0.5));
@@ -3586,39 +3585,6 @@ static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
                Txt_Dates,StrDatesRange,NumDays,Txt_days);
      }
    fprintf (Gbl.F.Out,"</p>");
-  }
-
-/*****************************************************************************/
-/******** Write a number in floating point with the correct accuracy *********/
-/*****************************************************************************/
-
-static void Sta_WriteFloatNum (float Number)
-  {
-   double IntegerPart,FractionaryPart;
-   char *Format;
-
-   FractionaryPart = modf ((double) Number,&IntegerPart);
-
-   if (FractionaryPart == 0.0)
-      fprintf (Gbl.F.Out,"%.0f",IntegerPart);
-   else
-     {
-      if (IntegerPart != 0.0 || FractionaryPart >= 0.1)
-         Format = "%.2f";
-      else if (FractionaryPart >= 0.01)
-         Format = "%.3f";
-      else if (FractionaryPart >= 0.001)
-         Format = "%.4f";
-      else if (FractionaryPart >= 0.0001)
-         Format = "%.5f";
-      else if (FractionaryPart >= 0.00001)
-         Format = "%.6f";
-      else if (FractionaryPart >= 0.000001)
-         Format = "%.7f";
-      else
-         Format = "%e";
-      fprintf (Gbl.F.Out,Format,Number);
-     }
   }
 
 /*****************************************************************************/

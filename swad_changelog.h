@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.85.2 (2015/03/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.86 (2015/03/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.86:    Mar 11, 2015	Show user's figures per days. (181525 lines)
         Version 14.85.2:  Mar 11, 2015	Refactoring in user's figures. (181478 lines)
         Version 14.85.1:  Mar 11, 2015	Remove user's figures when removing user's account. (181472 lines)
         Version 14.85:    Mar 11, 2015	Number of messages sent is stored in user's figures. (181457 lines)

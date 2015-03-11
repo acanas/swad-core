@@ -74,8 +74,11 @@ char *Str_ConvertToUpperText (char *Str);
 char *Str_ConvertToLowerText (char *Str);
 char Str_ConvertToUpperLetter (char Ch);
 char Str_ConvertToLowerLetter (char Ch);
+
+void Str_WriteFloatNum (float Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
 float Str_GetFloatNumFromStr (const char *Str);
+
 void Str_AddStrToQuery (char *Query,const char *Str,size_t SizeOfQuery);
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                        char *Str,size_t MaxLengthStr,bool RemoveLeadingAndTrailingSpaces);

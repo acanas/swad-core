@@ -6892,9 +6892,30 @@ const char *Txt_Day =
 	"Dia";
 #endif
 
+const char *Txt_day =
+#if   L==0
+	"dia";
+#elif L==1
+	"Tag";
+#elif L==2
+	"day";
+#elif L==3
+	"d&iacute;a";
+#elif L==4
+	"jour";
+#elif L==5
+	"&aacute;ra";
+#elif L==6
+	"giorno";
+#elif L==7
+	"dzie&nacute;";
+#elif L==8
+	"dia";
+#endif
+
 const char *Txt_days =
 #if   L==0
-	"d&iacute;as";	// Necessita traduccio
+	"dies";
 #elif L==1
 	"Tage";
 #elif L==2
@@ -6904,11 +6925,11 @@ const char *Txt_days =
 #elif L==4
 	"jours";
 #elif L==5
-	"d&iacute;as";	// Okoteve traducción
+	"&aacute;ra";
 #elif L==6
 	"giorni";
 #elif L==7
-	"dni";
+	"dni;";
 #elif L==8
 	"dias";
 #endif

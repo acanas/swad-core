@@ -28,6 +28,7 @@
 #include <linux/stddef.h>	// For NULL
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <locale.h>		// For setlocale
+#include <math.h>		// For log10, floor, ceil, modf, sqrt...
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
@@ -595,6 +596,40 @@ char Str_ConvertToLowerLetter (char Ch)
       case 'Ö': return 'ö';
       case 'Ü': return 'ü';
       default: return (char) tolower ((int) Ch);
+     }
+  }
+
+/*****************************************************************************/
+/******** Write a number in floating point with the correct accuracy *********/
+/*****************************************************************************/
+
+void Str_WriteFloatNum (float Number)
+  {
+   double IntegerPart;
+   double FractionaryPart;
+   char *Format;
+
+   FractionaryPart = modf ((double) Number,&IntegerPart);
+
+   if (FractionaryPart == 0.0)
+      fprintf (Gbl.F.Out,"%.0f",IntegerPart);
+   else
+     {
+      if (IntegerPart != 0.0 || FractionaryPart >= 0.1)
+         Format = "%.2f";
+      else if (FractionaryPart >= 0.01)
+         Format = "%.3f";
+      else if (FractionaryPart >= 0.001)
+         Format = "%.4f";
+      else if (FractionaryPart >= 0.0001)
+         Format = "%.5f";
+      else if (FractionaryPart >= 0.00001)
+         Format = "%.6f";
+      else if (FractionaryPart >= 0.000001)
+         Format = "%.7f";
+      else
+         Format = "%e";
+      fprintf (Gbl.F.Out,Format,Number);
      }
   }
 

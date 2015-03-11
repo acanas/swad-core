@@ -94,6 +94,7 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 struct UsrFigures
   {
    struct DateTime FirstClickTime;	//   0 ==> unknown first click time of user never logged
+   int NumDays;				//  -1 ==> not applicable
    long NumClicks;			// -1L ==> unknown number of clicks
    long NumForPst;			// -1L ==> unknown number of forum posts
    long NumMsgSnt;			// -1L ==> unknown number of messages sent
@@ -7583,9 +7584,9 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Figures;
-   // extern const char *Txt_Shortcut;
-   // extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_First_access;
+   extern const char *Txt_day;
+   extern const char *Txt_days;
    extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
    extern const char *Txt_Courses_as_a_ROLE;
@@ -7604,26 +7605,6 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
 
-   /***** Shortcut to the user's profile *****/
-   /*
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">"
-		      "<a href=\"%s/%s?usr=@%s\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?usr=@%s"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Shortcut,
-	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
-	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
-   */
-
    /***** First click time and number of clicks *****/
    Usr_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
@@ -7640,8 +7621,13 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    if (UsrFigures.FirstClickTime.Date.Year)
      {
       Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      fprintf (Gbl.F.Out," ");
       Dat_WriteHourMinute (&(UsrFigures.FirstClickTime.YYYYMMDDHHMMSS[8]));
+      if (UsrFigures.NumDays >= 0)
+	 fprintf (Gbl.F.Out," (%d %s)",
+		  UsrFigures.NumDays,
+		  (UsrFigures.NumDays == 1) ? Txt_day :
+					      Txt_days);
      }
    else	// First click time is unknown or user never logged
      {
@@ -7666,7 +7652,16 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
+     {
       fprintf (Gbl.F.Out,"%ld",UsrFigures.NumClicks);
+      if (UsrFigures.NumDays >= 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+         Str_WriteFloatNum ((float) UsrFigures.NumClicks /
+		            (float) (UsrFigures.NumDays + 1));
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
    else	// Number of clicks is unknown
      {
       /***** Button to fetch and store number of clicks *****/
@@ -7752,7 +7747,16 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Forum_posts);
    if (UsrFigures.NumForPst >= 0)
+     {
       fprintf (Gbl.F.Out,"%ld",UsrFigures.NumForPst);
+      if (UsrFigures.NumDays >= 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+         Str_WriteFloatNum ((float) UsrFigures.NumForPst /
+		            (float) (UsrFigures.NumDays + 1));
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
    else	// Number of forum posts is unknown
      {
       /***** Button to fetch and store number of forum posts *****/
@@ -7776,7 +7780,16 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Messages_sent);
    if (UsrFigures.NumMsgSnt >= 0)
+     {
       fprintf (Gbl.F.Out,"%ld",UsrFigures.NumMsgSnt);
+      if (UsrFigures.NumDays >= 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+         Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
+		            (float) (UsrFigures.NumDays + 1));
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
    else	// Number of clicks is unknown
      {
       /***** Button to fetch and store number of messages sent *****/
@@ -7806,6 +7819,7 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
    /***** Get user's code from database *****/
    sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),"
+	          "DATEDIFF(NOW(),FirstClickTime),"
 	          "NumClicks,NumForPst,NumMsgSnt"
 	          " FROM usr_figures WHERE UsrCod='%ld'",
 	    UsrCod);
@@ -7818,16 +7832,25 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
 	 Lay_ShowErrorAndExit ("Error when reading first click time.");
 
-      /* Get number of clicks (row[1]) */
-      if (sscanf (row[1],"%ld",&UsrFigures->NumClicks) != 1)
+      /* Get number of days since first click (row[1]) */
+      if (UsrFigures->FirstClickTime.Date.Year)
+	{
+	 if (sscanf (row[1],"%d",&UsrFigures->NumDays) != 1)
+	    UsrFigures->NumDays = -1;
+	}
+      else
+	 UsrFigures->NumDays = -1;
+
+      /* Get number of clicks (row[2]) */
+      if (sscanf (row[2],"%ld",&UsrFigures->NumClicks) != 1)
 	 UsrFigures->NumClicks = -1L;
 
-      /* Get number of forum posts (row[2]) */
-      if (sscanf (row[2],"%ld",&UsrFigures->NumForPst) != 1)
+      /* Get number of forum posts (row[3]) */
+      if (sscanf (row[3],"%ld",&UsrFigures->NumForPst) != 1)
 	 UsrFigures->NumForPst = -1L;
 
-      /* Get number of messages sent (row[3]) */
-      if (sscanf (row[3],"%ld",&UsrFigures->NumMsgSnt) != 1)
+      /* Get number of messages sent (row[4]) */
+      if (sscanf (row[4],"%ld",&UsrFigures->NumMsgSnt) != 1)
 	 UsrFigures->NumMsgSnt = -1L;
      }
    else
@@ -8046,6 +8069,7 @@ static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 static void Usr_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
    Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000");	//  unknown first click time or user never logged
+   UsrFigures->NumDays   = -1;		// not applicable
    UsrFigures->NumClicks = -1L;		// unknown number of clicks
    UsrFigures->NumForPst = -1L;		// unknown number of forum posts
    UsrFigures->NumMsgSnt = -1L;		// unknown number of messages sent
