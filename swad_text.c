@@ -4542,6 +4542,27 @@ const char *Txt_Clicks =
 	"Cliques";
 #endif
 
+const char *Txt_clicks =
+#if   L==0
+	"clics";
+#elif L==1
+	"Klicks";
+#elif L==2
+	"clicks";
+#elif L==3
+	"clics";
+#elif L==4
+	"clics";
+#elif L==5
+	"clics";	// Okoteve traducción
+#elif L==6
+	"clic";
+#elif L==7
+	"klikni&eogon;cia";
+#elif L==8
+	"cliques";
+#endif
+
 const char *Txt_Clicks_without_degree_selected =
 #if   L==0
 	"Clics sense seleccionar titulaci&oacute;";

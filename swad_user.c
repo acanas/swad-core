@@ -185,6 +185,10 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
 static void Usr_ShowUserProfile (void);
 static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
+static unsigned long Usr_GetRankingNumClicks (long UsrCod);
+static unsigned long Usr_GetNumUsrsWithNumClicks (void);
+static unsigned long Usr_GetRankingNumClicksPerDay (long UsrCod);
+static unsigned long Usr_GetNumUsrsWithNumClicksPerDay (void);
 static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Usr_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
 static void Usr_GetNumForPstAndStoreAsUsrFigure (long UsrCod);
@@ -7589,6 +7593,8 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_days;
    extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
+   extern const char *Txt_of_PART_OF_A_TOTAL;
+   extern const char *Txt_clicks;
    extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -7605,7 +7611,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
 
-   /***** First click time and number of clicks *****/
+   /***** Get figures *****/
    Usr_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
    /* First click time */
@@ -7644,22 +7650,30 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /* Number of clicks */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      " style=\"text-align:right; vertical-align:top;\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:middle;\">",
+		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumClicks);
+      fprintf (Gbl.F.Out,"%ld, #%ld %s %ld",
+               UsrFigures.NumClicks,
+               Usr_GetRankingNumClicks (UsrDat->UsrCod),
+               Txt_of_PART_OF_A_TOTAL,
+               Usr_GetNumUsrsWithNumClicks ());
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out," (");
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," %s / %s, #%ld %s %ld",
+	          Txt_clicks,Txt_day,
+		  Usr_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+		  Txt_of_PART_OF_A_TOTAL,
+		  Usr_GetNumUsrsWithNumClicksPerDay ());
 	}
      }
    else	// Number of clicks is unknown
@@ -7859,6 +7873,69 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********** Get ranking of a user according to the number of clicks **********/
+/*****************************************************************************/
+
+static unsigned long Usr_GetRankingNumClicks (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*)+1 FROM usr_figures"
+	          " WHERE NumClicks>"
+	          "(SELECT NumClicks FROM usr_figures WHERE UsrCod='%ld')",
+	    UsrCod);
+   return DB_QueryCOUNT (Query,"can not get ranking using number of clicks");
+  }
+
+/*****************************************************************************/
+/******************* Get number of users with number of clicks ***************/
+/*****************************************************************************/
+
+static unsigned long Usr_GetNumUsrsWithNumClicks (void)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE NumClicks>='0'");
+   return DB_QueryCOUNT (Query,"can not get number of users with number of clicks");
+  }
+
+/*****************************************************************************/
+/****** Get ranking of a user according to the number of clicks per day ******/
+/*****************************************************************************/
+
+static unsigned long Usr_GetRankingNumClicksPerDay (long UsrCod)
+  {
+   char Query[512];
+
+   sprintf (Query,"SELECT COUNT(*)+1 FROM"
+                  " (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+                  " AS NumClicksPerDay"
+                  " FROM usr_figures"
+                  " WHERE NumClicks>='0' AND FirstClickTime>'0')"
+                  " AS TableNumClicksPerDay"
+                  " WHERE NumClicksPerDay>"
+                  "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
+                  " FROM usr_figures"
+                  " WHERE UsrCod='%ld'"
+                  " AND NumClicks>='0' AND FirstClickTime>'0');",
+	    UsrCod);
+   return DB_QueryCOUNT (Query,"can not get ranking using number of clicks per day");
+  }
+
+/*****************************************************************************/
+/************** Get number of users with number of clicks per day ************/
+/*****************************************************************************/
+
+static unsigned long Usr_GetNumUsrsWithNumClicksPerDay (void)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
+	          " WHERE NumClicks>='0' AND FirstClickTime>'0'");
+   return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
   }
 
 /*****************************************************************************/
