@@ -10516,4 +10516,7 @@ CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATET
 
 
 
+SELECT * FROM usr_figures WHERE NumClicks>='0' AND FirstClickTime>'0';
 
+SELECT COUNT(*)+1 FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay FROM usr_figures WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0') AS TableNumClicksPerDay WHERE NumClicksPerDay>(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) FROM usr_figures WHERE UsrCod='1' AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0');
+               

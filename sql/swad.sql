@@ -1178,7 +1178,9 @@ CREATE TABLE IF NOT EXISTS usr_figures (
 	NumClicks INT NOT NULL DEFAULT -1,
 	NumForPst INT NOT NULL DEFAULT -1,
 	NumMsgSnt INT NOT NULL DEFAULT -1,
-	PRIMARY KEY(UsrCod));
+	PRIMARY KEY(UsrCod),
+	INDEX(FirstClickTime),
+	INDEX(NumClicks));
 --
 -- Table usr_last: stores some variable data related to users
 --

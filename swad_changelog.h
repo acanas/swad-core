@@ -103,11 +103,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.87.1 (2015/03/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.87.4 (2015/03/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.87.4:  Mar 11, 2015	Added indexes to usr_figures. (181629 lines)
+					2 changes necessary in database:
+CREATE INDEX FirstClickTime ON usr_figures (FirstClickTime);
+CREATE INDEX NumClicks ON usr_figures (NumClicks);
+
+        Version 14.87.3:  Mar 11, 2015	Fix bug comparing first click dates in user's figures. (181623 lines)
+        Version 14.87.2:  Mar 11, 2015	Fix bug comparing first click dates in user's figures. (181614 lines)
         Version 14.87.1:  Mar 11, 2015	Fix style in CSS and record. (181613 lines)
         Version 14.87:    Mar 11, 2015	Ranking according to the number of clicks. (181611 lines)
         Version 14.86:    Mar 11, 2015	Show user's figures per days. (181525 lines)

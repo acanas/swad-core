@@ -7883,10 +7883,13 @@ static unsigned long Usr_GetRankingNumClicks (long UsrCod)
   {
    char Query[128];
 
+   /***** Select number of rows with number of clicks
+          greater than the clicks of this user *****/
    sprintf (Query,"SELECT COUNT(*)+1 FROM usr_figures"
-	          " WHERE NumClicks>"
+	          " WHERE UsrCod<>'%ld'"	// Really not necessary here
+                  " AND NumClicks>"
 	          "(SELECT NumClicks FROM usr_figures WHERE UsrCod='%ld')",
-	    UsrCod);
+	    UsrCod,UsrCod);
    return DB_QueryCOUNT (Query,"can not get ranking using number of clicks");
   }
 
@@ -7898,6 +7901,7 @@ static unsigned long Usr_GetNumUsrsWithNumClicks (void)
   {
    char Query[128];
 
+   /***** Select number of rows with values already calculated *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE NumClicks>='0'");
    return DB_QueryCOUNT (Query,"can not get number of users with number of clicks");
   }
@@ -7910,18 +7914,21 @@ static unsigned long Usr_GetRankingNumClicksPerDay (long UsrCod)
   {
    char Query[512];
 
+   /***** Select number of rows with number of clicks per day
+          greater than the clicks per day of this user *****/
    sprintf (Query,"SELECT COUNT(*)+1 FROM"
                   " (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
                   " AS NumClicksPerDay"
                   " FROM usr_figures"
-                  " WHERE NumClicks>='0' AND FirstClickTime>'0')"
+                  " WHERE UsrCod<>'%ld'"	// Necessary because the following comparison is not exact in floating point
+                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0')"
                   " AS TableNumClicksPerDay"
                   " WHERE NumClicksPerDay>"
                   "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
                   " FROM usr_figures"
                   " WHERE UsrCod='%ld'"
-                  " AND NumClicks>='0' AND FirstClickTime>'0');",
-	    UsrCod);
+                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0')",
+	    UsrCod,UsrCod);
    return DB_QueryCOUNT (Query,"can not get ranking using number of clicks per day");
   }
 
@@ -7933,8 +7940,9 @@ static unsigned long Usr_GetNumUsrsWithNumClicksPerDay (void)
   {
    char Query[128];
 
+   /***** Select number of rows with values already calculated *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
-	          " WHERE NumClicks>='0' AND FirstClickTime>'0'");
+	          " WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0'");
    return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
   }
 

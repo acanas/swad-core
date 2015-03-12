@@ -2344,8 +2344,8 @@ mysql> DESCRIBE usr_figures;
 | Field          | Type     | Null | Key | Default | Extra |
 +----------------+----------+------+-----+---------+-------+
 | UsrCod         | int(11)  | NO   | PRI | NULL    |       |
-| FirstClickTime | datetime | NO   |     | NULL    |       |
-| NumClicks      | int(11)  | NO   |     | -1      |       |
+| FirstClickTime | datetime | NO   | MUL | NULL    |       |
+| NumClicks      | int(11)  | NO   | MUL | -1      |       |
 | NumForPst      | int(11)  | NO   |     | -1      |       |
 | NumMsgSnt      | int(11)  | NO   |     | -1      |       |
 +----------------+----------+------+-----+---------+-------+
@@ -2357,7 +2357,7 @@ mysql> DESCRIBE usr_figures;
 	           "NumClicks INT NOT NULL DEFAULT -1,"
 	           "NumForPst INT NOT NULL DEFAULT -1,"
 	           "NumMsgSnt INT NOT NULL DEFAULT -1,"
-	           "PRIMARY KEY(UsrCod))");
+	           "PRIMARY KEY(UsrCod),INDEX(FirstClickTime),INDEX(NumClicks))");
 
 /***** Table usr_IDs *****/
 /*
