@@ -120,7 +120,7 @@ static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
 static unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
-static unsigned Usr_GetNumUsrsOtherRoleInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole);
+static unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole);
 
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
@@ -767,10 +767,10 @@ static unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/********* Get number of students in courses of a user as teacher ************/
+/******* Get number of users with different role in courses of a user ********/
 /*****************************************************************************/
 
-static unsigned Usr_GetNumUsrsOtherRoleInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole)
+static unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole)
   {
    char Query[256];
 
@@ -780,7 +780,7 @@ static unsigned Usr_GetNumUsrsOtherRoleInCrssOfAUsr (long UsrCod,Rol_Role_t UsrR
                   " (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld' AND Role='%u')"
                   " AND Role='%u'",
             UsrCod,(unsigned) UsrRole,(unsigned) OthersRole);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user with a role");
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
   }
 
 /*****************************************************************************/
@@ -1539,7 +1539,7 @@ void Usr_WriteLoggedUsrHead (void)
   {
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *The_ClassHead[The_NUM_THEMES];
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const unsigned NumCharsName[Lay_NUM_LAYOUTS] =
      {
       16,        // Lay_LAYOUT_DESKTOP
@@ -1553,7 +1553,7 @@ void Usr_WriteLoggedUsrHead (void)
    if (Rol_GetNumAvailableRoles () == 1)
       fprintf (Gbl.F.Out,"<span class=\"%s\">%s:&nbsp;</span>",
                The_ClassUsr[Gbl.Prefs.Theme],
-               Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
    else
      {
       Rol_PutFormToChangeMyRole (true);
@@ -2445,7 +2445,7 @@ void Usr_ShowFormsRoleAndLogout (void)
    extern const char *Txt_Log_out;
    extern const char *Txt_You_are_LOGGED_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Role;
 
    /***** Link to log out *****/
@@ -2459,7 +2459,7 @@ void Usr_ShowFormsRoleAndLogout (void)
    /***** Write message with my new logged role *****/
    sprintf (Gbl.Message,Txt_You_are_LOGGED_as_X,
             Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
-            Txt_ROLES_SINGULAR_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Put a form to change my role *****/
@@ -4865,7 +4865,7 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
 
 void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct ListUsers *LstUsrs;
    Usr_Sex_t Sex;
@@ -4887,7 +4887,7 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
    Sex = Usr_GetSexOfUsrsLst (LstUsrs);
    fprintf (Gbl.F.Out,"%s:</td>"
 	              "</tr>",
-	    LstUsrs->NumUsrs == 1 ? Txt_ROLES_SINGULAR_Abc[Role][Sex] :
+	    LstUsrs->NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                     Txt_ROLES_PLURAL_Abc  [Role][Sex]);
   }
 
@@ -5726,7 +5726,7 @@ void Usr_ListAllDataTchs (void)
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
   {
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct ListUsers *LstUsrs;
    Usr_Sex_t Sex;
@@ -5758,7 +5758,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 	       Usr_NUM_MAIN_FIELDS_DATA_USR);
       if (NumUsrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",
-		  Txt_ROLES_SINGULAR_abc[Role][Sex]);
+		  Txt_ROLES_SINGUL_abc[Role][Sex]);
       else
 	 fprintf (Gbl.F.Out,"%u %s",
 		  NumUsrs,
@@ -7527,15 +7527,24 @@ static void Usr_ShowUserProfile (void)
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 	   }
 
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
+	                    "<table style=\"margin:0 auto;\">"
+	                    "<tr>"
+	                    "<td style=\"text-align:right; vertical-align:top;\">");
 
 	 /***** Common record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
+	 fprintf (Gbl.F.Out,"</td>"
+	                    "<td style=\"text-align:left; vertical-align:top; padding-left:4px;\">");
+
 	 /***** Show details of user's profile *****/
 	 Usr_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 fprintf (Gbl.F.Out,"</td>"
+	                    "</tr>"
+	                    "</table>"
+	                    "</div>");
 	}
       else
 	 Error = true;
@@ -7587,29 +7596,101 @@ void Usr_ChangeProfileVisibility (void)
 void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Figures;
-   extern const char *Txt_First_access;
+   // extern const char *Txt_Figures;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_course;
+   extern const char *Txt_courses;
+   extern const char *Txt_From_TIME;
+   // extern const char *Txt_First_access;
    extern const char *Txt_day;
    extern const char *Txt_days;
    extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_clicks;
-   extern const char *Txt_Courses_as_a_ROLE;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   // extern const char *Txt_Courses_as_a_ROLE;
+   extern const char *Txt_Forums;
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
+   extern const char *Txt_Messages;
+   extern const char *Txt_message;
+   extern const char *Txt_messages;
    extern const char *Txt_Files;
-   extern const char *Txt_public_files;
-   extern const char *Txt_Forum_posts;
-   extern const char *Txt_Messages_sent;
+   extern const char *Txt_files;
+   extern const char *Txt_public_FILES;
    struct UsrFigures UsrFigures;
    unsigned NumCrssUsrIsTeacher;
    unsigned NumCrssUsrIsStudent;
+   unsigned NumStds;
+   unsigned NumTchs;
    unsigned NumFiles;
    unsigned NumPublicFiles;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
+   // Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
+   // Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
+
+   /***** Number of courses in which the user is teacher or student *****/
+   if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
+     {
+      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_TEACHER);
+      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT);
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:top;\">"
+                         "%s"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:top;\">"
+			 "%u&nbsp;%s<br />"
+			 "%u&nbsp;%s<br />"
+			 "%u&nbsp;%s"
+			 "</a>"
+			 "</td>",
+	       The_ClassFormul[Gbl.Prefs.Theme],
+	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][UsrDat->Sex],
+	       NumCrssUsrIsTeacher,
+	       (NumCrssUsrIsTeacher == 1) ? Txt_course :
+		                            Txt_courses,
+	       NumTchs,
+	       (NumTchs == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN] :
+		                Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],
+	       NumStds,
+	       (NumStds == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
+		                Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+     }
+   if ((NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT)))
+     {
+      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER);
+      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_STUDENT);
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\""
+			 " style=\"text-align:right; vertical-align:top;\">"
+                         "%s"
+			 "</td>"
+			 "<td class=\"DAT\""
+			 " style=\"text-align:left; vertical-align:top;\">"
+			 "%u&nbsp;%s<br />"
+			 "%u&nbsp;%s<br />"
+			 "%u&nbsp;%s"
+			 "</a>"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormul[Gbl.Prefs.Theme],
+	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][UsrDat->Sex],
+	       NumCrssUsrIsStudent,
+	       (NumCrssUsrIsStudent == 1) ? Txt_course :
+	                                    Txt_courses,
+	       NumTchs,
+	       (NumTchs == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN] :
+		                Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],
+	       NumStds,
+	       (NumStds == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
+		                Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+     }
 
    /***** Get figures *****/
    Usr_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
@@ -7618,19 +7699,18 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s:"
+		      "%s"
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_First_access);
+	    Txt_From_TIME);
    if (UsrFigures.FirstClickTime.Date.Year)
      {
       Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
-      fprintf (Gbl.F.Out," ");
-      Dat_WriteHourMinute (&(UsrFigures.FirstClickTime.YYYYMMDDHHMMSS[8]));
       if (UsrFigures.NumDays >= 0)
-	 fprintf (Gbl.F.Out," (%d %s)",
+	 fprintf (Gbl.F.Out,"<br />"
+	                    "%d&nbsp;%s",
 		  UsrFigures.NumDays,
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
@@ -7651,7 +7731,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s:"
+		      "%s"
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:top;\">",
@@ -7659,8 +7739,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld, #%ld %s %ld",
-               UsrFigures.NumClicks,
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s<br />"
+	                 "<span class=\"RANK\">#%ld</span>"
+	                 "&nbsp;%s&nbsp;%ld",
+               UsrFigures.NumClicks,Txt_clicks,
                Usr_GetRankingNumClicks (UsrDat->UsrCod),
                Txt_of_PART_OF_A_TOTAL,
                Usr_GetNumUsrsWithNumClicks ());
@@ -7669,8 +7751,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out," %s / %s, #%ld %s %ld",
-	          Txt_clicks,Txt_day,
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s<br />"
+	                    "<span class=\"RANK\">#%ld</span>"
+	                    "&nbsp;%s&nbsp;%ld",
+	          Txt_day,
 		  Usr_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 		  Txt_of_PART_OF_A_TOTAL,
 		  Usr_GetNumUsrsWithNumClicksPerDay ());
@@ -7688,87 +7772,28 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
-   /***** Number of courses in which the user is teacher or student *****/
-   if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:top;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
-	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_TEACHER][UsrDat->Sex]);
-      fprintf (Gbl.F.Out,":"
-			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:top;\">"
-			 "%u (%u %s)"
-			 "</a>"
-			 "</td>",
-	       NumCrssUsrIsTeacher,
-	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT),
-	       Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
-     }
-   if ((NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT)))
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:top;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,Txt_Courses_as_a_ROLE,
-	       Txt_ROLES_SINGULAR_abc[Rol_ROLE_STUDENT][UsrDat->Sex]);
-      fprintf (Gbl.F.Out,":"
-			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:top;\">"
-			 "%u (%u %s)"
-			 "</a>"
-			 "</td>"
-			 "</tr>",
-	       NumCrssUsrIsStudent,
-	       Usr_GetNumUsrsOtherRoleInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER),
-	       Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
-     }
-
-   /***** Number of files published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
-   else
-      NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">"
-		      "%u (%u %s)"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Files,
-	    NumFiles,NumPublicFiles,
-	    Txt_public_files);
-
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s:"
+		      "%s"
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Forum_posts);
+	    Txt_Forums);
    if (UsrFigures.NumForPst >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumForPst);
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+               UsrFigures.NumForPst,
+               (UsrFigures.NumForPst == 1) ? Txt_post :
+        	                             Txt_posts);
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out," (");
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
 	}
      }
    else	// Number of forum posts is unknown
@@ -7787,21 +7812,24 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
 		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s:"
+		      "%s"
 		      "</td>"
 		      "<td class=\"DAT\""
 		      " style=\"text-align:left; vertical-align:top;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Messages_sent);
+	    Txt_Messages);
    if (UsrFigures.NumMsgSnt >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumMsgSnt);
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+               UsrFigures.NumMsgSnt,
+               (UsrFigures.NumMsgSnt == 1) ? Txt_message :
+        	                             Txt_messages);
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out," (");
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
 	}
      }
    else	// Number of clicks is unknown
@@ -7816,8 +7844,31 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
+   /***** Number of files published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   else
+      NumPublicFiles = 0;
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:top;\">"
+		      "%u&nbsp;%s<br />"
+		      "%u&nbsp;%s"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Files,
+	    NumFiles,Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
+
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
+   fprintf (Gbl.F.Out,"</table>");
+   // Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

@@ -287,7 +287,7 @@ unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr)
 
 void Rol_PutFormToChangeMyRole (bool FormInHead)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
       90,        // Lay_LAYOUT_DESKTOP
@@ -310,7 +310,7 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
          if (Role == Gbl.Usrs.Me.LoggedRole)
             fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",
-                  Txt_ROLES_SINGULAR_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+                  Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
    fprintf (Gbl.F.Out,"</select>"
 	              "</form>");
@@ -414,7 +414,7 @@ void Rol_PutAllRolesRegRemUsrsCrs (void)
 
 static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    fprintf (Gbl.F.Out,"<li>"
 	              "<input type=\"radio\" name=\"RegRemRole\" value=\"%u\"",
@@ -431,7 +431,7 @@ static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
          break;
      }
    fprintf (Gbl.F.Out," />%s</li>",
-            Txt_ROLES_SINGULAR_Abc[Role][Usr_SEX_UNKNOWN]);
+            Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/

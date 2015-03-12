@@ -5589,7 +5589,7 @@ const char *Txt_courses =
 #elif L==8
 	"disciplinas";
 #endif
-
+/*
 const char *Txt_Courses_as_a_ROLE =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Assignatures com %s";
@@ -5610,7 +5610,7 @@ const char *Txt_Courses_as_a_ROLE =	// Warning: it is very important to include 
 #elif L==8
 	"Disciplinas como %s";
 #endif
-
+*/
 const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==0
 	"Se ha(n) eliminado %u asignatura(s).";		// Necessita traduccio
@@ -10892,7 +10892,7 @@ const char *Txt_Field_BR_name =
 #elif L==8
 	"Nome<br />do campo";
 #endif
-
+/*
 const char *Txt_Figures =
 #if   L==0
 	"Xifres";
@@ -10913,7 +10913,7 @@ const char *Txt_Figures =
 #elif L==8
 	"N&uacute;meros";
 #endif
-
+*/
 const char *Txt_File =
 #if   L==0
 	"Fitxer";
@@ -11546,7 +11546,7 @@ const char *Txt_Files_works =
 #elif L==8
 	"Arquivos trabalhos";
 #endif
-
+/*
 const char *Txt_First_access =
 #if   L==0
 	"Primer acc&eacute;s";
@@ -11567,7 +11567,7 @@ const char *Txt_First_access =
 #elif L==8
 	"Primeiro acesso";
 #endif
-
+*/
 const char *Txt_first_message_not_allowed =
 #if   L==0
 	"primer mensaje no permitido";	// Necessita traduccio
@@ -12178,6 +12178,27 @@ const char *Txt_from_A_COURSE =
 	"od";
 #elif L==8
 	"de";
+#endif
+
+const char *Txt_From_TIME =
+#if   L==0
+	"Des de";
+#elif L==1
+	"Vom";
+#elif L==2
+	"From";
+#elif L==3
+	"Desde";
+#elif L==4
+	"Depuis";
+#elif L==5
+	"Desde";	// Okoteve traducción
+#elif L==6
+	"Da";
+#elif L==7
+	"Od";
+#elif L==8
+	"Desde";
 #endif
 
 const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
@@ -27154,25 +27175,25 @@ const char *Txt_posts =
 	"posts";
 #endif
 
-const char *Txt_public_files =
+const char *Txt_public_FILES =
 #if   L==0
-	"arxius p&uacute;blics";
+	"p&uacute;blics";
 #elif L==1
-	"&ouml;ffentliche Dateien";
+	"&ouml;ffentliche";
 #elif L==2
-	"public files";
+	"public";
 #elif L==3
-	"archivos p&uacute;blicos";
+	"p&uacute;blicos";
 #elif L==4
-	"fichiers publics";
+	"publics";
 #elif L==5
-	"archivos p&uacute;blicos";	// Okoteve traducción
+	"p&uacute;blicos";	// Okoteve traducción
 #elif L==6
-	"file pubblici";
+	"pubblici";
 #elif L==7
-	"publicznych pliki";
+	"publicznych";
 #elif L==8
-	"arquivos p&uacute;blicos";
+	"p&uacute;blicos";
 #endif
 
 const char *Txt_Public_open_educational_resource_OER_for_everyone =
@@ -29678,7 +29699,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #endif
 	};
 
-const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
+const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
 #if   L==0	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN
@@ -30410,7 +30431,7 @@ const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 } };
 
-const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
+const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
 #if   L==0	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN

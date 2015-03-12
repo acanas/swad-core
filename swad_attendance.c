@@ -1894,7 +1894,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save;
 
    /***** Get my preference about photos in users' list for current course *****/
@@ -1927,7 +1927,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 		      "%s"
 		      "</th>"
 		      "</tr>",
-	    Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+	    Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
 	    Txt_Student_comment,
 	    Txt_Teachers_comment);
 
@@ -1954,7 +1954,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save;
    unsigned NumStd;
    struct UsrData UsrDat;
@@ -1998,7 +1998,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                          "%s"
                          "</th>"
                          "</tr>",
-               Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+               Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
                Txt_Student_comment,
                Txt_Teachers_comment);
 
@@ -3143,7 +3143,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 
 static void Att_WriteTableHeadSeveralAttEvents (void)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
    unsigned NumAttEvent;
 
@@ -3154,7 +3154,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
                       "</th>",
             Gbl.Usrs.Listing.WithPhotos ? 4 :
         	                          3,
-            Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+            Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;

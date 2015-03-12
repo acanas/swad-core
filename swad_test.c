@@ -6551,7 +6551,7 @@ static long Tst_GetParamTstCod (void)
 
 void Tst_ShowOneTestExam (void)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
@@ -6615,7 +6615,7 @@ void Tst_ShowOneTestExam (void)
                       "</td>"
 	              "<td class=\"DAT\" style=\"text-align:left;"
 	              " vertical-align:top;\">",
-            Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
+            Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,true);
    fprintf (Gbl.F.Out," %s",
             Gbl.Usrs.Other.UsrDat.Surname1);

@@ -8699,7 +8699,7 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
    extern const char *Txt_Uploaded_by;
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date_of_creation;
    extern const char *Txt_Availability;
    extern const char *Txt_Private_available_to_certain_users_identified;
@@ -8910,7 +8910,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else
 	    /* Unknown publisher */
-	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGULAR_Abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);
+	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);
 	 fprintf (Gbl.F.Out,"</td>"
 	                    "</tr>");
 

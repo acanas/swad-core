@@ -155,7 +155,7 @@ void Con_GetAndShowLastClicks (void)
    extern const char *Txt_Role;
    extern const char *Txt_Degree;
    extern const char *Txt_Action;
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -248,7 +248,7 @@ void Con_GetAndShowLastClicks (void)
 			 "</tr>",
                ClassRow,row[0],
                ClassRow,row[2],
-               ClassRow,Txt_ROLES_SINGULAR_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
+               ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
                ClassRow,Deg.ShortName,
 	       ClassRow,row[5]);
      }
@@ -268,7 +268,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned StdsTotal = Con_GetConnectedStdsTotal ();
    unsigned TchsTotal = Con_GetConnectedTchsTotal ();
@@ -312,7 +312,7 @@ void Con_ShowGlobalConnectedUsrs (void)
                       "</td>"
                       "</tr>",
             StdsTotal,
-            (StdsTotal == 1) ? Txt_ROLES_SINGULAR_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
+            (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
                                Txt_ROLES_PLURAL_abc  [Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of teachers *****/
@@ -323,7 +323,7 @@ void Con_ShowGlobalConnectedUsrs (void)
                       "</td>"
                       "</tr>",
             TchsTotal,
-            (TchsTotal == 1) ? Txt_ROLES_SINGULAR_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN] :
+            (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN] :
                                Txt_ROLES_PLURAL_abc  [Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of users who do not belong to any course *****/
@@ -335,7 +335,7 @@ void Con_ShowGlobalConnectedUsrs (void)
                          "</td>"
                          "</tr>",
                WithoutCoursesTotal,
-               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGULAR_abc[Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN] :
+               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN] :
                                             Txt_ROLES_PLURAL_abc  [Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN]);
 
    /***** End table *****/
@@ -499,7 +499,7 @@ static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role
 
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role)
   {
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumUsrsThisRole;
    Usr_Sex_t UsrSex;
@@ -513,7 +513,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
                       "</td>"
                       "</tr>",
             NumUsrsThisRole,
-            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGULAR_abc[Role][UsrSex] :
+            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
                                      Txt_ROLES_PLURAL_abc  [Role][UsrSex]);
 
    /***** List connected users belonging to this location *****/
@@ -559,7 +559,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_Role_t Role)
   {
    extern const char *The_ClassConnected[The_NUM_THEMES];
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Connected_users;
    unsigned NumUsrsThisRole;
@@ -590,7 +590,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
                       "</td>"
                       "</tr>",
             NumUsrsThisRole,
-            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGULAR_abc[Role][UsrSex] :
+            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
                                      Txt_ROLES_PLURAL_abc  [Role][UsrSex]);
 
    /***** List connected users belonging to this location *****/

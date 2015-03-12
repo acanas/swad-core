@@ -2996,7 +2996,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
   {
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
 
@@ -3040,7 +3040,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
      }
    else
       fprintf (Gbl.F.Out,"[%s]",
-               Txt_ROLES_SINGULAR_abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+               Txt_ROLES_SINGUL_abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "</table>");

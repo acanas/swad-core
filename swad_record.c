@@ -2021,7 +2021,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
@@ -2090,7 +2090,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              TypeOfView == Rec_RECORD_PRINT) &&
 		     IAmTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
    bool ShowData = ItsMe || UsrDat->Accepted || IAmDegAdmin || IAmSuperuser;
-   bool ShowMailIDRoleRows = (TypeOfView != Rec_RECORD_PUBLIC);
+   bool ShowIDRows = (TypeOfView != Rec_RECORD_PUBLIC);
    bool ShowAddressRows = (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
                            TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 			   TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
@@ -2387,7 +2387,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
-   if (ShowMailIDRoleRows)
+   if (ShowIDRows)
      {
       /***** User's e-mail *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2455,7 +2455,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  if (Role == DefaultRoleInCurrentCrs)
 		     fprintf (Gbl.F.Out," selected=\"selected\"");
 		  fprintf (Gbl.F.Out,">%s</option>",
-			   Txt_ROLES_SINGULAR_Abc[Role][UsrDat->Sex]);
+			   Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		 }
 	       fprintf (Gbl.F.Out,"</select>");
 	       break;
@@ -2494,7 +2494,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  case Rol_ROLE_STUDENT:
 		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
 			      (unsigned) Gbl.Usrs.Me.LoggedRole,
-			      Txt_ROLES_SINGULAR_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
+			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 		     break;
 		  case Rol_ROLE_TEACHER:
 		     for (Role = Rol_ROLE_STUDENT;
@@ -2507,7 +2507,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   if (Role == DefaultRoleInCurrentCrs)
 			      fprintf (Gbl.F.Out," selected=\"selected\"");
 			   fprintf (Gbl.F.Out,">%s</option>",
-				    Txt_ROLES_SINGULAR_Abc[Role][UsrDat->Sex]);
+				    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 			  }
 		     break;
 		  case Rol_ROLE_DEG_ADM:
@@ -2520,7 +2520,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			if (Role == DefaultRoleInCurrentCrs)
 			   fprintf (Gbl.F.Out," selected=\"selected\"");
 			fprintf (Gbl.F.Out,">%s</option>",
-				 Txt_ROLES_SINGULAR_Abc[Role][UsrDat->Sex]);
+				 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
 		     break;
 		  default: // The rest of users can not register other users
@@ -2534,14 +2534,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		 {
 		  case Rol_ROLE_TEACHER:	// A teacher only can create students
 		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
-			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
 		     break;
 		  case Rol_ROLE_DEG_ADM:	// An administrator or a superuser can create students and teachers
 		  case Rol_ROLE_SYS_ADM:
 		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 					"<option value=\"%u\">%s</option>",
-			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGULAR_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-			      (unsigned) Rol_ROLE_TEACHER,Txt_ROLES_SINGULAR_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
+			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+			      (unsigned) Rol_ROLE_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
@@ -2569,69 +2569,69 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 							     Txt_Role,
 		  ClassData,Col2Width,
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
-							     Txt_ROLES_SINGULAR_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
+							     Txt_ROLES_SINGUL_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
+
+      /***** Name *****/
+      /* Surname 1 */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "%s",
+	       ClassForm,Col1Width,Txt_Surname_1);
+      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	 fprintf (Gbl.F.Out,"*");
+      fprintf (Gbl.F.Out,":</td>"
+			 "<td colspan=\"2\" class=\"%s\""
+			 " style=\"width:%upx; text-align:left;\">",
+	       ClassData,Cols2and3Width);
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
+			    " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
+		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->Surname1);
+      else if (UsrDat->Surname1[0])
+	 fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      /* Surname 2 */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "%s:"
+			 "</td>"
+			 "<td colspan=\"2\" class=\"%s\""
+			 " style=\"width:%upx; text-align:left;\">",
+	       ClassForm,Col1Width,
+	       Txt_Surname_2,
+	       ClassData,Cols2and3Width);
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
+			    " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
+		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->Surname2);
+      else if (UsrDat->Surname2[0])
+	 fprintf (Gbl.F.Out,"<strong>%s</strong>",
+		  UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      /* First name */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "%s",
+	       ClassForm,Col1Width,Txt_First_name);
+      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	 fprintf (Gbl.F.Out,"*");
+      fprintf (Gbl.F.Out,":</td>"
+			 "<td class=\"%s\" colspan=\"2\""
+			 " style=\"width:%upx; text-align:left;\">",
+	       ClassData,Cols2and3Width);
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
+			    " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
+		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->FirstName);
+      else if (UsrDat->FirstName[0])
+	 fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-
-   /***** Name *****/
-   /* Surname 1 */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-		      "%s",
-	    ClassForm,Col1Width,Txt_Surname_1);
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
-		      "<td colspan=\"2\" class=\"%s\""
-		      " style=\"width:%upx; text-align:left;\">",
-	    ClassData,Cols2and3Width);
-   if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
-			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->Surname1);
-   else if (UsrDat->Surname1[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-
-   /* Surname 2 */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-		      "%s:"
-		      "</td>"
-		      "<td colspan=\"2\" class=\"%s\""
-		      " style=\"width:%upx; text-align:left;\">",
-	    ClassForm,Col1Width,
-	    Txt_Surname_2,
-	    ClassData,Cols2and3Width);
-   if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
-			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->Surname2);
-   else if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",
-	       UsrDat->Surname2);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-
-   /* First name */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-		      "%s",
-	    ClassForm,Col1Width,Txt_First_name);
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
-		      "<td class=\"%s\" colspan=\"2\""
-		      " style=\"width:%upx; text-align:left;\">",
-	    ClassData,Cols2and3Width);
-   if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
-			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\" />",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,UsrDat->FirstName);
-   else if (UsrDat->FirstName[0])
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
 
    /* Country */
    fprintf (Gbl.F.Out,"<tr>"

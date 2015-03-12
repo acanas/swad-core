@@ -265,7 +265,6 @@ p			{margin:0;}
 .TIT_TBL_10
 	{
 	margin:0 10px 10px 10px;
-	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	color:#808080;
 	font-size:20pt;
 	font-weight:bold;
@@ -631,6 +630,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CONV_NEG_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-weight:bold; font-size:11pt; white-space:nowrap;}
 .CONV			{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-size:11pt;}
 .CONV_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-size:11pt;}
+
+/***************************** Public user's profile *************************/
+.RANK
+	{
+	color:#808080;
+	font-size:20pt;
+	font-weight:bold;
+	}
 
 .CON			{color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}
 .CON_CRS		{color:#398000; font-size:9pt; line-height:110%; white-space:nowrap;}

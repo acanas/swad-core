@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.87.4 (2015/03/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.88 (2015/03/12)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.88:    Mar 12, 2015	Changes in layout of public user profile. (181718 lines)
         Version 14.87.4:  Mar 11, 2015	Added indexes to usr_figures. (181629 lines)
 					2 changes necessary in database:
 CREATE INDEX FirstClickTime ON usr_figures (FirstClickTime);

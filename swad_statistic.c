@@ -1452,7 +1452,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_Date;
    extern const char *Txt_Action;
    extern const char *Txt_LOG_More_info;
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned long NumRow;
    unsigned long FirstRow;	// First row to show
    unsigned long LastRow;	// Last rows to show
@@ -1656,7 +1656,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGULAR_Abc[RoleFromLog][UsrDat.Sex] :
+	       RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 		                             "?");
 
       /* Write the date (in row[3] is the date in YYYYMMDDHHMMSS format) */
@@ -1734,7 +1734,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
    extern const char *Txt_Name;
    extern const char *Txt_Type;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_ROW row;
    unsigned long NumRow;
    float NumPagesGenerated,MaxPagesGenerated = 0.0;
@@ -1829,7 +1829,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Txt_ROLES_SINGULAR_Abc[UsrDat.RoleInCurrentCrsDB][UsrDat.Sex]);
+	       Txt_ROLES_SINGUL_Abc[UsrDat.RoleInCurrentCrsDB][UsrDat.Sex]);
 
       /* Write the number of clicks */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);

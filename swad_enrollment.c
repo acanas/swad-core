@@ -150,7 +150,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
                                  Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
    Rol_Role_t OldRole;
 
@@ -174,8 +174,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
 	{
 	 sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
 		  UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName,
-		  Txt_ROLES_SINGULAR_abc[OldRole][UsrDat->Sex],
-		  Txt_ROLES_SINGULAR_abc[NewRole][UsrDat->Sex]);
+		  Txt_ROLES_SINGUL_abc[OldRole][UsrDat->Sex],
+		  Txt_ROLES_SINGUL_abc[NewRole][UsrDat->Sex]);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
 
@@ -318,7 +318,7 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
                              long CrsCod,long UsrCod,
                              unsigned MaxChars)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -351,7 +351,7 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
 
             /* Role (row[0]) */
             Role = Rol_ConvertUnsignedStrToRole (row[0]);
-            strcpy (SummaryStr,Txt_ROLES_SINGULAR_Abc[Role][UsrDat.Sex]);
+            strcpy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex]);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1825,13 +1825,13 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 void Enr_ReqSignUpInCrs (void)
   {
    extern const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_ROLE_STUDENT)
      {
       sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGULAR_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
@@ -1850,7 +1850,7 @@ void Enr_ReqSignUpInCrs (void)
 void Enr_SignUpInCrs (void)
   {
    extern const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1864,7 +1864,7 @@ void Enr_SignUpInCrs (void)
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_ROLE_STUDENT)
      {
       sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
-               Txt_ROLES_SINGULAR_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
@@ -1916,7 +1916,7 @@ void Enr_SignUpInCrs (void)
 
       /***** Show confirmation message *****/
       sprintf (Gbl.Message,Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing,
-               Txt_ROLES_SINGULAR_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
+               Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
@@ -1939,7 +1939,7 @@ void Enr_SignUpInCrs (void)
 void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
                                     long ReqCod,unsigned MaxChars,bool GetContent)
   {
-   extern const char *Txt_ROLES_SINGULAR_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1973,7 +1973,7 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
 
             /* Role (row[1]) */
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
-            strcpy (SummaryStr,Txt_ROLES_SINGULAR_Abc[DesiredRole][UsrDat.Sex]);
+            strcpy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -2003,7 +2003,7 @@ void Enr_AskIfRejectSignUp (void)
   {
    extern const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y;
    extern const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Reject;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -2034,7 +2034,7 @@ void Enr_AskIfRejectSignUp (void)
             /* Ask if reject */
             sprintf (Gbl.Message,Txt_Do_you_really_want_to_reject_the_enrollment_request_,
                      Gbl.Usrs.Other.UsrDat.FullName,
-                     Txt_ROLES_SINGULAR_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+                     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
                      Gbl.CurrentCrs.Crs.FullName);
             Lay_ShowAlert (Lay_INFO,Gbl.Message);
             Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -2109,7 +2109,7 @@ void Enr_ShowEnrollmentRequests (void)
    extern const char *Txt_Role;
    extern const char *Txt_Date;
    extern const char *Txt_Go_to_X;
-   extern const char *Txt_ROLES_SINGULAR_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrollment_requests;
@@ -2494,7 +2494,7 @@ void Enr_ShowEnrollmentRequests (void)
         	               " vertical-align:top;\">"
         	               "%s"
         	               "</td>",
-                     Txt_ROLES_SINGULAR_abc[DesiredRole][UsrDat.Sex]);
+                     Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
 
             /***** Request time (row[4]) *****/
             Msg_WriteMsgDate (row[4],"DAT");
