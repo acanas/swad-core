@@ -34,6 +34,13 @@
 #define Pho_PHOTO_REAL_WIDTH		150
 #define Pho_PHOTO_REAL_HEIGHT		200
 
+/***** Zoom? *****/
+typedef enum
+  {
+   Pho_ZOOM,
+   Pho_NO_ZOOM,
+  } Pho_Zoom_t;
+
 /***** Average photos of students in degrees ******/
 
 typedef enum
@@ -99,7 +106,7 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto);
 bool Pho_RemovePhoto (struct UsrData *UsrDat);
 void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,bool Zoom);
+                       const char *ClassPhoto,Pho_Zoom_t Zoom);
 
 void Pho_ChangePhotoVisibility (void);
 

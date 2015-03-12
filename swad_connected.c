@@ -93,8 +93,8 @@ void Con_ShowConnectedUsrs (void)
      }
    Act_LinkFormSubmit (Txt_Update_connected_users,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("recycle",Txt_Update_connected_users,Txt_Update_connected_users);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Show connected users *****/
    Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_MAIN_ZONE;
@@ -638,12 +638,13 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
       Sco_PutParamScope (Sco_SCOPE_CRS);
       Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" class=\"ICON32x32\" /></a>"
-	                 "</form>"
-			 "</td>"
-			 "</tr>",
+	                 " alt=\"%s\" class=\"ICON32x32\" />"
+	                 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Connected_users);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
   }
 
@@ -953,6 +954,7 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
+   extern const char *Txt_View_record_card;
    const char *Color = Gbl.ColorRows[Gbl.RowEvenOdd];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
@@ -976,18 +978,16 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	              " vertical-align:middle; background-color:%s;\">",
 	    Color);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
-   Act_FormStartId ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
-	                                         ActSeeRecOneTch,
-	            Gbl.FormId);
+   Act_FormStartId (ActSeePubPrf,Gbl.FormId);
    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitId (NULL,NULL,Gbl.FormId);
+   Act_LinkFormSubmitId (UsrDat.FullName,NULL,Gbl.FormId);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO18x24",true);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</form>"
-		      "</td>");
+                     "PHOTO18x24",Pho_ZOOM);
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:54px; text-align:left;"
@@ -998,11 +998,11 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	                                         ActSeeRecOneTch,
 	            Gbl.FormId);
    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitId (UsrDat.FullName,Font,Gbl.FormId);
+   Act_LinkFormSubmitId (Txt_View_record_card,Font,Gbl.FormId);
    Usr_RestrictLengthAndWriteName (&UsrDat,8);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</form>"
-		      "</td>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Write time from last access *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:38px; text-align:right;"
@@ -1159,20 +1159,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                             "<td style=\"width:18px; text-align:left;"
 	                    " vertical-align:middle; background-color:%s;\">",
                   Gbl.ColorRows[Gbl.RowEvenOdd]);
-         if (PutLinkToRecord)
-           {
-	    Act_FormStart ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
-							ActSeeRecOneTch);
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Act_LinkFormSubmit (NULL,NULL);
-           }
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           "PHOTO18x24",true);
-         if (PutLinkToRecord)
-	    fprintf (Gbl.F.Out,"</a>"
-			       "</form>");
+                           "PHOTO18x24",Pho_ZOOM);
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write full name and link *****/
@@ -1189,8 +1179,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
            }
          Usr_RestrictLengthAndWriteName (&UsrDat,40);
          if (PutLinkToRecord)
-	    fprintf (Gbl.F.Out,"</a>"
-			       "</form>");
+           {
+	    fprintf (Gbl.F.Out,"</a>");
+            Act_FormEnd ();
+           }
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write time from last access *****/

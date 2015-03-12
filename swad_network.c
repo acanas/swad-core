@@ -252,12 +252,12 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
 			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			 "</form>"
-			 "</td>"
-			 "</tr>",
+			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Cns_MAX_LENGTH_URL,URL,
 	       Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** End table *****/

@@ -223,7 +223,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 		      Txt_Upload_logo;
    Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon (Icon,Msg,Msg);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -302,12 +302,12 @@ void Log_RequestLogo (Sco_Scope_t Scope)
                       "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
                       "</td>"
                       "</tr>"
-                      "</table>"
-                      "</form>",
+                      "</table>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Txt_Upload_logo);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -323,7 +323,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_logo,Txt_Remove_logo);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

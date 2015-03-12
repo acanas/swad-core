@@ -155,9 +155,9 @@ void Syl_PutFormWhichSyllabus (void)
                          "</li>",
                Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</form>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -563,11 +563,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    sprintf (Gbl.Title,"%s %s",
                      Txt_Remove,StrItemCod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-        	               "</form>",
+        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
+            Act_FormEnd ();
 	   }
          fprintf (Gbl.F.Out,"</td>");
 
@@ -584,11 +584,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                                                                  Txt_Move_up_X,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/up_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-		               "</form>",
+		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
+	    Act_FormEnd ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/up_off16x16.gif\""
@@ -610,11 +610,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/down_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />"
-		               "</form>",
+		               " title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
+	    Act_FormEnd ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/down_off16x16.gif\""
@@ -633,11 +633,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/left_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />"
-		               "</form>",
+		               " title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
+	    Act_FormEnd ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/left_off16x16.gif\""
@@ -657,11 +657,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/right_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />"
-		               "</form>",
+		               " title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
+	    Act_FormEnd ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/right_off16x16.gif\""
@@ -903,11 +903,11 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
    Syl_PutParamNumItem (NumItem);
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\" size=\"80\" maxlength=\"%u\" value=\"%s\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\""
-                      " onfocus=\"javascript:if(this.value=='%s') this.value='';\" />"
-                      "</form>"
-                      "</td>",
+                      " onfocus=\"javascript:if(this.value=='%s') this.value='';\" />",
 	    Syl_MAX_LENGTH_TEXT_ITEM,Text,Gbl.FormId,
 	    Txt_Enter_a_new_item_here);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/

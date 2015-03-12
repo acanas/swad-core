@@ -238,10 +238,10 @@ void Deg_SeeDegWithPendingCrss (void)
          sprintf (Gbl.Title,Txt_Go_to_X,Deg.FullName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
          fprintf (Gbl.F.Out,"%s"
-                            "</a>"
-                            "</form>"
-                            "</td>",
+                            "</a>",
 	          Deg.FullName);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending courses (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -309,7 +309,7 @@ static void Deg_Configuration (bool PrintView)
 	 Act_FormStart (ActSeeCrs);
 	 Act_LinkFormSubmit (Txt_Courses,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("crs",Txt_Courses,Txt_Courses);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 
 	  /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnDegInf);
@@ -634,8 +634,8 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -653,9 +653,8 @@ void Deg_WriteCtyInsCtrDeg (void)
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
 	               The_ClassDegree[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>"
-                      "</form>",
-            Txt_System);
+   fprintf (Gbl.F.Out,"%s</a>",Txt_System);
+   Act_FormEnd ();
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If country selected...
      {
@@ -668,9 +667,9 @@ void Deg_WriteCtyInsCtrDeg (void)
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
       Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
 	                  The_ClassDegree[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s</a>"
-                         "</form>",
+      fprintf (Gbl.F.Out,"%s</a>",
                Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+      Act_FormEnd ();
 
       if (Gbl.CurrentIns.Ins.InsCod > 0)	// If institution selected...
         {
@@ -683,9 +682,9 @@ void Deg_WriteCtyInsCtrDeg (void)
          Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
          Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
                              The_ClassDegree[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s</a>"
-                            "</form>",
+         fprintf (Gbl.F.Out,"%s</a>",
                   Gbl.CurrentIns.Ins.ShortName);
+         Act_FormEnd ();
 
          if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// If centre selected...
            {
@@ -698,9 +697,9 @@ void Deg_WriteCtyInsCtrDeg (void)
             Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
             Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
         	                The_ClassDegree[Gbl.Prefs.Theme]);
-            fprintf (Gbl.F.Out,"%s</a>"
-        	               "</form>",
+            fprintf (Gbl.F.Out,"%s</a>",
                      Gbl.CurrentCtr.Ctr.ShortName);
+            Act_FormEnd ();
 
             if (Gbl.CurrentDeg.Deg.DegCod > 0)	// If degree selected...
               {
@@ -716,9 +715,9 @@ void Deg_WriteCtyInsCtrDeg (void)
                strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
                Str_LimitLengthHTMLStr (DegreeShortName,
         	                       Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
-               fprintf (Gbl.F.Out,"%s</a>"
-                                  "</form>",
+               fprintf (Gbl.F.Out,"%s</a>",
                         DegreeShortName);
+               Act_FormEnd ();
               }
            }
         }
@@ -1173,11 +1172,11 @@ static void Deg_ListDegreeTypesForEdition (void)
          Act_FormStart (ActRemDegTyp);
          Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_type_of_degree,
                   Txt_Remove_type_of_degree);
+         Act_FormEnd ();
         }
 
       /* Degree type code */
@@ -1194,12 +1193,12 @@ static void Deg_ListDegreeTypesForEdition (void)
       Act_FormStart (ActRenDegTyp);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\" size=\"25\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Deg_MAX_LENGTH_DEGREE_TYPE_NAME,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Direct log in is allowed for this degree type? */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1207,12 +1206,12 @@ static void Deg_ListDegreeTypesForEdition (void)
       Act_FormStart (ActChgDegTypLog);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s"
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? " checked=\"checked\"" :
         	                                                   "",
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
@@ -1318,10 +1317,9 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    Deg_PutParamDegCod (Deg->DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>"
-		      "</form>"
-		      "</td>",
-	    Deg->FullName);
+   fprintf (Gbl.F.Out,"%s</a>",Deg->FullName);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /* Type of degree */
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
@@ -1430,11 +1428,11 @@ static void Deg_ListDegreesForEdition (void)
          Act_FormStart (ActRemDeg);
          Deg_PutParamOtherDegCod (Deg->DegCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_degree,
                   Txt_Remove_degree);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1470,8 +1468,8 @@ static void Deg_ListDegreesForEdition (void)
 		     (Gbl.Ctrs.Lst[NumCtr].CtrCod == Deg->CtrCod) ? " selected=\"selected\"" :
 			                                            "",
 		     Gbl.Ctrs.Lst[NumCtr].ShortName);
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShortName);
@@ -1485,9 +1483,9 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->ShortName);
@@ -1501,9 +1499,9 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName,Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->FullName);
@@ -1530,8 +1528,8 @@ static void Deg_ListDegreesForEdition (void)
 			                                     "",
 		     DegTyp->DegTypName);
 	   }
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
 	 for (NumDegTyp = 0;
@@ -1559,8 +1557,8 @@ static void Deg_ListDegreesForEdition (void)
 		     (Year == Deg->FirstYear) ? " selected=\"selected\"" :
 			                        "",
 	             Year);
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
          fprintf (Gbl.F.Out,"%u",Deg->FirstYear);
@@ -1584,8 +1582,8 @@ static void Deg_ListDegreesForEdition (void)
 		     (Year == Deg->LastYear) ? " selected=\"selected\"" :
 			                       "",
 		     Year);
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
          fprintf (Gbl.F.Out,"%u",Deg->LastYear);
@@ -1599,12 +1597,12 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegOptYea);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"OptYear\" value=\"Y\"%s"
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Deg->OptYear ? " checked=\"checked\"" :
 			         "",
 	          Gbl.FormId);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
 	 /* Degree optional year */
@@ -1625,9 +1623,9 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"5\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	{
@@ -1661,13 +1659,13 @@ static void Deg_ListDegreesForEdition (void)
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
-			    "</select>"
-			    "</form>",
+			    "</select>",
 		  Gbl.FormId,
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
 		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),
 		  Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
@@ -1805,7 +1803,7 @@ static void Deg_PutFormToCreateDegType (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1974,7 +1972,7 @@ static void Deg_PutFormToCreateDegree (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -4017,9 +4015,8 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
             Log_DrawLogo (Sco_SCOPE_DEG,DegCod,row[1],
                           16,"vertical-align:top;",true);
-            fprintf (Gbl.F.Out,"&nbsp;%s</a>"
-                               "</form>",
-                     row[2]);
+            fprintf (Gbl.F.Out,"&nbsp;%s</a>",row[2]);
+            Act_FormEnd ();
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\" alt=\"%s\""

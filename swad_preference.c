@@ -246,8 +246,8 @@ void Prf_PutSelectorToSelectLanguage (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STR_LANG_NAME[Lan]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -274,7 +274,7 @@ void Prf_AskChangeLanguage (void)
    Act_FormStart (ActChgLan);
    Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
    Lay_PutSendButton (Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
   }
@@ -355,13 +355,13 @@ static void Prf_PutIconsToSelectSideCols (void)
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\" style=\"display:block;"
-	                 " width:32px; height:20px; margin:0 auto;\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " width:32px; height:20px; margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();
@@ -396,7 +396,7 @@ void Prf_PutLeftIconToHideShowCols (void)
                Txt_Show_left_column,
                Txt_Show_left_column);
      }
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -428,7 +428,7 @@ void Prf_PutRigthIconToHideShowCols (void)
                Txt_Show_right_column,
                Txt_Show_right_column);
      }
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

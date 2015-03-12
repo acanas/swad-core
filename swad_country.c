@@ -167,10 +167,10 @@ void Cty_SeeCtyWithPendingInss (void)
          Cty_PutParamCtyCod (Cty.CtyCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Cty.Name[Gbl.Prefs.Language]);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s</a>"
-                            "</form>"
-                            "</td>",
+         fprintf (Gbl.F.Out,"%s</a>",
 	          Cty.Name[Gbl.Prefs.Language]);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -238,7 +238,7 @@ static void Cty_Configuration (bool PrintView)
       Act_FormStart (ActSeeIns);
       Act_LinkFormSubmit (Txt_Institutions,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("ins",Txt_Institutions,Txt_Institutions);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
 
       /* Link to print view */
       if (!PrintView)
@@ -299,9 +299,9 @@ static void Cty_Configuration (bool PrintView)
 		     Gbl.FormId);
             if (MapAttribution)
 	       fprintf (Gbl.F.Out,"%s",MapAttribution);
-	    fprintf (Gbl.F.Out,"</textarea>"
-		               "</form>"
-		               "</td>"
+	    fprintf (Gbl.F.Out,"</textarea>");
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</td>"
 		               "</tr>");
            }
 	 else if (MapAttribution)
@@ -535,9 +535,9 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
       if (Order == Gbl.Ctys.SelectedOrderType)
          fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>"
-                         "</form>"
-                         "</th>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:right;\">"
 	              "%s"
@@ -576,8 +576,8 @@ void Cty_ListCountries2 (void)
 		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 	 Act_LinkFormSubmit (Gbl.Title,NULL);
 	 Cty_DrawCountryMap (&Gbl.Ctys.Lst[NumCty],"COUNTRY_MAP_SMALL");
-         fprintf (Gbl.F.Out,"</a>"
-			    "</form>");
+         fprintf (Gbl.F.Out,"</a>");
+         Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -590,11 +590,11 @@ void Cty_ListCountries2 (void)
       sprintf (Gbl.Title,Txt_Go_to_X,
 	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
       Act_LinkFormSubmit (Gbl.Title,"DAT");
-      fprintf (Gbl.F.Out,"%s (%s)</a>"
-	                 "</form>"
-	                 "</td>",
+      fprintf (Gbl.F.Out,"%s (%s)</a>",
 	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language],
 	       Gbl.Ctys.Lst[NumCty].Alpha2);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Write stats of this country */
       NumStds = Usr_GetNumUsrsInCountry (Rol_ROLE_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod);
@@ -1049,8 +1049,8 @@ void Cty_WriteSelectorOfCountry (Act_Action_t NextAction)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1310,11 +1310,11 @@ static void Cty_ListCountriesForEdition (void)
          Act_FormStart (ActRemCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_country,
                   Txt_Remove_country);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1371,11 +1371,11 @@ static void Cty_ListCountriesForEdition (void)
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                            "</form>"
-                            "</td>",
+                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                   Cty_MAX_LENGTH_COUNTRY_NAME,
                   Cty->Name[Lan],Gbl.FormId);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* WWW */
          fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
@@ -1384,12 +1384,12 @@ static void Cty_ListCountriesForEdition (void)
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                            "</form>"
-                            "</td>"
-                            "</tr>",
+                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                   Cty_MAX_LENGTH_COUNTRY_WWW,
                   Cty->WWW[Lan],Gbl.FormId);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
         }
      }
 
@@ -1758,7 +1758,7 @@ static void Cty_PutFormToCreateCountry (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

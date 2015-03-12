@@ -114,8 +114,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Act_FormStart (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("login",Txt_Log_in,Txt_Log_in);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -164,8 +164,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "</tr>",
 	              Txt_Create_account);
    Lay_EndRoundFrameTable10 ();
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -236,7 +236,7 @@ static void Acc_PutLinkToRemoveMyAccount (void)
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
    Act_LinkFormSubmit (Txt_Remove_account,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_account,Txt_Remove_account);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -621,10 +621,10 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
 
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<input type=\"submit\" value=\"%s\" />"
-	                 "</div>"
-	                 "</form>",
+	                 "</div>",
                ItsMe ? Txt_Completely_eliminate_me :
                        Txt_Completely_eliminate_user);
+      Act_FormEnd ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

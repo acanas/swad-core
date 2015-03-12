@@ -646,8 +646,8 @@ static void Lay_WritePageTopHeading (void)
 	                                              ActSysSch)))));
       Sco_PutParamScope (Sco_SCOPE_SYS);
       Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</td>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
 
    /* Logged user or language selection */
@@ -887,9 +887,8 @@ static void Lay_ShowRightColumn (void)
 	              "<td style=\"text-align:center;\">");
    Act_FormStart (ActLstCon);
    Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>"
-		      "</form>",
-            Txt_Connected_PLURAL);
+   fprintf (Gbl.F.Out,"%s</a>",Txt_Connected_PLURAL);
+   Act_FormEnd ();
 
    /***** Number of connected users in the whole platform *****/
    fprintf (Gbl.F.Out,"<div id=\"globalconnected\">");	// Used for AJAX based refresh
@@ -946,8 +945,8 @@ void Lay_PutFormToView (Act_Action_t Action)
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_View,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("visible_on",Txt_View,Txt_View);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -963,8 +962,8 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1416,13 +1415,13 @@ void Lay_PutIconsToSelectLayout (void)
       Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
-	                 " style=\"margin:0 auto;\" />"
-                         "</form>"
-                         "</td>",
+	                 " style=\"margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Lay_LayoutIcons[Layout],
                Txt_LAYOUT_NAMES[Layout],
                Txt_LAYOUT_NAMES[Layout]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();
@@ -1484,7 +1483,7 @@ void Lay_PutLinkToPrintView2 (void)
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

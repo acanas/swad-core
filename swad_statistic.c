@@ -375,7 +375,7 @@ static void Sta_PutFormToRequestAccessesCrs (void)
    Act_FormStart (ActReqAccCrs);
    Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("stats",Txt_Visits_to_course,Txt_Visits_to_course);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -508,8 +508,8 @@ void Sta_AskSeeCrsAccesses (void)
          Sta_PutSeeAccessesButton ();
 
          /***** Form end *****/
-         fprintf (Gbl.F.Out,"</table>"
-                            "</form>");
+         fprintf (Gbl.F.Out,"</table>");
+         Act_FormEnd ();
 
          /* Free the memory used by the list of users */
          Usr_FreeListsEncryptedUsrCods ();
@@ -636,8 +636,8 @@ void Sta_AskSeeGblAccesses (void)
    Sta_PutSeeAccessesButton ();
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</table>"
-                      "</form>");
+   fprintf (Gbl.F.Out,"</table>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1528,7 +1528,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      }
    fprintf (Gbl.F.Out,"</td>");
    if (FirstRow > 1)
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
 
    /* Write number of current page */
    fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"width:60%%; text-align:center;\">"
@@ -1563,7 +1563,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      }
    fprintf (Gbl.F.Out,"</td>");
    if (LastRow < NumRows)
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>"
@@ -1806,7 +1806,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO12x16",true);
+                        "PHOTO12x16",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
@@ -2070,9 +2070,9 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_COLOR_TYPES[ColorType]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Compute maximum number of pages generated per day-hour *****/
@@ -3467,7 +3467,7 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
          fprintf (Gbl.F.Out,"-");
       fprintf (Gbl.F.Out,"&nbsp;");
       if (CrsOK)
-         fprintf (Gbl.F.Out,"</form>");
+         Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Draw bar proportional to number of pages generated */
@@ -3644,8 +3644,8 @@ void Sta_ReqUseOfPlatform (void)
             Txt_Show_statistic);
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

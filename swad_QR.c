@@ -98,8 +98,8 @@ void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool Pri
             Txt_QR_code);
    if (PrintText)
       fprintf (Gbl.F.Out," %s",Txt_QR_code);
-   fprintf (Gbl.F.Out,"</a>"
-                      "</form>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

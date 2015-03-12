@@ -187,10 +187,10 @@ void Ctr_SeeCtrWithPendingDegs (void)
          sprintf (Gbl.Title,Txt_Go_to_X,Ctr.FullName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
          fprintf (Gbl.F.Out,"%s"
-                            "</a>"
-                            "</form>"
-                            "</td>",
+                            "</a>",
 	          Ctr.FullName);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending degrees (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -271,7 +271,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Act_FormStart (ActSeeDeg);
 	 Act_LinkFormSubmit (Txt_Degrees,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 
          /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
@@ -345,9 +345,9 @@ static void Ctr_Configuration (bool PrintView)
 		     Gbl.FormId);
             if (PhotoAttribution)
 	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
-	    fprintf (Gbl.F.Out,"</textarea>"
-		               "</form>"
-		               "</td>"
+	    fprintf (Gbl.F.Out,"</textarea>");
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</td>"
 		               "</tr>");
 	   }
 	 else if (PhotoAttribution)
@@ -649,10 +649,10 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    Ctr_PutParamCtrCod (Ctr->CtrCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>"
-		      "</form>"
-		      "</td>",
+   fprintf (Gbl.F.Out,"%s</a>",
 	    Ctr->FullName);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of teachers *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
@@ -1125,8 +1125,8 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1186,11 +1186,11 @@ static void Ctr_ListCentresForEdition (void)
          Act_FormStart (ActRemCtr);
          Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_centre,
                   Txt_Remove_centre);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1225,8 +1225,8 @@ static void Ctr_ListCentresForEdition (void)
 		     (Gbl.Inss.Lst[NumIns].InsCod == Ctr->InsCod) ? " selected=\"selected\"" :
 			                                            "",
 		     Gbl.Inss.Lst[NumIns].ShortName);
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShortName);
@@ -1254,8 +1254,8 @@ static void Ctr_ListCentresForEdition (void)
 		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
 			                                            "",
 		     Gbl.Plcs.Lst[NumPlc].ShortName);
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
 	 for (NumPlc = 0;
@@ -1273,10 +1273,10 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.FormId);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->ShortName);
@@ -1290,10 +1290,10 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.FormId);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->FullName);
@@ -1307,9 +1307,9 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	{
@@ -1347,13 +1347,13 @@ static void Ctr_ListCentresForEdition (void)
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
-			    "</select>"
-			    "</form>",
+			    "</select>",
 		  Gbl.FormId,
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
@@ -1838,7 +1838,7 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
 		       Txt_Upload_photo;
    Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("photo",Msg,Msg);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1874,12 +1874,12 @@ void Ctr_RequestPhoto (void)
                       "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
                       "</td>"
                       "</tr>"
-                      "</table>"
-                      "</form>",
+                      "</table>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Txt_Upload_photo);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2100,7 +2100,7 @@ static void Ctr_PutFormToCreateCentre (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2141,8 +2141,8 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Ctrs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</th>");
      }

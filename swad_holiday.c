@@ -111,9 +111,9 @@ void Hld_SeeHolidays (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
 	 if (Order == Gbl.Hlds.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>"
-			    "</form>"
-			    "</td>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:center;\">"
 	                 "&nbsp;%s&nbsp;"
@@ -202,8 +202,8 @@ static void Hld_PutFormToEditHlds (void)
    Act_FormStart (ActEdiHld);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -495,12 +495,12 @@ static void Hld_ListHolidaysForEdition (void)
       Act_FormStart (ActRemHld);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_holiday,
                Txt_Remove_holiday);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Holiday code */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
@@ -528,9 +528,9 @@ static void Hld_ListHolidaysForEdition (void)
                   Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
                 	                                       "",
                   Gbl.Plcs.Lst[NumPlc].ShortName);
-      fprintf (Gbl.F.Out,"</select>"
-	                 "</form>"
-	                 "</td>");
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Holiday type */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -548,9 +548,9 @@ static void Hld_ListHolidaysForEdition (void)
                   HolidayType == Hld->HldTyp ? " selected=\"selected\"" :
                 	                       "",
                   Txt_HOLIDAY_TYPES[HolidayType]);
-      fprintf (Gbl.F.Out,"</select>"
-	                 "</form>"
-	                 "</td>");
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Holiday date / Non school period start date */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -562,8 +562,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "StartDay","StartMonth","StartYear",
                          &(Gbl.Hlds.Lst[NumHld].StartDate),
                          true,false);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</td>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Non school period end date */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -575,8 +575,8 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "EndDay","EndMonth","EndYear",
                          &(Gbl.Hlds.Lst[NumHld].EndDate),
                          true,(Hld->HldTyp == Hld_HOLIDAY));
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</td>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Holiday name */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -584,11 +584,11 @@ static void Hld_ListHolidaysForEdition (void)
       Act_FormStart (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>"
-                         "</tr>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+                         "</tr>");
      }
 
    Lay_EndRoundFrameTable10 ();
@@ -1021,7 +1021,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

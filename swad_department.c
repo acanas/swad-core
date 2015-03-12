@@ -116,9 +116,9 @@ void Dpt_SeeDepts (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
 	 if (Order == Gbl.Dpts.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>"
-	                    "</form>"
-	                    "</td>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       fprintf (Gbl.F.Out,"</tr>");
 
@@ -218,8 +218,8 @@ static void Dpt_PutFormToEditDpts (void)
    Act_FormStart (ActEdiDpt);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -522,11 +522,11 @@ static void Dpt_ListDepartmentsForEdition (void)
          Act_FormStart (ActRemDpt);
          Dpt_PutParamDptCod (Dpt->DptCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_department,
                   Txt_Remove_department);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -556,7 +556,9 @@ static void Dpt_ListDepartmentsForEdition (void)
                   Gbl.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
                 	                                       "",
                   Gbl.Inss.Lst[NumIns].ShortName);
-      fprintf (Gbl.F.Out,"</select></form></td>");
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Department short name */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -564,30 +566,30 @@ static void Dpt_ListDepartmentsForEdition (void)
       Act_FormStart (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Department full name */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">");
       Act_FormStart (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Department WWW */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">");
       Act_FormStart (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Number of teachers */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
@@ -955,7 +957,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

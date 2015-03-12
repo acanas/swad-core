@@ -176,10 +176,10 @@ void Ins_SeeInsWithPendingCtrs (void)
          Ins_PutParamInsCod (Ins.InsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Ins.FullName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s</a>"
-                            "</form>"
-                            "</td>",
+         fprintf (Gbl.F.Out,"%s</a>",
 	          Ins.FullName);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending centres (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -250,7 +250,7 @@ static void Ins_Configuration (bool PrintView)
 	 Act_FormStart (ActSeeCtr);
 	 Act_LinkFormSubmit (Txt_Centres,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 
 	 /* Link to print view */
 	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
@@ -573,10 +573,10 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    Ins_PutParamInsCod (Ins->InsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
    Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>"
-		      "</form>"
-		      "</td>",
+   fprintf (Gbl.F.Out,"%s</a>",
 	    Ins->FullName);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Stats *****/
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
@@ -659,8 +659,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Inss.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
@@ -1072,8 +1072,8 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
      }
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1130,11 +1130,11 @@ static void Ins_ListInstitutionsForEdition (void)
          Act_FormStart (ActRemIns);
          Ins_PutParamOtherInsCod (Ins->InsCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_institution,
                   Txt_Remove_institution);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1176,8 +1176,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	    fprintf (Gbl.F.Out,">%s</option>",
 		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 	   }
-	 fprintf (Gbl.F.Out,"</select>"
-			    "</form>");
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
@@ -1191,10 +1191,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName,
 		  Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ins->ShortName);
@@ -1208,10 +1208,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName,
 		  Gbl.FormId);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
@@ -1225,11 +1225,11 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			    "</form>"
-			    "</td>",
+			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ins->WWW,
 		  Gbl.FormId);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
 	{
@@ -1268,13 +1268,13 @@ static void Ins_ListInstitutionsForEdition (void)
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
-			    "</select>"
-			    "</form>",
+			    "</select>",
 		  Gbl.FormId,
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
+	 Act_FormEnd ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
@@ -1861,7 +1861,7 @@ static void Ins_PutFormToCreateInstitution (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

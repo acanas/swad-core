@@ -82,15 +82,15 @@ void Ico_PutIconsToSelectIconSet (void)
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
-	                 " style=\"margin:0 auto;\" />"
-                         "</form>"
-                         "</td>",
+	                 " style=\"margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
                Cfg_ICON_ACTION,
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();

@@ -417,12 +417,12 @@ void Ntf_ShowMyNotifications (void)
            {
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-        	               "</form>",
+        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            Act_FormEnd ();
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" alt=\"%s\""
@@ -440,9 +440,9 @@ void Ntf_ShowMyNotifications (void)
            {
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
             Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
-            fprintf (Gbl.F.Out,"%s</a>"
-        	               "</form>",
+            fprintf (Gbl.F.Out,"%s</a>",
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            Act_FormEnd ();
            }
          else
             fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
@@ -467,9 +467,13 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
-            fprintf (Gbl.F.Out,PutLink ? "</a>"
-        	                         "</form>" :
-        	                         "</span>");
+            if (PutLink)
+              {
+               fprintf (Gbl.F.Out,"</a>");
+               Act_FormEnd ();
+              }
+            else
+               fprintf (Gbl.F.Out,"</span>");
            }
          else if (Crs.CrsCod > 0)
            {
@@ -481,9 +485,13 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
-            fprintf (Gbl.F.Out,PutLink ? "</a>"
-        	                         "</form>" :
-        	                         "</span>");
+            if (PutLink)
+              {
+               fprintf (Gbl.F.Out,"</a>");
+               Act_FormEnd ();
+              }
+            else
+               fprintf (Gbl.F.Out,"</span>");
            }
          else if (Deg.DegCod > 0)
            {
@@ -578,11 +586,11 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    if (AllNotifications)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-                      " %s"
-	              "</form>"
-	              "</div>",
+                      " %s",
             Gbl.FormId,
             Txt_Show_all_notifications);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1610,7 +1618,7 @@ static void Ntf_PutLinkToChangePrefs (void)
    Act_FormStart (ActEdiPrf);
    Act_LinkFormSubmit (Txt_Change_preferences,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("heart",Txt_Change_preferences,Txt_Change_preferences);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1625,7 +1633,7 @@ static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
    Act_FormStart (ActMrkNtfSee);
    Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1712,7 +1720,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** End form *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_PutSendButton (Txt_Save_changes);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -1827,7 +1835,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
      }
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</a></form>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

@@ -340,7 +340,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Send and undo buttons *****/
       Lay_PutSendButton (Txt_Send_message);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
 
    /***** Free memory used by the list of nicknames *****/
@@ -782,9 +782,9 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>"
-	              "</form>",
+	              "</div>",
             Txt_Delete_messages_received);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -819,9 +819,9 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>"
-	              "</form>",
+	              "</div>",
             Txt_Delete_messages_sent);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1555,7 +1555,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       Msg_ShowFormToShowOnlyUnreadMessages ();
      }
    Lay_PutSendButton (Txt_View_messages);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    if (TypeOfMessages == Msg_MESSAGES_RECEIVED)
       NumUnreadMsgs = Msg_GetNumUnreadMsgs (Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
@@ -1677,7 +1677,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
    Act_FormStart (ActLstBanUsr);
    Act_LinkFormSubmit (Txt_Banned_users,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("stop",Txt_Banned_users,Txt_Banned_users);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2197,10 +2197,10 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\" alt=\"%s\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
-	              " %s</a>"
-	              "</form>"
-	              "</div>",
+	              " %s</a>",
             Gbl.Prefs.IconsURL,Gbl.Title,Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2825,7 +2825,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
       fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
 
    /***** End form to expand the message *****/
-   fprintf (Gbl.F.Out,"</a></form>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
@@ -2862,7 +2863,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO24x32",true);
+                        "PHOTO24x32",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
@@ -2929,9 +2930,9 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"MSG_AUT");
             fprintf (Gbl.F.Out,"%s</a>)"
-        	               "</div>"
-        	               "</form>",
+        	               "</div>",
         	     Crs.ShortName);
+            Act_FormEnd ();
            }
 	}
      }
@@ -2985,7 +2986,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 				      Txt_Reply,
 			    Replied ? Txt_Reply_again :
 				      Txt_Reply);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3020,7 +3021,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO18x24",true);
+                     "PHOTO18x24",Pho_ZOOM);
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -3165,7 +3166,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           "PHOTO18x24",true);
+                           "PHOTO18x24",Pho_ZOOM);
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
@@ -3210,9 +3211,9 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
          Act_LinkFormSubmit (Txt_View_all_recipients,"MSG_AUT");
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
                   NumRecipientsKnown - NumRecipientsToShow);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</form>"
-                            "</td>"
+         fprintf (Gbl.F.Out,"</a>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
 
@@ -3261,12 +3262,12 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	              "</form>"
-	              "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Txt_Delete_message,
             Txt_Delete_message);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -3340,11 +3341,11 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/open_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	              "</form>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3361,11 +3362,11 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	              "</form>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3541,12 +3542,12 @@ void Msg_ListBannedUsrs (void)
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
         	               " src=\"%s/closed_on16x16.gif\" alt=\"%s\""
-        	               " title=\"%s\" class=\"ICON16x16\" />"
-        	               "</form>"
-        	               "</td>",
+        	               " title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>");
 
             /* Show photo */
             fprintf (Gbl.F.Out,"<td style=\"width:24px;"
@@ -3554,7 +3555,7 @@ void Msg_ListBannedUsrs (void)
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
-                              "PHOTO18x24",true);
+                              "PHOTO18x24",Pho_ZOOM);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write user's full name */

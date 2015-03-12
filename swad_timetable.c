@@ -257,7 +257,7 @@ void TT_ShowClassTimeTable (void)
 	 Grp_PutParamWhichGrps ();
 	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 	}
 
       if (PutEditOfficeHours)
@@ -265,7 +265,7 @@ void TT_ShowClassTimeTable (void)
 	 Act_FormStart (ActEdiTut);
 	 Act_LinkFormSubmit (Txt_Edit_office_hours,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("edit",Txt_Edit_office_hours,Txt_Edit_office_hours);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 	}
 
       if (!PrintView)
@@ -296,8 +296,8 @@ void TT_ShowClassTimeTable (void)
 			 "<td>");
       Act_FormStart (Gbl.CurrentAct);
       Grp_ShowSelectorWhichGrps ();
-      fprintf (Gbl.F.Out,"</form>"
-			 "</td>"
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
@@ -326,8 +326,8 @@ void TT_EditCrsTimeTable (void)
    Act_FormStart (ActSeeCrsTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Start of table *****/
    Lay_StartRoundFrameTable10 ("98%",0,NULL);
@@ -358,8 +358,8 @@ void TT_ShowMyTutTimeTable (void)
    Act_FormStart (ActSeeMyTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
@@ -1301,7 +1301,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
    /***** End of form *****/
    if (TimeTableView == TT_CRS_EDIT ||
        TimeTableView == TT_TUT_EDIT)
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
 
    /***** End of cell *****/
    fprintf (Gbl.F.Out,"</td>");

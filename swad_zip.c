@@ -122,8 +122,8 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    Par_PutHiddenParamChar ("CreateZIP",'Y');
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("download",Txt_Create_ZIP_file,Txt_Create_ZIP_file);
-   fprintf (Gbl.F.Out,"</form>"
-		      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -308,9 +308,9 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormul[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\" alt=\"%s\""
 	              " title=\"%s\" class=\"ICON16x16B\" />"
-		      "</a>"
-		      "</form>",
+		      "</a>",
 	 Gbl.Prefs.IconsURL,Txt_Create_ZIP_file,Txt_Create_ZIP_file);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

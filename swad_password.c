@@ -233,7 +233,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** End form *****/
    Lay_PutSendButton (Txt_Email_new_password);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -682,7 +682,7 @@ void Pwd_ShowFormChgPwd (void)
 		      "</tr>",
             Txt_Save);
    Lay_EndRoundFrameTable10 ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -761,7 +761,7 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /* End form */
 	 Lay_PutSendButton (Txt_Save);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -792,7 +792,7 @@ void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat)
 	}
       Act_LinkFormSubmit (Txt_Change_password,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("key",Txt_Change_password,Txt_Change_password);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

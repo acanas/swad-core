@@ -4198,43 +4198,57 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\" id=\"%s\"",
-            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Id);
-
-   switch (Act_Actions[NextAction].BrowserWindow)
+   if (!Gbl.InsideForm)
      {
-      case Act_NEW_WINDOW:
-      case Act_DOWNLD_FILE:
-         fprintf (Gbl.F.Out," target=\"_blank\"");
-	 break;
-      default:
-	 break;
+      fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\" id=\"%s\"",
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Id);
+
+      switch (Act_Actions[NextAction].BrowserWindow)
+	{
+	 case Act_NEW_WINDOW:
+	 case Act_DOWNLD_FILE:
+	    fprintf (Gbl.F.Out," target=\"_blank\"");
+	    break;
+	 default:
+	    break;
+	}
+
+      if (Act_Actions[NextAction].ContentType == Act_CONTENT_DATA)
+	 fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
+
+      fprintf (Gbl.F.Out,">");
+
+      Gbl.InsideForm = true;
+
+      if (NextAction != ActUnk)
+	 Par_PutHiddenParamLong ("act",Act_Actions[NextAction].ActCod);
+
+      if (Gbl.Session.Id[0])
+	 Par_PutHiddenParamString ("ses",Gbl.Session.Id);
+      else if (PutParameterLocationIfNoSesion)	// Extra parameters necessary when there's no open session
+	{
+	 /* If session is open, course code will be get from session data,
+	    but if there is not an open session, and next action is known, it is necessary to send a parameter with course code */
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// If course selected...
+	    Crs_PutParamCrsCod (Gbl.CurrentCrs.Crs.CrsCod);
+	 else if (Gbl.CurrentDeg.Deg.DegCod > 0)		// If no course selected, but degree selected...
+	    Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
+	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// If no degree selected, but centre selected...
+	    Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
+	 else if (Gbl.CurrentIns.Ins.InsCod > 0)		// If no centre selected, but institution selected...
+	    Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
+	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If no institution selected, but country selected...
+	    Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
+	}
      }
+  }
 
-   if (Act_Actions[NextAction].ContentType == Act_CONTENT_DATA)
-      fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
-
-   fprintf (Gbl.F.Out,">");
-
-   if (NextAction != ActUnk)
-      Par_PutHiddenParamLong ("act",Act_Actions[NextAction].ActCod);
-
-   if (Gbl.Session.Id[0])
-      Par_PutHiddenParamString ("ses",Gbl.Session.Id);
-   else if (PutParameterLocationIfNoSesion)	// Extra parameters necessary when there's no open session
+void Act_FormEnd (void)
+  {
+   if (Gbl.InsideForm)
      {
-      /* If session is open, course code will be get from session data,
-	 but if there is not an open session, and next action is known, it is necessary to send a parameter with course code */
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// If course selected...
-	 Crs_PutParamCrsCod (Gbl.CurrentCrs.Crs.CrsCod);
-      else if (Gbl.CurrentDeg.Deg.DegCod > 0)		// If no course selected, but degree selected...
-	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// If no degree selected, but centre selected...
-	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-      else if (Gbl.CurrentIns.Ins.InsCod > 0)		// If no centre selected, but institution selected...
-	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-      else if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If no institution selected, but country selected...
-	 Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
+      fprintf (Gbl.F.Out,"</form>");
+      Gbl.InsideForm = false;
      }
   }
 
@@ -4650,11 +4664,10 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
                   Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],
                   Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
          Str_LimitLengthHTMLStr (ActionStr,40);
-         fprintf (Gbl.F.Out," %s</a>"
-                            "</form>"
-                            "</td>"
-                            "</tr>",
-                  ActionStr);
+         fprintf (Gbl.F.Out," %s</a>",ActionStr);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
         }
      }
 
@@ -4679,9 +4692,9 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    Act_FormStart (ActMFUAct);
    Act_LinkFormSubmit (Txt_Frequent_actions,"MFU_ACT");
    fprintf (Gbl.F.Out," %s"
-	              "</a>"
-	              "</form>",
+	              "</a>",
 	    Txt_Frequent_actions);
+   Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
 	              "<table style=\"width:120px;\">");
@@ -4715,11 +4728,11 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
 
          strcpy (ActionStr,Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
          Str_LimitLengthHTMLStr (ActionStr,12);
-         fprintf (Gbl.F.Out," %s</a>"
-                            "</form>"
-                            "</td>"
-                            "</tr>",
+         fprintf (Gbl.F.Out," %s</a>",
                   ActionStr);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
         }
      }
 

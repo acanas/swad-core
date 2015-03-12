@@ -291,9 +291,9 @@ void Tst_ShowFormAskTst (void)
 
          /***** Send button *****/
          fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />"
-                            "</div>"
-                            "</form>",
+                            "</div>",
                   Txt_Generate_exam);
+         Act_FormEnd ();
         }
      }
    else
@@ -320,7 +320,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
 	                                                       ActReqSeeUsrTstExa);
    Act_LinkFormSubmit (Txt_Results_tests,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("file",Txt_Results_tests,Txt_Results_tests);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -335,7 +335,7 @@ static void Tst_PutFormToEdit (void)
    Act_FormStart (ActEdiTstQst);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -351,7 +351,7 @@ static void Tst_PutFormToConfigure (void)
    Act_FormStart (ActCfgTst);
    Act_LinkFormSubmit (Txt_Configure_tests,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Configure,Txt_Configure);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -418,7 +418,7 @@ void Tst_ShowNewTestExam (void)
 
             /* End form */
             Lay_PutSendButton (Txt_Done_assess_exam);
-            fprintf (Gbl.F.Out,"</form>");
+            Act_FormEnd ();
 
             /***** Set test status *****/
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
@@ -1145,9 +1145,9 @@ void Tst_ShowFormAskEditTsts (void)
 
       /***** Send button *****/
       fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />"
-	                 "</div>"
-	                 "</form>",
+	                 "</div>",
                Txt_Show_questions);
+      Act_FormEnd ();
      }
 
    /* Free structure that stores the query result */
@@ -1167,7 +1167,7 @@ static void Tst_PutFormToCreateNewTstQst (void)
    Act_FormStart (ActEdiOneTstQst);
    Act_LinkFormSubmit (Txt_New_question,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1528,8 +1528,8 @@ static void Tst_ShowFormEditTags (void)
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                   Tst_MAX_TAG_LENGTH,row[1],Gbl.FormId);
-         fprintf (Gbl.F.Out,"</form>"
-                            "</td>"
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
 
@@ -1555,12 +1555,12 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    Par_PutHiddenParamLong ("TagCod",TagCod);
    sprintf (Gbl.Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -1576,12 +1576,12 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    Par_PutHiddenParamLong ("TagCod",TagCod);
    sprintf (Gbl.Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -1717,7 +1717,7 @@ static void Tst_ShowFormConfigTst (void)
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();
    Lay_PutSendButton (Txt_Save);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2485,8 +2485,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
         {
          if (Order == Gbl.Test.SelectedOrderType)
             fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>"
-                            "</form>");
+         fprintf (Gbl.F.Out,"</a>");
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</th>");
      }
@@ -2518,12 +2518,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                               NumRows == 1 ? 'Y' :
                         	             'N'); // If there are only one row, don't list again after removing
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                         "</form>"
-                         "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_question,
                Txt_Remove_question);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Write icon to edit the question */
       fprintf (Gbl.F.Out,"<td class=\"BT%d\">",
@@ -2531,12 +2531,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Act_FormStart (ActEdiOneTstQst);
       Par_PutHiddenParamLong ("QstCod",QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Edit_question,
                Txt_Edit_question);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of question */
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:center;"
@@ -2595,9 +2595,9 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
          if (Str_ConvertToUpperLetter (row[3][0]) == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-                            "</form>",
+         fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />",
                   Gbl.FormId);
+         Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
 
@@ -4522,7 +4522,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	              "</tr>"
 	              "</table>");
    Lay_PutSendButton (Txt_Save);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    Tst_FreeTextChoiceAnswers ();
   }
@@ -5995,7 +5995,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          fprintf (Gbl.F.Out,"</table>"
 	                    "</div>");
          Lay_PutSendButton (Txt_See_exams);
-         fprintf (Gbl.F.Out,"</form>");
+         Act_FormEnd ();
         }
      }
    else
@@ -6030,7 +6030,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
 
    /***** Button to send the form *****/
    Lay_PutSendButton (Txt_See_exams);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -6363,11 +6363,11 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file16x16.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON16x16B\" />"
-			       "</form>",
+			       " class=\"ICON16x16B\" />",
 		     Gbl.Prefs.IconsURL,
 		     Txt_See_exam,
 		     Txt_See_exam);
+	    Act_FormEnd ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -6491,7 +6491,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO36x48",true);
+                     "PHOTO36x48",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to go to user's record card *****/
@@ -6519,8 +6519,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
       fprintf (Gbl.F.Out,",<br />%s",UsrDat->FirstName);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -6629,7 +6629,7 @@ void Tst_ShowOneTestExam (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
                 	                                NULL,
-                     "PHOTO36x48",true);
+                     "PHOTO36x48",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

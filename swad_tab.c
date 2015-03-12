@@ -166,13 +166,13 @@ static void Tab_DrawTabsDeskTop (void)
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:4px;\" />"
 			       "<div>%s</div>"
-			       "</a>"
-			       "</form>",
+			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_SHORT_TXT[NumTab]);
+	    Act_FormEnd ();
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
@@ -236,14 +236,14 @@ void Tab_DrawTabsMobile (void)
 			       " alt=\"%s\" title=\"%s\" class=\"ICON64x64\""
 			       " style=\"margin:4px;\" />"
 			       "<div>%s</div>"
-			       "</a>"
-			       "</form>"
-			       "</div>",
+			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab]);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</div>");
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
@@ -353,9 +353,9 @@ static void Tab_WriteBreadcrumbHome (void)
 
    Act_FormStart (ActHom);
    Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTabOn[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
+   fprintf (Gbl.F.Out,"%s</a>",
 	    Txt_Home_PAGE);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -373,9 +373,9 @@ static void Tab_WriteBreadcrumbTab (void)
    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.CurrentTab],The_ClassTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
+   fprintf (Gbl.F.Out,"%s</a>",
 	    Txt_TABS_FULL_TXT[Gbl.CurrentTab]);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -392,9 +392,9 @@ static void Tab_WriteBreadcrumbAction (void)
    Act_LinkFormSubmit (Title,The_ClassTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
+   fprintf (Gbl.F.Out,"%s</a>",
 	    Title);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

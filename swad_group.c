@@ -289,8 +289,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Lay_EndRoundFrameTable10 ();
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1141,24 +1141,24 @@ static void Grp_ListGroupTypesForEdition (void)
       Act_FormStart (ActReqRemGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_type_of_group,
                Txt_Remove_type_of_group);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Name of group type */
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">");
       Act_FormStart (ActRenGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                MAX_LENGTH_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Is it mandatory to register in any group? */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1177,10 +1177,10 @@ static void Grp_ListGroupTypesForEdition (void)
       if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrollment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
-	                 "</select>"
-	                 "</form>"
-	                 "</td>",
+	                 "</select>",
                Txt_It_is_mandatory_to_choose_a_group);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Is it possible to register in multiple groups? */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1199,10 +1199,10 @@ static void Grp_ListGroupTypesForEdition (void)
       if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
-	                 "</select>"
-	                 "</form>"
-	                 "</td>",
+	                 "</select>",
                Txt_A_student_can_belong_to_several_groups);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Open time */
       fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
@@ -1235,9 +1235,9 @@ static void Grp_ListGroupTypesForEdition (void)
                                true,false);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
-	                 "</table>"
-                         "</form>"
-                         "</td>");
+	                 "</table>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Number of groups of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
@@ -1330,12 +1330,12 @@ static void Grp_ListGroupsForEdition (void)
          Act_FormStart (ActReqRemGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>"
-                            "</td>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_group,
                   Txt_Remove_group);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Write icon to open/close group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -1347,14 +1347,14 @@ static void Grp_ListGroupsForEdition (void)
                               Txt_Group_X_closed_click_to_open_it,
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>"
-                            "</td>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->Open ? "open" :
                 	      "closed",
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Write icon to activate file zones for this group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -1366,14 +1366,14 @@ static void Grp_ListGroupsForEdition (void)
                                    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>"
-                            "</td>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->FileZones ? "folder-yes" :
                 	           "folder-no",
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Group type */
          fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1393,7 +1393,9 @@ static void Grp_ListGroupsForEdition (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%s</option>",GrpTypAux->GrpTypName);
            }
-         fprintf (Gbl.F.Out,"</select></form></td>");
+         fprintf (Gbl.F.Out,"</select>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Group name */
          fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1401,10 +1403,10 @@ static void Grp_ListGroupsForEdition (void)
          Act_FormStart (ActRenGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                        " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                        "</form>"
-                        "</td>",
+                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                   MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.FormId);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Maximum number of students of the group (row[3]) */
          fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -1413,10 +1415,10 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\" size=\"3\" maxlength=\"10\" value=\"");
          Grp_WriteMaxStdsGrp (Grp->MaxStudents);
-         fprintf (Gbl.F.Out,"\" onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                            "</form>"
-                            "</td>",
+         fprintf (Gbl.F.Out,"\" onchange=\"javascript:document.getElementById('%s').submit();\" />",
                   Gbl.FormId);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 
          /* Current number of students in this group */
          fprintf (Gbl.F.Out,"<td class=\"DAT\""
@@ -1560,7 +1562,7 @@ void Grp_ReqRegisterInGrps (void)
       /***** End form *****/
       Lay_PutSendButton (NumGrpsIBelong ? Txt_Change_my_groups :
 	                                  Txt_Enroll_in_groups);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    else	// This course has not groups
      {
@@ -2154,7 +2156,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2239,7 +2241,7 @@ static void Grp_PutFormToCreateGroup (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3307,8 +3309,8 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Act_FormStart (ActRemGrpTyp);
    Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    Lay_PutSendButton (Txt_Remove_type_of_group);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3346,8 +3348,8 @@ static void Grp_AskConfirmRemGrp (void)
    Act_FormStart (ActRemGrp);
    Grp_PutParamGrpCod (GrpDat.GrpCod);
    Lay_PutSendButton (Txt_Remove_group);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

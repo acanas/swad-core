@@ -82,7 +82,7 @@ void Ann_ShowAllAnnouncements (void)
       Act_FormStart (ActWriAnn);
       Act_LinkFormSubmit (Txt_New_announcement,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("new",Txt_New_announcement,Txt_New_announcement);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
 
    /***** List announcements *****/
@@ -254,11 +254,11 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 			 " alt=\"%s\" class=\"ICON16x16\" />"
-			 " %s</a>"
-			 "</form>",
+			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Remove,
 	       Txt_Remove);
+      Act_FormEnd ();
      }
    else
      {
@@ -268,11 +268,11 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 			 " alt=\"%s\" class=\"ICON16x16\" />"
-			 " %s</a>"
-			 "</form>",
+			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Do_not_show_again,
 	       Txt_Do_not_show_again);
+      Act_FormEnd ();
      }
 
    fprintf (Gbl.F.Out,"</div>");
@@ -369,7 +369,7 @@ void Ann_ShowFormAnnouncement (void)
                       "</table>");
 
    Lay_PutSendButton (Txt_Create_announcement);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

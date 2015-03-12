@@ -136,7 +136,7 @@ static void Usr_SetUsrRoleAndPrefs (void);
 static void Usr_InsertMyLastData (void);
 
 static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat);
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckboxToSelectUsr);
+static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr);
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *BgColor,bool ShowEmail,
                                              const char *MailLink,
@@ -1350,7 +1350,7 @@ void Usr_WriteFormLogin (void)
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("arroba",Txt_Create_account,Gbl.Title);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Link to enter from external site *****/
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1407,15 +1407,15 @@ void Usr_WriteFormLogin (void)
 	              "</tr>",
 	              Txt_Log_in);
    Lay_EndRoundFrameTable10 ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Link used for sending a new password *****/
    Act_FormStart (ActReqSndNewPwd);
    Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
    Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1526,9 +1526,9 @@ void Usr_PutFormLogIn (void)
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/login16x16.gif\""
                       " alt=\"%s\" class=\"ICON16x16\" />"
-                      " %s</a>"
-                      "</form>",
+                      " %s</a>",
             Gbl.Prefs.PathTheme,Txt_Log_in,Txt_Log_in);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1565,7 +1565,7 @@ void Usr_WriteLoggedUsrHead (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,
-                     "PHOTO15x20",true);
+                     "PHOTO15x20",Pho_ZOOM);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
@@ -1595,9 +1595,9 @@ void Usr_PutFormLogOut (void)
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout16x16.gif\" alt=\"%s\""
                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
-                      " %s</a>"
-                      "</form>",
+                      " %s</a>",
             Gbl.Prefs.PathTheme,Txt_Log_out,Txt_Log_out);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2453,8 +2453,8 @@ void Usr_ShowFormsRoleAndLogout (void)
    Act_FormStart (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("logout",Txt_Log_out,Txt_Log_out);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
    sprintf (Gbl.Message,Txt_You_are_LOGGED_as_X,
@@ -2616,8 +2616,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2653,7 +2652,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 /************ Write a row of a table with the data of a student **************/
 /*****************************************************************************/
 
-void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckboxToSelectUsr)
+void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
@@ -2671,12 +2670,12 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
-   if (PutCheckboxToSelectUsr)
+   if (PutCheckBoxToSelectUsr)
       UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    // Two colors are used alternatively to better distinguish the rows
    BgColor = UsrIsTheMsgSender ? LIGHT_GREEN :
 	                         Gbl.ColorRows[Gbl.RowEvenOdd];
-   if (PutCheckboxToSelectUsr)
+   if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;"
 	                 " background-color:%s;\">",
@@ -2719,8 +2718,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2777,8 +2775,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-                        Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2882,8 +2879,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-                        Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2977,7 +2973,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 /************* Write a row of a table with the data of a teacher *************/
 /*****************************************************************************/
 
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckboxToSelectUsr)
+static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
@@ -2995,11 +2991,11 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
-   if (PutCheckboxToSelectUsr)
+   if (PutCheckBoxToSelectUsr)
       UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    BgColor = UsrIsTheMsgSender ? LIGHT_GREEN :
 	                         Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
-   if (PutCheckboxToSelectUsr)
+   if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;"
 	                 " background-color:%s;\">",
@@ -3039,8 +3035,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3099,8 +3094,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3182,8 +3176,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-	                Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -4328,8 +4321,8 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
 
    /***** Send button *****/
    Lay_PutSendButton (Txt_Show_anyway);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -4734,8 +4727,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>"
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** 2nd row *****/
@@ -4753,8 +4746,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutParamUsrListType (Usr_LIST);
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutCheckboxListWithPhotos ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>"
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End of table *****/
@@ -4778,12 +4771,12 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormulNB[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" class=\"ICON16x16\" />"
-                      " %s&nbsp;</a>"
-                      "</form>",
+                      " %s&nbsp;</a>",
             Gbl.Prefs.IconsURL,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType]);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -5883,8 +5876,8 @@ void Usr_ListDataAdms (void)
    Act_FormStart (ActLstAdm);
    Sco_PutSelectorScope (true);
    Usr_PutParamListWithPhotos ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get and order list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
@@ -5896,8 +5889,8 @@ void Usr_ListDataAdms (void)
       Act_FormStart (ActLstAdm);
       Sco_PutParamScope (Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
-      fprintf (Gbl.F.Out,"</form>"
-                         "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_MAIN_FIELDS_DATA_ADM;
@@ -6313,8 +6306,8 @@ void Usr_SeeGuests (void)
          Usr_PutParamListWithPhotos ();
          fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
          Sco_PutSelectorScope (true);
-         fprintf (Gbl.F.Out,"</form>"
-                            "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
          break;
       default:
          break;
@@ -6350,8 +6343,8 @@ void Usr_SeeGuests (void)
 	       Usr_PutExtraParamsUsrList (ActLstInvAll);
 	       Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
 	       Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-	       fprintf (Gbl.F.Out,"</form>"
-				  "</div>");
+	       Act_FormEnd ();
+	       fprintf (Gbl.F.Out,"</div>");
 	       break;
            }
 
@@ -6392,8 +6385,8 @@ void Usr_SeeGuests (void)
 
          /* Send button */
          Lay_PutSendButton (Txt_Show_records);
-         fprintf (Gbl.F.Out,"</form>"
-                            "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
 	}
      }
    else
@@ -6458,8 +6451,8 @@ void Usr_SeeStudents (void)
          Usr_PutParamListWithPhotos ();
          fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
          Sco_PutSelectorScope (true);
-         fprintf (Gbl.F.Out,"</form>"
-                            "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
          break;
       default:
          break;
@@ -6503,8 +6496,8 @@ void Usr_SeeStudents (void)
 		  Usr_PutExtraParamsUsrList (ActLstStdAll);
 		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
 		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-		  fprintf (Gbl.F.Out,"</form>"
-				     "</div>");
+		  Act_FormEnd ();
+		  fprintf (Gbl.F.Out,"</div>");
 		 }
 	       break;
            }
@@ -6558,7 +6551,7 @@ void Usr_SeeStudents (void)
          if (ICanViewRecords)
            {
             Lay_PutSendButton (Txt_Show_records);
-            fprintf (Gbl.F.Out,"</form>");
+            Act_FormEnd ();
            }
 
          fprintf (Gbl.F.Out,"</div>");
@@ -6612,8 +6605,8 @@ void Usr_SeeTeachers (void)
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
    Sco_PutSelectorScope (true);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to select type of list of users *****/
    Usr_ShowFormsToSelectUsrListType (ActLstTch);
@@ -6645,8 +6638,8 @@ void Usr_SeeTeachers (void)
 		  Usr_PutParamListWithPhotos ();
 		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
 		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-		  fprintf (Gbl.F.Out,"</form>"
-				     "</div>");
+		  Act_FormEnd ();
+		  fprintf (Gbl.F.Out,"</div>");
 		 }
                break;
            }
@@ -6697,7 +6690,7 @@ void Usr_SeeTeachers (void)
            {
             /* Send button */
             Lay_PutSendButton (Txt_Show_records);
-            fprintf (Gbl.F.Out,"</form>");
+            Act_FormEnd ();
            }
 
          fprintf (Gbl.F.Out,"</div>");
@@ -6729,7 +6722,7 @@ static void Usr_PutLinkToListOfficialStudents (void)
       Act_FormStart (ActGetExtLstStd);
       Act_LinkFormSubmit (Txt_Official_students,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("list",Txt_Official_students,Txt_Official_students);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
   }
 
@@ -6972,8 +6965,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           ClassPhoto,
-                           Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                           ClassPhoto,Pho_ZOOM);
 
          /***** Photo foot *****/
          fprintf (Gbl.F.Out,"<br />");
@@ -7446,13 +7438,13 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
 void Usr_RequestUserProfile (void)
   {
-   extern const char *Txt_View_a_user_public_profile;
+   extern const char *Txt_View_public_profile;
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_a_user_public_profile);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_public_profile);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td>");
 
@@ -7469,7 +7461,7 @@ void Usr_RequestUserProfile (void)
 
    /***** Send button*****/
    Lay_PutSendButton (Txt_Continue);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -7603,14 +7595,12 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_course;
    extern const char *Txt_courses;
    extern const char *Txt_From_TIME;
-   // extern const char *Txt_First_access;
    extern const char *Txt_day;
    extern const char *Txt_days;
    extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_clicks;
-   // extern const char *Txt_Courses_as_a_ROLE;
    extern const char *Txt_Forums;
    extern const char *Txt_post;
    extern const char *Txt_posts;
@@ -7629,8 +7619,6 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumPublicFiles;
 
    /***** Start table *****/
-   // Lay_StartRoundFrameTable10 (NULL,2,Txt_Figures);
-   // Lay_StartRoundFrameTable10 (NULL,2,NULL);
    fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
 
    /***** Number of courses in which the user is teacher or student *****/
@@ -7722,7 +7710,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -7767,7 +7755,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -7803,7 +7791,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -7839,7 +7827,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -7868,7 +7856,6 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
-   // Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/

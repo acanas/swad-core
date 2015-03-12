@@ -416,8 +416,8 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    Act_FormStart (Inf_ActionsEditInfo[InfoType]);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -438,11 +438,11 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," name=\"MustBeRead\" value=\"Y\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                      " %s"
-                      "</form>"
-	              "</div>",
+                      " %s",
             Gbl.FormId,
             Txt_Force_students_to_read_this_information);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -463,10 +463,11 @@ static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," name=\"IHaveRead\" value=\"Y\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                      "%s</form>"
-	              "</div>",
+                      "%s",
             Gbl.FormId,
             Txt_I_have_read_this_information);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -560,10 +561,10 @@ void Inf_WriteMsgYouMustReadInfo (void)
          Act_FormStart (Inf_ActionsSeeInfo[InfoType]);
          Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),The_ClassFormul[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s"
-                            "</a>"
-                            "</form>"
-                            "</li>",
+                            "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</li>");
         }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</td>"
@@ -988,7 +989,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /* End of table and form */
    Lay_EndRoundFrameTable10 ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1006,7 +1007,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoT
    Lay_PutSendButton (Txt_Edit);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1024,7 +1025,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTy
    Lay_PutSendButton (Txt_Edit_text);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1042,7 +1043,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTyp
    Lay_PutSendButton (Txt_Edit_text);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1076,7 +1077,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Lay_PutSendButton (Txt_Upload_file);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1121,7 +1122,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Lay_PutSendButton (Txt_Send_URL);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1729,7 +1730,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Send and undo buttons *****/
    Lay_PutSendButton (Txt_Send);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1789,7 +1790,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Send and undo buttons *****/
    Lay_PutSendButton (Txt_Send);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

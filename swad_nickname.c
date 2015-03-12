@@ -239,12 +239,12 @@ void Nck_ShowFormChangeUsrNickname (void)
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\" value=\"%s\" />"
 			    "<input type=\"image\" src=\"%s/delon16x16.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			    " style=\"margin-right:2px;\" />"
-			    "</form>",
+			    " style=\"margin-right:2px;\" />",
 		  row[0],
 		  Gbl.Prefs.IconsURL,
 		  Gbl.Title,
 		  Gbl.Title);
+	 Act_FormEnd ();
 	}
 
       /* Nickname */
@@ -263,10 +263,10 @@ void Nck_ShowFormChangeUsrNickname (void)
 	 Act_FormStart (ActChgNic);
 	 fprintf (Gbl.F.Out,"&nbsp;"
 	                    "<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />"
-			    "<input type=\"submit\" value=\"%s\" />"
-			    "</form>",
+			    "<input type=\"submit\" value=\"%s\" />",
 		  row[0],	// Nickname
 		  Txt_Use_this_nickname);
+	 Act_FormEnd ();
 	}
 
       if (NumNick == 1 ||
@@ -288,14 +288,14 @@ void Nck_ShowFormChangeUsrNickname (void)
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\" size=\"16\" maxlength=\"%u\" value=\"@%s\" />"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</form>"
-	              "</td>"
-	              "</tr>",
+	              "<input type=\"submit\" value=\"%s\" />",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname,
             NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	       Txt_Save);		// I have no nickname yet
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/

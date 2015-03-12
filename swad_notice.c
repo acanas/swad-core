@@ -116,7 +116,7 @@ void Not_ShowFormNotice (void)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
    Lay_PutSendButton (Txt_Create_notice);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -317,7 +317,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 Act_FormStart (ActWriNot);
 	 Act_LinkFormSubmit (Txt_New_notice,The_ClassFormul[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("new",Txt_New_notice,Txt_New_notice);
-	 fprintf (Gbl.F.Out,"</form>");
+	 Act_FormEnd ();
 	}
 
       /***** Show highlighted notice *****/
@@ -501,22 +501,22 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<input type=\"image\""
         	                  " src=\"%s/visible_on16x16.gif\" alt=\"%s\""
-        	                  " title=\"%s\" class=\"ICON16x16\" />"
-                                  "</form>",
+        	                  " title=\"%s\" class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
                         Txt_NOTICE_Active_Mark_as_obsolete);
+               Act_FormEnd ();
                break;
             case Not_OBSOLETE_NOTICE:
                Act_FormStart (ActRevNot);
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<input type=\"image\""
         	                  " src=\"%s/hidden_on16x16.gif\" alt=\"%s\""
-        	                  " title=\"%s\" class=\"ICON16x16\" />"
-                                  "</form>",
+        	                  " title=\"%s\" class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,
                         Txt_NOTICE_Obsolete_Mark_as_active);
+               Act_FormEnd ();
                break;
            }
       else			// Don't put form to change the state of the notice
@@ -556,8 +556,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    fprintf (Gbl.F.Out,"&nbsp;");
    Dat_WriteHourMinute (&DateTime[8]);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-      fprintf (Gbl.F.Out,"</a>"
-			 "</form>");
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write the content of the notice *****/
@@ -571,11 +573,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" class=\"ICON32x32\" /></a>"
-	                 "</form>"
-	                 "</div>",
+	                 " alt=\"%s\" class=\"ICON32x32\" />"
+	                 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_See_full_notice);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</div>");
 
@@ -600,11 +603,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_LinkFormSubmit (Txt_Remove_notice,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 	                 " alt=\"%s\" class=\"ICON16x16\" />"
-                         " %s</a>"
-                         "</form>",
+                         " %s</a>",
                Gbl.Prefs.IconsURL,
                Txt_Remove_notice,
                Txt_Remove);
+      Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</div>");
      }

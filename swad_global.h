@@ -86,6 +86,7 @@ struct Globals
    struct Files F;
    MYSQL mysql;
    pid_t PID;	// PID of current process
+   bool InsideForm;		// Set to true inside a form to avoid nested forms
    int NumForm;			// Number of form, used in form submit links
    int NumFormConnectedUsrs;	// Number of form in list of connected users, used in form submit links
    char FormId[32];		// Identifier string used in forms

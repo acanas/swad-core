@@ -312,8 +312,8 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
         }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>");
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

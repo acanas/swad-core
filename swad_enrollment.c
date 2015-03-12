@@ -138,7 +138,7 @@ void Enr_PutLinkToRequestSignUp (void)
    Act_FormStart (ActReqSignUp);
    Act_LinkFormSubmit (Txt_Sign_up,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("signup",Txt_Sign_up,Txt_Sign_up);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -270,7 +270,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
    /***** Send button*****/
    Lay_PutSendButton (Txt_Continue);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -294,14 +294,14 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Act_FormStart (ActAccEnrCrs);
    Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
    Act_FormStart (ActRemMeCrs);
    Act_LinkFormSubmit (Txt_Remove_me_from_this_course,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Mark possible notification as seen *****/
    Ntf_SetNotifAsSeen (Ntf_EVENT_ENROLLMENT,
@@ -619,7 +619,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Lay_PutSendButton (Txt_Confirm);
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -640,7 +640,7 @@ static void Enr_PutLinkToRemOldUsrs (void)
    Act_FormStart (ActReqRemOldUsr);
    Act_LinkFormSubmit (Txt_Remove_old_users,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_old_users,Txt_Remove_old_users);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -681,8 +681,8 @@ void Enr_AskRemoveOldUsrs (void)
 
    /***** Send button*****/
    Lay_PutSendButton (Txt_Eliminate);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1724,7 +1724,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    Act_FormStart (ActReqRemAllStdCrs);
    Act_LinkFormSubmit (Txt_Remove_all_students,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_all_students,Txt_Remove_all_students);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1750,7 +1750,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
       Lay_PutSendButton (Txt_Remove_students);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    else
      {
@@ -2044,7 +2044,7 @@ void Enr_AskIfRejectSignUp (void)
             Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
             Lay_PutSendButton (Txt_Reject);
-            fprintf (Gbl.F.Out,"</form>");
+            Act_FormEnd ();
            }
          else
             Lay_ShowErrorAndExit ("Wrong role.");
@@ -2185,7 +2185,7 @@ void Enr_ShowEnrollmentRequests (void)
    /* Form end */
    fprintf (Gbl.F.Out,"</table>");
    Lay_PutSendButton (Txt_Update);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Build query *****/
    switch (Gbl.Scope.Current)
@@ -2462,10 +2462,10 @@ void Enr_ShowEnrollmentRequests (void)
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
             Act_LinkFormSubmit (Gbl.Title,"DAT");
             fprintf (Gbl.F.Out,"%s &gt; %s"
-        	               "</a>"
-        	               "</form>"
-        	               "</td>",
+        	               "</a>",
                      Deg.ShortName,Crs.ShortName);
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>");
 
             /***** Number of teachers in the course *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -2480,7 +2480,7 @@ void Enr_ShowEnrollmentRequests (void)
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
-                              "PHOTO18x24",true);
+                              "PHOTO18x24",Pho_ZOOM);
             fprintf (Gbl.F.Out,"</td>");
 
             /***** User name *****/
@@ -2506,8 +2506,8 @@ void Enr_ShowEnrollmentRequests (void)
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutSendButton (Txt_Register);
-            fprintf (Gbl.F.Out,"</form>"
-        	               "</td>");
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>");
 
             /***** Button to reject the request *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
@@ -2516,8 +2516,8 @@ void Enr_ShowEnrollmentRequests (void)
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutSendButton (Txt_Reject);
-            fprintf (Gbl.F.Out,"</form>"
-        	               "</td>"
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>"
                                "</tr>");
 
             /***** Mark possible notification as seen *****/
@@ -2587,7 +2587,7 @@ static void Enr_PutLinkToAdminOneUsr (void)
    Act_FormStart (ActReqMdfOneUsr);
    Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Admin_one_user,Txt_Admin_one_user);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2602,7 +2602,7 @@ static void Enr_PutLinkToAdminSeveralUsrs (void)
    Act_FormStart (ActReqMdfSevUsr);
    Act_LinkFormSubmit (Txt_Admin_several_users,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Admin_several_users,Txt_Admin_several_users);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2879,8 +2879,8 @@ static void Enr_ShowFormToEditOtherUsr (void)
    if (Enr_PutActionsRegRemOneUsr (ItsMe))
       Lay_PutSendButton (Txt_Confirm);
 
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3204,9 +3204,9 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
                fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
         	                  "<input type=\"submit\" value=\"%s\" />"
-        	                  "</div>"
-        	                  "</form>",
+        	                  "</div>",
                         Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+               Act_FormEnd ();
               }
            }
          else
@@ -3471,8 +3471,8 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />",
                ItsMe ? Txt_Remove_me_from_this_course :
                        Txt_Remove_user_from_this_course);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -3570,10 +3570,10 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	                 "<input type=\"submit\" value=\"%s\" />"
-	                 "</div>"
-	                 "</form>",
+	                 "</div>",
                ItsMe ? Txt_Remove_me_as_an_administrator :
                        Txt_Remove_user_as_an_administrator);
+      Act_FormEnd ();
      }
    else
       Lay_ShowErrorAndExit ("User doesn't exist.");

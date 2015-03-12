@@ -52,6 +52,7 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
+extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -167,7 +168,7 @@ void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
 		       Txt_Upload_photo;
    Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("photo",Msg,Msg);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -190,7 +191,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
 
    Act_LinkFormSubmit (Txt_Remove_photo,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_photo,Txt_Remove_photo);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -243,7 +244,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
-      Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",true);
+      Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_ZOOM);
      }
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
 
@@ -269,14 +270,14 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
                       "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
                       "</td>"
                       "</tr>"
-                      "</table>"
-                      "</form>"
-                      "</div>",
+                      "</table>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             UsrDat->UsrCod,
             Txt_Upload_photo);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -507,7 +508,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                if (!ItsMe)
                   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
                Par_PutHiddenParamString ("FileName",StrFileName);
-               fprintf (Gbl.F.Out,"</form>");
+               Act_FormEnd ();
               }
             else
                NumFacesRed++;
@@ -948,26 +949,44 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,bool Zoom)
+                       const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
+   bool PutLinkToPublicProfile = !Gbl.InsideForm &&						// Only if not inside another form
+                                 Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+   bool PutZoomCode = PhotoURL &&							// Photo exists
+                      Zoom == Pho_ZOOM &&						// Make zoom
+                      Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
-   /* Replace tildes, ñ, etc. in full name by codes,
-      because some browsers (i.e., IE5) don't show correctly tildes with AJAX */
+   /***** Replace tildes, ñ, etc. in full name by codes,
+          because some browsers (i.e., IE5)
+          don't show correctly tildes with AJAX *****/
    strcpy (SpecialFullName,UsrDat->FullName);
    Str_ReplaceSpecialCharByCodes (SpecialFullName,sizeof (SpecialFullName)-1);
 
+   /***** Start form to go to public profile *****/
+   if (PutLinkToPublicProfile)
+     {
+      Act_FormStart (ActSeePubPrf);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (NULL,NULL);
+     }
+
+   /***** Start image *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    if (PhotoURL)
       fprintf (Gbl.F.Out,"%s",PhotoURL);
    else
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
    fprintf (Gbl.F.Out,"\" class=\"%s\"",ClassPhoto);
-   if (SpecialFullName[0])
+   if (SpecialFullName[0] &&
+       Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)	// Only in main window
       fprintf (Gbl.F.Out," title=\"%s\"",SpecialFullName);
-   if (Zoom && PhotoURL)
+
+   /***** Image zoom *****/
+   if (PutZoomCode)
      {
       strcpy (SpecialShortName,UsrDat->FirstName);
       Str_LimitLengthHTMLStr (SpecialShortName,23);
@@ -987,7 +1006,16 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom(this);\"",
                PhotoURL,SpecialShortName);
      }
+
+   /***** End image *****/
    fprintf (Gbl.F.Out," />");
+
+   /***** End form to go to public profile *****/
+   if (PutLinkToPublicProfile)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/
@@ -1462,9 +1490,9 @@ static void Pho_PutSelectorForTypeOfAvg (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
@@ -1532,9 +1560,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
@@ -1602,9 +1630,9 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
@@ -1719,9 +1747,9 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
         }
 
       /***** End selector, form, table and div *****/
-      fprintf (Gbl.F.Out,"</select>"
-	                 "</form>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Free list of all the degrees *****/
       Deg_FreeListAllDegs ();

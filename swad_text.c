@@ -5589,28 +5589,7 @@ const char *Txt_courses =
 #elif L==8
 	"disciplinas";
 #endif
-/*
-const char *Txt_Courses_as_a_ROLE =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Assignatures com %s";
-#elif L==1
-	"Kurse als %s";
-#elif L==2
-	"Courses as %s";
-#elif L==3
-	"Asignaturas como %s";
-#elif L==4
-	"Mati&egrave;res comme %s";
-#elif L==5
-	"Asignaturas como %s";		// Okoteve traducción
-#elif L==6
-	"Corsi come %s";
-#elif L==7
-	"Kursy jako %s";
-#elif L==8
-	"Disciplinas como %s";
-#endif
-*/
+
 const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==0
 	"Se ha(n) eliminado %u asignatura(s).";		// Necessita traduccio
@@ -11546,28 +11525,7 @@ const char *Txt_Files_works =
 #elif L==8
 	"Arquivos trabalhos";
 #endif
-/*
-const char *Txt_First_access =
-#if   L==0
-	"Primer acc&eacute;s";
-#elif L==1
-	"Erster Zugang";
-#elif L==2
-	"First access";
-#elif L==3
-	"Primer acceso";
-#elif L==4
-	"Premier acc&egrave;s";
-#elif L==5
-	"Primer acceso";	// Okoteve traducción
-#elif L==6
-	"Primo accesso";
-#elif L==7
-	"Pierwszy dost&eogon;p";
-#elif L==8
-	"Primeiro acesso";
-#endif
-*/
+
 const char *Txt_first_message_not_allowed =
 #if   L==0
 	"primer mensaje no permitido";	// Necessita traduccio
@@ -46905,27 +46863,6 @@ const char *Txt_View =
 	"Ver";
 #endif
 
-const char *Txt_View_a_user_public_profile =
-#if   L==0
-	"Veure el perfil p&uacute;blic d'un usuari";
-#elif L==1
-	"&Ouml;ffentliches Benutzer-Profile anzeigen";
-#elif L==2
-	"View a user's public profile";
-#elif L==3
-	"Ver el perfil p&uacute;blico de un usuario";
-#elif L==4
-	"Voir le profil public d'un utilisateur";
-#elif L==5
-	"Ver el perfil p&uacute;blico de un usuario";	// Okoteve traducción
-#elif L==6
-	"Mostra il profilo pubblico di un utente";
-#elif L==7
-	"Zobacz profil publiczny u&zdot;ytkownika";
-#elif L==8
-	"Ver o perfil p&uacute;blico de um utilizador";
-#endif
-
 const char *Txt_View_all_recipients =
 #if   L==0
 	"Ver todos los destinatarios";	// Necessita traduccio
@@ -47071,6 +47008,48 @@ const char *Txt_View_my_record_for_this_course =
 	"Zobacz m&oacute;j rekord na ten kurs";
 #elif L==8
 	"Meu cart&atilde;o em disciplina";
+#endif
+
+const char *Txt_View_public_profile =
+#if   L==0
+	"Veure perfil p&uacute;blic";
+#elif L==1
+	"&Ouml;ffentliches Profile anzeigen";
+#elif L==2
+	"View public profile";
+#elif L==3
+	"Ver perfil p&uacute;blico";
+#elif L==4
+	"Voir profil public";
+#elif L==5
+	"Ver perfil p&uacute;blico";	// Okoteve traducción
+#elif L==6
+	"Mostra profilo pubblico";
+#elif L==7
+	"Zobacz profil publiczny";
+#elif L==8
+	"Ver perfil p&uacute;blico";
+#endif
+
+const char *Txt_View_record_card =
+#if   L==0
+	"Ver ficha";		// Necessita traduccio
+#elif L==1
+	"View record card";	// Need Übersetzung
+#elif L==2
+	"View record card";
+#elif L==3
+	"Ver ficha";
+#elif L==4
+	"View record card";	// Besoin de traduction
+#elif L==5
+	"Ver ficha";		// Okoteve traducción
+#elif L==6
+	"Vedi scheda";
+#elif L==7
+	"Zobacz rekord";
+#elif L==8
+	"View record card";	// Necessita de tradução
 #endif
 
 const char *Txt_View_survey =

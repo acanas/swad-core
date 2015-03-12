@@ -376,7 +376,7 @@ void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
 	}
       Act_LinkFormSubmit (Txt_Change_IDs,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("arroba",Txt_Change_IDs,Txt_Change_IDs);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -477,12 +477,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />"
 			       "<input type=\"image\" src=\"%s/delon16x16.gif\""
 			       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			       " style=\"margin-right:2px;\" />"
-			       "</form>",
+			       " style=\"margin-right:2px;\" />",
 		     UsrDat->IDs.List[NumID].ID,
 		     Gbl.Prefs.IconsURL,
 		     Gbl.Title,
 		     Gbl.Title);
+	    Act_FormEnd ();
 	   }
 	}
 
@@ -531,16 +531,16 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
-			 "<input type=\"submit\" value=\"%s\" />"
-			 "</form>"
-			 "</td>"
-			 "</tr>"
-			 "<tr>",
+			 "<input type=\"submit\" value=\"%s\" />",
 	       16,
 	       ID_MAX_LENGTH_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "",	// Show the most recent ID
 	       Txt_Add_this_ID);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>"
+			 "<tr>");
      }
 
    /***** Write help text *****/

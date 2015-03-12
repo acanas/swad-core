@@ -2870,8 +2870,8 @@ void Brw_AskEditWorksCrs (void)
 
          /* Button to send the form */
          Lay_PutSendButton (Txt_View_works);
-         fprintf (Gbl.F.Out,"</form>"
-	                    "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
         }
      }
    else
@@ -3098,8 +3098,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
      }
 
    /***** End list and form *****/
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</form>");
+   fprintf (Gbl.F.Out,"</ul>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3146,7 +3146,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO75x100",true);
+                     "PHOTO75x100",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
@@ -3182,8 +3182,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
       Str_LimitLengthHTMLStr (UsrDat->Email,25);
       fprintf (Gbl.F.Out,"%s</a>",UsrDat->Email);
      }
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -4293,8 +4293,8 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
 	                  Txt_Edit);
 	 break;
      }
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -4349,11 +4349,11 @@ static void Brw_WriteFormFullTree (void)
    if (Gbl.FileBrowser.FullTree)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-                      " %s"
-	              "</form>"
-	              "</div>",
+                      " %s",
             Gbl.FormId,
             Txt_Show_all_files);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -5017,11 +5017,11 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	                 "</form>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
+      Act_FormEnd ();
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\" alt=\"\""
@@ -5062,11 +5062,11 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	                 "</form>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
+      Act_FormEnd ();
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\" alt=\"\""
@@ -5108,11 +5108,11 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	                 "</form>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
+      Act_FormEnd ();
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/copy_off16x16.gif\" alt=\"\""
@@ -5151,12 +5151,12 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	              "</form>"
-	              "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -5218,11 +5218,11 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,Txt_Expand_FOLDER_X,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
          break;
       case Brw_EXPAND_TREE_MINUS:
          /***** Form to contract folder *****/
@@ -5247,11 +5247,11 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,Txt_Contract_FOLDER_X,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
          break;
      }
 
@@ -5302,14 +5302,14 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	              "</form>"
-	              "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
             Gbl.Title,
             Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -5335,14 +5335,14 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
-	              "</form>"
-	              "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
             Gbl.Title,
             Gbl.Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -5400,13 +5400,13 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
       sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/folder-%s-plus16x16.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON16x16B\" />"
-	                 "</form>",
+	                 " title=\"%s\" class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
         	                                      "open",
                Gbl.Title,
                Gbl.Title);
+      Act_FormEnd ();
      }
    else	// I can't create a new file or folder
       fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\" alt=\"\""
@@ -5480,8 +5480,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,Brw_FileType_t 
    Brw_PutIconFile (Size,FileType,FileName);
 
    /* End of the link and of the form */
-   fprintf (Gbl.F.Out,"</a>"
-                      "</form>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -5571,15 +5571,17 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       /***** Write name of the folder *****/
       fprintf (Gbl.F.Out,"&nbsp;");
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
+	{
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
       	                    " size=\"40\" maxlength=\"40\" value=\"%s\""
                             " class=\"%s\" style=\"background-color:%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                            "</form>",
+                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  FileName,Gbl.FileBrowser.InputStyle,
                   Gbl.FileBrowser.Clipboard.IsThisFile ? LIGHT_GREEN :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.FormId);
+         Act_FormEnd ();
+        }
       else
         {
          if ((Level == 1) &&
@@ -5634,11 +5636,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
 			 " title=\"%s\" class=\"%s\">"
 			 "%s"
-			 "</a>"
-			 "</form>",
+			 "</a>",
 	       Gbl.FormId,
 	       Gbl.Title,Gbl.FileBrowser.TxtStyle,
 	       FileNameToShow);
+      Act_FormEnd ();
 
       /* Put icon to make public/private file */
       if (IsPublic)
@@ -5833,7 +5835,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO12x16B",true);
+                        "PHOTO12x16B",Pho_ZOOM);
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" alt=\"\""
@@ -5891,10 +5893,10 @@ void Brw_AskRemFileFromTree (void)
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                          "<input type=\"submit\" value=\"%s\" />"
-                         "</div>"
-                         "</form>",
+                         "</div>",
                Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
         	                                         Txt_Remove_link);
+      Act_FormEnd ();
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
@@ -6045,9 +6047,9 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<input type=\"submit\" value=\"%s\" />"
-                      "</div>"
-                      "</form>",
+                      "</div>",
             Txt_Remove_folder);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -7663,7 +7665,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /* Button to send */
    Lay_PutSendButton (Txt_Create_folder);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -7726,9 +7728,9 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
 		      "<span class=\"DAT_LIGHT\">%s</div>"
-		      "</div>"
-                      "</form>",
+		      "</div>",
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+   Act_FormEnd ();
 
    /***** Put button to refresh file browser after upload *****/
    Act_FormStart (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
@@ -7752,7 +7754,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /* Button to send */
    Lay_PutSendButton (Txt_FILE_UPLOAD_Done);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -7802,7 +7804,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /* Button to send */
    Lay_PutSendButton (Txt_Upload_file);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -7849,7 +7851,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /* Button to send */
    Lay_PutSendButton (Txt_Paste);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -7910,7 +7912,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /* Button to send */
    Lay_PutSendButton (Txt_Create_link);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -8902,7 +8904,7 @@ void Brw_ShowFileMetadata (void)
 	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&PublisherUsrDat,ShowPhoto ? PhotoURL :
 	                	                           NULL,
-	                      "PHOTO12x16",true);
+	                      "PHOTO12x16",Pho_ZOOM);
 
 	    /* Write name */
 	    fprintf (Gbl.F.Out,"%s",
@@ -9058,7 +9060,7 @@ void Brw_ShowFileMetadata (void)
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    Lay_PutSendButton (Txt_Save_file_properties);
-	    fprintf (Gbl.F.Out,"</form>");
+	    Act_FormEnd ();
 	   }
 
 	 /***** End frame *****/
@@ -9377,9 +9379,10 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,Brw_FileType_t FileT
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/grades32x32.gif\" alt=\"%s\" title=\"%s\""
-			 " class=\"ICON32x32\" /></a>"
-			 "</form>",
+			 " class=\"ICON32x32\" />"
+			 "</a>",
 	       FileNameToShow,Gbl.Prefs.IconsURL,Gbl.Title,Gbl.Title);
+      Act_FormEnd ();
      }
    else
      {
@@ -9436,9 +9439,8 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
       Act_LinkFormSubmit (Gbl.Title,"DAT");
 
       /* Name of the file of marks, link end and form end */
-      fprintf (Gbl.F.Out,"%s</a>"
-			 "</form>",
-	       FileNameToShow);
+      fprintf (Gbl.F.Out,"%s</a>",FileNameToShow);
+      Act_FormEnd ();
      }
    else
       /* Put anchor and filename */
@@ -10961,9 +10963,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_LinkFormSubmit (Gbl.Title,"DAT");
          Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,
                        16,"vertical-align:top;",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
-			    "</form>",
-		  InsShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -10979,9 +10980,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_LinkFormSubmit (Gbl.Title,"DAT");
          Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,
                        16,"vertical-align:top;",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
-			    "</form>",
-		  CtrShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -10997,9 +10997,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_LinkFormSubmit (Gbl.Title,"DAT");
          Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,
                        16,"vertical-align:top;",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>"
-			    "</form>",
-		  DegShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -11013,9 +11012,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 Crs_PutParamCrsCod (CrsCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,CrsShortName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
-	 fprintf (Gbl.F.Out,"%s</a>"
-	                    "</form>",
-		  CrsShortName);
+	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
+	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -11096,11 +11094,11 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       /* File name and end of form */
       fprintf (Gbl.F.Out,"%s"
-	                 "</a>"
-	                 "</form>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</a>",
 	       FileNameToShow);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }

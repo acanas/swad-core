@@ -448,8 +448,8 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
          Act_FormStart (ActEdiExaAnn);
          Act_LinkFormSubmit (Txt_New_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("new",Txt_New_announcement_of_exam,Txt_New_announcement_of_exam);
-         fprintf (Gbl.F.Out,"</form>"
-	                    "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
          break;
       default:
          break;
@@ -1209,8 +1209,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
         	                  " alt=\"%s\" class=\"ICON16x16\" />" \
 	   	                  " %s</a>",
                         Gbl.Prefs.IconsURL,Txt_Edit_announcement_of_exam,Txt_Edit);
-               fprintf (Gbl.F.Out,"</form>" \
-        	                  "</td>");
+               Act_FormEnd ();
+               fprintf (Gbl.F.Out,"</td>");
 
                /***** Create link to remove this exam announcement *****/
                fprintf (Gbl.F.Out,"<td style=\"text-align:right;\">");
@@ -1223,8 +1223,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    		        Gbl.Prefs.IconsURL,
    		        Txt_Remove_announcement_of_exam,
    		        Txt_Remove);
-               fprintf (Gbl.F.Out,"</form>" \
-        	                  "</td>" \
+               Act_FormEnd ();
+               fprintf (Gbl.F.Out,"</td>" \
         	                  "</tr>");
                break;
             default:
@@ -1264,7 +1264,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          break;
       case Exa_FORM_VIEW:
          Lay_PutSendButton (Txt_Send_announcement_of_exam);
-         fprintf (Gbl.F.Out,"</form>");
+         Act_FormEnd ();
          break;
      }
   }

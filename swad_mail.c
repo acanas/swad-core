@@ -116,9 +116,9 @@ void Mai_SeeMailDomains (void)
       fprintf (Gbl.F.Out,"%s",Txt_MAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrderType)
          fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>"
-	                 "</form>"
-	                 "</td>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -181,8 +181,8 @@ static void Mai_PutFormToEditMailDomains (void)
    Act_FormStart (ActEdiMai);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -412,11 +412,11 @@ static void Mai_ListMailDomainsForEdition (void)
       Act_FormStart (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_mail_domain,
                Txt_Remove_mail_domain);
+      Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
       /* Mail code */
@@ -431,11 +431,11 @@ static void Mai_ListMailDomainsForEdition (void)
       Act_FormStart (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Mail domain info */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -443,11 +443,11 @@ static void Mai_ListMailDomainsForEdition (void)
       Act_FormStart (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_INFO,Mai->Info,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Number of users */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
@@ -696,7 +696,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1078,12 +1078,12 @@ void Mai_ShowFormChangeUsrEmail (void)
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />"
 			    "<input type=\"image\" src=\"%s/delon16x16.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			    " style=\"margin-right:2px;\" />"
-			    "</form>",
+			    " style=\"margin-right:2px;\" />",
 		  row[0],
 		  Gbl.Prefs.IconsURL,
 		  Gbl.Title,
 		  Gbl.Title);
+	 Act_FormEnd ();
 	}
 
       /* E-mail */
@@ -1112,11 +1112,11 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 Act_FormStart (ActChgMai);
 	 fprintf (Gbl.F.Out,"&nbsp;<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />"
-			    "<input type=\"submit\" value=\"%s\" />"
-			    "</form>",
+			    "<input type=\"submit\" value=\"%s\" />",
 		  row[0],	// E-mail
 		  NumEmail == 1 ? Txt_Confirm_email :
 			          Txt_Use_this_email);
+	 Act_FormEnd ();
 	}
 
       if (NumEmail == 1 ||
@@ -1138,14 +1138,14 @@ void Mai_ShowFormChangeUsrEmail (void)
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\" size=\"16\" maxlength=\"%u\" value=\"%s\" />"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</form>"
-	              "</td>"
-	              "</tr>",
+                      "<input type=\"submit\" value=\"%s\" />",
             Cns_MAX_BYTES_STRING,
             Gbl.Usrs.Me.UsrDat.Email,
             NumEmails ? Txt_Change_email :	// I already have an e-mail address
         	        Txt_Save);		// I have no e-mail address yet
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/

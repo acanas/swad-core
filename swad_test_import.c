@@ -98,7 +98,7 @@ void TsI_PutFormToExportQuestions (void)
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("export",Txt_Export_questions_to_XML_file,Txt_Export_questions);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -117,7 +117,7 @@ void TsI_PutFormToImportQuestions (void)
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("import",Txt_Import_questions_from_XML_file,Txt_Import_questions);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -152,13 +152,13 @@ void TsI_ShowFormImportQstsFromXML (void)
 	              "<input type=\"submit\" value=\"%s\" accept=\"text/xml\" />"
 	              "</td>"
 	              "</tr>"
-                      "</table>"
-	              "</form>"
-	              "</div>",
+                      "</table>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Txt_Upload_file);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

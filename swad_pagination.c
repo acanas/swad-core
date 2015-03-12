@@ -176,10 +176,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       else
          fprintf (Gbl.F.Out,"[%s]",
                   Txt_first_message_not_allowed);
-      fprintf (Gbl.F.Out,"%s",
-               LinkToPagCurrent ? "</a>"
-	                          "</form>" :
-        	                  "</span>");
+      if (LinkToPagCurrent)
+	{
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+      else
+	 fprintf (Gbl.F.Out,"</span>");
      }
 
    if (Pagination->MoreThanOnePage)
@@ -245,9 +248,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   1,(unsigned) Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font);
-         fprintf (Gbl.F.Out,"1</a>"
-                            "</form>"
-                            "</td>");
+         fprintf (Gbl.F.Out,"1</a>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage > 2)
             fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
         	               "..."
@@ -305,10 +308,10 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->LeftPage,(unsigned) Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font);
-         fprintf (Gbl.F.Out,"%u</a>"
-                            "</form>"
-                            "</td>",
+         fprintf (Gbl.F.Out,"%u</a>",
                   (unsigned) Pagination->LeftPage);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage < Pagination->StartPage-1)
             fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
         	               "..."
@@ -372,9 +375,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                      (unsigned) NumPage,(unsigned) Pagination->NumPags);
             Act_LinkFormSubmit (Gbl.Title,Font);
-            fprintf (Gbl.F.Out,"%u</a>"
-        	               "</form>",
+            fprintf (Gbl.F.Out,"%u</a>",
         	     (unsigned) NumPage);
+            Act_FormEnd ();
            }
          fprintf (Gbl.F.Out,"</td>");
         }
@@ -434,10 +437,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->RightPage,(unsigned) Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font);
-         fprintf (Gbl.F.Out,"%u</a>"
-                            "</form>"
-                            "</td>",
-                  (unsigned) Pagination->RightPage);
+         fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->RightPage);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
         }
 
       /***** Possible link to last page *****/
@@ -495,10 +497,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->NumPags,(unsigned) Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font);
-         fprintf (Gbl.F.Out,"%u</a>"
-                            "</form>"
-                            "</td>",
-                  (unsigned) Pagination->NumPags);
+         fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->NumPags);
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
         }
       fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
 	                 "]"

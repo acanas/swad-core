@@ -244,8 +244,10 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
    fprintf (Gbl.F.Out,"%s %u",
 	    Txt_MONTHS_CAPS[RealMonth-1],RealYear);
    if (PutLinkToCalendar)
-      fprintf (Gbl.F.Out,"</a>"
-	                 "</form>");
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Month head: first letter for each day of week *****/
@@ -378,11 +380,13 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
          /* If day has an exam announcement */
 	 if (PutLinkToEvents && ThisDayHasEvent)
+	   {
             fprintf (Gbl.F.Out,"</a>"
         	               "</td>"
         	               "</tr>"
-        	               "</table>"
-        	               "</form>");
+        	               "</table>");
+	    Act_FormEnd ();
+	   }
          else
             fprintf (Gbl.F.Out,"</div>");
 

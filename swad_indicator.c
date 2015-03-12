@@ -169,7 +169,7 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</table>");
    Lay_PutSendButton (Txt_Update_indicators);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
@@ -191,7 +191,7 @@ void Ind_ReqIndicatorsCourses (void)
       Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
       Par_PutHiddenParamLong ("Indicators",Gbl.Stat.NumIndicators);
       Lay_PutSendButton (Txt_Show_more_details);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
 
       /* End table */
       fprintf (Gbl.F.Out,"</td>"
@@ -457,8 +457,8 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
    /***** Send button *****/
    Lay_PutSendButton (Txt_Show_anyway);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

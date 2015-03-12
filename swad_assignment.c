@@ -170,9 +170,9 @@ static void Asg_ShowAllAssignments (void)
       fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
       if (Order == Gbl.Asgs.SelectedOrderType)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>"
-			 "</form>"
-			 "</th>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
 		      "%s"
@@ -215,7 +215,7 @@ static void Asg_PutFormToSelectWhichGroupsToShow (void)
    Asg_PutHiddenParamAsgOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -375,7 +375,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-	             "PHOTO12x16",true);
+	             "PHOTO12x16",Pho_ZOOM);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -420,11 +420,11 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
                   Asg->Folder);
          fprintf (Gbl.F.Out,"<input type=\"image\""
                             " src=\"%s/folder-open-plus16x16.gif\" alt=\"%s\""
-                            " title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
         }
       else			// I can't send files to this assignment folder
          fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
@@ -482,8 +482,8 @@ static void Asg_PutFormToCreateNewAsg (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_New_assignment,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_assignment,Txt_New_assignment);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -508,12 +508,12 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Remove,
             Txt_Remove);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to hide/show assignment *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -535,8 +535,8 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	       Gbl.Prefs.IconsURL,
 	       Txt_Hide,
 	       Txt_Hide);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to edit assignment *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -546,12 +546,12 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Edit,
             Txt_Edit);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
@@ -935,9 +935,10 @@ void Asg_AskRemAssignment (void)
             Asg.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" /></div>"
-	              "</form>",
+	              "<input type=\"submit\" value=\"%s\" />"
+	              "</div>",
             Txt_Remove_assignment);
+   Act_FormEnd ();
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1243,7 +1244,8 @@ void Asg_RequestCreatOrEditAsg (void)
                                           Txt_Modify_assignment);
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</form><br />");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"<br />");
 
    /***** Show current assignments *****/
    Asg_ShowAllAssignments ();

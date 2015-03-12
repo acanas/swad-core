@@ -125,8 +125,8 @@ static void Lnk_PutFormToEditLinks (void)
    Act_FormStart (ActEdiLnk);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -304,12 +304,12 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_link,
                Txt_Remove_link);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Link code */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
@@ -323,11 +323,11 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Link full name */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -335,11 +335,11 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Link WWW */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -347,13 +347,12 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>"
-                         "</tr>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Lnk->WWW,
                Gbl.FormId);
-
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+                         "</tr>");
      }
 
    Lay_EndRoundFrameTable10 ();
@@ -634,7 +633,7 @@ static void Lnk_PutFormToCreateLink (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

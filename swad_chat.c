@@ -327,9 +327,9 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
                Txt_connected_SINGULAR);
    if (NumUsrsInRoom)
       fprintf (Gbl.F.Out,"</strong>");
-   fprintf (Gbl.F.Out,"</a>"
-	              "</form>"
-	              "</li>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/

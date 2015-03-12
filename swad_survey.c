@@ -224,9 +224,9 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
       if (Order == Gbl.Svys.SelectedOrderType)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>"
-			 "</form>"
-			 "</th>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:center;\">"
 		      "%s"
@@ -285,7 +285,7 @@ static void Svy_PutFormToSelectWhichGroupsToShow (void)
    Svy_PutHiddenParamSvyOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -393,9 +393,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Act_LinkFormSubmit (Txt_View_survey,
                        Svy.Status.Visible ? "ASG_TITLE" :
 	                                    "ASG_TITLE_LIGHT");
-   fprintf (Gbl.F.Out,"%s</a>"
-	              "</form>",
+   fprintf (Gbl.F.Out,"%s</a>",
             Svy.Title);
+   Act_FormEnd ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
    fprintf (Gbl.F.Out,"<p class=\"%s\">%s: %u; %s: %u</p></td>",
@@ -426,7 +426,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
          Lay_PutSendButton (Txt_Answer_survey);
-         fprintf (Gbl.F.Out,"</form>");
+         Act_FormEnd ();
         }
       /* Possible button to see the result of the survey */
       else if (Svy.Status.ICanViewResults)
@@ -437,7 +437,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
          Lay_PutSendButton (Txt_View_survey_results);
-         fprintf (Gbl.F.Out,"</form>");
+         Act_FormEnd ();
         }
      }
 
@@ -562,7 +562,7 @@ static void Svy_WriteAuthor (struct Survey *Svy)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO12x16",true);
+                     "PHOTO12x16",Pho_ZOOM);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -704,8 +704,8 @@ static void Svy_PutFormToCreateNewSvy (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_New_survey,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_survey,Txt_New_survey);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -731,12 +731,12 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Remove,
             Txt_Remove);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to reset survey *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -746,12 +746,12 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/reset16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Reset,
             Txt_Reset);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to hide/show survey *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -771,8 +771,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 			 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Show,Txt_Show);
-   fprintf (Gbl.F.Out,"</form>"
-                      "</td>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to edit survey *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -782,12 +782,12 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Edit,
             Txt_Edit);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    fprintf (Gbl.F.Out,"</tr>"
                       "</table>");
@@ -1272,9 +1272,9 @@ void Svy_AskRemSurvey (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>"
-                      "</form>",
+	              "</div>",
             Txt_Remove_survey);
+   Act_FormEnd ();
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1375,9 +1375,9 @@ void Svy_AskResetSurvey (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>"
-	              "</form>",
+	              "</div>",
             Txt_Reset_survey);
+   Act_FormEnd ();
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1707,7 +1707,7 @@ void Svy_RequestCreatOrEditSvy (void)
                                       Txt_Modify_survey);
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    /***** Show questions of the survey ready to be edited *****/
    if (!ItsANewSurvey)
@@ -2536,9 +2536,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
      }
 
    /***** Send and undo buttons *****/
-   fprintf (Gbl.F.Out,"</table></tr></table></div>");
+   fprintf (Gbl.F.Out,"</table>"
+	              "</tr>"
+	              "</table>"
+	              "</div>");
    Lay_PutSendButton (Txt_Send);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
 
    Svy_FreeTextChoiceAnswers (SvyQst,NumAnswers);
   }
@@ -3028,12 +3031,12 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Sta_WriteParamsDatesSeeAccesses ();
             Svy_WriteParamEditQst (SvyQst);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                               "</form>"
-                               "</td>",
+        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Remove_question,
                      Txt_Remove_question);
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>");
 
             /* Write icon to edit the question */
             fprintf (Gbl.F.Out,"<td class=\"BT%d\">",
@@ -3042,12 +3045,12 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-        	               "</form>"
-        	               "</td>",
+        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Edit_question,
                      Txt_Edit_question);
+            Act_FormEnd ();
+            fprintf (Gbl.F.Out,"</td>");
            }
 
          /* Write index of question inside survey (row[1]) */
@@ -3100,7 +3103,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Lay_PutSendButton (Txt_Send_survey);
 
       /***** Form end *****/
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
    else
      {
@@ -3116,8 +3119,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
          Act_LinkFormSubmit (Txt_New_question,The_ClassFormul[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
-         fprintf (Gbl.F.Out,"</form>"
-                            "</td>"
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
 

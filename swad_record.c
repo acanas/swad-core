@@ -208,12 +208,12 @@ void Rec_ListFieldsRecordsForEdition (void)
       Act_FormStart (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_record_field,
                Txt_Remove_record_field);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Name of the field */
       fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
@@ -222,12 +222,12 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Rec_MAX_LENGTH_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Number of lines in the form */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -236,11 +236,11 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\" size=\"2\""
                          " maxlength=\"2\" value=\"%u\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
                Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Visibility of a field */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -260,8 +260,9 @@ void Rec_ListFieldsRecordsForEdition (void)
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
         }
-      fprintf (Gbl.F.Out,"</select></form>"
-	                 "</td>"
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
   }
@@ -341,7 +342,7 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Send button *****/
    Lay_PutSendButton (Txt_Create_record_field);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -592,7 +593,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 	              "<input type=\"submit\" value=\"%s\" />"
 	              "</div>",
             Txt_Remove_record_field);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -887,7 +888,7 @@ void Rec_PutLinkToEditRecordFields (void)
    Act_FormStart (ActEdiRecFie);
    Act_LinkFormSubmit (Txt_Edit_record_fields,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit_record_fields,Txt_Edit_record_fields);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -929,8 +930,8 @@ void Rec_ListRecordsInvs (void)
       Act_FormStart (ActPrnRecSevInv);
       Usr_PutHiddenParUsrCodAll (ActPrnRecSevInv,Gbl.Usrs.Select.All);
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      fprintf (Gbl.F.Out,"</form>"
-                         "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Initialize structure with user's data *****/
@@ -1015,8 +1016,8 @@ static void Rec_ShowRecordOneStdCrs (void)
    Act_FormStart (ActPrnRecSevStd);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Rec_ShowLinkToPrintPreviewOfRecords ();
-   fprintf (Gbl.F.Out,"</form>"
-		      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Show the record *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
@@ -1079,8 +1080,8 @@ void Rec_ListRecordsStdsCrs (void)
       Act_FormStart (ActPrnRecSevStd);
       Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Select.All);
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      fprintf (Gbl.F.Out,"</form>"
-                         "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Initialize structure with user's data *****/
@@ -1171,8 +1172,8 @@ static void Rec_ShowRecordOneTchCrs (void)
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
    Par_PutHiddenParamChar ("ShowOfficeHours",'Y');
    Rec_ShowLinkToPrintPreviewOfRecords ();
-   fprintf (Gbl.F.Out,"</form>"
-		      "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
 		      " margin-bottom:10px;\">");
@@ -1243,8 +1244,8 @@ void Rec_ListRecordsTchsCrs (void)
                               ShowOfficeHours ? 'Y' :
                         	                'N');
       Rec_ShowLinkToPrintPreviewOfRecords ();
-      fprintf (Gbl.F.Out,"</form>"
-                         "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Initialize structure with user's data *****/
@@ -1362,13 +1363,13 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
 	              " onclick=\"javascript:document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
                       " alt=\"%s\" class=\"ICON16x16\" />"
-                      "<span class=\"%s\">&nbsp;%s</span>"
-	              "</form>",
+                      "<span class=\"%s\">&nbsp;%s</span>",
             Gbl.FormId,
             Gbl.Prefs.IconsURL,
             Txt_Show_office_hours,
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Show_office_hours);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1644,7 +1645,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    if (DataForm)
      {
       Lay_PutSendButton (Txt_Send);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
   }
 
@@ -1872,8 +1873,8 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
    Act_FormStart (ActSignUp);
    Rec_ShowSharedUsrRecord (Rec_FORM_SIGN_UP,&Gbl.Usrs.Me.UsrDat);
    Lay_PutSendButton (Txt_Sign_up);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1908,8 +1909,8 @@ void Rec_ShowFormMyCommRecord (void)
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
    Lay_PutSendButton (Txt_Save_changes);
    Rec_WriteLinkToDataProtectionClause ();
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1925,7 +1926,7 @@ static void Rec_PutFormToMyCommonRecord (void)
    Act_FormStart (ActReqEdiRecCom);
    Act_LinkFormSubmit (Txt_Edit_my_personal_data,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit_my_personal_data,Txt_Edit_my_personal_data);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1944,7 +1945,7 @@ static void Rec_PutLinkToMyCrsRecord (void)
       Act_FormStart (ActSeeRecCrs);
       Act_LinkFormSubmit (Txt_View_my_record_for_this_course,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("card",Txt_View_my_record_for_this_course,Txt_View_my_record_for_this_course);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
   }
 
@@ -1964,8 +1965,8 @@ void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 
    Lay_PutSendButton (Txt_Register);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2010,6 +2011,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_View_record_card;
    extern const char *Txt_Admin_user;
    extern const char *Txt_ID;
    extern const char *Txt_Nickname;
@@ -2017,6 +2019,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_View_works;
    extern const char *Txt_See_exams;
    extern const char *Txt_Attendance;
+   extern const char *Txt_View_public_profile;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2050,10 +2053,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    const char *ClassHead,*ClassForm,*ClassData;
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);	// My current role is teacher
-   bool IAmDegAdmin  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM);	// My current role is degree administrator
-   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
-   bool HeIsTeacher  = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
+   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT);	// My current role is student
+   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);	// My current role is teacher
+   bool IAmLoggedAsDegAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM);	// My current role is degree administrator
+   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
+   bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
    bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ||
 	                         UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER);
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
@@ -2063,12 +2067,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
-                     !(IAmTeacher && HeIsTeacher)));	// A teacher can not modify another teacher's data
+                     !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)));	// A teacher can not modify another teacher's data
    bool GoToPublicProfileForm = (TypeOfView == Rec_RECORD_LIST ||
 	                         TypeOfView == Rec_RECORD_PUBLIC ||
+	                         TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
                                  TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK);
    bool CommandForms = GoToPublicProfileForm && Gbl.Usrs.Me.Logged;
-   bool ShowEmail = (IAmDegAdmin || IAmSuperuser || DataForm ||
+   bool ShowEmail = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 		     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
@@ -2077,19 +2082,19 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      (TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK ||
 		       ((TypeOfView == Rec_RECORD_LIST ||
 			 TypeOfView == Rec_RECORD_PRINT) &&
-		        (IAmTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
-   bool ShowID = (IAmDegAdmin || IAmSuperuser || DataForm ||
+		        (IAmLoggedAsTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
+   bool ShowID = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
 	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 		  TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
 		  TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
                   (UsrDat->Accepted &&
 		   ((TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK &&
-                     !(IAmTeacher && HeIsTeacher)) ||	// A teacher can not see another teacher's ID
+                     !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)) ||	// A teacher can not see another teacher's ID
 		    ((TypeOfView == Rec_RECORD_LIST ||
 	              TypeOfView == Rec_RECORD_PRINT) &&
-		     IAmTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
-   bool ShowData = ItsMe || UsrDat->Accepted || IAmDegAdmin || IAmSuperuser;
+		     IAmLoggedAsTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
+   bool ShowData = ItsMe || UsrDat->Accepted || IAmLoggedAsDegAdm || IAmLoggedAsSysAdm;
    bool ShowIDRows = (TypeOfView != Rec_RECORD_PUBLIC);
    bool ShowAddressRows = (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
                            TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
@@ -2097,7 +2102,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
 			   ((TypeOfView == Rec_RECORD_LIST          ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
-			    (IAmTeacher || IAmSuperuser) &&
+			    (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT));
    bool ShowTeacherRows = (((TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 			     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
@@ -2126,7 +2131,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_FORM_MY_COMMON_RECORD:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
-         Col3Width = 160;
+         // Col3Width = 160;
 	 ClassHead = "HEAD_REC";
 	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2145,7 +2150,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   }
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
-         Col3Width = 160;
+         // Col3Width = 160;
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2156,7 +2161,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_RECORD_PUBLIC:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_SMALL;
          FrameWidth = 10;
-         Col3Width = 160;
+         // Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2164,7 +2169,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_RECORD_PRINT:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_PRINT;
          FrameWidth = 1;
-         Col3Width = 160;
+         // Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2217,6 +2222,31 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       fprintf (Gbl.F.Out,"<div style=\"width:22px; margin:6px auto 0 auto;\">");
 
+      /***** Button to view user's record card when:
+             - viewing public profile &&
+             - a course is selected &&
+             - the user belongs to it &&
+             - I belong to it or I am system admin *****/
+      if (TypeOfView == Rec_RECORD_PUBLIC &&
+	  HeBelongsToCurrentCrs &&
+	  (IAmLoggedAsStudent ||
+	   IAmLoggedAsTeacher ||
+	   IAmLoggedAsSysAdm))
+	{
+	 Act_FormStart ((UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
+									   ActSeeRecOneTch);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_View_record_card,NULL);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			    "<img src=\"%s/card16x16.gif\""
+			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_View_record_card);
+	 Act_FormEnd ();
+	}
+
       /***** Button to admin user *****/
       if (ItsMe ||
 	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER) ||
@@ -2232,15 +2262,15 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "<img src=\"%s/config16x16.gif\""
 			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			    "</div>"
-			    "</a>"
-			    "</form>",
+			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Admin_user);
+	 Act_FormEnd ();
 	}
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// A course is selected
 	  UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT &&	// He/she is a student in the current course
-	  (ItsMe || IAmTeacher || IAmSuperuser))		// I can view
+	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
 	{
 	 /***** Button to view user's assignments and works *****/
 	 if (ItsMe)	// I am a student
@@ -2257,10 +2287,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "<img src=\"%s/folder16x16.gif\""
 			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			    "</div>"
-			    "</a>"
-			    "</form>",
+			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_View_works);
+	 Act_FormEnd ();
 
 	 /***** Button to view user's test exams *****/
 	 if (ItsMe)
@@ -2276,14 +2306,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "<img src=\"%s/file16x16.gif\""
 			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			    "</div>"
-			    "</a>"
-			    "</form>",
+			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_See_exams);
+	 Act_FormEnd ();
 
 	 /***** Button to view user's attendance *****/
 	 // TODO: A student should see her/his attendance
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
 	   {
 	    Act_FormStart (ActSeeLstAttStd);
 	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
@@ -2293,10 +2323,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			       "<img src=\"%s/rollcall16x16.gif\""
 			       " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			       "</div>"
-			       "</a>"
-			       "</form>",
+			       "</a>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_Attendance);
+	    Act_FormEnd ();
 	   }
 	}
 
@@ -2313,10 +2343,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "<img src=\"%s/msg16x16.gif\""
 			 " style=\"width:16px;height:16px;\" alt=\"%s\" />"
 			 "</div>"
-			 "</a>"
-			 "</form>",
+			 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title);
+      Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -2343,8 +2373,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Col3Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-		     "PHOTO150x200",
-		     Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+		     "PHOTO150x200",Pho_NO_ZOOM);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -2365,13 +2394,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Put form to go to public profile */
 	 Act_FormStart (ActSeePubPrf);
          Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
-	 Act_LinkFormSubmit (Gbl.Title,"HEAD_REC_BIG");
+	 Act_LinkFormSubmit (Txt_View_public_profile,"HEAD_REC_BIG");
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (GoToPublicProfileForm)
-	 fprintf (Gbl.F.Out,"</a>"
-			    "</form>");
+	{
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
 
       /* Link to QR code */
       if (!DataForm)
@@ -3135,7 +3165,7 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
    Act_FormStart (ActReqEdiMyIns);
    Act_LinkFormSubmit (Txt_Edit_my_institution,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("institution",Txt_Edit_my_institution,Txt_Edit_my_institution);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3151,7 +3181,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    Act_FormStart (ActReqEdiMyNet);
    Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3232,9 +3262,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-                      "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
    /***** Institution *****/
@@ -3276,9 +3306,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Inss.Lst[NumIns].FullName);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</form>"
-                      "</td>"
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
    if (IAmTeacher)
@@ -3323,9 +3353,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Gbl.Ctrs.Lst[NumCtr].FullName);
 	}
-      fprintf (Gbl.F.Out,"</select>"
-			 "</form>"
-			 "</td>"
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
       /***** Department *****/
@@ -3368,9 +3398,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Gbl.Dpts.Lst[NumDpt].FullName);
 	}
-      fprintf (Gbl.F.Out,"</select>"
-			 "</form>"
-			 "</td>"
+      fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
       /***** Office *****/
@@ -3385,13 +3415,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Act_FormGoToStart (ActChgMyOff);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
 			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			 "</form>"
-                         "</td>"
-	                 "</tr>",
+			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3404,13 +3434,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
 			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-			 "</form>"
-                         "</td>"
-	                 "</tr>",
+			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	       Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
      }
 
    /***** End table *****/

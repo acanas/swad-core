@@ -157,8 +157,8 @@ static void Plg_PutFormToEditPlugins (void)
    Act_FormStart (ActEdiPlg);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -375,12 +375,12 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>"
-	                 "</td>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_plugin,
                Txt_Remove_plugin);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin code */
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
@@ -402,10 +402,10 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin description */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -413,10 +413,10 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\" size=\"30\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin logo */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -424,10 +424,10 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin application key */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -435,10 +435,10 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\" size=\"16\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin URL */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -446,10 +446,10 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Plg->URL,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin IP */
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
@@ -457,11 +457,11 @@ static void Plg_ListPluginsForEdition (void)
       Act_FormStart (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />"
-                         "</form>"
-                         "</td>"
-                         "</tr>",
+                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_IP,Plg->IP,Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+                         "</tr>");
      }
 
    Lay_EndRoundFrameTable10 ();
@@ -924,7 +924,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** End of form *****/
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

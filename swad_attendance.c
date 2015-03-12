@@ -200,9 +200,9 @@ static void Att_ShowAllAttEvents (void)
       fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
       if (Order == Gbl.AttEvents.SelectedOrderType)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>"
-			 "</form>"
-			 "</th>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">"
 		      "%s"
@@ -241,7 +241,7 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
    Att_PutHiddenParamAttOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -307,8 +307,9 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Att_PutParamsCodGrps (Att->AttCod);
    Act_LinkFormSubmit (Txt_View_event,Att->Hidden ? "ASG_TITLE_LIGHT" :
 	                                            "ASG_TITLE");
-   fprintf (Gbl.F.Out,"%s</a></form></td>",
-            Att->Title);
+   fprintf (Gbl.F.Out,"%s</a>",Att->Title);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of students in this event *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N\""
@@ -389,7 +390,7 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO12x16",true);
+                     "PHOTO12x16",Pho_ZOOM);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -451,7 +452,7 @@ static void Att_PutFormToListStds (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_Attendance_list,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("list",Txt_Attendance_list,Txt_Attendance_list);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -470,7 +471,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_New_event,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_event,Txt_New_event);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -494,12 +495,12 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Remove,
             Txt_Remove);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to hide/show attendance event *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -521,8 +522,8 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 	       Gbl.Prefs.IconsURL,
 	       Txt_Hide,
 	       Txt_Hide);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</td>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to edit attendance event *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -532,14 +533,14 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</form>"
-                      "</td>"
-                      "</tr>"
-	              "</table>",
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Edit,
             Txt_Edit);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+	              "</table>");
   }
 
 /*****************************************************************************/
@@ -896,9 +897,9 @@ void Att_AskRemAttEvent (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
 	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>"
-	              "</form>",
+	              "</div>",
             Txt_Remove_event);
+   Act_FormEnd ();
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1209,7 +1210,8 @@ void Att_RequestCreatOrEditAttEvent (void)
                                         Txt_Modify_event);
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</form><br />");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"<br />");
 
    /***** Show current attendance events *****/
    Att_ShowAllAttEvents ();
@@ -1941,7 +1943,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
      {
       /***** Send button *****/
       Lay_PutSendButton (Txt_Save);
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
      }
   }
 
@@ -2020,8 +2022,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /***** Send button *****/
       Lay_PutSendButton (Txt_Save);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</div>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2099,7 +2101,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO36x48",true);
+                        "PHOTO36x48",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2662,8 +2664,8 @@ void Usr_ReqListAttendanceStdsCrs (void)
 
          /* Send button */
          Lay_PutSendButton (Txt_Show_list);
-         fprintf (Gbl.F.Out,"</form>"
-	                    "</div>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</div>");
 
          /***** Free memory used for by the list of users *****/
          Usr_FreeListsEncryptedUsrCods ();
@@ -2926,8 +2928,8 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
    Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2947,8 +2949,8 @@ static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
    if (StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
    Lay_PutSendButton (Txt_Show_more_details);
-   fprintf (Gbl.F.Out,"</form>"
-	              "</div>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3058,7 +3060,7 @@ static void Att_ListEventsToSelect (void)
 
    /***** End form *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
-      fprintf (Gbl.F.Out,"</form>");
+      Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3216,8 +3218,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",
-			Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+                        "PHOTO18x24",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3354,8 +3355,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 				        NULL,
-		     "PHOTO18x24",
-		     Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW);
+		     "PHOTO18x24",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write user's ID ******/

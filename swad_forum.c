@@ -1125,11 +1125,11 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       For_PutAllHiddenParamsForum ();
       For_PutHiddenParamThrCod (Thr->ThrCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                 "</form>",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Remove_post,
                Txt_Remove_post);
+      Act_FormEnd ();
      }
 
    /***** Form to ban/unban post *****/
@@ -1148,13 +1148,13 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                                       Txt_Post_X_banned_Click_to_unban_it,
                   PstNum);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Enabled ? "visible" :
                 	    "hidden",
                   Gbl.Title,
                   Gbl.Title);
+         Act_FormEnd ();
         }
       else
         {
@@ -1776,9 +1776,9 @@ static void For_PutFormWhichForums (void)
                          "</li>",
                Gbl.FormId,Txt_FORUM_WHICH_FORUM[WhichForums]);
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</form>"
-                      "</td>"
+   fprintf (Gbl.F.Out,"</ul>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }
 
@@ -1799,13 +1799,13 @@ static void For_WriteLinkToTopLevelOfForums (void)
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
                       "&nbsp;%s"
-                      "</a>"
-                      "</form>"
-                      "</li>",
+                      "</a>",
             Gbl.Prefs.IconsURL,
             Txt_Forums,
             Txt_Forums,
             Txt_Forums);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
@@ -2147,11 +2147,11 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Gbl.Forum.ThreadToMove);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Paste_thread,
                   Txt_Paste_thread);
+         Act_FormEnd ();
         }
      }
 
@@ -2192,9 +2192,9 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
       if (NumThrs)
          For_WriteNumberOfThrs (NumThrs,NumThrsWithNewPosts);
 
-   fprintf (Gbl.F.Out,"</a>"
-	              "</form>"
-	              "</li>");
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
@@ -2526,9 +2526,9 @@ void For_ShowForumThrs (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);
          if (Order == Gbl.Forum.SelectedOrderType)
             fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>"
-                            "</form>"
-                            "</td>");
+         fprintf (Gbl.F.Out,"</a>");
+         Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</td>");
 	}
       fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:right;\">"
 	                 "%s"
@@ -3299,11 +3299,11 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr.ThrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Remove_thread,
                   Txt_Remove_thread);
+         Act_FormEnd ();
         }
 
       if (ICanMoveThreads)
@@ -3315,11 +3315,11 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr.ThrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                            "</form>",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Move_thread,
                   Txt_Move_thread);
+         Act_FormEnd ();
         }
 
       fprintf (Gbl.F.Out,"</td>");
@@ -3749,7 +3749,7 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
             Txt_MSG_Message);
 
    Lay_PutSendButton (Txt_Send_message);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -3967,7 +3967,7 @@ void For_ReqDelThr (void)
                       "<input type=\"submit\" value=\"%s\" />"
                       "</div>",
             Txt_Remove_thread);
-   fprintf (Gbl.F.Out,"</form>");
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

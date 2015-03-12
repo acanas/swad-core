@@ -140,8 +140,8 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
          /***** End of link and form *****/
          fprintf (Gbl.F.Out,"</div>"
 	                    "</div>"
-	                    "</a>"
-	                    "</form>");
+	                    "</a>");
+         Act_FormEnd ();
 
          /***** End of container used to highlight this option *****/
          if (!IsTheSelectedAction)
@@ -211,12 +211,12 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
 	                    " alt=\"%s\" class=\"ICON28x28\""
 	                    " style=\"margin:0;\" />"
 			    "<div>%s</div>"
-                            "</a>"
-                            "</form>",
+                            "</a>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	          Act_Actions[NumAct].Icon,
 	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+	 Act_FormEnd ();
 
          /***** End of container used to highlight this option *****/
          fprintf (Gbl.F.Out,"</div>");
@@ -276,14 +276,14 @@ void Mnu_WriteMenuThisTabMobile (void)
 	                    " alt=\"%s\" class=\"ICON64x64\""
 	                    " style=\"margin:4px;\" />"
 			    "<div>%s</div>"
-                            "</a>"
-                            "</form>"
-                            "</div>"
-                            "</td>",
+                            "</a>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	          Act_Actions[NumAct].Icon,
 	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</div>"
+                            "</td>");
 
          if ((NumOptVisible % Cfg_LAYOUT_MOBILE_NUM_COLUMNS) ==
              (Cfg_LAYOUT_MOBILE_NUM_COLUMNS - 1))
@@ -320,13 +320,13 @@ void Mnu_PutIconsToSelectMenu (void)
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
-	                 " style=\"margin:0 auto;\" />"
-                         "</form>"
-                         "</td>",
+	                 " style=\"margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();

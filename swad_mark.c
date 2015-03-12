@@ -145,8 +145,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.ColorRows[Gbl.RowEvenOdd],
                Gbl.FormId);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</td>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /***** Write the number of rows of footer *****/
       fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
@@ -172,8 +172,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.ColorRows[Gbl.RowEvenOdd],
                Gbl.FormId);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
-      fprintf (Gbl.F.Out,"</form>"
-	                 "</td>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
   }
 

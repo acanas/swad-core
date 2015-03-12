@@ -247,14 +247,14 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
 	                 " title=\"%s\" style=\"display:block;"
-	                 " width:32px; height:20px; margin:0 auto;\" />"
-                         "</form>"
-                         "</td>",
+	                 " width:32px; height:20px; margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_THEMES,
                The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();
