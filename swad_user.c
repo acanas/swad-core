@@ -7729,21 +7729,24 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s<br />"
-	                 "<span class=\"RANK\">#%ld</span>"
-	                 "&nbsp;%s&nbsp;%ld",
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s"
+			 "<div style=\"vertical-align:middle;\">"
+			 "<span class=\"RANK\">#%ld</span>"
+			 "&nbsp;%s&nbsp;%ld"
+	                 "</div>",
                UsrFigures.NumClicks,Txt_clicks,
                Usr_GetRankingNumClicks (UsrDat->UsrCod),
                Txt_of_PART_OF_A_TOTAL,
                Usr_GetNumUsrsWithNumClicks ());
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s<br />"
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s"
+	                    "<div style=\"vertical-align:middle;\">"
 	                    "<span class=\"RANK\">#%ld</span>"
-	                    "&nbsp;%s&nbsp;%ld",
+	                    "&nbsp;%s&nbsp;%ld"
+	                    "</div>",
 	          Txt_day,
 		  Usr_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 		  Txt_of_PART_OF_A_TOTAL,
