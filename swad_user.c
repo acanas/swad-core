@@ -7601,15 +7601,15 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Clicks;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_clicks;
+   extern const char *Txt_Files;
+   extern const char *Txt_files;
+   extern const char *Txt_public_FILES;
    extern const char *Txt_Forums;
    extern const char *Txt_post;
    extern const char *Txt_posts;
    extern const char *Txt_Messages;
    extern const char *Txt_message;
    extern const char *Txt_messages;
-   extern const char *Txt_Files;
-   extern const char *Txt_files;
-   extern const char *Txt_public_FILES;
    struct UsrFigures UsrFigures;
    unsigned NumCrssUsrIsTeacher;
    unsigned NumCrssUsrIsStudent;
@@ -7767,6 +7767,28 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
+   /***** Number of files published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   else
+      NumPublicFiles = 0;
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:top;\">"
+		      "%u&nbsp;%s<br />"
+		      "%u&nbsp;%s"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Files,
+	    NumFiles,Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
+
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
@@ -7842,28 +7864,6 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-
-   /***** Number of files published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
-   else
-      NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">"
-		      "%u&nbsp;%s<br />"
-		      "%u&nbsp;%s"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Files,
-	    NumFiles,Txt_files,
-	    NumPublicFiles,Txt_public_FILES);
 
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
