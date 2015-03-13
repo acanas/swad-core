@@ -374,7 +374,11 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
+         if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
+            return;
+         break;
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
             return;
          break;
@@ -401,7 +405,10 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          strcpy (LocationName,Cfg_PLATFORM_SHORT_NAME);
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
+         strcpy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+         break;
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          strcpy (LocationName,Gbl.CurrentIns.Ins.ShortName);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
@@ -520,10 +527,11 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
          if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
             return;
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM ||
                Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
@@ -596,11 +604,13 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    /***** List connected users belonging to this location *****/
    switch (Gbl.Scope.Current)
      {
+      /*
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
          if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
             return;
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM ||
                Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
@@ -615,6 +625,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
                Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
             return;
          break;
+      */
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
                Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
@@ -766,7 +777,33 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                            " AND connected.UsrCod=usr_data.UsrCod",
                      (unsigned) Role);
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
+         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+                           " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=connected.UsrCod"
+                           " AND connected.UsrCod=usr_data.UsrCod",
+                     Gbl.CurrentCty.Cty.CtyCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+                           " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.UsrCod=connected.UsrCod"
+                           " AND connected.UsrCod=usr_data.UsrCod",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     (unsigned) Role);
+         break;
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM centres,degrees,courses,crs_usr,connected,usr_data"
@@ -1072,7 +1109,22 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                         " AND connected.UsrCod=usr_data.UsrCod ORDER BY Dif",
                   (unsigned) Role);
          break;
-      case Sco_SCOPE_INS:	// Show connected users in the current institution
+      case Sco_SCOPE_CTY:		// Show connected users in the current country
+         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+                        " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.Role='%u'"
+                        " AND crs_usr.UsrCod=connected.UsrCod"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  (unsigned) Role);
+         break;
+      case Sco_SCOPE_INS:		// Show connected users in the current institution
          sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
                         "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                         " FROM centres,degrees,courses,crs_usr,connected,usr_data"
