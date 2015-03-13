@@ -7708,8 +7708,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store first click time *****/
       Act_FormStart (ActCal1stClkTim);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
+                                  "calculate1","calculating1");
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
+                            "calculate1","calculating1");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -7753,8 +7755,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of clicks *****/
       Act_FormStart (ActCalNumClk);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
+                                  "calculate2","calculating2");
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
+                            "calculate2","calculating2");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -7789,8 +7793,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of forum posts *****/
       Act_FormStart (ActCalNumForPst);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
+                                  "calculate3","calculating3");
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
+                            "calculate3","calculating3");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -7825,8 +7831,10 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of messages sent *****/
       Act_FormStart (ActCalNumMsgSnt);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Calculate,Txt_Calculate);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
+                                  "calculate4","calculating4");
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
+                            "calculate4","calculating4");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -8017,8 +8025,9 @@ static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Usr_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      sprintf (Query,"SELECT DATE_FORMAT(ClickTime,'%%Y%%m%%d%%H%%i%%S') FROM log"
-		     " WHERE UsrCod='%ld' ORDER BY ClickTime LIMIT 1",
+      sprintf (Query,"SELECT DATE_FORMAT("
+	             "(SELECT MIN(ClickTime) FROM log WHERE UsrCod='%ld')"
+	             ",'%%Y%%m%%d%%H%%i%%S')",
 	       UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's first click"))
 	{
@@ -8026,8 +8035,9 @@ static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
-	 if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures.FirstClickTime),row[0])))
-	    Lay_ShowErrorAndExit ("Error when reading first click time.");
+	 if (row[0])	// It is NULL when user never logged
+	    if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures.FirstClickTime),row[0])))
+	       Lay_ShowErrorAndExit ("Error when reading first click time.");
 	}
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);

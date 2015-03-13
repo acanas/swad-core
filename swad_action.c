@@ -4267,14 +4267,36 @@ void Act_LinkFormSubmit (const char *Title,const char *LinkStyle)
 // Id can not be NULL
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id)
   {
-   fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\"",Id);
+   fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
       if (Title[0])
          fprintf (Gbl.F.Out," title=\"%s\"",Title);
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out," onclick=\"javascript:"
+		      "document.getElementById('%s').submit();return false;\">",
+	    Id);
+  }
+
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
+                                 const char *StaticIconId,
+                                 const char *AnimatedIconId)
+  {
+   fprintf (Gbl.F.Out,"<a href=\"\"");
+   if (Title)
+      if (Title[0])
+         fprintf (Gbl.F.Out," title=\"%s\"",Title);
+   if (LinkStyle)
+      if (LinkStyle[0])
+         fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
+   fprintf (Gbl.F.Out," onclick=\"javascript:"
+		      "document.getElementById('%s').style.display='none';"
+		      "document.getElementById('%s').style.display='';"
+		      "document.getElementById('%s').submit();return false;\">",
+	    StaticIconId,	// Icon to be hiden on click
+	    AnimatedIconId,	// Icon to be shown on click
+	    Gbl.FormId);
   }
 
 /*****************************************************************************/

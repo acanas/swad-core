@@ -980,6 +980,25 @@ void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
   }
 
 /*****************************************************************************/
+/********** Put a icon with a text to submit a form.                **********/
+/********** When clicked, the icon will be replaced by an animation **********/
+/*****************************************************************************/
+
+void Lay_PutCalculateIcon (const char *Alt,const char *Text,
+                           const char *StaticIconId,
+                           const char *AnimatedIconId)
+  {
+   fprintf (Gbl.F.Out,"<img id=\"%s\" src=\"%s/recycle16x16.gif\" alt=\"%s\""
+		      " class=\"ICON16x16\" />"
+		      "<img id=\"%s\" src=\"%s/working16x16.gif\" alt=\"%s\""
+		      " class=\"ICON16x16\" style=\"display:none;\" />"	// Animated icon hidden
+		      "&nbsp;%s</a>",
+	    StaticIconId,Gbl.Prefs.IconsURL,Alt,
+	    AnimatedIconId,Gbl.Prefs.IconsURL,Alt,
+	    Text);
+  }
+
+/*****************************************************************************/
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 

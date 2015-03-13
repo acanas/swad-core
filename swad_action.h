@@ -1336,6 +1336,9 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id);
 void Act_FormEnd (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
+                                 const char *StaticIconId,
+                                 const char *AnimatedIconId);
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
 Act_Action_t Act_GetFirstActionAvailableInCurrentTab (void);
