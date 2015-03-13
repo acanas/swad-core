@@ -7728,9 +7728,9 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
 		      "<span class=\"DAT_LIGHT\">%s</div>"
-		      "</div>",
+		      "</div>"
+                      "</form>",
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
-   Act_FormEnd ();
 
    /***** Put button to refresh file browser after upload *****/
    Act_FormStart (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);

@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.90 (2015/03/13)"
+#define Log_PLATFORM_VERSION	"SWAD 14.90.1 (2015/03/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.90.1:  Mar 13, 2015	Fixed bug in form used to upload files. (181827 lines)
         Version 14.90:    Mar 13, 2015	Animated gif icon when calculating user's figures.
 					Changes in all submit links. (181826 lines)
         Version 14.89.1:  Mar 13, 2015	Optimization in database query for first click time. (181771 lines)
