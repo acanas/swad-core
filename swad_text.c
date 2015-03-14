@@ -9219,7 +9219,7 @@ const char *Txt_Done_assess_exam =
 	"Feito; corrigir exame";
 #endif
 
-const char *Txt_Download =
+const char *Txt_Download =	// As a verb
 #if   L==0
 	"Descarregar";
 #elif L==1
@@ -9259,6 +9259,69 @@ const char *Txt_Download_FILE_OR_LINK_X =	// Warning: it is very important to in
 	"Pobierz %s";
 #elif L==8
 	"Download %s";		// Necessita de tradução
+#endif
+
+const char *Txt_download =	// As a noun
+#if   L==0
+	"desc&agrave;rrega";
+#elif L==1
+	"Download";
+#elif L==2
+	"download";
+#elif L==3
+	"descarga";
+#elif L==4
+	"t&eacute;l&eacute;chargement";
+#elif L==5
+	"descarga";	// Okoteve traducción
+#elif L==6
+	"download";
+#elif L==7
+	"pobrania";
+#elif L==8
+	"download";
+#endif
+
+const char *Txt_Downloads =	// As a noun
+#if   L==0
+	"Desc&agrave;rregues";
+#elif L==1
+	"Downloads";
+#elif L==2
+	"Downloads";
+#elif L==3
+	"Descargas";
+#elif L==4
+	"T&eacute;l&eacute;chargements";
+#elif L==5
+	"Descargas";	// Okoteve traducción
+#elif L==6
+	"Downloads";
+#elif L==7
+	"Pobrania";
+#elif L==8
+	"Downloads";
+#endif
+
+const char *Txt_downloads =	// As a noun
+#if   L==0
+	"desc&agrave;rregues";
+#elif L==1
+	"Downloads";
+#elif L==2
+	"downloads";
+#elif L==3
+	"descargas";
+#elif L==4
+	"t&eacute;l&eacute;chargements";
+#elif L==5
+	"descargas";	// Okoteve traducción
+#elif L==6
+	"downloads";
+#elif L==7
+	"pobrania";
+#elif L==8
+	"downloads";
 #endif
 
 const char *Txt_Edit =

@@ -9970,6 +9970,10 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
 
       /***** Update number of my views (if I am not logged, UsrCod == -1L) *****/
       Brw_UpdateFileViews (FileMetadata->NumMyViews,FileMetadata->FilCod);
+
+      /***** Increment number of file views in my user's figures *****/
+      if (Gbl.Usrs.Me.Logged)
+         Usr_IncrementNumFileViewsUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
       FileMetadata->NumMyViews             =
@@ -9986,6 +9990,45 @@ void Brw_UpdateMyFileViews (long FilCod)
   {
    /***** Update number of my views *****/
    Brw_UpdateFileViews (Brw_GetFileViewsFromMe (FilCod),FilCod);
+  }
+
+/*****************************************************************************/
+/******************** Get number of file views from a user *******************/
+/*****************************************************************************/
+
+unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long FileViews;
+
+   /***** Get number of posts from a user from database *****/
+   sprintf (Query,"SELECT SUM(FileViews) FROM file_views WHERE UsrCod='%ld'",
+            UsrCod);
+
+   /***** Get number of filw views *****/
+   sprintf (Query,"SELECT SUM(NumViews) FROM file_view WHERE UsrCod='%ld'",
+            UsrCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of file views"))
+     {
+      /* Get number of file views */
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])
+	{
+	 if (sscanf (row[0],"%lu",&FileViews) != 1)
+	    FileViews = 0;
+	}
+      else
+	 FileViews = 0;
+     }
+   else
+      FileViews = 0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return FileViews;
   }
 
 /*****************************************************************************/
@@ -10063,7 +10106,7 @@ static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata
    else
       FileMetadata->NumPublicViews = 0;
 
-   /* Free structure that stores the query result */
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 

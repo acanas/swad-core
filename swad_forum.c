@@ -781,14 +781,14 @@ unsigned For_GetNumMyPstInThr (long ThrCod)
 /*********************** Get number of posts from a user *********************/
 /*****************************************************************************/
 
-unsigned For_GetNumPostsUsr (long UsrCod)
+unsigned long For_GetNumPostsUsr (long UsrCod)
   {
    char Query[128];
 
    /***** Get number of posts from a user from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE UsrCod='%ld'",
             UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not number of posts from a user");
+   return DB_QueryCOUNT (Query,"can not number of posts from a user");
   }
 
 /*****************************************************************************/

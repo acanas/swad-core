@@ -103,11 +103,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.90.4 (2015/03/13)"
+#define Log_PLATFORM_VERSION	"SWAD 14.91 (2015/03/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.91:    Mar 14, 2015	Statistics for number of file views added to user figures. (182091 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_figures ADD COLUMN NumFileViews INT NOT NULL DEFAULT -1 AFTER NumClicks;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1409','es','N','Calcular n&uacute;mero de descargas de archivos');
+
         Version 14.90.4:  Mar 13, 2015	Changes in layout of public user profile. (181885 lines)
         Version 14.90.3:  Mar 13, 2015	Fixed bug in connected users when the scope is a country. (181884 lines)
         Version 14.90.2:  Mar 13, 2015	Fixed minor bug in layout of user's figures. (181831 lines)

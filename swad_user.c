@@ -96,6 +96,7 @@ struct UsrFigures
    struct DateTime FirstClickTime;	//   0 ==> unknown first click time of user never logged
    int NumDays;				//  -1 ==> not applicable
    long NumClicks;			// -1L ==> unknown number of clicks
+   long NumFileViews;			// -1L ==> unknown number of file views
    long NumForPst;			// -1L ==> unknown number of forum posts
    long NumMsgSnt;			// -1L ==> unknown number of messages sent
   };
@@ -191,6 +192,7 @@ static unsigned long Usr_GetRankingNumClicksPerDay (long UsrCod);
 static unsigned long Usr_GetNumUsrsWithNumClicksPerDay (void);
 static void Usr_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Usr_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
+static void Usr_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod);
 static void Usr_GetNumForPstAndStoreAsUsrFigure (long UsrCod);
 static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod);
 static void Usr_ResetUsrFigures (struct UsrFigures *UsrFigures);
@@ -7604,6 +7606,9 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Files;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
+   extern const char *Txt_Downloads;
+   extern const char *Txt_download;
+   extern const char *Txt_downloads;
    extern const char *Txt_Forums;
    extern const char *Txt_post;
    extern const char *Txt_posts;
@@ -7789,6 +7794,44 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    NumFiles,Txt_files,
 	    NumPublicFiles,Txt_public_FILES);
 
+   /***** Number of file views *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:top;\">",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Downloads);
+   if (UsrFigures.NumFileViews >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+               UsrFigures.NumFileViews,
+               (UsrFigures.NumFileViews == 1) ? Txt_download :
+        	                                Txt_downloads);
+      if (UsrFigures.NumDays >= 0)
+	{
+	 fprintf (Gbl.F.Out,"<br />");
+         Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
+		            (float) (UsrFigures.NumDays + 1));
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	}
+     }
+   else	// Number of file views is unknown
+     {
+      /***** Button to fetch and store number of file views *****/
+      Act_FormStart (ActCalNumFilVie);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
+                                  "calculate3","calculating3");
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
+                            "calculate3","calculating3");
+      Act_FormEnd ();
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
@@ -7819,9 +7862,9 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Act_FormStart (ActCalNumForPst);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate3","calculating3");
+                                  "calculate4","calculating4");
       Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate3","calculating3");
+                            "calculate4","calculating4");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -7857,9 +7900,9 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Act_FormStart (ActCalNumMsgSnt);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate4","calculating4");
+                                  "calculate5","calculating5");
       Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate4","calculating4");
+                            "calculate5","calculating5");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -7880,10 +7923,10 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
    MYSQL_ROW row;
    unsigned NumRows;
 
-   /***** Get user's code from database *****/
+   /***** Get user's figures from database *****/
    sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),"
 	          "DATEDIFF(NOW(),FirstClickTime),"
-	          "NumClicks,NumForPst,NumMsgSnt"
+	          "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
 	          " FROM usr_figures WHERE UsrCod='%ld'",
 	    UsrCod);
    if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's figures")))
@@ -7908,12 +7951,16 @@ static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       if (sscanf (row[2],"%ld",&UsrFigures->NumClicks) != 1)
 	 UsrFigures->NumClicks = -1L;
 
-      /* Get number of forum posts (row[3]) */
-      if (sscanf (row[3],"%ld",&UsrFigures->NumForPst) != 1)
+      /* Get number of file views (row[3]) */
+      if (sscanf (row[3],"%ld",&UsrFigures->NumFileViews) != 1)
+	 UsrFigures->NumFileViews = -1L;
+
+      /* Get number of forum posts (row[4]) */
+      if (sscanf (row[4],"%ld",&UsrFigures->NumForPst) != 1)
 	 UsrFigures->NumForPst = -1L;
 
-      /* Get number of messages sent (row[4]) */
-      if (sscanf (row[4],"%ld",&UsrFigures->NumMsgSnt) != 1)
+      /* Get number of messages sent (row[5]) */
+      if (sscanf (row[5],"%ld",&UsrFigures->NumMsgSnt) != 1)
 	 UsrFigures->NumMsgSnt = -1L;
      }
    else
@@ -8107,6 +8154,52 @@ static void Usr_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
    }
 
 /*****************************************************************************/
+/******* Calculate number of file views and show user's profile again *******/
+/*****************************************************************************/
+
+void Usr_CalculateNumFileViews (void)
+  {
+   /***** Get user's code *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
+
+   /***** Get number of file views and store as user's figure *****/
+   Usr_GetNumFileViewsAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Show user's profile again *****/
+   Usr_ShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/**** Get number of file views sent by a user and store in user's figures ****/
+/*****************************************************************************/
+
+static void Usr_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
+  {
+   char Query[256];
+   struct UsrFigures UsrFigures;
+
+   if (Usr_ChkIfUsrCodExists (UsrCod))
+     {
+      /***** Reset user's figures *****/
+      Usr_ResetUsrFigures (&UsrFigures);
+
+      /***** Get number of file views from database *****/
+      UsrFigures.NumFileViews = Brw_GetNumFileViewsUsr (UsrCod);
+
+      /***** Update number of file views in user's figures *****/
+      if (Usr_CheckIfUsrFiguresExists (UsrCod))
+	{
+	 sprintf (Query,"UPDATE usr_figures SET NumFileViews='%ld'"
+			" WHERE UsrCod='%ld'",
+		  UsrFigures.NumFileViews,UsrCod);
+	 DB_QueryUPDATE (Query,"can not update user's figures");
+	}
+      else			// User entry does not exist
+	 Usr_CreateUsrFigures (UsrCod,&UsrFigures);
+     }
+   }
+
+/*****************************************************************************/
 /******* Calculate number of forum posts and show user's profile again *******/
 /*****************************************************************************/
 
@@ -8205,10 +8298,11 @@ static void Usr_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 static void Usr_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
    Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000");	//  unknown first click time or user never logged
-   UsrFigures->NumDays   = -1;		// not applicable
-   UsrFigures->NumClicks = -1L;		// unknown number of clicks
-   UsrFigures->NumForPst = -1L;		// unknown number of forum posts
-   UsrFigures->NumMsgSnt = -1L;		// unknown number of messages sent
+   UsrFigures->NumDays      = -1;		// not applicable
+   UsrFigures->NumClicks    = -1L;		// unknown number of clicks
+   UsrFigures->NumFileViews = -1L;		// unknown number of file views
+   UsrFigures->NumForPst    = -1L;		// unknown number of forum posts
+   UsrFigures->NumMsgSnt    = -1L;		// unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -8220,11 +8314,12 @@ static void Usr_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
    char Query[256];
 
    /***** Create user's figures *****/
-   sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumForPst,NumMsgSnt)"
-		  " VALUES ('%ld','%s','%ld','%ld','%ld')",
+   sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+		  " VALUES ('%ld','%s','%ld','%ld','%ld','%ld')",
 	    UsrCod,
 	    UsrFigures->FirstClickTime.YYYYMMDDHHMMSS,	//   0 ==> unknown first click time or user never logged
 	    UsrFigures->NumClicks,			// -1L ==> unknown number of clicks
+	    UsrFigures->NumFileViews,			// -1L ==> unknown number of file views
 	    UsrFigures->NumForPst,			// -1L ==> unknown number of forum posts
 	    UsrFigures->NumMsgSnt);			// -1L ==> unknown number of messages sent
    DB_QueryINSERT (Query,"can not create user's figures");
@@ -8271,6 +8366,22 @@ void Usr_IncrementNumClicksUsr (long UsrCod)
 	          " WHERE UsrCod='%ld' AND NumClicks>=0",
 	    UsrCod);
    DB_QueryINSERT (Query,"can not increment user's clicks");
+  }
+
+/*****************************************************************************/
+/************** Increment number of file views sent by a user ****************/
+/*****************************************************************************/
+
+void Usr_IncrementNumFileViewsUsr (long UsrCod)
+  {
+   char Query[256];
+
+   /***** Increment number of file views *****/
+   // If NumFileViews < 0 ==> not yet calculated, so do nothing
+   sprintf (Query,"UPDATE IGNORE usr_figures SET NumFileViews=NumFileViews+1"
+	          " WHERE UsrCod='%ld' AND NumFileViews>=0",
+	    UsrCod);
+   DB_QueryINSERT (Query,"can not increment user's file views");
   }
 
 /*****************************************************************************/

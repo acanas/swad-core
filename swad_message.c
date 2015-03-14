@@ -1804,7 +1804,7 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 /************** Get the number of unique messages sent by a user *************/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsSentByUsr (long UsrCod)
+unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
   {
    char Query[256];
 
@@ -1815,7 +1815,7 @@ unsigned Msg_GetNumMsgsSentByUsr (long UsrCod)
                   " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod='%ld')",
                   UsrCod,
                   UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of messages sent by a user");
+   return DB_QueryCOUNT (Query,"can not get the number of messages sent by a user");
   }
 
 /*****************************************************************************/
