@@ -327,7 +327,6 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role);
 void Usr_RequestUserProfile (void);
 void Usr_GetUsrCodAndShowUserProfile (void);
 void Usr_ChangeProfileVisibility (void);
-void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 void Usr_CalculateFirstClickTime (void);
 void Usr_CalculateNumClicks (void);
 void Usr_CalculateNumFileViews (void);

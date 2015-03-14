@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.91 (2015/03/14)"
+#define Log_PLATFORM_VERSION	"SWAD 14.91.1 (2015/03/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.91.1:  Mar 14, 2015	Current figures separated from historic figures in layout of public user profile.
+					Show only number of files, not folder or links. (182112 lines)
         Version 14.91:    Mar 14, 2015	Statistics for number of file views added to user figures. (182091 lines)
 					2 changes necessary in database:
 ALTER TABLE usr_figures ADD COLUMN NumFileViews INT NOT NULL DEFAULT -1 AFTER NumClicks;

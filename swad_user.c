@@ -185,6 +185,8 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
 static void Usr_ShowUserProfile (void);
+static void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat);
+static void Usr_ShowHistoricUserProfile (const struct UsrData *UsrDat);
 static void Usr_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 static unsigned long Usr_GetRankingNumClicks (long UsrCod);
 static unsigned long Usr_GetNumUsrsWithNumClicks (void);
@@ -7524,16 +7526,21 @@ static void Usr_ShowUserProfile (void)
 	 fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
 	                    "<table style=\"margin:0 auto;\">"
 	                    "<tr>"
-	                    "<td style=\"text-align:right; vertical-align:top;\">");
+	                    "<td style=\"text-align:right;"
+	                    " vertical-align:top;\">");
 
 	 /***** Common record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td style=\"text-align:left; vertical-align:top; padding-left:4px;\">");
-
 	 /***** Show details of user's profile *****/
 	 Usr_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
+
+	 fprintf (Gbl.F.Out,"</td>"
+	                    "<td style=\"text-align:left;"
+	                    " vertical-align:top; padding-left:4px;\">");
+
+	 /***** Show historic user's profile *****/
+	 Usr_ShowHistoricUserProfile (&Gbl.Usrs.Other.UsrDat);
 
 	 fprintf (Gbl.F.Out,"</td>"
 	                    "</tr>"
@@ -7587,7 +7594,7 @@ void Usr_ChangeProfileVisibility (void)
 /********************** Show details of user's profile ***********************/
 /*****************************************************************************/
 
-void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
+static void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    // extern const char *Txt_Figures;
@@ -7596,26 +7603,9 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_course;
    extern const char *Txt_courses;
-   extern const char *Txt_From_TIME;
-   extern const char *Txt_day;
-   extern const char *Txt_days;
-   extern const char *Txt_Calculate;
-   extern const char *Txt_Clicks;
-   extern const char *Txt_of_PART_OF_A_TOTAL;
-   extern const char *Txt_clicks;
    extern const char *Txt_Files;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
-   extern const char *Txt_Downloads;
-   extern const char *Txt_download;
-   extern const char *Txt_downloads;
-   extern const char *Txt_Forums;
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
-   extern const char *Txt_Messages;
-   extern const char *Txt_message;
-   extern const char *Txt_messages;
-   struct UsrFigures UsrFigures;
    unsigned NumCrssUsrIsTeacher;
    unsigned NumCrssUsrIsStudent;
    unsigned NumStds;
@@ -7624,15 +7614,15 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumPublicFiles;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">"
+	              "<tr>");
 
    /***** Number of courses in which the user is teacher or student *****/
    if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
      {
       NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_TEACHER);
       NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
+      fprintf (Gbl.F.Out,"<td class=\"%s\""
 			 " style=\"text-align:right; vertical-align:top;\">"
                          "%s"
 			 "</td>"
@@ -7659,8 +7649,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER);
       NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_STUDENT);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
+      fprintf (Gbl.F.Out,"<td class=\"%s\""
 			 " style=\"text-align:right; vertical-align:top;\">"
                          "%s"
 			 "</td>"
@@ -7670,8 +7659,7 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 			 "%u&nbsp;%s<br />"
 			 "%u&nbsp;%s"
 			 "</a>"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][UsrDat->Sex],
 	       NumCrssUsrIsStudent,
@@ -7684,6 +7672,59 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	       (NumStds == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
 		                Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
      }
+
+   /***** Number of files currently published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   else
+      NumPublicFiles = 0;
+   fprintf (Gbl.F.Out,"<td class=\"%s\""
+		      " style=\"text-align:right; vertical-align:top;\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT\""
+		      " style=\"text-align:left; vertical-align:top;\">"
+		      "%u&nbsp;%s<br />"
+		      "%u&nbsp;%s"
+		      "</a>"
+		      "</td>",
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Files,
+	    NumFiles,Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
+
+   /***** End of table *****/
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+  }
+
+/*****************************************************************************/
+/********************** Show details of user's profile ***********************/
+/*****************************************************************************/
+
+static void Usr_ShowHistoricUserProfile (const struct UsrData *UsrDat)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_From_TIME;
+   extern const char *Txt_day;
+   extern const char *Txt_days;
+   extern const char *Txt_Calculate;
+   extern const char *Txt_Clicks;
+   extern const char *Txt_of_PART_OF_A_TOTAL;
+   extern const char *Txt_clicks;
+   extern const char *Txt_Downloads;
+   extern const char *Txt_download;
+   extern const char *Txt_downloads;
+   extern const char *Txt_Forums;
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
+   extern const char *Txt_Messages;
+   extern const char *Txt_message;
+   extern const char *Txt_messages;
+   struct UsrFigures UsrFigures;
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
 
    /***** Get figures *****/
    Usr_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
@@ -7771,28 +7812,6 @@ void Usr_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-
-   /***** Number of files published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
-   else
-      NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">"
-		      "%u&nbsp;%s<br />"
-		      "%u&nbsp;%s"
-		      "</a>"
-		      "</td>"
-		      "</tr>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Files,
-	    NumFiles,Txt_files,
-	    NumPublicFiles,Txt_public_FILES);
 
    /***** Number of file views *****/
    fprintf (Gbl.F.Out,"<tr>"

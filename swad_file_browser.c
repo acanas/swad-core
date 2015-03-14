@@ -10195,12 +10195,15 @@ static bool Brw_GetIfFolderHasPublicFiles (const char *Path)
 
 unsigned Brw_GetNumFilesUsr (long UsrCod)
   {
-   char Query[128];
+   char Query[256];
 
-   /***** Get number of posts from a user from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM files WHERE PublisherUsrCod='%ld'",
-            UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not number of files from a user");
+   /***** Get current number of files published by a user from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM files"
+	          " WHERE PublisherUsrCod='%ld' AND FileType IN ('%u','%u')",
+            UsrCod,
+            (unsigned) Brw_IS_FILE,
+            (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of files from a user");
   }
 
 /*****************************************************************************/
@@ -10209,13 +10212,16 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
 
 unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
   {
-   char Query[128];
+   char Query[256];
 
-   /***** Get number of posts from a user from database *****/
+   /***** Get current number of public files published by a user from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-	          " WHERE PublisherUsrCod='%ld' AND Public='Y'",
-            UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not number of public files from a user");
+	          " WHERE PublisherUsrCod='%ld' AND FileType IN ('%u','%u')"
+	          " AND Public='Y'",
+            UsrCod,
+            (unsigned) Brw_IS_FILE,
+            (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of public files from a user");
   }
 
 /*****************************************************************************/
