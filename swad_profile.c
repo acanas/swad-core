@@ -74,19 +74,25 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
+
 static void Prf_ShowUserProfile (void);
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat);
+
 static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
+
 static unsigned long Prf_GetRankingNumClicks (long UsrCod);
 static unsigned long Prf_GetNumUsrsWithNumClicks (void);
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod);
 static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void);
+
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod);
+
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures);
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
@@ -113,6 +119,17 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
 
 void Prf_RequestUserProfile (void)
   {
+   /* By default, the nickname is filled with my nickname
+      If no user logged ==> the nickname is empty */
+   Prf_RequestUserProfileWithDefaultNickname (Gbl.Usrs.Me.UsrDat.Nickname);
+  }
+
+/*****************************************************************************/
+/*************** Request a user's profile with nickname filled ***************/
+/*****************************************************************************/
+
+static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
+  {
    extern const char *Txt_View_public_profile;
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Nickname;
@@ -133,7 +150,7 @@ void Prf_RequestUserProfile (void)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
-            Gbl.Usrs.Me.UsrDat.Nickname);	// If no user logged ==> nickname is empty
+            DefaultNickname);
 
    /***** Send button*****/
    Lay_PutSendButton (Txt_Continue);
@@ -151,21 +168,11 @@ void Prf_RequestUserProfile (void)
 
 void Prf_GetUsrCodAndShowUserProfile (void)
   {
-   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
-   long OtherUsrCod;
-
-   /***** Get user from nickname *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)
-     {
-      Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-      if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
-	{
-	 Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
-	 Gbl.CurrentAct = ActSeePubPrf;
-	}
-      else
-	 Usr_GetParamOtherUsrCodEncrypted ();
-     }
+   /***** Try to get user *****/
+   // User's code may be already taken from nickname in Par_GetMainParameters ()
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+      // If user is not set, try to get it from user code
+      Usr_GetParamOtherUsrCodEncrypted ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile ();
@@ -174,6 +181,7 @@ void Prf_GetUsrCodAndShowUserProfile (void)
 /*****************************************************************************/
 /*************************** Show a user's profile ***************************/
 /*****************************************************************************/
+// If error, Nickname is used to fill the form to request another nickname
 
 static void Prf_ShowUserProfile (void)
   {
@@ -231,7 +239,7 @@ static void Prf_ShowUserProfile (void)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
       /***** Request nickname again *****/
-      Prf_RequestUserProfile ();
+      Prf_RequestUserProfileWithDefaultNickname ("");
      }
   }
 
