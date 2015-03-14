@@ -103,11 +103,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.91.1 (2015/03/14)"
+#define Log_PLATFORM_VERSION	"SWAD 14.92 (2015/03/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.92:    Mar 14, 2015	New module swad_profile for public user's profile. (182202 lines)
+					1 change necessary in Makefile:
+Add swad_profile.o to list of object files
+
+        Version 14.91.3:  Mar 14, 2015	By default, the logged user's nickname is shown in form to view user's profile
+					Action to view QR code is now public. (182108 lines)
+        Version 14.91.2:  Mar 14, 2015	URL of public profile is embedded under user's photo in record card.
+					Changes in layout of record card. (182124 lines)
         Version 14.91.1:  Mar 14, 2015	Current figures separated from historic figures in layout of public user profile.
 					Show only number of files, not folder or links. (182112 lines)
         Version 14.91:    Mar 14, 2015	Statistics for number of file views added to user figures. (182091 lines)

@@ -46,6 +46,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_profile.h"
 #include "swad_string.h"
 #include "swad_zip.h"
 
@@ -9973,7 +9974,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
 
       /***** Increment number of file views in my user's figures *****/
       if (Gbl.Usrs.Me.Logged)
-         Usr_IncrementNumFileViewsUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+         Prf_IncrementNumFileViewsUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
       FileMetadata->NumMyViews             =

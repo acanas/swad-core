@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_profile.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -134,13 +135,15 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Net_ShowAWebOrSocialNet (const char *URL,
+                                     const char *Icon,const char *Title);
 static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 /*****************************************************************************/
 /************************** Show webs / social networks **********************/
 /*****************************************************************************/
 
-void Net_ShowWebsAndSocialNets (long UsrCod)
+void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -148,8 +151,14 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_URL+1];
 
+   /***** Start container *****/
    fprintf (Gbl.F.Out,"<div style=\"width:144px; margin:0 auto;\">");
 
+   /***** Show link to public profile *****/
+   Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
+                            "swad",Cfg_PLATFORM_PAGE_TITLE);
+
+   /***** Show the rest of webs / social networks *****/
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	NumURL++)
@@ -157,36 +166,47 @@ void Net_ShowWebsAndSocialNets (long UsrCod)
       /***** Get user's web / social network from database *****/
       sprintf (Query,"SELECT URL FROM usr_webs"
 		     " WHERE UsrCod='%ld' AND Web='%s'",
-	       UsrCod,
-	       Net_WebsAndSocialNetworksDB[NumURL]);
+	       UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]);
 
-      /***** Check number of rows in result *****/
+      /***** Check if exists the web / social network for this user *****/
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's web / social network"))
 	{
-	 /***** Get URL *****/
+	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
 	 strncpy (URL,row[0],Cns_MAX_BYTES_URL);
 	 URL[Cns_MAX_BYTES_URL] = '\0';
 
-	 /***** Write link and icon *****/
-         fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-                            " style=\"display:inline;\" >"
-                            "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
-		            "<img src=\"%s/%s16x16.gif\""
-		            " style=\"width:16px;height:16px;margin:0 1px;\" alt=\"%s\" />"
-		            "</a>"
-		            "</div>",
-	          URL,
-	          Net_TitleWebsAndSocialNetworks[NumURL],
-	          Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
-	          Net_TitleWebsAndSocialNetworks[NumURL]);
+	 /* Show the web / social network */
+	 Net_ShowAWebOrSocialNet (URL,
+	                          Net_WebsAndSocialNetworksDB[NumURL],
+	                          Net_TitleWebsAndSocialNetworks[NumURL]);
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/************************** Show a web / social network **********************/
+/*****************************************************************************/
+
+static void Net_ShowAWebOrSocialNet (const char *URL,
+                                     const char *Icon,const char *Title)
+  {
+   /***** Write link and icon *****/
+   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+		      " style=\"display:inline;\">"
+		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
+		      "<img src=\"%s/%s16x16.gif\""
+		      " style=\"width:16px;height:16px;margin:0 1px;\" alt=\"%s\" />"
+		      "</a>"
+		      "</div>",
+	    URL,Title,
+	    Gbl.Prefs.IconsURL,Icon,Title);
   }
 
 /*****************************************************************************/

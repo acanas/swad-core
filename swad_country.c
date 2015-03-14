@@ -1489,7 +1489,7 @@ void Cty_RenameCountry (void)
       Lay_ShowErrorAndExit ("Code of country is missing.");
 
    /* Get the lenguage */
-   Language = Prf_GetParamLanguage ();
+   Language = Pre_GetParamLanguage ();
 
    /* Get the new name for the country */
    Par_GetParToText ("Name",NewCtyName,Cty_MAX_LENGTH_COUNTRY_NAME);
@@ -1607,7 +1607,7 @@ void Cty_ChangeCtyWWW (void)
       Lay_ShowErrorAndExit ("Code of country is missing.");
 
    /* Get the lenguage */
-   Language = Prf_GetParamLanguage ();
+   Language = Pre_GetParamLanguage ();
 
    /* Get the new WWW for the country */
    Par_GetParToText ("WWW",NewWWW,Cty_MAX_LENGTH_COUNTRY_NAME);

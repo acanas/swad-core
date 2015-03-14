@@ -2030,8 +2030,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_First_name;
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
-   extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Institution;
@@ -2045,7 +2043,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    unsigned RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
    char StrRecordWidth[10+1];
    unsigned FrameWidth = 10;
-   unsigned Col1Width = 140;
+   unsigned Col1Width = 130;
    unsigned Col2Width;
    unsigned Col3Width = 160;
    unsigned Cols1and2Width;
@@ -2379,7 +2377,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+	              "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"HEAD_REC_BIG\""
@@ -2413,7 +2411,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"<td style=\"width:%upx;"
 	              " vertical-align:top;\">",
             Col3Width);
-   Net_ShowWebsAndSocialNets (UsrDat->UsrCod);
+   Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -2421,7 +2419,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       /***** User's e-mail *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 			 "%s:"
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
@@ -2445,7 +2443,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       /***** User's ID *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 			 "%s:"
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
@@ -2461,7 +2459,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:left;\">",
+			    " style=\"width:%upx; text-align:right;\">",
 		  ClassForm,Col1Width);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	    fprintf (Gbl.F.Out,"%s*",Txt_Sex);
@@ -2586,7 +2584,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	}
       else	// RoleForm == false
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			    "<td class=\"%s\" style=\"width:%upx;"
+			    " text-align:right;\">"
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s\""
@@ -2604,7 +2603,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /***** Name *****/
       /* Surname 1 */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 			 "%s",
 	       ClassForm,Col1Width,Txt_Surname_1);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2624,7 +2623,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       /* Surname 2 */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 			 "%s:"
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
@@ -2644,7 +2643,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       /* First name */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
+			 "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 			 "%s",
 	       ClassForm,Col1Width,Txt_First_name);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2666,7 +2665,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /* Country */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s\""
-		      " style=\"width:%upx; text-align:left;\">"
+		      " style=\"width:%upx; text-align:right;\">"
 		      "%s",
 	    ClassForm,Col1Width,Txt_Country);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2714,32 +2713,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
-   /***** Shortcut to the user's profile *****/
-   if (TypeOfView == Rec_RECORD_PUBLIC)
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">"
-			 "%s:"
-			 "</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">"
-			 "<a href=\"%s/%s?usr=@%s\" class=\"%s\" target=\"_blank\">"
-			 "%s/%s?usr=@%s"
-			 "</a>"
-			 "</td>"
-			 "</tr>",
-	       ClassForm,Col1Width,Txt_Shortcut,
-	       ClassData,Cols2and3Width,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname,
-	       ClassData,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],UsrDat->Nickname);
-
    if (ShowAddressRows)
      {
       /* Origin place */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2761,7 +2740,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Date of birth */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2785,7 +2764,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Local address */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2807,7 +2786,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Local phone */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2829,7 +2808,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Family address */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2851,7 +2830,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Family phone */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2873,7 +2852,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Common comments for all the courses */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\" style=\"width:%upx;"
-	                 " text-align:left; vertical-align:top;\">"
+	                 " text-align:right; vertical-align:top;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
@@ -2903,7 +2882,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Institution */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">"
+			 " style=\"width:%upx; text-align:right;\">"
 			 "%s:"
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
@@ -2928,7 +2907,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Centre */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2955,7 +2934,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Department */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2982,7 +2961,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Office */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
@@ -2997,7 +2976,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /* Phone */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
+	                 " style=\"width:%upx; text-align:right;\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td colspan=\"2\" class=\"%s\""

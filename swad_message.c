@@ -42,6 +42,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_profile.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -1185,7 +1186,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content)
    DB_QueryINSERT (Query,"can not create message");
 
    /***** Increment number of messages sent by me *****/
-   Usr_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Prf_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    return MsgCod;
   }

@@ -120,7 +120,7 @@ void Ico_ChangeIconSet (void)
      }
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/

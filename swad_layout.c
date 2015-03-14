@@ -296,7 +296,7 @@ void Lay_WriteStartOfPage (void)
          /* Left bar used to expand-contract central zone */
          fprintf (Gbl.F.Out,"<td style=\"width:10px; text-align:right;"
                             " vertical-align:top;\">");
-         Prf_PutLeftIconToHideShowCols ();
+         Pre_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</td>");
 
          if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
@@ -382,7 +382,7 @@ static void Lay_WriteEndOfPage (void)
 	 /* Right bar used to expand-contract central zone */
 	 fprintf (Gbl.F.Out,"<td style=\"width:10px; text-align:left;"
 	                    " vertical-align:top;\">");
-	 Prf_PutRigthIconToHideShowCols ();
+	 Pre_PutRigthIconToHideShowCols ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
 
@@ -657,7 +657,7 @@ static void Lay_WritePageTopHeading (void)
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
-      Prf_PutSelectorToSelectLanguage ();
+      Pre_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "</table>"
@@ -1191,7 +1191,7 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 1013))	// Do this only one of 1013 times (1013 is prime)
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 1019))	// Do this only one of 1019 times (1019 is prime)
-      Prf_RemoveOldPrefsFromIP ();		// Remove old preferences from IP
+      Pre_RemoveOldPrefsFromIP ();		// Remove old preferences from IP
    else if (!(Gbl.PID % 1021))	// Do this only one of 1021 times (1021 is prime)
       Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
 
@@ -1466,7 +1466,7 @@ void Lay_ChangeLayout (void)
      }
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/

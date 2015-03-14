@@ -39,7 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Net_ShowWebsAndSocialNets (long UsrCod);
+void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat);
 void Net_ShowFormMyWebsAndSocialNets (void);
 void Net_UpdateMyWebsAndSocialNets (void);
 void Net_ShowWebAndSocialNetworksStats (void);

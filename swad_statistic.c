@@ -46,6 +46,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_profile.h"
 #include "swad_statistic.h"
 #include "swad_tab.h"
 #include "swad_web_service.h"
@@ -345,7 +346,7 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
-      Usr_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+      Prf_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

@@ -40,6 +40,7 @@
 #include "swad_logo.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_profile.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -757,7 +758,8 @@ unsigned For_GetNumPstsInThr (long ThrCod)
    char Query[512];
 
    /***** Get number of posts in a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post"
+	          " WHERE ThrCod='%ld'",
             ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a thread of a forum");
   }
@@ -3820,7 +3822,7 @@ void For_RecForumPst (void)
      }
 
    /***** Increment number of forum posts in my user's figures *****/
-   Usr_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Post_sent);

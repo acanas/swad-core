@@ -352,7 +352,7 @@ void Mnu_ChangeMenu (void)
      }
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/

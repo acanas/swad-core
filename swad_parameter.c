@@ -235,7 +235,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Try to get preferences changed from current IP *****/
-   Prf_GetPrefsFromIP ();
+   Pre_GetPrefsFromIP ();
    if (Gbl.Prefs.Layout == Lay_LAYOUT_UNKNOWN)
       Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;
 
@@ -252,7 +252,7 @@ void Par_GetMainParameters (void)
          Gbl.Prefs.Layout = LayoutFromForm;
 
          /* Update preferences from current IP */
-         Prf_SetPrefsFromIP ();
+         Pre_SetPrefsFromIP ();
         }
 
       /***** Set path of theme *****/

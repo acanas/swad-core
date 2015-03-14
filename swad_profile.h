@@ -1,7 +1,7 @@
-// swad_preference.h: user's preferences
+// swad_profile.h: user's public profile
 
-#ifndef _SWAD_PRE
-#define _SWAD_PRE
+#ifndef _SWAD_PRF
+#define _SWAD_PRF
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,39 +24,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/******************************** Public types *******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Pre_EditPrefs (void);
-
-void Pre_GetPrefsFromIP (void);
-void Pre_SetPrefsFromIP (void);
-void Pre_RemoveOldPrefsFromIP (void);
-
-void Pre_PutSelectorToSelectLanguage (void);
-void Pre_AskChangeLanguage (void);
-void Pre_ChangeLanguage (void);
-Txt_Language_t Pre_GetParamLanguage (void);
-
-void Pre_PutLeftIconToHideShowCols (void);
-void Pre_PutRigthIconToHideShowCols (void);
-void Pre_ChangeSideCols (void);
-void Pre_HideLeftCol (void);
-void Pre_HideRightCol (void);
-void Pre_ShowLeftCol (void);
-void Pre_ShowRightCol (void);
-unsigned Pre_GetParamSideCols (void);
+char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba);
+void Prf_RequestUserProfile (void);
+void Prf_GetUsrCodAndShowUserProfile (void);
+void Prf_ChangeProfileVisibility (void);
+void Prf_CalculateFirstClickTime (void);
+void Prf_CalculateNumClicks (void);
+void Prf_CalculateNumFileViews (void);
+void Prf_CalculateNumForPst (void);
+void Prf_CalculateNumMsgSnt (void);
+void Prf_RemoveUsrFigures (long UsrCod);
+void Prf_IncrementNumClicksUsr (long UsrCod);
+void Prf_IncrementNumFileViewsUsr (long UsrCod);
+void Prf_IncrementNumForPstUsr (long UsrCod);
+void Prf_IncrementNumMsgSntUsr (long UsrCod);
 
 #endif

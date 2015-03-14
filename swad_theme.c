@@ -282,7 +282,7 @@ void The_ChangeTheme (void)
      }
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/

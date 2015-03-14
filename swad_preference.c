@@ -54,14 +54,14 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Prf_PutIconsToSelectSideCols (void);
-static void Prf_UpdateSideColsOnUsrDataTable (void);
+static void Pre_PutIconsToSelectSideCols (void);
+static void Pre_UpdateSideColsOnUsrDataTable (void);
 
 /*****************************************************************************/
 /***************************** Edit preferences ******************************/
 /*****************************************************************************/
 
-void Prf_EditPrefs (void)
+void Pre_EditPrefs (void)
   {
    extern const char *Txt_Language;
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
@@ -71,7 +71,7 @@ void Prf_EditPrefs (void)
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Language);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"text-align:center;\">");
-   Prf_PutSelectorToSelectLanguage ();
+   Pre_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
@@ -94,7 +94,7 @@ void Prf_EditPrefs (void)
       Mnu_PutIconsToSelectMenu ();	// 4. Menu
       fprintf (Gbl.F.Out,"</td>"
                          "<td>");
-      Prf_PutIconsToSelectSideCols ();	// 5. Side columns
+      Pre_PutIconsToSelectSideCols ();	// 5. Side columns
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>"
@@ -115,7 +115,7 @@ void Prf_EditPrefs (void)
 /******************* Get preferences changed from current IP *****************/
 /*****************************************************************************/
 
-void Prf_GetPrefsFromIP (void)
+void Pre_GetPrefsFromIP (void)
   {
    char Query[1024];
    unsigned long NumRows;
@@ -171,7 +171,7 @@ void Prf_GetPrefsFromIP (void)
 /************************ Set preferences from current IP ********************/
 /*****************************************************************************/
 
-void Prf_SetPrefsFromIP (void)
+void Pre_SetPrefsFromIP (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -207,7 +207,7 @@ void Prf_SetPrefsFromIP (void)
 /*********************** Remove old preferences from IP **********************/
 /*****************************************************************************/
 
-void Prf_RemoveOldPrefsFromIP (void)
+void Pre_RemoveOldPrefsFromIP (void)
   {
    char Query[256];
 
@@ -223,7 +223,7 @@ void Prf_RemoveOldPrefsFromIP (void)
 /*****************************************************************************/
 // Width == 0 means don't force width of selector
 
-void Prf_PutSelectorToSelectLanguage (void)
+void Pre_PutSelectorToSelectLanguage (void)
   {
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    Txt_Language_t Lan;
@@ -254,7 +254,7 @@ void Prf_PutSelectorToSelectLanguage (void)
 /********* Ask user if he/she really wants to change the language ************/
 /*****************************************************************************/
 
-void Prf_AskChangeLanguage (void)
+void Pre_AskChangeLanguage (void)
   {
    extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Txt_NUM_LANGUAGES];
    extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Txt_NUM_LANGUAGES];
@@ -262,7 +262,7 @@ void Prf_AskChangeLanguage (void)
    Txt_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
-   Gbl.Prefs.Language = Prf_GetParamLanguage ();	// Change temporarily language to set form action
+   Gbl.Prefs.Language = Pre_GetParamLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
    if (Gbl.Usrs.Me.Logged)
@@ -283,7 +283,7 @@ void Prf_AskChangeLanguage (void)
 /******************************* Change language *****************************/
 /*****************************************************************************/
 
-void Prf_ChangeLanguage (void)
+void Pre_ChangeLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_Your_language_has_changed_to_LANGUAGE;
@@ -293,7 +293,7 @@ void Prf_ChangeLanguage (void)
    bool MyLanguageHasChanged = false;
 
    /***** Get param language *****/
-   Gbl.Prefs.Language = Prf_GetParamLanguage ();
+   Gbl.Prefs.Language = Pre_GetParamLanguage ();
 
    /***** Store language in database *****/
    if (Gbl.Usrs.Me.Logged && Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
@@ -305,7 +305,7 @@ void Prf_ChangeLanguage (void)
      }
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
 
    /***** Confirmation *****/
    if (MyLanguageHasChanged)
@@ -318,7 +318,7 @@ void Prf_ChangeLanguage (void)
 /*************************** Get parameter language **************************/
 /*****************************************************************************/
 
-Txt_Language_t Prf_GetParamLanguage (void)
+Txt_Language_t Pre_GetParamLanguage (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    char UnsignedStr[10+1];
@@ -336,7 +336,7 @@ Txt_Language_t Prf_GetParamLanguage (void)
 /************ Put icons to select the layout of the side columns *************/
 /*****************************************************************************/
 
-static void Prf_PutIconsToSelectSideCols (void)
+static void Pre_PutIconsToSelectSideCols (void)
   {
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
@@ -371,7 +371,7 @@ static void Prf_PutIconsToSelectSideCols (void)
 /**************** Put left icon to hide/show side columns ********************/
 /*****************************************************************************/
 
-void Prf_PutLeftIconToHideShowCols (void)
+void Pre_PutLeftIconToHideShowCols (void)
   {
    extern const char *Txt_Hide_left_column;
    extern const char *Txt_Show_left_column;
@@ -403,7 +403,7 @@ void Prf_PutLeftIconToHideShowCols (void)
 /**************** Put right icon to hide/show side columns *******************/
 /*****************************************************************************/
 
-void Prf_PutRigthIconToHideShowCols (void)
+void Pre_PutRigthIconToHideShowCols (void)
   {
    extern const char *Txt_Hide_right_column;
    extern const char *Txt_Show_right_column;
@@ -435,80 +435,80 @@ void Prf_PutRigthIconToHideShowCols (void)
 /*********************** Change layout of side columns ***********************/
 /*****************************************************************************/
 
-void Prf_ChangeSideCols (void)
+void Pre_ChangeSideCols (void)
   {
    /***** Get param side-columns *****/
-   Gbl.Prefs.SideCols = Prf_GetParamSideCols ();
+   Gbl.Prefs.SideCols = Pre_GetParamSideCols ();
 
    /***** Store side colums in database *****/
    if (Gbl.Usrs.Me.Logged)
-      Prf_UpdateSideColsOnUsrDataTable ();
+      Pre_UpdateSideColsOnUsrDataTable ();
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/
 /*************************** Hide left side column ***************************/
 /*****************************************************************************/
 
-void Prf_HideLeftCol (void)
+void Pre_HideLeftCol (void)
   {
    Gbl.Prefs.SideCols &= ~Lay_SHOW_LEFT_COLUMN;	//  And with 1...101 to hide left column
    if (Gbl.Usrs.Me.Logged)
-      Prf_UpdateSideColsOnUsrDataTable ();
+      Pre_UpdateSideColsOnUsrDataTable ();
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/
 /*************************** Hide right side column **************************/
 /*****************************************************************************/
 
-void Prf_HideRightCol (void)
+void Pre_HideRightCol (void)
   {
    Gbl.Prefs.SideCols &= ~Lay_SHOW_RIGHT_COLUMN;	//  And with 1...110 to hide right column
    if (Gbl.Usrs.Me.Logged)
-      Prf_UpdateSideColsOnUsrDataTable ();
+      Pre_UpdateSideColsOnUsrDataTable ();
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/
 /**************************** Show left side column **************************/
 /*****************************************************************************/
 
-void Prf_ShowLeftCol (void)
+void Pre_ShowLeftCol (void)
   {
    Gbl.Prefs.SideCols |= Lay_SHOW_LEFT_COLUMN;	// Or with 10 to show left column
    if (Gbl.Usrs.Me.Logged)
-      Prf_UpdateSideColsOnUsrDataTable ();
+      Pre_UpdateSideColsOnUsrDataTable ();
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/
 /**************************** Show right side column *************************/
 /*****************************************************************************/
 
-void Prf_ShowRightCol (void)
+void Pre_ShowRightCol (void)
   {
    Gbl.Prefs.SideCols |= Lay_SHOW_RIGHT_COLUMN;	// Or with 01 to show right column
    if (Gbl.Usrs.Me.Logged)
-      Prf_UpdateSideColsOnUsrDataTable ();
+      Pre_UpdateSideColsOnUsrDataTable ();
 
    /***** Set preferences from current IP *****/
-   Prf_SetPrefsFromIP ();
+   Pre_SetPrefsFromIP ();
   }
 
 /*****************************************************************************/
 /************** Update layout of side colums on user data table **************/
 /*****************************************************************************/
 
-static void Prf_UpdateSideColsOnUsrDataTable (void)
+static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
    char Query[512];
 
@@ -521,7 +521,7 @@ static void Prf_UpdateSideColsOnUsrDataTable (void)
 /************** Get parameter used to show/hide side columns *****************/
 /*****************************************************************************/
 
-unsigned Prf_GetParamSideCols (void)
+unsigned Pre_GetParamSideCols (void)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;	// 11 ==> by default, show both side columns

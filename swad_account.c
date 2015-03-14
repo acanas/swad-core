@@ -35,6 +35,7 @@
 #include "swad_ID.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_profile.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -741,7 +742,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    DB_QueryDELETE (Query,"can not remove sessions of a user");
 
    /***** Remove user's figures *****/
-   Usr_RemoveUsrFigures (UsrDat->UsrCod);
+   Prf_RemoveUsrFigures (UsrDat->UsrCod);
 
    /***** Remove the user from the list of users without photo *****/
    Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
