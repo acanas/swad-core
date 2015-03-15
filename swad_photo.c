@@ -232,19 +232,20 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    extern const char *Txt_Upload_photo;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
    /***** Write message about photo presence or ausence *****/
    if (PhotoExists)	// User has photo
      {
       /***** Forms to remove photo and make it public *****/
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
-      Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
+      if (ItsMe)
+         Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_ZOOM);
+      fprintf (Gbl.F.Out,"</div>");
      }
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
 
@@ -277,7 +278,6 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
             UsrDat->UsrCod,
             Txt_Upload_photo);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
