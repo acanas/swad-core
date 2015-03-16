@@ -3393,10 +3393,10 @@ long Usr_GetRamdomStdFromCrs (long CrsCod)
       /***** Get user code *****/
       row = mysql_fetch_row (mysql_res);
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    return UsrCod;
   }

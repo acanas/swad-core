@@ -54,4 +54,7 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod);
 void Prf_IncrementNumForPstUsr (long UsrCod);
 void Prf_IncrementNumMsgSntUsr (long UsrCod);
 
+void Prf_GetAndShowRankingClicks (void);
+void Prf_GetAndShowRankingClicksPerDay (void);
+
 #endif

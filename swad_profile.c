@@ -1117,3 +1117,265 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
 	    UsrCod);
    DB_QueryINSERT (Query,"can not increment user's messages sent");
   }
+
+/*****************************************************************************/
+/******** Get and show ranking of users attending to number of clicks ********/
+/*****************************************************************************/
+
+void Prf_GetAndShowRankingClicks (void)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+   unsigned long NumClicks;
+
+   /***** Get ranking from database *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT UsrCod,NumClicks"
+	                " FROM usr_figures"
+			" WHERE NumClicks>='0'"
+			" ORDER BY NumClicks DESC LIMIT 10");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+                        " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>='0'"
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+                        " FROM centres,degrees,courses,crs_usr,usr_figures"
+                        " WHERE centres.InsCod='%ld'"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>='0'"
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+                  Gbl.CurrentIns.Ins.InsCod);
+         break;
+      case Sco_SCOPE_CTR:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+                        " FROM degrees,courses,crs_usr,usr_figures"
+                        " WHERE degrees.CtrCod='%ld'"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>='0'"
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+         break;
+      case Sco_SCOPE_DEG:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+                        " FROM courses,crs_usr,usr_figures"
+                        " WHERE courses.DegCod='%ld'"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>='0'"
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+                  Gbl.CurrentDeg.Deg.DegCod);
+         break;
+      case Sco_SCOPE_CRS:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+                        " FROM crs_usr,usr_figures"
+                        " WHERE crs_usr.CrsCod='%ld'"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>='0'"
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+                  Gbl.CurrentCrs.Crs.CrsCod);
+         break;
+      default:
+         Lay_ShowErrorAndExit ("Wrong scope.");
+         break;
+     }
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get ranking");
+   if (NumUsrs)
+     {
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      fprintf (Gbl.F.Out,"<table>");
+
+      for (NumUsr = 1;
+	   NumUsr <= NumUsrs;
+	   NumUsr++)
+	{
+	 /***** Get user and number of clicks *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get user's code (row[0]) */
+	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+
+	 /* Get number of clicks (row[1]) */
+	 if (sscanf (row[1],"%ld",&NumClicks) != 1)
+	    NumClicks = -1L;
+
+	 /***** Show row *****/
+	 if (UsrDat.Nickname[0])
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td style=\"text-align:right;\">#%u</td>"
+			       "<td style=\"text-align:left;\">@%s</td>"
+			       "<td style=\"text-align:right;\">%ld</td>"
+			       "</tr>",
+		     NumUsr,
+		     UsrDat.Nickname,
+		     NumClicks);
+	}
+
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/**** Get and show ranking of users attending to number of clicks per day ****/
+/*****************************************************************************/
+
+void Prf_GetAndShowRankingClicksPerDay (void)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+   float NumClicksPerDay;
+
+   /***** Get ranking from database *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT UsrCod,"
+	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
+	                " FROM usr_figures"
+			" WHERE FirstClickTime>0"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+                        "usr_figures.NumClicks/(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+                        " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.FirstClickTime>0"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+                        "usr_figures.NumClicks/(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+                        " FROM centres,degrees,courses,crs_usr,usr_figures"
+                        " WHERE centres.InsCod='%ld'"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.FirstClickTime>0"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+                  Gbl.CurrentIns.Ins.InsCod);
+         break;
+      case Sco_SCOPE_CTR:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+                        "usr_figures.NumClicks/(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+                        " FROM degrees,courses,crs_usr,usr_figures"
+                        " WHERE degrees.CtrCod='%ld'"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.FirstClickTime>0'"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+         break;
+      case Sco_SCOPE_DEG:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+                        "usr_figures.NumClicks/(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+                        " FROM courses,crs_usr,usr_figures"
+                        " WHERE courses.DegCod='%ld'"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.FirstClickTime>0"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+                  Gbl.CurrentDeg.Deg.DegCod);
+         break;
+      case Sco_SCOPE_CRS:
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
+                        "usr_figures.NumClicks/(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1) AS NumClicksPerDay"
+                        " FROM crs_usr,usr_figures"
+                        " WHERE crs_usr.CrsCod='%ld'"
+                        " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.FirstClickTime>0"
+			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+                  Gbl.CurrentCrs.Crs.CrsCod);
+         break;
+      default:
+         Lay_ShowErrorAndExit ("Wrong scope.");
+         break;
+     }
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get ranking");
+   if (NumUsrs)
+     {
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      fprintf (Gbl.F.Out,"<table>");
+
+      for (NumUsr = 1;
+	   NumUsr <= NumUsrs;
+	   NumUsr++)
+	{
+	 /***** Get user and number of clicks *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get user's code (row[0]) */
+	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+
+	 /* Get number of clicks per day (row[1]) */
+	 NumClicksPerDay = Str_GetFloatNumFromStr (row[1]);
+
+	 /***** Show row *****/
+	 if (UsrDat.Nickname[0])
+	   {
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td style=\"text-align:right;\">#%u</td>"
+			       "<td style=\"text-align:left;\">@%s</td>"
+			       "<td style=\"text-align:right;\">",
+		     NumUsr,
+		     UsrDat.Nickname);
+	    Str_WriteFloatNum (NumClicksPerDay);
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+	   }
+	}
+
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }

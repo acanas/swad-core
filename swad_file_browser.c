@@ -10004,10 +10004,6 @@ unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
    MYSQL_ROW row;
    unsigned long FileViews;
 
-   /***** Get number of posts from a user from database *****/
-   sprintf (Query,"SELECT SUM(FileViews) FROM file_views WHERE UsrCod='%ld'",
-            UsrCod);
-
    /***** Get number of filw views *****/
    sprintf (Query,"SELECT SUM(NumViews) FROM file_view WHERE UsrCod='%ld'",
             UsrCod);

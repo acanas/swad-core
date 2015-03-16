@@ -132,6 +132,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void);
 static void Sta_GetAndShowNumCrssInSWAD (void);
 
 static void Sta_GetAndShowUsersStats (void);
+static void Sta_GetAndShowUsersRanking (void);
 
 static void Sta_GetAndShowFileBrowsersStats (void);
 static void Sta_WriteStatsExpTreesTableHead (void);
@@ -3676,6 +3677,10 @@ void Sta_ShowUseOfPlatform (void)
 	 /***** Number of users *****/
          Sta_GetAndShowUsersStats ();
          break;
+      case Sta_USRS_RANKING:
+	 /***** Users ranking *****/
+         Sta_GetAndShowUsersRanking ();
+         break;
       case Sta_DEGREES_AND_COURSES:
          /***** Number of degrees and courses *****/
 	 Sta_GetAndShowDegCrsStats ();
@@ -3788,6 +3793,45 @@ static void Sta_GetAndShowUsersStats (void)
    Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_STUDENT);
    Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_TEACHER);
    Usr_GetAndShowNumUsrsInPlatform (Rol_ROLE_GUEST__);	// Users not beloging to any course
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/****************************** Show users' ranking **************************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowUsersRanking (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_Clicks;
+   extern const char *Txt_Clicks_per_day;
+
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USRS_RANKING]);
+
+   /***** Header *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Clicks,
+            Txt_Clicks_per_day);
+
+   /***** Rankings *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Prf_GetAndShowRankingClicks ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Prf_GetAndShowRankingClicksPerDay ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    Lay_EndRoundFrameTable10 ();
   }

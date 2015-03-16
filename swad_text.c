@@ -4563,6 +4563,27 @@ const char *Txt_clicks =
 	"cliques";
 #endif
 
+const char *Txt_Clicks_per_day =
+#if   L==0
+	"Clics per dia";
+#elif L==1
+	"Klicks pro Tag";
+#elif L==2
+	"Clicks per day";
+#elif L==3
+	"Clics por d&iacute;a";
+#elif L==4
+	"Clics par jour";
+#elif L==5
+	"Clics por d&iacute;a";	// Okoteve traducción
+#elif L==6
+	"Clic al giorno";
+#elif L==7
+	"Klikni&eogon;&cacute; dziennie";
+#elif L==8
+	"Cliques por dia";
+#endif
+
 const char *Txt_Clicks_without_degree_selected =
 #if   L==0
 	"Clics sense seleccionar titulaci&oacute;";
@@ -35930,6 +35951,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "U&zdot;ytkownicy"
 #elif L==8
 	 "Utilizadores"
+#endif
+	 ,
+#if   L==0
+	 "R&agrave;nquing"
+#elif L==1
+	 "Rang"
+#elif L==2
+	 "Ranking"
+#elif L==3
+	 "Ranking"
+#elif L==4
+	 "Classement"
+#elif L==5
+	 "Ranking"	// Okoteve traducción
+#elif L==6
+	 "Posto"
+#elif L==7
+	 "Ranking"
+#elif L==8
+	 "Posi&ccedil;&atilde;o"
 #endif
 	 ,
 #if   L==0

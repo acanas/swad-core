@@ -1268,7 +1268,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
      }
 
    /***** Free structure that stores the query result *****/
-   mysql_free_result (mysql_res);
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

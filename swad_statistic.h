@@ -86,10 +86,11 @@ typedef enum
    Sta_ACC_GBL_PER_COURSE        = 20,
   } Sta_ClicksStatType_t;
 
-#define Sta_NUM_TYPES_USE_STATS 19
+#define Sta_NUM_TYPES_USE_STATS 20
 typedef enum
   {
    Sta_USERS,			// Number of users
+   Sta_USRS_RANKING,		// Users' ranking
    Sta_DEGREES_AND_COURSES,	// Number of degrees and courses
    Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
@@ -101,7 +102,7 @@ typedef enum
    Sta_MSGS_BETWEEN_USERS,	// Number of users' (sent and received) messages
    Sta_FORUMS,			// Number of forums, threads and posts
    Sta_SURVEYS,			// Number of surveys
-   Sta_PRIVACY,		// Number of users per privacity
+   Sta_PRIVACY,			// Number of users per privacity
    Sta_LANGUAGES,		// Number of users per language
    Sta_LAYOUTS,			// Number of users per layout
    Sta_THEMES,			// Number of users per theme

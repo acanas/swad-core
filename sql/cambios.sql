@@ -10518,5 +10518,29 @@ CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATET
 
 SELECT * FROM usr_figures WHERE NumClicks>='0' AND FirstClickTime>'0';
 
-SELECT COUNT(*)+1 FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay FROM usr_figures WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0') AS TableNumClicksPerDay WHERE NumClicksPerDay>(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) FROM usr_figures WHERE UsrCod='1' AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0');
+SELECT COUNT(*)+1 FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay FROM (SELECT UsrCod,COUNT(*) AS N FROM msg_snt_deleted GROUP BY UsrCod) UNION (SELECT UsrCod,'0' FROM usr_figures WHERE UsrCod NOT IN (SELECT UsrCod FROM msg_snt_deleted))usr_figures WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0') AS TableNumClicksPerDay WHERE NumClicksPerDay>(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) FROM usr_figures WHERE UsrCod='1' AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0');
                
+
+----- 2015-03-15, swad14.92.2
+
+INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt) SELECT UsrCod,0,-1,-1,-1,-1 FROM usr_data WHERE UsrCod>0 AND UsrCod NOT IN (SELECT UsrCod FROM usr_figures);
+
+
+Hecho:
+UPDATE usr_figures,((SELECT UsrCod,COUNT(*) AS N FROM forum_post WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM forum_post))) AS FP SET usr_figures.NumForPst=FP.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumForPst<0 AND usr_figures.UsrCod=FP.UsrCod;
+UPDATE usr_figures,((SELECT UsrCod,COUNT(*) AS N FROM log WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM log))) AS NC SET usr_figures.NumClicks=NC.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumClicks<0 AND usr_figures.UsrCod=NC.UsrCod;
+UPDATE usr_figures,((SELECT UsrCod,COUNT(*) AS N FROM msg_snt WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM msg_snt))) AS MS,((SELECT UsrCod,COUNT(*) AS N FROM msg_snt_deleted WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM msg_snt_deleted))) AS MSD SET usr_figures.NumMsgSnt=MS.N+MSD.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumMsgSnt<0 AND usr_figures.UsrCod=MS.UsrCod AND usr_figures.UsrCod=MSD.UsrCod;
+
+Haciendo:
+SET @USRCODMIN=0;
+SET @USRCODMAX=1000;
+UPDATE usr_figures,((SELECT UsrCod,MIN(ClickTime) AS FCT FROM log WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,0 AS FCT FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM log))) AS CT SET usr_figures.FirstClickTime=CT.FCT WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.FirstClickTime=0 AND usr_figures.UsrCod=CT.UsrCod;
+
+
+SET @USRCODMIN=0;
+SET @USRCODMAX=1000;
+UPDATE usr_figures,((SELECT UsrCod,SUM(NumViews) AS N FROM file_view WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM file_view))) AS FV SET usr_figures.NumFileViews=FV.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumFileViews<0 AND usr_figures.UsrCod=FV.UsrCod;
+
+
+
+
