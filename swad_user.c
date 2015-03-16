@@ -471,9 +471,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo)-1);
    UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
-   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[13]);
+   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
    UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
-   UsrDat->InsCod = Str_ConvertStrCodToLongCod (row[15]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
 
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);

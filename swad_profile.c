@@ -1124,6 +1124,7 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
 
 void Prf_GetAndShowRankingClicks (void)
   {
+   extern const char *Txt_View_public_profile;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1131,6 +1132,8 @@ void Prf_GetAndShowRankingClicks (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
    unsigned long NumClicks;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
@@ -1139,7 +1142,7 @@ void Prf_GetAndShowRankingClicks (void)
 	 sprintf (Query,"SELECT UsrCod,NumClicks"
 	                " FROM usr_figures"
 			" WHERE NumClicks>='0'"
-			" ORDER BY NumClicks DESC LIMIT 10");
+			" ORDER BY NumClicks DESC LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
@@ -1151,7 +1154,7 @@ void Prf_GetAndShowRankingClicks (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
@@ -1163,7 +1166,7 @@ void Prf_GetAndShowRankingClicks (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
@@ -1174,7 +1177,7 @@ void Prf_GetAndShowRankingClicks (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
@@ -1184,7 +1187,7 @@ void Prf_GetAndShowRankingClicks (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
@@ -1193,7 +1196,7 @@ void Prf_GetAndShowRankingClicks (void)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 10",
+			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -1225,14 +1228,31 @@ void Prf_GetAndShowRankingClicks (void)
 
 	 /***** Show row *****/
 	 if (UsrDat.Nickname[0])
+	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td style=\"text-align:right;\">#%u</td>"
-			       "<td style=\"text-align:left;\">@%s</td>"
-			       "<td style=\"text-align:right;\">%ld</td>"
+			       "<td style=\"text-align:left;\">",
+		     NumUsr);
+
+	    /* User's photo */
+	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+						  NULL,
+			      "PHOTO18x24",Pho_ZOOM);
+
+	    /* Put form to go to public profile */
+	    Act_FormStart (ActSeePubPrf);
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+	    fprintf (Gbl.F.Out,"@%s",UsrDat.Nickname);
+	    fprintf (Gbl.F.Out,"</a>");
+	    Act_FormEnd ();
+
+	    fprintf (Gbl.F.Out,"</td>"
+		               "<td style=\"text-align:right;\">%ld</td>"
 			       "</tr>",
-		     NumUsr,
-		     UsrDat.Nickname,
 		     NumClicks);
+	   }
 	}
 
       fprintf (Gbl.F.Out,"</table>");
@@ -1251,6 +1271,7 @@ void Prf_GetAndShowRankingClicks (void)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
+   extern const char *Txt_View_public_profile;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1258,6 +1279,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
    float NumClicksPerDay;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
@@ -1267,7 +1290,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
 	                " FROM usr_figures"
 			" WHERE FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10");
+			" ORDER BY NumClicksPerDay DESC LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1280,7 +1303,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+			" ORDER BY NumClicksPerDay DESC LIMIT 100",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
@@ -1293,7 +1316,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+			" ORDER BY NumClicksPerDay DESC LIMIT 100",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
@@ -1305,7 +1328,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0'"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+			" ORDER BY NumClicksPerDay DESC LIMIT 100",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
@@ -1316,7 +1339,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+			" ORDER BY NumClicksPerDay DESC LIMIT 100",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
@@ -1326,7 +1349,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 10",
+			" ORDER BY NumClicksPerDay DESC LIMIT 100",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -1360,10 +1383,25 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td style=\"text-align:right;\">#%u</td>"
-			       "<td style=\"text-align:left;\">@%s</td>"
-			       "<td style=\"text-align:right;\">",
-		     NumUsr,
-		     UsrDat.Nickname);
+			       "<td style=\"text-align:left;\">",
+		     NumUsr);
+
+	    /* User's photo */
+	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+						  NULL,
+			      "PHOTO18x24",Pho_ZOOM);
+
+	    /* Put form to go to public profile */
+	    Act_FormStart (ActSeePubPrf);
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+	    fprintf (Gbl.F.Out,"@%s",UsrDat.Nickname);
+	    fprintf (Gbl.F.Out,"</a>");
+	    Act_FormEnd ();
+
+	    fprintf (Gbl.F.Out,"</td>"
+		               "<td style=\"text-align:right;\">");
 	    Str_WriteFloatNum (NumClicksPerDay);
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
