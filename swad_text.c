@@ -27448,6 +27448,27 @@ const char *Txt_Quota_exceeded =
 	"Quota excedida!";
 #endif
 
+const char *Txt_Ranking =
+#if   L==0
+	 "R&agrave;nquing";
+#elif L==1
+	 "Rang";
+#elif L==2
+	 "Ranking";
+#elif L==3
+	 "Ranking";
+#elif L==4
+	 "Classement";
+#elif L==5
+	 "Ranking";	// Okoteve traducción
+#elif L==6
+	 "Posto";
+#elif L==7
+	 "Ranking";
+#elif L==8
+	 "Posi&ccedil;&atilde;o";
+#endif
+
 const char *Txt_ReaBRders =
 #if   L==0
 	"Lec-<br />tores";	// Necessita traduccio

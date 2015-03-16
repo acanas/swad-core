@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.93.3 (2015/03/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.93.4 (2015/03/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.93.4:  Mar 17, 2015	Links in user's figures to ranking. (182661 lines)
         Version 14.93.3:  Mar 16, 2015	Changes in rankings. (182630 lines)
         Version 14.93.2:  Mar 16, 2015	New rankings for downloads, forum posts and messages sent. (182628 lines)
         Version 14.93.1:  Mar 16, 2015	Photos and links to users' profiles in users' ranking. (182560 lines)

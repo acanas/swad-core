@@ -86,6 +86,7 @@ static unsigned long Prf_GetRankingNumClicks (long UsrCod);
 static unsigned long Prf_GetNumUsrsWithNumClicks (void);
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod);
 static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void);
+static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs);
 
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
@@ -396,7 +397,6 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_days;
    extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
-   extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_clicks;
    extern const char *Txt_Downloads;
    extern const char *Txt_download;
@@ -461,28 +461,17 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s"
-			 "<div style=\"vertical-align:middle;\">"
-			 "<span class=\"RANK\">#%ld</span>"
-			 "&nbsp;%s&nbsp;%ld"
-	                 "</div>",
-               UsrFigures.NumClicks,Txt_clicks,
-               Prf_GetRankingNumClicks (UsrDat->UsrCod),
-               Txt_of_PART_OF_A_TOTAL,
-               Prf_GetNumUsrsWithNumClicks ());
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+               UsrFigures.NumClicks,Txt_clicks);
+      Prf_ShowRanking (Prf_GetRankingNumClicks (UsrDat->UsrCod),
+                       Prf_GetNumUsrsWithNumClicks ());
       if (UsrFigures.NumDays >= 0)
 	{
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s"
-	                    "<div style=\"vertical-align:middle;\">"
-	                    "<span class=\"RANK\">#%ld</span>"
-	                    "&nbsp;%s&nbsp;%ld"
-	                    "</div>",
-	          Txt_day,
-		  Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
-		  Txt_of_PART_OF_A_TOTAL,
-		  Prf_GetNumUsrsWithNumClicksPerDay ());
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+			  Prf_GetNumUsrsWithNumClicksPerDay ());
 	}
      }
    else	// Number of clicks is unknown
@@ -745,6 +734,32 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
    sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
 	          " WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0'");
    return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
+  }
+
+/*****************************************************************************/
+/************************* Show position in ranking **************************/
+/*****************************************************************************/
+
+static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
+  {
+   extern const char *Txt_Ranking;
+   extern const char *Txt_of_PART_OF_A_TOTAL;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div style=\"vertical-align:middle;\">");
+
+   /***** Rank in form to go to ranking *****/
+   Act_FormStart (ActSeeUseGbl);
+   Sco_PutParamScope (Sco_SCOPE_SYS);
+   Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USRS_RANKING);
+   Act_LinkFormSubmit (Txt_Ranking,"RANK");
+   fprintf (Gbl.F.Out,"#%ld</a>",Rank);
+   Act_FormEnd ();
+
+   /***** Part of a total and end container *****/
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;%ld"
+		      "</div>",
+	    Txt_of_PART_OF_A_TOTAL,NumUsrs);
   }
 
 /*****************************************************************************/
@@ -1445,7 +1460,7 @@ static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO18x24",Pho_ZOOM);
+			"PHOTO15x20",Pho_ZOOM);
 
       /***** Put form to go to public profile *****/
       if (UsrDat->Nickname[0])
