@@ -1267,18 +1267,15 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 	   }
 
 	 /***** Show row *****/
-	 if (UsrDat.Nickname[0])
-	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td style=\"text-align:right;\">#%u</td>"
-			       "<td style=\"text-align:left;\">",
-		     Rank);
-	    Prf_ShowUsrInRanking (&UsrDat);
-	    fprintf (Gbl.F.Out,"</td>"
-		               "<td style=\"text-align:right;\">%ld</td>"
-			       "</tr>",
-		     Figure);
-	   }
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td style=\"text-align:right;\">#%u</td>"
+			    "<td style=\"text-align:left;\">",
+		  Rank);
+         Prf_ShowUsrInRanking (&UsrDat);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td style=\"text-align:right;\">%ld</td>"
+			    "</tr>",
+		  Figure);
 	}
 
       fprintf (Gbl.F.Out,"</table>");
@@ -1352,7 +1349,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.FirstClickTime>0'"
+			" AND usr_figures.FirstClickTime>0"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
@@ -1409,19 +1406,16 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   }
 
 	 /***** Show row *****/
-	 if (UsrDat.Nickname[0])
-	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td style=\"text-align:right;\">#%u</td>"
-			       "<td style=\"text-align:left;\">",
-		     Rank);
-	    Prf_ShowUsrInRanking (&UsrDat);
-	    fprintf (Gbl.F.Out,"</td>"
-		               "<td style=\"text-align:right;\">");
-	    Str_WriteFloatNum (NumClicksPerDay);
-	    fprintf (Gbl.F.Out,"</td>"
-			       "</tr>");
-	   }
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td style=\"text-align:right;\">#%u</td>"
+			    "<td style=\"text-align:left;\">",
+		  Rank);
+	 Prf_ShowUsrInRanking (&UsrDat);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td style=\"text-align:right;\">");
+	 Str_WriteFloatNum (NumClicksPerDay);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 	}
 
       fprintf (Gbl.F.Out,"</table>");
@@ -1444,17 +1438,24 @@ static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
 
-   /***** User's photo *****/
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-				        NULL,
-		     "PHOTO18x24",Pho_ZOOM);
+   /***** Check if I can see the public profile *****/
+   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod))
+     {
+      /***** User's photo *****/
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
+			"PHOTO18x24",Pho_ZOOM);
 
-   /***** Put form to go to public profile *****/
-   Act_FormStart (ActSeePubPrf);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
-   fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+      /***** Put form to go to public profile *****/
+      if (UsrDat->Nickname[0])
+	{
+	 Act_FormStart (ActSeePubPrf);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
+	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+     }
   }

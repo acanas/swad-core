@@ -3673,13 +3673,13 @@ void Sta_ShowUseOfPlatform (void)
    /***** Show the stat of use selected by user *****/
    switch (Gbl.Stat.UseStatType)
      {
-      case Sta_USERS:
-	 /***** Number of users *****/
-         Sta_GetAndShowUsersStats ();
-         break;
       case Sta_USRS_RANKING:
 	 /***** Users ranking *****/
          Sta_GetAndShowUsersRanking ();
+         break;
+      case Sta_USERS:
+	 /***** Number of users *****/
+         Sta_GetAndShowUsersStats ();
          break;
       case Sta_DEGREES_AND_COURSES:
          /***** Number of degrees and courses *****/
