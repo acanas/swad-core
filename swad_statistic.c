@@ -3806,6 +3806,9 @@ static void Sta_GetAndShowUsersRanking (void)
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
+   extern const char *Txt_Downloads;
+   extern const char *Txt_Forums;
+   extern const char *Txt_Messages;
 
    Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USRS_RANKING]);
 
@@ -3817,9 +3820,21 @@ static void Sta_GetAndShowUsersRanking (void)
                       "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
                       "%s"
                       "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Clicks,
-            Txt_Clicks_per_day);
+            Txt_Clicks_per_day,
+            Txt_Downloads,
+            Txt_Forums,
+            Txt_Messages);
 
    /***** Rankings *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3830,6 +3845,18 @@ static void Sta_GetAndShowUsersRanking (void)
                       "<td class=\"DAT\" style=\"text-align:left;"
                       " vertical-align:top;\">");
    Prf_GetAndShowRankingClicksPerDay ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Prf_GetAndShowRankingFileViews ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Prf_GetAndShowRankingForPst ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Prf_GetAndShowRankingMsgSnt ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

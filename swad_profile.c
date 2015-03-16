@@ -97,6 +97,9 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures);
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
+static void Prf_GetAndShowRankingFigure (const char *FieldName);
+static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat);
+
 /*****************************************************************************/
 /************************** Get public profile URL ***************************/
 /*****************************************************************************/
@@ -1124,28 +1127,49 @@ void Prf_IncrementNumMsgSntUsr (long UsrCod)
 
 void Prf_GetAndShowRankingClicks (void)
   {
-   extern const char *Txt_View_public_profile;
+   Prf_GetAndShowRankingFigure ("NumClicks");
+  }
+
+void Prf_GetAndShowRankingFileViews (void)
+  {
+   Prf_GetAndShowRankingFigure ("NumFileViews");
+  }
+
+void Prf_GetAndShowRankingForPst (void)
+  {
+   Prf_GetAndShowRankingFigure ("NumForPst");
+  }
+
+void Prf_GetAndShowRankingMsgSnt (void)
+  {
+   Prf_GetAndShowRankingFigure ("NumMsgSnt");
+  }
+
+static void Prf_GetAndShowRankingFigure (const char *FieldName)
+  {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
+   unsigned Rank;
    struct UsrData UsrDat;
-   unsigned long NumClicks;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   long FigureHigh = LONG_MAX;
+   long Figure;
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT UsrCod,NumClicks"
+	 sprintf (Query,"SELECT UsrCod,%s"
 	                " FROM usr_figures"
-			" WHERE NumClicks>='0'"
-			" ORDER BY NumClicks DESC LIMIT 100");
+			" WHERE %s>='0'"
+			" ORDER BY %s DESC LIMIT 100",
+		  FieldName,
+		  FieldName,FieldName);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_figures"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
@@ -1153,51 +1177,61 @@ void Prf_GetAndShowRankingClicks (void)
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
-                  Gbl.CurrentCty.Cty.CtyCod);
+			" AND usr_figures.%s>='0'"
+			" ORDER BY usr_figures.%s DESC LIMIT 100",
+		  FieldName,
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  FieldName,FieldName);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
                         " FROM centres,degrees,courses,crs_usr,usr_figures"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
-                  Gbl.CurrentIns.Ins.InsCod);
+			" AND usr_figures.%s>='0'"
+			" ORDER BY usr_figures.%s DESC LIMIT 100",
+		  FieldName,
+                  Gbl.CurrentIns.Ins.InsCod,
+                  FieldName,FieldName);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
                         " FROM degrees,courses,crs_usr,usr_figures"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+			" AND usr_figures.%s>='0'"
+			" ORDER BY usr_figures.%s DESC LIMIT 100",
+		  FieldName,
+                  Gbl.CurrentCtr.Ctr.CtrCod,
+                  FieldName,FieldName);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
                         " FROM courses,crs_usr,usr_figures"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
-                  Gbl.CurrentDeg.Deg.DegCod);
+			" AND usr_figures.%s>='0'"
+			" ORDER BY usr_figures.%s DESC LIMIT 100",
+		  FieldName,
+                  Gbl.CurrentDeg.Deg.DegCod,
+                  FieldName,FieldName);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.NumClicks"
+         sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
                         " FROM crs_usr,usr_figures"
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
-			" AND usr_figures.NumClicks>='0'"
-			" ORDER BY usr_figures.NumClicks DESC LIMIT 100",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+			" AND usr_figures.%s>='0'"
+			" ORDER BY usr_figures.%s DESC LIMIT 100",
+		  FieldName,
+                  Gbl.CurrentCrs.Crs.CrsCod,
+                  FieldName,FieldName);
          break;
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
@@ -1211,8 +1245,8 @@ void Prf_GetAndShowRankingClicks (void)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 1;
-	   NumUsr <= NumUsrs;
+      for (NumUsr = 0, Rank = 0;
+	   NumUsr < NumUsrs;
 	   NumUsr++)
 	{
 	 /***** Get user and number of clicks *****/
@@ -1222,9 +1256,15 @@ void Prf_GetAndShowRankingClicks (void)
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	 Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
-	 /* Get number of clicks (row[1]) */
-	 if (sscanf (row[1],"%ld",&NumClicks) != 1)
-	    NumClicks = -1L;
+	 /* Get figure (row[1]) */
+	 if (sscanf (row[1],"%ld",&Figure) != 1)
+	    Lay_ShowErrorAndExit ("Error reading user's figure.");
+
+	 if (Figure < FigureHigh)
+	   {
+	    Rank++;
+	    FigureHigh = Figure;
+	   }
 
 	 /***** Show row *****/
 	 if (UsrDat.Nickname[0])
@@ -1232,26 +1272,12 @@ void Prf_GetAndShowRankingClicks (void)
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td style=\"text-align:right;\">#%u</td>"
 			       "<td style=\"text-align:left;\">",
-		     NumUsr);
-
-	    /* User's photo */
-	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-						  NULL,
-			      "PHOTO18x24",Pho_ZOOM);
-
-	    /* Put form to go to public profile */
-	    Act_FormStart (ActSeePubPrf);
-	    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
-	    fprintf (Gbl.F.Out,"@%s",UsrDat.Nickname);
-	    fprintf (Gbl.F.Out,"</a>");
-	    Act_FormEnd ();
-
+		     Rank);
+	    Prf_ShowUsrInRanking (&UsrDat);
 	    fprintf (Gbl.F.Out,"</td>"
 		               "<td style=\"text-align:right;\">%ld</td>"
 			       "</tr>",
-		     NumClicks);
+		     Figure);
 	   }
 	}
 
@@ -1271,16 +1297,15 @@ void Prf_GetAndShowRankingClicks (void)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
-   extern const char *Txt_View_public_profile;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
+   unsigned Rank;
    struct UsrData UsrDat;
+   float NumClicksPerDayHigh = (float) LONG_MAX;
    float NumClicksPerDay;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
@@ -1364,8 +1389,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 1;
-	   NumUsr <= NumUsrs;
+      for (NumUsr = 0, Rank = 0;
+	   NumUsr < NumUsrs;
 	   NumUsr++)
 	{
 	 /***** Get user and number of clicks *****/
@@ -1377,6 +1402,11 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	 /* Get number of clicks per day (row[1]) */
 	 NumClicksPerDay = Str_GetFloatNumFromStr (row[1]);
+	 if (NumClicksPerDay < NumClicksPerDayHigh)
+	   {
+	    Rank++;
+	    NumClicksPerDayHigh = NumClicksPerDay;
+	   }
 
 	 /***** Show row *****/
 	 if (UsrDat.Nickname[0])
@@ -1384,22 +1414,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td style=\"text-align:right;\">#%u</td>"
 			       "<td style=\"text-align:left;\">",
-		     NumUsr);
-
-	    /* User's photo */
-	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-						  NULL,
-			      "PHOTO18x24",Pho_ZOOM);
-
-	    /* Put form to go to public profile */
-	    Act_FormStart (ActSeePubPrf);
-	    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
-	    fprintf (Gbl.F.Out,"@%s",UsrDat.Nickname);
-	    fprintf (Gbl.F.Out,"</a>");
-	    Act_FormEnd ();
-
+		     Rank);
+	    Prf_ShowUsrInRanking (&UsrDat);
 	    fprintf (Gbl.F.Out,"</td>"
 		               "<td style=\"text-align:right;\">");
 	    Str_WriteFloatNum (NumClicksPerDay);
@@ -1416,4 +1432,29 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Show user's photo and nickname in ranking list ***************/
+/*****************************************************************************/
+
+static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_View_public_profile;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
+
+   /***** User's photo *****/
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+				        NULL,
+		     "PHOTO18x24",Pho_ZOOM);
+
+   /***** Put form to go to public profile *****/
+   Act_FormStart (ActSeePubPrf);
+   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+   fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
   }
