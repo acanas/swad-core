@@ -1164,7 +1164,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 	 sprintf (Query,"SELECT UsrCod,%s"
 	                " FROM usr_figures"
 			" WHERE %s>='0'"
-			" ORDER BY %s DESC LIMIT 100",
+			" ORDER BY %s DESC,UsrCod LIMIT 100",
 		  FieldName,
 		  FieldName,FieldName);
          break;
@@ -1178,7 +1178,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
-			" ORDER BY usr_figures.%s DESC LIMIT 100",
+			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCty.Cty.CtyCod,
                   FieldName,FieldName);
@@ -1192,7 +1192,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
-			" ORDER BY usr_figures.%s DESC LIMIT 100",
+			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentIns.Ins.InsCod,
                   FieldName,FieldName);
@@ -1205,7 +1205,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
-			" ORDER BY usr_figures.%s DESC LIMIT 100",
+			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   FieldName,FieldName);
@@ -1217,7 +1217,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
-			" ORDER BY usr_figures.%s DESC LIMIT 100",
+			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentDeg.Deg.DegCod,
                   FieldName,FieldName);
@@ -1228,7 +1228,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
-			" ORDER BY usr_figures.%s DESC LIMIT 100",
+			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCrs.Crs.CrsCod,
                   FieldName,FieldName);
@@ -1315,7 +1315,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
 	                " FROM usr_figures"
 			" WHERE FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100");
+			" ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1328,7 +1328,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100",
+			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
@@ -1341,7 +1341,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100",
+			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
@@ -1353,7 +1353,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0'"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100",
+			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
@@ -1364,7 +1364,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100",
+			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
@@ -1374,7 +1374,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
-			" ORDER BY NumClicksPerDay DESC LIMIT 100",
+			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
