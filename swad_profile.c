@@ -1453,7 +1453,7 @@ static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat)
    /***** Put form to go to public profile *****/
    Act_FormStart (ActSeePubPrf);
    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
    fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
