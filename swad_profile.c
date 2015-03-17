@@ -82,8 +82,8 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat);
 
 static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
-static unsigned long Prf_GetRankingNumClicks (long UsrCod);
-static unsigned long Prf_GetNumUsrsWithNumClicks (void);
+static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
+static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName);
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod);
 static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void);
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs);
@@ -463,8 +463,8 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
      {
       fprintf (Gbl.F.Out,"%ld&nbsp;%s",
                UsrFigures.NumClicks,Txt_clicks);
-      Prf_ShowRanking (Prf_GetRankingNumClicks (UsrDat->UsrCod),
-                       Prf_GetNumUsrsWithNumClicks ());
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
+                       Prf_GetNumUsrsWithFigure ("NumClicks"));
       if (UsrFigures.NumDays >= 0)
 	{
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
@@ -504,9 +504,10 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                UsrFigures.NumFileViews,
                (UsrFigures.NumFileViews == 1) ? Txt_download :
         	                                Txt_downloads);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
+                       Prf_GetNumUsrsWithFigure ("NumFileViews"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -542,9 +543,10 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                UsrFigures.NumForPst,
                (UsrFigures.NumForPst == 1) ? Txt_post :
         	                             Txt_posts);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
+                       Prf_GetNumUsrsWithFigure ("NumForPst"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -580,9 +582,10 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                UsrFigures.NumMsgSnt,
                (UsrFigures.NumMsgSnt == 1) ? Txt_message :
         	                             Txt_messages);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
+                       Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -669,31 +672,32 @@ static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 /********** Get ranking of a user according to the number of clicks **********/
 /*****************************************************************************/
 
-static unsigned long Prf_GetRankingNumClicks (long UsrCod)
+static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
   {
    char Query[128];
 
-   /***** Select number of rows with number of clicks
-          greater than the clicks of this user *****/
+   /***** Select number of rows with figure
+          greater than the figure of this user *****/
    sprintf (Query,"SELECT COUNT(*)+1 FROM usr_figures"
 	          " WHERE UsrCod<>'%ld'"	// Really not necessary here
-                  " AND NumClicks>"
-	          "(SELECT NumClicks FROM usr_figures WHERE UsrCod='%ld')",
-	    UsrCod,UsrCod);
-   return DB_QueryCOUNT (Query,"can not get ranking using number of clicks");
+                  " AND %s>"
+	          "(SELECT %s FROM usr_figures WHERE UsrCod='%ld')",
+	    UsrCod,FieldName,FieldName,UsrCod);
+   return DB_QueryCOUNT (Query,"can not get ranking using a figure");
   }
 
 /*****************************************************************************/
-/******************* Get number of users with number of clicks ***************/
+/********************* Get number of users with a figure *********************/
 /*****************************************************************************/
 
-static unsigned long Prf_GetNumUsrsWithNumClicks (void)
+static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
   {
    char Query[128];
 
    /***** Select number of rows with values already calculated *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE NumClicks>='0'");
-   return DB_QueryCOUNT (Query,"can not get number of users with number of clicks");
+   sprintf (Query,"SELECT COUNT(*) FROM usr_figures WHERE %s>='0'",
+            FieldName);
+   return DB_QueryCOUNT (Query,"can not get number of users with a figure");
   }
 
 /*****************************************************************************/
