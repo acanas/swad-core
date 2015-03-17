@@ -99,7 +99,7 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
-static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat);
+static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank);
 
 /*****************************************************************************/
 /************************** Get public profile URL ***************************/
@@ -1264,9 +1264,9 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 1, Rank = 1;
+      for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
-	   NumUsr++)
+	   NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
 	 /***** Get user and number of clicks *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1286,15 +1286,12 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 	   }
 
 	 /***** Show row *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"text-align:right;\">#%u</td>"
-			    "<td style=\"text-align:left;\">",
-		  Rank);
-         Prf_ShowUsrInRanking (&UsrDat);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "<td style=\"text-align:right;\">%ld</td>"
+	 fprintf (Gbl.F.Out,"<tr>");
+         Prf_ShowUsrInRanking (&UsrDat,Rank);
+	 fprintf (Gbl.F.Out,"<td style=\"text-align:right; height:40px;"
+	                    " background-color:%s;\">%ld</td>"
 			    "</tr>",
-		  Figure);
+		  Gbl.ColorRows[Gbl.RowEvenOdd],Figure);
 	}
 
       fprintf (Gbl.F.Out,"</table>");
@@ -1405,9 +1402,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 1, Rank = 1;
+      for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
-	   NumUsr++)
+	   NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
 	 /***** Get user and number of clicks *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1425,13 +1422,11 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   }
 
 	 /***** Show row *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"text-align:right;\">#%u</td>"
-			    "<td style=\"text-align:left;\">",
-		  Rank);
-	 Prf_ShowUsrInRanking (&UsrDat);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "<td style=\"text-align:right;\">");
+	 fprintf (Gbl.F.Out,"<tr>");
+	 Prf_ShowUsrInRanking (&UsrDat,Rank);
+	 fprintf (Gbl.F.Out,"<td style=\"text-align:right; height:40px;"
+	                    " background-color:%s;\">",
+	          Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Str_WriteFloatNum (NumClicksPerDay);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -1451,30 +1446,48 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat)
+static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
   {
    extern const char *Txt_View_public_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
+   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RANK\" style=\"text-align:right;"
+		      " height:40px; background-color:%s;\">"
+		      "#%u"
+		      "</td>"
+                      "<td style=\"width:18px; height:40px;"
+	              " background-color:%s;\">",
+	    Gbl.ColorRows[Gbl.RowEvenOdd],
+	    Rank,
+            Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod))
+   if (Visible)
      {
       /***** User's photo *****/
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO15x20",Pho_ZOOM);
-
-      /***** Put form to go to public profile *****/
-      if (UsrDat->Nickname[0])
-	{
-	 Act_FormStart (ActSeePubPrf);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
-	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
-	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-	}
+			"PHOTO18x24",Pho_ZOOM);
      }
+
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td style=\"height:40px; background-color:%s;\">",
+            Gbl.ColorRows[Gbl.RowEvenOdd]);
+
+   /***** Put form to go to public profile *****/
+   if (Visible && UsrDat->Nickname[0])
+     {
+      Act_FormStart (ActSeePubPrf);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
+      Usr_RestrictLengthAndWriteName (UsrDat,8);
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
   }

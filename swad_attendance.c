@@ -261,14 +261,15 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    /***** Start date/time *****/
    fprintf (Gbl.F.Out,"<tr>"  \
 	              "<td class=\"%s\""
-	              " style=\"text-align:left; vertical-align:top;\"",
+	              " style=\"text-align:left; vertical-align:top;",
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
                           (Att->Open ? "DATE_GREEN" :
                         	       "DATE_RED"));
    if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," bgcolor=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">%02u/%02u/%02u<br />%02u:%02u h</td>",
+      fprintf (Gbl.F.Out," background-color:%s;",
+               Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"\">%02u/%02u/%02u<br />%02u:%02u h</td>",
             Att->DateTimes[Att_START_TIME].Date.Day,
             Att->DateTimes[Att_START_TIME].Date.Month,
 	    Att->DateTimes[Att_START_TIME].Date.Year % 100,

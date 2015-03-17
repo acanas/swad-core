@@ -206,7 +206,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);
 
 void Usr_BuildFullName (struct UsrData *UsrDat);
 
-void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars);
+void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxChars);
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);

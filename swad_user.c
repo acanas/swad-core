@@ -666,7 +666,7 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 /******** Restrict length of firstname and surnames and write then ***********/
 /*****************************************************************************/
 
-void Usr_RestrictLengthAndWriteName (struct UsrData *UsrDat,unsigned MaxChars)
+void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxChars)
   {
    char FirstName[Usr_MAX_BYTES_NAME_SPEC_CHAR+1];
    char Surnames[2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)];
