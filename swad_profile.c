@@ -1264,8 +1264,8 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 0, Rank = 0;
-	   NumUsr < NumUsrs;
+      for (NumUsr = 1, Rank = 1;
+	   NumUsr <= NumUsrs;
 	   NumUsr++)
 	{
 	 /***** Get user and number of clicks *****/
@@ -1281,7 +1281,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 
 	 if (Figure < FigureHigh)
 	   {
-	    Rank++;
+	    Rank = NumUsr;
 	    FigureHigh = Figure;
 	   }
 
@@ -1405,8 +1405,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       fprintf (Gbl.F.Out,"<table>");
 
-      for (NumUsr = 0, Rank = 0;
-	   NumUsr < NumUsrs;
+      for (NumUsr = 1, Rank = 1;
+	   NumUsr <= NumUsrs;
 	   NumUsr++)
 	{
 	 /***** Get user and number of clicks *****/
@@ -1420,7 +1420,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 NumClicksPerDay = Str_GetFloatNumFromStr (row[1]);
 	 if (NumClicksPerDay < NumClicksPerDayHigh)
 	   {
-	    Rank++;
+	    Rank = NumUsr;
 	    NumClicksPerDayHigh = NumClicksPerDay;
 	   }
 
