@@ -2129,7 +2129,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_FORM_MY_COMMON_RECORD:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
-         // Col3Width = 160;
 	 ClassHead = "HEAD_REC";
 	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2148,7 +2147,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   }
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
          FrameWidth = 10;
-         // Col3Width = 160;
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
@@ -2159,7 +2157,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_RECORD_PUBLIC:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_SMALL;
          FrameWidth = 10;
-         // Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2167,7 +2164,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_RECORD_PRINT:
 	 RecordWidth = Rec_WIDTH_SHARE_RECORD_PRINT;
          FrameWidth = 1;
-         // Col3Width = 160;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -2351,7 +2347,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Full name *****/
    fprintf (Gbl.F.Out,"</td>"
-	              "<td class=\"HEAD_REC_BIG\" style=\"text-align:left;"
+	              "<td class=\"REC_NAME\" style=\"text-align:left;"
 	              " vertical-align:top;\">"
 	              "%s<br />%s<br />%s"
 	              "</td>"
@@ -2380,7 +2376,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              "<td class=\"%s\" style=\"width:%upx; text-align:right;\">"
 	              "%s:"
 	              "</td>"
-                      "<td class=\"HEAD_REC_BIG\""
+                      "<td class=\"REC_NICK\""
                       " style=\"width:%upx; text-align:left;\">",
             ClassForm,Col1Width,
             Txt_Nickname,
@@ -2392,7 +2388,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Put form to go to public profile */
 	 Act_FormStart (ActSeePubPrf);
          Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_public_profile,"HEAD_REC_BIG");
+	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (GoToPublicProfileForm)

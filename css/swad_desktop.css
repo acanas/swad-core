@@ -730,7 +730,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .HEAD_REC		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:10pt;}
 .HEAD_REC_SMALL		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:9pt;}
-.HEAD_REC_BIG		{color:#808080; font-size:16pt; font-weight:bold;}
+.REC_NAME		{color:#808080; font-size:16pt; font-weight:bold;}
+.REC_NICK		{color:#808080; font-size:14pt; font-weight:bold;}
 .DAT_REC		{color:#404040; font-size:9pt; line-height:110%;}
 .DAT_REC_SMALL		{color:#808080; font-size:9pt; line-height:110%;}
 .DAT_REC_SMALL_BOLD	{color:#202020; font-size:9pt; line-height:110%;}
