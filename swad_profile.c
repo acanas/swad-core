@@ -674,7 +674,7 @@ static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Select number of rows with figure
           greater than the figure of this user *****/
@@ -757,11 +757,11 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USRS_RANKING);
    Act_LinkFormSubmit (Txt_Ranking,"RANK");
-   fprintf (Gbl.F.Out,"#%ld</a>",Rank);
+   fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
 
    /***** Part of a total and end container *****/
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;%ld"
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;%lu"
 		      "</div>",
 	    Txt_of_PART_OF_A_TOTAL,NumUsrs);
   }
