@@ -29,6 +29,7 @@
 
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_nickname.h"
 #include "swad_parameter.h"
@@ -231,11 +232,15 @@ bool Prf_ShowUserProfile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
 			 "<table style=\"margin:0 auto;\">"
 			 "<tr>"
-			 "<td style=\"text-align:right;"
+			 "<td style=\"text-align:center;"
 			 " vertical-align:top;\">");
 
       /***** Common record *****/
       Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
+
+      /***** Show following and followers *****/
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+         Fol_ShowFollowingAndFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       fprintf (Gbl.F.Out,"</td>"
 			 "<td style=\"text-align:left;"
@@ -739,7 +744,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   // extern const char *Txt_Ranking;
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -750,7 +755,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Act_FormStart (ActSeeUseGbl);
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USRS_RANKING);
-   Act_LinkFormSubmit (Gbl.Title,"RANK");
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
   }

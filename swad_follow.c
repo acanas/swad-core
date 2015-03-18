@@ -60,6 +60,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static unsigned Fol_GetNumFollowing (long UsrCod);
+static unsigned Fol_GetNumFollowers (long UsrCod);
+
 /*****************************************************************************/
 /*************** Check if a user is a follower of another user ***************/
 /*****************************************************************************/
@@ -78,6 +81,82 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
    return (DB_QueryCOUNT (Query,"can not get if a user is a follower of another one") != 0);
   }
 
+/*****************************************************************************/
+/**************** Show following and followers of a user *********************/
+/*****************************************************************************/
+
+void Fol_ShowFollowingAndFollowers (long UsrCod)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Following;
+   extern const char *Txt_Followers;
+   unsigned Following = Fol_GetNumFollowing (UsrCod);
+   unsigned Followers = Fol_GetNumFollowers (UsrCod);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:0 auto;\">"
+	              "<tr>");
+
+   /***** Following *****/
+   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
+	              " text-align:center; vertical-align:top;\">"
+		      "<div class=\"FOLLOW\">"
+		      "%u"
+                      "</div>"
+                      "<div class=\"%s\">"
+                      "%s"
+                      "</div>"
+		      "</td>",
+	    Following,
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Following);
+
+   /***** Followers *****/
+   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
+	              " text-align:center; vertical-align:top;\">"
+		      "<div class=\"FOLLOW\">"
+		      "%u"
+                      "</div>"
+                      "<div class=\"%s\">"
+                      "%s"
+                      "</div>"
+		      "</td>",
+	    Followers,
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Followers);
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+  }
+
+/*****************************************************************************/
+/*************************** Get number of followed **************************/
+/*****************************************************************************/
+
+static unsigned Fol_GetNumFollowing (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Check if a user is a follower of another user *****/
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod='%ld'",
+            UsrCod);
+   return DB_QueryCOUNT (Query,"can not get number of followed");
+  }
+
+/*****************************************************************************/
+/************************** Get number of followers **************************/
+/*****************************************************************************/
+
+static unsigned Fol_GetNumFollowers (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Check if a user is a follower of another user *****/
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod='%ld'",
+            UsrCod);
+   return DB_QueryCOUNT (Query,"can not get number of followers");
+  }
 
 /*****************************************************************************/
 /***************************** Follow another user ***************************/

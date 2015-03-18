@@ -11859,6 +11859,48 @@ const char *Txt_Follow =
 	"Seguir";
 #endif
 
+const char *Txt_Followers =
+#if   L==0
+	"Seguidors";
+#elif L==1
+	"Anh&auml;nger";
+#elif L==2
+	"Followers";
+#elif L==3
+	"Seguidores";
+#elif L==4
+	"Suiveurs";
+#elif L==5
+	"Seguidores";	// Okoteve traducción
+#elif L==6
+	"Followers";
+#elif L==7
+	"Obserwuj&aogon;";
+#elif L==8
+	"Seguidores";
+#endif
+
+const char *Txt_Following =
+#if   L==0
+	"Seg&uuml;ent";
+#elif L==1
+	"Folgende";
+#elif L==2
+	"Following";
+#elif L==3
+	"Siguiendo";
+#elif L==4
+	"Suivant";
+#elif L==5
+	"Siguiendo";	// Okoteve traducción
+#elif L==6
+	"Following";
+#elif L==7
+	"Nast&eogon;puj&aogon;cy";
+#elif L==8
+	"Seguinte";
+#endif
+
 const char *Txt_For_security_enter_your_password =
 #if   L==0
 	"Per a m&eacute;s seguretat, introdueixi la seva contrasenya";

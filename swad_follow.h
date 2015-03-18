@@ -40,6 +40,7 @@
 /*****************************************************************************/
 
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
+void Fol_ShowFollowingAndFollowers (long UsrCod);
 
 void Fol_FollowUsr (void);
 void Fol_UnfollowUsr (void);

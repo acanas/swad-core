@@ -820,10 +820,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CONV_IMPR		{font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-size:11pt;}
 
 /***************************** Public user's profile *************************/
-.RANK
+.FOLLOW
 	{
 	color:#808080;
-	font-size:11pt;
+	font-size:24pt;
 	font-weight:bold;
 	}
 
