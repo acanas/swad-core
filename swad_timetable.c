@@ -781,7 +781,7 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"min-width:560px; margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table style=\"min-width:540px; margin:0 auto;\">");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();

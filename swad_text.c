@@ -38084,7 +38084,7 @@ const char *Txt_Tags =		// Tags used in test
 
 const char *Txt_Teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #if   L==0
-	"Prof.";	// Necessita traduccio
+	"Prof.";
 #elif L==1
 	"Lehr.";
 #elif L==2
@@ -38098,9 +38098,30 @@ const char *Txt_Teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #elif L==6
 	"Prof.";
 #elif L==7
-	"Teach.";	// Potrzebujesz tlumaczenie
+	"Naucz.";
 #elif L==8
 	"Prof.";
+#endif
+
+const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
+#if   L==0
+	"prof.";
+#elif L==1
+	"Lehr.";
+#elif L==2
+	"teach.";
+#elif L==3
+	"prof.";
+#elif L==4
+	"enseig.";
+#elif L==5
+	"prof.";	// Okoteve traducción
+#elif L==6
+	"prof.";
+#elif L==7
+	"naucz.";
+#elif L==8
+	"prof.";
 #endif
 
 const char *Txt_Test =

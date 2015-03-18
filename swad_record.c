@@ -2014,7 +2014,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 
 #define C1_WIDTH  52
 #define C2_WIDTH 144
-#define C3_WIDTH 230
+#define C3_WIDTH 210
 #define C4_WIDTH 154
 
 void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
@@ -2039,7 +2039,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   // extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
@@ -2064,6 +2063,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
    bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ||
 	                         UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER);
+   bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
+                       TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
 	            TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
@@ -2198,7 +2199,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"width:%upx;"
+   fprintf (Gbl.F.Out,"<td rowspan=\"3\" style=\"width:%upx;"
                       " text-align:center; vertical-align:top;\">",
 	    C4_WIDTH);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -2208,7 +2209,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      "</tr>");
 
    /***** Commands *****/
-   CommandsRowspan = 4;		// Name + Webs/social networks + Layout row + Country
+   CommandsRowspan = 5;		// Name + Nickname + Webs/social networks + Layout row + Country
    if (ShowIDRows)
       CommandsRowspan += 6;	// Email, ID, Role, Surname1, Surname2, Firstname
    if (ShowAddressRows)
@@ -2390,14 +2391,19 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /***** Full name *****/
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"REC_NAME\" style=\"width:%upx;"
 	              " text-align:left; vertical-align:top;\">"
-	              "%s<br />%s<br />%s",
+	              "%s<br />%s<br />%s"
+	              "</td>"
+	              "</tr>",
 	    C2_WIDTH + C3_WIDTH,
 	    UsrDat->FirstName ,
 	    UsrDat->Surname1,
 	    UsrDat->Surname2);
 
    /***** User's nickname *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_NICK\" style=\"margin-top:20px;\">");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"REC_NAME\" style=\"width:%upx;"
+	              " text-align:left; vertical-align:bottom;\">"
+	              "<div class=\"REC_NICK\">",
+	    C2_WIDTH + C3_WIDTH);
    if (UsrDat->Nickname[0])
      {
       if (GoToPublicProfileForm)
@@ -2437,7 +2443,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    ClassData,C2_WIDTH + C3_WIDTH);
    if (ShowData)
      {
-      if (DataForm)
+      if (CountryForm)
 	{
 	 /* If list of countries is empty, try to get it */
 	 if (!Gbl.Ctys.Num)
@@ -3243,7 +3249,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 ("580px",2,
+   Lay_StartRoundFrameTable10 ("560px",2,
                                IAmTeacher ? Txt_Institution_centre_and_department :
 	                                    Txt_Institution);
 

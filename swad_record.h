@@ -35,11 +35,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Rec_WIDTH_SHARE_RECORD_BIG	580
-// #define Rec_WIDTH_SHARE_RECORD_SMALL	540
-// #define Rec_WIDTH_SHARE_RECORD_PRINT	540
-// #define Rec_WIDTH_COURSE_RECORD		Rec_WIDTH_SHARE_RECORD_BIG
-// #define Rec_WIDTH_COURSE_RECORD_PRINT	Rec_WIDTH_SHARE_RECORD_BIG
+#define Rec_WIDTH_SHARE_RECORD_BIG	560
 
 #define Rec_MAX_LENGTH_NAME_FIELD	255
 #define Rec_MIN_LINES_IN_EDITION_FIELD	  1
