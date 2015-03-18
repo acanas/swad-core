@@ -43,6 +43,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_enrollment.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
@@ -951,6 +952,9 @@ Users:
 	---. ActCalNumFileViews		Calculate number of file views and store into user's figures
 	---. ActCalNumForPst		Calculate number of forum posts and store into user's figures
 	---. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+
+	---. ActFolUsr			Follow another user
+	---. ActUnfUsr			Unfollow another user
 Messages:
 	794. ActSeeNtf			Show my recent notifications
 	795. ActSeeAnn			Show global announcements
@@ -2336,6 +2340,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCalNumFilVie	*/{1409,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
    /* ActCalNumForPst	*/{1408,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
    /* ActCalNumMsgSnt	*/{1407,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+
+   /* ActFolUsr		*/{1410,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -4075,6 +4082,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCalNumMsgSnt,	// #1407
 	ActCalNumForPst,	// #1408
 	ActCalNumFilVie,	// #1409
+	ActFolUsr,		// #1410
+	ActUnfUsr,		// #1411
 	};
 
 /*****************************************************************************/

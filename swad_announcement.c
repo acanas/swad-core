@@ -435,12 +435,12 @@ void Ann_RemoveAnnouncement (void)
    /***** Remove announcement *****/
    sprintf (Query,"DELETE FROM announcements WHERE AnnCod='%ld'",
             AnnCod);
-   DB_QueryREPLACE (Query,"can not remove announcement");
+   DB_QueryDELETE (Query,"can not remove announcement");
 
    /***** Remove users who have seen the announcement *****/
    sprintf (Query,"DELETE FROM ann_seen WHERE AnnCod='%ld'",
             AnnCod);
-   DB_QueryREPLACE (Query,"can not remove announcement");
+   DB_QueryDELETE (Query,"can not remove announcement");
 
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_removed);

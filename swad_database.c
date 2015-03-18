@@ -2361,6 +2361,26 @@ mysql> DESCRIBE usr_figures;
 	           "NumMsgSnt INT NOT NULL DEFAULT -1,"
 	           "PRIMARY KEY(UsrCod),INDEX(FirstClickTime),INDEX(NumClicks))");
 
+   /***** Table usr_follow *****/
+   /*
+mysql> DESCRIBE usr_follow;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| FollowerCod | int(11)  | NO   | PRI | NULL    |       |
+| FollowedCod | int(11)  | NO   | PRI | NULL    |       |
+| FollowTime  | datetime | NO   | MUL | NULL    |       |
++-------------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+   */
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_follow ("
+	           "FollowerCod INT NOT NULL,"
+	           "FollowedCod INT NOT NULL,"
+	           "FollowTime DATETIME NOT NULL,"
+	           "UNIQUE INDEX (FollowerCod,FollowedCod),"
+	           "UNIQUE INDEX (FollowedCod,FollowerCod),"
+	           "INDEX (FollowTime))");
+
 /***** Table usr_IDs *****/
 /*
 mysql> DESCRIBE usr_IDs;

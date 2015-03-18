@@ -34,6 +34,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrollment.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -50,7 +51,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
 
 /*****************************************************************************/
@@ -551,10 +551,11 @@ long Rec_GetFieldCod (void)
 
 unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of cards with a given field in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod='%ld'",FieldCod);
+   sprintf (Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod='%ld'",
+            FieldCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of cards with a given field not empty in a course");
   }
 
@@ -2214,7 +2215,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    if (CommandForms)
      {
-      fprintf (Gbl.F.Out,"<div style=\"width:22px; margin:6px auto 0 auto;\">");
+      fprintf (Gbl.F.Out,"<div style=\"width:44px; margin:6px auto 0 auto;\">");
 
       /***** Button to view user's record card when:
              - viewing public profile &&
@@ -2233,7 +2234,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_View_record_card,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/card16x16.gif\""
-			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2254,7 +2255,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/config16x16.gif\""
-			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2279,7 +2280,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_View_works,ClassData);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/folder16x16.gif\""
-			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2298,7 +2299,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_See_exams,ClassData);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/file16x16.gif\""
-			    " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2315,7 +2316,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_LinkFormSubmit (Txt_Attendance,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			       "<img src=\"%s/rollcall16x16.gif\""
-			       " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2335,12 +2336,46 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       Act_LinkFormSubmit (Gbl.Title,ClassData);
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			 "<img src=\"%s/msg16x16.gif\""
-			 " style=\"width:16px;height:16px;\" alt=\"%s\" />"
+			 " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Gbl.Title);
       Act_FormEnd ();
+
+      /***** Button to follow / unfollow *****/
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 if (!ItsMe)
+	   {
+	    if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
+	      {
+	       Act_FormStart (ActUnfUsr);
+	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	       Act_LinkFormSubmit ("Dejar de seguir",ClassData);
+	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+				  "<img src=\"%s/unfollow16x16.gif\""
+				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+				  "</div>"
+				  "</a>",
+			Gbl.Prefs.IconsURL,
+			"Dejar de seguir");
+	       Act_FormEnd ();
+	      }
+	    else
+	      {
+	       Act_FormStart (ActFolUsr);
+	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	       Act_LinkFormSubmit ("Seguir",ClassData);
+	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+				  "<img src=\"%s/follow16x16.gif\""
+				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+				  "</div>"
+				  "</a>",
+			Gbl.Prefs.IconsURL,
+			"Seguir");
+	       Act_FormEnd ();
+	      }
+	   }
 
       fprintf (Gbl.F.Out,"</div>");
      }

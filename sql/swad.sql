@@ -1183,6 +1183,16 @@ CREATE TABLE IF NOT EXISTS usr_figures (
 	INDEX(FirstClickTime),
 	INDEX(NumClicks));
 --
+-- Table usr_follow: stores followers and followed
+--
+CREATE TABLE IF NOT EXISTS usr_follow (
+	FollowerCod INT NOT NULL,
+	FollowedCod INT NOT NULL,
+	FollowTime DATETIME NOT NULL,
+	UNIQUE INDEX (FollowerCod,FollowedCod),
+	UNIQUE INDEX (FollowedCod,FollowerCod),
+	INDEX (FollowTime));
+--
 -- Table usr_last: stores some variable data related to users
 --
 CREATE TABLE IF NOT EXISTS usr_last (

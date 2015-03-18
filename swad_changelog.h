@@ -103,11 +103,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.94.4 (2015/03/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.95 (2015/03/18)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.95:    Mar 18, 2015	New module swad_follow for follow users. (182903 lines)
+					1 change necessary in Makefile:
+Add swad_follow.o to list of object files
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS usr_follow (FollowerCod INT NOT NULL,FollowedCod INT NOT NULL,FollowTime DATETIME NOT NULL,UNIQUE INDEX (FollowerCod,FollowedCod),UNIQUE INDEX (FollowedCod,FollowerCod),INDEX (FollowTime));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1410','es','N','Seguir a un usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1411','es','N','Dejar de seguir a un usuario');
+
         Version 14.94.4:  Mar 17, 2015	Changes in ranking layout. (182679 lines)
         Version 14.94.3:  Mar 17, 2015	Changes in record fonts. (182667 lines)
         Version 14.94.2:  Mar 17, 2015	Fixed bug in ranking. (182668 lines)

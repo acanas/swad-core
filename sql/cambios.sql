@@ -10525,6 +10525,7 @@ SELECT COUNT(*)+1 FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS N
 
 INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt) SELECT UsrCod,0,-1,-1,-1,-1 FROM usr_data WHERE UsrCod>0 AND UsrCod NOT IN (SELECT UsrCod FROM usr_figures);
 
+---------------
 
 Hecho:
 UPDATE usr_figures,((SELECT UsrCod,COUNT(*) AS N FROM forum_post WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM forum_post))) AS FP SET usr_figures.NumForPst=FP.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumForPst<0 AND usr_figures.UsrCod=FP.UsrCod;
@@ -10541,6 +10542,8 @@ SET @USRCODMIN=0;
 SET @USRCODMAX=1000;
 UPDATE usr_figures,((SELECT UsrCod,SUM(NumViews) AS N FROM file_view WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX GROUP BY UsrCod) UNION (SELECT UsrCod,'0' AS N FROM usr_figures WHERE UsrCod>=@USRCODMIN AND UsrCod<=@USRCODMAX AND UsrCod NOT IN (SELECT UsrCod FROM file_view))) AS FV SET usr_figures.NumFileViews=FV.N WHERE usr_figures.UsrCod>=@USRCODMIN AND usr_figures.UsrCod<=@USRCODMAX AND usr_figures.NumFileViews<0 AND usr_figures.UsrCod=FV.UsrCod;
 
+---------------
 
+CREATE TABLE IF NOT EXISTS usr_follow (FollowerCod INT NOT NULL,FollowedCod NIT NOT NULL,FollowTime DATETIME NOT NULL,UNIQUE INDEX (FollowerCod,FollowedCod),UNIQUE INDEX (FollowedCod,FollowerCod),INDEX (FollowTime));
 
 
