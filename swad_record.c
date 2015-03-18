@@ -2039,7 +2039,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Country;
+   // extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
@@ -2208,10 +2208,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      "</tr>");
 
    /***** Commands *****/
-   CommandsRowspan = 2;		// Name + Webs/social networks
+   CommandsRowspan = 4;		// Name + Webs/social networks + Layout row + Country
    if (ShowIDRows)
       CommandsRowspan += 6;	// Email, ID, Role, Surname1, Surname2, Firstname
-   CommandsRowspan += 1;	// Country
    if (ShowAddressRows)
       CommandsRowspan += 7;	// Origin place, Date of birth, Local address, Local phone
                                 // Family address, Family phone, Common comments for all the courses
@@ -2423,13 +2422,62 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              "</td>"
 	              "</tr>");
 
-   /***** User's web and social networks *****/
+   /***** Layout row *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"width:%upx;\">"
-                      "<td style=\"width:%upx;\">"
-                      "<td style=\"width:%upx;\">"
+	              "<td style=\"width:%upx; height:0px;\"></td>"
+                      "<td style=\"width:%upx; height:0px;\"></td>"
+                      "<td style=\"width:%upx; height:0px;\"></td>"
+		      "</tr>",
+            C2_WIDTH,C3_WIDTH,C4_WIDTH);
+
+   /***** Country *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
+		      " text-align:left; vertical-align:top;\">",
+	    ClassData,C2_WIDTH + C3_WIDTH);
+   if (ShowData)
+     {
+      if (DataForm)
+	{
+	 /* If list of countries is empty, try to get it */
+	 if (!Gbl.Ctys.Num)
+	   {
+	    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+	    Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+	   }
+
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
+			    "<option value=\"-1\">&nbsp;</option>"
+			    "<option value=\"0\"",
+		  C2_WIDTH + C3_WIDTH - 60);
+	 if (UsrDat->CtyCod == 0)
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
+	 for (NumCty = 0;
+	      NumCty < Gbl.Ctys.Num;
+	      NumCty++)
+	   {
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+		     Gbl.Ctys.Lst[NumCty].CtyCod);
+	    if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
+	       fprintf (Gbl.F.Out," selected=\"selected\"");
+	    fprintf (Gbl.F.Out,">%s</option>",
+		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	   }
+	 fprintf (Gbl.F.Out,"</select>");
+	}
+      else if (UsrDat->CtyCod > 0)
+	{
+	 Cty_GetCountryName (UsrDat->CtyCod,CtyName);
+	 fprintf (Gbl.F.Out,"%s",CtyName);
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** User's web and social networks *****/
+   fprintf (Gbl.F.Out,"<td style=\"width:%upx;\">"
 	              "<div style=\"vertical-align:top; margin:0 auto;\">",
-	    C2_WIDTH,C3_WIDTH,C4_WIDTH);
+	    C4_WIDTH);
    Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</div>"
 	              "</td>"
@@ -2640,7 +2688,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 40,
+		  C3_WIDTH + C4_WIDTH - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->Surname1);
       else if (UsrDat->Surname1[0])
@@ -2662,7 +2710,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 40,
+		  C3_WIDTH + C4_WIDTH - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->Surname2);
       else if (UsrDat->Surname2[0])
@@ -2686,7 +2734,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 40,
+		  C3_WIDTH + C4_WIDTH - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->FirstName);
       else if (UsrDat->FirstName[0])
@@ -2694,58 +2742,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
-
-   /* Country */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"width:%upx; text-align:right;\">"
-		      "%s",
-	    ClassForm,C2_WIDTH,Txt_Country);
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-      fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
-		      "<td colspan=\"2\" class=\"%s\""
-		      " style=\"width:%upx; text-align:left;\">",
-	    ClassData,C3_WIDTH + C4_WIDTH);
-   if (ShowData)
-     {
-      if (DataForm)
-	{
-	 /* If list of countries is empty, try to get it */
-	 if (!Gbl.Ctys.Num)
-	   {
-	    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-	    Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
-	   }
-
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
-			    "<option value=\"-1\">&nbsp;</option>"
-			    "<option value=\"0\"",
-		  C3_WIDTH + C4_WIDTH - 40);
-	 if (UsrDat->CtyCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
-	 for (NumCty = 0;
-	      NumCty < Gbl.Ctys.Num;
-	      NumCty++)
-	   {
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-		     Gbl.Ctys.Lst[NumCty].CtyCod);
-	    if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",
-		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	   }
-	 fprintf (Gbl.F.Out,"</select>");
-	}
-      else if (UsrDat->CtyCod > 0)
-	{
-	 Cty_GetCountryName (UsrDat->CtyCod,CtyName);
-	 fprintf (Gbl.F.Out,"%s",CtyName);
-	}
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
 
    if (ShowAddressRows)
      {
@@ -2764,7 +2760,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->OriginPlace);
          else if (UsrDat->OriginPlace[0])
@@ -2812,7 +2808,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->LocalAddress);
          else if (UsrDat->LocalAddress[0])
@@ -2836,7 +2832,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      Usr_MAX_LENGTH_PHONE,
                      UsrDat->LocalPhone);
          else if (UsrDat->LocalPhone[0])
@@ -2860,7 +2856,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->FamilyAddress);
          else if (UsrDat->FamilyAddress[0])
@@ -2884,7 +2880,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      Usr_MAX_LENGTH_PHONE,
                      UsrDat->FamilyPhone);
          else if (UsrDat->FamilyPhone[0])
@@ -2908,7 +2904,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          if (DataForm)
             fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
         	               " style=\"width:%upx;\">%s</textarea>",
-                     C3_WIDTH + C4_WIDTH - 40,
+                     C3_WIDTH + C4_WIDTH - 60,
                      UsrDat->Comments);
          else if (UsrDat->Comments[0])
            {

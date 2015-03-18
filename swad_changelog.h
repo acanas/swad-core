@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.96.1 (2015/03/18)"
+#define Log_PLATFORM_VERSION	"SWAD 14.96.2 (2015/03/18)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.96.2:  Mar 18, 2015	Changes in record cards. (183011 lines)
         Version 14.96.1:  Mar 18, 2015	Changes in user's profile. (183015 lines)
         Version 14.96:    Mar 18, 2015	New layout in record cards. (183011 lines)
         Version 14.95.1:  Mar 18, 2015	Show user's profile after followin or unfollowing. (182985 lines)
