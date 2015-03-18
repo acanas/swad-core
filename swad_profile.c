@@ -472,15 +472,16 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
                UsrFigures.NumClicks,Txt_clicks);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
                        Prf_GetNumUsrsWithFigure ("NumClicks"));
       if (UsrFigures.NumDays >= 0)
 	{
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
 	}
@@ -511,7 +512,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
 	    Txt_Downloads);
    if (UsrFigures.NumFileViews >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
                UsrFigures.NumFileViews,
                (UsrFigures.NumFileViews == 1) ? Txt_download :
         	                                Txt_downloads);
@@ -519,6 +520,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumFileViews"));
       if (UsrFigures.NumDays >= 0)
 	{
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -550,7 +552,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
 	    Txt_Forums);
    if (UsrFigures.NumForPst >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
                UsrFigures.NumForPst,
                (UsrFigures.NumForPst == 1) ? Txt_post :
         	                             Txt_posts);
@@ -558,6 +560,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumForPst"));
       if (UsrFigures.NumDays >= 0)
 	{
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -589,7 +592,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
 	    Txt_Messages);
    if (UsrFigures.NumMsgSnt >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s",
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
                UsrFigures.NumMsgSnt,
                (UsrFigures.NumMsgSnt == 1) ? Txt_message :
         	                             Txt_messages);
@@ -597,6 +600,7 @@ static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
       if (UsrFigures.NumDays >= 0)
 	{
+	 fprintf (Gbl.F.Out,"<br />");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
@@ -757,24 +761,20 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *Txt_Ranking;
+   // extern const char *Txt_Ranking;
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div style=\"vertical-align:middle;\">");
+   /***** Part of a total and end container *****/
+   sprintf (Gbl.Title,"#%lu %s %lu",
+	    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs);
 
    /***** Rank in form to go to ranking *****/
    Act_FormStart (ActSeeUseGbl);
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USRS_RANKING);
-   Act_LinkFormSubmit (Txt_Ranking,"RANK");
+   Act_LinkFormSubmit (Gbl.Title,"RANK");
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
-
-   /***** Part of a total and end container *****/
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;%lu"
-		      "</div>",
-	    Txt_of_PART_OF_A_TOTAL,NumUsrs);
   }
 
 /*****************************************************************************/

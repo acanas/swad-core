@@ -27482,7 +27482,7 @@ const char *Txt_Quota_exceeded =
 #elif L==8
 	"Quota excedida!";
 #endif
-
+/*
 const char *Txt_Ranking =
 #if   L==0
 	 "R&agrave;nquing";
@@ -27503,7 +27503,7 @@ const char *Txt_Ranking =
 #elif L==8
 	 "Posi&ccedil;&atilde;o";
 #endif
-
+*/
 const char *Txt_ReaBRders =
 #if   L==0
 	"Lec-<br />tores";	// Necessita traduccio
