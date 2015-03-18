@@ -42,6 +42,7 @@
 char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba);
 void Prf_RequestUserProfile (void);
 void Prf_GetUsrCodAndShowUserProfile (void);
+bool Prf_ShowUserProfile (void);
 void Prf_ChangeProfileVisibility (void);
 void Prf_CalculateFirstClickTime (void);
 void Prf_CalculateNumClicks (void);

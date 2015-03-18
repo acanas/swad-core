@@ -2016,10 +2016,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Admin_user;
    extern const char *Txt_ID;
    extern const char *Txt_Nickname;
-   extern const char *Txt_Write_a_message_to_X;
+   extern const char *Txt_Write_a_message;
    extern const char *Txt_View_works;
    extern const char *Txt_See_exams;
    extern const char *Txt_Attendance;
+   extern const char *Txt_Unfollow;
+   extern const char *Txt_Follow;
    extern const char *Txt_View_public_profile;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
@@ -2332,15 +2334,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       else
 	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
-      sprintf (Gbl.Title,Txt_Write_a_message_to_X,UsrDat->FullName);
-      Act_LinkFormSubmit (Gbl.Title,ClassData);
+      Act_LinkFormSubmit (Txt_Write_a_message,ClassData);
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			 "<img src=\"%s/msg16x16.gif\""
 			 " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
-	       Gbl.Title);
+	       Txt_Write_a_message);
       Act_FormEnd ();
 
       /***** Button to follow / unfollow *****/
@@ -2351,28 +2352,28 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	      {
 	       Act_FormStart (ActUnfUsr);
 	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	       Act_LinkFormSubmit ("Dejar de seguir",ClassData);
+	       Act_LinkFormSubmit (Txt_Unfollow,ClassData);
 	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 				  "<img src=\"%s/unfollow16x16.gif\""
 				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 				  "</div>"
 				  "</a>",
 			Gbl.Prefs.IconsURL,
-			"Dejar de seguir");
+			Txt_Unfollow);
 	       Act_FormEnd ();
 	      }
 	    else
 	      {
 	       Act_FormStart (ActFolUsr);
 	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	       Act_LinkFormSubmit ("Seguir",ClassData);
+	       Act_LinkFormSubmit (Txt_Follow,ClassData);
 	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 				  "<img src=\"%s/follow16x16.gif\""
 				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 				  "</div>"
 				  "</a>",
 			Gbl.Prefs.IconsURL,
-			"Seguir");
+			Txt_Follow);
 	       Act_FormEnd ();
 	      }
 	   }

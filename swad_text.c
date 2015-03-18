@@ -11841,6 +11841,27 @@ const char *Txt_Folders_not_renamed =
 	"Diret&oacute;rios n&atilde;o renomeados";
 #endif
 
+const char *Txt_Follow =
+#if   L==0
+	"Seguir";
+#elif L==1
+	"Folgen";
+#elif L==2
+	"Follow";
+#elif L==3
+	"Seguir";
+#elif L==4
+	"Suivre";
+#elif L==5
+	"Seguir";	// Okoteve traducción
+#elif L==6
+	"Seguire";
+#elif L==7
+	"&Sacute;ledzi&cacute;";
+#elif L==8
+	"Seguir";
+#endif
+
 const char *Txt_For_security_enter_your_password =
 #if   L==0
 	"Per a m&eacute;s seguretat, introdueixi la seva contrasenya";
@@ -45920,6 +45941,27 @@ const char *Txt_Undo =
 	"Desfazer";
 #endif
 
+const char *Txt_Unfollow =
+#if   L==0
+	"Deixar de seguir";
+#elif L==1
+	"Entfolgen";
+#elif L==2
+	"Unfollow";
+#elif L==3
+	"Dejar de seguir";
+#elif L==4
+	"Se d&eacute;sabonner";
+#elif L==5
+	"Dejar de seguir";	// Okoteve traducción
+#elif L==6
+	"Smetti";
+#elif L==7
+	"Nie obserwuj";
+#elif L==8
+	"Deixar de seguir";
+#endif
+
 const char *Txt_unknown_course =
 #if   L==0
 	"assignatura desconeguda";
@@ -48002,9 +48044,30 @@ const char *Txt_WriBRters =
 	"Escri-<br />tores";
 #endif
 
+const char *Txt_Write_a_message =
+#if   L==0
+	"Escriu un missatge";
+#elif L==1
+	"Schreiben eine Nachricht";
+#elif L==2
+	"Write a message";
+#elif L==3
+	"Escribir un mensaje";
+#elif L==4
+	"&Eacute;crire un message";
+#elif L==5
+	"Escribir un mensaje";		// Okoteve traducción
+#elif L==6
+	"Scrivi un messaggio";
+#elif L==7
+	"Napisz wiadomo&sacute;&cacute;";
+#elif L==8
+	"Escrever uma mensagem";
+#endif
+
 const char *Txt_Write_a_message_to_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Escribir un mensaje a %s";		// Necessita traduccio
+	"Escriu un missatge a %s";
 #elif L==1
 	"Schreiben Sie %s eine Nachricht";
 #elif L==2
@@ -48012,15 +48075,15 @@ const char *Txt_Write_a_message_to_X =	// Warning: it is very important to inclu
 #elif L==3
 	"Escribir un mensaje a %s";
 #elif L==4
-	"Write a message to %s";		// Besoin de traduction
+	"&Eacute;crire un message &agrave; %s";
 #elif L==5
 	"Escribir un mensaje a %s";		// Okoteve traducción
 #elif L==6
 	"Scrivi un messaggio a %s";
 #elif L==7
-	"Write a message to %s";		// Potrzebujesz tlumaczenie
+	"Napisz wiadomo&sacute;&cacute; do %s";
 #elif L==8
-	"Write a message to %s";		// Necessita de tradução
+	"Escrever uma mensagem para %s";
 #endif
 
 const char *Txt_WWW =		// World Wide Web

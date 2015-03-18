@@ -33,6 +33,7 @@
 #include "swad_nickname.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
+#include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_text.h"
 #include "swad_theme.h"
@@ -76,7 +77,7 @@ extern struct Globals Gbl;
 
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
 
-static void Prf_ShowUserProfile (void);
+static void Prf_GetUsrDatAndShowUserProfile (void);
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 static void Prf_ShowHistoricUserProfile (const struct UsrData *UsrDat);
 
@@ -179,7 +180,7 @@ void Prf_GetUsrCodAndShowUserProfile (void)
       Usr_GetParamOtherUsrCodEncrypted ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/
@@ -187,53 +188,15 @@ void Prf_GetUsrCodAndShowUserProfile (void)
 /*****************************************************************************/
 // If error, Nickname is used to fill the form to request another nickname
 
-static void Prf_ShowUserProfile (void)
+static void Prf_GetUsrDatAndShowUserProfile (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool Error = false;
+   bool Error;
 
    /***** Check if user exists and get his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
-     {
-      /***** Check if I can see the public profile *****/
-      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,Gbl.Usrs.Other.UsrDat.UsrCod))
-	{
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-	   {
-	    /* Get user's role in current course */
-	    Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
-
-	    /* Get if user has accepted enrollment in current course */
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
-	   }
-
-	 fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
-	                    "<table style=\"margin:0 auto;\">"
-	                    "<tr>"
-	                    "<td style=\"text-align:right;"
-	                    " vertical-align:top;\">");
-
-	 /***** Common record *****/
-	 Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
-
-	 /***** Show details of user's profile *****/
-	 Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td style=\"text-align:left;"
-	                    " vertical-align:top; padding-left:4px;\">");
-
-	 /***** Show historic user's profile *****/
-	 Prf_ShowHistoricUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "</tr>"
-	                    "</table>"
-	                    "</div>");
-	}
-      else
-	 Error = true;
-     }
+      /***** Show public profile *****/
+      Error = !Prf_ShowUserProfile ();
    else
       Error = true;
 
@@ -245,6 +208,54 @@ static void Prf_ShowUserProfile (void)
       /***** Request nickname again *****/
       Prf_RequestUserProfileWithDefaultNickname ("");
      }
+  }
+
+/*****************************************************************************/
+/*************************** Show a user's profile ***************************/
+/*****************************************************************************/
+// Return false on error
+
+bool Prf_ShowUserProfile (void)
+  {
+   /***** Check if I can see the public profile *****/
+   if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	{
+	 /* Get user's role in current course */
+	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+
+	 /* Get if user has accepted enrollment in current course */
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	}
+
+      fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
+			 "<table style=\"margin:0 auto;\">"
+			 "<tr>"
+			 "<td style=\"text-align:right;"
+			 " vertical-align:top;\">");
+
+      /***** Common record *****/
+      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
+
+      /***** Show details of user's profile *****/
+      Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "<td style=\"text-align:left;"
+			 " vertical-align:top; padding-left:4px;\">");
+
+      /***** Show historic user's profile *****/
+      Prf_ShowHistoricUserProfile (&Gbl.Usrs.Other.UsrDat);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>"
+			 "</table>"
+			 "</div>");
+
+      return true;
+     }
+   return false;
   }
 
 /*****************************************************************************/
@@ -779,7 +790,7 @@ void Prf_CalculateFirstClickTime (void)
    Prf_GetFirstClickFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/
@@ -842,7 +853,7 @@ void Prf_CalculateNumClicks (void)
    Prf_GetNumClicksAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/
@@ -890,7 +901,7 @@ void Prf_CalculateNumFileViews (void)
    Prf_GetNumFileViewsAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/
@@ -936,7 +947,7 @@ void Prf_CalculateNumForPst (void)
    Prf_GetNumForPstAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/
@@ -982,7 +993,7 @@ void Prf_CalculateNumMsgSnt (void)
    Prf_GetNumMsgSntAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show user's profile again *****/
-   Prf_ShowUserProfile ();
+   Prf_GetUsrDatAndShowUserProfile ();
   }
 
 /*****************************************************************************/

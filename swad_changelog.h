@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.95 (2015/03/18)"
+#define Log_PLATFORM_VERSION	"SWAD 14.95.1 (2015/03/18)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.95.1:  Mar 18, 2015	Show user's profile after followin or unfollowing. (182985 lines)
         Version 14.95:    Mar 18, 2015	New module swad_follow for follow users. (182903 lines)
 					1 change necessary in Makefile:
 Add swad_follow.o to list of object files

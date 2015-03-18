@@ -31,6 +31,7 @@
 #include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"
+#include "swad_profile.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -86,6 +87,7 @@ void Fol_FollowUsr (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
+   bool Error;
 
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -101,8 +103,14 @@ void Fol_FollowUsr (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not follow user");
         }
+
+      /***** Show user's profile again *****/
+      Error = !Prf_ShowUserProfile ();
      }
    else
+      Error = true;
+
+   if (Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
@@ -114,6 +122,7 @@ void Fol_UnfollowUsr (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
+   bool Error;
 
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -128,7 +137,13 @@ void Fol_UnfollowUsr (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
         }
+
+      /***** Show user's profile again *****/
+      Error = !Prf_ShowUserProfile ();
      }
    else
+      Error = true;
+
+   if (Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
