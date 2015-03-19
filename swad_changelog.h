@@ -103,12 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.98 (2015/03/19)"
+#define Log_PLATFORM_VERSION	"SWAD 14.98.1 (2015/03/19)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.98:    Mar 19, 2015	Show list of following and followers. (183300 lines)
+        Version 14.98.1:  Mar 19, 2015	Changes in lists of following and followers. (183360 lines)
+        Version 14.98:    Mar 19, 2015	Show lists of following and followers. (183300 lines)
         Version 14.97:    Mar 18, 2015	Show number of following and followers in user's profile. (183130 lines)
         Version 14.96.3:  Mar 18, 2015	Changes in record cards. (183017 lines)
         Version 14.96.2:  Mar 18, 2015	Changes in record cards. (183011 lines)

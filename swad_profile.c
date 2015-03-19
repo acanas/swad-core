@@ -239,8 +239,7 @@ bool Prf_ShowUserProfile (void)
       Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
       /***** Show following and followers *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-         Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
+      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
 
       fprintf (Gbl.F.Out,"</td>"
 			 "<td style=\"text-align:left;"

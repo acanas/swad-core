@@ -42,6 +42,8 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Fol_NUM_COLUMNS_FOLLOW 3
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -98,17 +100,23 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:0 auto;\">"
 	              "<tr>");
 
-   /***** Following *****/
+   /***** Followed users *****/
    fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
 	              " text-align:center; vertical-align:top;\">"
 		      "<div class=\"FOLLOW\">");
-
-   Act_FormStart (ActSeeFlg);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_Following,"FOLLOW");
-   fprintf (Gbl.F.Out,"%u</a>",Following);
-   Act_FormEnd ();
-
+   if (Following)
+     {
+      /* Form to list followed users */
+      Act_FormStart (ActSeeFlg);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_Following,"FOLLOW");
+     }
+   fprintf (Gbl.F.Out,"%u",Following);
+   if (Following)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"%s\">"
                       "%s</div>"
@@ -120,13 +128,19 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
 	              " text-align:center; vertical-align:top;\">"
 		      "<div class=\"FOLLOW\">");
-
-   Act_FormStart (ActSeeFlr);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_Followers,"FOLLOW");
-   fprintf (Gbl.F.Out,"%u</a>",Followers);
-   Act_FormEnd ();
-
+   if (Followers)
+     {
+      /* Form to list followers */
+      Act_FormStart (ActSeeFlr);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_Followers,"FOLLOW");
+     }
+   fprintf (Gbl.F.Out,"%u",Followers);
+   if (Followers)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"%s\">"
                       "%s</div>"
@@ -213,10 +227,11 @@ void Fol_ListFollowing (void)
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
 	       /***** Show user *****/
-	       if (!(NumUsr % 10))
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 		  fprintf (Gbl.F.Out,"<tr>");
 	       Fol_ShowFollowedOrFollowed (&UsrDat);
-	       if ((NumUsr % 10) == 9 || NumUsr == NumUsrs - 1)
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+		   NumUsr == NumUsrs - 1)
 		  fprintf (Gbl.F.Out,"</tr>");
 	      }
 
@@ -283,10 +298,11 @@ void Fol_ListFollowers (void)
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
 	       /***** Show user *****/
-	       if (!(NumUsr % 10))
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 		  fprintf (Gbl.F.Out,"<tr>");
 	       Fol_ShowFollowedOrFollowed (&UsrDat);
-	       if ((NumUsr % 10) == 9 || NumUsr == NumUsrs - 1)
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+		   NumUsr == NumUsrs - 1)
 		  fprintf (Gbl.F.Out,"</tr>");
 	      }
 
@@ -314,36 +330,76 @@ void Fol_ListFollowers (void)
 static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
+   extern const char *Txt_Unfollow;
+   extern const char *Txt_Follow;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<td style=\"width:18px; height:40px;\">");
+   /***** Put form to follow / unfollow *****/
+   fprintf (Gbl.F.Out,"<td style=\"width:50px; height:50px;"
+	              " text-align:right;\">");
+   if (Visible &&
+       Gbl.Usrs.Me.Logged &&
+       Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat->UsrCod)
+     {
+      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
+	{
+	 Act_FormStart (ActUnfUsr);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
+			    "<img src=\"%s/unfollow16x16.gif\""
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Unfollow);
+	 Act_FormEnd ();
+	}
+      else
+	{
+	 Act_FormStart (ActFolUsr);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_Follow,NULL);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
+			    "<img src=\"%s/follow16x16.gif\""
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Follow);
+	 Act_FormEnd ();
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Check if I can see the public profile *****/
+   fprintf (Gbl.F.Out,"<td style=\"width:40px; height:50px;"
+	              " text-align:center;\">");
    if (Visible)
      {
       /***** User's photo *****/
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO18x24",Pho_ZOOM);
+			"PHOTO36x48",Pho_ZOOM);
      }
-
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td style=\"height:40px;>");
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to go to public profile *****/
-   if (Visible && UsrDat->Nickname[0])
+   fprintf (Gbl.F.Out,"<td style=\"min-width:150px; height:50px;"
+	              " text-align:left;\">");
+   if (Visible &&
+       UsrDat->Nickname[0])
      {
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
-      Usr_RestrictLengthAndWriteName (UsrDat,8);
+      Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+      Usr_RestrictLengthAndWriteName (UsrDat,20);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
-
    fprintf (Gbl.F.Out,"</td>");
   }
 

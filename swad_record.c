@@ -2351,38 +2351,37 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       Act_FormEnd ();
 
       /***** Button to follow / unfollow *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-	 if (!ItsMe)
+      if (!ItsMe)
+	{
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
 	   {
-	    if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
-	      {
-	       Act_FormStart (ActUnfUsr);
-	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	       Act_LinkFormSubmit (Txt_Unfollow,ClassData);
-	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
-				  "<img src=\"%s/unfollow16x16.gif\""
-				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
-				  "</div>"
-				  "</a>",
-			Gbl.Prefs.IconsURL,
-			Txt_Unfollow);
-	       Act_FormEnd ();
-	      }
-	    else
-	      {
-	       Act_FormStart (ActFolUsr);
-	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	       Act_LinkFormSubmit (Txt_Follow,ClassData);
-	       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
-				  "<img src=\"%s/follow16x16.gif\""
-				  " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
-				  "</div>"
-				  "</a>",
-			Gbl.Prefs.IconsURL,
-			Txt_Follow);
-	       Act_FormEnd ();
-	      }
+	    Act_FormStart (ActUnfUsr);
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_Unfollow,ClassData);
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			       "<img src=\"%s/unfollow16x16.gif\""
+			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			       "</div>"
+			       "</a>",
+		     Gbl.Prefs.IconsURL,
+		     Txt_Unfollow);
+	    Act_FormEnd ();
 	   }
+	 else
+	   {
+	    Act_FormStart (ActFolUsr);
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_Follow,ClassData);
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			       "<img src=\"%s/follow16x16.gif\""
+			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			       "</div>"
+			       "</a>",
+		     Gbl.Prefs.IconsURL,
+		     Txt_Follow);
+	    Act_FormEnd ();
+	   }
+	}
 
       fprintf (Gbl.F.Out,"</div>");
      }
