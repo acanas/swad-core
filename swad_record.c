@@ -2351,7 +2351,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       Act_FormEnd ();
 
       /***** Button to follow / unfollow *****/
-      if (!ItsMe)
+      if (TypeOfView == Rec_RECORD_PUBLIC &&
+	  !ItsMe)
 	{
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
 	   {

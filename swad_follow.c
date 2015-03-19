@@ -416,17 +416,20 @@ void Fol_FollowUsr (void)
    /***** Get user to be followed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                     Gbl.Usrs.Other.UsrDat.UsrCod))
-	{
-	 /***** Follow user in database *****/
-	 sprintf (Query,"REPLACE INTO usr_follow"
-	                " (FollowerCod,FollowedCod,FollowTime)"
-			" VALUES ('%ld','%ld',NOW())",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  Gbl.Usrs.Other.UsrDat.UsrCod);
-	 DB_QueryREPLACE (Query,"can not follow user");
-        }
+      // Follow only if I can view his/her public profile
+      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,Gbl.Usrs.Other.UsrDat.UsrCod))
+         // Follow only if I do not follow him/her
+	 if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					Gbl.Usrs.Other.UsrDat.UsrCod))
+	   {
+	    /***** Follow user in database *****/
+	    sprintf (Query,"REPLACE INTO usr_follow"
+			   " (FollowerCod,FollowedCod,FollowTime)"
+			   " VALUES ('%ld','%ld',NOW())",
+		     Gbl.Usrs.Me.UsrDat.UsrCod,
+		     Gbl.Usrs.Other.UsrDat.UsrCod);
+	    DB_QueryREPLACE (Query,"can not follow user");
+	   }
 
       /***** Show user's profile again *****/
       Error = !Prf_ShowUserProfile ();
@@ -451,6 +454,7 @@ void Fol_UnfollowUsr (void)
    /***** Get user to be unfollowed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
+      // Unfollow only if I follow him/her
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
