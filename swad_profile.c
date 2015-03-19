@@ -323,10 +323,18 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumTchs;
    unsigned NumFiles;
    unsigned NumPublicFiles;
+   // char StrTimeGenerationInMicroseconds[64];
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
-
+   /*
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+     {
+      Sta_ComputeTimeToGeneratePage ();
+      Sta_WriteTime (StrTimeGenerationInMicroseconds,Gbl.TimeGenerationInMicroseconds);
+      fprintf (Gbl.F.Out,"<tr><td>%s</td></tr>",StrTimeGenerationInMicroseconds);
+     }
+   */
    /***** Number of courses in which the user is teacher or student *****/
    if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
      {

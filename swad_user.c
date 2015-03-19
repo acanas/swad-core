@@ -744,17 +744,40 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
 /******* Get number of users with different role in courses of a user ********/
 /*****************************************************************************/
 
-unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,Rol_Role_t OthersRole)
+unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
+                                     Rol_Role_t OthersRole)
   {
    char Query[256];
+   // This query can be made in a unique, but slower, query
+   // The temporary table achieves speedup from ~2s to few ms
+
+   /***** Remove temporary table if exists *****/
+   sprintf (Query,"DROP TABLE IF EXISTS my_courses_tmp");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   /***** Create temporary table with all my courses for a role *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
+	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
+	          " ENGINE=MEMORY"
+	          " SELECT CrsCod FROM crs_usr"
+	          " WHERE UsrCod='%ld' AND Role='%u'",
+	    UsrCod,(unsigned) UsrRole);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Get the number of teachers in a course from database ******/
-   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                  " WHERE CrsCod IN"
-                  " (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld' AND Role='%u')"
-                  " AND Role='%u'",
-            UsrCod,(unsigned) UsrRole,(unsigned) OthersRole);
+   sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+	          " FROM crs_usr,my_courses_tmp"
+                  " WHERE crs_usr.CrsCod=my_courses_tmp.CrsCod"
+                  " AND crs_usr.Role='%u'",
+            (unsigned) OthersRole);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
+
+   /***** Remove temporary table *****/
+   sprintf (Query,"DROP TABLE IF EXISTS my_courses_tmp");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
   }
 
 /*****************************************************************************/
