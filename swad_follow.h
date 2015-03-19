@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_user.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -40,7 +42,9 @@
 /*****************************************************************************/
 
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
-void Fol_ShowFollowingAndFollowers (long UsrCod);
+void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat);
+void Fol_ListFollowing (void);
+void Fol_ListFollowers (void);
 
 void Fol_FollowUsr (void);
 void Fol_UnfollowUsr (void);

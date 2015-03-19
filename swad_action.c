@@ -955,6 +955,9 @@ Users:
 
 	---. ActFolUsr			Follow another user
 	---. ActUnfUsr			Unfollow another user
+	---. ActSeeFlg			Show following
+	---. ActSeeFlr			Show followers
+
 Messages:
 	794. ActSeeNtf			Show my recent notifications
 	795. ActSeeAnn			Show global announcements
@@ -2343,6 +2346,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActFolUsr		*/{1410,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
    /* ActUnfUsr		*/{1411,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -4084,6 +4089,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCalNumFilVie,	// #1409
 	ActFolUsr,		// #1410
 	ActUnfUsr,		// #1411
+	ActSeeFlg,		// #1412
+	ActSeeFlr,		// #1413
 	};
 
 /*****************************************************************************/

@@ -240,7 +240,7 @@ bool Prf_ShowUserProfile (void)
 
       /***** Show following and followers *****/
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-         Fol_ShowFollowingAndFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
+         Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
 
       fprintf (Gbl.F.Out,"</td>"
 			 "<td style=\"text-align:left;"

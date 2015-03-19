@@ -62,6 +62,7 @@ extern struct Globals Gbl;
 
 static unsigned Fol_GetNumFollowing (long UsrCod);
 static unsigned Fol_GetNumFollowers (long UsrCod);
+static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /*************** Check if a user is a follower of another user ***************/
@@ -85,13 +86,13 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 /**************** Show following and followers of a user *********************/
 /*****************************************************************************/
 
-void Fol_ShowFollowingAndFollowers (long UsrCod)
+void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
-   unsigned Following = Fol_GetNumFollowing (UsrCod);
-   unsigned Followers = Fol_GetNumFollowers (UsrCod);
+   unsigned Following = Fol_GetNumFollowing (UsrDat->UsrCod);
+   unsigned Followers = Fol_GetNumFollowers (UsrDat->UsrCod);
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:0 auto;\">"
@@ -100,30 +101,38 @@ void Fol_ShowFollowingAndFollowers (long UsrCod)
    /***** Following *****/
    fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
 	              " text-align:center; vertical-align:top;\">"
-		      "<div class=\"FOLLOW\">"
-		      "%u"
-                      "</div>"
+		      "<div class=\"FOLLOW\">");
+
+   Act_FormStart (ActSeeFlg);
+   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_Following,"FOLLOW");
+   fprintf (Gbl.F.Out,"%u</a>",Following);
+   Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"%s\">"
-                      "%s"
-                      "</div>"
+                      "%s</div>"
 		      "</td>",
-	    Following,
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Following);
+            Txt_Following);
 
    /***** Followers *****/
    fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
 	              " text-align:center; vertical-align:top;\">"
-		      "<div class=\"FOLLOW\">"
-		      "%u"
-                      "</div>"
+		      "<div class=\"FOLLOW\">");
+
+   Act_FormStart (ActSeeFlr);
+   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_Followers,"FOLLOW");
+   fprintf (Gbl.F.Out,"%u</a>",Followers);
+   Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"%s\">"
-                      "%s"
-                      "</div>"
+                      "%s</div>"
 		      "</td>",
-	    Followers,
 	    The_ClassFormul[Gbl.Prefs.Theme],
-	    Txt_Followers);
+            Txt_Followers);
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"
@@ -159,6 +168,186 @@ static unsigned Fol_GetNumFollowers (long UsrCod)
   }
 
 /*****************************************************************************/
+/***************************** List followed users ***************************/
+/*****************************************************************************/
+
+void Fol_ListFollowing (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   extern const char *Txt_Following;
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+
+   /***** Get user to view user he/she follows *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Show user's profile *****/
+      if (Prf_ShowUserProfile ())
+	{
+	 /***** Check if a user is a follower of another user *****/
+	 sprintf (Query,"SELECT FollowedCod FROM usr_follow"
+			" WHERE FollowerCod='%ld' ORDER BY FollowTime DESC",
+		  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
+	 if (NumUsrs)
+	   {
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
+
+	    /***** Start listing *****/
+	    Lay_StartRoundFrameTable10 (NULL,2,Txt_Following);
+
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /***** Get user and number of clicks *****/
+	       row = mysql_fetch_row (mysql_res);
+
+	       /* Get user's code (row[0]) */
+	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+
+	       /***** Show user *****/
+	       if (!(NumUsr % 10))
+		  fprintf (Gbl.F.Out,"<tr>");
+	       Fol_ShowFollowedOrFollowed (&UsrDat);
+	       if ((NumUsr % 10) == 9 || NumUsr == NumUsrs - 1)
+		  fprintf (Gbl.F.Out,"</tr>");
+	      }
+
+	    /***** End listing *****/
+	    Lay_EndRoundFrameTable10 ();
+
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+      else
+	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/******************************* List followers ******************************/
+/*****************************************************************************/
+
+void Fol_ListFollowers (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   extern const char *Txt_Followers;
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+
+   /***** Get user to view user he/she follows *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Show user's profile *****/
+      if (Prf_ShowUserProfile ())
+	{
+	 /***** Check if a user is a follower of another user *****/
+	 sprintf (Query,"SELECT FollowerCod FROM usr_follow"
+			" WHERE FollowedCod='%ld' ORDER BY FollowTime DESC",
+		  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followers");
+	 if (NumUsrs)
+	   {
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
+
+	    /***** Start listing *****/
+	    Lay_StartRoundFrameTable10 (NULL,2,Txt_Followers);
+
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /***** Get user and number of clicks *****/
+	       row = mysql_fetch_row (mysql_res);
+
+	       /* Get user's code (row[0]) */
+	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+
+	       /***** Show user *****/
+	       if (!(NumUsr % 10))
+		  fprintf (Gbl.F.Out,"<tr>");
+	       Fol_ShowFollowedOrFollowed (&UsrDat);
+	       if ((NumUsr % 10) == 9 || NumUsr == NumUsrs - 1)
+		  fprintf (Gbl.F.Out,"</tr>");
+	      }
+
+	    /***** End listing *****/
+	    Lay_EndRoundFrameTable10 ();
+
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+      else
+	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/************** Show user's photo and nickname in ranking list ***************/
+/*****************************************************************************/
+
+static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_View_public_profile;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
+   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
+
+   fprintf (Gbl.F.Out,"<td style=\"width:18px; height:40px;\">");
+
+   /***** Check if I can see the public profile *****/
+   if (Visible)
+     {
+      /***** User's photo *****/
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
+			"PHOTO18x24",Pho_ZOOM);
+     }
+
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td style=\"height:40px;>");
+
+   /***** Put form to go to public profile *****/
+   if (Visible && UsrDat->Nickname[0])
+     {
+      Act_FormStart (ActSeePubPrf);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
+      Usr_RestrictLengthAndWriteName (UsrDat,8);
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
 /***************************** Follow another user ***************************/
 /*****************************************************************************/
 
@@ -168,7 +357,7 @@ void Fol_FollowUsr (void)
    char Query[256];
    bool Error;
 
-   /***** Get user to be removed *****/
+   /***** Get user to be followed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -203,7 +392,7 @@ void Fol_UnfollowUsr (void)
    char Query[256];
    bool Error;
 
-   /***** Get user to be removed *****/
+   /***** Get user to be unfollowed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
