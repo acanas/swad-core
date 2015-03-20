@@ -419,10 +419,13 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDFromTable);
       Str_ConvertToUpperText (UsrIDFromTable);
-      if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
-	 UsrIDFound = true;
-      else
-	 StuffNotUsrIDFound = true;
+      if (UsrIDFromTable[0])	// Something found
+	{
+	 if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
+	    UsrIDFound = true;
+	 else
+	    StuffNotUsrIDFound = true;
+	}
      }
 
    /***** Check if only user's IDs

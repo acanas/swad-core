@@ -442,7 +442,7 @@ void Str_ConvertToTitleType (char *Str)
      {
       Ch = *Ptr;
       if (isspace ((int) Ch) ||
-	  Ch == '\xA0' ||
+	  Ch == '\xA0' ||	// Unicode translation for &nbsp;
 	  Ch == '-' ||
 	  Ch == '(' ||
 	  Ch == ')' ||
@@ -461,7 +461,8 @@ void Str_ConvertToTitleType (char *Str)
 	    for (Ptr2 = Ptr, LengthStr = 0;
 		 *Ptr2;
 		 Ptr2++, LengthStr++)
-	       if (isspace ((int) *Ptr2) || *Ptr2 == '\xA0')
+	       if (isspace ((int) *Ptr2) ||
+		   *Ptr2 == '\xA0')	// Unicode translation for &nbsp;
 		  break;
 	    if (LengthStr == 1)
 	      {
@@ -1069,7 +1070,8 @@ void Str_RemoveLeadingSpacesHTML (char *Str)
 	Ptr++)
      {
       /* If it's space ==> continue in the loop */
-      if (isspace ((int) *Ptr) || *Ptr == '\xA0')	// Microsoft Excel uses A0 also as space!
+      if (isspace ((int) *Ptr) ||
+	  *Ptr == '\xA0')	// Unicode translation for &nbsp;
          continue;
       /* Check forward if it's a <br> or <br /> */
       if (*Ptr == '<')
@@ -1191,7 +1193,8 @@ void Str_RemoveTrailingSpacesHTML (char *Str)
 	Ptr--)
      {
       /* If it's space ==> continue in the loop */
-      if (isspace ((int) *Ptr) || *Ptr == '\xA0')	// Microsoft Excel uses A0 also as space!
+      if (isspace ((int) *Ptr) ||
+	  *Ptr == '\xA0')	// Unicode translation for &nbsp;
          continue;
       /* Check backward if it's <br> or <br /> */
       if (*Ptr == '>')
@@ -1727,7 +1730,8 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 	}
 
       /***** Skip spaces *****/
-      if (isspace (Ch) || Ch == 0xA0)	 // Microsoft Excel uses A0 also as space!
+      if (isspace (Ch) ||
+	  Ch == 0xA0)	// Unicode translation for &nbsp;
 	  SpaceFound = true;
 
       if (SpaceFound)
@@ -1780,10 +1784,13 @@ void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLen
       if ((Ch = (int) **StrSrc) != 0)
 	 (*StrSrc)++;
      }
-   while (isspace (Ch));
+   while (isspace (Ch) ||
+	  Ch == 0xA0);	// Unicode translation for &nbsp;
 
    /***** Copy string while non-space characters *****/
-   while (Ch && !isspace (Ch))
+   while (Ch &&
+	  !(isspace (Ch) ||
+	    Ch == 0xA0))	// Unicode translation for &nbsp;
      {
       if (i < MaxLength)
 	 StrDst[i++] = (char) Ch;
@@ -1809,10 +1816,17 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
       if ((Ch = (int) **StrSrc) != 0)
 	 (*StrSrc)++;
      }
-   while (isspace (Ch) || Ch == (int) ',' || Ch == (int) ';');
+   while (isspace (Ch)    ||
+	  Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	  Ch == (int) ',' ||
+	  Ch == (int) ';');
 
    /***** Copy string while no separator found *****/
-   while (Ch && !(isspace (Ch) || Ch == (int) ',' || Ch == (int) ';'))
+   while (Ch &&
+	  !(isspace (Ch)    ||
+	    Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	    Ch == (int) ',' ||
+	    Ch == (int) ';'))
      {
       if (i < MaxLength)
 	 StrDst[i++] = (char) Ch;
@@ -1834,10 +1848,18 @@ void Str_GetNextStringFromFileUntilSeparator (FILE *FileSrc,char *StrDst)
    /***** Skip separators *****/
    do
       Ch = fgetc (FileSrc);
-   while (Ch != EOF && (isspace (Ch) || Ch == (int) ',' || Ch == (int) ';')); // Skip spaces, puntuación, etc.
+   while (Ch != EOF &&
+	  (isspace (Ch)    ||
+	   Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	   Ch == (int) ',' ||
+	   Ch == (int) ';')); // Skip spaces, puntuación, etc.
 
    /***** Copy string while no separator found *****/
-   while (Ch != EOF && !(isspace (Ch) || Ch == (int) ',' || Ch == (int) ';'))
+   while (Ch != EOF &&
+	  !(isspace (Ch)    ||
+	    Ch == 0xA0      ||	// Unicode translation for &nbsp;
+	    Ch == (int) ',' ||
+	    Ch == (int) ';'))
      {
       if (i < ID_MAX_LENGTH_USR_ID)
 	 StrDst[i++] = (char) Ch;
@@ -1861,7 +1883,9 @@ void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLen
 
    /***** Skip leading spaces and ',' *****/
    Ch = (int) **StrSrc;
-   while (isspace (Ch) || Ch == (int) ',' || Ch == 0xA0)	// Microsoft Excel uses A0 also as space!
+   while (isspace (Ch) ||
+	  Ch == 0xA0   ||	// Unicode translation for &nbsp;
+	  Ch == (int) ',')
      {
       (*StrSrc)++;
       Ch = (int) **StrSrc;
@@ -1884,7 +1908,8 @@ void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLen
    for (Ptr--;
 	Ptr >= *StrSrc;
 	Ptr--)
-      if (!(isspace ((int) *Ptr) || *Ptr == '\xA0'))	// Microsoft Excel uses A0 also as space!
+      if (!(isspace ((int) *Ptr) ||
+	    *Ptr == '\xA0'))	// Unicode translation for &nbsp;
          break;
    *(Ptr+1) = '\0';
   }
@@ -1941,7 +1966,8 @@ void Str_ReplaceSeveralSpacesForOne (char *Str)
    /***** Do the replacing *****/
    for (PtrDst = PtrSrc = Str;
 	*PtrSrc;)
-      if (isspace ((int) *PtrSrc) || *PtrSrc == '\xA0')	// If character is printable in english ==> is OK; else ==> convert to code (Microsoft Excel uses A0 also as space!)
+      if (isspace ((int) *PtrSrc) ||
+	  *PtrSrc == '\xA0')	// Unicode translation for &nbsp;
         {
          if (!PreviousWasSpace)
             *PtrDst++ = ' ';
@@ -2130,7 +2156,8 @@ void Str_SkipSpacesInFile (FILE *FileSrc)
    int Ch;
 
    while ((Ch = fgetc (FileSrc)) != EOF)
-      if (!isspace (Ch))
+      if (!(isspace (Ch) ||
+	    Ch == 0xA0))	// Unicode translation for &nbsp;
 	{
 	 fseek (FileSrc,-1L,SEEK_CUR);
 	 break;
