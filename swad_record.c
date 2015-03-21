@@ -1485,7 +1485,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Send;
-   unsigned RecordWidth = Rec_WIDTH_SHARE_RECORD_BIG;
+   unsigned RecordWidth = Rec_RECORD_WIDTH_WIDE;
    char StrRecordWidth[10+1];
    unsigned FrameWidth = 10;
    unsigned Col1Width = 140;
@@ -2012,11 +2012,6 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Show form or only data depending on TypeOfView
 
-#define C1_WIDTH  52
-#define C2_WIDTH 144
-#define C3_WIDTH 210
-#define C4_WIDTH 154
-
 void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
@@ -2050,6 +2045,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Local_address;
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
+   unsigned RecordWidth;
+   unsigned C1Width;
+   unsigned C2Width;
+   unsigned C3Width;
+   unsigned C4Width;
    char StrRecordWidth[10+1];
    const char *ClassHead;
    const char *ClassForm;
@@ -2172,15 +2172,33 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          break;
     }
 
+   switch (TypeOfView)
+     {
+      case Rec_RECORD_PUBLIC:
+	 RecordWidth = Rec_RECORD_WIDTH_NARROW;
+         C1Width = Rec_C1_WIDTH_NARROW;
+         C2Width = Rec_C2_WIDTH_NARROW;
+         C3Width = Rec_C3_WIDTH_NARROW;
+         C4Width = Rec_C4_WIDTH_NARROW;
+	 break;
+      default:
+	 RecordWidth = Rec_RECORD_WIDTH_WIDE;
+         C1Width = Rec_C1_WIDTH_WIDE;
+         C2Width = Rec_C2_WIDTH_WIDE;
+         C3Width = Rec_C3_WIDTH_WIDE;
+         C4Width = Rec_C4_WIDTH_WIDE;
+	 break;
+    }
+
    /***** Start frame *****/
-   sprintf (StrRecordWidth,"%upx",Rec_WIDTH_SHARE_RECORD_BIG);
+   sprintf (StrRecordWidth,"%upx",RecordWidth);
    Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"width:%upx; height:%upx;"
                       " text-align:center; vertical-align:middle;\">",
-	    C1_WIDTH,C1_WIDTH);
+	    C1Width,C1Width);
    if (UsrDat->InsCod > 0)
      {
       Ins.InsCod = UsrDat->InsCod;
@@ -2192,7 +2210,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      "<td colspan=\"2\" class=\"%s\""
 		      " style=\"width:%upx; height:%upx;"
 		      " text-align:left; vertical-align:middle;\">",
-	    ClassHead,C2_WIDTH + C3_WIDTH,C1_WIDTH);
+	    ClassHead,C2Width + C3Width,C1Width);
    if (UsrDat->InsCod > 0)
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
    fprintf (Gbl.F.Out,"</td>");
@@ -2201,7 +2219,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" style=\"width:%upx;"
                       " text-align:center; vertical-align:top;\">",
-	    C4_WIDTH);
+	    C4Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
 		     "PHOTO150x200",Pho_NO_ZOOM);
@@ -2219,7 +2237,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       CommandsRowspan += 5;	// Institution, Centre, Department, Office, Phone
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td rowspan=\"%u\" style=\"width:%upx; vertical-align:top;\">",
-	    CommandsRowspan,C1_WIDTH);
+	    CommandsRowspan,C1Width);
 
    if (CommandForms)
      {
@@ -2394,7 +2412,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              "%s<br />%s<br />%s"
 	              "</td>"
 	              "</tr>",
-	    C2_WIDTH + C3_WIDTH,
+	    C2Width + C3Width,
 	    UsrDat->FirstName ,
 	    UsrDat->Surname1,
 	    UsrDat->Surname2);
@@ -2403,7 +2421,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"REC_NAME\" style=\"width:%upx;"
 	              " text-align:left; vertical-align:bottom;\">"
 	              "<div class=\"REC_NICK\">",
-	    C2_WIDTH + C3_WIDTH);
+	    C2Width + C3Width);
    if (UsrDat->Nickname[0])
      {
       if (GoToPublicProfileForm)
@@ -2434,13 +2452,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                       "<td style=\"width:%upx; height:0px;\"></td>"
                       "<td style=\"width:%upx; height:0px;\"></td>"
 		      "</tr>",
-            C2_WIDTH,C3_WIDTH,C4_WIDTH);
+            C2Width,C3Width,C4Width);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
 		      " text-align:left; vertical-align:top;\">",
-	    ClassData,C2_WIDTH + C3_WIDTH);
+	    ClassData,C2Width + C3Width);
    if (ShowData)
      {
       if (CountryForm)
@@ -2455,7 +2473,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
 			    "<option value=\"-1\">&nbsp;</option>"
 			    "<option value=\"0\"",
-		  C2_WIDTH + C3_WIDTH - 60);
+		  C2Width + C3Width - 60);
 	 if (UsrDat->CtyCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
@@ -2483,7 +2501,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /***** User's web and social networks *****/
    fprintf (Gbl.F.Out,"<td style=\"width:%upx;\">"
 	              "<div style=\"vertical-align:top; margin:0 auto;\">",
-	    C4_WIDTH);
+	    C4Width);
    Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</div>"
 	              "</td>"
@@ -2499,8 +2517,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2_WIDTH,Txt_Email,
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassForm,C2Width,Txt_Email,
+	       ClassData,C3Width + C4Width);
       if (UsrDat->Email[0])
 	{
 	 if (ShowEmail)
@@ -2525,8 +2543,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2_WIDTH,Txt_ID,
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassForm,C2Width,Txt_ID,
+	       ClassData,C3Width + C4Width);
       ID_WriteUsrIDs (UsrDat,ShowID);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
@@ -2537,7 +2555,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:right;\">",
-		  ClassForm,C2_WIDTH);
+		  ClassForm,C2Width);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	    fprintf (Gbl.F.Out,"%s*",Txt_Sex);
 	 else
@@ -2545,7 +2563,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 fprintf (Gbl.F.Out,":</td>"
 			    "<td colspan=\"2\" class=\"%s\""
 			    " style=\"width:%upx; text-align:left;\">",
-		  ClassData,C3_WIDTH + C4_WIDTH);
+		  ClassData,C3Width + C4Width);
 	 switch (TypeOfView)
 	   {
 	    case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
@@ -2671,10 +2689,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "%s"
 			    "</td>"
 			    "</tr>",
-		  ClassForm,C2_WIDTH,
+		  ClassForm,C2Width,
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
 							     Txt_Role,
-		  ClassData,C3_WIDTH + C4_WIDTH,
+		  ClassData,C3Width + C4Width,
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
 							     Txt_ROLES_SINGUL_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
 
@@ -2684,17 +2702,17 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "<td class=\"%s\""
 			 " style=\"width:%upx; text-align:right;\">"
 			 "%s",
-	       ClassForm,C2_WIDTH,Txt_Surname_1);
+	       ClassForm,C2Width,Txt_Surname_1);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	 fprintf (Gbl.F.Out,"*");
       fprintf (Gbl.F.Out,":</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassData,C3Width + C4Width);
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 60,
+		  C3Width + C4Width - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->Surname1);
       else if (UsrDat->Surname1[0])
@@ -2710,13 +2728,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2_WIDTH,
+	       ClassForm,C2Width,
 	       Txt_Surname_2,
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassData,C3Width + C4Width);
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 60,
+		  C3Width + C4Width - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->Surname2);
       else if (UsrDat->Surname2[0])
@@ -2730,17 +2748,17 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "<td class=\"%s\""
 			 " style=\"width:%upx; text-align:right;\">"
 			 "%s",
-	       ClassForm,C2_WIDTH,Txt_First_name);
+	       ClassForm,C2Width,Txt_First_name);
       if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	 fprintf (Gbl.F.Out,"*");
       fprintf (Gbl.F.Out,":</td>"
 			 "<td class=\"%s\" colspan=\"2\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassData,C3Width + C4Width);
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
 			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3_WIDTH + C4_WIDTH - 60,
+		  C3Width + C4Width - 60,
 		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		  UsrDat->FirstName);
       else if (UsrDat->FirstName[0])
@@ -2759,14 +2777,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Place_of_origin,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Place_of_origin,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->OriginPlace);
          else if (UsrDat->OriginPlace[0])
@@ -2783,8 +2801,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Date_of_birth,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Date_of_birth,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
@@ -2807,14 +2825,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Local_address,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Local_address,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->LocalAddress);
          else if (UsrDat->LocalAddress[0])
@@ -2831,14 +2849,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Phone,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Phone,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      Usr_MAX_LENGTH_PHONE,
                      UsrDat->LocalPhone);
          else if (UsrDat->LocalPhone[0])
@@ -2855,14 +2873,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Family_address,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Family_address,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      Cns_MAX_LENGTH_STRING,
                      UsrDat->FamilyAddress);
          else if (UsrDat->FamilyAddress[0])
@@ -2879,14 +2897,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Phone,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Phone,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
         	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      Usr_MAX_LENGTH_PHONE,
                      UsrDat->FamilyPhone);
          else if (UsrDat->FamilyPhone[0])
@@ -2903,14 +2921,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
                          " text-align:left; vertical-align:top;\">",
-               ClassForm,C2_WIDTH,Txt_USER_comments,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_USER_comments,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (DataForm)
             fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
         	               " style=\"width:%upx;\">%s</textarea>",
-                     C3_WIDTH + C4_WIDTH - 60,
+                     C3Width + C4Width - 60,
                      UsrDat->Comments);
          else if (UsrDat->Comments[0])
            {
@@ -2934,8 +2952,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</td>"
 			 "<td colspan=\"2\" class=\"%s\""
 			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2_WIDTH,Txt_Institution,
-	       ClassData,C3_WIDTH + C4_WIDTH);
+	       ClassForm,C2Width,Txt_Institution,
+	       ClassData,C3Width + C4Width);
       if (ShowData)
 	{
 	 if (UsrDat->InsCod > 0)
@@ -2959,8 +2977,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Centre,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Centre,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (UsrDat->Tch.CtrCod > 0)
@@ -2986,8 +3004,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Department,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Department,
+               ClassData,C3Width + C4Width);
       if (ShowData)
         {
          if (UsrDat->Tch.DptCod > 0)
@@ -3013,8 +3031,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
                          "<td colspan=\"2\" class=\"%s\""
                          " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Office,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Office,
+               ClassData,C3Width + C4Width);
       if (ShowData)
          fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
       fprintf (Gbl.F.Out,"</td>"
@@ -3028,8 +3046,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 "</td>"
 	                 "<td colspan=\"2\" class=\"%s\""
 	                 " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2_WIDTH,Txt_Phone,
-               ClassData,C3_WIDTH + C4_WIDTH);
+               ClassForm,C2Width,Txt_Phone,
+               ClassData,C3Width + C4Width);
       if (ShowData)
          fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
       fprintf (Gbl.F.Out,"</td>"

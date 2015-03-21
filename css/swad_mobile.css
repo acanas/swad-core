@@ -235,7 +235,7 @@ p			{margin:0;}
 /********************************* Frame 10 **********************************/
 .FRAME10
 	{
-	margin:4px 0;
+	margin:0;
 	padding:0;
 	background-color:white;
 	border-radius:8px;
@@ -636,9 +636,32 @@ a:hover img.CENTRE_PHOTO_SHOW
 /***************************** Public user's profile *************************/
 .FOLLOW
 	{
-	color:#808080;
+	color:#C0C0C0;
 	font-size:28pt;
 	font-weight:bold;
+	}
+.FOLLOW_B
+	{
+	color:#000000;
+	font-size:28pt;
+	font-weight:bold;
+	}
+.PRF_ICON_CONTAINER
+	{
+	width:20px;
+	}
+.PRF_ICON
+	{
+	margin:auto;
+	display:block;
+	width:16px;
+	height:16px;
+	opacity:0.33;
+	}
+.PRF_FIG
+	{
+	text-align:left;
+	vertical-align:middle;
 	}
 
 .CON			{color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}

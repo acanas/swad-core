@@ -271,7 +271,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /********************************* Frame 10 **********************************/
 .FRAME10
 	{
-	margin:4px 0;
+	margin:0;
 	padding:0;
 	background-color:white;
 	border-radius:4px;
@@ -732,7 +732,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .HEAD_REC		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:10pt;}
 .HEAD_REC_SMALL		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:9pt;}
 .REC_NAME		{color:#808080; font-size:16pt; font-weight:bold;}
-.REC_NICK		{color:#808080; font-size:14pt; font-weight:bold;}
+.REC_NICK		{color:#808080; font-size:12pt; font-weight:bold;}
 .DAT_REC		{color:#404040; font-size:9pt; line-height:110%;}
 .DAT_REC_SMALL		{color:#808080; font-size:9pt; line-height:110%;}
 .DAT_REC_SMALL_BOLD	{color:#202020; font-size:9pt; line-height:110%;}
@@ -823,9 +823,32 @@ a:hover img.CENTRE_PHOTO_SHOW
 /***************************** Public user's profile *************************/
 .FOLLOW
 	{
-	color:#808080;
+	color:#C0C0C0;
 	font-size:24pt;
 	font-weight:bold;
+	}
+.FOLLOW_B
+	{
+	color:#404040;
+	font-size:24pt;
+	font-weight:bold;
+	}
+.PRF_ICON_CONTAINER
+	{
+	width:20px;
+	}
+.PRF_ICON
+	{
+	margin:auto;
+	display:block;
+	width:16px;
+	height:16px;
+	opacity:0.33;
+	}
+.PRF_FIG
+	{
+	text-align:left;
+	vertical-align:middle;
 	}
 
 .CON			{color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}

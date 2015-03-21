@@ -42,7 +42,7 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Fol_NUM_COLUMNS_FOLLOW 3
+#define Fol_NUM_COLUMNS_FOLLOW 5
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -62,6 +62,10 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
+                                                  unsigned NumUsrs,
+                                                  Act_Action_t Action,
+                                                  const char *Title);
 static unsigned Fol_GetNumFollowing (long UsrCod);
 static unsigned Fol_GetNumFollowers (long UsrCod);
 static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat);
@@ -90,67 +94,85 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 
 void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
-   unsigned Following = Fol_GetNumFollowing (UsrDat->UsrCod);
-   unsigned Followers = Fol_GetNumFollowers (UsrDat->UsrCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto 4px auto;\">"
 	              "<tr>");
 
    /***** Followed users *****/
-   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
-	              " text-align:center; vertical-align:top;\">"
-		      "<div class=\"FOLLOW\">");
-   if (Following)
-     {
-      /* Form to list followed users */
-      Act_FormStart (ActSeeFlg);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Following,"FOLLOW");
-     }
-   fprintf (Gbl.F.Out,"%u",Following);
-   if (Following)
-     {
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"%s\">"
-                      "%s</div>"
-		      "</td>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Following);
+   Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
+                                         Fol_GetNumFollowing (UsrDat->UsrCod),
+                                         ActSeeFlg,Txt_Following);
 
    /***** Followers *****/
-   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
-	              " text-align:center; vertical-align:top;\">"
-		      "<div class=\"FOLLOW\">");
-   if (Followers)
-     {
-      /* Form to list followers */
-      Act_FormStart (ActSeeFlr);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_Followers,"FOLLOW");
-     }
-   fprintf (Gbl.F.Out,"%u",Followers);
-   if (Followers)
-     {
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"%s\">"
-                      "%s</div>"
-		      "</td>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Followers);
+   Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
+                                         Fol_GetNumFollowers (UsrDat->UsrCod),
+                                         ActSeeFlr,Txt_Followers);
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
+  }
+
+/*****************************************************************************/
+/**************** Show following and followers of a user *********************/
+/*****************************************************************************/
+
+static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
+                                                  unsigned NumUsrs,
+                                                  Act_Action_t Action,
+                                                  const char *Title)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
+
+
+   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
+	              " text-align:center; vertical-align:top;\">");
+   /* Number */
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+            (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
+        	                         "FOLLOW");
+   if (NumUsrs)
+     {
+      /* Form to list followed users */
+      Act_FormStart (Action);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Title,
+                          (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
+        	                                       "FOLLOW");
+     }
+   fprintf (Gbl.F.Out,"%u",NumUsrs);
+   if (NumUsrs)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Text */
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+            (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
+        	                         The_ClassFormul[Gbl.Prefs.Theme]);
+   if (NumUsrs)
+     {
+      /* Form to list followed users */
+      Act_FormStart (Action);
+      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Act_LinkFormSubmit (Title,
+                          (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
+        	                                       The_ClassFormul[Gbl.Prefs.Theme]);
+     }
+   fprintf (Gbl.F.Out,"%s",Title);
+   if (NumUsrs)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+   fprintf (Gbl.F.Out,"</div>"
+	              "</td>");
   }
 
 /*****************************************************************************/
@@ -213,7 +235,8 @@ void Fol_ListFollowing (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-	    Lay_StartRoundFrameTable10 (NULL,2,Txt_Following);
+	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+		               " style=\"margin:10px auto;\">");
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -236,7 +259,7 @@ void Fol_ListFollowing (void)
 	      }
 
 	    /***** End listing *****/
-	    Lay_EndRoundFrameTable10 ();
+	    fprintf (Gbl.F.Out,"</table>");
 
 	    /***** Free memory used for user's data *****/
 	    Usr_UsrDataDestructor (&UsrDat);
@@ -284,7 +307,8 @@ void Fol_ListFollowers (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-	    Lay_StartRoundFrameTable10 (NULL,2,Txt_Followers);
+	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+		               " style=\"margin:10px auto;\">");
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -307,7 +331,7 @@ void Fol_ListFollowers (void)
 	      }
 
 	    /***** End listing *****/
-	    Lay_EndRoundFrameTable10 ();
+	    fprintf (Gbl.F.Out,"</table>");
 
 	    /***** Free memory used for user's data *****/
 	    Usr_UsrDataDestructor (&UsrDat);
@@ -337,7 +361,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
    /***** Put form to follow / unfollow *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:50px; height:50px;"
+   fprintf (Gbl.F.Out,"<td style=\"width:20px; height:50px;"
 	              " text-align:right;\">");
    if (Visible &&
        Gbl.Usrs.Me.Logged &&
@@ -350,7 +374,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/unfollow16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " style=\"width:16px; height:16px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -388,7 +412,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to go to public profile *****/
-   fprintf (Gbl.F.Out,"<td style=\"min-width:150px; height:50px;"
+   fprintf (Gbl.F.Out,"<td style=\"min-width:70px; height:50px;"
 	              " text-align:left;\">");
    if (Visible &&
        UsrDat->Nickname[0])
@@ -396,7 +420,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
-      Usr_RestrictLengthAndWriteName (UsrDat,20);
+      Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }

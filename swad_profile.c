@@ -232,21 +232,27 @@ bool Prf_ShowUserProfile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
 			 "<table style=\"margin:0 auto;\">"
 			 "<tr>"
-			 "<td style=\"text-align:center;"
+			 "<td rowspan=\"2\" style=\"text-align:center;"
 			 " vertical-align:top;\">");
 
       /***** Common record *****/
       Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show following and followers *****/
-      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
-
       fprintf (Gbl.F.Out,"</td>"
 			 "<td style=\"text-align:left;"
-			 " vertical-align:top; padding-left:4px;\">");
+			 " vertical-align:top;\">");
 
       /***** Show details of user's profile *****/
       Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>"
+			 "<tr>"
+			 "</td>"
+			 "<td style=\"vertical-align:bottom;\">");
+
+      /***** Show following and followers *****/
+      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
 
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>"
@@ -326,7 +332,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    // char StrTimeGenerationInMicroseconds[64];
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"TABLE10 CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 10px;\">");
    /*
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
@@ -341,18 +347,16 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_TEACHER);
       NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT);
       fprintf (Gbl.F.Out,"<tr>"
-		         "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:top;\">"
-                         "%s"
+		         "<td class=\"PRF_ICON_CONTAINER\">"
+                         "<img src=\"%s/tch64x64.gif\" title=\"%s\""
+	                 " class=\"PRF_ICON\" />"
 			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:top;\">"
-			 "%u&nbsp;%s<br />"
-			 "%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s"
+			 "<td class=\"PRF_FIG DAT\">"
+			 "%u&nbsp;%s&nbsp;(%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s)"
 			 "</a>"
 			 "</td>"
                          "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+               Gbl.Prefs.IconsURL,
 	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][UsrDat->Sex],
 	       NumCrssUsrIsTeacher,
 	       (NumCrssUsrIsTeacher == 1) ? Txt_course :
@@ -367,18 +371,16 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER);
       NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_STUDENT);
       fprintf (Gbl.F.Out,"<tr>"
-		         "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:top;\">"
-                         "%s"
+		         "<td class=\"PRF_ICON_CONTAINER\">"
+                         "<img src=\"%s/std64x64.gif\" title=\"%s\""
+	                 " class=\"PRF_ICON\" />"
 			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:top;\">"
-			 "%u&nbsp;%s<br />"
-			 "%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s"
+                         "<td class=\"PRF_FIG DAT\">"
+			 "%u&nbsp;%s&nbsp;(%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s)"
 			 "</a>"
 			 "</td>"
                          "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+               Gbl.Prefs.IconsURL,
 	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][UsrDat->Sex],
 	       NumCrssUsrIsStudent,
 	       (NumCrssUsrIsStudent == 1) ? Txt_course :
@@ -395,18 +397,16 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    else
       NumPublicFiles = 0;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/file64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">"
-		      "%u&nbsp;%s<br />"
-		      "%u&nbsp;%s"
+		      "<td class=\"PRF_FIG DAT\">"
+		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</a>"
 		      "</td>"
                       "</tr>",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+            Gbl.Prefs.IconsURL,
 	    Txt_Files,
 	    NumFiles,
 	    (NumFiles == 1) ? Txt_file :
@@ -418,20 +418,18 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /* First click time */
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/clock64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+		      "<td class=\"PRF_FIG DAT\">",
+            Gbl.Prefs.IconsURL,
 	    Txt_From_TIME);
    if (UsrFigures.FirstClickTime.Date.Year)
      {
       Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
       if (UsrFigures.NumDays >= 0)
-	 fprintf (Gbl.F.Out,"<br />"
-	                    "%d&nbsp;%s",
+	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
 		  UsrFigures.NumDays,
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
@@ -452,13 +450,12 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /* Number of clicks */
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/click64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+		      "<td class=\"PRF_FIG DAT\">",
+            Gbl.Prefs.IconsURL,
 	    Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
@@ -468,12 +465,13 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumClicks"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
+	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 		            (float) (UsrFigures.NumDays + 1));
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
+	 fprintf (Gbl.F.Out,")");
 	}
      }
    else	// Number of clicks is unknown
@@ -492,13 +490,12 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Number of file views *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/download64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+		      "<td class=\"PRF_FIG DAT\">",
+            Gbl.Prefs.IconsURL,
 	    Txt_Downloads);
    if (UsrFigures.NumFileViews >= 0)
      {
@@ -510,10 +507,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumFileViews"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
+	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
    else	// Number of file views is unknown
@@ -532,13 +529,12 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/forum64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+		      "<td class=\"PRF_FIG DAT\">",
+            Gbl.Prefs.IconsURL,
 	    Txt_Forums);
    if (UsrFigures.NumForPst >= 0)
      {
@@ -550,10 +546,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumForPst"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
+	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
    else	// Number of forum posts is unknown
@@ -572,13 +568,12 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Number of messages sent *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:top;\">"
-		      "%s"
+                      "<td class=\"PRF_ICON_CONTAINER\">"
+                      "<img src=\"%s/msg64x64.gif\" title=\"%s\""
+	              " class=\"PRF_ICON\" />"
 		      "</td>"
-		      "<td class=\"DAT\""
-		      " style=\"text-align:left; vertical-align:top;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],
+		      "<td class=\"PRF_FIG DAT\">",
+            Gbl.Prefs.IconsURL,
 	    Txt_Messages);
    if (UsrFigures.NumMsgSnt >= 0)
      {
@@ -590,10 +585,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                        Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
       if (UsrFigures.NumDays >= 0)
 	{
-	 fprintf (Gbl.F.Out,"<br />");
+	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 		            (float) (UsrFigures.NumDays + 1));
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s",Txt_day);
+	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
    else	// Number of clicks is unknown
@@ -1459,7 +1454,7 @@ static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
 		      " height:40px; background-color:%s;\">"
 		      "#%u"
 		      "</td>"
-                      "<td style=\"width:18px; height:40px;"
+                      "<td style=\"width:28px; height:40px;"
 	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd],
 	    Rank,
@@ -1472,7 +1467,7 @@ static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO18x24",Pho_ZOOM);
+			"PHOTO24x32",Pho_ZOOM);
      }
 
    fprintf (Gbl.F.Out,"</td>"
