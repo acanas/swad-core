@@ -103,11 +103,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.99 (2015/03/21)"
+#define Log_PLATFORM_VERSION	"SWAD 14.99.2 (2015/03/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.99.2:  Mar 23, 2015	Ranking attending to number of followers. (183614 lines)
+        Version 14.99.1:  Mar 21, 2015	Change in file_view to accelerate queries. (183521 lines)
+					1 change necessary in Makefile:
+CREATE INDEX UsrCod ON file_view (UsrCod);
+
         Version 14.99:    Mar 21, 2015	Icons instead of text in user's profile.
 					Lot of changes in layout of user's profile. (183519 lines)
         Version 14.98.5:  Mar 21, 2015	New icons for some options. (183431 lines)

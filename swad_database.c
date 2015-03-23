@@ -1027,10 +1027,10 @@ mysql> DESCRIBE file_view;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_view ("
-		  "FilCod INT NOT NULL,"
-		  "UsrCod INT NOT NULL,"
-		  "NumViews INT NOT NULL DEFAULT 0,"
-		  "UNIQUE INDEX(FilCod,UsrCod))");
+		   "FilCod INT NOT NULL,"
+		   "UsrCod INT NOT NULL,"
+		   "NumViews INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod))");
 
    /***** Table files *****/
 /*

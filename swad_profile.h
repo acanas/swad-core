@@ -59,6 +59,8 @@ void Prf_GetAndShowRankingClicks (void);
 void Prf_GetAndShowRankingFileViews (void);
 void Prf_GetAndShowRankingForPst (void);
 void Prf_GetAndShowRankingMsgSnt (void);
+void Prf_ShowRankingFigure (const char *Query);
 void Prf_GetAndShowRankingClicksPerDay (void);
+void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank);
 
 #endif

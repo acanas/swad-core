@@ -38,6 +38,7 @@
 #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_file_browser.h"
+#include "swad_follow.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -3809,6 +3810,7 @@ static void Sta_GetAndShowUsersRanking (void)
    extern const char *Txt_Downloads;
    extern const char *Txt_Forums;
    extern const char *Txt_Messages;
+   extern const char *Txt_Followers;
 
    Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USRS_RANKING]);
 
@@ -3829,12 +3831,16 @@ static void Sta_GetAndShowUsersRanking (void)
                       "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
                       "%s"
                       "</th>"
+                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Clicks,
             Txt_Clicks_per_day,
             Txt_Downloads,
             Txt_Forums,
-            Txt_Messages);
+            Txt_Messages,
+            Txt_Followers);
 
    /***** Rankings *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3857,6 +3863,10 @@ static void Sta_GetAndShowUsersRanking (void)
                       "<td class=\"DAT\" style=\"text-align:left;"
                       " vertical-align:top;\">");
    Prf_GetAndShowRankingMsgSnt ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT\" style=\"text-align:left;"
+                      " vertical-align:top;\">");
+   Fol_GetAndShowRankingFollowers ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

@@ -100,7 +100,6 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
-static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank);
 
 /*****************************************************************************/
 /************************** Get public profile URL ***************************/
@@ -1163,14 +1162,6 @@ void Prf_GetAndShowRankingMsgSnt (void)
 static void Prf_GetAndShowRankingFigure (const char *FieldName)
   {
    char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
-   unsigned Rank;
-   struct UsrData UsrDat;
-   long FigureHigh = LONG_MAX;
-   long Figure;
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
@@ -1252,6 +1243,20 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          Lay_ShowErrorAndExit ("Wrong scope.");
          break;
      }
+   Prf_ShowRankingFigure (Query);
+  }
+
+void Prf_ShowRankingFigure (const char *Query)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   unsigned Rank;
+   struct UsrData UsrDat;
+   long FigureHigh = LONG_MAX;
+   long Figure;
+
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get ranking");
    if (NumUsrs)
      {
@@ -1442,15 +1447,14 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-static void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
+void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
   {
    extern const char *Txt_View_public_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RANK\" style=\"text-align:right;"
+   fprintf (Gbl.F.Out,"<td class=\"RANK\" style=\"text-align:right;"
 		      " height:40px; background-color:%s;\">"
 		      "#%u"
 		      "</td>"

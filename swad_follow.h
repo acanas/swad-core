@@ -49,4 +49,6 @@ void Fol_ListFollowers (void);
 void Fol_FollowUsr (void);
 void Fol_UnfollowUsr (void);
 
+void Fol_GetAndShowRankingFollowers (void);
+
 #endif
