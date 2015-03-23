@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include <stdlib.h>		// For malloc
+
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -50,5 +52,7 @@ void Fol_FollowUsr (void);
 void Fol_UnfollowUsr (void);
 
 void Fol_GetAndShowRankingFollowers (void);
+
+void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr);
 
 #endif

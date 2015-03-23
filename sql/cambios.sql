@@ -10551,3 +10551,25 @@ CREATE TABLE IF NOT EXISTS usr_follow (FollowerCod INT NOT NULL,FollowedCod NIT 
 CREATE INDEX UsrCod ON file_view (UsrCod);
 
 SELECT FollowedCod,COUNT(FollowerCod) AS N FROM usr_follow GROUP BY FollowedCod ORDER BY N DESC,FollowedCod LIMIT 100;
+
+
+----- 2015-03-23, swad14.100
+/*
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9 WHERE NotifyEvent=8;
+
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9 WHERE NotifyEvent=8;
+
+UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0xFF) << 1) | (NotifNtfEvents & 0xFF) | 0x100);
+UPDATE usr_data SET EmailNtfEvent =(((EmailNtfEvent  & ~0xFF) << 1) | (EmailNtfEvent  & 0xFF));
+*/
+UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000);
+
+

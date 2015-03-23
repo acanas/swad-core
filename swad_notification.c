@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_enrollment.h"
 #include "swad_exam.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_mark.h"
 #include "swad_notice.h"
@@ -78,6 +79,9 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Statistics tab */
    "survey",
+
+   /* Profile tab */
+   "follower",
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
@@ -105,6 +109,9 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Statistics tab */
    ActSeeAllSvy,	// Ntf_EVENT_SURVEY
+
+   /* Profile tab */
+   ActSeeFlr,		// Ntf_EVENT_FOLLOWER
   };
 
 /*****************************************************************************/
@@ -137,6 +144,9 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Statistics tab */
    "NotifyNtfEventSurvey",
+
+   /* Profile tab */
+   "NotifyNtfEventFollower",
   };
 
 // Email me about notification events
@@ -165,6 +175,9 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Statistics tab */
    "EmailNtfEventSurvey",
+
+   /* Profile tab */
+   "EmailNtfEventFollower",
   };
 
 // Icons for notification events
@@ -193,6 +206,9 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Statistics tab */
    "survey",			// Ntf_EVENT_SURVEY
+
+   /* Profile tab */
+   "follow",			// Ntf_EVENT_FOLLOWER
   };
 
 /*****************************************************************************/
@@ -750,6 +766,9 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
       case Ntf_EVENT_SURVEY:
          Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
+      case Ntf_EVENT_FOLLOWER:
+         Fol_GetNotifFollower (SummaryStr,ContentStr);
+         break;
      }
 
    //if (Gbl.WebService.IsWebService)
@@ -1135,6 +1154,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
                   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
+      case Ntf_EVENT_FOLLOWER:	// This function should not be called in this case
+         return 0;
      }
 
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get users to be notified"))) // Users found
@@ -1421,6 +1442,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    switch (NotifyEvent)
 	      {
 	       case Ntf_EVENT_UNKNOWN:
+	       case Ntf_EVENT_FOLLOWER:
 		  break;
 	       case Ntf_EVENT_DOCUMENT_FILE:
 	       case Ntf_EVENT_SHARED_FILE:

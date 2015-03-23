@@ -507,10 +507,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    else
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
-   /* Get on which events I want to be notified by e-mail */
+   /* Get on which events I want to be notified inside the platform */
    if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
+   /* Get on which events I want to be notified by e-mail */
    if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11

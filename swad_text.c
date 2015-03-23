@@ -681,6 +681,18 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][Txt_NUM_LA
 	"Nowe badania",
 	"Novo inqu&eacute;rito",
 	},
+	{
+	// Ntf_EVENT_FOLLOWER
+	"Nou seguidor",
+	"Neue Anh&auml;nger",
+	"New follower",
+	"Nuevo seguidor",
+	"Nouveau suiveur",
+	"Nuevo seguidor",	// Okoteve traducción
+	"Nuovo follower",
+	"Nowy obserwuj&aogon;",
+	"Novo seguidor",
+	},
 };
 
 const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
@@ -24819,6 +24831,26 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==8
 	 "Novos inqu&eacute;ritos"
 #endif
+	 ,
+#if   L==0	// Ntf_EVENT_FOLLOWER
+	 "Nous seguidors"
+#elif L==1
+	 "Neue Anh&auml;nger"
+#elif L==2
+	 "New followers"
+#elif L==3
+	 "Nuevos seguidores"
+#elif L==4
+	 "Nouveaux suiveurs"
+#elif L==5
+	 "Nuevos seguidores"	// Okoteve traducción
+#elif L==6
+	 "Nuovi followers"
+#elif L==7
+	 "Nowe obserwuj&aogon;"
+#elif L==8
+	 "Novos seguidores"
+#endif
 	};
 
 const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
@@ -25081,6 +25113,26 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Badania"
 #elif L==8
 	 "Inqu&eacute;rito"
+#endif
+	 ,
+#if   L==0	// Ntf_EVENT_FOLLOWER
+	"Seguidor"
+#elif L==1
+	"Anh&auml;nger"
+#elif L==2
+	"Follower"
+#elif L==3
+	"Seguidor"
+#elif L==4
+	"Suiveur"
+#elif L==5
+	"Seguidor"	// Okoteve traducción
+#elif L==6
+	"Follower"
+#elif L==7
+	"Obserwuj&aogon;"
+#elif L==8
+	"Seguidor"
 #endif
 	};
 

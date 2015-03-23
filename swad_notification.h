@@ -37,7 +37,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	13
+#define Ntf_NUM_NOTIFY_EVENTS	14
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database tables notif and sta_notif
 typedef enum
@@ -65,6 +65,9 @@ typedef enum
 
    /* Statistics tab */
    Ntf_EVENT_SURVEY			= 12,
+
+   /* Profile tab */
+   Ntf_EVENT_FOLLOWER			= 13,
 
   } Ntf_NotifyEvent_t;
 

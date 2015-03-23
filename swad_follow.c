@@ -26,11 +26,13 @@
 /*****************************************************************************/
 
 #include <stdio.h>		// For sprintf
+#include <string.h>		// For string functions
 
 #include "swad_bool.h"
 #include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"
+#include "swad_notification.h"
 #include "swad_profile.h"
 #include "swad_user.h"
 
@@ -291,7 +293,12 @@ void Fol_ListFollowers (void)
    struct UsrData UsrDat;
 
    /***** Get user to view user he/she follows *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   Usr_GetParamOtherUsrCodEncrypted ();
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)	// If user not specified, view my profile
+      Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   /***** Check if user exists and get his data *****/
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
      {
       /***** Show user's profile *****/
       if (Prf_ShowUserProfile ())
@@ -339,6 +346,11 @@ void Fol_ListFollowers (void)
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** If it's me, mark possible notification as seen *****/
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
+	    Ntf_SetNotifAsSeen (Ntf_EVENT_FOLLOWER,-1L,
+				Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -435,6 +447,8 @@ void Fol_FollowUsr (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
+   bool CreateNotif;
+   bool NotifyByEmail;
    bool Error;
 
    /***** Get user to be followed *****/
@@ -453,6 +467,18 @@ void Fol_FollowUsr (void)
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     Gbl.Usrs.Other.UsrDat.UsrCod);
 	    DB_QueryREPLACE (Query,"can not follow user");
+
+	    /***** This follow must be notified by e-mail? *****/
+            CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+            NotifyByEmail = CreateNotif &&
+        	            (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+
+            /***** Create notification for this followed.
+                   If this followed wants to receive notifications by e-mail, activate the sending of a notification *****/
+            if (CreateNotif)
+               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,-1L,
+                                              (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+                                        	                              0));
 	   }
 
       /***** Show user's profile again *****/
@@ -577,4 +603,17 @@ void Fol_GetAndShowRankingFollowers (void)
          break;
      }
    Prf_ShowRankingFigure (Query);
+  }
+
+/*****************************************************************************/
+/********************* Get notification of a new follower ********************/
+/*****************************************************************************/
+// This function may be called inside a web service, so don't report error
+
+void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr)
+  {
+   SummaryStr[0] = '\0';
+
+   if ((*ContentStr = (char *) malloc (1)))
+      strcpy (*ContentStr,"");
   }
