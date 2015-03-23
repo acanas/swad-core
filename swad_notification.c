@@ -432,18 +432,18 @@ void Ntf_ShowMyNotifications (void)
          if (PutLink)
            {
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
+            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
         	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+                     Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             Act_FormEnd ();
            }
          else
-            fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s16x16.gif\" alt=\"%s\""
+            fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\" alt=\"%s\""
         	               " class=\"ICON16x16\" />",
-                     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+                     Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
          fprintf (Gbl.F.Out,"</td>");

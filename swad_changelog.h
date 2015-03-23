@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.100 (2015/03/23)"
+#define Log_PLATFORM_VERSION	"SWAD 14.100.1 (2015/03/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.100.1: Mar 24, 2015	Only font-awesome icons for notifications. (183724 lines)
         Version 14.100:   Mar 23, 2015	Notification when a user gets a new follower. (183723 lines)
 					1 change necessary in database:
 UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000) WHERE NotifNtfEvents<>0;
