@@ -2208,8 +2208,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (PutFormLinks)
 	{
 	 Act_FormGoToStart (ActSeeInsInf);
-	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-	 Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,NULL);
+	 Ins_PutParamInsCod (Ins.InsCod);
+	 Act_LinkFormSubmit (Ins.FullName,NULL);
 	}
       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
@@ -2230,8 +2230,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (PutFormLinks)
 	{
 	 Act_FormGoToStart (ActSeeInsInf);
-	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-	 Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassHead);
+	 Ins_PutParamInsCod (Ins.InsCod);
+	 Act_LinkFormSubmit (Ins.FullName,ClassHead);
 	}
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
       if (PutFormLinks)
