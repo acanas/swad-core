@@ -51,7 +51,7 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -2015,6 +2015,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
+   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_View_record_card;
    extern const char *Txt_Admin_user;
@@ -2073,11 +2074,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                      !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)));	// A teacher can not modify another teacher's data
-   bool GoToPublicProfileForm = (TypeOfView == Rec_RECORD_LIST ||
-	                         TypeOfView == Rec_RECORD_PUBLIC ||
-	                         TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-                                 TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK);
-   bool CommandForms = GoToPublicProfileForm && Gbl.Usrs.Me.Logged;
+   bool PutFormLinks;	// Put links (forms) inside record card
    bool ShowEmail = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
@@ -2190,6 +2187,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 break;
     }
 
+   PutFormLinks = !Gbl.InsideForm &&						// Only if not inside another form
+                  Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
    Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
@@ -2203,8 +2203,21 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+
+      /* Form to go to the institution */
+      if (PutFormLinks)
+	{
+	 Act_FormGoToStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
+	 Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,NULL);
+	}
       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
+      if (PutFormLinks)
+	{
+         fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "<td colspan=\"2\" class=\"%s\""
@@ -2212,7 +2225,21 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      " text-align:left; vertical-align:middle;\">",
 	    ClassHead,C2Width + C3Width,C1Width);
    if (UsrDat->InsCod > 0)
+     {
+      /* Form to go to the institution */
+      if (PutFormLinks)
+	{
+	 Act_FormGoToStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
+	 Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassHead);
+	}
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
+      if (PutFormLinks)
+	{
+         fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+     }
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Photo *****/
@@ -2239,7 +2266,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              "<td rowspan=\"%u\" style=\"width:%upx; vertical-align:top;\">",
 	    CommandsRowspan,C1Width);
 
-   if (CommandForms)
+   if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div style=\"width:20px; margin:6px auto;\">");
 
@@ -2424,7 +2451,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    C2Width + C3Width);
    if (UsrDat->Nickname[0])
      {
-      if (GoToPublicProfileForm)
+      if (PutFormLinks)
 	{
 	 /* Put form to go to public profile */
 	 Act_FormStart (ActSeePubPrf);
@@ -2432,7 +2459,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
-      if (GoToPublicProfileForm)
+      if (PutFormLinks)
 	{
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();

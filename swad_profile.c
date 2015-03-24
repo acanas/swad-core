@@ -427,7 +427,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    if (UsrFigures.FirstClickTime.Date.Year)
      {
       Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
-      if (UsrFigures.NumDays >= 0)
+      if (UsrFigures.NumDays > 0)
 	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
 		  UsrFigures.NumDays,
 		  (UsrFigures.NumDays == 1) ? Txt_day :
@@ -462,11 +462,11 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                UsrFigures.NumClicks,Txt_clicks);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
                        Prf_GetNumUsrsWithFigure ("NumClicks"));
-      if (UsrFigures.NumDays >= 0)
+      if (UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumClicks /
-		            (float) (UsrFigures.NumDays + 1));
+		            (float) UsrFigures.NumDays);
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
 	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			  Prf_GetNumUsrsWithNumClicksPerDay ());
@@ -504,11 +504,11 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
         	                                Txt_downloads);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
                        Prf_GetNumUsrsWithFigure ("NumFileViews"));
-      if (UsrFigures.NumDays >= 0)
+      if (UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
-		            (float) (UsrFigures.NumDays + 1));
+		            (float) UsrFigures.NumDays);
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
@@ -543,11 +543,11 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
         	                             Txt_posts);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
                        Prf_GetNumUsrsWithFigure ("NumForPst"));
-      if (UsrFigures.NumDays >= 0)
+      if (UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumForPst /
-		            (float) (UsrFigures.NumDays + 1));
+		            (float) UsrFigures.NumDays);
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
@@ -582,11 +582,11 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
         	                             Txt_messages);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
                        Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
-      if (UsrFigures.NumDays >= 0)
+      if (UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
          Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
-		            (float) (UsrFigures.NumDays + 1));
+		            (float) UsrFigures.NumDays);
 	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
 	}
      }
@@ -621,7 +621,7 @@ static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
    /***** Get user's figures from database *****/
    sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),"
-	          "DATEDIFF(NOW(),FirstClickTime),"
+	          "DATEDIFF(NOW(),FirstClickTime)+1,"
 	          "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
 	          " FROM usr_figures WHERE UsrCod='%ld'",
 	    UsrCod);
@@ -1033,7 +1033,8 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
    char Query[256];
 
    /***** Create user's figures *****/
-   sprintf (Query,"INSERT INTO usr_figures (UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+   sprintf (Query,"INSERT INTO usr_figures"
+	          "(UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
 		  " VALUES ('%ld','%s','%ld','%ld','%ld','%ld')",
 	    UsrCod,
 	    UsrFigures->FirstClickTime.YYYYMMDDHHMMSS,	//   0 ==> unknown first click time or user never logged
