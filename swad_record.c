@@ -2015,6 +2015,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
    extern const char *Txt_View_public_profile;
+   extern const char *Txt_Country;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2054,14 +2055,15 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                         UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER);
    bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                        TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
-   bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
-	            TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
-                    TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
-                    TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR);
+   bool RoleForm = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+	            (TypeOfView == Rec_FORM_SIGN_UP ||
+	             TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
+                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
+                     TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR));
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
-                     !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)));	// A teacher can not modify another teacher's data
+                     Gbl.Usrs.Me.LoggedRole > Rol_ROLE_TEACHER));
    bool PutFormLinks;	// Put links (forms) inside record card
    bool ShowEmail = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
@@ -2486,9 +2488,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   }
 
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
-			    "<option value=\"-1\">&nbsp;</option>"
+			    "<option value=\"-1\">%s</option>"
 			    "<option value=\"0\"",
-		  C2Width + C3Width - 60);
+		  C2Width + C3Width - 60,
+		  Txt_Country);
 	 if (UsrDat->CtyCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);

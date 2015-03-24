@@ -276,9 +276,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" class=\"%s\""
-	              " style=\"padding-top:10px; text-align:center;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+	              "<td colspan=\"7\" style=\"padding-top:10px;"
+	              " text-align:center;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"

@@ -2181,10 +2181,16 @@ void Enr_ShowEnrollmentRequests (void)
         }
    Rol_WriteSelectorRoles (Roles);
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+                      "</tr>"
+                      "</table>");
+
+   /* Send button */
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update,Txt_Update);
+   fprintf (Gbl.F.Out,"</div>");
+
    /* Form end */
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_PutConfirmButton (Txt_Update);
    Act_FormEnd ();
 
    /***** Build query *****/
