@@ -438,10 +438,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store first click time *****/
       Act_FormStart (ActCal1stClkTim);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate1","calculating1");
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate1","calculating1");
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -478,10 +476,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of clicks *****/
       Act_FormStart (ActCalNumClk);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate2","calculating2");
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate2","calculating2");
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -517,10 +513,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of file views *****/
       Act_FormStart (ActCalNumFilVie);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate3","calculating3");
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate3","calculating3");
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -556,10 +550,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of forum posts *****/
       Act_FormStart (ActCalNumForPst);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate4","calculating4");
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate4","calculating4");
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -595,10 +587,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store number of messages sent *****/
       Act_FormStart (ActCalNumMsgSnt);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme],
-                                  "calculate5","calculating5");
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate,
-                            "calculate5","calculating5");
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
