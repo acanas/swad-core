@@ -92,7 +92,13 @@ void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutCalculateIcon (const char *Alt,const char *Text,
                            const char *StaticIconId,
                            const char *AnimatedIconId);
-void Lay_PutSendButton (const char *TextSendButton);
+
+void Lay_PutCreateButton (const char *Text);
+void Lay_PutCreateButtonInline (const char *Text);
+void Lay_PutConfirmButton (const char *Text);
+void Lay_PutConfirmButtonInline (const char *Text);
+void Lay_PutRemoveButton (const char *Text);
+
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title);
 void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable10 (void);

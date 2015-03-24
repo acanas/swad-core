@@ -271,9 +271,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sch_PutFormToSearch (Gbl.Prefs.IconsURL);
 
    /***** Send button *****/
-   fprintf (Gbl.F.Out,"<br />"
-                      "<input type=\"submit\" value=\"%s\" />",
-            Txt_Search);
+   fprintf (Gbl.F.Out,"<br />");
+   Lay_PutConfirmButton (Txt_Search);
 
    /***** Form end *****/
    fprintf (Gbl.F.Out,"</td>"

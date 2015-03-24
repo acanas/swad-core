@@ -896,10 +896,7 @@ void Att_AskRemAttEvent (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
             Att.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Remove_event);
+   Lay_PutRemoveButton (Txt_Remove_event);
    Act_FormEnd ();
 
    /***** Show attendance events again *****/
@@ -1207,8 +1204,10 @@ void Att_RequestCreatOrEditAttEvent (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** New attendance event *****/
-   Lay_PutSendButton (ItsANewAttEvent ? Txt_Create_event :
-                                        Txt_Modify_event);
+   if (ItsANewAttEvent)
+      Lay_PutCreateButton (Txt_Create_event);
+   else
+      Lay_PutConfirmButton (Txt_Modify_event);
 
    /***** Form end *****/
    Act_FormEnd ();
@@ -1943,7 +1942,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    if (Att->Open)
      {
       /***** Send button *****/
-      Lay_PutSendButton (Txt_Save);
+      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
      }
   }
@@ -2022,7 +2021,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Lay_EndRoundFrameTable10 ();
 
       /***** Send button *****/
-      Lay_PutSendButton (Txt_Save);
+      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
@@ -2664,7 +2663,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Att_FreeListAttEvents ();
 
          /* Send button */
-         Lay_PutSendButton (Txt_Show_list);
+         Lay_PutConfirmButton (Txt_Show_list);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
 
@@ -2949,7 +2948,7 @@ static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
    Usr_PutHiddenParUsrCodAll (ActSeeLstAttStd,Gbl.Usrs.Select.All);
    if (StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Lay_PutSendButton (Txt_Show_more_details);
+   Lay_PutConfirmButton (Txt_Show_more_details);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

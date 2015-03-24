@@ -2870,7 +2870,7 @@ void Brw_AskEditWorksCrs (void)
          Lay_EndRoundFrameTable10 ();
 
          /* Button to send the form */
-         Lay_PutSendButton (Txt_View_works);
+         Lay_PutConfirmButton (Txt_View_works);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
         }
@@ -5892,11 +5892,10 @@ void Brw_AskRemFileFromTree (void)
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                         "<input type=\"submit\" value=\"%s\" />"
-                         "</div>",
-               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
-        	                                         Txt_Remove_link);
+
+      Lay_PutRemoveButton (Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
+        	                                                     Txt_Remove_link);
+
       Act_FormEnd ();
      }
    else
@@ -6046,10 +6045,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
             Gbl.FileBrowser.FilFolLnkName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</div>",
-            Txt_Remove_folder);
+   Lay_PutRemoveButton (Txt_Remove_folder);
    Act_FormEnd ();
   }
 
@@ -7665,7 +7661,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Folder);
 
    /* Button to send */
-   Lay_PutSendButton (Txt_Create_folder);
+   Lay_PutCreateButton (Txt_Create_folder);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -7754,7 +7750,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
       Par_PutHiddenParamChar ("FullTree",'Y');
 
    /* Button to send */
-   Lay_PutSendButton (Txt_FILE_UPLOAD_Done);
+   Lay_PutConfirmButton (Txt_FILE_UPLOAD_Done);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -7804,7 +7800,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /* Button to send */
-   Lay_PutSendButton (Txt_Upload_file);
+   Lay_PutCreateButton (Txt_Upload_file);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -7851,7 +7847,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
    /* Button to send */
-   Lay_PutSendButton (Txt_Paste);
+   Lay_PutCreateButton (Txt_Paste);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -7912,7 +7908,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
             The_ClassFormul[Gbl.Prefs.Theme],Txt_URL,PATH_MAX);
 
    /* Button to send */
-   Lay_PutSendButton (Txt_Create_link);
+   Lay_PutCreateButton (Txt_Create_link);
    Act_FormEnd ();
 
    /***** End frame *****/
@@ -9060,7 +9056,7 @@ void Brw_ShowFileMetadata (void)
 
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    Lay_PutSendButton (Txt_Save_file_properties);
+	    Lay_PutConfirmButton (Txt_Save_file_properties);
 	    Act_FormEnd ();
 	   }
 

@@ -160,7 +160,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Send button and form end *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
+                      "%s"
+                      "</button>"
                       "</td>"
 	              "</tr>",
 	              Txt_Create_account);
@@ -201,7 +203,7 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 ("80%",2,Txt_User_account);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_User_account);
 
    /***** Nickname *****/
    Nck_ShowFormChangeUsrNickname ();
@@ -250,7 +252,8 @@ static void Acc_PrintAccountSeparator (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" style=\"text-align:center; vertical-align:middle;\">"
+		      "<td colspan=\"3\""
+		      " style=\"text-align:center; vertical-align:middle;\">"
 		      "<hr class=\"%s\" />"
 		      "</td>"
 		      "</tr>",
@@ -324,12 +327,12 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 
    /***** Step 1/3: Get new nickname from form *****/
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
 
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
-      strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-      NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
       Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
@@ -620,11 +623,9 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
       /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();
 
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	                 "<input type=\"submit\" value=\"%s\" />"
-	                 "</div>",
-               ItsMe ? Txt_Completely_eliminate_me :
-                       Txt_Completely_eliminate_user);
+      Lay_PutRemoveButton (ItsMe ? Txt_Completely_eliminate_me :
+                                   Txt_Completely_eliminate_user);
+
       Act_FormEnd ();
      }
    else

@@ -1741,7 +1741,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</table>");
-   Lay_PutSendButton (Txt_Save_changes);
+   Lay_PutConfirmButton (Txt_Save_changes);
    Act_FormEnd ();
 
    /***** End table *****/

@@ -1337,6 +1337,7 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
+   extern const char *Txt_User;
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Password;
    extern const char *Txt_Log_in;
@@ -1376,7 +1377,8 @@ void Usr_WriteFormLogin (void)
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
-                      " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"25\" maxlength=\"%u\""
+                      " placeholder=\"%s\" value=\"%s\" />"
                       "</td>"
 		      "</tr>"
 		      "<tr>"
@@ -1386,12 +1388,13 @@ void Usr_WriteFormLogin (void)
 		      "</td>"
 		      "<td style=\"text-align:left; vertical-align:middle;\">"
 		      "<input type=\"password\" name=\"UsrPwd\""
-		      " size=\"16\" maxlength=\"%u\" />"
+		      " size=\"25\" maxlength=\"%u\" />"
 		      "</td>"
 		      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_nick_email_or_ID,
+            Txt_User,
             Usr_MAX_LENGTH_USR_LOGIN,
+            Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin,
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Password,
@@ -1400,7 +1403,9 @@ void Usr_WriteFormLogin (void)
    /***** Send button and form end *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
+                      "%s"
+                      "</button>"
                       "</td>"
 	              "</tr>",
 	              Txt_Log_in);
@@ -4318,7 +4323,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
    Par_PutHiddenParamChar ("ShowBigList",'Y');
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Show_anyway);
+   Lay_PutConfirmButton (Txt_Show_anyway);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -6382,7 +6387,7 @@ void Usr_SeeGuests (void)
          Lay_EndRoundFrameTable10 ();
 
          /* Send button */
-         Lay_PutSendButton (Txt_Show_records);
+         Lay_PutConfirmButton (Txt_Show_records);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
 	}
@@ -6548,7 +6553,7 @@ void Usr_SeeStudents (void)
          /* Send button */
          if (ICanViewRecords)
            {
-            Lay_PutSendButton (Txt_Show_records);
+            Lay_PutConfirmButton (Txt_Show_records);
             Act_FormEnd ();
            }
 
@@ -6687,7 +6692,7 @@ void Usr_SeeTeachers (void)
          if (ICanViewRecords)
            {
             /* Send button */
-            Lay_PutSendButton (Txt_Show_records);
+            Lay_PutConfirmButton (Txt_Show_records);
             Act_FormEnd ();
            }
 

@@ -3750,7 +3750,7 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
-   Lay_PutSendButton (Txt_Send_message);
+   Lay_PutCreateButton (Txt_Send_message);
    Act_FormEnd ();
   }
 
@@ -3965,10 +3965,7 @@ void For_ReqDelThr (void)
    Act_FormStart (For_ActionsDelThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
    For_PutHiddenParamThrCod (ThrCod);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</div>",
-            Txt_Remove_thread);
+   Lay_PutRemoveButton (Txt_Remove_thread);
    Act_FormEnd ();
   }
 

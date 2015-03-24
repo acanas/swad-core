@@ -1560,8 +1560,8 @@ void Grp_ReqRegisterInGrps (void)
       NumGrpsIBelong = Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
 
       /***** End form *****/
-      Lay_PutSendButton (NumGrpsIBelong ? Txt_Change_my_groups :
-	                                  Txt_Enroll_in_groups);
+      Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+	                                     Txt_Enroll_in_groups);
       Act_FormEnd ();
      }
    else	// This course has not groups
@@ -2146,11 +2146,10 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</td>"
-	              "</tr>",
-            Txt_Create_type_of_group);
+	              "<td colspan=\"6\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_type_of_group);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
@@ -2231,11 +2230,10 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</td>"
-	              "</tr>",
-            Txt_Create_group);
+	              "<td colspan=\"7\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_group);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
@@ -3308,7 +3306,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemGrpTyp);
    Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   Lay_PutSendButton (Txt_Remove_type_of_group);
+   Lay_PutRemoveButton (Txt_Remove_type_of_group);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -3347,7 +3345,7 @@ static void Grp_AskConfirmRemGrp (void)
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemGrp);
    Grp_PutParamGrpCod (GrpDat.GrpCod);
-   Lay_PutSendButton (Txt_Remove_group);
+   Lay_PutRemoveButton (Txt_Remove_group);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

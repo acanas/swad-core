@@ -273,7 +273,7 @@ void Pre_AskChangeLanguage (void)
    /***** Send button *****/
    Act_FormStart (ActChgLan);
    Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
-   Lay_PutSendButton (Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
+   Lay_PutConfirmButton (Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
    Act_FormEnd ();
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language

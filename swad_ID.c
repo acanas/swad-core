@@ -402,7 +402,7 @@ void ID_ShowFormOthIDs (void)
 
 	 /***** Form to change IDs *****/
 	 /* Show user's record */
-	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
 			    "<tr>"
 			    "<td colspan=\"2\" style=\"text-align:center;\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -445,12 +445,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       if (NumID == 0)
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"width:40%%;"
-			    " text-align:right; vertical-align:top;\">"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:top;\">"
 			    "%s:"
 			    "</td>"
-			    "<td style=\"width:60%%;"
-			    " text-align:left; vertical-align:top;\">",
+			    "<td colspan=\"2\" style=\"text-align:left;"
+			    " vertical-align:top;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -514,12 +514,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"width:40%%;"
-			 " text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\" style=\"text-align:right;"
+			 " vertical-align:middle;\">"
 			 "%s:"
 			 "</td>"
-			 "<td style=\"width:60%%;"
-			 " text-align:left; vertical-align:middle;\">",
+			 "<td style=\"text-align:left;"
+			 " vertical-align:middle;\">",
 	       The_ClassFormul[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
@@ -530,13 +530,15 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActNewIDOth);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
-			 "<input type=\"submit\" value=\"%s\" />",
-	       16,
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\""
+	                 " size=\"16\" maxlength=\"%u\" value=\"%s\" />",
 	       ID_MAX_LENGTH_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
-		                 "",	// Show the most recent ID
-	       Txt_Add_this_ID);
+		                 "");	// Show the most recent ID
+      fprintf (Gbl.F.Out,"</td>"
+	                 "<td style=\"text-align:left;"
+	                 " vertical-align:middle;\">");
+      Lay_PutCreateButtonInline (Txt_Add_this_ID);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>"
@@ -544,7 +546,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
 
    /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\""
+   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\""
 	              " style=\"text-align:center;\">");
    if (ItsMe)
       fprintf (Gbl.F.Out,"%s ",

@@ -232,7 +232,7 @@ void Pwd_ShowFormSendNewPwd (void)
             The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** End form *****/
-   Lay_PutSendButton (Txt_Email_new_password);
+   Lay_PutConfirmButton (Txt_Email_new_password);
    Act_FormEnd ();
   }
 
@@ -676,11 +676,10 @@ void Pwd_ShowFormChgPwd (void)
 
    /***** Send button and end form *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-		      "</td>"
-		      "</tr>",
-            Txt_Save);
+		      "<td colspan=\"2\" style=\"text-align:center;\">");
+   Lay_PutConfirmButton (Txt_Save);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
    Lay_EndRoundFrameTable10 ();
    Act_FormEnd ();
   }
@@ -760,7 +759,7 @@ void Pwd_ShowFormOthPwd (void)
 	 fprintf (Gbl.F.Out,"</table>");
 
 	 /* End form */
-	 Lay_PutSendButton (Txt_Save);
+	 Lay_PutConfirmButton (Txt_Save);
 	 Act_FormEnd ();
 	}
       else

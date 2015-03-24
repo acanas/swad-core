@@ -1851,11 +1851,10 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"11\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_institution);
+	              "<td colspan=\"11\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_institution);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

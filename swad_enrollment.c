@@ -269,7 +269,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
             Usr_MAX_BYTES_USR_LOGIN);
 
    /***** Send button*****/
-   Lay_PutSendButton (Txt_Continue);
+   Lay_PutConfirmButton (Txt_Continue);
    Act_FormEnd ();
   }
 
@@ -616,7 +616,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_5_Confirm_the_enrollment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
-   Lay_PutSendButton (Txt_Confirm);
+   Lay_PutConfirmButton (Txt_Confirm);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -680,7 +680,7 @@ void Enr_AskRemoveOldUsrs (void)
    fprintf (Gbl.F.Out,"</span>");
 
    /***** Send button*****/
-   Lay_PutSendButton (Txt_Eliminate);
+   Lay_PutRemoveButton (Txt_Eliminate);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1749,7 +1749,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormStart (ActRemAllStdCrs);
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
-      Lay_PutSendButton (Txt_Remove_students);
+      Lay_PutRemoveButton (Txt_Remove_students);
       Act_FormEnd ();
      }
    else
@@ -2043,7 +2043,7 @@ void Enr_AskIfRejectSignUp (void)
             Act_FormStart (ActRejSignUp);
             Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
-            Lay_PutSendButton (Txt_Reject);
+            Lay_PutConfirmButton (Txt_Reject);
             Act_FormEnd ();
            }
          else
@@ -2184,7 +2184,7 @@ void Enr_ShowEnrollmentRequests (void)
                       "</tr>");
    /* Form end */
    fprintf (Gbl.F.Out,"</table>");
-   Lay_PutSendButton (Txt_Update);
+   Lay_PutConfirmButton (Txt_Update);
    Act_FormEnd ();
 
    /***** Build query *****/
@@ -2505,7 +2505,7 @@ void Enr_ShowEnrollmentRequests (void)
             Act_FormStart (ActReqMdfUsr);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutSendButton (Txt_Register);
+            Lay_PutCreateButton (Txt_Register);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 
@@ -2515,7 +2515,7 @@ void Enr_ShowEnrollmentRequests (void)
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutSendButton (Txt_Reject);
+            Lay_PutConfirmButton (Txt_Reject);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>"
                                "</tr>");
@@ -2877,7 +2877,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
 
    /***** Which action, register or removing? *****/
    if (Enr_PutActionsRegRemOneUsr (ItsMe))
-      Lay_PutSendButton (Txt_Confirm);
+      Lay_PutConfirmButton (Txt_Confirm);
 
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -3202,10 +3202,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
 
                Act_FormStart (Enr_ActNewAdm[Scope]);
                Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-        	                  "<input type=\"submit\" value=\"%s\" />"
-        	                  "</div>",
-                        Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+               Lay_PutConfirmButton (Txt_Register_user_IN_A_COURSE_OR_DEGREE);
                Act_FormEnd ();
               }
            }
@@ -3468,9 +3465,8 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Act_FormStart (ActRemUsrCrs);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
-      fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />",
-               ItsMe ? Txt_Remove_me_from_this_course :
-                       Txt_Remove_user_from_this_course);
+      Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
+                                   Txt_Remove_user_from_this_course);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -3568,11 +3564,8 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
 
       Act_FormStart (Enr_ActRemAdm[Scope]);
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	                 "<input type=\"submit\" value=\"%s\" />"
-	                 "</div>",
-               ItsMe ? Txt_Remove_me_as_an_administrator :
-                       Txt_Remove_user_as_an_administrator);
+      Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_as_an_administrator :
+                                   Txt_Remove_user_as_an_administrator);
       Act_FormEnd ();
      }
    else

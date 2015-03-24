@@ -148,15 +148,14 @@ void TsI_ShowFormImportQstsFromXML (void)
 	              "</td>"
                       "</tr>"
                       "<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" accept=\"text/xml\" />"
-	              "</td>"
-	              "</tr>"
-                      "</table>",
+	              "<td colspan=\"2\" style=\"text-align:center;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_XML_file,
-            Fil_NAME_OF_PARAM_FILENAME_ORG,
-            Txt_Upload_file);
+            Fil_NAME_OF_PARAM_FILENAME_ORG);
+   Lay_PutCreateButton (Txt_Upload_file);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>"
+                      "</table>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

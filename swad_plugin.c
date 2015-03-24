@@ -914,11 +914,10 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_plugin);
+	              "<td colspan=\"6\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_plugin);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

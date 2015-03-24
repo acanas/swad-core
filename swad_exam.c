@@ -739,9 +739,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    extern const char *Txt_minutes;
    extern const char *Txt_Edit_announcement_of_exam;
    extern const char *Txt_Edit;
-   extern const char *Txt_Send_announcement_of_exam;
    extern const char *Txt_Remove_announcement_of_exam;
    extern const char *Txt_Remove;
+   extern const char *Txt_Publish_announcement_OF_EXAM;
    const char *StyleTitle  = "CONV_TIT";
    const char *StyleForm   = "CONV_NEG";
    const char *StyleNormal = "CONV";
@@ -772,7 +772,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          StyleForm = The_ClassFormul[Gbl.Prefs.Theme];
          /***** Start form *****/
          Act_FormStart (ActRcvExaAnn);
-         if (ExaCod >= 0)
+         if (ExaCod > 0)
             Par_PutHiddenParamLong ("ExaCod",ExaCod);
          break;
      }
@@ -1263,7 +1263,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          QR_ExamAnnnouncement ();
          break;
       case Exa_FORM_VIEW:
-         Lay_PutSendButton (Txt_Send_announcement_of_exam);
+	 if (ExaCod > 0)
+            Lay_PutConfirmButton (Txt_Publish_announcement_OF_EXAM);
+	 else
+            Lay_PutCreateButton (Txt_Publish_announcement_OF_EXAM);
          Act_FormEnd ();
          break;
      }

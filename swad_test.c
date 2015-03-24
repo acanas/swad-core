@@ -287,12 +287,11 @@ void Tst_ShowFormAskTst (void)
          if (Gbl.Test.Config.Min == Gbl.Test.Config.Max)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
          fprintf (Gbl.F.Out," />"
+                            "</div>"
                             "</div>");
 
          /***** Send button *****/
-         fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />"
-                            "</div>",
-                  Txt_Generate_exam);
+         Lay_PutConfirmButton (Txt_Generate_exam);
          Act_FormEnd ();
         }
      }
@@ -417,7 +416,7 @@ void Tst_ShowNewTestExam (void)
 		     Txt_Allow_teachers_to_consult_this_exam);
 
             /* End form */
-            Lay_PutSendButton (Txt_Done_assess_exam);
+            Lay_PutConfirmButton (Txt_Done_assess_exam);
             Act_FormEnd ();
 
             /***** Set test status *****/
@@ -1141,12 +1140,11 @@ void Tst_ShowFormAskEditTsts (void)
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
 	                 " style=\"margin:0 auto;\">");
       Dat_WriteFormIniEndDates ();
-      fprintf (Gbl.F.Out,"</table>");
+      fprintf (Gbl.F.Out,"</table>"
+	                 "</div>");
 
       /***** Send button *****/
-      fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />"
-	                 "</div>",
-               Txt_Show_questions);
+      Lay_PutConfirmButton (Txt_Show_questions);
       Act_FormEnd ();
      }
 
@@ -1716,7 +1714,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** End form *****/
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable10 ();
-   Lay_PutSendButton (Txt_Save);
+   Lay_PutConfirmButton (Txt_Save);
    Act_FormEnd ();
   }
 
@@ -4521,7 +4519,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"</table>"
 	              "</tr>"
 	              "</table>");
-   Lay_PutSendButton (Txt_Save);
+   Lay_PutConfirmButton (Txt_Save);
    Act_FormEnd ();
 
    Tst_FreeTextChoiceAnswers ();
@@ -5994,7 +5992,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          /***** Button to send the form *****/
          fprintf (Gbl.F.Out,"</table>"
 	                    "</div>");
-         Lay_PutSendButton (Txt_See_exams);
+         Lay_PutConfirmButton (Txt_See_exams);
          Act_FormEnd ();
         }
      }
@@ -6029,7 +6027,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Button to send the form *****/
-   Lay_PutSendButton (Txt_See_exams);
+   Lay_PutConfirmButton (Txt_See_exams);
    Act_FormEnd ();
   }
 

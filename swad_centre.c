@@ -1870,15 +1870,15 @@ void Ctr_RequestPhoto (void)
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>",
+                      "<td colspan=\"2\" style=\"text-align:center;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
-            Fil_NAME_OF_PARAM_FILENAME_ORG,
-            Txt_Upload_photo);
+            Fil_NAME_OF_PARAM_FILENAME_ORG);
+   Lay_PutCreateButton (Txt_Upload_photo);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+                      "</table>");
+
    Act_FormEnd ();
   }
 
@@ -2090,11 +2090,10 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"12\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_centre);
+	              "<td colspan=\"12\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_centre);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

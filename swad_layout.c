@@ -1002,12 +1002,50 @@ void Lay_PutCalculateIcon (const char *Alt,const char *Text,
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 
-void Lay_PutSendButton (const char *TextSendButton)
+void Lay_PutCreateButton (const char *Text)
   {
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
+                      "%s"
+                      "</button>"
                       "</div>",
-            TextSendButton);
+            Text);
+  }
+
+void Lay_PutCreateButtonInline (const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
+                      "%s"
+                      "</button>",
+            Text);
+  }
+
+void Lay_PutConfirmButton (const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
+                      "%s"
+                      "</button>"
+                      "</div>",
+            Text);
+  }
+
+void Lay_PutConfirmButtonInline (const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
+                      "%s"
+                      "</button>",
+            Text);
+  }
+
+void Lay_PutRemoveButton (const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\">"
+                      "%s"
+                      "</button>"
+                      "</div>",
+            Text);
   }
 
 /*****************************************************************************/

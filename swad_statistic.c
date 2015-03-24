@@ -94,7 +94,6 @@ struct Sta_StatsForum
 
 static void Sta_PutFormToRequestAccessesCrs (void);
 
-static void Sta_PutSeeAccessesButton (void);
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
 static bool Sta_SeeAccesses (void);
@@ -388,10 +387,11 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 void Sta_AskSeeCrsAccesses (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_No_teachers_or_students_found;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
    extern const char *Txt_results_per_page;
+   extern const char *Txt_Show_visits;
+   extern const char *Txt_No_teachers_or_students_found;
    static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    Sta_ClicksStatType_t ClicksStatType;
@@ -505,13 +505,13 @@ void Sta_AskSeeCrsAccesses (void)
            }
          fprintf (Gbl.F.Out,"</select>)"
                             "</td>"
-                            "</tr>");
+                            "</tr>"
+                            "</table>");
 
          /***** Submit button *****/
-         Sta_PutSeeAccessesButton ();
+         Lay_PutConfirmButton (Txt_Show_visits);
 
          /***** Form end *****/
-         fprintf (Gbl.F.Out,"</table>");
          Act_FormEnd ();
 
          /* Free the memory used by the list of users */
@@ -541,6 +541,7 @@ void Sta_AskSeeGblAccesses (void)
    extern const char *Txt_Scope;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
+   extern const char *Txt_Show_visits;
    Sta_Role_t RoleStat;
    Sta_ClicksStatType_t ClicksStatType;
 
@@ -633,30 +634,14 @@ void Sta_AskSeeGblAccesses (void)
                Txt_STAT_CLICK_STAT_TYPES[ClicksStatType]);
      }
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	              "</tr>"
+                      "</table>");
 
    /***** Submit button *****/
-   Sta_PutSeeAccessesButton ();
+   Lay_PutConfirmButton (Txt_Show_visits);
 
    /***** Form end *****/
-   fprintf (Gbl.F.Out,"</table>");
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/********************** Put submit button to see accesses ********************/
-/*****************************************************************************/
-
-static void Sta_PutSeeAccessesButton (void)
-  {
-   extern const char *Txt_Show_visits;
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-                      "</td>"
-                      "</tr>",
-            Txt_Show_visits);
   }
 
 /*****************************************************************************/
@@ -822,7 +807,7 @@ static bool Sta_SeeAccesses (void)
    struct UsrData UsrDat;
    unsigned NumUsr = 0;
    const char *Ptr;
-   char StrRole[16+1];
+   char StrRole[256];
    char StrQueryCountType[256];
    unsigned NumDays;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
@@ -1060,6 +1045,7 @@ static bool Sta_SeeAccesses (void)
             Gbl.DateRange.DateEnd.Month,
             Gbl.DateRange.DateEnd.Day);
    strcat (Query,QueryAux);
+
    switch (StatsGlobalOrCourse)
      {
       case STAT_GLOBAL:
@@ -1099,6 +1085,7 @@ static bool Sta_SeeAccesses (void)
                      LogTable,Gbl.CurrentCrs.Crs.CrsCod);
             strcat (Query,QueryAux);
            }
+
          /* Type of users */
 	 switch (Gbl.Stat.Role)
 	   {
@@ -3643,8 +3630,7 @@ void Sta_ReqUseOfPlatform (void)
                       "</div>");
 
    /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<input type=\"submit\" value=\"%s\" />",
-            Txt_Show_statistic);
+   Lay_PutConfirmButton (Txt_Show_statistic);
 
    /***** Form end *****/
    Act_FormEnd ();

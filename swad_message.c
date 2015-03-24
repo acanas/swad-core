@@ -340,7 +340,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       fprintf (Gbl.F.Out,"</table>");
 
       /***** Send and undo buttons *****/
-      Lay_PutSendButton (Txt_Send_message);
+      Lay_PutCreateButton (Txt_Send_message);
       Act_FormEnd ();
      }
 
@@ -781,10 +781,7 @@ void Msg_ReqDelAllRecMsgs (void)
 
    Act_FormStart (ActDelAllRcvMsg);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Delete_messages_received);
+   Lay_PutRemoveButton (Txt_Delete_messages_received);
    Act_FormEnd ();
   }
 
@@ -818,10 +815,7 @@ void Msg_ReqDelAllSntMsgs (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    Act_FormStart (ActDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Delete_messages_sent);
+   Lay_PutRemoveButton (Txt_Delete_messages_sent);
    Act_FormEnd ();
   }
 
@@ -1555,7 +1549,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       Msg_GetParamOnlyUnreadMsgs ();
       Msg_ShowFormToShowOnlyUnreadMessages ();
      }
-   Lay_PutSendButton (Txt_View_messages);
+   Lay_PutConfirmButton (Txt_View_messages);
    Act_FormEnd ();
 
    if (TypeOfMessages == Msg_MESSAGES_RECEIVED)

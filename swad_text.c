@@ -2349,17 +2349,17 @@ const char *Txt_Another_ID =
 
 const char *Txt_Add_this_ID =
 #if   L==0
-	"Afegir aquest ID (DNI/c&egrave;dula)";
+	"Afegir aquest ID";
 #elif L==1
 	"F&uuml;gen Sie diese Ausweis-Nr.";
 #elif L==2
 	"Add this ID";
 #elif L==3
-	"A&ntilde;adir este ID (DNI/c&eacute;dula)";
+	"A&ntilde;adir este ID";
 #elif L==4
 	"Ajouter ce num&eacute;ro d'identit&eacute;";
 #elif L==5
-	"A&ntilde;adir este ID (DNI/c&eacute;dula)";	// Okoteve traducción
+	"A&ntilde;adir este ID";	// Okoteve traducción
 #elif L==6
 	"Aggiungi questa carta d'identit&agrave;";
 #elif L==7
@@ -27940,25 +27940,25 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 #endif
 	};
 
-const char *Txt_Record_fields_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Record_fields =
 #if   L==0
-	"Camps de fitxes en <strong>%s</strong>:";
+	"Camps de fitxes";
 #elif L==1
-	"Record fields in <strong>%s</strong>:";		// Need Übersetzung
+	"Record fields";	// Need Übersetzung
 #elif L==2
-	"Record fields in <strong>%s</strong>:";
+	"Record fields";
 #elif L==3
-	"Campos de fichas en <strong>%s</strong>:";
+	"Campos de fichas";
 #elif L==4
-	"Record fields in <strong>%s</strong>:";		// Besoin de traduction
+	"Record fields";	// Besoin de traduction
 #elif L==5
-	"Campos de fichas en <strong>%s</strong>:";	// Okoteve traducción
+	"Campos de fichas";	// Okoteve traducción
 #elif L==6
-	"Campo schede in <strong>%s</strong>:";
+	"Campo schede";
 #elif L==7
-	"Rekord w dziedzinie <strong>%s</strong>:";
+	"Rekord w dziedzinie";
 #elif L==8
-	"Record fields in <strong>%s</strong>:";		// Necessita de tradução
+	"Record fields";	// Necessita de tradução
 #endif
 
 const char *Txt_Recipients =
@@ -33866,25 +33866,25 @@ const char *Txt_Send =
 	"Enviar";
 #endif
 
-const char *Txt_Send_announcement_of_exam =
+const char *Txt_Publish_announcement_OF_EXAM =
 #if   L==0
-	"Enviar convocatoria de examen";	// Necessita traduccio
+	"Publicar convocat&ograve;ria";
 #elif L==1
-	"Senden Aufruf f&uuml;r Pr&uuml;fung";
+	"Ver&ouml;ffentlichen Aufruf";
 #elif L==2
-	"Send announcement of exam";
+	"Publish announcement";
 #elif L==3
-	"Enviar convocatoria de examen";
+	"Publicar convocatoria";
 #elif L==4
-	"Envoyer convocation &agrave; l'examen";
+	"Publier convocation";
 #elif L==5
-	"Enviar convocatoria de examen";	// Okoteve traducción
+	"Publicar convocatoria";	// Okoteve traducción
 #elif L==6
-	"Invia sessione d'esame";
+	"Pubblicare sessione";
 #elif L==7
-	"Send announcement of exam";		// Potrzebujesz tlumaczenie
+	"Publikuje zaproszenie";
 #elif L==8
-	"Enviar chamada para o exame";
+	"Publicar chamada";
 #endif
 
 const char *Txt_Send_message =

@@ -1748,11 +1748,10 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"8\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_country);
+	              "<td colspan=\"8\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_country);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

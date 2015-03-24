@@ -103,11 +103,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.100.3 (2015/03/24)"
+#define Log_PLATFORM_VERSION	"SWAD 14.101 (2015/03/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.101:   Mar 24, 2015	Fixed bug in form to create a new account.
+					Fixed bug in statistics.
+					New design of buttons. (183753 lines)
         Version 14.100.3: Mar 24, 2015	Fixed bug in link to institution in record. (183753 lines)
         Version 14.100.2: Mar 24, 2015	Changes in profile.
 					Link to institution in record. (183752 lines)

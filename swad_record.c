@@ -90,7 +90,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void);
 void Rec_ReqEditRecordFields (void)
   {
    extern const char *Txt_There_are_no_record_fields_in_the_course_X;
-   extern const char *Txt_Record_fields_in_X;
+   extern const char *Txt_Record_fields;
 
    /***** Form to edit the fields of the records *****/
    /***** Get list of fields of records in current course *****/
@@ -99,11 +99,7 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
-      sprintf (Gbl.Message,Txt_Record_fields_in_X,
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_WriteTitle (Gbl.Message);
-
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_Record_fields);
       Rec_ListFieldsRecordsForEdition ();
       Lay_EndRoundFrameTable10 ();
      }
@@ -273,7 +269,6 @@ void Rec_ListFieldsRecordsForEdition (void)
 
 void Rec_ShowFormCreateRecordField (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
@@ -283,16 +278,7 @@ void Rec_ShowFormCreateRecordField (void)
    Act_FormStart (ActNewFie);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
-
-   /***** Message *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"4\" class=\"%s\""
-	              " style=\"text-align:left;\">"
-	              "%s:"
-	              "</td>"
-	              "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_New_record_field);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_New_record_field);
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -332,16 +318,21 @@ void Rec_ShowFormCreateRecordField (void)
 	       Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
      }
 
-   /***** End of form *****/
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
+	              "</tr>");
+
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"4\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_record_field);
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
 
-   /***** Send button *****/
-   Lay_PutSendButton (Txt_Create_record_field);
+   /***** End of form *****/
    Act_FormEnd ();
   }
 
@@ -590,10 +581,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    /***** Button to confirm removing *****/
    Act_FormStart (ActRemFie);
    Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.Field.FieldCod);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Remove_record_field);
+   Lay_PutRemoveButton (Txt_Remove_record_field);
    Act_FormEnd ();
   }
 
@@ -1484,7 +1472,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
-   extern const char *Txt_Send;
+   extern const char *Txt_Save;
    unsigned RecordWidth = Rec_RECORD_WIDTH_WIDE;
    char StrRecordWidth[10+1];
    unsigned FrameWidth = 10;
@@ -1649,7 +1637,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
    if (DataForm)
      {
-      Lay_PutSendButton (Txt_Send);
+      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
      }
   }
@@ -1877,7 +1865,7 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActSignUp);
    Rec_ShowSharedUsrRecord (Rec_FORM_SIGN_UP,&Gbl.Usrs.Me.UsrDat);
-   Lay_PutSendButton (Txt_Sign_up);
+   Lay_PutConfirmButton (Txt_Sign_up);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1912,7 +1900,7 @@ void Rec_ShowFormMyCommRecord (void)
    /***** My record *****/
    Act_FormStart (ActChgMyData);
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
-   Lay_PutSendButton (Txt_Save_changes);
+   Lay_PutConfirmButton (Txt_Save_changes);
    Rec_WriteLinkToDataProtectionClause ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -1969,7 +1957,7 @@ void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 
-   Lay_PutSendButton (Txt_Register);
+   Lay_PutConfirmButton (Txt_Register);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

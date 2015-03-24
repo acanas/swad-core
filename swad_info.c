@@ -1004,7 +1004,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoT
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Edit);
+   Lay_PutConfirmButton (Txt_Edit);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1022,7 +1022,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTy
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Edit_text);
+   Lay_PutConfirmButton (Txt_Edit_text);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1040,7 +1040,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTyp
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Edit_text);
+   Lay_PutConfirmButton (Txt_Edit_text);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1074,7 +1074,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Upload_file);
+   Lay_PutCreateButton (Txt_Upload_file);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1119,7 +1119,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
 	              "</table>");
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Send_URL);
+   Lay_PutCreateButton (Txt_Send_URL);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1729,7 +1729,7 @@ void Inf_EditPlainTxtInfo (void)
    // fprintf (Gbl.F.Out,"<br />");
 
    /***** Send and undo buttons *****/
-   Lay_PutSendButton (Txt_Send);
+   Lay_PutCreateButton (Txt_Send);
    Act_FormEnd ();
   }
 
@@ -1789,7 +1789,7 @@ void Inf_EditRichTxtInfo (void)
    // fprintf (Gbl.F.Out,"<br />");
 
    /***** Send and undo buttons *****/
-   Lay_PutSendButton (Txt_Send);
+   Lay_PutCreateButton (Txt_Send);
    Act_FormEnd ();
   }
 

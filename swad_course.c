@@ -441,7 +441,7 @@ static void Crs_Configuration (bool PrintView)
    /***** End form *****/
    if (IsForm)
      {
-      Lay_PutSendButton (Txt_Save);
+      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
      }
   }
@@ -1774,11 +1774,10 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"12\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_course);
+	              "<td colspan=\"12\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_course);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
@@ -3432,7 +3431,7 @@ void Crs_AskRemoveOldCrss (void)
    fprintf (Gbl.F.Out,"</span>");
 
    /***** Send button*****/
-   Lay_PutSendButton (Txt_Eliminate);
+   Lay_PutRemoveButton (Txt_Eliminate);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

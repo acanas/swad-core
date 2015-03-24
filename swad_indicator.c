@@ -168,7 +168,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Form end */
    fprintf (Gbl.F.Out,"</td>"
 	              "</table>");
-   Lay_PutSendButton (Txt_Update_indicators);
+   Lay_PutConfirmButton (Txt_Update_indicators);
    Act_FormEnd ();
 
    /***** Get courses from database *****/
@@ -190,7 +190,7 @@ void Ind_ReqIndicatorsCourses (void)
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
       Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
       Par_PutHiddenParamLong ("Indicators",Gbl.Stat.NumIndicators);
-      Lay_PutSendButton (Txt_Show_more_details);
+      Lay_PutConfirmButton (Txt_Show_more_details);
       Act_FormEnd ();
 
       /* End table */
@@ -456,7 +456,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    Par_PutHiddenParamChar ("ShowBigList",'Y');
 
    /***** Send button *****/
-   Lay_PutSendButton (Txt_Show_anyway);
+   Lay_PutConfirmButton (Txt_Show_anyway);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

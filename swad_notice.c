@@ -93,15 +93,14 @@ void Not_ShowFormNotice (void)
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
+   /***** Form start *****/
    Act_FormStart (ActRcvNot);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	              "<tr>"
-	              "<td></td>"
-	              "<td class=\"%s\" style=\"text-align:left;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_notice);
+
+   /***** Message body *****/
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s\" style=\"text-align:right;"
                       " vertical-align:top;\">"
                       "%s: "
@@ -109,13 +108,21 @@ void Not_ShowFormNotice (void)
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"Content\" cols=\"30\" rows=\"10\"></textarea>"
                       "</td>"
-                      "</tr>"
-                      "</table>",
-            The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_New_notice,
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
-   Lay_PutSendButton (Txt_Create_notice);
+
+   /***** Button to create announcement *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_notice);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** Form end *****/
    Act_FormEnd ();
   }
 

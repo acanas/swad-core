@@ -157,7 +157,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
             DefaultNickname);
 
    /***** Send button*****/
-   Lay_PutSendButton (Txt_Continue);
+   Lay_PutConfirmButton (Txt_Continue);
    Act_FormEnd ();
 
    /***** End frame *****/

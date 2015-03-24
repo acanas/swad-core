@@ -211,26 +211,27 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick == 1)
 	 /* The first nickname is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"width:40%%;"
-			    " text-align:right; vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
-			    "<td style=\"width:60%%;"
-			    " text-align:left; vertical-align:middle;\">",
+			    "<td colspan=\"2\" style=\"text-align:left;"
+			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_nickname);
       else	// NumNick >= 2
 	{
+	 fprintf (Gbl.F.Out,"<tr>");
 	 if (NumNick == 2)
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\" style=\"width:40%%;"
-			       " text-align:right; vertical-align:top;\">"
-			       "%s:"
-			       "</td>"
-			       "<td style=\"width:60%%;"
-			       " text-align:left; vertical-align:top;\">",
-		     The_ClassFormul[Gbl.Prefs.Theme],Txt_Other_nicknames);
-	 else	// NumNick >= 3
-	    fprintf (Gbl.F.Out,"<br />");
+	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s\""
+		               " style=\"text-align:right;"
+			       " vertical-align:top;\">"
+			       "%s:",
+		     NumNicks - 1,
+		     The_ClassFormul[Gbl.Prefs.Theme],
+		     Txt_Other_nicknames);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td style=\"text-align:left;"
+			    " vertical-align:top;\">");
 
 	 /* Form to remove old nickname */
 	 Act_FormStart (ActRemOldNic);
@@ -260,39 +261,38 @@ void Nck_ShowFormChangeUsrNickname (void)
       /* Form to change the nickname */
       if (NumNick > 1)
 	{
+	 fprintf (Gbl.F.Out,"</td>"
+	                    "<td style=\"text-align:left;"
+	                    " vertical-align:top;\">");
 	 Act_FormStart (ActChgNic);
-	 fprintf (Gbl.F.Out,"&nbsp;"
-	                    "<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />"
-			    "<input type=\"submit\" value=\"%s\" />",
-		  row[0],	// Nickname
-		  Txt_Use_this_nickname);
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />",
+		  row[0]);	// Nickname
+	 Lay_PutConfirmButtonInline (Txt_Use_this_nickname);
 	 Act_FormEnd ();
 	}
 
-      if (NumNick == 1 ||
-	  NumNick == NumNicks)
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** Form to enter new nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"width:40%%;"
-                      " text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\" style=\"text-align:right;"
+                      " vertical-align:middle;\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"width:60%%;"
-                      " text-align:left; vertical-align:middle;\">",
+                      "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\" size=\"16\" maxlength=\"%u\" value=\"@%s\" />"
-	              "<input type=\"submit\" value=\"%s\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\" size=\"16\" maxlength=\"%u\" value=\"@%s\" />",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
-            Gbl.Usrs.Me.UsrDat.Nickname,
-            NumNicks ? Txt_Change_nickname :	// I already have a nickname
-        	       Txt_Save);		// I have no nickname yet
+            Gbl.Usrs.Me.UsrDat.Nickname);
+   fprintf (Gbl.F.Out,"</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">");
+   Lay_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+        	                         Txt_Save);			// I have no nickname yet);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

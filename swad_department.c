@@ -947,11 +947,10 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"4\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_department);
+	              "<td colspan=\"4\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_department);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

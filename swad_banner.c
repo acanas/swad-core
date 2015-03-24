@@ -779,11 +779,10 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_banner);
+	              "<td colspan=\"7\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_banner);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

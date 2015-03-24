@@ -686,11 +686,10 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_mail_domain);
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_mail_domain);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
@@ -1048,28 +1047,34 @@ void Mai_ShowFormChangeUsrEmail (void)
       Confirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
 
       if (NumEmail == 1)
+	{
 	 /* The first mail is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"width:40%%;"
-			    " text-align:right; vertical-align:middle;\">"
+			    "<td ");
+	 if (Confirmed)
+	    fprintf (Gbl.F.Out," colspan=\"2\"");
+	 fprintf (Gbl.F.Out," class=\"%s\" style=\"text-align:right;"
+			    " vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
-			    "<td style=\"width:60%%; text-align:left;"
+			    "<td style=\"text-align:left;"
 			    " vertical-align:middle;\">",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_email);
+	}
       else	// NumEmail >= 2
 	{
+	 fprintf (Gbl.F.Out,"<tr>");
 	 if (NumEmail == 2)
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\" style=\"width:40%%;"
-			       " text-align:right; vertical-align:top;\">"
-			       "%s:"
-			       "</td>"
-			       "<td style=\"width:60%%; text-align:left;"
-			       " vertical-align:top;\">",
-		     The_ClassFormul[Gbl.Prefs.Theme],Txt_Other_emails);
-	 else	// NumEmail >= 3
-	    fprintf (Gbl.F.Out,"<br />");
+	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s\""
+		               " style=\"text-align:right;"
+			       " vertical-align:top;\">"
+			       "%s:",
+		     NumEmails - 1,
+		     The_ClassFormul[Gbl.Prefs.Theme],
+		     Txt_Other_emails);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "<td style=\"text-align:left;"
+			    " vertical-align:top;\">");
 
 	 /* Form to remove old e-mail */
 	 Act_FormStart (ActRemOldMai);
@@ -1110,39 +1115,40 @@ void Mai_ShowFormChangeUsrEmail (void)
       /* Form to change the email */
       if (NumEmail > 1 || !Confirmed)
 	{
+	 fprintf (Gbl.F.Out,"</td>"
+	                    "<td style=\"text-align:left;"
+                            " vertical-align:middle;\">");
 	 Act_FormStart (ActChgMai);
-	 fprintf (Gbl.F.Out,"&nbsp;<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />"
-			    "<input type=\"submit\" value=\"%s\" />",
-		  row[0],	// E-mail
-		  NumEmail == 1 ? Txt_Confirm_email :
-			          Txt_Use_this_email);
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
+		  row[0]);	// E-mail
+         Lay_PutConfirmButtonInline (NumEmail == 1 ? Txt_Confirm_email :
+			                             Txt_Use_this_email);
 	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
 	}
 
-      if (NumEmail == 1 ||
-	  NumEmail == NumEmails)
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** Form to enter new e-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"width:40%%;"
-                      " text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\" style=\"text-align:right;"
+                      " vertical-align:middle;\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"width:60%%; text-align:left;"
-                      " vertical-align:middle;\">",
+                      "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\" size=\"16\" maxlength=\"%u\" value=\"%s\" />"
-                      "<input type=\"submit\" value=\"%s\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\" size=\"16\" maxlength=\"%u\" value=\"%s\" />",
             Cns_MAX_BYTES_STRING,
-            Gbl.Usrs.Me.UsrDat.Email,
-            NumEmails ? Txt_Change_email :	// I already have an e-mail address
-        	        Txt_Save);		// I have no e-mail address yet
+            Gbl.Usrs.Me.UsrDat.Email);
+   fprintf (Gbl.F.Out,"</td>"
+	              "<td style=\"text-align:left; vertical-align:middle;\">");
+   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// I already have an e-mail address
+        	                          Txt_Save);		// I have no e-mail address yet);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

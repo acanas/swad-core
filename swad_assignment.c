@@ -934,10 +934,7 @@ void Asg_AskRemAssignment (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Remove_assignment);
+   Lay_PutRemoveButton (Txt_Remove_assignment);
    Act_FormEnd ();
 
    /***** Show assignments again *****/
@@ -1240,8 +1237,10 @@ void Asg_RequestCreatOrEditAsg (void)
    Lay_EndRoundFrameTable10 ();
 
    /***** New assignment *****/
-   Lay_PutSendButton (ItsANewAssignment ? Txt_Create_assignment :
-                                          Txt_Modify_assignment);
+   if (ItsANewAssignment)
+      Lay_PutCreateButton (Txt_Create_assignment);
+   else
+      Lay_PutConfirmButton (Txt_Modify_assignment);
 
    /***** Form end *****/
    Act_FormEnd ();

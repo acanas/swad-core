@@ -1793,11 +1793,10 @@ static void Deg_PutFormToCreateDegType (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_type_of_degree);
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_type_of_degree);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();
@@ -1962,11 +1961,10 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"14\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" />"
-	              "</td>"
-	              "</tr>",
-            Txt_Create_degree);
+	              "<td colspan=\"14\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_degree);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** End of frame *****/
    Lay_EndRoundFrameTable10 ();

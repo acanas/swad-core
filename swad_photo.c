@@ -267,16 +267,15 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<input type=\"submit\" value=\"%s\" accept=\"image/jpeg\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>",
+                      "<td colspan=\"2\" style=\"text-align:center;\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
-            UsrDat->UsrCod,
-            Txt_Upload_photo);
+            UsrDat->UsrCod);
+   Lay_PutCreateButton (Txt_Upload_photo);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+                      "</table>");
    Act_FormEnd ();
   }
 

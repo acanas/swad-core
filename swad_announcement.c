@@ -320,15 +320,14 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
+   /***** Form start *****/
    Act_FormStart (ActRcvAnn);
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_announcement);
+
    /***** Message subject and body *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	              "<tr>"
-	              "<td></td>"
-	              "<td class=\"%s\" style=\"text-align:left;\">%s</td>"
-	              "</tr>"
-                      "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
 	              "%s: "
                       "</td>"
@@ -347,8 +346,6 @@ void Ann_ShowFormAnnouncement (void)
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_New_announcement,
-            The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Subject,
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
@@ -365,10 +362,19 @@ void Ann_ShowFormAnnouncement (void)
    Rol_WriteSelectorRoles (1 << Rol_ROLE_STUDENT |
                            1 << Rol_ROLE_TEACHER);
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-                      "</table>");
+	              "</tr>");
 
-   Lay_PutSendButton (Txt_Create_announcement);
+   /***** Button to create announcement *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   Lay_PutCreateButton (Txt_Create_announcement);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** Form end *****/
    Act_FormEnd ();
   }
 

@@ -425,7 +425,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
          Svy_PutHiddenParamSvyOrderType ();
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutSendButton (Txt_Answer_survey);
+         Lay_PutConfirmButton (Txt_Answer_survey);
          Act_FormEnd ();
         }
       /* Possible button to see the result of the survey */
@@ -436,7 +436,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
          Svy_PutHiddenParamSvyOrderType ();
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutSendButton (Txt_View_survey_results);
+         Lay_PutConfirmButton (Txt_View_survey_results);
          Act_FormEnd ();
         }
      }
@@ -1270,10 +1270,7 @@ void Svy_AskRemSurvey (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Remove_survey);
+   Lay_PutRemoveButton (Txt_Remove_survey);
    Act_FormEnd ();
 
    /***** Show surveys again *****/
@@ -1373,10 +1370,7 @@ void Svy_AskResetSurvey (void)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_reset_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
-	              "<input type=\"submit\" value=\"%s\" />"
-	              "</div>",
-            Txt_Reset_survey);
+   Lay_PutConfirmButton (Txt_Reset_survey);
    Act_FormEnd ();
 
    /***** Show surveys again *****/
@@ -1600,7 +1594,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
-   /***** Table start *****/
+   /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,2,
                                ItsANewSurvey ? Txt_New_survey :
                                                Txt_Edit_survey);
@@ -1627,7 +1621,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<input type=\"text\" name=\"Title\" size=\"80\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Txt_Title,
@@ -1699,12 +1693,18 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Groups *****/
    Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
-
    /***** Button to create/modify survey *****/
-   Lay_PutSendButton (ItsANewSurvey ? Txt_Create_survey :
-                                      Txt_Modify_survey);
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   if (ItsANewSurvey)
+      Lay_PutCreateButton (Txt_Create_survey);
+   else
+      Lay_PutConfirmButton (Txt_Modify_survey);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
 
    /***** Form end *****/
    Act_FormEnd ();
@@ -1779,7 +1779,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable10 ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2391,7 +2391,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    extern const char *Txt_Stem;
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
-   extern const char *Txt_Send;
+   extern const char *Txt_Save;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2452,19 +2452,15 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
-   /***** Show message *****/
+   /***** Start frame *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
      {
-      sprintf (Gbl.Message,"%s %u",
+      sprintf (Gbl.Title,"%s %u",
                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Lay_WriteTitle (Gbl.Message);
+      Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
      }
    else
-      Lay_WriteTitle (Txt_New_question);
-
-   fprintf (Gbl.F.Out,"<table>");
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_question);
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2534,13 +2530,24 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	                 "</td>"
 	                 "</tr>");
      }
-
-   /***** Send and undo buttons *****/
    fprintf (Gbl.F.Out,"</table>"
-	              "</tr>"
-	              "</table>"
-	              "</div>");
-   Lay_PutSendButton (Txt_Send);
+	              "</td>"
+	              "</tr>");
+
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
+      Lay_PutConfirmButton (Txt_Save);
+   else
+      Lay_PutCreateButton (Txt_Save);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
    Act_FormEnd ();
 
    Svy_FreeTextChoiceAnswers (SvyQst,NumAnswers);
@@ -3100,7 +3107,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Lay_EndRoundFrameTable10 ();
 
       /***** Button to create/modify survey *****/
-      Lay_PutSendButton (Txt_Send_survey);
+      Lay_PutConfirmButton (Txt_Send_survey);
 
       /***** Form end *****/
       Act_FormEnd ();
