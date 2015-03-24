@@ -3049,8 +3049,8 @@ static void Att_ListEventsToSelect (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"DAT\""
 			 " style=\"text-align:center;\">");
-      Act_LinkFormSubmit (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
+      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

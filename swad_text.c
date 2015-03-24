@@ -17598,23 +17598,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	 // ActReqPubPrf
 #if   L==0
-	 "Perfil"
+	 "Perfils"
 #elif L==1
-	 "Profil"
+	 "Profiles"
 #elif L==2
-	 "Profile"
+	 "Profiles"
 #elif L==3
-	 "Perfil"
+	 "Perfiles"
 #elif L==4
-	 "Profil"
+	 "Profils"
 #elif L==5
 	 "Che"
 #elif L==6
-	 "Profilo"
+	 "Profili"
 #elif L==7
-	 "Profil"
+	 "Profile"
 #elif L==8
-	 "Perfil"
+	 "Perfiles"
 #endif
 	,
 	NULL,
@@ -19594,23 +19594,23 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	 // ActReqPubPrf
 #if   L==0
-	 "Perfil"
+	 "Perfils"
 #elif L==1
-	 "Profil"
+	 "Profiles"
 #elif L==2
-	 "Public profile of a user"
+	 "Public profiles of users"
 #elif L==3
-	 "Perfil p&uacute;blico de un usuario"
+	 "Perfiles p&uacute;blicos de usuarios"
 #elif L==4
-	 "Profil"
+	 "Profils"
 #elif L==5
 	 "Che"
 #elif L==6
-	 "Profilo"
+	 "Profili"
 #elif L==7
-	 "Profil"
+	 "Profile"
 #elif L==8
-	 "Perfil"
+	 "Perfiles"
 #endif
 	,
 	NULL,

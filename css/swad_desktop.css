@@ -201,57 +201,6 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
 	}
 
-/*
-	
-.signin-wrapper .primary-btn {
-    font-size: 18px;
-    padding: 9px 13px;
-}
-.primary-btn, .following.first-hover .follow-btn:hover, .following .follow-btn, .following .follow-button.cancel-hover-style:hover, .following .follow-button, .notifying .device-follow-button, .button-group-item .content.selected {
-    background-color: #55acee;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
-    border: 1px solid #3b88c3;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    color: #fff;
-}
-.btn {
-    background-color: #f5f8fa;
-    background-image: linear-gradient(#fff, #f5f8fa);
-}
-.btn {
-    background-color: #ccd6dd;
-    background-repeat: no-repeat;
-    border: 1px solid #e1e8ed;
-    border-radius: 4px;
-    color: #66757f;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: normal;
-    padding: 8px 16px;
-    position: relative;
-}
-button {
-    border: 0 none;
-}
-button {
-    background: none repeat scroll 0 0 transparent;
-    border: 0 none;
-    padding: 0;
-}
-button, html input[type="button"], input[type="reset"], input[type="submit"] {
-    cursor: pointer;
-}
-button, select {
-    text-transform: none;
-}
-button {
-    overflow: visible;
-}
-	
-*/
-
 /********************************** Notice ***********************************/
 
 .NOTICE_CONTAINER

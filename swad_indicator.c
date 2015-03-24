@@ -88,24 +88,29 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned Ind;
    unsigned NumCrss;
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Indicators_of_courses);
+
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td style=\"text-align:center;\">");
+
    /***** Form to update indicators *****/
    /* Start form */
    Act_FormStart (ActReqStaCrs);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
-   /* Compute stats for anywhere, centre, degree or course? */
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>"
                       "<td class=\"%s\""
                       " style=\"text-align:right; vertical-align:middle;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR      |
-		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
@@ -163,24 +168,32 @@ void Ind_ReqIndicatorsCourses (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Ind);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+	              "</tr>");
+
+   /* Send button */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\" style=\"text-align:center;\">");
+   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update_indicators,Txt_Update_indicators);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>"
+	              "</table>");
 
    /* Form end */
-   fprintf (Gbl.F.Out,"</td>"
-	              "</table>");
-   Lay_PutConfirmButton (Txt_Update_indicators);
    Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>"
+                      "<tr>"
+                      "<td style=\"text-align:center;\">");
 
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
    if (Ind_GetIfShowBigList (NumCrss))
      {
       /***** Show the stats of courses *****/
-      /* Start table */
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_Indicators_of_courses);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:center;\">");
-
       /* Show table */
       Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
@@ -192,12 +205,12 @@ void Ind_ReqIndicatorsCourses (void)
       Par_PutHiddenParamLong ("Indicators",Gbl.Stat.NumIndicators);
       Lay_PutConfirmButton (Txt_Show_more_details);
       Act_FormEnd ();
-
-      /* End table */
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
      }
+
+   /***** End frame *****/
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+   Lay_EndRoundFrameTable10 ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -309,6 +322,32 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                               " WHERE degrees.DegCod=courses.DegCod"
                               " ORDER BY degrees.FullName,courses.FullName");
            }
+         break;
+      case Sco_SCOPE_CTY:
+         if (Gbl.Stat.DptCod > 0)
+            sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+                           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND usr_data.DptCod='%ld'"
+                           " ORDER BY degrees.FullName,courses.FullName",
+                     Gbl.CurrentCty.Cty.CtyCod,
+                     (unsigned) Rol_ROLE_TEACHER,
+                     Gbl.Stat.DptCod);
+         else
+            sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
+                           " FROM institutions,centres,degrees,courses"
+                          " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " ORDER BY degrees.FullName,courses.FullName",
+                     Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
          if (Gbl.Stat.DptCod > 0)

@@ -104,6 +104,53 @@ p			{margin:0;}
 .DAY_EVENT		{border:solid 1px; border-color:white; background-color:#FFF080;}
 .TODAY_EVENT		{border:solid 1px; border-color:#50B800; background-color:#FFF080;}
 
+/********************************* Buttons ***********************************/
+.BT_CREATE
+	{
+	background-color:#5BC33B;
+	border:1px solid #518741;
+	}
+.BT_CONFIRM
+	{
+	background-color:#55ACEE;
+	border:1px solid #3B88C3;
+	}
+.BT_REMOVE
+	{
+	background-color:#EF5555;
+	border:1px solid #C33B3B;
+	}
+.BT_SUBMIT
+	{
+	color:white;
+	font-size:16px;
+	font-weight:bold;
+	line-height:normal;
+	margin:8px;
+	padding:8px 16px;
+	border-radius:4px;
+	box-shadow:0 1px 0 rgba(255, 255, 255, 0.15) inset;
+	}
+.BT_SUBMIT_INLINE
+	{
+	color:white;
+	font-size:12px;
+	font-weight:bold;
+	line-height:normal;
+	margin:0 4px;
+	padding:4px 8px;
+	border-radius:4px;
+	box-shadow:0 1px 0 rgba(255, 255, 255, 0.15) inset;
+	}
+.BT_SUBMIT:hover
+	{
+	background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	}
+.BT_SUBMIT_INLINE:hover
+	{
+	background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	}
+
 /********************************** Notice ***********************************/
 
 .NOTICE_CONTAINER

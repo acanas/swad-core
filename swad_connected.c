@@ -76,11 +76,23 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Connected_users;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   /***** Set where to show connected users to main zone *****/
+   Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_MAIN_ZONE;
+
+   /***** Start frame *****/
+   /* Current time */
+   sprintf (Gbl.Title,"%s<br />%u %s, %u:%02u",
+	    Txt_Connected_users,
+            Gbl.Now.Date.Day,
+            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
+            Gbl.Now.Time.Hour,
+            Gbl.Now.Time.Minute);
+   Lay_StartRoundFrameTable10 (NULL,0,Gbl.Title);
 
    /***** Put form to update connected users *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td style=\"padding-bottom:10px; text-align:center;\">");
    Act_FormStart (ActLstCon);
-   /* Users connected belonging to the platform, current degree or current course */
    Gbl.Scope.Current = Sco_SCOPE_CRS;
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
@@ -91,24 +103,14 @@ void Con_ShowConnectedUsrs (void)
       Sco_PutSelectorScope (false);
       fprintf (Gbl.F.Out,"</div>");
      }
-   Act_LinkFormSubmit (Txt_Update_connected_users,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("recycle",Txt_Update_connected_users,Txt_Update_connected_users);
+   Act_LinkFormSubmitAnimated (Txt_Update_connected_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update_connected_users,Txt_Update_connected_users);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
 
-   /***** Show connected users *****/
-   Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_MAIN_ZONE;
-
-   /* Current time */
-   sprintf (Gbl.Title,"%s<br />%u %s, %u:%02u",
-	    Txt_Connected_users,
-            Gbl.Now.Date.Day,
-            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
-            Gbl.Now.Time.Hour,
-            Gbl.Now.Time.Minute);
-   Lay_StartRoundFrameTable10 (NULL,0,Gbl.Title);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>");
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>"
+                      "<tr>"
+                      "<td style=\"text-align:center;\">");
 
    /* Number of connected users in the whole platform */
    Con_ShowGlobalConnectedUsrs ();
@@ -118,6 +120,8 @@ void Con_ShowConnectedUsrs (void)
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
+
+   /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
   }
 

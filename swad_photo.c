@@ -1718,8 +1718,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
-      Act_LinkFormSubmit (Txt_Calculate_average_photo_of_a_degree,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("recycle",Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
+      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormul[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIcon (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees *****/
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");
