@@ -1470,7 +1470,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /***** Put form to go to public profile *****/
-   if (Visible && UsrDat->Nickname[0])
+   if (Visible)
      {
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);

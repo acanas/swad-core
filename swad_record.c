@@ -2057,9 +2057,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                        TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
    bool RoleForm = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
 	            (TypeOfView == Rec_FORM_SIGN_UP ||
-	             TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                      TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                      TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR));
+   bool SexForm = TypeOfView == Rec_FORM_MY_COMMON_RECORD;
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
@@ -2567,20 +2567,17 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
-      /***** User's role *****/
+      /***** User's role or sex *****/
       if (RoleForm)
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">",
-		  ClassForm,C2Width);
-	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	    fprintf (Gbl.F.Out,"%s*",Txt_Sex);
-	 else
-	    fprintf (Gbl.F.Out,"%s",Txt_Role);
-	 fprintf (Gbl.F.Out,":</td>"
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:</td>"
 			    "<td colspan=\"2\" class=\"%s\""
 			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,C2Width,
+		  Txt_Role,
 		  ClassData,C3Width + C4Width);
 	 switch (TypeOfView)
 	   {
@@ -2599,23 +2596,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		 }
 	       fprintf (Gbl.F.Out,"</select>");
-	       break;
-	    case Rec_FORM_MY_COMMON_RECORD:	// It's me, change my data
-	       for (Sex = Usr_SEX_FEMALE;
-		    Sex <= Usr_SEX_MALE;
-		    Sex++)
-		 {
-		  fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
-		  if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
-		     fprintf (Gbl.F.Out," checked=\"checked\"");
-		  fprintf (Gbl.F.Out," />"
-			             "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
-				     " class=\"ICON16x16\""
-				     " style=\"vertical-align:bottom;\" />%s",
-			   Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
-			   Txt_SEX_SINGULAR_Abc[Sex],
-			   Txt_SEX_SINGULAR_Abc[Sex]);
-		 }
 	       break;
 	    case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:	// The other user already exists in the platform
 	       if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
@@ -2696,7 +2676,36 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
-      else	// RoleForm == false
+      else if (SexForm)
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s*:</td>"
+			    "<td colspan=\"2\" class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,C2Width,
+		  Txt_Sex,
+		  ClassData,C3Width + C4Width);
+	 for (Sex = Usr_SEX_FEMALE;
+	      Sex <= Usr_SEX_MALE;
+	      Sex++)
+	   {
+	    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
+	    if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
+	       fprintf (Gbl.F.Out," checked=\"checked\"");
+	    fprintf (Gbl.F.Out," />"
+			       "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+			       " class=\"ICON16x16\""
+			       " style=\"vertical-align:bottom;\" />%s",
+		     Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
+		     Txt_SEX_SINGULAR_Abc[Sex],
+		     Txt_SEX_SINGULAR_Abc[Sex]);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	}
+      else	// RoleForm == false, SexForm == false
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:right;\">"
