@@ -1337,21 +1337,24 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
+   extern const char *Txt_Log_in;
    extern const char *Txt_User;
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Password;
-   extern const char *Txt_Log_in;
+   extern const char *Txt_password;
    extern const char *Txt_I_forgot_my_password;
 
-   /***** Link to create a new account *****/
+   /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
+
+   /* Link to create a new account */
    Act_FormStart (ActFrmUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("arroba",Txt_Create_account,Gbl.Title);
    Act_FormEnd ();
 
-   /***** Link to enter from external site *****/
+   /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
        Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])
      {
@@ -1362,6 +1365,14 @@ void Usr_WriteFormLogin (void)
                Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
       Lay_PutSendIcon ("login",Gbl.Title,Gbl.Title);
      }
+
+   /* Link to send a new password */
+   Act_FormStart (ActReqSndNewPwd);
+   Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
+   Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password);
+   Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form start *****/
@@ -1371,9 +1382,9 @@ void Usr_WriteFormLogin (void)
 
    /***** User's ID/nickname and password *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
-                      "%s:"
+                      "<td class=\"BM\">"
+                      "<img src=\"%s/user16x16.gif\" title=\"%s\""
+	              " class=\"ICON16x16\" />"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
@@ -1382,23 +1393,24 @@ void Usr_WriteFormLogin (void)
                       "</td>"
 		      "</tr>"
 		      "<tr>"
-		      "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
-		      "%s:"
+		      "<td class=\"BM\">"
+                      "<img src=\"%s/key16x16.gif\" title=\"%s\""
+	              " class=\"ICON16x16\" />"
 		      "</td>"
 		      "<td style=\"text-align:left; vertical-align:middle;\">"
 		      "<input type=\"password\" name=\"UsrPwd\""
-		      " size=\"25\" maxlength=\"%u\" />"
+		      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
 		      "</td>"
 		      "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            Gbl.Prefs.IconsURL,
             Txt_User,
             Usr_MAX_LENGTH_USR_LOGIN,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin,
-            The_ClassFormul[Gbl.Prefs.Theme],
+            Gbl.Prefs.IconsURL,
             Txt_Password,
-            Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Txt_password);
 
    /***** Send button and form end *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1412,12 +1424,6 @@ void Usr_WriteFormLogin (void)
    Lay_EndRoundFrameTable10 ();
    Act_FormEnd ();
 
-   /***** Link used for sending a new password *****/
-   Act_FormStart (ActReqSndNewPwd);
-   Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
-   Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password);
-   Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
 

@@ -26285,6 +26285,27 @@ const char *Txt_Password =
 	"Senha";
 #endif
 
+const char *Txt_password =
+#if   L==0
+	"contrasenya";
+#elif L==1
+	"Passwort";
+#elif L==2
+	"password";
+#elif L==3
+	"contrase&ntilde;a";
+#elif L==4
+	"mot de passe";
+#elif L==5
+	"tera&ntilde;emi";
+#elif L==6
+	"password";
+#elif L==7
+	"has&lstrok;o";
+#elif L==8
+	"senha";
+#endif
+
 const char *Txt_Paste =
 #if   L==0
 	"Pegar";	// Necessita traduccio

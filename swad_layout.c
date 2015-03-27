@@ -1545,7 +1545,7 @@ void Lay_PutLinkToPrintView2 (void)
 /**************** Show advertisement about mobile version ********************/
 /*****************************************************************************/
 
-#define Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X	1	// n ==> show advertisement 1/n of the times
+#define Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X	5	// n ==> show advertisement 1/n of the times
 
 void Lay_AdvertisementMobile (void)
   {
@@ -1553,6 +1553,8 @@ void Lay_AdvertisementMobile (void)
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
      {
+      fprintf (Gbl.F.Out,"<div style=\"margin-top:20px;\">");
+
       /***** Table start *****/
       Lay_StartRoundFrameTable10 (NULL,8,NULL);
 
@@ -1572,6 +1574,8 @@ void Lay_AdvertisementMobile (void)
 
       /***** End table *****/
       Lay_EndRoundFrameTable10 ();
+
+      fprintf (Gbl.F.Out,"</div>");
      }
   }
 
