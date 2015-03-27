@@ -12840,6 +12840,69 @@ const char *Txt_Guided_academic_assignments =
 	"Atividades acad&eacute;micas guided";
 #endif
 
+const char *Txt_HELP_email =
+#if   L==0
+	"Exemple: garcia@exemplemail.com";
+#elif L==1
+	"Beispiel: muller@beispielmail.com";
+#elif L==2
+	"Example: smith@examplemail.com";
+#elif L==3
+	"Ejemplo: gonzalez@ejemplomail.com";
+#elif L==4
+	"Exemple: dubois@exemplemail.com";
+#elif L==5
+	"Ejemplo: gonzalez@ejemplomail.com";	// Okoteve traducción
+#elif L==6
+	"Esempio: rossi@esempiomail.com";
+#elif L==7
+	"Przyk&lstrok;ad: nowak@przykladmail.com";
+#elif L==8
+	"Exemplo: silva@exemplomail.com";
+#endif
+
+const char *Txt_HELP_nickname =
+#if   L==0
+	"Exemple: @garcia";
+#elif L==1
+	"Beispiel: @muller";
+#elif L==2
+	"Example: @smith";
+#elif L==3
+	"Ejemplo: @gonzalez";
+#elif L==4
+	"Exemple: @dubois";
+#elif L==5
+	"Ejemplo: @gonzalez";	// Okoteve traducción
+#elif L==6
+	"Esempio: @rossi";
+#elif L==7
+	"Przyk&lstrok;ad: @nowak";
+#elif L==8
+	"Exemplo: @silva";
+#endif
+
+const char *Txt_HELP_password =	// Warning: it is very important to include %u in the following sentences
+#if   L==0
+	"%u o m&eacute;s car&agrave;cters";
+#elif L==1
+	"%u oder mehr Zeichen";
+#elif L==2
+	"%u or more characters";
+#elif L==3
+	"%u o m&aacute;s caracteres";
+#elif L==4
+	"%u ou plusieurs caract&egrave;res";
+#elif L==5
+	"%u o m&aacute;s caracteres";	// Okoteve traducción
+#elif L==6
+	"%u o pi&ugrave; caratteri";
+#elif L==7
+	"%u lub wi&eogon;cej znak&oacute;w";
+#elif L==8
+	"%u ou mais caracteres";
+#endif
+
 const char *Txt_Hidden_MALE_PLURAL =
 #if   L==0
 	"Ocultos";	// Necessita traduccio

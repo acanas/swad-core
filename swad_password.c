@@ -666,12 +666,13 @@ void Pwd_ShowFormChgPwd (void)
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
-                         "<input type=\"password\" name=\"UsrPwd\" size=\"%u\" maxlength=\"%u\" />"
+                         "<input type=\"password\" name=\"UsrPwd\""
+                         " size=\"25\" maxlength=\"%u\" />"
                          "</td>"
                          "</tr>",
                The_ClassFormul[Gbl.Prefs.Theme],
                Txt_Current_password,
-               Pwd_INPUT_LENGTH_PLAIN_PASSWORD,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+               Pwd_MAX_LENGTH_PLAIN_PASSWORD);
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
@@ -693,15 +694,18 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_password;
    extern const char *Txt_Password;
+   extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
    extern const char *Txt_Retype_password;
 
+   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"text-align:right;\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<input type=\"password\" name=\"Paswd1\" size=\"%u\" maxlength=\"%u\" />"
+                      "<input type=\"password\" name=\"Paswd1\""
+                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
@@ -709,17 +713,20 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<input type=\"password\" name=\"Paswd2\" size=\"%u\" maxlength=\"%u\" />"
+                      "<input type=\"password\" name=\"Paswd2\""
+                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Gbl.Usrs.Me.Logged? Txt_New_password :		// Changing my password
         	                Txt_Password,			// Creating new account
-            Pwd_INPUT_LENGTH_PLAIN_PASSWORD,Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Gbl.Message,
             The_ClassFormul[Gbl.Prefs.Theme],
             Gbl.Usrs.Me.Logged ? Txt_Retype_new_password :	// Changing my password
         	                 Txt_Retype_password,		// Creating new account
-            Pwd_INPUT_LENGTH_PLAIN_PASSWORD,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Gbl.Message);
   }
 
 /*****************************************************************************/

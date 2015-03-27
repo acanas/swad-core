@@ -32,7 +32,6 @@
 /*****************************************************************************/
 
 #define Pwd_MIN_LENGTH_PLAIN_PASSWORD	  8
-#define Pwd_INPUT_LENGTH_PLAIN_PASSWORD	 16
 #define Pwd_MAX_LENGTH_PLAIN_PASSWORD	256
 
 /*****************************************************************************/

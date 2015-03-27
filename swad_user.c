@@ -1358,7 +1358,7 @@ void Usr_WriteFormLogin (void)
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
        Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])
      {
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" style=\"margin-left:10px;\">",
+      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\">",
                Cfg_EXTERNAL_LOGIN_URL,
                The_ClassFormul[Gbl.Prefs.Theme]);
       sprintf (Gbl.Title,Txt_Enter_from_X,

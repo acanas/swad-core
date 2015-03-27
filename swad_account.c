@@ -106,9 +106,12 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
+   extern const char *Txt_HELP_nickname;
+   extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Link to log in *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
@@ -125,19 +128,25 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
 
    /***** Nickname *****/
+   if (NewNicknameWithoutArroba[0])
+      sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
+   else
+      NewNicknameWithArroba[0] = '\0';
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s: "
                       "</td>"
 	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewNick\""
-                      " size=\"16\" maxlength=\"%u\" value=\"@%s\" />"
+                      " size=\"25\" maxlength=\"%u\""
+                      " placeholder=\"%s\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Nickname,
             1+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
-            NewNicknameWithoutArroba);
+            Txt_HELP_nickname,
+            NewNicknameWithArroba);
 
    /***** E-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -146,12 +155,14 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</td>"
 	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewEmail\""
-                      " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"25\" maxlength=\"%u\""
+                      " placeholder=\"%s\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Email,
             Cns_MAX_BYTES_STRING,
+            Txt_HELP_email,
             NewEmail);
 
    /***** Password *****/
