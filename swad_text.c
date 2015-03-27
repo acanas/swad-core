@@ -50637,25 +50637,25 @@ const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_ans
 	"You must enter the range of floating point values allowed as answer.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_must_enter_your_ID_or_your_nickname =
+const char *Txt_You_must_enter_your_nick_email_or_ID =
 #if   L==0
-	"Debe escribir su ID (DNI/c&eacute;dula) o su apodo.";	// Necessita traduccio
+	"Ha d'escriure el seu @sobrenom, correu o ID (DNI/c&egrave;dula).";
 #elif L==1
-	"Bitte geben Sie Ihre Ausweis-Nr. oder Ihren Benutzernamen ein.";
+	"Bitte geben Sie Ihre @Benutzername, E-mail oder Ausweis-Nr.";
 #elif L==2
-	"You must enter your ID or your nickname.";
+	"You must enter your @nick, e-mail or ID.";
 #elif L==3
-	"Debe escribir su ID (DNI/c&eacute;dula) o su apodo.";
+	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";
 #elif L==4
-	"Vous devez entrer votre num&eacute;ro d'identit&eacute; ou votre surnom.";
+	"Vous devez entrer votre @surnom, courrier ou num&eacute;ro d'identit&eacute;.";
 #elif L==5
-	"Debe escribir su ID (DNI/c&eacute;dula) o su apodo.";	// Okoteve traducción
+	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==6
-	"Devi inserire il tuo numero di carta d'identit&agrave; o il tuo nome utente.";
+	"Devi inserire il tuo @nome-utente, e-mail o numero carta d'identit&agrave;.";
 #elif L==7
-	"You must enter your ID or your nickname.";		// Potrzebujesz tlumaczenie
+	"Musisz napisa&cacute; @pseudonim, e-mail lub ID.";
 #elif L==8
-	"Voc&ecirc; deve digitar seu n&ordm; identif. ou seu alcunha.";
+	"Voc&ecirc; deve digitar seu @alcunha, e-mail ou n&ordm; identif.";
 #endif
 
 const char *Txt_You_must_mark_an_answer_as_correct =

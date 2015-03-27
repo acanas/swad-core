@@ -1050,16 +1050,16 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 /* The first mail is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td ");
-	 if (Confirmed)
-	    fprintf (Gbl.F.Out," colspan=\"2\"");
-	 fprintf (Gbl.F.Out," class=\"%s\" style=\"text-align:right;"
+			    "<td class=\"%s\" style=\"text-align:right;"
 			    " vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
-			    "<td style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td",
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_email);
+	 if (Confirmed)
+	    fprintf (Gbl.F.Out," colspan=\"2\"");
+	 fprintf (Gbl.F.Out," style=\"text-align:left;"
+	                    " vertical-align:middle;\">");
 	}
       else	// NumEmail >= 2
 	{

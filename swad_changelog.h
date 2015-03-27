@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.102.6 (2015/03/27)"
+#define Log_PLATFORM_VERSION	"SWAD 14.102.8 (2015/03/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.102.8: Mar 27, 2015	Fixed bug in form to edit account. (183989 lines)
+        Version 14.102.7: Mar 27, 2015	Minor change in help text. (183988 lines)
         Version 14.102.6: Mar 27, 2015	Changes in layout of sign up. (183987 lines)
         Version 14.102.5: Mar 27, 2015	Changes in layout of log in. (183909 lines)
         Version 14.102.4: Mar 25, 2015	Fixed bug in ranking. (183883 lines)

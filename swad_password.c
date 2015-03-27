@@ -242,7 +242,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
 void Pwd_ChkIdLoginAndSendNewPwd (void)
   {
-   extern const char *Txt_You_must_enter_your_ID_or_your_nickname;
+   extern const char *Txt_You_must_enter_your_nick_email_or_ID;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    extern const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
@@ -253,7 +253,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    /***** Check if user's ID or nickname is not empty *****/
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_enter_your_ID_or_your_nickname);
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_enter_your_nick_email_or_ID);
       Pwd_ShowFormSendNewPwd ();
       return;
      }
