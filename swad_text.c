@@ -1341,11 +1341,11 @@ const char *Txt_A_student_can_only_belong_to_one_group =
 #elif L==2
 	"A student can only belong to one group";
 #elif L==3
-	"Un estudiante s&oacute;lo puede pertenecer a un grupo";
+	"Un estudiante solo puede pertenecer a un grupo";
 #elif L==4
 	"Un &eacute;tudiant ne peut appartenir &agrave; un groupe";
 #elif L==5
-	"Un estudiante s&oacute;lo puede pertenecer a un grupo";	// Okoteve traducción
+	"Un estudiante solo puede pertenecer a un grupo";	// Okoteve traducción
 #elif L==6
 	"Uno studente pu&ograve; appartenere solo a un gruppo";
 #elif L==7
@@ -1704,11 +1704,11 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #elif L==2
 	"accessible only for reading by you and the teachers of the course";
 #elif L==3
-	"accesible s&oacute;lo para lectura por usted y los profesores de la asignatura";
+	"accesible solo para lectura por usted y los profesores de la asignatura";
 #elif L==4
 	"accessible uniquement pour la lecture par vous et par les &eacute;tudiants et les enseignants de la mati&egrave;re";
 #elif L==5
-	"accesible s&oacute;lo para lectura por usted y los profesores de la asignatura";	// Okoteve traducción
+	"accesible solo para lectura por usted y los profesores de la asignatura";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura per te e i professori del corso";
 #elif L==7
@@ -1725,11 +1725,11 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 #elif L==2
 	"accessible only for reading by students and teachers of the centre";
 #elif L==3
-	"accesible s&oacute;lo para lectura por estudiantes y profesores del centro";
+	"accesible solo para lectura por estudiantes y profesores del centro";
 #elif L==4
 	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du centre";
 #elif L==5
-	"accesible s&oacute;lo para lectura por estudiantes y profesores del centro";	// Okoteve traducción
+	"accesible solo para lectura por estudiantes y profesores del centro";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti e dei professori del centro";
 #elif L==7
@@ -1746,11 +1746,11 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #elif L==2
 	"accessible only for reading by students and teachers of the course";
 #elif L==3
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la asignatura";
+	"accesible solo para lectura por estudiantes y profesores de la asignatura";
 #elif L==4
 	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de la mati&egrave;re";
 #elif L==5
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la asignatura";	// Okoteve traducción
+	"accesible solo para lectura por estudiantes y profesores de la asignatura";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti e dei professori del corso";
 #elif L==7
@@ -1767,11 +1767,11 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 #elif L==2
 	"accessible only for reading by students and teachers of the degree";
 #elif L==3
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la titulaci&oacute;n";
+	"accesible solo para lectura por estudiantes y profesores de la titulaci&oacute;n";
 #elif L==4
 	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tude";
 #elif L==5
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
+	"accesible solo para lectura por estudiantes y profesores de la titulaci&oacute;n";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti e dei professori della laurea";
 #elif L==7
@@ -1788,11 +1788,11 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_inst
 #elif L==2
 	"accessible only for reading by students and teachers of the institution";
 #elif L==3
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la instituci&oacute;n";
+	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";
 #elif L==4
 	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
 #elif L==5
-	"accesible s&oacute;lo para lectura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
+	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti e dei professori della istituzione";
 #elif L==7
@@ -1809,11 +1809,11 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #elif L==2
 	"accessible only for reading by students of the group and teachers of the course";
 #elif L==3
-	"accesible s&oacute;lo para lectura por estudiantes del grupo y profesores de la asignatura";
+	"accesible solo para lectura por estudiantes del grupo y profesores de la asignatura";
 #elif L==4
 	"accessible uniquement pour la lecture par les &eacute;tudiants du groupe et les enseignants de la mati&egrave;re";
 #elif L==5
-	"accesible s&oacute;lo para lectura por estudiantes del grupo y profesores de la asignatura";	// Okoteve traducción
+	"accesible solo para lectura por estudiantes del grupo y profesores de la asignatura";	// Okoteve traducción
 #elif L==6
 	"accessibile solo per la lettura da parte degli studenti del gruppo e dei professori del corso";
 #elif L==7
@@ -14040,17 +14040,17 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 	 {
 	 NULL,
 #if   L==0
-	   "editor integrado, s&oacute;lo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
+	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
 #elif L==1
 	   "Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)"
 #elif L==2
 	   "internal editor, only for syllabus (lectures and practicals)"
 #elif L==3
-	   "editor integrado, s&oacute;lo para los temarios de teor&iacute;a y pr&aacute;cticas"
+	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"
 #elif L==4
 	   "&eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)"
 #elif L==5
-	   "editor integrado, s&oacute;lo para los temarios de teor&iacute;a y pr&aacute;cticas"// Okoteve traducción
+	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Okoteve traducción
 #elif L==6
 	   "editor interno, solo per programmi di teoria e di pratica"
 #elif L==7
@@ -14899,17 +14899,17 @@ const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS] =
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
    {
 #if   L==0
-	 "S&oacute;lo zona central"	// Necessita traduccio
+	 "Solo zona central"	// Necessita traduccio
 #elif L==1
 	 "Nur mittleren Bereich anzeigen"
 #elif L==2
 	 "Display central area only"
 #elif L==3
-	 "S&oacute;lo zona central"
+	 "Solo zona central"
 #elif L==4
 	 "Display central area only"	// Besoin de traduction
 #elif L==5
-	 "S&oacute;lo zona central"	// Okoteve traducción
+	 "Solo zona central"	// Okoteve traducción
 #elif L==6
 	 "Mostra solo la parte centrale"
 #elif L==7
@@ -19147,13 +19147,13 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Marks"
 #elif L==3
 	"Consulta individualizada de calificaciones"
-	" (cada estudiante s&oacute;lo ve sus calificaciones,"
+	" (cada estudiante solo ve sus calificaciones,"
 	" el profesor ve la calificaci&oacute;n de un estudiante seleccionado al azar)"
 #elif L==4
 	"Notes"
 #elif L==5
 	"Consulta individualizada de calificaciones"
-	" (cada estudiante s&oacute;lo ve sus calificaciones,"
+	" (cada estudiante solo ve sus calificaciones,"
 	" el profesor ve la calificaci&oacute;n de un estudiante seleccionado al azar)"	// Okoteve traducción
 #elif L==6
 	"Risultati"
@@ -25006,17 +25006,17 @@ const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Wa
 
 const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"Ahora cada estudiante s&oacute;lo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Necessita traduccio
+	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Necessita traduccio
 #elif L==1
 	"Now each student can only belong to a group of type <strong>%s</strong>.";
 #elif L==2
 	"Now each student can only belong to a group of type <strong>%s</strong>.";
 #elif L==3
-	"Ahora cada estudiante s&oacute;lo puede pertenecer a un grupo de tipo <strong>%s</strong>.";
+	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";
 #elif L==4
 	"Now each student can only belong to a group of type <strong>%s</strong>.";
 #elif L==5
-	"Ahora cada estudiante s&oacute;lo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Okoteve traducción
+	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==6
 	"Ora ogni studente pu&ograve; solo appartenere a un gruppo di tipo <strong>%s</strong>.";
 #elif L==7
@@ -25474,11 +25474,11 @@ const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to inc
 #elif L==2
 	"only if the scope is %s";
 #elif L==3
-	"s&oacute;lo si el &aacute;mbito es %s";
+	"solo si el &aacute;mbito es %s";
 #elif L==4
 	"seulement si le port&eacute;e est %s";
 #elif L==5
-	"s&oacute;lo si el &aacute;mbito es %s";	// Okoteve traducción
+	"solo si el &aacute;mbito es %s";	// Okoteve traducción
 #elif L==6
 	"solo se l'ambito &egrave; %s";
 #elif L==7
@@ -25489,17 +25489,17 @@ const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to inc
 
 const char *Txt_only_students =
 #if   L==0
-	", s&oacute;lo estudiantes";	// Necessita traduccio
+	", solo estudiantes";	// Necessita traduccio
 #elif L==1
 	", nur Studenten";
 #elif L==2
 	", only students";
 #elif L==3
-	", s&oacute;lo estudiantes";
+	", solo estudiantes";
 #elif L==4
 	", seulement &eacute;tudiants";
 #elif L==5
-	", s&oacute;lo estudiantes";	// Okoteve traducción
+	", solo estudiantes";	// Okoteve traducción
 #elif L==6
 	", solo studenti";
 #elif L==7
@@ -33676,7 +33676,7 @@ const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_her
 const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =
 #if   L==0
 	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" S&oacute;lo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
@@ -33697,7 +33697,7 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" or removed from the course and from all groups.";
 #elif L==3
 	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" S&oacute;lo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
@@ -33711,7 +33711,7 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" or removed from the course and from all groups.";	// Besoin de traduction
 #elif L==5
 	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" S&oacute;lo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
@@ -34690,11 +34690,11 @@ const char *Txt_Show_WHICH_groups[2] =
 #elif L==2
 	 "Only my groups"
 #elif L==3
-	 "S&oacute;lo mis grupos"
+	 "Solo mis grupos"
 #elif L==4
 	 "Uniquement mes groupes"
 #elif L==5
-	 "S&oacute;lo mis grupos"	// Okoteve traducción
+	 "Solo mis grupos"	// Okoteve traducción
 #elif L==6
 	 "Solo i miei gruppi"
 #elif L==7
@@ -39977,23 +39977,32 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 
 const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
-	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Necessita traduccio
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
+	" Solo puede contener n&uacute;meros (al menos uno) y letras.";		// Necessita traduccio
 #elif L==1
-	"The ID <strong>%s</strong> is not valid.";				// Need Übersetzung
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";		// Need Übersetzung
 #elif L==2
-	"The ID <strong>%s</strong> is not valid.";
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";
 #elif L==3
-	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
+	" Solo puede contener n&uacute;meros (al menos uno) y letras.";
 #elif L==4
-	"The ID <strong>%s</strong> is not valid.";				// Besoin de traduction
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";		// Besoin de traduction
 #elif L==5
-	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Okoteve traducción
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
+	" Solo puede contener n&uacute;meros (al menos uno) y letras.";		// Okoteve traducción
 #elif L==6
-	"L'ID <strong>%s</strong> non &egrave; valido.";
+	"L'ID <strong>%s</strong> non &egrave; valido."
+	" Pu&ograve; contenere solo numeri (almeno uno) e lettere.";
 #elif L==7
-	"The ID <strong>%s</strong> is not valid.";				// Potrzebujesz tlumaczenie
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"The ID <strong>%s</strong> is not valid.";				// Necessita de tradução
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
@@ -41134,7 +41143,7 @@ const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_ =	// War
 #if   L==0
 	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
 	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no s&oacute;lo por los usuarios de la asignatura %s).<br />"
+	" (no solo por los usuarios de la asignatura %s).<br />"
 	"<strong>El mensaje debe ser breve</strong>."
 	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
 	" puede usar el foro de la asignatura,"
@@ -41161,7 +41170,7 @@ const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_ =	// War
 #elif L==3
 	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
 	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no s&oacute;lo por los usuarios de la asignatura %s).<br />"
+	" (no solo por los usuarios de la asignatura %s).<br />"
 	"<strong>El mensaje debe ser breve</strong>."
 	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
 	" puede usar el foro de la asignatura,"
@@ -41179,7 +41188,7 @@ const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_ =	// War
 #elif L==5
 	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
 	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no s&oacute;lo por los usuarios de la asignatura %s).<br />"
+	" (no solo por los usuarios de la asignatura %s).<br />"
 	"<strong>El mensaje debe ser breve</strong>."
 	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
 	" puede usar el foro de la asignatura,"
@@ -41280,7 +41289,7 @@ const char *Txt_The_new_image_is_X =	// Warning: it is very important to include
 const char *Txt_The_new_password_can_not_consist_only_of_digits =
 #if   L==0
 	"La contrase&ntilde;a nueva no puede estar formada"
-	" s&oacute;lo por d&iacute;gitos.";		// Necessita traduccio
+	" solo por d&iacute;gitos.";		// Necessita traduccio
 #elif L==1
 	"The new password can not consist"
 	" only of digits.";				// Need Übersetzung
@@ -41289,13 +41298,13 @@ const char *Txt_The_new_password_can_not_consist_only_of_digits =
 	" only of digits.";
 #elif L==3
 	"La contrase&ntilde;a nueva no puede estar formada"
-	" s&oacute;lo por d&iacute;gitos.";
+	" solo por d&iacute;gitos.";
 #elif L==4
 	"The new password can not consist"
 	" only of digits.";				// Besoin de traduction
 #elif L==5
 	"La contrase&ntilde;a nueva no puede estar formada"
-	" s&oacute;lo por d&iacute;gitos.";		// Okoteve traducción
+	" solo por d&iacute;gitos.";		// Okoteve traducción
 #elif L==6
 	"La nuova password non pu&ograve; consistere"
 	" solo di numeri.";
@@ -45395,17 +45404,17 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 #endif
 	 ,
 #if   L==0
-	 "Poca: s&oacute;lo puntuaci&oacute;n total"	// Necessita traduccio
+	 "Poca: solo puntuaci&oacute;n total"	// Necessita traduccio
 #elif L==1
 	 "Kleine: nur die Gesamtnote"
 #elif L==2
 	 "Little: only the total score"
 #elif L==3
-	 "Poca: s&oacute;lo puntuaci&oacute;n total"
+	 "Poca: solo puntuaci&oacute;n total"
 #elif L==4
 	 "Petit: seul le note total"
 #elif L==5
-	 "Poca: s&oacute;lo puntuaci&oacute;n total"	// Okoteve traducción
+	 "Poca: solo puntuaci&oacute;n total"	// Okoteve traducción
 #elif L==6
 	 "Poco: solo il punteggio totale"
 #elif L==7
@@ -45928,7 +45937,7 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
-	" S&oacute;lo se tendr&aacute;n en cuenta aquellas palabras"
+	" Solo se tendr&aacute;n en cuenta aquellas palabras"
 	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";		// Necessita traduccio
 #elif L==1
@@ -45955,7 +45964,7 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
-	" S&oacute;lo se tendr&aacute;n en cuenta aquellas palabras"
+	" Solo se tendr&aacute;n en cuenta aquellas palabras"
 	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";
 #elif L==4
@@ -45973,7 +45982,7 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
-	" S&oacute;lo se tendr&aacute;n en cuenta aquellas palabras"
+	" Solo se tendr&aacute;n en cuenta aquellas palabras"
 	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";		// Okoteve traducción
 #elif L==6
@@ -49810,7 +49819,7 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 
 const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==0
-	"S&oacute;lo podr&aacute; realizar %u acciones m&aacute;s"
+	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Necessita traduccio
 #elif L==1
 	"You can only perform %u further actions"
@@ -49819,13 +49828,13 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"You can only perform %u further actions"
 	" if you don't send your photo.";
 #elif L==3
-	"S&oacute;lo podr&aacute; realizar %u acciones m&aacute;s"
+	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";
 #elif L==4
 	"You can only perform %u further actions"
 	" if you don't send your photo.";			// Besoin de traduction
 #elif L==5
-	"S&oacute;lo podr&aacute; realizar %u acciones m&aacute;s"
+	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Okoteve traducción
 #elif L==6
 	"Puoi solo realizzare %u massime azioni"
@@ -49840,7 +49849,7 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 
 const char *Txt_You_can_only_receive_email_notifications_if_ =
 #if   L==0
-	"S&oacute;lo podr&aacute; recibir notificaciones por correo"
+	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
 	" listados en PLATAFORMA &gt; Dominios.";		// Necessita traduccio
 #elif L==1
@@ -49852,7 +49861,7 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =
 	" if your email ends in one of the domains"
 	" listed in SYSTEM &gt; Domains.";
 #elif L==3
-	"S&oacute;lo podr&aacute; recibir notificaciones por correo"
+	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
 	" listados en PLATAFORMA &gt; Dominios.";
 #elif L==4
@@ -49860,7 +49869,7 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =
 	" if your email ends in one of the domains"
 	" listed in SYSTEM &gt; Domains.";			// Besoin de traduction
 #elif L==5
-	"S&oacute;lo podr&aacute; recibir notificaciones por correo"
+	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo termina en uno de los dominios"
 	" listados en PLATAFORMA &gt; Dominios.";	// Okoteve traducción
 #elif L==6
@@ -51868,7 +51877,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #if   L==0
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
-	" Es muy importante que no use s&oacute;lo"
+	" Es muy importante que no use solo"
 	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";	// Necessita traduccio
 #elif L==1
 	"Your password must be at least %u characters"
@@ -51883,7 +51892,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==3
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
-	" Es muy importante que no use s&oacute;lo"
+	" Es muy importante que no use solo"
 	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";
 #elif L==4
 	"Your password must be at least %u characters"
@@ -51893,7 +51902,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==5
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
-	" Es muy importante que no use s&oacute;lo"
+	" Es muy importante que no use solo"
 	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido, ni una palabra conocida.";	// Okoteve traducción
 #elif L==6
 	"La tua password deve essere almeno di %u caratteri"
