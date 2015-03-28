@@ -49,6 +49,8 @@ void Prf_CalculateNumClicks (void);
 void Prf_CalculateNumFileViews (void);
 void Prf_CalculateNumForPst (void);
 void Prf_CalculateNumMsgSnt (void);
+
+void Prf_CreateNewUsrFigures (long UsrCod);
 void Prf_RemoveUsrFigures (long UsrCod);
 void Prf_IncrementNumClicksUsr (long UsrCod);
 void Prf_IncrementNumFileViewsUsr (long UsrCod);

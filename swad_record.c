@@ -1876,18 +1876,19 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
 
 void Rec_ShowFormMyCommRecord (void)
   {
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_sex;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_name;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_country_nationality;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
+   extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
    extern const char *Txt_Save_changes;
 
    /***** If user has no sex, name and surname... *****/
-   if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_sex);
-   else if (!Gbl.Usrs.Me.UsrDat.FirstName[0] || !Gbl.Usrs.Me.UsrDat.Surname1[0])
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_name);
-   else if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_country_nationality);
+   if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+   else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
+   else if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
+	    !Gbl.Usrs.Me.UsrDat.Surname1[0])
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -3265,8 +3266,8 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
 void Rec_ShowFormMyInsCtrDpt (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_institution;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_centre_and_department;
+   extern const char *Txt_Please_fill_in_your_institution;
+   extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country_of_institution;
@@ -3287,11 +3288,11 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /***** If there is no institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0 ||
        Gbl.Usrs.Me.UsrDat.InsCod < 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_institution);
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_institution);
    else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_ROLE_TEACHER)) &&
             (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
              Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0))
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_centre_and_department);
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
    Lay_StartRoundFrameTable10 ("560px",2,

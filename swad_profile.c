@@ -1001,6 +1001,21 @@ static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
   }
 
 /*****************************************************************************/
+/******************* Create user's figures for a new user ********************/
+/*****************************************************************************/
+
+void Prf_CreateNewUsrFigures (long UsrCod)
+  {
+   struct UsrFigures UsrFigures;
+
+   /***** Reset user's figures *****/
+   Prf_ResetUsrFigures (&UsrFigures);
+
+   /***** Create user's figures *****/
+   Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+  }
+
+/*****************************************************************************/
 /********************** Reset values of user's figures ***********************/
 /*****************************************************************************/
 
@@ -1020,7 +1035,7 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
 
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures)
   {
-   char Query[256];
+   char Query[512];
 
    /***** Create user's figures *****/
    sprintf (Query,"INSERT INTO usr_figures"

@@ -3338,6 +3338,36 @@ const char *Txt_Banners =
 	"Banners";
 #endif
 
+const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
+#if   L==0
+	"Abans d'accedir a qualsevol altra opci&oacute;"
+	" ha de crear el seu sobrenom.";
+#elif L==1
+	"Bevor ich auf jede andere Option"
+	" m&uuml;ssen Sie Ihr Benutzernamen erstellen.";
+#elif L==2
+	"Before going to any other option"
+	" you must fill your nickname.";
+#elif L==3
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe crear su apodo.";
+#elif L==4
+	"Avant d'aller &agrave; une autre option"
+	" vous devez cr&eacute;er votre surnom.";
+#elif L==5
+	"Antes de acceder a cualquier otra opci&oacute;n"
+	" debe crear su apodo.";			// Okoteve traducción
+#elif L==6
+	"Prima di scegliere qualsiasi altra opzione"
+	" devi creare il tuo soprannome.";
+#elif L==7
+	"Przed udaniem si&eogon; do innej opcji"
+	" nale&zdot;y wype&lstrok;ni&cacute; sw&oacute;j nick";
+#elif L==8
+	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
+	" voc&ecirc; deve criar sua alcunha.";
+#endif
+
 const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 #if   L==0
 	"Abans d'accedir a qualsevol altra opci&oacute;"
@@ -3366,273 +3396,6 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 #elif L==8
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve criar sua senha.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_centre_and_department =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir el seu centre i department.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre Zentrum und Abteilung zu f&uuml;llen.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your centre and department.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su centro y departamento.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre centre et d&eacute;partement.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su centro y departamento.";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare il tuo centro e dipartimento.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy wypelnic tym centrum i dzia&lstrok;u.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o seu centro e departamento.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_country_nationality =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir la seva fitxa,"
-	" incloent el seu pais (nacionalitat).";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre Karteikarte zu f&uuml;llen,"
-	" einschlie&szlig;lich Ihrem Land (Nationalit&auml;t).";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your record card,"
-	" including your country (nationality).";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo su pa&iacute;s (nacionalidad).";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre carte d'enregistrement,"
-	" y compris votre pays (nationalit&eacute;).";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo su pa&iacute;s (nacionalidad).";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare la tua scheda,"
-	" compreso il tuo paese (nazionalit&agrave;).";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy wypelnic karte zapisu,"
-	" w tym kraju (obywatelstwo";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o seu cart&atilde;o,"
-	" incluindo seu pa&iacute;s (nacionalidade).";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_email_address =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir la seva adre&ccedil;a de correu.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre E-Mail-Adresse ein.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your email address.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su direcci&oacute;n de correo.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre adresse e-mail.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su direcci&oacute;n de correo.";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare il tuo indirizzo e-mail.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy w tym adresu e-mail.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o seu endere&ccedil;o de e-mail.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_ID =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir el seu ID (DNI/c&egrave;dula).";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihren Ausweis-Nr. &auml;nder.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your ID.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ID (DNI/c&eacute;dula).";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre ID.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ID (DNI/c&eacute;dula).";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare il tuo ID.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy w tym nick swoje zmie&nacute; identyfikatory.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o seu n&ordm;. identif.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir el seu sobrenom.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihren Namen zu f&uuml;llen.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your nickname.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su apodo.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre surnom.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su apodo.";			// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare il tuo soprannome.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy w tym nick.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher a seu alcunha.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_institution =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir la seva instituci&oacute;.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre Einrichtung zu f&uuml;llen.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your institution.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su instituci&oacute;n.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre &eacute;tablissement.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su instituci&oacute;n.";	// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare la tua istituzione accademica.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy wypelnic tym instytucji.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher sua institui&ccedil;&atilde;o.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_name =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir la seva fitxa,"
-	" incloent el seu nom i cognom(s).";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre Karteikarte zu f&uuml;llen,"
-	" mit Ihrem Namen.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your record card,"
-	" including your name.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo su nombre y apellido(s).";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre carte d'enregistrement,"
-	" y compris votre nom.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo su nombre y apellido(s).";		// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare la tua scheda,"
-	" compresi il tuo nome e cognome.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy wypelnic karte zapisu,"
-	" w tym imie i nazwisko.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o cart&atilde;o,"
-	" incluindo seu nome.";
-#endif
-
-const char *Txt_Before_going_to_any_other_option_you_must_fill_your_record_card_including_your_sex =
-#if   L==0
-	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de omplir la seva fitxa,"
-	" incloent el sexe.";
-#elif L==1
-	"Bevor ich auf jede andere Option"
-	" m&uuml;ssen Sie Ihre Karteikarte zu f&uuml;llen,"
-	" einschließlich Ihrer Sex.";
-#elif L==2
-	"Before going to any other option"
-	" you must fill your record card,"
-	" including your sex.";
-#elif L==3
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo el sexo.";
-#elif L==4
-	"Avant d'aller &agrave; une autre option"
-	" vous devez remplir votre carte d'enregistrement,"
-	" y compris votre sexe.";
-#elif L==5
-	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe rellenar su ficha,"
-	" incluyendo el sexo.";				// Okoteve traducción
-#elif L==6
-	"Prima di scegliere qualsiasi altra opzione"
-	" devi compilare la tua scheda,"
-	" compreso il sesso.";
-#elif L==7
-	"Zanim przejdziemy do innych opcji"
-	" nalezy wypelnic karte zapisu,"
-	" w tym ple&cacute;.";
-#elif L==8
-	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
-	" voc&ecirc; deve preencher o cart&atilde;o,"
-	" incluindo o seu sexo.";
 #endif
 
 const char *Txt_Calculate =
@@ -4762,48 +4525,6 @@ const char *Txt_Teachers_comment =
 	"Komentarz nauczycieli";
 #elif L==8
 	"Coment&aacute;rio dos professores";
-#endif
-
-const char *Txt_Completely_eliminate_user =
-#if   L==0
-	"Eliminar usuari completament";
-#elif L==1
-	"Completely eliminate user";		// Need Übersetzung
-#elif L==2
-	"Completely eliminate user";
-#elif L==3
-	"Eliminar usuario completamente";
-#elif L==4
-	"Completely eliminate user";		// Besoin de traduction
-#elif L==5
-	"Eliminar usuario completamente";	// Okoteve traducción
-#elif L==6
-	"Rimuovere utente completamente";
-#elif L==7
-	"Calkowicie wyeliminowac u&zdot;ytkownika";
-#elif L==8
-	"Completely eliminate user";		// Necessita de tradução
-#endif
-
-const char *Txt_Completely_eliminate_me =
-#if   L==0
-	"Eliminar-me completament";
-#elif L==1
-	"Completely eliminate me";		// Need Übersetzung
-#elif L==2
-	"Completely eliminate me";
-#elif L==3
-	"Eliminarme completamente";
-#elif L==4
-	"Completely eliminate me";		// Besoin de traduction
-#elif L==5
-	"Eliminarme completamente";		// Okoteve traducción
-#elif L==6
-	"Rimuovimi completamente";
-#elif L==7
-	"Calkowicie mnie wyeliminowac";
-#elif L==8
-	"Completely eliminate me";		// Necessita de tradução
 #endif
 
 const char *Txt_Configure =
@@ -8222,17 +7943,17 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
 #if   L==0
-	"&iquest;Realmente desea eliminar completamente el siguiente usuario?";	// Necessita traduccio
+	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";	// Necessita traduccio
 #elif L==1
 	"Do you really want to completely eliminate the following user?";	// Need Übersetzung
 #elif L==2
 	"Do you really want to completely eliminate the following user?";
 #elif L==3
-	"&iquest;Realmente desea eliminar completamente el siguiente usuario?";
+	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";
 #elif L==4
 	"Do you really want to completely eliminate the following user?";	// Besoin de traduction
 #elif L==5
-	"&iquest;Realmente desea eliminar completamente el siguiente usuario?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";	// Okoteve traducción
 #elif L==6
 	"Vuoi realmente rimuovere totalmente il seguente utente?";
 #elif L==7
@@ -8243,17 +7964,17 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
 #if   L==0
-	"&iquest;Realmente desea eliminar completamente su cuenta de usuario?";	// Necessita traduccio
+	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";	// Necessita traduccio
 #elif L==1
 	"Do you really want to completely eliminate your user account?";	// Need Übersetzung
 #elif L==2
 	"Do you really want to completely eliminate your user account?";
 #elif L==3
-	"&iquest;Realmente desea eliminar completamente su cuenta de usuario?";
+	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";
 #elif L==4
 	"Do you really want to completely eliminate your user account?";	// Besoin de traduction
 #elif L==5
-	"&iquest;Realmente desea eliminar completamente su cuenta de usuario?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar completamente su cuenta de usuario/a?";	// Okoteve traducción
 #elif L==6
 	"Vuoi realmente rimuovere totalmente il tuo account?";
 #elif L==7
@@ -8273,13 +7994,13 @@ const char *Txt_Do_you_really_want_to_create_a_new_user_account_with_the_followi
 	"Do you really want to create a new user account"
 	" with the following data?";
 #elif L==3
-	"&iquest;Realmente desea crear una nueva cuenta de usuario"
+	"&iquest;Realmente desea crear una nueva cuenta de usuario/a"
 	" con los siguientes datos?";
 #elif L==4
 	"Voulez-vous vraiment cr&eacute;er un nouveau compte d'utilisateur"
 	" avec les donn&eacute;es suivantes?";
 #elif L==5
-	"&iquest;Realmente desea crear una nueva cuenta de usuario"
+	"&iquest;Realmente desea crear una nueva cuenta de usuario/a"
 	" con los siguientes datos?";	// Okoteve traducción
 #elif L==6
 	"Vuoi realmente creare un nuovo account utente"
@@ -9813,6 +9534,48 @@ const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months
 #elif L==8
 	"Eliminating %lu course(s) without users"
 	" and with more than %u months without access.";		// Necessita de tradução
+#endif
+
+const char *Txt_Eliminate_my_user_account =
+#if   L==0
+	"Eliminar la meva compte d'usuari";
+#elif L==1
+	"Entfernen mein Benutzerkonto";
+#elif L==2
+	"Eliminate my user account";
+#elif L==3
+	"Eliminar mi cuenta de usuario/a";
+#elif L==4
+	"Supprimer mon compte d'utilisateur";
+#elif L==5
+	"Eliminar mi cuenta de usuario/a";		// Okoteve traducción
+#elif L==6
+	"Rimuovere il mio account utente";
+#elif L==7
+	"Usu&nacute; moje konto u&zdot;ytkownika";
+#elif L==8
+	"Remover minha conta de usu&aacute;rio";
+#endif
+
+const char *Txt_Eliminate_user_account =
+#if   L==0
+	"Eliminar compte d'usuari";
+#elif L==1
+	"Entfernen Benutzerkonto";
+#elif L==2
+	"Eliminate user account";
+#elif L==3
+	"Eliminar cuenta de usuario/a";
+#elif L==4
+	"Supprimer compte d'utilisateur";
+#elif L==5
+	"Eliminar cuenta de usuario/a";		// Okoteve traducción
+#elif L==6
+	"Rimuovere account utente";
+#elif L==7
+	"Usu&nacute; konto u&zdot;ytkownika";
+#elif L==8
+	"Remover conta de usu&aacute;rio";
 #endif
 
 const char *Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z =	// Warning: it is very important to include %lu, %u and %s in the following sentences
@@ -20123,11 +19886,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2
 	"Create or edit my user account"
 #elif L==3
-	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario"
+	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario/a"
 #elif L==4
 	"Cr&eacute;er ou modifier mon compte d'utilisateur"
 #elif L==5
-	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario"// Okoteve traducción
+	"Creaci&oacute;n o edici&oacute;n de mi cuenta de usuario/a"// Okoteve traducción
 #elif L==6
 	"Creare o modificare il mio account utente"
 #elif L==7
@@ -26832,6 +26595,179 @@ const char *Txt_PLACES_ORDER[2] =
 	 "Titula&ccedil;oes"
 #endif
 	};
+
+const char *Txt_Please_fill_in_your_centre_and_department =
+#if   L==0
+	"Si us plau, ompli el seu centre i department.";
+#elif L==1
+	"Bitte geben Sie Ihre Zentrum und Abteilung zu f&uuml;llen.";
+#elif L==2
+	"Please fill in your centre and department.";
+#elif L==3
+	"Por favor, rellene su centro y departamento.";
+#elif L==4
+	"S'il vous pla&iacute;t, indiquez votre centre et d&eacute;partement.";
+#elif L==5
+	"Por favor, rellene su centro y departamento.";	// Okoteve traducción
+#elif L==6
+	"Per favore, inserisci il tuo centro e dipartimento.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje tym centrum i dzia&lstrok;u.";
+#elif L==8
+	"Por favor, preencha o seu centro e departamento.";
+#endif
+
+const char *Txt_Please_fill_in_your_email_address =
+#if   L==0
+	"Si us plau, ompli la seva adre&ccedil;a de correu.";
+#elif L==1
+	"Bitte geben Sie Ihre E-Mail-Adresse ein.";
+#elif L==2
+	"Please fill in your email address.";
+#elif L==3
+	"Por favor, rellene su direcci&oacute;n de correo.";
+#elif L==4
+	"S'il vous pla&iacute;t, indiquez votre adresse e-mail.";
+#elif L==5
+	"Por favor, rellene su direcci&oacute;n de correo.";	// Okoteve traducción
+#elif L==6
+	"Per favore, inserisci il tuo indirizzo e-mail.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje w tym adresu e-mail.";
+#elif L==8
+	"Por favor, preencha o seu endere&ccedil;o de e-mail.";
+#endif
+
+const char *Txt_Please_fill_in_your_ID =
+#if   L==0
+	"Si us plau, ompli el seu ID (DNI/c&egrave;dula).";
+#elif L==1
+	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder.";
+#elif L==2
+	"Please fill in your ID.";
+#elif L==3
+	"Por favor, rellene su ID (DNI/c&eacute;dula).";
+#elif L==4
+	"S'il vous pla&iacute;t, indiquez votre ID.";
+#elif L==5
+	"Por favor, rellene su ID (DNI/c&eacute;dula).";	// Okoteve traducción
+#elif L==6
+	"Per favore, inserisci il tuo ID.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje zmie&nacute; identyfikatory.";
+#elif L==8
+	"Por favor, preencha seu n&ordm;. identif.";
+#endif
+
+const char *Txt_Please_fill_in_your_institution =
+#if   L==0
+	"Si us plau, ompli la seva instituci&oacute;.";
+#elif L==1
+	"Bitte geben Sie Ihre Einrichtung zu f&uuml;llen.";
+#elif L==2
+	"Please fill in your institution.";
+#elif L==3
+	"Por favor, rellene su instituci&oacute;n.";
+#elif L==4
+	"S'il vous pla&iacute;t, indiquez votre &eacute;tablissement.";
+#elif L==5
+	"Por favor, rellene su instituci&oacute;n.";	// Okoteve traducción
+#elif L==6
+	"Per favore, inserisci la tua istituzione accademica.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje tym instytucji.";
+#elif L==8
+	"Por favor, preencha sua institui&ccedil;&atilde;o.";
+#endif
+
+const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality =
+#if   L==0
+	"Si us plau, ompli la seva fitxa,"
+	" incloent el seu pais (nacionalitat).";
+#elif L==1
+	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
+	" einschlie&szlig;lich Ihrem Land (Nationalit&auml;t).";
+#elif L==2
+	"Please fill in your country (nationality).";
+#elif L==3
+	"Por favor, rellene su ficha,"
+	" incluyendo su pa&iacute;s (nacionalidad).";
+#elif L==4
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
+	" y compris votre pays (nationalit&eacute;).";
+#elif L==5
+	"Por favor, rellene su ficha,"
+	" incluyendo su pa&iacute;s (nacionalidad).";	// Okoteve traducción
+#elif L==6
+	"Per favore, compila la tua scheda,"
+	" compreso il tuo paese (nazionalit&agrave;).";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje karte zapisu,"
+	" w tym kraju (obywatelstwo";
+#elif L==8
+	"Por favor, preencha o seu cart&atilde;o,"
+	" incluindo seu pa&iacute;s (nacionalidade).";
+#endif
+
+const char *Txt_Please_fill_in_your_record_card_including_your_name =
+#if   L==0
+	"Si us plau, ompli la seva fitxa,"
+	" incloent el seu nom i cognom(s).";
+#elif L==1
+	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
+	" mit Ihrem Namen.";
+#elif L==2
+	"Please fill in your record card,"
+	" including your name.";
+#elif L==3
+	"Por favor, rellene su ficha,"
+	" incluyendo su nombre y apellido(s).";
+#elif L==4
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
+	" y compris votre nom.";
+#elif L==5
+	"Por favor, rellene su ficha,"
+	" incluyendo su nombre y apellido(s).";		// Okoteve traducción
+#elif L==6
+	"Per favore, compila la tua scheda,"
+	" compresi il tuo nome e cognome.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje karte zapisu,"
+	" w tym imie i nazwisko.";
+#elif L==8
+	"Por favor, preencha o cart&atilde;o,"
+	" incluindo seu nome.";
+#endif
+
+const char *Txt_Please_fill_in_your_record_card_including_your_sex =
+#if   L==0
+	"Si us plau, ompli la seva fitxa,"
+	" incloent el sexe.";
+#elif L==1
+	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
+	" einschlie&szlig;lich Ihrer Sex.";
+#elif L==2
+	"Please fill in your record card,"
+	" including your sex.";
+#elif L==3
+	"Por favor, rellene su ficha,"
+	" incluyendo el sexo.";
+#elif L==4
+	"S'il vous pla&iacute;t, remplissez votre carte d'enregistrement,"
+	" y compris votre sexe.";
+#elif L==5
+	"Por favor, rellene su ficha,"
+	" incluyendo el sexo.";				// Okoteve traducción
+#elif L==6
+	"Per favore, compila la tua scheda,"
+	" compreso il sesso.";
+#elif L==7
+	"Prosz&eogon;, wpisz swoje karte zapisu,"
+	" w tym ple&cacute;.";
+#elif L==8
+	"Por favor, preencha o cart&atilde;o,"
+	" incluindo o seu sexo.";
+#endif
 
 const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications =
 #if   L==0
@@ -36778,25 +36714,25 @@ const char *Txt_Step_1_Provide_a_list_of_users =
 	"Step 1: Provide a list of users";		// Necessita de tradução
 #endif
 
-const char *Txt_Step_2_Select_the_type_of_user_to_register_remove =
+const char *Txt_Step_2_Select_the_type_of_users_to_register_remove =
 #if   L==0
-	"Paso 2: Seleccione el tipo de usuario a inscribir / eliminar";	// Necessita traduccio
+	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";	// Necessita traduccio
 #elif L==1
-	"Step 2: Select the type of user to register / remove";		// Need Übersetzung
+	"Step 2: Select the type of users to register / remove";		// Need Übersetzung
 #elif L==2
-	"Step 2: Select the type of user to register / remove";
+	"Step 2: Select the type of users to register / remove";
 #elif L==3
-	"Paso 2: Seleccione el tipo de usuario a inscribir / eliminar";
+	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";
 #elif L==4
-	"Step 2: Select the type of user to register / remove";		// Besoin de traduction
+	"Step 2: Select the type of users to register / remove";		// Besoin de traduction
 #elif L==5
-	"Paso 2: Seleccione el tipo de usuario a inscribir / eliminar";	// Okoteve traducción
+	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";	// Okoteve traducción
 #elif L==6
-	"Passo 2: Seleziona il tipo di utente da registrare / rimuovere";
+	"Passo 2: Seleziona il tipo di utenti da registrare / rimuovere";
 #elif L==7
-	"Step 2: Select the type of user to register / remove";		// Potrzebujesz tlumaczenie
+	"Step 2: Select the type of users to register / remove";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"Step 2: Select the type of user to register / remove";		// Necessita de tradução
+	"Step 2: Select the type of users to register / remove";		// Necessita de tradução
 #endif
 
 const char *Txt_Step_3_Select_the_desired_action =
@@ -46875,11 +46811,11 @@ const char *Txt_User_account =
 #elif L==2
 	"User account";
 #elif L==3
-	"Cuenta de usuario";
+	"Cuenta de usuario/a";
 #elif L==4
 	"Compte d'utilisateur";
 #elif L==5
-	"Cuenta de usuario";	// Okoteve traducción
+	"Cuenta de usuario/a";	// Okoteve traducción
 #elif L==6
 	"Account utente";
 #elif L==7

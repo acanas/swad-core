@@ -189,8 +189,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 void Acc_ShowFormChangeMyAccount (void)
   {
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_email_address;
-   extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_ID;
+   extern const char *Txt_Please_fill_in_your_email_address;
+   extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_User_account;
 
    /***** Get current user's nickname and e-mail address
@@ -202,9 +202,9 @@ void Acc_ShowFormChangeMyAccount (void)
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
       Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
    else if (!Gbl.Usrs.Me.UsrDat.Email[0])
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_email_address);
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_email_address);
    else if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_ID);
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -495,6 +495,9 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
    /***** Create directory for the user, if not exists *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
    Fil_CreateDirIfNotExists (PathRelUsr);
+
+   /***** Create user's figures *****/
+   Prf_CreateNewUsrFigures (UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
@@ -617,8 +620,8 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account;
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
-   extern const char *Txt_Completely_eliminate_me;
-   extern const char *Txt_Completely_eliminate_user;
+   extern const char *Txt_Eliminate_my_user_account;
+   extern const char *Txt_Eliminate_user_account;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
@@ -634,8 +637,8 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
       /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();
 
-      Lay_PutRemoveButton (ItsMe ? Txt_Completely_eliminate_me :
-                                   Txt_Completely_eliminate_user);
+      Lay_PutRemoveButton (ItsMe ? Txt_Eliminate_my_user_account :
+                                   Txt_Eliminate_user_account);
 
       Act_FormEnd ();
      }

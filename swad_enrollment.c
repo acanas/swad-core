@@ -508,7 +508,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
    extern const char *Txt_Option_b_Type_or_paste_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
-   extern const char *Txt_Step_2_Select_the_type_of_user_to_register_remove;
+   extern const char *Txt_Step_2_Select_the_type_of_users_to_register_remove;
    extern const char *Txt_Step_3_Select_the_desired_action;
    extern const char *Txt_Step_4_Optionally_select_groups;
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_;
@@ -575,7 +575,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_2_Select_the_type_of_user_to_register_remove);
+            Txt_Step_2_Select_the_type_of_users_to_register_remove);
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
       Rol_PutAllRolesRegRemUsrsCrs ();
 
@@ -816,8 +816,8 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *Txt_Remove_user_as_an_administrator_of_the_centre_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_user_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Completely_eliminate_me;
-   extern const char *Txt_Completely_eliminate_user;
+   extern const char *Txt_Eliminate_my_user_account;
+   extern const char *Txt_Eliminate_user_account;
    unsigned NumOptionsShown = 0;
    bool UsrBelongsToCrs = false;
    bool UsrIsDegAdmin = false;
@@ -1042,8 +1042,8 @@ static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       if (!OptionChecked)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />%s</li>",
-               ItsMe ? Txt_Completely_eliminate_me :
-        	       Txt_Completely_eliminate_user);
+               ItsMe ? Txt_Eliminate_my_user_account :
+        	       Txt_Eliminate_user_account);
 
       NumOptionsShown++;
      }

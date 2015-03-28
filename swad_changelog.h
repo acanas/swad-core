@@ -103,11 +103,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.102.8 (2015/03/27)"
+#define Log_PLATFORM_VERSION	"SWAD 14.102.11 (2015/03/28)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.102.11:Mar 28, 2015	Change help messages. (183943 lines)
+        Version 14.102.10:Mar 28, 2015	Create user's figures when a user account is created. (183942 lines)
+        Version 14.102.9: Mar 28, 2015	Changes in help messages while filling in user's record card. (183927 lines)
         Version 14.102.8: Mar 27, 2015	Fixed bug in form to edit account. (183989 lines)
         Version 14.102.7: Mar 27, 2015	Minor change in help text. (183988 lines)
         Version 14.102.6: Mar 27, 2015	Changes in layout of sign up. (183987 lines)
