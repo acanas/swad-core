@@ -1892,15 +1892,14 @@ void Rec_ShowFormMyCommRecord (void)
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_PutLinkToMyCrsRecord ();				// Put link (form) to my record in this course
-   Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+   Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
 
    /***** My record *****/
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
    Rec_WriteLinkToDataProtectionClause ();
-   Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2003,6 +2002,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Edit;
    extern const char *Txt_View_record_card;
    extern const char *Txt_Admin_user;
    extern const char *Txt_ID;
@@ -2119,15 +2119,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    switch (TypeOfView)
      {
       case Rec_FORM_SIGN_UP:
-	 ClassHead = "HEAD_REC";
-	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
-	 ClassData = "DAT_REC";
-	 break;
       case Rec_FORM_MY_COMMON_RECORD:
 	 ClassHead = "HEAD_REC";
 	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
-	 Act_FormStart (ActChgMyData);
 	 break;
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
 	 ClassHead = "HEAD_REC";
@@ -2252,12 +2247,26 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       fprintf (Gbl.F.Out,"<div style=\"width:20px; margin:6px auto;\">");
 
-      /***** Button to view user's record card when:
-             - viewing public profile &&
-             - a course is selected &&
-             - the user belongs to it &&
-             - I belong to it or I am system admin *****/
-      if (TypeOfView == Rec_RECORD_PUBLIC &&
+      /***** Button to edit my record card *****/
+      if (ItsMe && TypeOfView != Rec_FORM_MY_COMMON_RECORD)
+        {
+	 Act_FormStart (ActReqEdiRecCom);
+	 Act_LinkFormSubmit (Txt_Edit,NULL);
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+			    "<img src=\"%s/edit16x16.gif\""
+			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Edit);
+	 Act_FormEnd ();
+        }
+
+      /***** Button to view user's record card in course when:
+             - not already viewing user's record card in course &&
+             - a course is selected && the user belongs to it &&
+             - I can view user's record card in course *****/
+      if (TypeOfView != Rec_RECORD_LIST &&
 	  HeBelongsToCurrentCrs &&
 	  (IAmLoggedAsStudent ||
 	   IAmLoggedAsTeacher ||
@@ -2481,8 +2490,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
        ShowTeacherRows)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\">"
-			 "<table style=\"width:100%%\">");
+			 "<td colspan=\"3\">");
+
+      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	 Act_FormStart (ActChgMyData);
+
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%\">");
 
       if (ShowIDRows)
 	{
@@ -3087,17 +3100,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
+      fprintf (Gbl.F.Out,"</table>");
 
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</td>"
-			 "</tr>");
-     }
+      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	{
+	 Lay_PutConfirmButton (Txt_Save_changes);
+	 Act_FormEnd ();
+	}
 
-   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td colspan=\"3\" style=\"text-align:center;\">");
-      Lay_PutConfirmButton (Txt_Save_changes);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
