@@ -737,7 +737,8 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
-   /***** Remove user from table of banned users *****/
+   /***** Remove user from tables of banned users *****/
+   Usr_RemoveUsrFromUsrBanned (UsrDat->UsrCod);
    Msg_RemoveUsrFromBanned (UsrDat->UsrCod);
 
    /***** Delete thread read status for this user *****/

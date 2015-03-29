@@ -1100,15 +1100,11 @@ CREATE TABLE IF NOT EXISTS tst_tags (
 	INDEX(CrsCod,ChangeTime),
 	INDEX(TagTxt));
 --
--- Table usr_IDs: stores the users' IDs
+-- Table usr_banned: stores users banned for ranking
 --
-CREATE TABLE IF NOT EXISTS usr_IDs (
+CREATE TABLE IF NOT EXISTS usr_banned (
 	UsrCod INT NOT NULL,
-	UsrID CHAR(16) NOT NULL,
-	CreatTime DATETIME NOT NULL,
-	Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UNIQUE INDEX(UsrCod,UsrID),
-	INDEX(UsrID));
+	UNIQUE INDEX(UsrCod));
 --
 -- Table usr_data: stores users' data
 --
@@ -1158,7 +1154,6 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(CtrCod),
 	INDEX(Menu),
 	INDEX(SideCols));
-);
 --
 -- Table usr_emails: stores the users' e-mails
 --
@@ -1192,6 +1187,16 @@ CREATE TABLE IF NOT EXISTS usr_follow (
 	UNIQUE INDEX (FollowerCod,FollowedCod),
 	UNIQUE INDEX (FollowedCod,FollowerCod),
 	INDEX (FollowTime));
+--
+-- Table usr_IDs: stores the users' IDs
+--
+CREATE TABLE IF NOT EXISTS usr_IDs (
+	UsrCod INT NOT NULL,
+	UsrID CHAR(16) NOT NULL,
+	CreatTime DATETIME NOT NULL,
+	Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(UsrCod,UsrID),
+	INDEX(UsrID));
 --
 -- Table usr_last: stores some variable data related to users
 --

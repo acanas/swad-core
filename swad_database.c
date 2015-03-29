@@ -2241,6 +2241,21 @@ mysql> DESCRIBE tst_tags;
                    "TagHidden ENUM('N','Y') NOT NULL,"
                    "UNIQUE INDEX(TagCod),INDEX(CrsCod,ChangeTime),INDEX(TagTxt))");
 
+   /***** Table usr_banned *****/
+/*
+mysql> DESCRIBE usr_banned;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+1 row in set (0.01 sec)
+
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_banned ("
+		   "UsrCod INT NOT NULL,"
+		   "UNIQUE INDEX(UsrCod))");
+
    /***** Table usr_data *****/
 /*
 mysql> DESCRIBE usr_data;

@@ -10573,3 +10573,9 @@ UPDATE usr_data SET EmailNtfEvent =(((EmailNtfEvent  & ~0xFF) << 1) | (EmailNtfE
 UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000);
 
 
+-----------------
+
+
+CREATE TABLE IF NOT EXISTS usr_banned (
+	UsrCod INT NOT NULL,
+	UNIQUE INDEX(UsrCod));

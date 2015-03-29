@@ -7440,3 +7440,30 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 
    return NumUsrsPerCrs;
   }
+
+/*****************************************************************************/
+/****************** Check if a user is banned in ranking *********************/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrBanned (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM usr_banned WHERE UsrCod='%ld'",
+	    UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if user is banned") != 0);
+  }
+
+/*****************************************************************************/
+/****************** Check if a user is banned in ranking *********************/
+/*****************************************************************************/
+
+void Usr_RemoveUsrFromUsrBanned (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove user from users banned");
+  }
+

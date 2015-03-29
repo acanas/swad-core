@@ -321,6 +321,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Messages;
    extern const char *Txt_message;
    extern const char *Txt_messages;
+   bool UsrIsBannedFromRanking;
    struct UsrFigures UsrFigures;
    unsigned NumCrssUsrIsTeacher;
    unsigned NumCrssUsrIsStudent;
@@ -445,154 +446,159 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
-   /* Number of clicks */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"PRF_ICON_CONTAINER\">"
-                      "<img src=\"%s/click64x64.gif\" title=\"%s\""
-	              " class=\"PRF_ICON\" />"
-		      "</td>"
-		      "<td class=\"PRF_FIG DAT\">",
-            Gbl.Prefs.IconsURL,
-	    Txt_Clicks);
-   if (UsrFigures.NumClicks >= 0)
+   UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
+   if (!UsrIsBannedFromRanking)
      {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-               UsrFigures.NumClicks,Txt_clicks);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
-                       Prf_GetNumUsrsWithFigure ("NumClicks"));
-      if (UsrFigures.NumDays > 0)
-	{
-	 fprintf (Gbl.F.Out,"&nbsp;(");
-         Str_WriteFloatNum ((float) UsrFigures.NumClicks /
-		            (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
-	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
-			  Prf_GetNumUsrsWithNumClicksPerDay ());
-	 fprintf (Gbl.F.Out,")");
-	}
-     }
-   else	// Number of clicks is unknown
-     {
-      /***** Button to fetch and store number of clicks *****/
-      Act_FormStart (ActCalNumClk);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+      /* Number of clicks */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"PRF_ICON_CONTAINER\">"
+			 "<img src=\"%s/click64x64.gif\" title=\"%s\""
+			 " class=\"PRF_ICON\" />"
+			 "</td>"
+			 "<td class=\"PRF_FIG DAT\">",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Clicks);
 
-   /***** Number of file views *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"PRF_ICON_CONTAINER\">"
-                      "<img src=\"%s/download64x64.gif\" title=\"%s\""
-	              " class=\"PRF_ICON\" />"
-		      "</td>"
-		      "<td class=\"PRF_FIG DAT\">",
-            Gbl.Prefs.IconsURL,
-	    Txt_Downloads);
-   if (UsrFigures.NumFileViews >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-               UsrFigures.NumFileViews,
-               (UsrFigures.NumFileViews == 1) ? Txt_download :
-        	                                Txt_downloads);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
-                       Prf_GetNumUsrsWithFigure ("NumFileViews"));
-      if (UsrFigures.NumDays > 0)
+      if (UsrFigures.NumClicks >= 0)
 	{
-	 fprintf (Gbl.F.Out,"&nbsp;(");
-         Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
-		            (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+		  UsrFigures.NumClicks,Txt_clicks);
+	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
+			  Prf_GetNumUsrsWithFigure ("NumClicks"));
+	 if (UsrFigures.NumDays > 0)
+	   {
+	    fprintf (Gbl.F.Out,"&nbsp;(");
+	    Str_WriteFloatNum ((float) UsrFigures.NumClicks /
+			       (float) UsrFigures.NumDays);
+	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
+	    Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+			     Prf_GetNumUsrsWithNumClicksPerDay ());
+	    fprintf (Gbl.F.Out,")");
+	   }
 	}
-     }
-   else	// Number of file views is unknown
-     {
-      /***** Button to fetch and store number of file views *****/
-      Act_FormStart (ActCalNumFilVie);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+      else	// Number of clicks is unknown
+	{
+	 /***** Button to fetch and store number of clicks *****/
+	 Act_FormStart (ActCalNumClk);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Act_FormEnd ();
+	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-   /***** Number of posts in forums *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"PRF_ICON_CONTAINER\">"
-                      "<img src=\"%s/forum64x64.gif\" title=\"%s\""
-	              " class=\"PRF_ICON\" />"
-		      "</td>"
-		      "<td class=\"PRF_FIG DAT\">",
-            Gbl.Prefs.IconsURL,
-	    Txt_Forums);
-   if (UsrFigures.NumForPst >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-               UsrFigures.NumForPst,
-               (UsrFigures.NumForPst == 1) ? Txt_post :
-        	                             Txt_posts);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
-                       Prf_GetNumUsrsWithFigure ("NumForPst"));
-      if (UsrFigures.NumDays > 0)
+      /***** Number of file views *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"PRF_ICON_CONTAINER\">"
+			 "<img src=\"%s/download64x64.gif\" title=\"%s\""
+			 " class=\"PRF_ICON\" />"
+			 "</td>"
+			 "<td class=\"PRF_FIG DAT\">",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Downloads);
+      if (UsrFigures.NumFileViews >= 0)
 	{
-	 fprintf (Gbl.F.Out,"&nbsp;(");
-         Str_WriteFloatNum ((float) UsrFigures.NumForPst /
-		            (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+		  UsrFigures.NumFileViews,
+		  (UsrFigures.NumFileViews == 1) ? Txt_download :
+						   Txt_downloads);
+	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
+			  Prf_GetNumUsrsWithFigure ("NumFileViews"));
+	 if (UsrFigures.NumDays > 0)
+	   {
+	    fprintf (Gbl.F.Out,"&nbsp;(");
+	    Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
+			       (float) UsrFigures.NumDays);
+	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	   }
 	}
-     }
-   else	// Number of forum posts is unknown
-     {
-      /***** Button to fetch and store number of forum posts *****/
-      Act_FormStart (ActCalNumForPst);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+      else	// Number of file views is unknown
+	{
+	 /***** Button to fetch and store number of file views *****/
+	 Act_FormStart (ActCalNumFilVie);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Act_FormEnd ();
+	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-   /***** Number of messages sent *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"PRF_ICON_CONTAINER\">"
-                      "<img src=\"%s/msg64x64.gif\" title=\"%s\""
-	              " class=\"PRF_ICON\" />"
-		      "</td>"
-		      "<td class=\"PRF_FIG DAT\">",
-            Gbl.Prefs.IconsURL,
-	    Txt_Messages);
-   if (UsrFigures.NumMsgSnt >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-               UsrFigures.NumMsgSnt,
-               (UsrFigures.NumMsgSnt == 1) ? Txt_message :
-        	                             Txt_messages);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
-                       Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
-      if (UsrFigures.NumDays > 0)
+      /***** Number of posts in forums *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"PRF_ICON_CONTAINER\">"
+			 "<img src=\"%s/forum64x64.gif\" title=\"%s\""
+			 " class=\"PRF_ICON\" />"
+			 "</td>"
+			 "<td class=\"PRF_FIG DAT\">",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Forums);
+      if (UsrFigures.NumForPst >= 0)
 	{
-	 fprintf (Gbl.F.Out,"&nbsp;(");
-         Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
-		            (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+		  UsrFigures.NumForPst,
+		  (UsrFigures.NumForPst == 1) ? Txt_post :
+						Txt_posts);
+	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
+			  Prf_GetNumUsrsWithFigure ("NumForPst"));
+	 if (UsrFigures.NumDays > 0)
+	   {
+	    fprintf (Gbl.F.Out,"&nbsp;(");
+	    Str_WriteFloatNum ((float) UsrFigures.NumForPst /
+			       (float) UsrFigures.NumDays);
+	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	   }
 	}
+      else	// Number of forum posts is unknown
+	{
+	 /***** Button to fetch and store number of forum posts *****/
+	 Act_FormStart (ActCalNumForPst);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Act_FormEnd ();
+	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      /***** Number of messages sent *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"PRF_ICON_CONTAINER\">"
+			 "<img src=\"%s/msg64x64.gif\" title=\"%s\""
+			 " class=\"PRF_ICON\" />"
+			 "</td>"
+			 "<td class=\"PRF_FIG DAT\">",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Messages);
+      if (UsrFigures.NumMsgSnt >= 0)
+	{
+	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+		  UsrFigures.NumMsgSnt,
+		  (UsrFigures.NumMsgSnt == 1) ? Txt_message :
+						Txt_messages);
+	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
+			  Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
+	 if (UsrFigures.NumDays > 0)
+	   {
+	    fprintf (Gbl.F.Out,"&nbsp;(");
+	    Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
+			       (float) UsrFigures.NumDays);
+	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	   }
+	}
+      else	// Number of clicks is unknown
+	{
+	 /***** Button to fetch and store number of messages sent *****/
+	 Act_FormStart (ActCalNumMsgSnt);
+	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Act_FormEnd ();
+	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   else	// Number of clicks is unknown
-     {
-      /***** Button to fetch and store number of messages sent *****/
-      Act_FormStart (ActCalNumMsgSnt);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
-      Act_FormEnd ();
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
 
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
@@ -1167,7 +1173,7 @@ void Prf_GetAndShowRankingMsgSnt (void)
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
@@ -1176,6 +1182,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 	 sprintf (Query,"SELECT UsrCod,%s"
 	                " FROM usr_figures"
 			" WHERE %s>='0'"
+			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY %s DESC,UsrCod LIMIT 100",
 		  FieldName,
 		  FieldName,FieldName);
@@ -1190,6 +1197,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCty.Cty.CtyCod,
@@ -1204,6 +1212,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentIns.Ins.InsCod,
@@ -1217,6 +1226,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCtr.Ctr.CtrCod,
@@ -1229,6 +1239,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -1240,6 +1251,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.%s>='0'"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 		  FieldName,
                   Gbl.CurrentCrs.Crs.CrsCod,
@@ -1317,7 +1329,7 @@ void Prf_ShowRankingFigure (const char *Query)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1335,6 +1347,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
 	                " FROM usr_figures"
 			" WHERE FirstClickTime>0"
+			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
@@ -1348,6 +1361,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
@@ -1361,6 +1375,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -1373,6 +1388,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
@@ -1384,6 +1400,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
@@ -1394,6 +1411,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
 			" AND usr_figures.FirstClickTime>0"
+			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
