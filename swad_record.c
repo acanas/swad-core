@@ -2025,6 +2025,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
+   extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
@@ -2037,10 +2038,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
    unsigned RecordWidth;
-   unsigned C1Width;
-   unsigned C2Width;
-   unsigned C3Width;
-   unsigned C4Width;
+   unsigned TopC1Width;
+   unsigned TopC2Width;
+   unsigned TopC3Width;
    char StrRecordWidth[10+1];
    const char *ClassHead;
    const char *ClassForm;
@@ -2105,7 +2105,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   ((TypeOfView == Rec_RECORD_LIST ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER));	// He/she is a teacher in the current course
-   unsigned CommandsRowspan;
    Usr_Sex_t Sex;
    Rol_Role_t Role;
    Rol_Role_t DefaultRoleInCurrentCrs;
@@ -2164,17 +2163,15 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       case Rec_RECORD_PUBLIC:
 	 RecordWidth = Rec_RECORD_WIDTH_NARROW;
-         C1Width = Rec_C1_WIDTH_NARROW;
-         C2Width = Rec_C2_WIDTH_NARROW;
-         C3Width = Rec_C3_WIDTH_NARROW;
-         C4Width = Rec_C4_WIDTH_NARROW;
+         TopC1Width = Rec_C1_TOP_NARROW;
+         TopC2Width = Rec_C2_TOP_NARROW;
+         TopC3Width = Rec_C3_TOP_NARROW;
 	 break;
       default:
 	 RecordWidth = Rec_RECORD_WIDTH_WIDE;
-         C1Width = Rec_C1_WIDTH_WIDE;
-         C2Width = Rec_C2_WIDTH_WIDE;
-         C3Width = Rec_C3_WIDTH_WIDE;
-         C4Width = Rec_C4_WIDTH_WIDE;
+         TopC1Width = Rec_C1_TOP_WIDE;
+         TopC2Width = Rec_C2_TOP_WIDE;
+         TopC3Width = Rec_C3_TOP_WIDE;
 	 break;
     }
 
@@ -2189,7 +2186,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"width:%upx; height:%upx;"
                       " text-align:center; vertical-align:middle;\">",
-	    C1Width,C1Width);
+	    TopC1Width,TopC1Width);
    if (UsrDat->InsCod > 0)
      {
       Ins.InsCod = UsrDat->InsCod;
@@ -2211,10 +2208,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	}
      }
    fprintf (Gbl.F.Out,"</td>"
-		      "<td colspan=\"2\" class=\"%s\""
+		      "<td class=\"%s\""
 		      " style=\"width:%upx; height:%upx;"
 		      " text-align:left; vertical-align:middle;\">",
-	    ClassHead,C2Width + C3Width,C1Width);
+	    ClassHead,TopC2Width,TopC1Width);
    if (UsrDat->InsCod > 0)
      {
       /* Form to go to the institution */
@@ -2237,7 +2234,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" style=\"width:%upx;"
                       " text-align:center; vertical-align:top;\">",
-	    C4Width);
+	    TopC3Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
 		     "PHOTO150x200",Pho_NO_ZOOM);
@@ -2245,17 +2242,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      "</tr>");
 
    /***** Commands *****/
-   CommandsRowspan = 5;		// Name + Nickname + Webs/social networks + Layout row + Country
-   if (ShowIDRows)
-      CommandsRowspan += 6;	// Email, ID, Role, Surname1, Surname2, Firstname
-   if (ShowAddressRows)
-      CommandsRowspan += 7;	// Origin place, Date of birth, Local address, Local phone
-                                // Family address, Family phone, Common comments for all the courses
-   if (ShowTeacherRows)
-      CommandsRowspan += 5;	// Institution, Centre, Department, Office, Phone
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"%u\" style=\"width:%upx; vertical-align:top;\">",
-	    CommandsRowspan,C1Width);
+	              "<td rowspan=\"3\""
+	              " style=\"width:%upx; vertical-align:top;\">",
+	    TopC1Width);
 
    if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
@@ -2425,21 +2415,21 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Full name *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"REC_NAME\" style=\"width:%upx;"
+   fprintf (Gbl.F.Out,"<td class=\"REC_NAME\" style=\"width:%upx;"
 	              " text-align:left; vertical-align:top;\">"
 	              "%s<br />%s<br />%s"
 	              "</td>"
 	              "</tr>",
-	    C2Width + C3Width,
+	    TopC2Width,
 	    UsrDat->FirstName ,
 	    UsrDat->Surname1,
 	    UsrDat->Surname2);
 
    /***** User's nickname *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"REC_NAME\" style=\"width:%upx;"
+   fprintf (Gbl.F.Out,"<td class=\"REC_NAME\" style=\"width:%upx;"
 	              " text-align:left; vertical-align:bottom;\">"
 	              "<div class=\"REC_NICK\">",
-	    C2Width + C3Width);
+	    TopC2Width);
    if (UsrDat->Nickname[0])
      {
       if (PutFormLinks)
@@ -2464,167 +2454,147 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              "</td>"
 	              "</tr>");
 
-   /***** Layout row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"width:%upx; height:0px;\"></td>"
-                      "<td style=\"width:%upx; height:0px;\"></td>"
-                      "<td style=\"width:%upx; height:0px;\"></td>"
-		      "</tr>",
-            C2Width,C3Width,C4Width);
-
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
+		      "<td class=\"%s\" style=\"width:%upx;"
 		      " text-align:left; vertical-align:top;\">",
-	    ClassData,C2Width + C3Width);
-   if (ShowData)
+	    ClassData,TopC2Width);
+   if (ShowData && UsrDat->CtyCod > 0)
      {
-      if (CountryForm)
-	{
-	 /* If list of countries is empty, try to get it */
-	 if (!Gbl.Ctys.Num)
-	   {
-	    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-	    Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
-	   }
-
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
-			    "<option value=\"-1\">%s</option>"
-			    "<option value=\"0\"",
-		  C2Width + C3Width - 60,
-		  Txt_Country);
-	 if (UsrDat->CtyCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
-	 for (NumCty = 0;
-	      NumCty < Gbl.Ctys.Num;
-	      NumCty++)
-	   {
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-		     Gbl.Ctys.Lst[NumCty].CtyCod);
-	    if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",
-		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	   }
-	 fprintf (Gbl.F.Out,"</select>");
-	}
-      else if (UsrDat->CtyCod > 0)
-	{
-	 Cty_GetCountryName (UsrDat->CtyCod,CtyName);
-	 fprintf (Gbl.F.Out,"%s",CtyName);
-	}
+      Cty_GetCountryName (UsrDat->CtyCod,CtyName);
+      fprintf (Gbl.F.Out,"%s",CtyName);
      }
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's web and social networks *****/
    fprintf (Gbl.F.Out,"<td style=\"width:%upx;\">"
 	              "<div style=\"vertical-align:top; margin:0 auto;\">",
-	    C4Width);
+	    TopC3Width);
    Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</div>"
 	              "</td>"
 		      "</tr>");
 
-   if (ShowIDRows)
+   if (ShowIDRows ||
+       ShowAddressRows ||
+       ShowTeacherRows)
      {
-      /***** User's e-mail *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s:"
-			 "</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2Width,Txt_Email,
-	       ClassData,C3Width + C4Width);
-      if (UsrDat->Email[0])
-	{
-	 if (ShowEmail)
-	   {
-	    fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
-		     UsrDat->Email);
-	    Str_LimitLengthHTMLStr (UsrDat->Email,36);
-	    fprintf (Gbl.F.Out," class=\"%s\">%s</a>",
-		     ClassData,UsrDat->Email);
-	   }
-	 else
-	    fprintf (Gbl.F.Out,"********");
-	}
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+			 "<td colspan=\"3\">"
+			 "<table style=\"width:100%%\">");
 
-      /***** User's ID *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s:"
-			 "</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2Width,Txt_ID,
-	       ClassData,C3Width + C4Width);
-      ID_WriteUsrIDs (UsrDat,ShowID);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** User's role or sex *****/
-      if (RoleForm)
+      if (ShowIDRows)
 	{
+	 /***** User's e-mail *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:right;\">"
-			    "%s:</td>"
-			    "<td colspan=\"2\" class=\"%s\""
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:left;\">",
-		  ClassForm,C2Width,
-		  Txt_Role,
-		  ClassData,C3Width + C4Width);
-	 switch (TypeOfView)
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Email,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (UsrDat->Email[0])
 	   {
-	    case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
-	       DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
-										     Rol_ROLE_STUDENT;
-	       fprintf (Gbl.F.Out,"<select name=\"Role\">");
-	       for (Role = Rol_ROLE_STUDENT;
-		    Role <= Rol_ROLE_TEACHER;
-		    Role++)
-		 {
-		  fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-		  if (Role == DefaultRoleInCurrentCrs)
-		     fprintf (Gbl.F.Out," selected=\"selected\"");
-		  fprintf (Gbl.F.Out,">%s</option>",
-			   Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
-		 }
-	       fprintf (Gbl.F.Out,"</select>");
-	       break;
-	    case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:	// The other user already exists in the platform
-	       if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
-		 {
-		  /* If there is a request of this user, default role is the requested role */
-		  if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
-		     DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
-											   Rol_ROLE_STUDENT;
-		 }
-	       else
-		  DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
+	    if (ShowEmail)
+	      {
+	       fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
+			UsrDat->Email);
+	       Str_LimitLengthHTMLStr (UsrDat->Email,36);
+	       fprintf (Gbl.F.Out," class=\"%s\">%s</a>",
+			ClassData,UsrDat->Email);
+	      }
+	    else
+	       fprintf (Gbl.F.Out,"********");
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
-	       fprintf (Gbl.F.Out,"<select name=\"Role\">");
-	       switch (Gbl.Usrs.Me.LoggedRole)
-		 {
-		  case Rol_ROLE_GUEST__:
-		  case Rol_ROLE_VISITOR:
-		  case Rol_ROLE_STUDENT:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
-			      (unsigned) Gbl.Usrs.Me.LoggedRole,
-			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
-		     break;
-		  case Rol_ROLE_TEACHER:
-		     for (Role = Rol_ROLE_STUDENT;
-			  Role <= Rol_ROLE_TEACHER;
-			  Role++)
-			if (Role == Rol_ROLE_STUDENT ||
-			    (UsrDat->Roles & (1 << Role)))	// A teacher can not upgrade a student (in all other courses) to teacher
+	 /***** User's ID *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_ID,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 ID_WriteUsrIDs (UsrDat,ShowID);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /***** User's role or sex *****/
+	 if (RoleForm)
+	   {
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:right;\">"
+			       "%s:</td>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:left;\">",
+		     ClassForm,Rec_C1_BOTTOM_WIDE,
+		     Txt_Role,
+		     ClassData,Rec_C2_BOTTOM_WIDE);
+	    switch (TypeOfView)
+	      {
+	       case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
+		  DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
+											Rol_ROLE_STUDENT;
+		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
+		  for (Role = Rol_ROLE_STUDENT;
+		       Role <= Rol_ROLE_TEACHER;
+		       Role++)
+		    {
+		     fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
+		     if (Role == DefaultRoleInCurrentCrs)
+			fprintf (Gbl.F.Out," selected=\"selected\"");
+		     fprintf (Gbl.F.Out,">%s</option>",
+			      Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+		    }
+		  fprintf (Gbl.F.Out,"</select>");
+		  break;
+	       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:	// The other user already exists in the platform
+		  if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
+		    {
+		     /* If there is a request of this user, default role is the requested role */
+		     if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
+			DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
+											      Rol_ROLE_STUDENT;
+		    }
+		  else
+		     DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
+
+		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
+		  switch (Gbl.Usrs.Me.LoggedRole)
+		    {
+		     case Rol_ROLE_GUEST__:
+		     case Rol_ROLE_VISITOR:
+		     case Rol_ROLE_STUDENT:
+			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
+				 (unsigned) Gbl.Usrs.Me.LoggedRole,
+				 Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
+			break;
+		     case Rol_ROLE_TEACHER:
+			for (Role = Rol_ROLE_STUDENT;
+			     Role <= Rol_ROLE_TEACHER;
+			     Role++)
+			   if (Role == Rol_ROLE_STUDENT ||
+			       (UsrDat->Roles & (1 << Role)))	// A teacher can not upgrade a student (in all other courses) to teacher
+			     {
+			      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
+			      if (Role == DefaultRoleInCurrentCrs)
+				 fprintf (Gbl.F.Out," selected=\"selected\"");
+			      fprintf (Gbl.F.Out,">%s</option>",
+				       Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+			     }
+			break;
+		     case Rol_ROLE_DEG_ADM:
+		     case Rol_ROLE_SYS_ADM:
+			for (Role = Rol_ROLE_STUDENT;
+			     Role <= Rol_ROLE_TEACHER;
+			     Role++)
 			  {
 			   fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
 			   if (Role == DefaultRoleInCurrentCrs)
@@ -2632,454 +2602,494 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   fprintf (Gbl.F.Out,">%s</option>",
 				    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 			  }
-		     break;
-		  case Rol_ROLE_DEG_ADM:
-		  case Rol_ROLE_SYS_ADM:
-		     for (Role = Rol_ROLE_STUDENT;
-			  Role <= Rol_ROLE_TEACHER;
-			  Role++)
-		       {
-			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			if (Role == DefaultRoleInCurrentCrs)
-			   fprintf (Gbl.F.Out," selected=\"selected\"");
-			fprintf (Gbl.F.Out,">%s</option>",
-				 Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
-		       }
-		     break;
-		  default: // The rest of users can not register other users
-		     break;
-		 }
-	       fprintf (Gbl.F.Out,"</select>");
-	       break;
-	    case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:	// The other user does not exist in platform
-	       fprintf (Gbl.F.Out,"<select name=\"Role\">");
-	       switch (Gbl.Usrs.Me.LoggedRole)
-		 {
-		  case Rol_ROLE_TEACHER:	// A teacher only can create students
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
-			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
-		     break;
-		  case Rol_ROLE_DEG_ADM:	// An administrator or a superuser can create students and teachers
-		  case Rol_ROLE_SYS_ADM:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
-					"<option value=\"%u\">%s</option>",
-			      (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-			      (unsigned) Rol_ROLE_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
-		     break;
-		  default:	// The rest of users can not register other users
-		     break;
-		 }
-	       fprintf (Gbl.F.Out,"</select>");
-	       break;
-	    default:
-	       break;
+			break;
+		     default: // The rest of users can not register other users
+			break;
+		    }
+		  fprintf (Gbl.F.Out,"</select>");
+		  break;
+	       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:	// The other user does not exist in platform
+		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
+		  switch (Gbl.Usrs.Me.LoggedRole)
+		    {
+		     case Rol_ROLE_TEACHER:	// A teacher only can create students
+			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
+				 (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+			break;
+		     case Rol_ROLE_DEG_ADM:	// An administrator or a superuser can create students and teachers
+		     case Rol_ROLE_SYS_ADM:
+			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
+					   "<option value=\"%u\">%s</option>",
+				 (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+				 (unsigned) Rol_ROLE_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
+			break;
+		     default:	// The rest of users can not register other users
+			break;
+		    }
+		  fprintf (Gbl.F.Out,"</select>");
+		  break;
+	       default:
+		  break;
+	      }
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
 	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
-      else if (SexForm)
-	{
+	 else if (SexForm)
+	   {
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:right;\">"
+			       "%s*:</td>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:left;\">",
+		     ClassForm,Rec_C1_BOTTOM_WIDE,
+		     Txt_Sex,
+		     ClassData,Rec_C2_BOTTOM_WIDE);
+	    for (Sex = Usr_SEX_FEMALE;
+		 Sex <= Usr_SEX_MALE;
+		 Sex++)
+	      {
+	       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
+	       if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
+		  fprintf (Gbl.F.Out," checked=\"checked\"");
+	       fprintf (Gbl.F.Out," />"
+				  "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+				  " class=\"ICON16x16\""
+				  " style=\"vertical-align:bottom;\" />%s",
+			Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
+			Txt_SEX_SINGULAR_Abc[Sex],
+			Txt_SEX_SINGULAR_Abc[Sex]);
+	      }
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+	   }
+	 else	// RoleForm == false, SexForm == false
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:right;\">"
+			       "%s:"
+			       "</td>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:left;\">"
+			       "%s"
+			       "</td>"
+			       "</tr>",
+		     ClassForm,Rec_C1_BOTTOM_WIDE,
+		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
+								Txt_Role,
+		     ClassData,Rec_C2_BOTTOM_WIDE,
+		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
+								Txt_ROLES_SINGUL_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
+
+	 /***** Name *****/
+	 /* Surname 1 */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:right;\">"
-			    "%s*:</td>"
-			    "<td colspan=\"2\" class=\"%s\""
+			    "%s",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Surname_1);
+	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	    fprintf (Gbl.F.Out,"*");
+	 fprintf (Gbl.F.Out,":</td>"
+			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:left;\">",
-		  ClassForm,C2Width,
-		  Txt_Sex,
-		  ClassData,C3Width + C4Width);
-	 for (Sex = Usr_SEX_FEMALE;
-	      Sex <= Usr_SEX_MALE;
-	      Sex++)
-	   {
-	    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
-	    if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
-	       fprintf (Gbl.F.Out," checked=\"checked\"");
-	    fprintf (Gbl.F.Out," />"
-			       "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
-			       " class=\"ICON16x16\""
-			       " style=\"vertical-align:bottom;\" />%s",
-		     Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
-		     Txt_SEX_SINGULAR_Abc[Sex],
-		     Txt_SEX_SINGULAR_Abc[Sex]);
-	   }
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (DataForm)
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
+			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+		     Rec_C2_BOTTOM_WIDE - 60,
+		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+		     UsrDat->Surname1);
+	 else if (UsrDat->Surname1[0])
+	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
-	}
-      else	// RoleForm == false, SexForm == false
+
+	 /* Surname 2 */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s\""
 			    " style=\"width:%upx; text-align:right;\">"
 			    "%s:"
 			    "</td>"
-			    "<td colspan=\"2\" class=\"%s\""
-			    " style=\"width:%upx; text-align:left;\">"
-			    "%s"
-			    "</td>"
-			    "</tr>",
-		  ClassForm,C2Width,
-		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
-							     Txt_Role,
-		  ClassData,C3Width + C4Width,
-		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
-							     Txt_ROLES_SINGUL_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,
+		  Txt_Surname_2,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (DataForm)
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
+			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+		     Rec_C2_BOTTOM_WIDE - 60,
+		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+		     UsrDat->Surname2);
+	 else if (UsrDat->Surname2[0])
+	    fprintf (Gbl.F.Out,"<strong>%s</strong>",
+		     UsrDat->Surname2);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
-      /***** Name *****/
-      /* Surname 1 */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s",
-	       ClassForm,C2Width,Txt_Surname_1);
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	 fprintf (Gbl.F.Out,"*");
-      fprintf (Gbl.F.Out,":</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassData,C3Width + C4Width);
-      if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
-			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3Width + C4Width - 60,
-		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		  UsrDat->Surname1);
-      else if (UsrDat->Surname1[0])
-	 fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+	 /* First name */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_First_name);
+	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	    fprintf (Gbl.F.Out,"*");
+	 fprintf (Gbl.F.Out,":</td>"
+			    "<td class=\"%s\" colspan=\"2\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (DataForm)
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
+			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+		     Rec_C2_BOTTOM_WIDE - 60,
+		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+		     UsrDat->FirstName);
+	 else if (UsrDat->FirstName[0])
+	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
-      /* Surname 2 */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s:"
-			 "</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2Width,
-	       Txt_Surname_2,
-	       ClassData,C3Width + C4Width);
-      if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
-			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3Width + C4Width - 60,
-		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		  UsrDat->Surname2);
-      else if (UsrDat->Surname2[0])
-	 fprintf (Gbl.F.Out,"<strong>%s</strong>",
-		  UsrDat->Surname2);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /* First name */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s",
-	       ClassForm,C2Width,Txt_First_name);
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	 fprintf (Gbl.F.Out,"*");
-      fprintf (Gbl.F.Out,":</td>"
-			 "<td class=\"%s\" colspan=\"2\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassData,C3Width + C4Width);
-      if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
-			    " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		  C3Width + C4Width - 60,
-		  Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		  UsrDat->FirstName);
-      else if (UsrDat->FirstName[0])
-	 fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
-
-   if (ShowAddressRows)
-     {
-      /* Origin place */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Place_of_origin,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
-        	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3Width + C4Width - 60,
-                     Cns_MAX_LENGTH_STRING,
-                     UsrDat->OriginPlace);
-         else if (UsrDat->OriginPlace[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Date of birth */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Date_of_birth,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            Dat_WriteFormDate (Gbl.Now.Date.Year - 99,
-        	               Gbl.Now.Date.Year - 16,
-        	               "DiaNac","MesNac","AnoNac",
-                               &(UsrDat->Birthday),
-                               false,false);
-         else if (UsrDat->StrBirthday[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Local address */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Local_address,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
-        	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3Width + C4Width - 60,
-                     Cns_MAX_LENGTH_STRING,
-                     UsrDat->LocalAddress);
-         else if (UsrDat->LocalAddress[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Local phone */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Phone,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
-        	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3Width + C4Width - 60,
-                     Usr_MAX_LENGTH_PHONE,
-                     UsrDat->LocalPhone);
-         else if (UsrDat->LocalPhone[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Family address */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Family_address,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
-        	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3Width + C4Width - 60,
-                     Cns_MAX_LENGTH_STRING,
-                     UsrDat->FamilyAddress);
-         else if (UsrDat->FamilyAddress[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Family phone */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Phone,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
-        	               " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-                     C3Width + C4Width - 60,
-                     Usr_MAX_LENGTH_PHONE,
-                     UsrDat->FamilyPhone);
-         else if (UsrDat->FamilyPhone[0])
-            fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Common comments for all the courses */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"width:%upx;"
-	                 " text-align:right; vertical-align:top;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\" style=\"width:%upx;"
-                         " text-align:left; vertical-align:top;\">",
-               ClassForm,C2Width,Txt_USER_comments,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (DataForm)
-            fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
-        	               " style=\"width:%upx;\">%s</textarea>",
-                     C3Width + C4Width - 60,
-                     UsrDat->Comments);
-         else if (UsrDat->Comments[0])
-           {
-            Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                              UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);     // Convert from HTML to rigorous HTML
-            fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
-           }
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-
-   /***** Institution, centre, department, office, etc. *****/
-   if (ShowTeacherRows)
-     {
-      /* Institution */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:right;\">"
-			 "%s:"
-			 "</td>"
-			 "<td colspan=\"2\" class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">",
-	       ClassForm,C2Width,Txt_Institution,
-	       ClassData,C3Width + C4Width);
-      if (ShowData)
-	{
-	 if (UsrDat->InsCod > 0)
+	 /* Country */
+	 if (CountryForm)
 	   {
-	    if (Ins.WWW[0])
-	       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-			Ins.WWW,ClassData);
-	    fprintf (Gbl.F.Out,"%s",Ins.FullName);
-	    if (Ins.WWW[0])
-	       fprintf (Gbl.F.Out,"</a>");
+	    /* If list of countries is empty, try to get it */
+	    if (!Gbl.Ctys.Num)
+	      {
+	       Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+	       Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+	      }
+
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"%s\""
+			       " style=\"width:%upx; text-align:right;\">"
+			       "%s",
+		     ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Country);
+	    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+	       fprintf (Gbl.F.Out,"*");
+	    fprintf (Gbl.F.Out,":</td>"
+			       "<td class=\"%s\" colspan=\"2\""
+			       " style=\"width:%upx; text-align:left;\">",
+		     ClassData,Rec_C2_BOTTOM_WIDE);
+
+	    /* Selector of country */
+	    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
+			       "<option value=\"-1\">%s</option>"
+			       "<option value=\"0\"",
+		     Rec_C2_BOTTOM_WIDE - 60,
+		     Txt_Country);
+	    if (UsrDat->CtyCod == 0)
+	       fprintf (Gbl.F.Out," selected=\"selected\"");
+	    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
+	    for (NumCty = 0;
+		 NumCty < Gbl.Ctys.Num;
+		 NumCty++)
+	      {
+	       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+			Gbl.Ctys.Lst[NumCty].CtyCod);
+	       if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
+		  fprintf (Gbl.F.Out," selected=\"selected\"");
+	       fprintf (Gbl.F.Out,">%s</option>",
+			Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	      }
+	    fprintf (Gbl.F.Out,"</select>");
+
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
 	   }
 	}
-      fprintf (Gbl.F.Out,"</td>"
+
+      if (ShowAddressRows)
+	{
+	 /* Origin place */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Place_of_origin,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
+				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+			Rec_C2_BOTTOM_WIDE - 60,
+			Cns_MAX_LENGTH_STRING,
+			UsrDat->OriginPlace);
+	    else if (UsrDat->OriginPlace[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Date of birth */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Date_of_birth,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       Dat_WriteFormDate (Gbl.Now.Date.Year - 99,
+				  Gbl.Now.Date.Year - 16,
+				  "DiaNac","MesNac","AnoNac",
+				  &(UsrDat->Birthday),
+				  false,false);
+	    else if (UsrDat->StrBirthday[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Local address */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Local_address,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
+				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+			Rec_C2_BOTTOM_WIDE - 60,
+			Cns_MAX_LENGTH_STRING,
+			UsrDat->LocalAddress);
+	    else if (UsrDat->LocalAddress[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Local phone */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
+				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+			Rec_C2_BOTTOM_WIDE - 60,
+			Usr_MAX_LENGTH_PHONE,
+			UsrDat->LocalPhone);
+	    else if (UsrDat->LocalPhone[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Family address */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Family_address,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
+				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+			Rec_C2_BOTTOM_WIDE - 60,
+			Cns_MAX_LENGTH_STRING,
+			UsrDat->FamilyAddress);
+	    else if (UsrDat->FamilyAddress[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Family phone */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
+				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
+			Rec_C2_BOTTOM_WIDE - 60,
+			Usr_MAX_LENGTH_PHONE,
+			UsrDat->FamilyPhone);
+	    else if (UsrDat->FamilyPhone[0])
+	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Common comments for all the courses */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\" style=\"width:%upx;"
+			    " text-align:right; vertical-align:top;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\" style=\"width:%upx;"
+			    " text-align:left; vertical-align:top;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_USER_comments,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (DataForm)
+	       fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
+				  " style=\"width:%upx;\">%s</textarea>",
+			Rec_C2_BOTTOM_WIDE - 60,
+			UsrDat->Comments);
+	    else if (UsrDat->Comments[0])
+	      {
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);     // Convert from HTML to rigorous HTML
+	       fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	      }
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	}
+
+      /***** Institution, centre, department, office, etc. *****/
+      if (ShowTeacherRows)
+	{
+	 /* Institution */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Institution,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (UsrDat->InsCod > 0)
+	      {
+	       if (Ins.WWW[0])
+		  fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
+			   Ins.WWW,ClassData);
+	       fprintf (Gbl.F.Out,"%s",Ins.FullName);
+	       if (Ins.WWW[0])
+		  fprintf (Gbl.F.Out,"</a>");
+	      }
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Centre */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Centre,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (UsrDat->Tch.CtrCod > 0)
+	      {
+	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
+	       Ctr_GetDataOfCentreByCod (&Ctr);
+	       if (Ctr.WWW[0])
+		  fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
+			   Ctr.WWW,ClassData);
+	       fprintf (Gbl.F.Out,"%s",Ctr.FullName);
+	       if (Ctr.WWW[0])
+		  fprintf (Gbl.F.Out,"</a>");
+	      }
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Department */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Department,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	   {
+	    if (UsrDat->Tch.DptCod > 0)
+	      {
+	       Dpt.DptCod = UsrDat->Tch.DptCod;
+	       Dpt_GetDataOfDepartmentByCod (&Dpt);
+	       if (Dpt.WWW[0])
+		  fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
+			   Dpt.WWW,ClassData);
+	       fprintf (Gbl.F.Out,"%s",Dpt.FullName);
+	       if (Dpt.WWW[0])
+		  fprintf (Gbl.F.Out,"</a>");
+	      }
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Office */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Office,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	    fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+
+	 /* Phone */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:right;\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s\""
+			    " style=\"width:%upx; text-align:left;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
+	 if (ShowData)
+	    fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	}
+
+      fprintf (Gbl.F.Out,"</table>"
+	                 "</td>"
 			 "</tr>");
-
-      /* Centre */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Centre,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (UsrDat->Tch.CtrCod > 0)
-           {
-            Ctr.CtrCod = UsrDat->Tch.CtrCod;
-            Ctr_GetDataOfCentreByCod (&Ctr);
-            if (Ctr.WWW[0])
-               fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-                        Ctr.WWW,ClassData);
-            fprintf (Gbl.F.Out,"%s",Ctr.FullName);
-            if (Ctr.WWW[0])
-               fprintf (Gbl.F.Out,"</a>");
-           }
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Department */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Department,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-        {
-         if (UsrDat->Tch.DptCod > 0)
-           {
-            Dpt.DptCod = UsrDat->Tch.DptCod;
-            Dpt_GetDataOfDepartmentByCod (&Dpt);
-            if (Dpt.WWW[0])
-               fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-                        Dpt.WWW,ClassData);
-            fprintf (Gbl.F.Out,"%s",Dpt.FullName);
-            if (Dpt.WWW[0])
-               fprintf (Gbl.F.Out,"</a>");
-           }
-        }
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Office */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"%s\""
-                         " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Office,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-         fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /* Phone */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:right;\">"
-	                 "%s:"
-	                 "</td>"
-	                 "<td colspan=\"2\" class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">",
-               ClassForm,C2Width,Txt_Phone,
-               ClassData,C3Width + C4Width);
-      if (ShowData)
-         fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
      }
 
    /***** End frame *****/

@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.103 (2015/03/28)"
+#define Log_PLATFORM_VERSION	"SWAD 14.104 (2015/03/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.104:   Mar 29, 2015	Changes in layout of record cards. (184021 lines)
         Version 14.103:   Mar 29, 2015	New table to ban users out of ranking. (184014 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS usr_banned (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod));

@@ -36,16 +36,16 @@
 /*****************************************************************************/
 
 #define Rec_RECORD_WIDTH_WIDE	560
-#define Rec_C1_WIDTH_WIDE	 52
-#define Rec_C2_WIDTH_WIDE	144
-#define Rec_C3_WIDTH_WIDE	210
-#define Rec_C4_WIDTH_WIDE	154
+#define Rec_C1_TOP_WIDE		 52
+#define Rec_C2_TOP_WIDE		354
+#define Rec_C3_TOP_WIDE		154
+#define Rec_C1_BOTTOM_WIDE	(160-2)
+#define Rec_C2_BOTTOM_WIDE	(400-2)
 
 #define Rec_RECORD_WIDTH_NARROW	460
-#define Rec_C1_WIDTH_NARROW	 52
-#define Rec_C2_WIDTH_NARROW	 94
-#define Rec_C3_WIDTH_NARROW	160
-#define Rec_C4_WIDTH_NARROW	154
+#define Rec_C1_TOP_NARROW	 52
+#define Rec_C2_TOP_NARROW	254
+#define Rec_C3_TOP_NARROW	154
 
 #define Rec_MAX_LENGTH_NAME_FIELD	255
 #define Rec_MIN_LINES_IN_EDITION_FIELD	  1
