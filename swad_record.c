@@ -1879,7 +1879,6 @@ void Rec_ShowFormMyCommRecord (void)
    extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_name;
-   extern const char *Txt_Save_changes;
 
    /***** If user has no sex, name and surname... *****/
    if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
@@ -1899,9 +1898,7 @@ void Rec_ShowFormMyCommRecord (void)
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
 
    /***** My record *****/
-   Act_FormStart (ActChgMyData);
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
-   Lay_PutConfirmButton (Txt_Save_changes);
    Rec_WriteLinkToDataProtectionClause ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -2037,6 +2034,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Local_address;
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
+   extern const char *Txt_Save_changes;
    unsigned RecordWidth;
    unsigned TopC1Width;
    unsigned TopC2Width;
@@ -2121,26 +2119,29 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    switch (TypeOfView)
      {
       case Rec_FORM_SIGN_UP:
-      case Rec_FORM_MY_COMMON_RECORD:
 	 ClassHead = "HEAD_REC";
 	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
 	 break;
+      case Rec_FORM_MY_COMMON_RECORD:
+	 ClassHead = "HEAD_REC";
+	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+	 ClassData = "DAT_REC";
+	 Act_FormStart (ActChgMyData);
+	 break;
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
-      case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
-	 if (TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR)
-	   {
-	    Act_FormStart (ActCreOthUsrDat);
-            ID_PutParamOtherUsrIDPlain ();	// New user
-	   }
-	 else
-	   {
-	    Act_FormStart (ActUpdOthUsrDat);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);	// Existing user
-	   }
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
+	 Act_FormStart (ActCreOthUsrDat);
+	 ID_PutParamOtherUsrIDPlain ();							// New user
+	 break;
+      case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
+	 ClassHead = "HEAD_REC";
+         ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+	 ClassData = "DAT_REC";
+	 Act_FormStart (ActUpdOthUsrDat);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);	// Existing user
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
       case Rec_OTHER_USR_COMMON_RECORD_CHECK:
@@ -3089,6 +3090,15 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       fprintf (Gbl.F.Out,"</table>"
 	                 "</td>"
+			 "</tr>");
+     }
+
+   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td colspan=\"3\" style=\"text-align:center;\">");
+      Lay_PutConfirmButton (Txt_Save_changes);
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
