@@ -1945,18 +1945,8 @@ static void Rec_PutLinkToMyCrsRecord (void)
 
 void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
   {
-   extern const char *Txt_Register;
-
    /***** Show the form *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowSharedUsrRecord (Rec_FORM_NEW_RECORD_OTHER_NEW_USR,UsrDat);
-
-   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
-      Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-
-   Lay_PutConfirmButton (Txt_Register);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1971,9 +1961,7 @@ void Rec_ShowMyCommonRecordUpd (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record for checking *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Rec_ShowSharedUsrRecord (Rec_MY_COMMON_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2035,6 +2023,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
    extern const char *Txt_Save_changes;
+   extern const char *Txt_Register;
+   extern const char *Txt_Confirm;
    unsigned RecordWidth;
    unsigned TopC1Width;
    unsigned TopC2Width;
@@ -2120,40 +2110,25 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       case Rec_FORM_SIGN_UP:
       case Rec_FORM_MY_COMMON_RECORD:
-	 ClassHead = "HEAD_REC";
-	 ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
-	 ClassData = "DAT_REC";
-	 break;
+      case Rec_FORM_MY_COURSE_RECORD:
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
-	 ClassHead = "HEAD_REC";
-         ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
-	 ClassData = "DAT_REC";
-	 Act_FormStart (ActCreOthUsrDat);
-	 ID_PutParamOtherUsrIDPlain ();							// New user
-	 break;
       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
 	 ClassHead = "HEAD_REC";
          ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
-	 Act_FormStart (ActUpdOthUsrDat);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);	// Existing user
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
+      case Rec_MY_COURSE_RECORD_CHECK:
       case Rec_OTHER_USR_COMMON_RECORD_CHECK:
+      case Rec_OTHER_USR_COURSE_RECORD_CHECK:
       case Rec_RECORD_LIST:
       case Rec_RECORD_PUBLIC:
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassForm = "DAT_REC_SMALL";
-	 ClassData = "DAT_REC_SMALL_BOLD";
-	 break;
       case Rec_RECORD_PRINT:
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassForm = "DAT_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
          break;
-      default:
-         break;
-    }
+     }
 
    switch (TypeOfView)
      {
@@ -2492,8 +2467,22 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\">");
 
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	 Act_FormStart (ActChgMyData);
+      switch (TypeOfView)
+        {
+	 case Rec_FORM_MY_COMMON_RECORD:
+	    Act_FormStart (ActChgMyData);
+            break;
+	 case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
+	    Act_FormStart (ActCreOthUsrDat);
+	    ID_PutParamOtherUsrIDPlain ();				// New user
+	    break;
+         case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
+	    Act_FormStart (ActUpdOthUsrDat);
+	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
+	    break;
+         default:
+            break;
+        }
 
       fprintf (Gbl.F.Out,"<table style=\"width:100%%\">");
 
@@ -3102,11 +3091,41 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	}
       fprintf (Gbl.F.Out,"</table>");
 
-      if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	{
-	 Lay_PutConfirmButton (Txt_Save_changes);
-	 Act_FormEnd ();
-	}
+      switch (TypeOfView)
+        {
+	 case Rec_FORM_MY_COMMON_RECORD:
+	    Lay_PutConfirmButton (Txt_Save_changes);
+	    Act_FormEnd ();
+	    break;
+	 case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
+	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
+	       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+	    Lay_PutConfirmButton (Txt_Register);
+	    Act_FormEnd ();
+	    break;
+	 case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
+	    /***** Show list of groups to register/remove me/user *****/
+	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
+	      {
+	       if (ItsMe)
+		 {
+		  // Don't show groups if I don't belong to course
+		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
+		 }
+	       else
+		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+	      }
+
+	    /***** Which action, register or removing? *****/
+	    if (Enr_PutActionsRegRemOneUsr (ItsMe))
+	       Lay_PutConfirmButton (Txt_Confirm);
+
+	    Act_FormEnd ();
+	    break;
+	 default:
+	    break;
+        }
 
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

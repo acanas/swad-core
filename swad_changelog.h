@@ -109,6 +109,7 @@
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
 TODO: Show my course record card when I am a student and I click on record icon on the left of my record card?
+        Version 14.104.2: Mar 29, 2015	Changes in layout of record cards. (184042 lines)
         Version 14.104.1: Mar 29, 2015	Changes in layout of record cards. (184039 lines)
         Version 14.104:   Mar 29, 2015	Changes in layout of record cards. (184021 lines)
         Version 14.103:   Mar 29, 2015	New table to ban users out of ranking. (184014 lines)

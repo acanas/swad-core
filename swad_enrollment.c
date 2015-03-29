@@ -90,7 +90,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (void);
 
 static void Enr_PutLinkToRemOldUsrs (void);
 static void Enr_PutAreaToEnterUsrsIDs (void);
-static bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
@@ -798,7 +797,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-static bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
+bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Modify_me_in_the_course_X;
@@ -2851,12 +2850,8 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
 
 static void Enr_ShowFormToEditOtherUsr (void)
   {
-   extern const char *Txt_Confirm;
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
-
    /***** Buttons for edition *****/
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       ID_PutLinkToChangeUsrIDs (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's IDs
@@ -2864,29 +2859,10 @@ static void Enr_ShowFormToEditOtherUsr (void)
      }
    if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
       Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's photo
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
    Rec_ShowSharedUsrRecord (Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,&Gbl.Usrs.Other.UsrDat);
-
-   /***** Show list of groups to register/remove me/user *****/
-   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
-     {
-      if (ItsMe)
-	{
-	 // Don't show groups if I don't belong to course
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-            Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
-	}
-      else
-         Grp_ShowLstGrpsToChgOtherUsrsGrps (Gbl.Usrs.Other.UsrDat.UsrCod);
-     }
-
-   /***** Which action, register or removing? *****/
-   if (Enr_PutActionsRegRemOneUsr (ItsMe))
-      Lay_PutConfirmButton (Txt_Confirm);
-
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

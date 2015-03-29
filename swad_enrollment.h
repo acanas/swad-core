@@ -91,6 +91,8 @@ void Enr_ReqAdminUsrs (void);
 void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
+bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
+
 void Enr_ReceiveFormUsrsCrs (void);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);
