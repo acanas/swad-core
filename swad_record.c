@@ -74,8 +74,6 @@ static void Rec_ShowRecordOneTchCrs (void);
 static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
-static void Rec_ShowCrsRecordAfterUpdate (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat);
-static void Rec_PutFormToMyCommonRecord (void);
 static void Rec_PutLinkToMyCrsRecord (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -92,7 +90,6 @@ void Rec_ReqEditRecordFields (void)
    extern const char *Txt_There_are_no_record_fields_in_the_course_X;
    extern const char *Txt_Record_fields;
 
-   /***** Form to edit the fields of the records *****/
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
@@ -992,9 +989,6 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
-   /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
-
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
    /***** Link to edit record fields *****/
@@ -1006,21 +1000,28 @@ static void Rec_ShowRecordOneStdCrs (void)
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Show the record *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
-		      " margin-bottom:10px;\">");
-
-   /* Common record */
+   /***** Common record *****/
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-   /* Record of the student in the course */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
-       Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
-      Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+   /***** Record of the student in the course *****/
+   /* Get list of fields of records in current course */
+   Rec_GetListRecordFieldsInCurrentCrs ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+     {
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT &&
+	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
+	 Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD,&Gbl.Usrs.Other.UsrDat);
+     }
+
+   /* Free list of fields of records */
+   Rec_FreeListFields ();
   }
 
 /*****************************************************************************/
@@ -1385,13 +1386,7 @@ static bool Rec_GetParamShowOfficeHours (void)
 
 void Rec_ShowFormMyCrsRecord (void)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
    /***** Show record common to all courses *****/
-   /* Button for edition */
-   Rec_PutFormToMyCommonRecord ();	// Put link (form) to my common record
-
-   /* Common record */
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
 
    /***** Get list of fields of records in current course *****/
@@ -1403,8 +1398,6 @@ void Rec_ShowFormMyCrsRecord (void)
 
    /***** Free list of fields of records *****/
    Rec_FreeListFields ();
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1789,7 +1782,7 @@ void Rec_ShowMyCrsRecordUpdated (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
    /***** Show user's record ya actualizada *****/
-   Rec_ShowCrsRecordAfterUpdate (Rec_MY_COURSE_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowCrsRecord (Rec_MY_COURSE_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
   }
 
 /*****************************************************************************/
@@ -1804,19 +1797,7 @@ void Rec_ShowOtherCrsRecordUpdated (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Student_record_card_in_this_course_has_been_updated);
 
    /***** Show user's record ya actualizada *****/
-   Rec_ShowCrsRecordAfterUpdate (Rec_OTHER_USR_COURSE_RECORD_CHECK,&Gbl.Usrs.Other.UsrDat);
-  }
-
-/*****************************************************************************/
-/************ Show user's record in the course already updated ***************/
-/*****************************************************************************/
-
-static void Rec_ShowCrsRecordAfterUpdate (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
-  {
-   /***** Show user's record *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Rec_ShowCrsRecord (TypeOfView,UsrDat);
-   fprintf (Gbl.F.Out,"</div>");
+   Rec_ShowCrsRecord (Rec_OTHER_USR_COURSE_RECORD_CHECK,&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/
@@ -1909,22 +1890,6 @@ void Rec_ShowFormMyCommRecord (void)
   }
 
 /*****************************************************************************/
-/********** Put a link to the action used to change my common record *********/
-/*****************************************************************************/
-
-static void Rec_PutFormToMyCommonRecord (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Edit_my_personal_data;
-
-   /***** Link for editing my common record *****/
-   Act_FormStart (ActReqEdiRecCom);
-   Act_LinkFormSubmit (Txt_Edit_my_personal_data,The_ClassFormul[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("edit",Txt_Edit_my_personal_data,Txt_Edit_my_personal_data);
-   Act_FormEnd ();
-  }
-
-/*****************************************************************************/
 /** Put a link to the action used to change my record in the current course **/
 /*****************************************************************************/
 
@@ -1995,6 +1960,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_Edit;
    extern const char *Txt_View_record_card;
    extern const char *Txt_Admin_user;
@@ -2228,10 +2194,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"<div style=\"width:20px; margin:6px auto;\">");
 
       /***** Button to edit my record card *****/
-      if (ItsMe && TypeOfView != Rec_FORM_MY_COMMON_RECORD)
+      if (ItsMe)
         {
 	 Act_FormStart (ActReqEdiRecCom);
-	 Act_LinkFormSubmit (Txt_Edit,NULL);
+	 Act_LinkFormSubmit (Txt_Edit_my_personal_data,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/edit16x16.gif\""
 			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
@@ -2243,11 +2209,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
         }
 
       /***** Button to view user's record card in course when:
-             - not already viewing user's record card in course &&
              - a course is selected && the user belongs to it &&
              - I can view user's record card in course *****/
-      if (TypeOfView != Rec_RECORD_LIST &&
-	  HeBelongsToCurrentCrs &&
+      if (HeBelongsToCurrentCrs &&
 	  (IAmLoggedAsStudent ||
 	   IAmLoggedAsTeacher ||
 	   IAmLoggedAsSysAdm))

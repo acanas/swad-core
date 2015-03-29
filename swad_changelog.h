@@ -103,12 +103,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.104.3 (2015/03/29)"
+#define Log_PLATFORM_VERSION	"SWAD 14.104.5 (2015/03/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-TODO: Show my course record card when I am a student and I click on record icon on the left of my record card?
+TODO: Listar ficha de asignatura bajo mi ficha si soy estudiante al ver varios estudiantes
+TODO: ¿Eliminar mi ficha en la asignatura de la pestaña Evaluación?
+        Version 14.104.5: Mar 29, 2015	Changes in course cards. (184023 lines)
+        Version 14.104.4: Mar 29, 2015	Changes in layout of record cards. (184047 lines)
         Version 14.104.3: Mar 29, 2015	Changes in layout of course record cards. (184048 lines)
         Version 14.104.2: Mar 29, 2015	Changes in layout of record cards. (184042 lines)
         Version 14.104.1: Mar 29, 2015	Changes in layout of record cards. (184039 lines)
