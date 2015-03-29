@@ -1632,14 +1632,19 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          DB_FreeMySQLResult (&mysql_res);
         }
 
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
-
+   /***** Button to save changes *****/
    if (DataForm)
      {
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"2\" style=\"text-align:center;\">");
       Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
