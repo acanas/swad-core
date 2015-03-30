@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.105.1 (2015/03/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.105.2 (2015/03/30)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.105.2: Mar 30, 2015	Some messages translated. (183941 lines)
         Version 14.105.1: Mar 30, 2015	Shared record card is shown after updating course record card. (183937 lines)
         Version 14.105:   Mar 30, 2015	Removed option in the assessment tab to view course card. (183932 lines)
 					1 change necessary in database:

@@ -19119,28 +19119,31 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// ActSeeMrk
 #if   L==0
 	"Consulta individualitzada de qualificacions"
-	" (cada estudiant nom&eacute;s veu les seves qualificacions,"
-	" el professor veu la qualificaci&oacute; d'un estudiant seleccionat a l'atzar)"
+	" (cada estudiant nom&eacute;s veu les seves qualificacions)"
 #elif L==1
-	"Bewertungen"
+	"Individuelle Beratung von Bewertungen"
+	" (jeder Student sieht nur seine Bewertungen)"
 #elif L==2
-	"Marks"
+	"Individualized consultation of marks"
+	"(each student only sees her/his marks)"
 #elif L==3
 	"Consulta individualizada de calificaciones"
-	" (cada estudiante solo ve sus calificaciones,"
-	" el profesor ve la calificaci&oacute;n de un estudiante seleccionado al azar)"
+	" (cada estudiante solo ve sus calificaciones)"
 #elif L==4
-	"Notes"
+	"Consultation individualis&eacute; des notes"
+	" (chaque &eacute;tudiant ne voit que ses notes)"
 #elif L==5
 	"Consulta individualizada de calificaciones"
-	" (cada estudiante solo ve sus calificaciones,"
-	" el profesor ve la calificaci&oacute;n de un estudiante seleccionado al azar)"	// Okoteve traducción
+	" (cada estudiante solo ve sus calificaciones)"	// Okoteve traducción
 #elif L==6
-	"Risultati"
+	"Consultazione individualizzata dei risultati"
+	" (ogni studente vede solo i suoi risultati)"
 #elif L==7
-	"Marks"
+	"Zindywidualizowane konsultacje znak&oacute;w"
+	" (ka&zdot;dy student widzi tylko jego &sacute;lady)"
 #elif L==8
-	"Notas"
+	"Consulta individualizada de notas"
+	" (somente cada aluno v&ecirc; suas notas)"
 #endif
 	,
 	NULL,
@@ -24947,13 +24950,13 @@ const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Wa
 #if   L==0
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";	// Necessita traduccio
 #elif L==1
-	"Now each student can belong to multiple groups of type <strong>%s</strong>.";
+	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		//
 #elif L==2
 	"Now each student can belong to multiple groups of type <strong>%s</strong>.";
 #elif L==3
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";
 #elif L==4
-	"Now each student can belong to multiple groups of type <strong>%s</strong>.";
+	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		//
 #elif L==5
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==6
@@ -24961,7 +24964,7 @@ const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Wa
 #elif L==7
 	"Teraz kazdy student moze nalezec do wielu grup typu <strong>%s</strong>.";
 #elif L==8
-	"Now each student can belong to multiple groups of type <strong>%s</strong>.";
+	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		//
 #endif
 
 const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -24974,7 +24977,7 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 #elif L==3
 	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";
 #elif L==4
-	"Now each student can only belong to a group of type <strong>%s</strong>.";
+	"Now each student can only belong to a group of type <strong>%s</strong>.";		//
 #elif L==5
 	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==6
@@ -24982,7 +24985,7 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 #elif L==7
 	"Teraz kazdy student moze nalezec tylko do grupy typu <strong>%s</strong>.";
 #elif L==8
-	"Now each student can only belong to a group of type <strong>%s</strong>.";
+	"Now each student can only belong to a group of type <strong>%s</strong>.";		//
 #endif
 
 const char *Txt_Number_of_BR_assignments =
