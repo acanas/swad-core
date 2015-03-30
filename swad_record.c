@@ -74,6 +74,7 @@ static void Rec_ShowRecordOneTchCrs (void);
 static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
+static void Rec_ShowMyCrsRecordUpdated (void);
 static void Rec_PutLinkToMyCrsRecord (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1100,8 +1101,9 @@ void Rec_ListRecordsStdsCrs (void)
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
 
             /* Record of the student in the course */
-            if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
-        	Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+            if (Gbl.CurrentCrs.Records.LstFields.Num &&		// There are fields in the record
+        	(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||	// I am teacher in this course
+        	 UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// I am student in this course and it's me
                Rec_ShowCrsRecord (TypeOfView,&UsrDat);
 
             fprintf (Gbl.F.Out,"</div>");
@@ -1774,7 +1776,7 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbo
 /*************** Show my record in the course already updated ****************/
 /*****************************************************************************/
 
-void Rec_ShowMyCrsRecordUpdated (void)
+static void Rec_ShowMyCrsRecordUpdated (void)
   {
    extern const char *Txt_Your_record_card_in_this_course_has_been_updated;
 
@@ -1902,7 +1904,8 @@ static void Rec_PutLinkToMyCrsRecord (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)	// I am logged as student in current course
      {
-      Act_FormStart (ActSeeRecCrs);
+      Act_FormStart (ActSeeRecOneStd);
+      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_my_record_for_this_course,The_ClassFormul[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("card",Txt_View_my_record_for_this_course,Txt_View_my_record_for_this_course);
       Act_FormEnd ();
@@ -2008,7 +2011,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);	// My current role is teacher
-   bool IAmLoggedAsDegAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM);	// My current role is degree administrator
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
    bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
    bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ||
@@ -2025,7 +2027,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                      Gbl.Usrs.Me.LoggedRole > Rol_ROLE_TEACHER));
    bool PutFormLinks;	// Put links (forms) inside record card
-   bool ShowEmail = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
+   bool ShowEmail = (ItsMe ||
+	             Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	             DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 		     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
@@ -2035,7 +2039,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		       ((TypeOfView == Rec_RECORD_LIST ||
 			 TypeOfView == Rec_RECORD_PRINT) &&
 		        (IAmLoggedAsTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
-   bool ShowID = (IAmLoggedAsDegAdm || IAmLoggedAsSysAdm || DataForm ||
+   bool ShowID = (ItsMe ||
+	          Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	          DataForm ||
 	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 		  TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
@@ -2046,7 +2052,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		    ((TypeOfView == Rec_RECORD_LIST ||
 	              TypeOfView == Rec_RECORD_PRINT) &&
 		     IAmLoggedAsTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
-   bool ShowData = ItsMe || UsrDat->Accepted || IAmLoggedAsDegAdm || IAmLoggedAsSysAdm;
+   bool ShowData = ItsMe ||
+	           Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	           UsrDat->Accepted;
    bool ShowIDRows = (TypeOfView != Rec_RECORD_PUBLIC);
    bool ShowAddressRows = (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
                            TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||

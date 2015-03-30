@@ -145,7 +145,6 @@ void Rec_GetFieldsCrsRecordFromForm (void);
 void Rec_UpdateCrsRecord (long UsrCod);
 void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
 void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbose);
-void Rec_ShowMyCrsRecordUpdated (void);
 void Rec_ShowOtherCrsRecordUpdated (void);
 void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);

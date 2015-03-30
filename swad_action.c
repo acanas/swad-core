@@ -676,7 +676,6 @@ Assessment:
 	534. ActRemAsg			Remove assignment
 	535. ActHidAsg			Hide assignment
 	536. ActShoAsg			Show assignment
-        537. ActRcvRecCrs		Receive and update fields of my record in this course
         538. ActAdmAsgWrkCrs		Edit all the works sent to the course
 	539. ActReqRemFilAsgUsr		Request removal of a file of assignments from a user
 	540. ActRemFilAsgUsr		Remove a file of assignments from a user
@@ -896,6 +895,7 @@ Users:
 	744. ActRenFie			Request renaming of record field
 	745. ActChgRowFie		Request change in number of lines of form of a record field
 	746. ActChgVisFie		Request change in visibility of a record field
+        537. ActRcvRecCrs		Receive and update fields of my record in this course
 
 	747. ActReqLstAttStd		Request listing of attendance of several students to several events
 	748. ActSeeLstAttStd		List attendance of several students to several events
@@ -2040,7 +2040,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActHidAsg		*/{ 964,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_HideAssignment		,NULL},
    /* ActShoAsg		*/{ 965,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_ShowAssignment		,NULL},
 
-   /* ActRcvRecCrs	*/{ 301,-1,TabAss,ActSeeRecCrs		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowMyCrsRecord	,NULL},
    /* ActAdmAsgWrkCrs	*/{ 139,-1,TabAss,ActReqAsgWrkCrs	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
    /* ActReqRemFilAsgUsr*/{ 834,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
@@ -2276,6 +2275,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenFie		*/{ 296,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_RenameField		,NULL},
    /* ActChgRowFie	*/{ 305,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeLinesField		,NULL},
    /* ActChgVisFie	*/{ 297,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeVisibilityField	,NULL},
+   /* ActRcvRecCrs	*/{ 301,-1,TabUsr,ActLstStd		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
    /* ActReqLstAttStd	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListAttendanceStdsCrs	,NULL},
    /* ActSeeLstAttStd	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListAttendanceStdsCrs	,NULL},
