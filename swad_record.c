@@ -75,6 +75,7 @@ static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
 static void Rec_ShowMyCrsRecordUpdated (void);
+static void Rec_ShowOtherCrsRecordUpdated (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
@@ -1759,10 +1760,13 @@ static void Rec_ShowMyCrsRecordUpdated (void)
   {
    extern const char *Txt_Your_record_card_in_this_course_has_been_updated;
 
-   /***** Write mensaje of confirmación *****/
+   /***** Write mensaje of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
-   /***** Show user's record ya actualizada *****/
+   /***** Common record *****/
+   Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show updated user's record *****/
    Rec_ShowCrsRecord (Rec_MY_COURSE_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
   }
 
@@ -1770,14 +1774,17 @@ static void Rec_ShowMyCrsRecordUpdated (void)
 /**************** Show updated user's record in the course *******************/
 /*****************************************************************************/
 
-void Rec_ShowOtherCrsRecordUpdated (void)
+static void Rec_ShowOtherCrsRecordUpdated (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
 
-   /***** Write mensaje of confirmación *****/
+   /***** Write mensaje of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Student_record_card_in_this_course_has_been_updated);
 
-   /***** Show user's record ya actualizada *****/
+   /***** Common record *****/
+   Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+
+   /***** Show updated user's record *****/
    Rec_ShowCrsRecord (Rec_OTHER_USR_COURSE_RECORD_CHECK,&Gbl.Usrs.Other.UsrDat);
   }
 
