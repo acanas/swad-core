@@ -103,12 +103,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.104.6 (2015/03/30)"
+#define Log_PLATFORM_VERSION	"SWAD 14.105 (2015/03/30)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-TODO: ¿Eliminar mi ficha en la asignatura de la pestaña Evaluación?
+        Version 14.105:   Mar 30, 2015	Removed option in the assessment tab to view course card. (183932 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='299';
+
         Version 14.104.6: Mar 30, 2015	Changes in course cards. (184030 lines)
         Version 14.104.5: Mar 29, 2015	Changes in course cards. (184023 lines)
         Version 14.104.4: Mar 29, 2015	Changes in layout of record cards. (184047 lines)

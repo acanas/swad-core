@@ -17177,27 +17177,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Notas"
 #endif
 	,
-	// ActSeeRecCrs
-#if   L==0
-	"Fitxa"
-#elif L==1
-	"Profil"
-#elif L==2
-	"Record"
-#elif L==3
-	"Ficha"
-#elif L==4
-	"Carte"
-#elif L==5
-	"Ficha"	// Okoteve traducción
-#elif L==6
-	"Scheda"
-#elif L==7
-	"Rekord"
-#elif L==8
-	"Cart&atilde;o"
-#endif
-	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19163,27 +19143,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Notas"
 #endif
 	,
-	// ActSeeRecCrs
-#if   L==0
-	"La meva fitxa personalitzada per a aquesta assignatura"
-#elif L==1
-	"Profil bei Kurs"
-#elif L==2
-	"My record for this course"
-#elif L==3
-	"Mi ficha personalizada para esta asignatura"
-#elif L==4
-	"Ma carte dans mati&egrave;re"
-#elif L==5
-	"Mi ficha personalizada para esta asignatura"// Okoteve traducción
-#elif L==6
-	"La mia scheda per questo corso"
-#elif L==7
-	"M&oacute;j rekord na ten kurs"
-#elif L==8
-	"Meu cart&atilde;o em disciplina"
-#endif
-	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -47293,27 +47253,6 @@ const char *Txt_View_my_courses =
 	"Ver as minha disciplinas";
 #endif
 
-const char *Txt_View_my_record_for_this_course =
-#if   L==0
-	"Veure la meva fitxa en aquesta assignatura";
-#elif L==1
-	"Anzeigen profil bei Kurs";
-#elif L==2
-	"View my record for this course";
-#elif L==3
-	"Ver mi ficha en esta asignatura";
-#elif L==4
-	"Voir ma carte dans mati&egrave;re";
-#elif L==5
-	"Ver mi ficha en esta asignatura";	// Okoteve traducción
-#elif L==6
-	"Vedi la mia scheda per questo corso";
-#elif L==7
-	"Zobacz m&oacute;j rekord na ten kurs";
-#elif L==8
-	"Meu cart&atilde;o em disciplina";
-#endif
-
 const char *Txt_View_public_profile =
 #if   L==0
 	"Veure perfil p&uacute;blic";
@@ -47335,25 +47274,25 @@ const char *Txt_View_public_profile =
 	"Ver perfil p&uacute;blico";
 #endif
 
-const char *Txt_View_record_card =
+const char *Txt_View_record_for_this_course =
 #if   L==0
-	"Ver ficha";		// Necessita traduccio
+	"Veure fitxa en aquesta assignatura";
 #elif L==1
-	"View record card";	// Need Übersetzung
+	"Anzeigen profil bei Kurs";
 #elif L==2
-	"View record card";
+	"View record for this course";
 #elif L==3
-	"Ver ficha";
+	"Ver ficha en esta asignatura";
 #elif L==4
-	"View record card";	// Besoin de traduction
+	"Voir carte dans mati&egrave;re";
 #elif L==5
-	"Ver ficha";		// Okoteve traducción
+	"Ver ficha en esta asignatura";	// Okoteve traducción
 #elif L==6
-	"Vedi scheda";
+	"Vedi scheda per questo corso";
 #elif L==7
-	"Zobacz rekord";
+	"Zobacz rekord na ten kurs";
 #elif L==8
-	"View record card";	// Necessita de tradução
+	"Meu cart&atilde;o em disciplina";
 #endif
 
 const char *Txt_View_survey =

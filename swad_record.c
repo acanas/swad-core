@@ -75,7 +75,6 @@ static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
 static void Rec_ShowMyCrsRecordUpdated (void);
-static void Rec_PutLinkToMyCrsRecord (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
@@ -1383,26 +1382,6 @@ static bool Rec_GetParamShowOfficeHours (void)
   }
 
 /*****************************************************************************/
-/****************** Show my record in the current course *********************/
-/*****************************************************************************/
-
-void Rec_ShowFormMyCrsRecord (void)
-  {
-   /***** Show record common to all courses *****/
-   Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
-
-   /***** Get list of fields of records in current course *****/
-   Rec_GetListRecordFieldsInCurrentCrs ();
-
-   /***** Show course record *****/
-   if (Gbl.CurrentCrs.Records.LstFields.Num) // If there are fields in the course record...
-      Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD,&Gbl.Usrs.Me.UsrDat);
-
-   /***** Free list of fields of records *****/
-   Rec_FreeListFields ();
-  }
-
-/*****************************************************************************/
 /*************** Update my record in the course and show it ******************/
 /*****************************************************************************/
 
@@ -1879,7 +1858,6 @@ void Rec_ShowFormMyCommRecord (void)
 
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Rec_PutLinkToMyCrsRecord ();				// Put link (form) to my record in this course
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
@@ -1889,27 +1867,6 @@ void Rec_ShowFormMyCommRecord (void)
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
    Rec_WriteLinkToDataProtectionClause ();
    fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/** Put a link to the action used to change my record in the current course **/
-/*****************************************************************************/
-
-static void Rec_PutLinkToMyCrsRecord (void)
-  {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_View_my_record_for_this_course;
-
-   /***** Link for viewing my course record *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)	// I am logged as student in current course
-     {
-      Act_FormStart (ActSeeRecOneStd);
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_my_record_for_this_course,The_ClassFormul[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("card",Txt_View_my_record_for_this_course,Txt_View_my_record_for_this_course);
-      Act_FormEnd ();
-     }
   }
 
 /*****************************************************************************/
@@ -1965,7 +1922,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_Edit;
-   extern const char *Txt_View_record_card;
+   extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_Admin_user;
    extern const char *Txt_ID;
    extern const char *Txt_Write_a_message;
@@ -2227,14 +2184,14 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_FormStart ((UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
 									   ActSeeRecOneTch);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_record_card,NULL);
+	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/card16x16.gif\""
 			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_View_record_card);
+		  Txt_View_record_for_this_course);
 	 Act_FormEnd ();
 	}
 

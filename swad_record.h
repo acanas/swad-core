@@ -136,7 +136,6 @@ void Rec_ListRecordsStdsCrs (void);
 void Rec_GetUsrAndShowRecordOneTchCrs (void);
 void Rec_ListRecordsTchsCrs (void);
 void Rec_ShowLinkToPrintPreviewOfRecords (void);
-void Rec_ShowFormMyCrsRecord (void);
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);
 void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat);

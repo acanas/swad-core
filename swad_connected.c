@@ -995,7 +995,7 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
-   extern const char *Txt_View_record_card;
+   extern const char *Txt_View_record_for_this_course;
    const char *Color = Gbl.ColorRows[Gbl.RowEvenOdd];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
@@ -1039,7 +1039,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	                                         ActSeeRecOneTch,
 	            Gbl.FormId);
    Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitId (Txt_View_record_card,Font,Gbl.FormId);
+   Act_LinkFormSubmitId (Txt_View_record_for_this_course,Font,Gbl.FormId);
    Usr_RestrictLengthAndWriteName (&UsrDat,8);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
