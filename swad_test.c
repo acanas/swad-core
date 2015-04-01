@@ -1390,9 +1390,10 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool ShowOnlyEnabledTags)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Tags;
+   extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
    extern const char *Txt_Tag_allowed;
-   extern const char *Txt_All_tags;
    unsigned long NumRow;
    MYSQL_ROW row;
    bool TagHidden = false;
@@ -1400,7 +1401,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
    char TagText[Tst_MAX_BYTES_TAG+1];
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Tags);
 
    /***** Select all tags *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2007,6 +2008,7 @@ static void Tst_CheckAndCorrectNumbersQst (void)
 static void Tst_ShowFormAnswerTypes (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    Tst_AnswerType_t AnsType;
@@ -2014,7 +2016,7 @@ static void Tst_ShowFormAnswerTypes (void)
    const char *Ptr;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Types_of_answers);
 
    /***** Select all types of answers *****/
    fprintf (Gbl.F.Out,"<tr>"

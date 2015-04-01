@@ -433,6 +433,15 @@ static void Crs_Configuration (bool PrintView)
                Gbl.Prefs.IconsURL,
                (Indicators.CountIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
         	                                                    "warning");
+
+      if (IsForm)
+        {
+	 fprintf (Gbl.F.Out,"<tr>"
+                            "<td colspan=\"2\">");
+         Lay_PutConfirmButton (Txt_Save);
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+        }
      }
 
    /***** End of the frame *****/
@@ -440,10 +449,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** End form *****/
    if (IsForm)
-     {
-      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
-     }
   }
 
 /*****************************************************************************/

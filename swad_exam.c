@@ -474,7 +474,6 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
 
       /***** Show exam announcement *****/
       Exa_ShowExamAnnouncement (ExaCod,TypeViewExamAnnouncement);
-      fprintf (Gbl.F.Out,"<br />");
 
       /***** Free memory of the exam announcement *****/
       Exa_FreeMemExamAnnouncement ();
@@ -718,6 +717,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Remove;
+   extern const char *Txt_Edit;
+   extern const char *Txt_Print;
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Year;
@@ -737,10 +739,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    extern const char *Txt_hours;
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
-   extern const char *Txt_Edit_announcement_of_exam;
-   extern const char *Txt_Edit;
-   extern const char *Txt_Remove_announcement_of_exam;
-   extern const char *Txt_Remove;
    extern const char *Txt_Publish_announcement_OF_EXAM;
    const char *StyleTitle  = "CONV_TIT";
    const char *StyleForm   = "CONV_NEG";
@@ -756,12 +754,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    switch (TypeViewExamAnnouncement)
      {
       case Exa_NORMAL_VIEW:
-         /***** Link to print view *****/
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-         Lay_PutLinkToPrintView1 (ActPrnExaAnn);
-         Par_PutHiddenParamLong ("ExaCod",ExaCod);
-         Lay_PutLinkToPrintView2 ();
-         fprintf (Gbl.F.Out,"</div>");
 	 break;
       case Exa_PRINT_VIEW:
          StyleTitle  = "CONV_TIT_IMPR";
@@ -770,18 +762,68 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          break;
       case Exa_FORM_VIEW:
          StyleForm = The_ClassFormul[Gbl.Prefs.Theme];
-         /***** Start form *****/
-         Act_FormStart (ActRcvExaAnn);
-         if (ExaCod > 0)
-            Par_PutHiddenParamLong ("ExaCod",ExaCod);
          break;
      }
 
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 ("500px",0,NULL);
+
+   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
+     {
+      fprintf (Gbl.F.Out,"<tr>" \
+	                 "<td style=\"text-align:left;\">");
+
+      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	{
+	 /***** Link to remove this exam announcement *****/
+	 Act_FormStart (ActRemExaAnn);
+	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
+	 Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\" alt=\"%s\""
+	                    " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
+                            "</a>",
+                  Gbl.Prefs.IconsURL,Txt_Remove);
+	 Act_FormEnd ();
+
+	 /***** Link to edit this exam announcement *****/
+	 Act_FormStart (ActEdiExaAnn);
+	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
+	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/edit16x16.gif\" alt=\"%s\""
+	                    " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
+                            "</a>",
+                  Gbl.Prefs.IconsURL,Txt_Edit);
+	 Act_FormEnd ();
+	}
+
+      /***** Link to print view *****/
+      Act_FormStart (ActPrnExaAnn);
+      Par_PutHiddenParamLong ("ExaCod",ExaCod);
+      Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<img src=\"%s/print16x16.gif\" alt=\"%s\""
+			 " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
+			 "</a>",
+	       Gbl.Prefs.IconsURL,Txt_Print);
+      Act_FormEnd ();
+
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
+
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td style=\"text-align:center;\">" \
-                      "<table style=\"width:100%%; padding:20px; border-spacing:3px;\">");
+	              "<td style=\"text-align:center;\">");
+
+   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
+     {
+      /***** Start form *****/
+      Act_FormStart (ActRcvExaAnn);
+      if (ExaCod > 0)
+	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
+     }
+
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+                      " style=\"width:100%%; padding:20px;\">");
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>" \
@@ -842,7 +884,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"CrsName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"CrsName\""
+	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
                Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncement.CrsFullName);
      }
    else
@@ -890,7 +933,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Session,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ExamSession\" size=\"40\" maxlength=\"%u\" value=\"%s\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ExamSession\""
+	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
                Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncement.Session);
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.Session);
@@ -1188,88 +1232,34 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.OtherInfo);
      }
    fprintf (Gbl.F.Out,"</td>" \
-	              "</tr>");
+	              "</tr>" \
+                      "</table>");
 
-   /***** Bottom space used for signatures, or links to edit / remove the exam announcement *****/
    switch (TypeViewExamAnnouncement)
      {
       case Exa_NORMAL_VIEW:
-         switch (Gbl.Usrs.Me.LoggedRole)
-           {
-            case Rol_ROLE_TEACHER:
-            case Rol_ROLE_DEG_ADM:
-            case Rol_ROLE_SYS_ADM:
-               /***** Create link to edit this exam announcement *****/
-               fprintf (Gbl.F.Out,"<tr>" \
-        	                  "<td style=\"text-align:left;\">");
-               Act_FormStart (ActEdiExaAnn);
-               Par_PutHiddenParamLong ("ExaCod",ExaCod);
-               Act_LinkFormSubmit (Txt_Edit_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
-               fprintf (Gbl.F.Out,"<img src=\"%s/edit16x16.gif\"" \
-        	                  " alt=\"%s\" class=\"ICON16x16\" />" \
-	   	                  " %s</a>",
-                        Gbl.Prefs.IconsURL,Txt_Edit_announcement_of_exam,Txt_Edit);
-               Act_FormEnd ();
-               fprintf (Gbl.F.Out,"</td>");
-
-               /***** Create link to remove this exam announcement *****/
-               fprintf (Gbl.F.Out,"<td style=\"text-align:right;\">");
-               Act_FormStart (ActRemExaAnn);
-               Par_PutHiddenParamLong ("ExaCod",ExaCod);
-               Act_LinkFormSubmit (Txt_Remove_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
-               fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\"" \
-        	                  " alt=\"%s\" class=\"ICON16x16\" />" \
-   		                  " %s</a>",
-   		        Gbl.Prefs.IconsURL,
-   		        Txt_Remove_announcement_of_exam,
-   		        Txt_Remove);
-               Act_FormEnd ();
-               fprintf (Gbl.F.Out,"</td>" \
-        	                  "</tr>");
-               break;
-            default:
-               break;
-           }
          break;
       case Exa_PRINT_VIEW:
          /* Bottom space used for signatures */
-         fprintf (Gbl.F.Out,"<tr>" \
-                            "<td colspan=\"2\" class=\"%s\""
-                            " style=\"text-align:left;\">"
-                            "&nbsp;<br />"
-                            "&nbsp;<br />"
-                            "&nbsp;<br />"
-                            "&nbsp;<br />"
-                            "&nbsp;"
-                            "</td>" \
-                            "</tr>",
-                  StyleForm);
+         fprintf (Gbl.F.Out,"<div style=\"height:100px;\"></div>");
          break;
-      default:
-         break;
+      case Exa_FORM_VIEW:
+	 /* Send button */
+	 if (ExaCod > 0)
+	    Lay_PutConfirmButton (Txt_Publish_announcement_OF_EXAM);
+	 else
+	    Lay_PutCreateButton (Txt_Publish_announcement_OF_EXAM);
+	 Act_FormEnd ();
+	 break;
      }
 
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</table>" \
-	              "</td>" \
+   fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();
 
-   switch (TypeViewExamAnnouncement)
-     {
-      case Exa_NORMAL_VIEW:
-	 break;
-      case Exa_PRINT_VIEW:
-         QR_ExamAnnnouncement ();
-         break;
-      case Exa_FORM_VIEW:
-	 if (ExaCod > 0)
-            Lay_PutConfirmButton (Txt_Publish_announcement_OF_EXAM);
-	 else
-            Lay_PutCreateButton (Txt_Publish_announcement_OF_EXAM);
-         Act_FormEnd ();
-         break;
-     }
+   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
+      QR_ExamAnnnouncement ();
   }
 
 /*****************************************************************************/

@@ -9099,27 +9099,6 @@ const char *Txt_Edit =
 	"Editar";
 #endif
 
-const char *Txt_Edit_announcement_of_exam =
-#if   L==0
-	"Editar convocatoria de examen";	// Necessita traduccio
-#elif L==1
-	"Aufruf f&uuml;r Pr&uuml;fung bearbeiten";
-#elif L==2
-	"Edit announcement of exam";
-#elif L==3
-	"Editar convocatoria de examen";
-#elif L==4
-	"&Eacute;diter convocation &agrave; l'examen";
-#elif L==5
-	"Editar convocatoria de examen";	// Okoteve traducción
-#elif L==6
-	"Editare sessione d'esame";
-#elif L==7
-	"Edytuj ogloszenie egzaminu";
-#elif L==8
-	"Editar chamada para o exame";
-#endif
-
 const char *Txt_Edit_assignment =
 #if   L==0
 	"Editar actividad";	// Necessita traduccio
@@ -28295,27 +28274,6 @@ const char *Txt_Remove_all_students =
 	"Tirar todos estudantes";
 #endif
 
-const char *Txt_Remove_announcement_of_exam =
-#if   L==0
-	"Eliminar convocat&ograve;ria d'examen";
-#elif L==1
-	"Entfernen Aufruf f&uuml;r Pr&uuml;fung";
-#elif L==2
-	"Remove announcement of exam";
-#elif L==3
-	"Eliminar convocatoria de examen";
-#elif L==4
-	"Supprimer convocation &agrave; l'examen";
-#elif L==5
-	"Eliminar convocatoria de examen";	// Okoteve traducción
-#elif L==6
-	"Rimuovere sessione d'esame";
-#elif L==7
-	"Usu&nacute; ogloszenie egzaminu";
-#elif L==8
-	"Remover chamada para o exame";
-#endif
-
 const char *Txt_Remove_assignment =
 #if   L==0
 	"Eliminar activitat";
@@ -45872,27 +45830,6 @@ const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to in
 	"Type of group <strong>%s</strong> removed.";	// Necessita de tradução
 #endif
 
-const char *Txt_Types_of_group =
-#if L==0
-	"Tipus de grup";
-#elif L==1
-	"Gruppen-Typen";
-#elif L==2
-	"Types of group";
-#elif L==3
-	"Tipos de grupo";
-#elif L==4
-	"Types de groupe";
-#elif L==5
-	"Tipos de grupo";	// Okoteve traducción
-#elif L==6
-	"Tipi di gruppo";
-#elif L==7
-	"Types of group";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Tipos de grupo";
-#endif
-
 const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 #if   L==0
 	"Escriba o pegue una lista"
@@ -46039,6 +45976,48 @@ const char *Txt_TYPES_OF_DEGREE_Without_degrees =
 	"Bez Stopnie";
 #elif L==8
 	"Sem titula&ccedil;oes";
+#endif
+
+const char *Txt_Types_of_answers =		// Answers of a test
+#if   L==0
+	"Tipus de respostes";
+#elif L==1
+	"Antworttypen";
+#elif L==2
+	"Types of answers";
+#elif L==3
+	"Tipos de respuestas";
+#elif L==4
+	"Types de r&eacute;ponses";
+#elif L==5
+	"Tipos de respuestas";	// Okoteve traducción
+#elif L==6
+	"Tipi di risposte";
+#elif L==7
+	"Typy odpowiedzi";
+#elif L==8
+	"Tipos de respostas";
+#endif
+
+const char *Txt_Types_of_group =
+#if L==0
+	"Tipus de grup";
+#elif L==1
+	"Gruppen-Typen";
+#elif L==2
+	"Types of group";
+#elif L==3
+	"Tipos de grupo";
+#elif L==4
+	"Types de groupe";
+#elif L==5
+	"Tipos de grupo";	// Okoteve traducción
+#elif L==6
+	"Tipi di gruppo";
+#elif L==7
+	"Types of group";	// Potrzebujesz tlumaczenie
+#elif L==8
+	"Tipos de grupo";
 #endif
 
 const char *Txt_Undo =
