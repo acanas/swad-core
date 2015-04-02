@@ -1592,7 +1592,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<input type=\"text\" name=\"Title\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Txt_Title,

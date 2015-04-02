@@ -496,25 +496,17 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
+   fprintf (Gbl.F.Out,"<div style=\"padding:5px 0;\">");
+
    /***** Put form to remove attendance event *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">"
-	              "<tr>"
-                      "<td style=\"text-align:left;\">");
    Act_FormStart (ActReqRemAtt);
    Att_PutParamAttCod (AttCod);
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Remove,
-            Txt_Remove);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   Act_PutIconLink ("delon",Txt_Remove);
 
    /***** Put form to hide/show attendance event *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (Hidden ? ActShoAtt :
 	                   ActHidAtt);
    Att_PutParamAttCod (AttCod);
@@ -522,36 +514,19 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_on16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Show,
-	       Txt_Show);
+      Act_PutIconLink ("hidden_on",Txt_Show);
    else
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_on16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Hide,
-	       Txt_Hide);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+      Act_PutIconLink ("visible_on",Txt_Hide);
 
    /***** Put form to edit attendance event *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActEdiOneAtt);
    Att_PutParamAttCod (AttCod);
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Edit,
-            Txt_Edit);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-	              "</table>");
+   Act_PutIconLink ("edit",Txt_Edit);
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1121,7 +1096,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<input type=\"text\" name=\"Title\" size=\"80\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Txt_Title,
@@ -1249,7 +1224,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable10 ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

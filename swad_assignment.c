@@ -1129,7 +1129,7 @@ void Asg_RequestCreatOrEditAsg (void)
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<input type=\"text\" name=\"Title\" size=\"80\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Txt_Title,
@@ -1249,7 +1249,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable10 ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1722,14 +1722,24 @@ static bool Asg_CheckIfICanDoThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   /***** Get if I can do an assignment from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM assignments"
-                  " WHERE AsgCod='%ld'"
-                  " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
-                  " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod='%ld' AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
-            AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+     {
+      /***** Get if I can do an assignment from database *****/
+      sprintf (Query,"SELECT COUNT(*) FROM assignments"
+		     " WHERE AsgCod='%ld'"
+		     " AND ("
+		     "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"
+		     " OR "
+		     "AsgCod IN"
+		     " (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+		     " WHERE crs_grp_usr.UsrCod='%ld'"
+		     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+		     ")",
+	       AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
+     }
+   else
+      return false;
   }
 
 /*****************************************************************************/
