@@ -415,7 +415,6 @@ static void Exa_ListExamAnnouncementsEdit (void)
 
 static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_No_announcements_of_exams_of_X;
    extern const char *Txt_New_announcement_OF_EXAM;
    char Query[512];
@@ -445,9 +444,7 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
       case Rol_ROLE_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Act_FormStart (ActEdiExaAnn);
-         Act_LinkFormSubmit (Txt_New_announcement_OF_EXAM,The_ClassFormulB[Gbl.Prefs.Theme]);
-         Lay_PutSendIcon ("new",Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
-         Act_FormEnd ();
+         Act_PutContextualLink ("new",Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
          fprintf (Gbl.F.Out,"</div>");
          break;
       default:

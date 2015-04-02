@@ -1634,13 +1634,10 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
 
 static void Ntf_PutLinkToChangePrefs (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_preferences;
 
    Act_FormStart (ActEdiPrf);
-   Act_LinkFormSubmit (Txt_Change_preferences,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("heart",Txt_Change_preferences,Txt_Change_preferences);
-   Act_FormEnd ();
+   Act_PutContextualLink ("heart",Txt_Change_preferences,Txt_Change_preferences,Txt_Change_preferences);
   }
 
 /*****************************************************************************/

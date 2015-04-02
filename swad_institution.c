@@ -225,9 +225,9 @@ void Ins_PrintConfiguration (void)
 
 static void Ins_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Centres;
+   extern const char *Txt_Print;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -249,13 +249,11 @@ static void Ins_Configuration (bool PrintView)
 
 	 /* Link to show centres */
 	 Act_FormStart (ActSeeCtr);
-	 Act_LinkFormSubmit (Txt_Centres,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
-	 Act_FormEnd ();
+         Act_PutContextualLink ("ctr",Txt_Centres,Txt_Centres,Txt_Centres);
 
 	 /* Link to print view */
-	 Lay_PutLinkToPrintView1 (ActPrnInsInf);
-	 Lay_PutLinkToPrintView2 ();
+	 Act_FormStart (ActPrnInsInf);
+         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)

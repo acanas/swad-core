@@ -216,9 +216,9 @@ void Cty_PrintConfiguration (void)
 
 static void Cty_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions;
+   extern const char *Txt_Print;
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
@@ -237,15 +237,13 @@ static void Cty_Configuration (bool PrintView)
 
       /* Link to show institutions */
       Act_FormStart (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institutions,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("ins",Txt_Institutions,Txt_Institutions);
-      Act_FormEnd ();
+      Act_PutContextualLink ("ins",Txt_Institutions,Txt_Institutions,Txt_Institutions);
 
       /* Link to print view */
       if (!PrintView)
 	{
-	 Lay_PutLinkToPrintView1 (ActPrnCtyInf);
-	 Lay_PutLinkToPrintView2 ();
+	 Act_FormStart (ActPrnCtyInf);
+         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 	}
 
       fprintf (Gbl.F.Out,"</div>");

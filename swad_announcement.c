@@ -71,7 +71,6 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_ShowAllAnnouncements (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
 
    /***** Put link (form) to create a new announcement *****/
@@ -79,15 +78,12 @@ void Ann_ShowAllAnnouncements (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Act_FormStart (ActWriAnn);
-      Act_LinkFormSubmit (Txt_New_announcement,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("new",Txt_New_announcement,Txt_New_announcement);
-      Act_FormEnd ();
+      Act_PutContextualLink ("new",Txt_New_announcement,Txt_New_announcement,Txt_New_announcement);
       fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** List announcements *****/
    Ann_ListAnnouncements ();
-
   }
 
 /*****************************************************************************/

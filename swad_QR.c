@@ -72,7 +72,6 @@ static void QR_ImageQRCode (const char *QRString);
 
 void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool PrintText)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_QR_code;
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
@@ -91,11 +90,8 @@ void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool Pri
          Par_PutHiddenParamString ("QRString",UsrDat->Email);
          break;
      }
-   Act_LinkFormSubmit (Txt_QR_code,PrintText ? The_ClassFormulB[Gbl.Prefs.Theme] :
-	                                       NULL);
-   Lay_PutSendIcon ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
-	                                         NULL);
-   Act_FormEnd ();
+   Act_PutContextualLink ("qr",Txt_QR_code,Txt_QR_code,PrintText ? Txt_QR_code :
+	                                                           NULL);
   }
 
 /*****************************************************************************/

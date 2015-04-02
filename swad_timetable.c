@@ -218,9 +218,9 @@ static void TT_GetParamsTimeTable (void)
 
 void TT_ShowClassTimeTable (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
    extern const char *Txt_Edit_office_hours;
+   extern const char *Txt_Print;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;
    bool PutEditButton = (Gbl.CurrentAct == ActSeeCrsTimTbl &&
@@ -255,25 +255,21 @@ void TT_ShowClassTimeTable (void)
 	{
 	 Act_FormStart (ActEdiCrsTimTbl);
 	 Grp_PutParamWhichGrps ();
-	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-	 Act_FormEnd ();
+         Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
 	}
 
       if (PutEditOfficeHours)
 	{
 	 Act_FormStart (ActEdiTut);
-	 Act_LinkFormSubmit (Txt_Edit_office_hours,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("edit",Txt_Edit_office_hours,Txt_Edit_office_hours);
-	 Act_FormEnd ();
+         Act_PutContextualLink ("edit",Txt_Edit_office_hours,Txt_Edit_office_hours,Txt_Edit_office_hours);
 	}
 
       if (!PrintView)
 	{
-         Lay_PutLinkToPrintView1 (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
-                                                                      ActPrnMyTimTbl);
+         Act_FormStart (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
+                                                            ActPrnMyTimTbl);
          Grp_PutParamWhichGrps ();
-         Lay_PutLinkToPrintView2 ();
+         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 	}
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -318,15 +314,12 @@ void TT_ShowClassTimeTable (void)
 
 void TT_EditCrsTimeTable (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActSeeCrsTimTbl);
-   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
-   Act_FormEnd ();
+   Act_PutContextualLink ("clock",Txt_Show_timetable,Txt_Show_timetable,Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start of table *****/
@@ -349,16 +342,13 @@ void TT_EditCrsTimeTable (void)
 
 void TT_ShowMyTutTimeTable (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Show_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActSeeMyTimTbl);
-   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
-   Act_FormEnd ();
+   Act_PutContextualLink ("clock",Txt_Show_timetable,Txt_Show_timetable,Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/

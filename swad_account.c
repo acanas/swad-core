@@ -103,7 +103,6 @@ void Acc_ShowFormAccount (void)
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
@@ -117,9 +116,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Link to log in *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActFrmLogIn);
-   Act_LinkFormSubmit (Txt_Log_in,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("login",Txt_Log_in,Txt_Log_in);
-   Act_FormEnd ();
+   Act_PutContextualLink ("login",Txt_Log_in,Txt_Log_in,Txt_Log_in);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
@@ -243,15 +240,12 @@ void Acc_ShowFormChangeMyAccount (void)
 
 static void Acc_PutLinkToRemoveMyAccount (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_account;
 
    Act_FormStart (ActUpdOthUsrDat);
    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-   Act_LinkFormSubmit (Txt_Remove_account,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_account,Txt_Remove_account);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Txt_Remove_account,Txt_Remove_account,Txt_Remove_account);
   }
 
 /*****************************************************************************/

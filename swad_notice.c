@@ -291,7 +291,6 @@ void Not_ShowANotice (void)
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_No_notices;
    extern const char *Txt_New_notice;
    extern const char *Txt_All_notices;
@@ -322,9 +321,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 Act_FormStart (ActWriNot);
-	 Act_LinkFormSubmit (Txt_New_notice,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("new",Txt_New_notice,Txt_New_notice);
-	 Act_FormEnd ();
+         Act_PutContextualLink ("new",Txt_New_notice,Txt_New_notice,Txt_New_notice);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 

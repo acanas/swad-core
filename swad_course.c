@@ -139,6 +139,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Show_more_details;
    extern const char *Txt_NO;
+   extern const char *Txt_Print;
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -186,8 +187,8 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
-      Lay_PutLinkToPrintView1 (ActPrnCrsInf);
-      Lay_PutLinkToPrintView2 ();
+      Act_FormStart (ActPrnCrsInf);
+      Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 
       /* Link to request enrollment in the current course */
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST__ ||
@@ -3002,7 +3003,6 @@ void Crs_ReqSelectOneOfMyCourses (void)
 
 static void Crs_PutLinkToSearchCourses (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
@@ -3014,9 +3014,7 @@ static void Crs_PutLinkToSearchCourses (void)
 						   ActSysReqSch)))));
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
-   Act_LinkFormSubmit (Txt_Search_courses,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("search",Txt_Search_courses,Txt_Search_courses);
-   Act_FormEnd ();
+   Act_PutContextualLink ("search",Txt_Search_courses,Txt_Search_courses,Txt_Search_courses);
   }
 
 /*****************************************************************************/
@@ -3025,14 +3023,11 @@ static void Crs_PutLinkToSearchCourses (void)
 
 void Crs_PutFormToSelectMyCourses (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
    Act_FormStart (ActMyCrs);
-   Act_LinkFormSubmit (Txt_My_courses,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("hierarchy",Txt_My_courses,Txt_My_courses);
-   Act_FormEnd ();
+   Act_PutContextualLink ("hierarchy",Txt_My_courses,Txt_My_courses,Txt_My_courses);
   }
 
 /*****************************************************************************/

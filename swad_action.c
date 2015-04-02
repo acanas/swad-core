@@ -4316,6 +4316,22 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
   }
 
 /*****************************************************************************/
+/***************** Show an icon with a link in contextual menu ***************/
+/*****************************************************************************/
+
+void Act_PutContextualLink (const char *Icon,
+                              const char *Title,
+                              const char *Alt,
+                              const char *Text)
+  {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
+
+   Act_LinkFormSubmit (Title,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon (Icon,Alt,Text);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /***************** Adjust current action when no user's logged ***************/
 /*****************************************************************************/
 

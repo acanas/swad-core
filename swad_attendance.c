@@ -443,7 +443,6 @@ void Att_PutHiddenParamAttOrderType (void)
 
 static void Att_PutFormToListStds (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Attendance_list;
 
    /***** Put form to create a new attendance event *****/
@@ -451,9 +450,7 @@ static void Att_PutFormToListStds (void)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_Attendance_list,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("list",Txt_Attendance_list,Txt_Attendance_list);
-   Act_FormEnd ();
+   Act_PutContextualLink ("list",Txt_Attendance_list,Txt_Attendance_list,Txt_Attendance_list);
   }
 
 /*****************************************************************************/
@@ -462,7 +459,6 @@ static void Att_PutFormToListStds (void)
 
 static void Att_PutFormToCreateNewAttEvent (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_event;
 
    /***** Put form to create a new attendance event *****/
@@ -470,9 +466,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_event,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("new",Txt_New_event,Txt_New_event);
-   Act_FormEnd ();
+   Act_PutContextualLink ("new",Txt_New_event,Txt_New_event,Txt_New_event);
   }
 
 /*****************************************************************************/
@@ -2912,7 +2906,6 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
@@ -2924,9 +2917,7 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
    Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
    if (StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
-   Act_FormEnd ();
+   Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 

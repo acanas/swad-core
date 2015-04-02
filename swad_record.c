@@ -868,14 +868,11 @@ void Rec_FreeListFields (void)
 
 void Rec_PutLinkToEditRecordFields (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
    Act_FormStart (ActEdiRecFie);
-   Act_LinkFormSubmit (Txt_Edit_record_fields,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("edit",Txt_Edit_record_fields,Txt_Edit_record_fields);
-   Act_FormEnd ();
+   Act_PutContextualLink ("edit",Txt_Edit_record_fields,Txt_Edit_record_fields,Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -3229,14 +3226,11 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 
 static void Rec_PutLinkToChangeMyInsCtrDpt (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
    Act_FormStart (ActReqEdiMyIns);
-   Act_LinkFormSubmit (Txt_Edit_my_institution,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("institution",Txt_Edit_my_institution,Txt_Edit_my_institution);
-   Act_FormEnd ();
+   Act_PutContextualLink ("institution",Txt_Edit_my_institution,Txt_Edit_my_institution,Txt_Edit_my_institution);
   }
 
 /*****************************************************************************/
@@ -3245,14 +3239,11 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
 
 static void Rec_PutLinkToChangeMySocialNetworks (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_my_webs_networks;
 
    /***** Link to edit my social networks *****/
    Act_FormStart (ActReqEdiMyNet);
-   Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
-   Act_FormEnd ();
+   Act_PutContextualLink ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
   }
 
 /*****************************************************************************/

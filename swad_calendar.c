@@ -92,6 +92,7 @@ void Cal_DrawCurrentMonth (void)
 */
 void Cal_DrawCalendar (void)
   {
+   extern const char *Txt_Print;
    static unsigned StartingMonth[1+12] =	// Calendar starts one row before current month
      {
       0,	// Not used
@@ -126,8 +127,8 @@ void Cal_DrawCalendar (void)
      {
       /* Link to print view */
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Lay_PutLinkToPrintView1 (ActPrnCal);
-      Lay_PutLinkToPrintView2 ();
+      Act_FormStart (ActPrnCal);
+      Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
       fprintf (Gbl.F.Out,"</div>");
      }
    Lay_StartRoundFrameTable10 (NULL,0,NULL);

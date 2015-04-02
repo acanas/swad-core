@@ -111,7 +111,6 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
 void ZIP_PutButtonToCreateZIPAsgWrk (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -120,9 +119,7 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
    Par_PutHiddenParamChar ("CreateZIP",'Y');
-   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("download",Txt_Create_ZIP_file,Txt_Create_ZIP_file);
-   Act_FormEnd ();
+   Act_PutContextualLink ("download",Txt_Create_ZIP_file,Txt_Create_ZIP_file,Txt_Create_ZIP_file);
    fprintf (Gbl.F.Out,"</div>");
   }
 

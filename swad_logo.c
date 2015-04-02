@@ -173,7 +173,6 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 
 void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
    Act_Action_t Action;
@@ -221,9 +220,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    Act_FormStart (Action);
    Msg = LogoExists ? Txt_Change_logo :
 		      Txt_Upload_logo;
-   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon (Icon,Msg,Msg);
-   Act_FormEnd ();
+   Act_PutContextualLink (Icon,Msg,Msg,Msg);
   }
 
 /*****************************************************************************/

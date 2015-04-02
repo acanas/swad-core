@@ -1665,13 +1665,10 @@ static unsigned long Msg_GetNumUsrsBannedByMe (void)
 
 static void Msg_PutLinkToViewBannedUsers(void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Banned_users;
 
    Act_FormStart (ActLstBanUsr);
-   Act_LinkFormSubmit (Txt_Banned_users,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("stop",Txt_Banned_users,Txt_Banned_users);
-   Act_FormEnd ();
+   Act_PutContextualLink ("stop",Txt_Banned_users,Txt_Banned_users,Txt_Banned_users);
   }
 
 /*****************************************************************************/
@@ -2139,7 +2136,6 @@ void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs)
 
 void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned NumMsgs)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_MSG_containing_the_text;
    extern const char *Txt_MSGS_containing_the_text;
    extern const char *Txt_Remove_the_MESSAGE;
@@ -2151,7 +2147,6 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    extern const char *Txt_messages_received_from_A_USER;
    extern const char *Txt_messages_sent_to_A_USER;
    extern const char *Txt_from_A_COURSE;
-   extern const char *Txt_Remove;
    char StrFilterContent[256+Msg_MAX_LENGTH_FILTER_CONTENT+1];
 
    /***** Put link to request deletion of all sent or received messages *****/
@@ -2189,9 +2184,7 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
                Txt_from_A_COURSE,
                Gbl.Msg.FilterCrsShortName,
                StrFilterContent);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove,Gbl.Title);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Gbl.Title,Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</div>");
   }
 

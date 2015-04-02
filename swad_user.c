@@ -1335,7 +1335,6 @@ void Usr_WriteFormLogin (void)
   {
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
    extern const char *Txt_Log_in;
    extern const char *Txt_User;
@@ -1350,9 +1349,7 @@ void Usr_WriteFormLogin (void)
    /* Link to create a new account */
    Act_FormStart (ActFrmUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("arroba",Txt_Create_account,Gbl.Title);
-   Act_FormEnd ();
+   Act_PutContextualLink ("arroba",Gbl.Title,Gbl.Title,Gbl.Title);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1369,9 +1366,7 @@ void Usr_WriteFormLogin (void)
    /* Link to send a new password */
    Act_FormStart (ActReqSndNewPwd);
    Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
-   Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password);
-   Act_FormEnd ();
+   Act_PutContextualLink ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password,Txt_I_forgot_my_password);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2450,7 +2445,6 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
 
 void Usr_ShowFormsLogoutAndRole (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_out;
    extern const char *Txt_You_are_LOGGED_as_X;
@@ -2461,9 +2455,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActLogOut);
-   Act_LinkFormSubmit (Txt_Log_out,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("logout",Txt_Log_out,Txt_Log_out);
-   Act_FormEnd ();
+   Act_PutContextualLink ("logout",Txt_Log_out,Txt_Log_out,Txt_Log_out);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
@@ -6289,8 +6281,8 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 void Usr_SeeGuests (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
+   extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
 
@@ -6342,17 +6334,15 @@ void Usr_SeeGuests (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       Lay_PutLinkToPrintView1 (ActPrnInvPho);
-	       Lay_PutLinkToPrintView2 ();
+	       Act_FormStart (ActPrnInvPho);
+               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
 	       Act_FormStart (ActLstInvAll);
 	       Usr_PutParamListWithPhotos ();
 	       Usr_PutExtraParamsUsrList (ActLstInvAll);
-	       Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
-	       Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-	       Act_FormEnd ();
+               Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
 	       break;
            }
 	 fprintf (Gbl.F.Out,"</div>");
@@ -6412,8 +6402,8 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
+   extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
    bool ICanViewRecords;
@@ -6489,9 +6479,9 @@ void Usr_SeeStudents (void)
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
 	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	       Lay_PutLinkToPrintView1 (ActPrnStdPho);
+	       Act_FormStart (ActPrnStdPho);
 	       Grp_PutParamsCodGrps ();
-	       Lay_PutLinkToPrintView2 ();
+               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
@@ -6503,9 +6493,7 @@ void Usr_SeeStudents (void)
 		  Grp_PutParamsCodGrps ();
 		  Usr_PutParamListWithPhotos ();
 		  Usr_PutExtraParamsUsrList (ActLstStdAll);
-		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
-		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-		  Act_FormEnd ();
+                  Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
 	       break;
@@ -6583,8 +6571,8 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
+   extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
@@ -6633,9 +6621,9 @@ void Usr_SeeTeachers (void)
            {
             case Usr_CLASS_PHOTO:
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	       Lay_PutLinkToPrintView1 (ActPrnTchPho);
+	       Act_FormStart (ActPrnTchPho);
 	       Sco_PutParamScope (Gbl.Scope.Current);
-	       Lay_PutLinkToPrintView2 ();
+               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
             case Usr_LIST:
@@ -6646,9 +6634,7 @@ void Usr_SeeTeachers (void)
 		  Act_FormStart (ActLstTchAll);
 		  Sco_PutParamScope (Gbl.Scope.Current);
 		  Usr_PutParamListWithPhotos ();
-		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
-		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
-		  Act_FormEnd ();
+                  Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
                break;
@@ -6719,7 +6705,6 @@ void Usr_SeeTeachers (void)
 
 static void Usr_PutLinkToListOfficialStudents (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Official_students;
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
@@ -6730,9 +6715,7 @@ static void Usr_PutLinkToListOfficialStudents (void)
      {
       /***** Link to list official students *****/
       Act_FormStart (ActGetExtLstStd);
-      Act_LinkFormSubmit (Txt_Official_students,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("list",Txt_Official_students,Txt_Official_students);
-      Act_FormEnd ();
+      Act_PutContextualLink ("list",Txt_Official_students,Txt_Official_students,Txt_Official_students);
      }
   }
 

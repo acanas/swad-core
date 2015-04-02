@@ -145,7 +145,6 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
 
 void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    bool PhotoExists;
@@ -166,9 +165,7 @@ void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
      }
    Msg = PhotoExists ? Txt_Change_photo :
 		       Txt_Upload_photo;
-   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("photo",Msg,Msg);
-   Act_FormEnd ();
+   Act_PutContextualLink ("photo",Msg,Msg,Msg);
   }
 
 /*****************************************************************************/
@@ -177,7 +174,6 @@ void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
 
 static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
@@ -188,10 +184,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
       Act_FormStart (ActRemUsrPho);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
-
-   Act_LinkFormSubmit (Txt_Remove_photo,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_photo,Txt_Remove_photo);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Txt_Remove_photo,Txt_Remove_photo,Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -1671,15 +1664,17 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 
 static void Pho_PutLinkToPrintViewOfDegreeStats (void)
   {
+   extern const char *Txt_Print;
+
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutLinkToPrintView1 (ActPrnPhoDeg);
+   Act_FormStart (ActPrnPhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
    Usr_PutParamListWithPhotos ();
-   Lay_PutLinkToPrintView2 ();
+   Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1708,7 +1703,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Start div *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /***** Start form *****/
       Act_FormStart (ActCalPhoDeg);

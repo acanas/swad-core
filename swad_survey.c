@@ -694,7 +694,6 @@ void Svy_PutHiddenParamSvyOrderType (void)
 
 static void Svy_PutFormToCreateNewSvy (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_survey;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -702,9 +701,7 @@ static void Svy_PutFormToCreateNewSvy (void)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_survey,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("new",Txt_New_survey,Txt_New_survey);
-   Act_FormEnd ();
+   Act_PutContextualLink ("new",Txt_New_survey,Txt_New_survey,Txt_New_survey);
    fprintf (Gbl.F.Out,"</div>");
   }
 

@@ -236,9 +236,9 @@ void Ctr_PrintConfiguration (void)
 
 static void Ctr_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Degrees;
+   extern const char *Txt_Print;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -270,13 +270,11 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /* Link to show degrees */
 	 Act_FormStart (ActSeeDeg);
-	 Act_LinkFormSubmit (Txt_Degrees,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
-	 Act_FormEnd ();
+	 Act_PutContextualLink ("deg",Txt_Degrees,Txt_Degrees,Txt_Degrees);
 
          /* Link to print view */
-	 Lay_PutLinkToPrintView1 (ActPrnCtrInf);
-	 Lay_PutLinkToPrintView2 ();
+	 Act_FormStart (ActPrnCtrInf);
+         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
 
 	 /* Links to upload logo and photo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
@@ -1827,7 +1825,6 @@ void Ctr_RemoveLogo (void)
 
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    const char *Msg;
@@ -1836,9 +1833,7 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
    Act_FormStart (ActReqCtrPho);
    Msg = PhotoExists ? Txt_Change_photo :
 		       Txt_Upload_photo;
-   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("photo",Msg,Msg);
-   Act_FormEnd ();
+   Act_PutContextualLink ("photo",Msg,Msg,Msg);
   }
 
 /*****************************************************************************/

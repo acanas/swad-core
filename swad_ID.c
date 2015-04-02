@@ -360,7 +360,6 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
 
 void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_IDs;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -374,9 +373,7 @@ void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
 	 Act_FormStart (ActFrmIDsOthUsr);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      Act_LinkFormSubmit (Txt_Change_IDs,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("arroba",Txt_Change_IDs,Txt_Change_IDs);
-      Act_FormEnd ();
+      Act_PutContextualLink ("arroba",Txt_Change_IDs,Txt_Change_IDs,Txt_Change_IDs);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

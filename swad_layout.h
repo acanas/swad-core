@@ -114,9 +114,6 @@ void Lay_ChangeLayout (void);
 Lay_Layout_t Lay_GetParamLayout (void);
 Lay_Layout_t Lay_GetLayoutFromStr (const char *Str);
 
-void Lay_PutLinkToPrintView1 (Act_Action_t NextAction);
-void Lay_PutLinkToPrintView2 (void);
-
 void Lay_AdvertisementMobile (void);
 
 void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);

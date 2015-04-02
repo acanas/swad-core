@@ -211,14 +211,11 @@ static void Dpt_GetParamDptOrderType (void)
 
 static void Dpt_PutFormToEditDpts (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActEdiDpt);
-   Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   Act_FormEnd ();
+   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

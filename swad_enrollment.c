@@ -130,14 +130,11 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
 
 void Enr_PutLinkToRequestSignUp (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
    Act_FormStart (ActReqSignUp);
-   Act_LinkFormSubmit (Txt_Sign_up,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("signup",Txt_Sign_up,Txt_Sign_up);
-   Act_FormEnd ();
+   Act_PutContextualLink ("signup",Txt_Sign_up,Txt_Sign_up,Txt_Sign_up);
   }
 
 /*****************************************************************************/
@@ -278,7 +275,6 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
 void Enr_ReqAcceptRegisterInCrs (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_;
    extern const char *Txt_Confirm_my_enrollment;
    extern const char *Txt_Remove_me_from_this_course;
@@ -292,15 +288,11 @@ void Enr_ReqAcceptRegisterInCrs (void)
 
    /***** Send button to accept register in the current course *****/
    Act_FormStart (ActAccEnrCrs);
-   Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
-   Act_FormEnd ();
+   Act_PutContextualLink ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
 
    /***** Send button to refuse register in the current course *****/
    Act_FormStart (ActRemMeCrs);
-   Act_LinkFormSubmit (Txt_Remove_me_from_this_course,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -634,14 +626,11 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
 static void Enr_PutLinkToRemOldUsrs (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_old_users;
 
    /***** Put form to remove old users *****/
    Act_FormStart (ActReqRemOldUsr);
-   Act_LinkFormSubmit (Txt_Remove_old_users,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_old_users,Txt_Remove_old_users);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Txt_Remove_old_users,Txt_Remove_old_users,Txt_Remove_old_users);
   }
 
 /*****************************************************************************/
@@ -1718,14 +1707,11 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
    Act_FormStart (ActReqRemAllStdCrs);
-   Act_LinkFormSubmit (Txt_Remove_all_students,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_all_students,Txt_Remove_all_students);
-   Act_FormEnd ();
+   Act_PutContextualLink ("delon",Txt_Remove_all_students,Txt_Remove_all_students,Txt_Remove_all_students);
   }
 
 /*****************************************************************************/
@@ -2587,13 +2573,10 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 
 static void Enr_PutLinkToAdminOneUsr (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Admin_one_user;
 
    Act_FormStart (ActReqMdfOneUsr);
-   Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("configtest",Txt_Admin_one_user,Txt_Admin_one_user);
-   Act_FormEnd ();
+   Act_PutContextualLink ("configtest",Txt_Admin_one_user,Txt_Admin_one_user,Txt_Admin_one_user);
   }
 
 /*****************************************************************************/
@@ -2602,13 +2585,10 @@ static void Enr_PutLinkToAdminOneUsr (void)
 
 static void Enr_PutLinkToAdminSeveralUsrs (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Admin_several_users;
 
    Act_FormStart (ActReqMdfSevUsr);
-   Act_LinkFormSubmit (Txt_Admin_several_users,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("configtest",Txt_Admin_several_users,Txt_Admin_several_users);
-   Act_FormEnd ();
+   Act_PutContextualLink ("configtest",Txt_Admin_several_users,Txt_Admin_several_users,Txt_Admin_several_users);
   }
 
 /*****************************************************************************/

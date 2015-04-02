@@ -471,7 +471,6 @@ void Asg_PutHiddenParamAsgOrderType (void)
 
 static void Asg_PutFormToCreateNewAsg (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
 
    /***** Put form to create a new assignment *****/
@@ -480,9 +479,7 @@ static void Asg_PutFormToCreateNewAsg (void)
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_assignment,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("new",Txt_New_assignment,Txt_New_assignment);
-   Act_FormEnd ();
+   Act_PutContextualLink ("new",Txt_New_assignment,Txt_New_assignment,Txt_New_assignment);
    fprintf (Gbl.F.Out,"</div>");
   }
 

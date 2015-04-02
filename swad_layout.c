@@ -938,14 +938,11 @@ static void Lay_ShowRightColumn (void)
 
 void Lay_PutFormToView (Act_Action_t Action)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_View,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("visible_on",Txt_View,Txt_View);
-   Act_FormEnd ();
+   Act_PutContextualLink ("visible_on",Txt_View,Txt_View,Txt_View);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -955,14 +952,11 @@ void Lay_PutFormToView (Act_Action_t Action)
 
 void Lay_PutFormToEdit (Act_Action_t Action)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
-   Act_FormEnd ();
+   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1531,25 +1525,6 @@ Lay_Layout_t Lay_GetParamLayout (void)
          return (Lay_Layout_t) UnsignedNum;
 
    return Lay_LAYOUT_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/************************* Put link to print view ****************************/
-/*****************************************************************************/
-
-void Lay_PutLinkToPrintView1 (Act_Action_t NextAction)
-  {
-   Act_FormStart (NextAction);
-  }
-
-void Lay_PutLinkToPrintView2 (void)
-  {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
-   extern const char *Txt_Print;
-
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
