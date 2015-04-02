@@ -1634,11 +1634,11 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
 
 static void Ntf_PutLinkToChangePrefs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_preferences;
 
    Act_FormStart (ActEdiPrf);
-   Act_LinkFormSubmit (Txt_Change_preferences,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Change_preferences,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("heart",Txt_Change_preferences,Txt_Change_preferences);
    Act_FormEnd ();
   }
@@ -1649,11 +1649,11 @@ static void Ntf_PutLinkToChangePrefs (void)
 
 static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Mark_all_notifications_as_read;
 
    Act_FormStart (ActMrkNtfSee);
-   Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
    Act_FormEnd ();
   }

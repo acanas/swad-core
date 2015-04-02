@@ -216,6 +216,7 @@ void Cty_PrintConfiguration (void)
 
 static void Cty_Configuration (bool PrintView)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions;
    extern const char *Txt_Country;
@@ -232,11 +233,11 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Links to show institutions and to print view  *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       /* Link to show institutions */
       Act_FormStart (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institutions,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Institutions,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("ins",Txt_Institutions,Txt_Institutions);
       Act_FormEnd ();
 

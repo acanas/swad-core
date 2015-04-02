@@ -145,7 +145,7 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
 
 void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    bool PhotoExists;
@@ -166,7 +166,7 @@ void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
      }
    Msg = PhotoExists ? Txt_Change_photo :
 		       Txt_Upload_photo;
-   Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("photo",Msg,Msg);
    Act_FormEnd ();
   }
@@ -177,7 +177,7 @@ void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
 
 static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
@@ -189,7 +189,7 @@ static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 
-   Act_LinkFormSubmit (Txt_Remove_photo,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_photo,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_photo,Txt_Remove_photo);
    Act_FormEnd ();
   }
@@ -236,7 +236,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    if (PhotoExists)	// User has photo
      {
       /***** Forms to remove photo and make it public *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
       if (ItsMe)
          Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
@@ -1671,7 +1671,7 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 
 static void Pho_PutLinkToPrintViewOfDegreeStats (void)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Lay_PutLinkToPrintView1 (ActPrnPhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1689,7 +1689,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStats (void)
 
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_a_degree;
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
@@ -1707,8 +1707,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       /***** Get data of the degree from database *****/
       Deg_GetDataOfDegreeByCod (&Deg);
 
-      /***** Start div and table *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      /***** Start div *****/
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       /***** Start form *****/
       Act_FormStart (ActCalPhoDeg);
@@ -1718,7 +1718,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
-      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutCalculateIcon (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees *****/
@@ -1745,7 +1745,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                   StrEstimatedTimeToComputeAvgPhoto);
         }
 
-      /***** End selector, form, table and div *****/
+      /***** End selector, form and div *****/
       fprintf (Gbl.F.Out,"</select>");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");

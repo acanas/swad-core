@@ -868,12 +868,12 @@ void Rec_FreeListFields (void)
 
 void Rec_PutLinkToEditRecordFields (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
    Act_FormStart (ActEdiRecFie);
-   Act_LinkFormSubmit (Txt_Edit_record_fields,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit_record_fields,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit_record_fields,Txt_Edit_record_fields);
    Act_FormEnd ();
   }
@@ -1295,16 +1295,16 @@ void Rec_ListRecordsTchsCrs (void)
 
 void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\"> (</span>"
 	              "<select name=\"RecsPerPag\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+	    The_ClassFormulB[Gbl.Prefs.Theme]);
 
    for (i = 1;
         i <= 10;
@@ -1317,7 +1317,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "<span class=\"%s\"> %s)</span>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_record_cards_per_page);
+            The_ClassFormulB[Gbl.Prefs.Theme],Txt_record_cards_per_page);
   }
 
 /*****************************************************************************/
@@ -1864,16 +1864,16 @@ void Rec_ShowFormMyCommRecord (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** My record *****/
    Rec_ShowSharedUsrRecord (Rec_FORM_MY_COMMON_RECORD,&Gbl.Usrs.Me.UsrDat);
    Rec_WriteLinkToDataProtectionClause ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3085,7 +3085,9 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
    char Title[1024];
 
-   sprintf (Title,"<a href=\"%s/%s/\" target=\"_blank\">%s</a>",
+   sprintf (Title,"<div style=\"text-align:center;\">"
+	          "<a href=\"%s/%s/\" target=\"_blank\">%s</a>"
+	          "</div>",
             Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_DATA_PROTECTION_FOLDER,
             Txt_DATA_PROTECTION_CLAUSE);
    Lay_WriteTitle (Title);
@@ -3220,12 +3222,12 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 
 static void Rec_PutLinkToChangeMyInsCtrDpt (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
    Act_FormStart (ActReqEdiMyIns);
-   Act_LinkFormSubmit (Txt_Edit_my_institution,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit_my_institution,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("institution",Txt_Edit_my_institution,Txt_Edit_my_institution);
    Act_FormEnd ();
   }
@@ -3236,12 +3238,12 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
 
 static void Rec_PutLinkToChangeMySocialNetworks (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit_my_webs_networks;
 
    /***** Link to edit my social networks *****/
    Act_FormStart (ActReqEdiMyNet);
-   Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit_my_webs_networks,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
    Act_FormEnd ();
   }

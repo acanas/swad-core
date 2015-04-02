@@ -72,7 +72,7 @@ static void QR_ImageQRCode (const char *QRString);
 
 void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool PrintText)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_QR_code;
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
@@ -91,14 +91,10 @@ void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool Pri
          Par_PutHiddenParamString ("QRString",UsrDat->Email);
          break;
      }
-   Act_LinkFormSubmit (Txt_QR_code,The_ClassFormul[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/qr16x16.gif\" alt=\"%s\""
-	              " class=\"ICON16x16\" style=\"margin-left:10px;\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_QR_code);
-   if (PrintText)
-      fprintf (Gbl.F.Out," %s",Txt_QR_code);
-   fprintf (Gbl.F.Out,"</a>");
+   Act_LinkFormSubmit (Txt_QR_code,PrintText ? The_ClassFormulB[Gbl.Prefs.Theme] :
+	                                       NULL);
+   Lay_PutSendIcon ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
+	                                         NULL);
    Act_FormEnd ();
   }
 

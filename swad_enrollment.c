@@ -130,12 +130,12 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
 
 void Enr_PutLinkToRequestSignUp (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
    Act_FormStart (ActReqSignUp);
-   Act_LinkFormSubmit (Txt_Sign_up,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Sign_up,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("signup",Txt_Sign_up,Txt_Sign_up);
    Act_FormEnd ();
   }
@@ -278,7 +278,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
 void Enr_ReqAcceptRegisterInCrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_;
    extern const char *Txt_Confirm_my_enrollment;
    extern const char *Txt_Remove_me_from_this_course;
@@ -289,15 +289,15 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Send button to accept register in the current course *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActAccEnrCrs);
-   Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
    Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
    Act_FormStart (ActRemMeCrs);
-   Act_LinkFormSubmit (Txt_Remove_me_from_this_course,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_me_from_this_course,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -517,7 +517,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
    /* Put link to go to admin one user */
    Enr_PutLinkToAdminOneUsr ();
@@ -530,7 +530,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Enr_PutLinkToRemOldUsrs ();
 
-   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_several_users);
@@ -632,12 +632,12 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
 static void Enr_PutLinkToRemOldUsrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_old_users;
 
    /***** Put form to remove old users *****/
    Act_FormStart (ActReqRemOldUsr);
-   Act_LinkFormSubmit (Txt_Remove_old_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_old_users,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_old_users,Txt_Remove_old_users);
    Act_FormEnd ();
   }
@@ -1716,12 +1716,12 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
    Act_FormStart (ActReqRemAllStdCrs);
-   Act_LinkFormSubmit (Txt_Remove_all_students,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_all_students,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_all_students,Txt_Remove_all_students);
    Act_FormEnd ();
   }
@@ -2099,6 +2099,7 @@ void Enr_RejectSignUp (void)
 void Enr_ShowEnrollmentRequests (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Update;
@@ -2184,8 +2185,8 @@ void Enr_ShowEnrollmentRequests (void)
                       "</table>");
 
    /* Send button */
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update,Txt_Update);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2586,11 +2587,11 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 
 static void Enr_PutLinkToAdminOneUsr (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Admin_one_user;
 
    Act_FormStart (ActReqMdfOneUsr);
-   Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Admin_one_user,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Admin_one_user,Txt_Admin_one_user);
    Act_FormEnd ();
   }
@@ -2601,11 +2602,11 @@ static void Enr_PutLinkToAdminOneUsr (void)
 
 static void Enr_PutLinkToAdminSeveralUsrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Admin_several_users;
 
    Act_FormStart (ActReqMdfSevUsr);
-   Act_LinkFormSubmit (Txt_Admin_several_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Admin_several_users,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Admin_several_users,Txt_Admin_several_users);
    Act_FormEnd ();
   }
@@ -2670,7 +2671,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          /* Put link to go to admin several users */
@@ -2851,7 +2852,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
 static void Enr_ShowFormToEditOtherUsr (void)
   {
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       ID_PutLinkToChangeUsrIDs (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's IDs

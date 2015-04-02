@@ -117,7 +117,7 @@ void Att_SeeAttEvents (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Put other options *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
    /* Put link (form) to create a bew attendance event */
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -443,7 +443,7 @@ void Att_PutHiddenParamAttOrderType (void)
 
 static void Att_PutFormToListStds (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Attendance_list;
 
    /***** Put form to create a new attendance event *****/
@@ -451,7 +451,7 @@ static void Att_PutFormToListStds (void)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_Attendance_list,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Attendance_list,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("list",Txt_Attendance_list,Txt_Attendance_list);
    Act_FormEnd ();
   }
@@ -462,7 +462,7 @@ static void Att_PutFormToListStds (void)
 
 static void Att_PutFormToCreateNewAttEvent (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_event;
 
    /***** Put form to create a new attendance event *****/
@@ -470,7 +470,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_event,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_New_event,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_event,Txt_New_event);
    Act_FormEnd ();
   }
@@ -1029,7 +1029,6 @@ static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Valu
 
 void Att_RequestCreatOrEditAttEvent (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Teachers_comment;
@@ -2687,7 +2686,6 @@ void Usr_ReqListAttendanceStdsCrs (void)
 
 void Usr_ListAttendanceStdsCrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
@@ -2914,11 +2912,11 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActPrnLstAttStd);
    if (ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
@@ -2926,7 +2924,7 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
    Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
    if (StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -2959,7 +2957,7 @@ static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
 
 static void Att_ListEventsToSelect (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3048,7 +3046,7 @@ static void Att_ListEventsToSelect (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" style=\"text-align:center;\">");
-      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutCalculateIcon (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

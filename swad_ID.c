@@ -360,7 +360,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
 
 void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_IDs;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -374,7 +374,7 @@ void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
 	 Act_FormStart (ActFrmIDsOthUsr);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      Act_LinkFormSubmit (Txt_Change_IDs,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Change_IDs,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("arroba",Txt_Change_IDs,Txt_Change_IDs);
       Act_FormEnd ();
      }
@@ -388,7 +388,6 @@ void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
 
 void ID_ShowFormOthIDs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Changing_the_IDs_for_the_following_user;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -404,7 +403,7 @@ void ID_ShowFormOthIDs (void)
 	 /* Show user's record */
 	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
 			    "<tr>"
-			    "<td colspan=\"2\" style=\"text-align:center;\">");
+			    "<td colspan=\"3\" style=\"text-align:center;\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");

@@ -938,12 +938,12 @@ static void Lay_ShowRightColumn (void)
 
 void Lay_PutFormToView (Act_Action_t Action)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_View,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_View,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("visible_on",Txt_View,Txt_View);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -955,12 +955,12 @@ void Lay_PutFormToView (Act_Action_t Action)
 
 void Lay_PutFormToEdit (Act_Action_t Action)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -972,11 +972,18 @@ void Lay_PutFormToEdit (Act_Action_t Action)
 
 void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
   {
-   // margin-left is used because this form link may be placed after another one
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\" alt=\"%s\""
-	              " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
-                      "&nbsp;%s</a>",
-            Gbl.Prefs.IconsURL,Icon,Alt,Text);
+   // margin is used because this form link may be placed after another one
+   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	              " style=\"margin:0 5px; display:inline;\">"
+	              "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+	              " class=\"ICON16x16\" />",
+            Gbl.Prefs.IconsURL,Icon,Alt);
+   if (Text)
+      if (Text[0])
+	 fprintf (Gbl.F.Out,"&nbsp;%s",
+		  Text);
+   fprintf (Gbl.F.Out,"</div>"
+	              "</a>");
   }
 
 /*****************************************************************************/
@@ -986,11 +993,15 @@ void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
 
 void Lay_PutCalculateIcon (const char *Alt,const char *Text)
   {
-   fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\" alt=\"%s\""
+   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	              " style=\"margin:0 5px; display:inline;\">"
+	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\" alt=\"%s\""
 		      " class=\"ICON16x16\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\" alt=\"%s\""
 		      " class=\"ICON16x16\" style=\"display:none;\" />"	// Animated icon hidden
-		      "&nbsp;%s</a>",
+		      "&nbsp;%s"
+		      "</div>"
+		      "</a>",
 	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,
 	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,
 	    Text);
@@ -1533,10 +1544,10 @@ void Lay_PutLinkToPrintView1 (Act_Action_t NextAction)
 
 void Lay_PutLinkToPrintView2 (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Print;
 
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
    Act_FormEnd ();
   }

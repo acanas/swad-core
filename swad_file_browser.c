@@ -4269,7 +4269,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
                                       Act_Action_t Action)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_View;
    extern const char *Txt_Edit;
 
@@ -4282,16 +4282,12 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
    switch (ShowOrAdmin)
      {
       case Brw_SHOW:
-	 Act_LinkFormSubmit (Txt_View,The_ClassFormul[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("visible_on",
-	                  Txt_View,
-	                  Txt_View);
+	 Act_LinkFormSubmit (Txt_View,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Lay_PutSendIcon ("visible_on",Txt_View,Txt_View);
 	 break;
       case Brw_ADMIN:
-	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
-	 Lay_PutSendIcon ("edit",
-	                  Txt_Edit,
-	                  Txt_Edit);
+	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
 	 break;
      }
    Act_FormEnd ();

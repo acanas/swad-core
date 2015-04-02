@@ -415,9 +415,9 @@ static void Exa_ListExamAnnouncementsEdit (void)
 
 static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_No_announcements_of_exams_of_X;
-   extern const char *Txt_New_announcement_of_exam;
+   extern const char *Txt_New_announcement_OF_EXAM;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -442,12 +442,11 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_ROLE_TEACHER:
-      case Rol_ROLE_DEG_ADM:
       case Rol_ROLE_SYS_ADM:
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
          Act_FormStart (ActEdiExaAnn);
-         Act_LinkFormSubmit (Txt_New_announcement_of_exam,The_ClassFormul[Gbl.Prefs.Theme]);
-         Lay_PutSendIcon ("new",Txt_New_announcement_of_exam,Txt_New_announcement_of_exam);
+         Act_LinkFormSubmit (Txt_New_announcement_OF_EXAM,The_ClassFormulB[Gbl.Prefs.Theme]);
+         Lay_PutSendIcon ("new",Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
          break;
@@ -779,32 +778,23 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 	 /***** Link to remove this exam announcement *****/
 	 Act_FormStart (ActRemExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\" alt=\"%s\""
-	                    " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
-                            "</a>",
-                  Gbl.Prefs.IconsURL,Txt_Remove);
+	 Act_LinkFormSubmit (Txt_Remove,NULL);
+	 Lay_PutSendIcon ("delon",Txt_Remove,NULL);
 	 Act_FormEnd ();
 
 	 /***** Link to edit this exam announcement *****/
 	 Act_FormStart (ActEdiExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/edit16x16.gif\" alt=\"%s\""
-	                    " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
-                            "</a>",
-                  Gbl.Prefs.IconsURL,Txt_Edit);
+	 Act_LinkFormSubmit (Txt_Edit,NULL);
+	 Lay_PutSendIcon ("edit",Txt_Edit,NULL);
 	 Act_FormEnd ();
 	}
 
       /***** Link to print view *****/
       Act_FormStart (ActPrnExaAnn);
       Par_PutHiddenParamLong ("ExaCod",ExaCod);
-      Act_LinkFormSubmit (Txt_Print,The_ClassFormul[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/print16x16.gif\" alt=\"%s\""
-			 " class=\"ICON16x16\" style=\"margin-left:10px;\" />"
-			 "</a>",
-	       Gbl.Prefs.IconsURL,Txt_Print);
+      Act_LinkFormSubmit (Txt_Print,NULL);
+      Lay_PutSendIcon ("print",Txt_Print,NULL);
       Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</td>"

@@ -103,6 +103,7 @@ void Acc_ShowFormAccount (void)
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
@@ -114,9 +115,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Link to log in *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActFrmLogIn);
-   Act_LinkFormSubmit (Txt_Log_in,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Log_in,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("login",Txt_Log_in,Txt_Log_in);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -207,7 +208,7 @@ void Acc_ShowFormChangeMyAccount (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Put links to change my password and to remove my account*****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Pwd_PutLinkToChangeUsrPassword (&Gbl.Usrs.Me.UsrDat);
    if (Acc_CheckIfICanEliminateAccount (true))	// ItsMe = true
       Acc_PutLinkToRemoveMyAccount ();
@@ -242,13 +243,13 @@ void Acc_ShowFormChangeMyAccount (void)
 
 static void Acc_PutLinkToRemoveMyAccount (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_account;
 
    Act_FormStart (ActUpdOthUsrDat);
    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-   Act_LinkFormSubmit (Txt_Remove_account,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_account,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_account,Txt_Remove_account);
    Act_FormEnd ();
   }

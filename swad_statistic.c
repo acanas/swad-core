@@ -371,11 +371,11 @@ void Sta_RemoveOldEntriesRecentLog (void)
 
 static void Sta_PutFormToRequestAccessesCrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Visits_to_course;
 
    Act_FormStart (ActReqAccCrs);
-   Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("stats",Txt_Visits_to_course,Txt_Visits_to_course);
    Act_FormEnd ();
   }

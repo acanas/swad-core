@@ -183,7 +183,7 @@ static void Crs_Configuration (bool PrintView)
 	}
 
       /***** Links to print view and request enrollment *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       /* Link to print view */
       Lay_PutLinkToPrintView1 (ActPrnCrsInf);
@@ -2976,7 +2976,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
    extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
 
    /***** Search / select more courses *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Crs_PutLinkToSearchCourses ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3002,7 +3002,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
 
 static void Crs_PutLinkToSearchCourses (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
@@ -3014,7 +3014,7 @@ static void Crs_PutLinkToSearchCourses (void)
 						   ActSysReqSch)))));
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
-   Act_LinkFormSubmit (Txt_Search_courses,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Search_courses,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("search",Txt_Search_courses,Txt_Search_courses);
    Act_FormEnd ();
   }
@@ -3025,12 +3025,12 @@ static void Crs_PutLinkToSearchCourses (void)
 
 void Crs_PutFormToSelectMyCourses (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
    Act_FormStart (ActMyCrs);
-   Act_LinkFormSubmit (Txt_My_courses,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_My_courses,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("hierarchy",Txt_My_courses,Txt_My_courses);
    Act_FormEnd ();
   }

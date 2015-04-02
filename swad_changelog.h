@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.105.3 (2015/04/01)"
+#define Log_PLATFORM_VERSION	"SWAD 14.106 (2015/04/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.106:   Apr 02, 2015	Lot of changes in layout of icon with links. (183909 lines)
         Version 14.105.3: Apr 01, 2015	Changes in layout of course configuration and exam announcements. (183912 lines)
         Version 14.105.2: Mar 30, 2015	Some messages translated. (183941 lines)
         Version 14.105.1: Mar 30, 2015	Shared record card is shown after updating course record card. (183937 lines)

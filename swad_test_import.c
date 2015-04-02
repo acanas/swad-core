@@ -81,7 +81,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
 void TsI_PutFormToExportQuestions (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Export_questions_to_XML_file;
    extern const char *Txt_Export_questions;
 
@@ -96,7 +96,7 @@ void TsI_PutFormToExportQuestions (void)
    Par_PutHiddenParamChar ("CreateXML",'Y');
 
    /***** Put a link to create a file with questions *****/
-   Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("export",Txt_Export_questions_to_XML_file,Txt_Export_questions);
    Act_FormEnd ();
   }
@@ -107,7 +107,7 @@ void TsI_PutFormToExportQuestions (void)
 
 void TsI_PutFormToImportQuestions (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Import_questions_from_XML_file;
    extern const char *Txt_Import_questions;
 
@@ -115,7 +115,7 @@ void TsI_PutFormToImportQuestions (void)
    Act_FormStart (ActReqImpTstQst);
 
    /***** Put a link to create a file with questions *****/
-   Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("import",Txt_Import_questions_from_XML_file,Txt_Import_questions);
    Act_FormEnd ();
   }
@@ -166,7 +166,7 @@ void TsI_ShowFormImportQstsFromXML (void)
 
 void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
@@ -263,7 +263,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\">",
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("file",Txt_XML_file,Txt_XML_file);
   }
 

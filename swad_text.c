@@ -3442,23 +3442,23 @@ const char *Txt_Calculate_average_photo_of_a_degree =
 
 const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 #if   L==0
-	"Calcular fotografia mitjana de ";
+	"Calcular fotografia mitjana de";
 #elif L==1
-	"Calculate average photo of ";			// Need Übersetzung
+	"Calculate average photo of";			// Need Übersetzung
 #elif L==2
-	"Calculate average photo of ";
+	"Calculate average photo of";
 #elif L==3
-	"Calcular fotograf&iacute;a promedio de ";
+	"Calcular fotograf&iacute;a promedio de";
 #elif L==4
-	"Calculate average photo of ";			// Besoin de traduction
+	"Calculate average photo of";			// Besoin de traduction
 #elif L==5
-	"Calcular fotograf&iacute;a promedio de ";	// Okoteve traducción
+	"Calcular fotograf&iacute;a promedio de";	// Okoteve traducción
 #elif L==6
-	"Calcolare la media della foto di ";
+	"Calcolare la media della foto di";
 #elif L==7
-	"Obliczyc &sacute;rednia zdjecie ";
+	"Obliczyc &sacute;rednia zdjecie";
 #elif L==8
-	"Calculate average photo of ";			// Necessita de tradução
+	"Calculate average photo of";			// Necessita de tradução
 #endif
 
 const char *Txt_Call_the_roll =
@@ -21966,25 +21966,25 @@ const char *Txt_New_announcement =
 	"Novo an&uacute;ncio";
 #endif
 
-const char *Txt_New_announcement_of_exam =
+const char *Txt_New_announcement_OF_EXAM =
 #if   L==0
-	"Nova convocat&ograve;ria d'examen";
+	"Nova convocat&ograve;ria";
 #elif L==1
-	"Neuer Aufruf f&uuml;r Pr&uuml;fung";
+	"Neuer Aufruf";
 #elif L==2
-	"New announcement of exam";
+	"New announcement";
 #elif L==3
-	"Nueva convocatoria de examen";
+	"Nueva convocatoria";
 #elif L==4
-	"Nouvelle convocation &agrave; un examen";
+	"Nouvelle convocation";
 #elif L==5
-	"Nueva convocatoria de examen";	// Okoteve traducción
+	"Nueva convocatoria";	// Okoteve traducción
 #elif L==6
-	"Nuova sessione d'esame";
+	"Nuova sessione";
 #elif L==7
-	"Nowe ogloszenie egzaminu";
+	"Nowe ogloszenie";
 #elif L==8
-	"Nova chamada para exame";
+	"Nova chamada";
 #endif
 
 const char *Txt_New_banner =

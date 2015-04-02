@@ -173,7 +173,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 
 void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
    Act_Action_t Action;
@@ -221,7 +221,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    Act_FormStart (Action);
    Msg = LogoExists ? Txt_Change_logo :
 		      Txt_Upload_logo;
-   Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon (Icon,Msg,Msg);
    Act_FormEnd ();
   }
@@ -315,12 +315,12 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
 static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
 
    /***** Link for removing the photo *****/
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_logo,Txt_Remove_logo);
    Act_FormEnd ();
   }

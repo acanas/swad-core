@@ -1303,7 +1303,7 @@ void Usr_WriteFormLoginLogout (void)
   {
    if (Gbl.Session.IsOpen)
       /***** Form to change my role *****/
-      Usr_ShowFormsRoleAndLogout ();
+      Usr_ShowFormsLogoutAndRole ();
    else
       /***** Form to log in *****/
       Usr_WriteFormLogin ();
@@ -1333,7 +1333,7 @@ void Usr_Logout (void)
 
 void Usr_WriteFormLogin (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
@@ -1345,12 +1345,12 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_I_forgot_my_password;
 
    /***** Links to other actions *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
    /* Link to create a new account */
    Act_FormStart (ActFrmUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("arroba",Txt_Create_account,Gbl.Title);
    Act_FormEnd ();
 
@@ -1360,7 +1360,7 @@ void Usr_WriteFormLogin (void)
      {
       fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\">",
                Cfg_EXTERNAL_LOGIN_URL,
-               The_ClassFormul[Gbl.Prefs.Theme]);
+               The_ClassFormulB[Gbl.Prefs.Theme]);
       sprintf (Gbl.Title,Txt_Enter_from_X,
                Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
       Lay_PutSendIcon ("login",Gbl.Title,Gbl.Title);
@@ -1369,7 +1369,7 @@ void Usr_WriteFormLogin (void)
    /* Link to send a new password */
    Act_FormStart (ActReqSndNewPwd);
    Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
-   Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_I_forgot_my_password,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password);
    Act_FormEnd ();
 
@@ -2445,11 +2445,12 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
   }
 
 /*****************************************************************************/
-/************** Show forms to change my role and to log out ******************/
+/************** Show forms to log out and to change my role ******************/
 /*****************************************************************************/
 
-void Usr_ShowFormsRoleAndLogout (void)
+void Usr_ShowFormsLogoutAndRole (void)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Log_out;
    extern const char *Txt_You_are_LOGGED_as_X;
@@ -2458,9 +2459,9 @@ void Usr_ShowFormsRoleAndLogout (void)
    extern const char *Txt_Role;
 
    /***** Link to log out *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActLogOut);
-   Act_LinkFormSubmit (Txt_Log_out,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Log_out,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("logout",Txt_Log_out,Txt_Log_out);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -6288,6 +6289,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 void Usr_SeeGuests (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
@@ -6339,18 +6341,18 @@ void Usr_SeeGuests (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnInvPho);
 	       Lay_PutLinkToPrintView2 ();
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Act_FormStart (ActLstInvAll);
 	       Usr_PutParamListWithPhotos ();
 	       Usr_PutExtraParamsUsrList (ActLstInvAll);
-	       Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
+	       Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
 	       Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
 	       Act_FormEnd ();
 	       fprintf (Gbl.F.Out,"</div>");
@@ -6412,6 +6414,7 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
@@ -6421,8 +6424,7 @@ void Usr_SeeStudents (void)
        (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||	// My role in current course is teacher...
         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))	// ...or superuser
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
-	                 " margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       /***** Link to list official students *****/
       Usr_PutLinkToListOfficialStudents ();
@@ -6488,7 +6490,7 @@ void Usr_SeeStudents (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnStdPho);
 	       Grp_PutParamsCodGrps ();
 	       Lay_PutLinkToPrintView2 ();
@@ -6498,12 +6500,12 @@ void Usr_SeeStudents (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+		  fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 		  Act_FormStart (ActLstStdAll);
 		  Grp_PutParamsCodGrps ();
 		  Usr_PutParamListWithPhotos ();
 		  Usr_PutExtraParamsUsrList (ActLstStdAll);
-		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
+		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
 		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
 		  Act_FormEnd ();
 		  fprintf (Gbl.F.Out,"</div>");
@@ -6583,6 +6585,7 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_all_data;
    extern const char *Txt_Show_records;
@@ -6631,7 +6634,7 @@ void Usr_SeeTeachers (void)
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_CLASS_PHOTO:
-               fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+               fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnTchPho);
 	       Sco_PutParamScope (Gbl.Scope.Current);
 	       Lay_PutLinkToPrintView2 ();
@@ -6641,11 +6644,11 @@ void Usr_SeeTeachers (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+		  fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 		  Act_FormStart (ActLstTchAll);
 		  Sco_PutParamScope (Gbl.Scope.Current);
 		  Usr_PutParamListWithPhotos ();
-		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormul[Gbl.Prefs.Theme]);
+		  Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
 		  Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
 		  Act_FormEnd ();
 		  fprintf (Gbl.F.Out,"</div>");
@@ -6718,7 +6721,7 @@ void Usr_SeeTeachers (void)
 
 static void Usr_PutLinkToListOfficialStudents (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Official_students;
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
@@ -6729,7 +6732,7 @@ static void Usr_PutLinkToListOfficialStudents (void)
      {
       /***** Link to list official students *****/
       Act_FormStart (ActGetExtLstStd);
-      Act_LinkFormSubmit (Txt_Official_students,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Official_students,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("list",Txt_Official_students,Txt_Official_students);
       Act_FormEnd ();
      }

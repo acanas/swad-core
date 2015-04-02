@@ -291,7 +291,7 @@ void Not_ShowANotice (void)
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_No_notices;
    extern const char *Txt_New_notice;
    extern const char *Txt_All_notices;
@@ -317,14 +317,15 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
                          Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
                         );
 
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       if (ICanEditNotices)
 	{
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	 Act_FormStart (ActWriNot);
-	 Act_LinkFormSubmit (Txt_New_notice,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_New_notice,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("new",Txt_New_notice,Txt_New_notice);
 	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</div>");
 	}
 
       /***** Show highlighted notice *****/
@@ -457,8 +458,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 			    "</tr>");
 	 Lay_EndRoundFrameTable10 ();
 	}
-
-      fprintf (Gbl.F.Out,"</div>");
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

@@ -296,7 +296,7 @@ void Prf_ChangeProfileVisibility (void)
 
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -439,7 +439,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store first click time *****/
       Act_FormStart (ActCal1stClkTim);
       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
@@ -481,7 +481,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of clicks *****/
 	 Act_FormStart (ActCalNumClk);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -518,7 +518,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of file views *****/
 	 Act_FormStart (ActCalNumFilVie);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -555,7 +555,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of forum posts *****/
 	 Act_FormStart (ActCalNumForPst);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -592,7 +592,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of messages sent *****/
 	 Act_FormStart (ActCalNumMsgSnt);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}

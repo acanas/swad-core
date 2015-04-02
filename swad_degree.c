@@ -287,6 +287,7 @@ void Deg_PrintConfiguration (void)
 
 static void Deg_Configuration (bool PrintView)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Degree;
@@ -303,11 +304,11 @@ static void Deg_Configuration (bool PrintView)
       /***** Links to show courses, to print view and to upload logo *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
 	 /* Link to show courses */
 	 Act_FormStart (ActSeeCrs);
-	 Act_LinkFormSubmit (Txt_Courses,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_Courses,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("crs",Txt_Courses,Txt_Courses);
 	 Act_FormEnd ();
 

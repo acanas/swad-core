@@ -225,6 +225,7 @@ void Ins_PrintConfiguration (void)
 
 static void Ins_Configuration (bool PrintView)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Centres;
    extern const char *Txt_Institution;
@@ -244,11 +245,11 @@ static void Ins_Configuration (bool PrintView)
       /***** Links to show centres, to print view and to upload logo *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+	 fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
 	 /* Link to show centres */
 	 Act_FormStart (ActSeeCtr);
-	 Act_LinkFormSubmit (Txt_Centres,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_Centres,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("ctr",Txt_Centres,Txt_Centres);
 	 Act_FormEnd ();
 

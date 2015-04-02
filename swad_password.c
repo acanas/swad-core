@@ -782,7 +782,7 @@ void Pwd_ShowFormOthPwd (void)
 
 void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_password;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -796,7 +796,7 @@ void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat)
 	 Act_FormStart (ActFrmPwdOthUsr);
 	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      Act_LinkFormSubmit (Txt_Change_password,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Change_password,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("key",Txt_Change_password,Txt_Change_password);
       Act_FormEnd ();
      }

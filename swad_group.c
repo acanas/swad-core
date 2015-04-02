@@ -227,6 +227,7 @@ static void Grp_EditGroups (void)
 static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_All_groups;
    extern const char *Txt_Update_students;
    extern const char *Txt_Update_students_according_to_selected_groups;
@@ -278,7 +279,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"7\" style=\"padding-top:10px;"
 	              " text-align:center;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -2044,7 +2045,6 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2162,7 +2162,6 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_group;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;

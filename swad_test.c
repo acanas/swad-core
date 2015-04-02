@@ -256,7 +256,7 @@ void Tst_ShowFormAskTst (void)
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
       Tst_PutFormToEdit ();
       Tst_PutFormToConfigure ();
@@ -312,12 +312,12 @@ void Tst_ShowFormAskTst (void)
 
 static void Tst_PutFormToSeeResultsOfUsersTests (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Results_tests;
 
    Act_FormStart (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ActReqSeeMyTstExa:
 	                                                       ActReqSeeUsrTstExa);
-   Act_LinkFormSubmit (Txt_Results_tests,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Results_tests,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("file",Txt_Results_tests,Txt_Results_tests);
    Act_FormEnd ();
   }
@@ -328,11 +328,11 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
 
 static void Tst_PutFormToEdit (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
    Act_FormStart (ActEdiTstQst);
-   Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
    Act_FormEnd ();
   }
@@ -343,12 +343,12 @@ static void Tst_PutFormToEdit (void)
 
 static void Tst_PutFormToConfigure (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Configure;
 
    Act_FormStart (ActCfgTst);
-   Act_LinkFormSubmit (Txt_Configure_tests,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Configure_tests,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("configtest",Txt_Configure,Txt_Configure);
    Act_FormEnd ();
   }
@@ -1158,12 +1158,12 @@ void Tst_ShowFormAskEditTsts (void)
 
 static void Tst_PutFormToCreateNewTstQst (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_question;
 
    /***** Put form to create a new test question *****/
    Act_FormStart (ActEdiOneTstQst);
-   Act_LinkFormSubmit (Txt_New_question,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
    Act_FormEnd ();
   }

@@ -218,7 +218,7 @@ static void TT_GetParamsTimeTable (void)
 
 void TT_ShowClassTimeTable (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
    extern const char *Txt_Edit_office_hours;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
@@ -249,13 +249,13 @@ void TT_ShowClassTimeTable (void)
    /***** Put buttons *****/
    if (PutEditButton || PutEditOfficeHours || !PrintView)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
       if (PutEditButton)
 	{
 	 Act_FormStart (ActEdiCrsTimTbl);
 	 Grp_PutParamWhichGrps ();
-	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
 	 Act_FormEnd ();
 	}
@@ -263,7 +263,7 @@ void TT_ShowClassTimeTable (void)
       if (PutEditOfficeHours)
 	{
 	 Act_FormStart (ActEdiTut);
-	 Act_LinkFormSubmit (Txt_Edit_office_hours,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_Edit_office_hours,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("edit",Txt_Edit_office_hours,Txt_Edit_office_hours);
 	 Act_FormEnd ();
 	}
@@ -318,13 +318,13 @@ void TT_ShowClassTimeTable (void)
 
 void TT_EditCrsTimeTable (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActSeeCrsTimTbl);
-   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -349,14 +349,14 @@ void TT_EditCrsTimeTable (void)
 
 void TT_ShowMyTutTimeTable (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Show_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActSeeMyTimTbl);
-   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");

@@ -111,16 +111,16 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
 void ZIP_PutButtonToCreateZIPAsgWrk (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActAdmAsgWrkCrs);
    Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
    Par_PutHiddenParamChar ("CreateZIP",'Y');
-   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("download",Txt_Create_ZIP_file,Txt_Create_ZIP_file);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -145,7 +145,6 @@ bool ZIP_GetCreateZIPFromForm (void)
 
 void ZIP_CreateZIPAsgWrk (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_works_ZIP_FILE_NAME;
    char StrZip[100+PATH_MAX*2+1];
    char Path[PATH_MAX+1];

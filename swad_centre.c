@@ -236,6 +236,7 @@ void Ctr_PrintConfiguration (void)
 
 static void Ctr_Configuration (bool PrintView)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Centre;
@@ -265,11 +266,11 @@ static void Ctr_Configuration (bool PrintView)
              and to upload photo and logo *****/
       if (!PrintView)
 	{
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 
 	 /* Link to show degrees */
 	 Act_FormStart (ActSeeDeg);
-	 Act_LinkFormSubmit (Txt_Degrees,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Txt_Degrees,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("deg",Txt_Degrees,Txt_Degrees);
 	 Act_FormEnd ();
 
@@ -1827,7 +1828,7 @@ void Ctr_RemoveLogo (void)
 
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    const char *Msg;
@@ -1836,7 +1837,7 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
    Act_FormStart (ActReqCtrPho);
    Msg = PhotoExists ? Txt_Change_photo :
 		       Txt_Upload_photo;
-   Act_LinkFormSubmit (Msg,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Msg,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("photo",Msg,Msg);
    Act_FormEnd ();
   }

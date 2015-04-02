@@ -694,15 +694,15 @@ void Svy_PutHiddenParamSvyOrderType (void)
 
 static void Svy_PutFormToCreateNewSvy (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_survey;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActFrmNewSvy);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_survey,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_New_survey,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_survey,Txt_New_survey);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -1510,7 +1510,6 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Start_date;
    extern const char *Txt_End_date;
    extern const char *Txt_Title;
@@ -2952,7 +2951,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Survey_questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -3124,7 +3123,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          Svy_PutHiddenParamSvyOrderType ();
          Grp_PutParamWhichGrps ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Act_LinkFormSubmit (Txt_New_question,The_ClassFormul[Gbl.Prefs.Theme]);
+         Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"

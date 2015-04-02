@@ -71,6 +71,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 void Con_ShowConnectedUsrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Update_connected_users;
    extern const char *Txt_Scope;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
@@ -103,7 +104,7 @@ void Con_ShowConnectedUsrs (void)
       Sco_PutSelectorScope (false);
       fprintf (Gbl.F.Out,"</div>");
      }
-   Act_LinkFormSubmitAnimated (Txt_Update_connected_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_connected_users,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update_connected_users,Txt_Update_connected_users);
    Act_FormEnd ();
 

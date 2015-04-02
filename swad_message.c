@@ -124,7 +124,7 @@ static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 
 void Msg_ListEMails (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Students_who_have_accepted_and_who_have_e_mail;
    extern const char *Txt_X_students_who_have_e_mail;
    extern const char *Txt_X_students_who_have_accepted_and_who_have_e_mail;
@@ -217,12 +217,12 @@ void Msg_ListEMails (void)
          Lay_EndRoundFrameTable10 ();
 
          /***** Icon to open the client e-mail program *****/
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">"
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\" title=\"%s\" class=\"%s\">",
                   Gbl.Usrs.Me.UsrDat.Email,
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
                   Txt_Create_e_mail_message,
-                  The_ClassFormul[Gbl.Prefs.Theme]);
+                  The_ClassFormulB[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("editnewmsg",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
          fprintf (Gbl.F.Out,"</div>");
         }
@@ -1498,8 +1498,7 @@ void Msg_ShowRecMsgs (void)
    /***** Link to view banned users *****/
    if (Msg_GetNumUsrsBannedByMe ())
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
-	                 " margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
       Msg_PutLinkToViewBannedUsers ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -1666,11 +1665,11 @@ static unsigned long Msg_GetNumUsrsBannedByMe (void)
 
 static void Msg_PutLinkToViewBannedUsers(void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Banned_users;
 
    Act_FormStart (ActLstBanUsr);
-   Act_LinkFormSubmit (Txt_Banned_users,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Banned_users,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("stop",Txt_Banned_users,Txt_Banned_users);
    Act_FormEnd ();
   }
@@ -2140,7 +2139,7 @@ void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs)
 
 void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned NumMsgs)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_MSG_containing_the_text;
    extern const char *Txt_MSGS_containing_the_text;
    extern const char *Txt_Remove_the_MESSAGE;
@@ -2152,10 +2151,11 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    extern const char *Txt_messages_received_from_A_USER;
    extern const char *Txt_messages_sent_to_A_USER;
    extern const char *Txt_from_A_COURSE;
+   extern const char *Txt_Remove;
    char StrFilterContent[256+Msg_MAX_LENGTH_FILTER_CONTENT+1];
 
    /***** Put link to request deletion of all sent or received messages *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg : ActReqDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
 
@@ -2189,11 +2189,8 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
                Txt_from_A_COURSE,
                Gbl.Msg.FilterCrsShortName,
                StrFilterContent);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\" alt=\"%s\""
-	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
-	              " %s</a>",
-            Gbl.Prefs.IconsURL,Gbl.Title,Gbl.Title);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("delon",Txt_Remove,Gbl.Title);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2948,7 +2945,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
                                   bool FromThisCrs,bool Replied,
                                   const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Reply;
    extern const char *Txt_Reply_again;
    extern const char *Txt_Go_to_course_and_reply;
@@ -2976,7 +2973,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 						Txt_Reply) :
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
-		       The_ClassFormul[Gbl.Prefs.Theme]);
+		       The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("reply",Replied ? Txt_Reply_again :
 				      Txt_Reply,
 			    Replied ? Txt_Reply_again :

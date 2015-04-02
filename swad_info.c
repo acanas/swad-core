@@ -409,12 +409,12 @@ void Inf_ShowInfo (void)
 
 static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (Inf_ActionsEditInfo[InfoType]);
-   Act_LinkFormSubmit (Txt_Edit,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -870,7 +870,7 @@ void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_B
 
 static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
 
@@ -881,7 +881,7 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td style=\"text-align:center;\">"
 		      "<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-	    URL,The_ClassFormul[Gbl.Prefs.Theme]);
+	    URL,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("fullscreen",
 		    Txt_View_in_a_new_window,
 		    Txt_View_in_a_new_window);

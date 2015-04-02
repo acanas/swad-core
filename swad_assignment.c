@@ -471,16 +471,16 @@ void Asg_PutHiddenParamAsgOrderType (void)
 
 static void Asg_PutFormToCreateNewAsg (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
 
    /***** Put form to create a new assignment *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActFrmNewAsg);
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_LinkFormSubmit (Txt_New_assignment,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_New_assignment,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("new",Txt_New_assignment,Txt_New_assignment);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -1070,7 +1070,6 @@ void Asg_RequestCreatOrEditAsg (void)
   {
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Start_date;
    extern const char *Txt_End_date;
    extern const char *Txt_Title;

@@ -75,6 +75,7 @@ static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileB
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -175,7 +176,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Send button */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\" style=\"text-align:center;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update_indicators,Txt_Update_indicators);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
