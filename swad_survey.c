@@ -724,41 +724,25 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div style=\"padding:5px 0;\">");
 
    /***** Put form to remove survey *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActReqRemSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Remove,
-            Txt_Remove);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   Act_PutIconLink ("delon",Txt_Remove);
 
    /***** Put form to reset survey *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActReqRstSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/reset16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Reset,
-            Txt_Reset);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   Act_PutIconLink ("reset",Txt_Reset);
 
    /***** Put form to hide/show survey *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (Visible ? ActHidSvy :
 	                    ActShoSvy);
    Svy_PutParamSvyCod (SvyCod);
@@ -766,35 +750,19 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Visible)
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_on16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Hide,Txt_Hide);
+      Act_PutIconLink ("visible_on",Txt_Hide);
    else
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_on16x16.gif\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Show,Txt_Show);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+      Act_PutIconLink ("hidden_on",Txt_Show);
 
    /***** Put form to edit survey *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Act_FormStart (ActEdiOneSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Edit,
-            Txt_Edit);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   Act_PutIconLink ("edit",Txt_Edit);
 
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
