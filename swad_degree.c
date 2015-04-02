@@ -307,12 +307,10 @@ static void Deg_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to show courses */
-	 Act_FormStart (ActSeeCrs);
-         Act_PutContextualLink ("crs",Txt_Courses,Txt_Courses,Txt_Courses);
+         Act_PutContextualLink (ActSeeCrs,NULL,"crs",Txt_Courses);
 
 	  /* Link to print view */
-	 Act_FormStart (ActPrnDegInf);
-         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+         Act_PutContextualLink (ActPrnDegInf,NULL,"print",Txt_Print);
 
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)

@@ -70,28 +70,20 @@ static void QR_ImageQRCode (const char *QRString);
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool PrintText)
+void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
   {
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_QR_code;
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Link to print view *****/
    Act_FormStart (ActPrnUsrQR);
-   switch (QRType)
-     {
-      case QR_ID:
-         Par_PutHiddenParamString ("QRString",UsrDat->IDs.List[0].ID);	// TODO: First ID?
-         break;
-      case QR_NICKNAME:
-         sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
-         Par_PutHiddenParamString ("QRString",NicknameWithArroba);
-         break;
-      case QR_EMAIL:
-         Par_PutHiddenParamString ("QRString",UsrDat->Email);
-         break;
-     }
-   Act_PutContextualLink ("qr",Txt_QR_code,Txt_QR_code,PrintText ? Txt_QR_code :
-	                                                           NULL);
+   sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
+   Par_PutHiddenParamString ("QRString",NicknameWithArroba);
+   Act_LinkFormSubmit (Txt_QR_code,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Lay_PutSendIcon ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
+	                                         NULL);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

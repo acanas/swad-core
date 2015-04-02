@@ -443,8 +443,8 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
       case Rol_ROLE_TEACHER:
       case Rol_ROLE_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-         Act_FormStart (ActEdiExaAnn);
-         Act_PutContextualLink ("new",Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
+         Act_PutContextualLink (ActEdiExaAnn,NULL,
+                                "new",Txt_New_announcement_OF_EXAM);
          fprintf (Gbl.F.Out,"</div>");
          break;
       default:

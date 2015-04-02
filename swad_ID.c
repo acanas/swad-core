@@ -358,22 +358,20 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
 /*********** Put a link to the action used to request user's IDs *************/
 /*****************************************************************************/
 
-void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat)
+void ID_PutLinkToChangeUsrIDs (void)
   {
    extern const char *Txt_Change_IDs;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Link for changing the password *****/
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
+   if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-	 Act_FormStart (ActFrmUsrAcc);
-      else						// Not me
-	{
-	 Act_FormStart (ActFrmIDsOthUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	}
-      Act_PutContextualLink ("arroba",Txt_Change_IDs,Txt_Change_IDs,Txt_Change_IDs);
+      if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+         Act_PutContextualLink (ActFrmUsrAcc,NULL,
+                                "arroba",Txt_Change_IDs);
+      else								// Not me
+         Act_PutContextualLink (ActFrmIDsOthUsr,Usr_PutParamOtherUsrCodEncrypted,
+                                "arroba",Txt_Change_IDs);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -466,7 +464,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    else
 	      {
 	       Act_FormStart (ActRemIDOth);
-	       Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
 	    sprintf (Gbl.Title,Txt_Remove_ID_X,
 		     UsrDat->IDs.List[NumID].ID);
@@ -524,7 +522,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
       else
 	{
 	 Act_FormStart (ActNewIDOth);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\""
 	                 " size=\"16\" maxlength=\"%u\" value=\"%s\" />",

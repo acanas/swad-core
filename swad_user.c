@@ -161,6 +161,11 @@ static void Usr_UpdateMyColsClassPhotoInDB (void);
 static void Usr_GetAndUpdatePrefAboutListWithPhotos (void);
 static bool Usr_GetParamListWithPhotosFromForm (void);
 static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
+
+static void Usr_PutLinkToShowGuestsAllDataParams (void);
+static void Usr_PutLinkToShowStdsAllDataParams (void);
+static void Usr_PutLinkToShowTchsAllDataParams (void);
+
 static void Usr_PutLinkToListOfficialStudents (void);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
@@ -192,7 +197,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
          Lay_ShowAlert (Lay_WARNING,Message);
 
 	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-	 Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);
+	 Pho_PutLinkToChangeMyPhoto ();
 	 fprintf (Gbl.F.Out,"</div>");
         }
      }
@@ -1341,15 +1346,13 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Password;
    extern const char *Txt_password;
-   extern const char *Txt_I_forgot_my_password;
 
    /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Link to create a new account */
-   Act_FormStart (ActFrmUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Act_PutContextualLink ("arroba",Gbl.Title,Gbl.Title,Gbl.Title);
+   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba",Gbl.Title);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1364,9 +1367,7 @@ void Usr_WriteFormLogin (void)
      }
 
    /* Link to send a new password */
-   Act_FormStart (ActReqSndNewPwd);
-   Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
-   Act_PutContextualLink ("key",Txt_I_forgot_my_password,Txt_I_forgot_my_password,Txt_I_forgot_my_password);
+   Pwd_PutLinkToSendNewPasswd ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1471,7 +1472,7 @@ void Usr_WelcomeUsr (void)
              !Gbl.Usrs.Me.MyPhotoExists)	// Check if I have no photo
 	   {
 	    Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_photo);
-	    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);
+	    Pho_PutLinkToChangeMyPhoto ();
 	   }
 
 	 fprintf (Gbl.F.Out,"</div>");
@@ -1705,7 +1706,12 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_PutParamOtherUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+void Usr_PutParamOtherUsrCodEncrypted (void)
+  {
+   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+  }
+
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
   {
    Par_PutHiddenParamString ("OtherUsrCod",EncryptedUsrCod);
   }
@@ -2454,8 +2460,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActLogOut);
-   Act_PutContextualLink ("logout",Txt_Log_out,Txt_Log_out,Txt_Log_out);
+   Act_PutContextualLink (ActLogOut,NULL,"logout",Txt_Log_out);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
@@ -4805,7 +4810,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
            {
             Par_PutHiddenParamChar ("IsReply",'Y');
             Msg_PutHiddenParamMsgCod (Gbl.Msg.RepliedMsgCod);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
            }
          break;
       case ActSeePhoDeg:
@@ -6334,15 +6339,13 @@ void Usr_SeeGuests (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       Act_FormStart (ActPrnInvPho);
-               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+               Act_PutContextualLink (ActPrnInvPho,Usr_PutLinkToShowGuestsAllDataParams,
+                                      "print",Txt_Print);
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
-	       Act_FormStart (ActLstInvAll);
-	       Usr_PutParamListWithPhotos ();
-	       Usr_PutExtraParamsUsrList (ActLstInvAll);
-               Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
+               Act_PutContextualLink (ActLstInvAll,Usr_PutLinkToShowGuestsAllDataParams,
+                                      "table",Txt_Show_all_data);
 	       break;
            }
 	 fprintf (Gbl.F.Out,"</div>");
@@ -6393,6 +6396,26 @@ void Usr_SeeGuests (void)
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
+  }
+
+static void Usr_PutLinkToShowGuestsAllDataParams (void)
+  {
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstInvAll);
+  }
+
+static void Usr_PutLinkToShowStdsAllDataParams (void)
+  {
+   Grp_PutParamsCodGrps ();
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstStdAll);
+  }
+
+static void Usr_PutLinkToShowTchsAllDataParams (void)
+  {
+   Sco_PutParamScope (Gbl.Scope.Current);
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstTchAll);
   }
 
 /*****************************************************************************/
@@ -6479,9 +6502,8 @@ void Usr_SeeStudents (void)
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
 	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	       Act_FormStart (ActPrnStdPho);
-	       Grp_PutParamsCodGrps ();
-               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+               Act_PutContextualLink (ActPrnStdPho,Usr_PutLinkToShowStdsAllDataParams,
+                                      "print",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
@@ -6489,11 +6511,8 @@ void Usr_SeeStudents (void)
 		 {
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-		  Act_FormStart (ActLstStdAll);
-		  Grp_PutParamsCodGrps ();
-		  Usr_PutParamListWithPhotos ();
-		  Usr_PutExtraParamsUsrList (ActLstStdAll);
-                  Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
+                  Act_PutContextualLink (ActLstStdAll,Usr_PutLinkToShowStdsAllDataParams,
+                                         "table",Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
 	       break;
@@ -6621,20 +6640,17 @@ void Usr_SeeTeachers (void)
            {
             case Usr_CLASS_PHOTO:
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	       Act_FormStart (ActPrnTchPho);
-	       Sco_PutParamScope (Gbl.Scope.Current);
-               Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+               Act_PutContextualLink (ActPrnTchPho,Usr_PutLinkToShowTchsAllDataParams,
+                                      "print",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
             case Usr_LIST:
-	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
+	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
 		 {
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-		  Act_FormStart (ActLstTchAll);
-		  Sco_PutParamScope (Gbl.Scope.Current);
-		  Usr_PutParamListWithPhotos ();
-                  Act_PutContextualLink ("table",Txt_Show_all_data,Txt_Show_all_data,Txt_Show_all_data);
+                  Act_PutContextualLink (ActLstTchAll,Usr_PutLinkToShowTchsAllDataParams,
+                                         "table",Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
                break;
@@ -6712,11 +6728,9 @@ static void Usr_PutLinkToListOfficialStudents (void)
        Gbl.Imported.ExternalUsrId[0] &&			// I was authenticated from external service...
        Gbl.Imported.ExternalSesId[0] &&
        Gbl.Imported.ExternalRole == Rol_ROLE_TEACHER)	// ...as a teacher
-     {
       /***** Link to list official students *****/
-      Act_FormStart (ActGetExtLstStd);
-      Act_PutContextualLink ("list",Txt_Official_students,Txt_Official_students,Txt_Official_students);
-     }
+      Act_PutContextualLink (ActGetExtLstStd,NULL,
+                             "list",Txt_Official_students);
   }
 
 /*****************************************************************************/

@@ -85,7 +85,9 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat);
+static void Pho_PutLinkToRemoveMyPhoto (void);
+static void Pho_PutLinkToRemoveOtherUsrPhoto (void);
+
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
 static void Pho_ClearPhotoName (long UsrCod);
@@ -102,7 +104,10 @@ static void Pho_PutSelectorForHowComputePhotoSize (void);
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
 static void Pho_PutSelectorForHowOrderDegrees (void);
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
+
 static void Pho_PutLinkToPrintViewOfDegreeStats (void);
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void);
+
 static void Pho_PutLinkToCalculateDegreeStats (void);
 static void Pho_GetMaxStdsPerDegree (void);
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
@@ -143,48 +148,60 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
 /********** Put a link to the action used to request user's photo ************/
 /*****************************************************************************/
 
-void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat)
+void Pho_PutLinkToChangeMyPhoto (void)
+  {
+   extern const char *Txt_Change_photo;
+   extern const char *Txt_Upload_photo;
+   bool PhotoExists;
+
+   /***** Link for changing / uploading the photo *****/
+   PhotoExists = Gbl.Usrs.Me.MyPhotoExists;
+   Act_PutContextualLink (ActReqMyPho,NULL,
+                          "photo",PhotoExists ? Txt_Change_photo :
+		                                Txt_Upload_photo);
+  }
+
+/*****************************************************************************/
+/********** Put a link to the action used to request user's photo ************/
+/*****************************************************************************/
+
+void Pho_PutLinkToChangeOtherUsrPhoto (void)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    bool PhotoExists;
    char PhotoURL[PATH_MAX+1];
-   const char *Msg;
 
    /***** Link for changing / uploading the photo *****/
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-     {
-      PhotoExists = Gbl.Usrs.Me.MyPhotoExists;
-      Act_FormStart (ActReqMyPho);
-     }
-   else							// Not me
-     {
-      PhotoExists = Pho_BuildLinkToPhoto (UsrDat,PhotoURL,true);
-      Act_FormStart (ActReqUsrPho);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-     }
-   Msg = PhotoExists ? Txt_Change_photo :
-		       Txt_Upload_photo;
-   Act_PutContextualLink ("photo",Msg,Msg,Msg);
+   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+   Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+                          "photo",PhotoExists ? Txt_Change_photo :
+		                                Txt_Upload_photo);
   }
 
 /*****************************************************************************/
 /********************* Put a link to remove user's photo *********************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToRemoveUsrPhoto (const struct UsrData *UsrDat)
+static void Pho_PutLinkToRemoveMyPhoto (void)
   {
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Act_FormStart (ActRemMyPho);
-   else							// Not me
-     {
-      Act_FormStart (ActRemUsrPho);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-     }
-   Act_PutContextualLink ("delon",Txt_Remove_photo,Txt_Remove_photo,Txt_Remove_photo);
+   Act_PutContextualLink (ActRemMyPho,NULL,"delon",Txt_Remove_photo);
+  }
+
+/*****************************************************************************/
+/********************* Put a link to remove user's photo *********************/
+/*****************************************************************************/
+
+static void Pho_PutLinkToRemoveOtherUsrPhoto (void)
+  {
+   extern const char *Txt_Remove_photo;
+
+   /***** Link for removing the photo *****/
+   Act_PutContextualLink (ActRemUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+                          "delon",Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -230,9 +247,13 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
      {
       /***** Forms to remove photo and make it public *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Pho_PutLinkToRemoveUsrPhoto (UsrDat);
       if (ItsMe)
+	{
+         Pho_PutLinkToRemoveMyPhoto ();
          Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
+	}
+      else
+         Pho_PutLinkToRemoveOtherUsrPhoto ();
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show photo */
@@ -248,7 +269,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    else
      {
       Act_FormStart (ActDetUsrPho);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
@@ -498,7 +519,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                Act_FormStart (ItsMe ? ActUpdMyPho :
         	                      ActUpdUsrPho);
                if (!ItsMe)
-                  Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+                  Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
                Par_PutHiddenParamString ("FileName",StrFileName);
                Act_FormEnd ();
               }
@@ -962,7 +983,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       Act_FormStart (ActSeePubPrf);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (NULL,NULL);
      }
 
@@ -1667,15 +1688,19 @@ static void Pho_PutLinkToPrintViewOfDegreeStats (void)
    extern const char *Txt_Print;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActPrnPhoDeg);
+   Act_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
+                          "print",Txt_Print);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
+  {
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
    Usr_PutParamListWithPhotos ();
-   Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

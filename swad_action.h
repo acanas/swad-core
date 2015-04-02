@@ -1343,10 +1343,8 @@ void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle);
 
-void Act_PutContextualLink (const char *Icon,
-                              const char *Title,
-                              const char *Alt,
-                              const char *Text);
+void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
+                            const char *Icon,const char *Title);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);

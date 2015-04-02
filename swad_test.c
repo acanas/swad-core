@@ -314,9 +314,9 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
   {
    extern const char *Txt_Results_tests;
 
-   Act_FormStart (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ActReqSeeMyTstExa:
-	                                                       ActReqSeeUsrTstExa);
-   Act_PutContextualLink ("file",Txt_Results_tests,Txt_Results_tests,Txt_Results_tests);
+   Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ActReqSeeMyTstExa :
+	                                                               ActReqSeeUsrTstExa,
+	                  NULL,"file",Txt_Results_tests);
   }
 
 /*****************************************************************************/
@@ -327,8 +327,7 @@ static void Tst_PutFormToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   Act_FormStart (ActEdiTstQst);
-   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+   Act_PutContextualLink (ActEdiTstQst,NULL,"edit",Txt_Edit);
   }
 
 /*****************************************************************************/
@@ -339,8 +338,7 @@ static void Tst_PutFormToConfigure (void)
   {
    extern const char *Txt_Configure;
 
-   Act_FormStart (ActCfgTst);
-   Act_PutContextualLink ("configtest",Txt_Configure,Txt_Configure,Txt_Configure);
+   Act_PutContextualLink (ActCfgTst,NULL,"configtest",Txt_Configure);
   }
 
 /*****************************************************************************/
@@ -6493,7 +6491,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT");
 
    /***** Show user's ID *****/

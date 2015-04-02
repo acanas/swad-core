@@ -438,7 +438,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       /***** Button to fetch and store first click time *****/
       Act_FormStart (ActCal1stClkTim);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
@@ -480,7 +480,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	{
 	 /***** Button to fetch and store number of clicks *****/
 	 Act_FormStart (ActCalNumClk);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
@@ -517,7 +517,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	{
 	 /***** Button to fetch and store number of file views *****/
 	 Act_FormStart (ActCalNumFilVie);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
@@ -554,7 +554,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	{
 	 /***** Button to fetch and store number of forum posts *****/
 	 Act_FormStart (ActCalNumForPst);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
@@ -591,7 +591,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	{
 	 /***** Button to fetch and store number of messages sent *****/
 	 Act_FormStart (ActCalNumMsgSnt);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
@@ -1506,7 +1506,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    if (Visible)
      {
       Act_FormStart (ActSeePubPrf);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
       Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");

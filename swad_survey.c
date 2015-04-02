@@ -97,7 +97,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 static void Svy_WriteAuthor (struct Survey *Svy);
 static void Svy_WriteStatus (struct Survey *Svy);
 static void Svy_GetParamSvyOrderType (void);
+
 static void Svy_PutFormToCreateNewSvy (void);
+static void Svy_PutFormToCreateNewSvyParams (void);
+
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt);
 static void Svy_PutParamSvyCod (long SvyCod);
@@ -697,12 +700,16 @@ static void Svy_PutFormToCreateNewSvy (void)
    extern const char *Txt_New_survey;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActFrmNewSvy);
+   Act_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
+                          "new",Txt_New_survey);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Svy_PutFormToCreateNewSvyParams (void)
+  {
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutContextualLink ("new",Txt_New_survey,Txt_New_survey,Txt_New_survey);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

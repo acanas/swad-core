@@ -203,8 +203,7 @@ static void Plc_PutFormToEditPlcs (void)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActEdiPlc);
-   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+   Act_PutContextualLink (ActEdiPlc,NULL,"edit",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

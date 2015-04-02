@@ -318,8 +318,13 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	text-align:center;
 	margin-bottom:10px;
+	text-align:center;
+	}
+.CONTEXT_OPT
+	{
+	display:inline;
+	margin:0 5px;
 	}
 
 /********************************* Frame 10 **********************************/

@@ -269,12 +269,10 @@ static void Ctr_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to show degrees */
-	 Act_FormStart (ActSeeDeg);
-	 Act_PutContextualLink ("deg",Txt_Degrees,Txt_Degrees,Txt_Degrees);
+	 Act_PutContextualLink (ActSeeDeg,NULL,"deg",Txt_Degrees);
 
          /* Link to print view */
-	 Act_FormStart (ActPrnCtrInf);
-         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+         Act_PutContextualLink (ActPrnCtrInf,NULL,"print",Txt_Print);
 
 	 /* Links to upload logo and photo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
@@ -1827,13 +1825,11 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
-   const char *Msg;
 
    /***** Link for changing / uploading the photo *****/
-   Act_FormStart (ActReqCtrPho);
-   Msg = PhotoExists ? Txt_Change_photo :
-		       Txt_Upload_photo;
-   Act_PutContextualLink ("photo",Msg,Msg,Msg);
+   Act_PutContextualLink (ActReqCtrPho,NULL,
+                          "photo",PhotoExists ? Txt_Change_photo :
+		                                Txt_Upload_photo);
   }
 
 /*****************************************************************************/

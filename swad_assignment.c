@@ -68,7 +68,10 @@ static void Asg_ShowOneAssignment (long AsgCod);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg);
 static void Asg_GetParamAsgOrderType (void);
+
 static void Asg_PutFormToCreateNewAsg (void);
+static void Asg_PutFormToCreateNewAsgParams (void);
+
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt);
@@ -475,12 +478,16 @@ static void Asg_PutFormToCreateNewAsg (void)
 
    /***** Put form to create a new assignment *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActFrmNewAsg);
+   Act_PutContextualLink (ActFrmNewAsg,Asg_PutFormToCreateNewAsgParams,
+                          "new",Txt_New_assignment);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Asg_PutFormToCreateNewAsgParams (void)
+  {
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutContextualLink ("new",Txt_New_assignment,Txt_New_assignment,Txt_New_assignment);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

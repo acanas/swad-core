@@ -282,8 +282,13 @@ p			{margin:0;}
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	text-align:center;
 	margin-bottom:10px;
+	text-align:center;
+	}
+.CONTEXT_OPT
+	{
+	display:inline;
+	margin:0 5px;
 	}
 
 /********************************* Frame 10 **********************************/

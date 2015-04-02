@@ -96,7 +96,9 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 static void Crs_EmptyCourseCompletely (long CrsCod);
 static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutLinkToGoToCrs (struct Course *Crs);
+
 static void Crs_PutLinkToSearchCourses (void);
+static void Crs_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetParamOtherCrsCod (void);
@@ -187,8 +189,7 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
-      Act_FormStart (ActPrnCrsInf);
-      Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+      Act_PutContextualLink (ActPrnCrsInf,NULL,"print",Txt_Print);
 
       /* Link to request enrollment in the current course */
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST__ ||
@@ -3006,15 +3007,20 @@ static void Crs_PutLinkToSearchCourses (void)
    extern const char *Txt_Search_courses;
 
    /***** Put form to search / select courses *****/
-   Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
-		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
-		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
-		  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
-		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
-						   ActSysReqSch)))));
+   Act_PutContextualLink ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsReqSch :
+                          (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegReqSch :
+                          (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrReqSch :
+                          (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
+                          (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
+                                                           ActSysReqSch)))),
+                          Crs_PutLinkToSearchCoursesParams,
+			  "search",Txt_Search_courses);
+  }
+
+static void Crs_PutLinkToSearchCoursesParams (void)
+  {
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
-   Act_PutContextualLink ("search",Txt_Search_courses,Txt_Search_courses,Txt_Search_courses);
   }
 
 /*****************************************************************************/
@@ -3026,8 +3032,7 @@ void Crs_PutFormToSelectMyCourses (void)
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
-   Act_FormStart (ActMyCrs);
-   Act_PutContextualLink ("hierarchy",Txt_My_courses,Txt_My_courses,Txt_My_courses);
+   Act_PutContextualLink (ActMyCrs,NULL,"hierarchy",Txt_My_courses);
   }
 
 /*****************************************************************************/

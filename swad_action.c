@@ -4319,15 +4319,16 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
 /***************** Show an icon with a link in contextual menu ***************/
 /*****************************************************************************/
 
-void Act_PutContextualLink (const char *Icon,
-                              const char *Title,
-                              const char *Alt,
-                              const char *Text)
+void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
+                            const char *Icon,const char *Title)
   {
    extern const char *The_ClassFormulB[The_NUM_THEMES];
 
+   Act_FormStart (NextAction);
+   if (FuncParams)
+      FuncParams ();
    Act_LinkFormSubmit (Title,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon (Icon,Alt,Text);
+   Lay_PutSendIcon (Icon,Title,Title);
    Act_FormEnd ();
   }
 

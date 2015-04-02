@@ -141,7 +141,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
      {
       /* Form to list followed users */
       Act_FormStart (Action);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
         	                                       "FOLLOW");
@@ -162,7 +162,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
      {
       /* Form to list followed users */
       Act_FormStart (Action);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
         	                                       The_ClassFormul[Gbl.Prefs.Theme]);
@@ -382,7 +382,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
 	{
 	 Act_FormStart (ActUnfUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/unfollow16x16.gif\""
@@ -396,7 +396,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
       else
 	{
 	 Act_FormStart (ActFolUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/follow16x16.gif\""
@@ -430,7 +430,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
        UsrDat->Nickname[0])
      {
       Act_FormStart (ActSeePubPrf);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
       Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");

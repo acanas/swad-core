@@ -547,6 +547,8 @@ struct Globals
       struct AttendanceEvent *Lst;	// List of attendance events
       Att_EventsOrderType_t SelectedOrderType;
       long AttCod;
+      bool ShowDetails;
+      char *StrAttCodsSelected;
      } AttEvents;
    struct
      {

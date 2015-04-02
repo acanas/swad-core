@@ -308,7 +308,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
         {
          Par_PutHiddenParamChar ("IsReply",'Y');
          Msg_PutHiddenParamMsgCod (Gbl.Msg.RepliedMsgCod);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
         }
 
       /* Start table */
@@ -1667,8 +1667,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Act_FormStart (ActLstBanUsr);
-   Act_PutContextualLink ("stop",Txt_Banned_users,Txt_Banned_users,Txt_Banned_users);
+   Act_PutContextualLink (ActLstBanUsr,NULL,"stop",Txt_Banned_users);
   }
 
 /*****************************************************************************/
@@ -2151,9 +2150,6 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
 
    /***** Put link to request deletion of all sent or received messages *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg : ActReqDelAllSntMsg);
-   Msg_PutHiddenParamsMsgsFilters ();
-
    if (Gbl.Msg.FilterContent[0])
       sprintf (StrFilterContent,", %s <strong>%s</strong>",
                NumMsgs == 1 ? Txt_MSG_containing_the_text :
@@ -2161,7 +2157,6 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
                Gbl.Msg.FilterContent);
    else
       StrFilterContent[0] = '\0';
-
    if (NumMsgs == 1)
       sprintf (Gbl.Title,"%s %s %s, %s %s%s",
                Txt_Remove_the_MESSAGE,
@@ -2184,7 +2179,10 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
                Txt_from_A_COURSE,
                Gbl.Msg.FilterCrsShortName,
                StrFilterContent);
-   Act_PutContextualLink ("delon",Gbl.Title,Gbl.Title,Gbl.Title);
+   Act_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
+	                                                              ActReqDelAllSntMsg,
+	                  Msg_PutHiddenParamsMsgsFilters,
+	                  "delon",Gbl.Title);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2955,7 +2953,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
    Grp_PutParamAllGroups ();
    Par_PutHiddenParamChar ("IsReply",'Y');
    Msg_PutHiddenParamMsgCod (MsgCod);
-   Usr_PutParamOtherUsrCodEncrypted (EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
    // Par_PutHiddenParamString ("UsrCodAll",EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Subject\""
 	              " value=\"Re: %s\" />",
@@ -3322,7 +3320,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
 
    Act_FormStart (ActBanUsrMsg);
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/open_on16x16.gif\""
@@ -3343,7 +3341,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
 
    Act_FormStart (ActUnbUsrMsg);
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
@@ -3524,7 +3522,7 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"<tr>"
                                "<td class=\"BM\">");
             Act_FormStart (ActUnbUsrLst);
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
         	               " src=\"%s/closed_on16x16.gif\" alt=\"%s\""
         	               " title=\"%s\" class=\"ICON16x16\" />",

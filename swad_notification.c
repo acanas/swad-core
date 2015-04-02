@@ -1636,8 +1636,7 @@ static void Ntf_PutLinkToChangePrefs (void)
   {
    extern const char *Txt_Change_preferences;
 
-   Act_FormStart (ActEdiPrf);
-   Act_PutContextualLink ("heart",Txt_Change_preferences,Txt_Change_preferences,Txt_Change_preferences);
+   Act_PutContextualLink (ActEdiPrf,NULL,"heart",Txt_Change_preferences);
   }
 
 /*****************************************************************************/

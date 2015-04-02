@@ -77,8 +77,7 @@ void Ann_ShowAllAnnouncements (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_FormStart (ActWriAnn);
-      Act_PutContextualLink ("new",Txt_New_announcement,Txt_New_announcement,Txt_New_announcement);
+      Act_PutContextualLink (ActWriAnn,NULL,"new",Txt_New_announcement);
       fprintf (Gbl.F.Out,"</div>");
      }
 

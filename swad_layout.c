@@ -941,8 +941,7 @@ void Lay_PutFormToView (Act_Action_t Action)
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (Action);
-   Act_PutContextualLink ("visible_on",Txt_View,Txt_View,Txt_View);
+   Act_PutContextualLink (Action,NULL,"visible_on",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -955,8 +954,7 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (Action);
-   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+   Act_PutContextualLink (Action,NULL,"edit",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -967,8 +965,7 @@ void Lay_PutFormToEdit (Act_Action_t Action)
 void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
   {
    // margin is used because this form link may be placed after another one
-   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	              " style=\"margin:0 5px; display:inline;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 	              "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
 	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,Icon,Alt);

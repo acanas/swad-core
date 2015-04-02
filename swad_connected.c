@@ -1021,7 +1021,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	    Color);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
    Act_FormStartId (ActSeePubPrf,Gbl.FormId);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
    Act_LinkFormSubmitId (UsrDat.FullName,NULL,Gbl.FormId);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -1039,7 +1039,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Act_FormStartId ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
 	                                         ActSeeRecOneTch,
 	            Gbl.FormId);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
    Act_LinkFormSubmitId (Txt_View_record_for_this_course,Font,Gbl.FormId);
    Usr_RestrictLengthAndWriteName (&UsrDat,8);
    fprintf (Gbl.F.Out,"</a>");
@@ -1231,7 +1231,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
            {
 	    Act_FormStart ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
 							ActSeeRecOneTch);
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	    Act_LinkFormSubmit (UsrDat.FullName,Font);
            }
          Usr_RestrictLengthAndWriteName (&UsrDat,40);

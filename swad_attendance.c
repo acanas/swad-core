@@ -69,8 +69,13 @@ static void Att_PutFormToSelectWhichGroupsToShow (void);
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete);
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
 static void Att_GetParamAttOrderType (void);
+
 static void Att_PutFormToListStds (void);
+static void Att_PutFormToListStdsParams (void);
+
 static void Att_PutFormToCreateNewAttEvent (void);
+static void Att_PutFormToCreateNewAttEventParams (void);
+
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
@@ -96,8 +101,11 @@ static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
 static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods);
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
-static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected);
-static void Att_PutButtonToShowDetails (char *StrAttCodsSelected);
+
+static void Att_PutFormToPrintListStds (void);
+static void Att_PutFormToPrintListStdsParams (void);
+
+static void Att_PutButtonToShowDetails (void);
 static void Att_ListEventsToSelect (void);
 static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
@@ -133,7 +141,7 @@ void Att_SeeAttEvents (void)
 
    /* Put link to my QR code */
    if (Gbl.Usrs.Me.UsrDat.Nickname[0])
-      QR_PutLinkToPrintQRCode (QR_NICKNAME,&Gbl.Usrs.Me.UsrDat,true);
+      QR_PutLinkToPrintQRCode (&Gbl.Usrs.Me.UsrDat,true);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -446,11 +454,15 @@ static void Att_PutFormToListStds (void)
    extern const char *Txt_Attendance_list;
 
    /***** Put form to create a new attendance event *****/
-   Act_FormStart (ActReqLstAttStd);
+   Act_PutContextualLink (ActReqLstAttStd,Att_PutFormToListStdsParams,
+                          "list",Txt_Attendance_list);
+  }
+
+static void Att_PutFormToListStdsParams (void)
+  {
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutContextualLink ("list",Txt_Attendance_list,Txt_Attendance_list,Txt_Attendance_list);
   }
 
 /*****************************************************************************/
@@ -462,11 +474,15 @@ static void Att_PutFormToCreateNewAttEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put form to create a new attendance event *****/
-   Act_FormStart (ActFrmNewAtt);
+   Act_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
+                          "new",Txt_New_event);
+  }
+
+static void Att_PutFormToCreateNewAttEventParams (void)
+  {
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutContextualLink ("new",Txt_New_event,Txt_New_event,Txt_New_event);
   }
 
 /*****************************************************************************/
@@ -2684,9 +2700,7 @@ void Usr_ListAttendanceStdsCrs (void)
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
-   char *StrAttCodsSelected;
    char YN[1+1];
-   bool ShowDetails;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2699,7 +2713,7 @@ void Usr_ListAttendanceStdsCrs (void)
      {
       /***** Get boolean parameter that indicates if details must be shown *****/
       Par_GetParToText ("ShowDetails",YN,1);
-      ShowDetails = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+      Gbl.AttEvents.ShowDetails = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
       /***** Get list of groups selected ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2716,11 +2730,11 @@ void Usr_ListAttendanceStdsCrs (void)
 	                                                                                           LstSelectedUsrCods,NumStdsInList);
 
       /***** Get list of attendance events selected *****/
-      Att_GetListSelectedAttCods (&StrAttCodsSelected);
+      Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
       /***** Put link to print *****/
       if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Att_PutFormToPrintListStds (ShowDetails,StrAttCodsSelected);
+	 Att_PutFormToPrintListStds ();
 
       /***** List events to select *****/
       Att_ListEventsToSelect ();
@@ -2732,13 +2746,13 @@ void Usr_ListAttendanceStdsCrs (void)
       Att_ListStdsAttendanceTable (NumStdsInList,LstSelectedUsrCods);
 
       /***** Show details or put button to show details *****/
-      if (ShowDetails)
+      if (Gbl.AttEvents.ShowDetails)
          Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
       else if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Att_PutButtonToShowDetails (StrAttCodsSelected);
+	 Att_PutButtonToShowDetails ();
 
       /***** Free memory for list of attendance events selected *****/
-      free ((void *) StrAttCodsSelected);
+      free ((void *) Gbl.AttEvents.StrAttCodsSelected);
 
       /***** Free list of user codes *****/
       free ((void *) LstSelectedUsrCods);
@@ -2904,28 +2918,32 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 /**** Put a link (form) to list assistance of students to several events *****/
 /*****************************************************************************/
 
-static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelected)
+static void Att_PutFormToPrintListStds (void)
   {
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActPrnLstAttStd);
-   if (ShowDetails)
+   Act_PutContextualLink (ActPrnLstAttStd,Att_PutFormToPrintListStdsParams,
+                          "print",Txt_Print);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Att_PutFormToPrintListStdsParams (void)
+  {
+   if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParUsrCodAll (ActPrnLstAttStd,Gbl.Usrs.Select.All);
-   if (StrAttCodsSelected[0])
-      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
-   Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</div>");
+   if (Gbl.AttEvents.StrAttCodsSelected[0])
+      Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
   }
 
 /*****************************************************************************/
 /**** Put a link (form) to list assistance of students to several events *****/
 /*****************************************************************************/
 
-static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
+static void Att_PutButtonToShowDetails (void)
   {
    extern const char *Txt_Show_more_details;
 
@@ -2935,8 +2953,8 @@ static void Att_PutButtonToShowDetails (char *StrAttCodsSelected)
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParUsrCodAll (ActSeeLstAttStd,Gbl.Usrs.Select.All);
-   if (StrAttCodsSelected[0])
-      Par_PutHiddenParamString ("AttCods",StrAttCodsSelected);
+   if (Gbl.AttEvents.StrAttCodsSelected[0])
+      Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Lay_PutConfirmButton (Txt_Show_more_details);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");

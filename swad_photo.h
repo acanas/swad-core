@@ -81,7 +81,8 @@ typedef enum
 /*****************************************************************************/
 
 bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod);
-void Pho_PutLinkToChangeUsrPhoto (const struct UsrData *UsrDat);
+void Pho_PutLinkToChangeMyPhoto (void);
+void Pho_PutLinkToChangeOtherUsrPhoto (void);
 void Pho_ReqMyPhoto (void);
 void Pho_ReqUsrPhoto (struct UsrData *UsrDat);
 void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *PhotoURL);

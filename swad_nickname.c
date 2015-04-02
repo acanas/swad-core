@@ -256,7 +256,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 
       /* Link to QR code */
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
-         QR_PutLinkToPrintQRCode (QR_NICKNAME,&Gbl.Usrs.Me.UsrDat,false);
+         QR_PutLinkToPrintQRCode (&Gbl.Usrs.Me.UsrDat,false);
 
       /* Form to change the nickname */
       if (NumNick > 1)

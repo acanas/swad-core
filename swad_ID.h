@@ -66,7 +66,7 @@ bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
 void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID);
 
-void ID_PutLinkToChangeUsrIDs (const struct UsrData *UsrDat);
+void ID_PutLinkToChangeUsrIDs (void);
 void ID_ShowFormOthIDs (void);
 void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe);
 void ID_RemoveMyUsrID (void);

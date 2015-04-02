@@ -48,7 +48,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (QR_QRType_t QRType,struct UsrData *UsrDat,bool PrintText);
+void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText);
 void QR_PrintQRCode (void);
 
 void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);

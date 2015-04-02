@@ -100,6 +100,8 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void ZIP_PutButtonToCreateZIPAsgWrkParams (void);
+
 static void ZIP_CompressFolderIntoZIP (void);
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
@@ -114,13 +116,17 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    extern const char *Txt_Create_ZIP_file;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActAdmAsgWrkCrs);
+   Act_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
+                          "download",Txt_Create_ZIP_file);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void ZIP_PutButtonToCreateZIPAsgWrkParams (void)
+  {
    Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
    Par_PutHiddenParamChar ("CreateZIP",'Y');
-   Act_PutContextualLink ("download",Txt_Create_ZIP_file,Txt_Create_ZIP_file,Txt_Create_ZIP_file);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -295,7 +301,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
 	 Usr_PutHiddenParUsrCodAll (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted ();
 	 break;
       default:
 	 break;

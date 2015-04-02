@@ -320,8 +320,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       if (ICanEditNotices)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_FormStart (ActWriNot);
-         Act_PutContextualLink ("new",Txt_New_notice,Txt_New_notice,Txt_New_notice);
+         Act_PutContextualLink (ActWriNot,NULL,"new",Txt_New_notice);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 

@@ -77,6 +77,8 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 
 static void Acc_PutLinkToRemoveMyAccount (void);
+static void Acc_PutLinkToRemoveMyAccountParams (void);
+
 static void Acc_PrintAccountSeparator (void);
 
 static void Acc_ReqDelOrDelUsrGbl (Acc_ReqDelOrDelUsr_t ReqDelOrDelUsr);
@@ -115,8 +117,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Link to log in *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActFrmLogIn);
-   Act_PutContextualLink ("login",Txt_Log_in,Txt_Log_in,Txt_Log_in);
+   Act_PutContextualLink (ActFrmLogIn,NULL,"login",Txt_Log_in);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
@@ -206,7 +207,7 @@ void Acc_ShowFormChangeMyAccount (void)
 
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Pwd_PutLinkToChangeUsrPassword (&Gbl.Usrs.Me.UsrDat);
+   Pwd_PutLinkToChangeMyPassword ();
    if (Acc_CheckIfICanEliminateAccount (true))	// ItsMe = true
       Acc_PutLinkToRemoveMyAccount ();
    fprintf (Gbl.F.Out,"</div>");
@@ -242,10 +243,14 @@ static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   Act_FormStart (ActUpdOthUsrDat);
-   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+   Act_PutContextualLink (ActUpdOthUsrDat,Acc_PutLinkToRemoveMyAccountParams,
+                          "delon",Txt_Remove_account);
+  }
+
+static void Acc_PutLinkToRemoveMyAccountParams (void)
+  {
+   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-   Act_PutContextualLink ("delon",Txt_Remove_account,Txt_Remove_account,Txt_Remove_account);
   }
 
 /*****************************************************************************/
@@ -627,7 +632,7 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
       Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       Act_FormStart (ActRemUsrGbl);
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted ();
 
       /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();

@@ -871,8 +871,7 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Act_FormStart (ActEdiRecFie);
-   Act_PutContextualLink ("edit",Txt_Edit_record_fields,Txt_Edit_record_fields,Txt_Edit_record_fields);
+   Act_PutContextualLink (ActEdiRecFie,NULL,"edit",Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -1496,7 +1495,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
       case Rec_RECORD_LIST:
          DataForm = true;
 	 Act_FormStart (ActRcvRecOthUsr);
-         Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 //RecordWidth = Rec_WIDTH_COURSE_RECORD;
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
@@ -1871,7 +1870,7 @@ void Rec_ShowFormMyCommRecord (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-   Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo
+   Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2194,7 +2193,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 Act_FormStart ((UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
 									   ActSeeRecOneTch);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/card16x16.gif\""
@@ -2215,7 +2214,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	{
 	 Act_FormStart (ActReqMdfUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			    "<img src=\"%s/config16x16.gif\""
@@ -2293,7 +2292,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       Act_FormStart (ActReqMsgUsr);
       Grp_PutParamAllGroups ();
       if (HeBelongsToCurrentCrs)
-         Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       else
 	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
       Act_LinkFormSubmit (Txt_Write_a_message,ClassData);
@@ -2313,7 +2312,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
 	   {
 	    Act_FormStart (ActUnfUsr);
-	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    Act_LinkFormSubmit (Txt_Unfollow,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			       "<img src=\"%s/unfollow16x16.gif\""
@@ -2327,7 +2326,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 else
 	   {
 	    Act_FormStart (ActFolUsr);
-	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    Act_LinkFormSubmit (Txt_Follow,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
 			       "<img src=\"%s/follow16x16.gif\""
@@ -2366,7 +2365,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 /* Put form to go to public profile */
 	 Act_FormStart (ActSeePubPrf);
-         Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
@@ -2374,11 +2373,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
-	}
 
-      /* Link to QR code */
-      if (!DataForm)
-	 QR_PutLinkToPrintQRCode (QR_NICKNAME,UsrDat,false);
+         /* Link to QR code */
+	 QR_PutLinkToPrintQRCode (UsrDat,false);
+	}
      }
    fprintf (Gbl.F.Out,"</div>"
 	              "</td>"
@@ -2423,7 +2421,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    break;
          case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
 	    Act_FormStart (ActUpdOthUsrDat);
-	    Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
          default:
             break;
@@ -3229,8 +3227,8 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
-   Act_FormStart (ActReqEdiMyIns);
-   Act_PutContextualLink ("institution",Txt_Edit_my_institution,Txt_Edit_my_institution,Txt_Edit_my_institution);
+   Act_PutContextualLink (ActReqEdiMyIns,NULL,
+                          "institution",Txt_Edit_my_institution);
   }
 
 /*****************************************************************************/
@@ -3242,8 +3240,8 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    extern const char *Txt_Edit_my_webs_networks;
 
    /***** Link to edit my social networks *****/
-   Act_FormStart (ActReqEdiMyNet);
-   Act_PutContextualLink ("earth",Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
+   Act_PutContextualLink (ActReqEdiMyNet,NULL,
+                          "earth",Txt_Edit_my_webs_networks);
   }
 
 /*****************************************************************************/

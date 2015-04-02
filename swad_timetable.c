@@ -252,25 +252,17 @@ void TT_ShowClassTimeTable (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (PutEditButton)
-	{
-	 Act_FormStart (ActEdiCrsTimTbl);
-	 Grp_PutParamWhichGrps ();
-         Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
-	}
+         Act_PutContextualLink (ActEdiCrsTimTbl,Grp_PutParamWhichGrps,
+                                "edit",Txt_Edit);
 
       if (PutEditOfficeHours)
-	{
-	 Act_FormStart (ActEdiTut);
-         Act_PutContextualLink ("edit",Txt_Edit_office_hours,Txt_Edit_office_hours,Txt_Edit_office_hours);
-	}
+         Act_PutContextualLink (ActEdiTut,NULL,"edit",Txt_Edit_office_hours);
 
       if (!PrintView)
-	{
-         Act_FormStart (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
-                                                            ActPrnMyTimTbl);
-         Grp_PutParamWhichGrps ();
-         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
-	}
+         Act_PutContextualLink (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
+                                                                    ActPrnMyTimTbl,
+                                Grp_PutParamWhichGrps,"print",Txt_Print);
+
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -318,8 +310,7 @@ void TT_EditCrsTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActSeeCrsTimTbl);
-   Act_PutContextualLink ("clock",Txt_Show_timetable,Txt_Show_timetable,Txt_Show_timetable);
+   Act_PutContextualLink (ActSeeCrsTimTbl,NULL,"clock",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start of table *****/
@@ -347,8 +338,7 @@ void TT_ShowMyTutTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActSeeMyTimTbl);
-   Act_PutContextualLink ("clock",Txt_Show_timetable,Txt_Show_timetable,Txt_Show_timetable);
+   Act_PutContextualLink (ActSeeMyTimTbl,NULL,"clock",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/

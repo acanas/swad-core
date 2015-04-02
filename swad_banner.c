@@ -128,8 +128,7 @@ static void Ban_PutFormToEditBanners (void)
 
    /***** Link to edit banners *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActEdiBan);
-   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+   Act_PutContextualLink (ActEdiBan,NULL,"edit",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

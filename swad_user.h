@@ -242,7 +242,9 @@ void Usr_WriteLoggedUsrHead (void);
 void Usr_PutFormLogOut (void);
 void Usr_GetParamUsrIdLogin (void);
 unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods);
-void Usr_PutParamOtherUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
+
+void Usr_PutParamOtherUsrCodEncrypted (void);
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
 void Usr_GetParamOtherUsrCodEncrypted (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
 

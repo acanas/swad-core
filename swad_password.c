@@ -65,6 +65,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Pwd_PutLinkToSendNewPasswdParams (void);
+
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1]);
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
@@ -205,6 +207,23 @@ void Pwd_ActChgMyPwd2 (void)
    /***** Retry? *****/
    if (Gbl.Usrs.Error)
       Pwd_ShowFormChgPwd ();
+  }
+
+/*****************************************************************************/
+/*************** Show form to send a new password by e-mail ******************/
+/*****************************************************************************/
+
+void Pwd_PutLinkToSendNewPasswd (void)
+  {
+   extern const char *Txt_I_forgot_my_password;
+
+   Act_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
+                          "key",Txt_I_forgot_my_password);
+  }
+
+static void Pwd_PutLinkToSendNewPasswdParams (void)
+  {
+   Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/
@@ -759,7 +778,7 @@ void Pwd_ShowFormOthPwd (void)
 	 /***** Form to change password *****/
 	 /* Start form */
 	 Act_FormStart (ActChgPwdOthUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
          Pwd_PutFormToGetNewPasswordTwice ();
@@ -777,26 +796,30 @@ void Pwd_ShowFormOthPwd (void)
   }
 
 /*****************************************************************************/
-/******** Put a link to the action used to request user's password ***********/
+/********* Put a link to the action used to change user's password ***********/
 /*****************************************************************************/
 
-void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat)
+void Pwd_PutLinkToChangeMyPassword (void)
+  {
+   extern const char *Txt_Change_password;
+
+   /***** Link for changing the password *****/
+   Act_PutContextualLink (ActFrmChgMyPwd,NULL,"key",Txt_Change_password);
+  }
+
+/*****************************************************************************/
+/********* Put a link to the action used to change user's password ***********/
+/*****************************************************************************/
+
+void Pwd_PutLinkToChangeOtherUsrPassword (void)
   {
    extern const char *Txt_Change_password;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Link for changing the password *****/
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
-     {
-      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-	 Act_FormStart (ActFrmChgMyPwd);
-      else						// Not me
-	{
-	 Act_FormStart (ActFrmPwdOthUsr);
-	 Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	}
-      Act_PutContextualLink ("key",Txt_Change_password,Txt_Change_password,Txt_Change_password);
-     }
+   if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+      Act_PutContextualLink (ActFrmPwdOthUsr,Usr_PutParamOtherUsrCodEncrypted,
+                             "key",Txt_Change_password);
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }

@@ -133,8 +133,7 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Act_FormStart (ActReqSignUp);
-   Act_PutContextualLink ("signup",Txt_Sign_up,Txt_Sign_up,Txt_Sign_up);
+   Act_PutContextualLink (ActReqSignUp,NULL,"signup",Txt_Sign_up);
   }
 
 /*****************************************************************************/
@@ -287,12 +286,12 @@ void Enr_ReqAcceptRegisterInCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /***** Send button to accept register in the current course *****/
-   Act_FormStart (ActAccEnrCrs);
-   Act_PutContextualLink ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
+   Act_PutContextualLink (ActAccEnrCrs,NULL,
+                          "ok_green",Txt_Confirm_my_enrollment);
 
    /***** Send button to refuse register in the current course *****/
-   Act_FormStart (ActRemMeCrs);
-   Act_PutContextualLink ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
+   Act_PutContextualLink (ActRemMeCrs,NULL,
+                          "delon",Txt_Remove_me_from_this_course);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -629,8 +628,7 @@ static void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Remove_old_users;
 
    /***** Put form to remove old users *****/
-   Act_FormStart (ActReqRemOldUsr);
-   Act_PutContextualLink ("delon",Txt_Remove_old_users,Txt_Remove_old_users,Txt_Remove_old_users);
+   Act_PutContextualLink (ActReqRemOldUsr,NULL,"delon",Txt_Remove_old_users);
   }
 
 /*****************************************************************************/
@@ -1710,8 +1708,8 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
-   Act_FormStart (ActReqRemAllStdCrs);
-   Act_PutContextualLink ("delon",Txt_Remove_all_students,Txt_Remove_all_students,Txt_Remove_all_students);
+   Act_PutContextualLink (ActReqRemAllStdCrs,NULL,
+                          "delon",Txt_Remove_all_students);
   }
 
 /*****************************************************************************/
@@ -2028,7 +2026,7 @@ void Enr_AskIfRejectSignUp (void)
 
             /* Button to confirm rejection */
             Act_FormStart (ActRejSignUp);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
 
             Lay_PutConfirmButton (Txt_Reject);
             Act_FormEnd ();
@@ -2496,7 +2494,7 @@ void Enr_ShowEnrollmentRequests (void)
         	               " vertical-align:top;\">");
             Act_FormStart (ActReqMdfUsr);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutCreateButton (Txt_Register);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
@@ -2506,7 +2504,7 @@ void Enr_ShowEnrollmentRequests (void)
         	               " vertical-align:top;\">");
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            Usr_PutParamOtherUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutConfirmButton (Txt_Reject);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>"
@@ -2575,8 +2573,8 @@ static void Enr_PutLinkToAdminOneUsr (void)
   {
    extern const char *Txt_Admin_one_user;
 
-   Act_FormStart (ActReqMdfOneUsr);
-   Act_PutContextualLink ("configtest",Txt_Admin_one_user,Txt_Admin_one_user,Txt_Admin_one_user);
+   Act_PutContextualLink (ActReqMdfOneUsr,NULL,
+                          "configtest",Txt_Admin_one_user);
   }
 
 /*****************************************************************************/
@@ -2587,8 +2585,8 @@ static void Enr_PutLinkToAdminSeveralUsrs (void)
   {
    extern const char *Txt_Admin_several_users;
 
-   Act_FormStart (ActReqMdfSevUsr);
-   Act_PutContextualLink ("configtest",Txt_Admin_several_users,Txt_Admin_several_users,Txt_Admin_several_users);
+   Act_PutContextualLink (ActReqMdfSevUsr,NULL,
+                          "configtest",Txt_Admin_several_users);
   }
 
 /*****************************************************************************/
@@ -2835,11 +2833,11 @@ static void Enr_ShowFormToEditOtherUsr (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      ID_PutLinkToChangeUsrIDs (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's IDs
-      Pwd_PutLinkToChangeUsrPassword (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's password
+      ID_PutLinkToChangeUsrIDs ();	// Put link (form) to change user's IDs
+      Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
      }
    if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
-      Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's photo
+      Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
@@ -3164,7 +3162,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
                Act_FormStart (Enr_ActNewAdm[Scope]);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted ();
                Lay_PutConfirmButton (Txt_Register_user_IN_A_COURSE_OR_DEGREE);
                Act_FormEnd ();
               }
@@ -3426,7 +3424,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
 
       fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
       Act_FormStart (ActRemUsrCrs);
-      Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
                                    Txt_Remove_user_from_this_course);
@@ -3526,7 +3524,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       Act_FormStart (Enr_ActRemAdm[Scope]);
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      Usr_PutParamOtherUsrCodEncrypted ();
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_as_an_administrator :
                                    Txt_Remove_user_as_an_administrator);
       Act_FormEnd ();

@@ -179,7 +179,6 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    long Cod;
    const char *Folder;
    const char *Icon;
-   const char *Msg;
    char PathLogo[PATH_MAX+1];
    bool LogoExists;
 
@@ -217,10 +216,8 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Act_FormStart (Action);
-   Msg = LogoExists ? Txt_Change_logo :
-		      Txt_Upload_logo;
-   Act_PutContextualLink (Icon,Msg,Msg,Msg);
+   Act_PutContextualLink (Action,NULL,Icon,LogoExists ? Txt_Change_logo :
+		                                        Txt_Upload_logo);
   }
 
 /*****************************************************************************/

@@ -412,8 +412,7 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (Inf_ActionsEditInfo[InfoType]);
-   Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

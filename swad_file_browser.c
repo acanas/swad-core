@@ -1332,8 +1332,11 @@ static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
 static void Brw_ShowSizeOfFileTree (void);
 static void Brw_StoreSizeOfFileTreeInDB (void);
+
+static void Brw_PutFormToShowOrAdminParams (void);
 static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
                                       Act_Action_t Action);
+
 static void Brw_WriteFormFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
@@ -3155,7 +3158,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	              " text-align:left; vertical-align:top;\">");
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
-   Usr_PutParamOtherUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,
@@ -4273,21 +4276,27 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (Action);
-   if (Gbl.FileBrowser.FullTree)
-      Par_PutHiddenParamChar ("FullTree",'Y');
-   // It's not necessary to put a parameter with the group code...
-   // ...because it is stored in database
    switch (ShowOrAdmin)
      {
       case Brw_SHOW:
-         Act_PutContextualLink ("visible_on",Txt_View,Txt_View,Txt_View);
+         Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+                                "visible_on",Txt_View);
 	 break;
       case Brw_ADMIN:
-         Act_PutContextualLink ("edit",Txt_Edit,Txt_Edit,Txt_Edit);
+         Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+                                "edit",Txt_Edit);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Brw_PutFormToShowOrAdminParams (void)
+  {
+   if (Gbl.FileBrowser.FullTree)
+      Par_PutHiddenParamChar ("FullTree",'Y');
+
+   // It's not necessary to put a parameter with the group code...
+   // ...because it is stored in database
   }
 
 /*****************************************************************************/
@@ -5002,7 +5011,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
             Usr_PutHiddenParUsrCodAll (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -5047,7 +5056,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
             Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -5093,7 +5102,7 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
             Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -5136,7 +5145,7 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -5203,7 +5212,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
             case Brw_ADMI_ASSIG_CRS:
             case Brw_ADMI_WORKS_CRS:
                Usr_PutHiddenParUsrCodAll (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted ();
                break;
             default:
                break;
@@ -5232,7 +5241,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
             case Brw_ADMI_ASSIG_CRS:
             case Brw_ADMI_WORKS_CRS:
                Usr_PutHiddenParUsrCodAll (Brw_ActContractFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted ();
                break;
             default:
                break;
@@ -5384,7 +5393,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
 	    Usr_PutHiddenParUsrCodAll (Brw_ActFormCreate[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -5452,7 +5461,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,Brw_FileType_t 
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
 	 Usr_PutHiddenParUsrCodAll (Brw_ActReqDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted ();
 	 break;
       default:
 	 break;
@@ -5553,7 +5562,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
             case Brw_ADMI_ASSIG_CRS:
             case Brw_ADMI_WORKS_CRS:
 	       Usr_PutHiddenParUsrCodAll (Brw_ActRenameFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+               Usr_PutParamOtherUsrCodEncrypted ();
                break;
             default:
                break;
@@ -5614,7 +5623,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
 	    Usr_PutHiddenParUsrCodAll (Brw_ActDowFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -5871,7 +5880,7 @@ void Brw_AskRemFileFromTree (void)
          case Brw_ADMI_ASSIG_CRS:
          case Brw_ADMI_WORKS_CRS:
             Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+            Usr_PutParamOtherUsrCodEncrypted ();
             break;
          default:
             break;
@@ -6028,7 +6037,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7631,7 +7640,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActCreateFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7708,7 +7717,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7733,7 +7742,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7782,7 +7791,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7831,7 +7840,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -7878,7 +7887,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          Usr_PutHiddenParUsrCodAll (Brw_ActCreateLink[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+         Usr_PutParamOtherUsrCodEncrypted ();
          break;
       default:
          break;
@@ -8833,7 +8842,7 @@ void Brw_ShowFileMetadata (void)
 	       case Brw_ADMI_ASSIG_CRS:
 	       case Brw_ADMI_WORKS_CRS:
 		  Usr_PutHiddenParUsrCodAll (Brw_ActRecDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+		  Usr_PutParamOtherUsrCodEncrypted ();
 		  ICanChangePublic  = false;	// A file in assignments or works zones can not be public...
 		  ICanChangeLicense = true;	// ...but I can change its license
 		  break;

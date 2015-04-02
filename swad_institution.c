@@ -248,12 +248,10 @@ static void Ins_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to show centres */
-	 Act_FormStart (ActSeeCtr);
-         Act_PutContextualLink ("ctr",Txt_Centres,Txt_Centres,Txt_Centres);
+         Act_PutContextualLink (ActSeeCtr,NULL,"ctr",Txt_Centres);
 
 	 /* Link to print view */
-	 Act_FormStart (ActPrnInsInf);
-         Act_PutContextualLink ("print",Txt_Print,Txt_Print,Txt_Print);
+         Act_PutContextualLink (ActPrnInsInf,NULL,"print",Txt_Print);
 
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)

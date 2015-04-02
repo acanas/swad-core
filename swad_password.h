@@ -46,6 +46,8 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void);
 
 void Pwd_ActChgMyPwd1 (void);
 void Pwd_ActChgMyPwd2 (void);
+
+void Pwd_PutLinkToSendNewPasswd (void);
 void Pwd_ShowFormSendNewPwd (void);
 void Pwd_ChkIdLoginAndSendNewPwd (void);
 int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1]);
@@ -62,7 +64,10 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword);
 void Pwd_ShowFormChgPwd (void);
 void Pwd_PutFormToGetNewPasswordTwice (void);
 void Pwd_ShowFormOthPwd (void);
-void Pwd_PutLinkToChangeUsrPassword (const struct UsrData *UsrDat);
+
+void Pwd_PutLinkToChangeMyPassword (void);
+void Pwd_PutLinkToChangeOtherUsrPassword (void);
+
 bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod);
 
 void Pwd_AskForConfirmationOnDangerousAction (void);
