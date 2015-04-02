@@ -2836,8 +2836,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
      }
-   if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
-      Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
+   Pho_PutLinkToChangeOtherUsrPhoto ();		// Put link (form) to change user's photo
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/

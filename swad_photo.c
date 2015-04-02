@@ -173,13 +173,14 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    /***** Link for changing / uploading the photo *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pho_PutLinkToChangeMyPhoto ();
-   else									// Not me
-     {
-      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
-      Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
-			     "photo",PhotoExists ? Txt_Change_photo :
-						   Txt_Upload_photo);
-     }
+   else								// Not me
+      if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
+	{
+	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+	 Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+				"photo",PhotoExists ? Txt_Change_photo :
+						      Txt_Upload_photo);
+	}
   }
 
 /*****************************************************************************/
@@ -240,6 +241,7 @@ void Pho_ReqUsrPhoto (struct UsrData *UsrDat)
 void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *PhotoURL)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
@@ -248,7 +250,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    /***** Write message about photo presence or ausence *****/
    if (PhotoExists)	// User has photo
      {
-      /***** Forms to remove photo and make it public *****/
+      /***** Forms to remove photo and change privacy *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       if (ItsMe)
 	{
@@ -258,15 +260,9 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       else
          Pho_PutLinkToRemoveOtherUsrPhoto ();
       fprintf (Gbl.F.Out,"</div>");
-
-      /* Show photo */
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-      Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_ZOOM);
-      fprintf (Gbl.F.Out,"</div>");
      }
-   Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
 
-   /***** Form to send photo *****/
+   /***** Start form *****/
    if (ItsMe)
       Act_FormStart (ActDetMyPho);
    else
@@ -274,13 +270,26 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       Act_FormStart (ActDetUsrPho);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Photo);
+
+   /***** Show current photo and help message *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\" style=\"text-align:center;\">");
+   Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_NO_ZOOM);
+   Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+
+   /***** Form to upload photo *****/
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s\" style=\"text-align:right;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
+                      "<input type=\"file\" name=\"%s\""
+                      " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
@@ -291,8 +300,12 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
             UsrDat->UsrCod);
    Lay_PutCreateButton (Txt_Upload_photo);
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-                      "</table>");
+                      "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -583,6 +596,17 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                      NumFacesTotal,NumFacesGreen,NumFacesRed);
          Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
         }
+     }
+
+   /***** Button to send another photo *****/
+   if (NumFacesGreen == 0)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
+         Pho_PutLinkToChangeMyPhoto ();
+      else if (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
+         Pho_PutLinkToChangeOtherUsrPhoto ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Create map *****/
