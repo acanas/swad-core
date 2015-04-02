@@ -1513,7 +1513,8 @@ void Msg_ShowRecMsgs (void)
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *Txt_View_messages;
+   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *Txt_Update_messages;
    extern const char *Txt_Messages_received;
    extern const char *Txt_Messages_sent;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
@@ -1548,7 +1549,12 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       Msg_GetParamOnlyUnreadMsgs ();
       Msg_ShowFormToShowOnlyUnreadMessages ();
      }
-   Lay_PutConfirmButton (Txt_View_messages);
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Act_LinkFormSubmitAnimated (Txt_Update_messages,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update_messages,Txt_Update_messages);
+   fprintf (Gbl.F.Out,"</div>");
+
    Act_FormEnd ();
 
    if (TypeOfMessages == Msg_MESSAGES_RECEIVED)

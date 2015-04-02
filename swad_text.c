@@ -46377,6 +46377,27 @@ const char *Txt_Update_indicators =
 	"Atualizar indocadores";
 #endif
 
+const char *Txt_Update_messages =
+#if   L==0
+	"Actualitzar missatges";
+#elif L==1
+	"Update Nachrichten";
+#elif L==2
+	"Update messages";
+#elif L==3
+	"Actualizar mensajes";
+#elif L==4
+	"Mise &agrave; jour des messages";
+#elif L==5
+	"Actualizar mensajes";		// Okoteve traducción
+#elif L==6
+	"Aggiornamento messaggi";
+#elif L==7
+	"Update messages";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Atualizar mensagens";
+#endif
+
 const char *Txt_Update_students =
 #if   L==0
 	"Actualitzar estudiants";
@@ -47212,27 +47233,6 @@ const char *Txt_View_in_a_new_window =
 	"View in a new window";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Ver em uma nova janela";
-#endif
-
-const char *Txt_View_messages =
-#if   L==0
-	"Veure missatges";
-#elif L==1
-	"Anzeigen Nachrichten";
-#elif L==2
-	"View messages";
-#elif L==3
-	"Ver mensajes";
-#elif L==4
-	"Voir messages";
-#elif L==5
-	"Ver mensajes";		// Okoteve traducción
-#elif L==6
-	"Vedi messaggi";
-#elif L==7
-	"View messages";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Ver mensagens";
 #endif
 
 const char *Txt_View_my_courses =
