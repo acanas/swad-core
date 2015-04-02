@@ -249,7 +249,7 @@ void TT_ShowClassTimeTable (void)
    /***** Put buttons *****/
    if (PutEditButton || PutEditOfficeHours || !PrintView)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (PutEditButton)
 	{
@@ -322,7 +322,7 @@ void TT_EditCrsTimeTable (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActSeeCrsTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);
@@ -354,7 +354,7 @@ void TT_ShowMyTutTimeTable (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActSeeMyTimTbl);
    Act_LinkFormSubmit (Txt_Show_timetable,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("clock",Txt_Show_timetable,Txt_Show_timetable);

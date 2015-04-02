@@ -114,7 +114,7 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActAdmAsgWrkCrs);
    Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
    if (Gbl.FileBrowser.FullTree)

@@ -153,7 +153,7 @@ static void Plg_PutFormToEditPlugins (void)
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActEdiPlg);
    Act_LinkFormSubmit (Txt_Edit,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("edit",Txt_Edit,Txt_Edit);

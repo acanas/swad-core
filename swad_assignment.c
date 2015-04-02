@@ -475,7 +475,7 @@ static void Asg_PutFormToCreateNewAsg (void)
    extern const char *Txt_New_assignment;
 
    /***** Put form to create a new assignment *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActFrmNewAsg);
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();

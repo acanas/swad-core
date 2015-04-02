@@ -256,7 +256,7 @@ void Tst_ShowFormAskTst (void)
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
       Tst_PutFormToEdit ();
       Tst_PutFormToConfigure ();

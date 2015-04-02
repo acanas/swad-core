@@ -116,8 +116,8 @@ void Att_SeeAttEvents (void)
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
-   /***** Put other options *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   /***** Show contextual menu *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Put link (form) to create a bew attendance event */
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -2916,7 +2916,7 @@ static void Att_PutFormToPrintListStds (bool ShowDetails,char *StrAttCodsSelecte
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActPrnLstAttStd);
    if (ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');

@@ -295,7 +295,7 @@ void Ntf_ShowMyNotifications (void)
    NumNotifications = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
 
    /***** Buttons to change preferences and to mark all notifications as seen *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Ntf_PutLinkToChangePrefs ();			// Put form to change notification preferences
    if (NumNotifications)
       Ntf_PutLinkToMarkAllNotifAsSeen ();	// Put form to change notification preferences

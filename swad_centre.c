@@ -266,7 +266,7 @@ static void Ctr_Configuration (bool PrintView)
              and to upload photo and logo *****/
       if (!PrintView)
 	{
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to show degrees */
 	 Act_FormStart (ActSeeDeg);
@@ -287,7 +287,6 @@ static void Ctr_Configuration (bool PrintView)
 
          fprintf (Gbl.F.Out,"</div>");
 	}
-
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable10 (NULL,2,NULL);

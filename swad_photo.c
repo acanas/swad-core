@@ -236,7 +236,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    if (PhotoExists)	// User has photo
      {
       /***** Forms to remove photo and make it public *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Pho_PutLinkToRemoveUsrPhoto (UsrDat);
       if (ItsMe)
          Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
@@ -1671,7 +1671,7 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 
 static void Pho_PutLinkToPrintViewOfDegreeStats (void)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutLinkToPrintView1 (ActPrnPhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1708,7 +1708,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Start div *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /***** Start form *****/
       Act_FormStart (ActCalPhoDeg);

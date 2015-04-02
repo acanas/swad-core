@@ -74,21 +74,20 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
-
    /***** Put link (form) to create a new announcement *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Act_FormStart (ActWriAnn);
       Act_LinkFormSubmit (Txt_New_announcement,The_ClassFormulB[Gbl.Prefs.Theme]);
       Lay_PutSendIcon ("new",Txt_New_announcement,Txt_New_announcement);
       Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** List announcements *****/
    Ann_ListAnnouncements ();
 
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

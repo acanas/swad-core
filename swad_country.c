@@ -233,7 +233,7 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Links to show institutions and to print view  *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to show institutions */
       Act_FormStart (ActSeeIns);

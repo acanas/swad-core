@@ -1345,7 +1345,7 @@ void Usr_WriteFormLogin (void)
    extern const char *Txt_I_forgot_my_password;
 
    /***** Links to other actions *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Link to create a new account */
    Act_FormStart (ActFrmUsrAcc);
@@ -2459,7 +2459,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    extern const char *Txt_Role;
 
    /***** Link to log out *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("logout",Txt_Log_out,Txt_Log_out);
@@ -6337,27 +6337,25 @@ void Usr_SeeGuests (void)
          /***** Get list of selected users *****/
          Usr_GetListSelectedUsrs ();
 
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Lay_PutLinkToPrintView1 (ActPrnInvPho);
 	       Lay_PutLinkToPrintView2 ();
-	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
 	       Act_FormStart (ActLstInvAll);
 	       Usr_PutParamListWithPhotos ();
 	       Usr_PutExtraParamsUsrList (ActLstInvAll);
 	       Act_LinkFormSubmit (Txt_Show_all_data,The_ClassFormulB[Gbl.Prefs.Theme]);
 	       Lay_PutSendIcon ("table",Txt_Show_all_data,Txt_Show_all_data);
 	       Act_FormEnd ();
-	       fprintf (Gbl.F.Out,"</div>");
 	       break;
            }
+	 fprintf (Gbl.F.Out,"</div>");
 
          /***** Draw a class photo with students of the course *****/
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
@@ -6424,7 +6422,7 @@ void Usr_SeeStudents (void)
        (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||	// My role in current course is teacher...
         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))	// ...or superuser
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /***** Link to list official students *****/
       Usr_PutLinkToListOfficialStudents ();
@@ -6490,7 +6488,7 @@ void Usr_SeeStudents (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	       Lay_PutLinkToPrintView1 (ActPrnStdPho);
 	       Grp_PutParamsCodGrps ();
 	       Lay_PutLinkToPrintView2 ();
@@ -6500,7 +6498,7 @@ void Usr_SeeStudents (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 		  Act_FormStart (ActLstStdAll);
 		  Grp_PutParamsCodGrps ();
 		  Usr_PutParamListWithPhotos ();
@@ -6634,7 +6632,7 @@ void Usr_SeeTeachers (void)
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_CLASS_PHOTO:
-               fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	       Lay_PutLinkToPrintView1 (ActPrnTchPho);
 	       Sco_PutParamScope (Gbl.Scope.Current);
 	       Lay_PutLinkToPrintView2 ();
@@ -6644,7 +6642,7 @@ void Usr_SeeTeachers (void)
 	       if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
 		 {
 		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 		  Act_FormStart (ActLstTchAll);
 		  Sco_PutParamScope (Gbl.Scope.Current);
 		  Usr_PutParamListWithPhotos ();

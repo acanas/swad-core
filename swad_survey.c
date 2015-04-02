@@ -697,7 +697,7 @@ static void Svy_PutFormToCreateNewSvy (void)
    extern const char *The_ClassFormulB[The_NUM_THEMES];
    extern const char *Txt_New_survey;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActFrmNewSvy);
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();

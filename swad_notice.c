@@ -320,7 +320,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 
       if (ICanEditNotices)
 	{
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 Act_FormStart (ActWriNot);
 	 Act_LinkFormSubmit (Txt_New_notice,The_ClassFormulB[Gbl.Prefs.Theme]);
 	 Lay_PutSendIcon ("new",Txt_New_notice,Txt_New_notice);

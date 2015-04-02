@@ -90,7 +90,7 @@ void Sch_ReqSysSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -109,7 +109,7 @@ void Sch_ReqCtySearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -128,7 +128,7 @@ void Sch_ReqInsSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -147,7 +147,7 @@ void Sch_ReqCtrSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -166,7 +166,7 @@ void Sch_ReqDegSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -185,7 +185,7 @@ void Sch_ReqCrsSearch (void)
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Crs_PutFormToSelectMyCourses ();
       fprintf (Gbl.F.Out,"</div>");
      }

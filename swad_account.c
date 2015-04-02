@@ -115,7 +115,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Link to log in *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("login",Txt_Log_in,Txt_Log_in);
@@ -208,7 +208,7 @@ void Acc_ShowFormChangeMyAccount (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Put links to change my password and to remove my account*****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Pwd_PutLinkToChangeUsrPassword (&Gbl.Usrs.Me.UsrDat);
    if (Acc_CheckIfICanEliminateAccount (true))	// ItsMe = true
       Acc_PutLinkToRemoveMyAccount ();

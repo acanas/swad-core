@@ -288,8 +288,9 @@ void Enr_ReqAcceptRegisterInCrs (void)
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
    /***** Send button to accept register in the current course *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
    Act_FormStart (ActAccEnrCrs);
    Act_LinkFormSubmit (Txt_Confirm_my_enrollment,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("ok_green",Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
@@ -300,6 +301,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Act_LinkFormSubmit (Txt_Remove_me_from_this_course,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("delon",Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
    Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Mark possible notification as seen *****/
@@ -517,7 +519,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Put link to go to admin one user */
    Enr_PutLinkToAdminOneUsr ();
@@ -2185,13 +2187,11 @@ void Enr_ShowEnrollmentRequests (void)
                       "</table>");
 
    /* Send button */
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update,Txt_Update);
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* Form end */
    Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Build query *****/
    switch (Gbl.Scope.Current)
@@ -2671,7 +2671,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          /* Put link to go to admin several users */
@@ -2852,7 +2852,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
 static void Enr_ShowFormToEditOtherUsr (void)
   {
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       ID_PutLinkToChangeUsrIDs (&Gbl.Usrs.Other.UsrDat);	// Put link (form) to change user's IDs

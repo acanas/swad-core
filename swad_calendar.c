@@ -125,7 +125,7 @@ void Cal_DrawCalendar (void)
    if (!PrintView)
      {
       /* Link to print view */
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Lay_PutLinkToPrintView1 (ActPrnCal);
       Lay_PutLinkToPrintView2 ();
       fprintf (Gbl.F.Out,"</div>");

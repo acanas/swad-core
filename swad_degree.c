@@ -304,7 +304,7 @@ static void Deg_Configuration (bool PrintView)
       /***** Links to show courses, to print view and to upload logo *****/
       if (!PrintView)
 	{
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to show courses */
 	 Act_FormStart (ActSeeCrs);

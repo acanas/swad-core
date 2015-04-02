@@ -443,7 +443,7 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
      {
       case Rol_ROLE_TEACHER:
       case Rol_ROLE_SYS_ADM:
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Act_FormStart (ActEdiExaAnn);
          Act_LinkFormSubmit (Txt_New_announcement_OF_EXAM,The_ClassFormulB[Gbl.Prefs.Theme]);
          Lay_PutSendIcon ("new",Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);

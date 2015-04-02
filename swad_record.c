@@ -911,7 +911,7 @@ void Rec_ListRecordsInvs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevInv)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevInv);
@@ -990,7 +990,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /***** Link to edit record fields *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
@@ -1061,7 +1061,7 @@ void Rec_ListRecordsStdsCrs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevStd)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to edit record fields */
       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
@@ -1153,18 +1153,20 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   /***** Show contextual menu *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /***** Show office hours? *****/
+   /* Show office hours? */
    Rec_WriteFormShowOfficeHours (true,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 
-   /***** Link to print view *****/
+   /* Link to print view */
    Act_FormStart (ActPrnRecSevTch);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
    Par_PutHiddenParamChar ("ShowOfficeHours",'Y');
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;"
@@ -1223,7 +1225,8 @@ void Rec_ListRecordsTchsCrs (void)
 
    if (Gbl.CurrentAct == ActSeeRecSevTch)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      /***** Show contextual menu *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Show office hours? */
       Rec_WriteFormShowOfficeHours (ShowOfficeHours,Gbl.Usrs.Select.All);
@@ -1237,6 +1240,7 @@ void Rec_ListRecordsTchsCrs (void)
                         	                'N');
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Act_FormEnd ();
+
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1296,15 +1300,16 @@ void Rec_ListRecordsTchsCrs (void)
 void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"<span class=\"%s\"> (</span>"
+   fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
-	    The_ClassFormulB[Gbl.Prefs.Theme]);
+	    The_ClassFormul[Gbl.Prefs.Theme]);
 
    for (i = 1;
         i <= 10;
@@ -1317,7 +1322,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "<span class=\"%s\"> %s)</span>",
-            The_ClassFormulB[Gbl.Prefs.Theme],Txt_record_cards_per_page);
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_record_cards_per_page);
   }
 
 /*****************************************************************************/
@@ -1348,14 +1353,16 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
+   fprintf (Gbl.F.Out,"<div style=\"margin:0 5px; display:inline;\">"
+                      "<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
    if (ShowOfficeHours)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," style=\"vertical-align:middle; margin-left:10px;\""
+   fprintf (Gbl.F.Out," style=\"vertical-align:middle;\""
 	              " onclick=\"javascript:document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
                       " alt=\"%s\" class=\"ICON16x16\" />"
-                      "<span class=\"%s\">&nbsp;%s</span>",
+                      "<span class=\"%s\">&nbsp;%s</span>"
+                      "</div>",
             Gbl.FormId,
             Gbl.Prefs.IconsURL,
             Txt_Show_office_hours,
@@ -1864,7 +1871,7 @@ void Rec_ShowFormMyCommRecord (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
    Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
    Pho_PutLinkToChangeUsrPhoto (&Gbl.Usrs.Me.UsrDat);	// Put link (form) to change my photo

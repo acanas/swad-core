@@ -183,7 +183,7 @@ static void Crs_Configuration (bool PrintView)
 	}
 
       /***** Links to print view and request enrollment *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
       Lay_PutLinkToPrintView1 (ActPrnCrsInf);
@@ -2976,7 +2976,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
    extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
 
    /***** Search / select more courses *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Crs_PutLinkToSearchCourses ();
    fprintf (Gbl.F.Out,"</div>");
 

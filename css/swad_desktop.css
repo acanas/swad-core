@@ -315,6 +315,13 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .ICON48x48	{width:48px; height:48px; vertical-align:middle;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
 
+/****** Contextual links with small icons and text to go to some action ******/
+.CONTEXT_MENU
+	{
+	text-align:center;
+	margin-bottom:10px;
+	}
+
 /********************************* Frame 10 **********************************/
 .FRAME10
 	{

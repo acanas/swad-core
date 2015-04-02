@@ -217,7 +217,7 @@ void Msg_ListEMails (void)
          Lay_EndRoundFrameTable10 ();
 
          /***** Icon to open the client e-mail program *****/
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">"
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\" title=\"%s\" class=\"%s\">",
                   Gbl.Usrs.Me.UsrDat.Email,
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
@@ -1498,7 +1498,7 @@ void Msg_ShowRecMsgs (void)
    /***** Link to view banned users *****/
    if (Msg_GetNumUsrsBannedByMe ())
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Msg_PutLinkToViewBannedUsers ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -2155,7 +2155,7 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    char StrFilterContent[256+Msg_MAX_LENGTH_FILTER_CONTENT+1];
 
    /***** Put link to request deletion of all sent or received messages *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg : ActReqDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
 
