@@ -657,7 +657,8 @@ void Pwd_ShowFormChgPwd (void)
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
    extern const char *Txt_Password;
    extern const char *Txt_Current_password;
-   extern const char *Txt_Save;
+   extern const char *Txt_Change_password;
+   extern const char *Txt_Set_password;
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
    /***** Help message *****/
@@ -669,16 +670,13 @@ void Pwd_ShowFormChgPwd (void)
          Lay_ShowAlert (Lay_WARNING,Txt_Your_password_is_not_secure_enough);
      }
 
-   sprintf (Gbl.Message,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-            Pwd_MIN_LENGTH_PLAIN_PASSWORD);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
    /***** Start form *****/
    Act_FormStart (ActChgPwd);
 
    /***** Start table *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Password);
 
+   /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\" style=\"text-align:right;\">"
@@ -686,18 +684,30 @@ void Pwd_ShowFormChgPwd (void)
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
                          "<input type=\"password\" name=\"UsrPwd\""
-                         " size=\"25\" maxlength=\"%u\" />"
+                         " size=\"25\" maxlength=\"%u\" autocomplete=\"off\" />"
                          "</td>"
                          "</tr>",
                The_ClassFormul[Gbl.Prefs.Theme],
                Txt_Current_password,
                Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+
+   /* Help message */
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\">");
+   sprintf (Gbl.Message,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+            Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /* New password */
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutConfirmButton (Txt_Save);
+   Lay_PutConfirmButton (IHaveAPasswordInDB ? Txt_Change_password :
+	                                      Txt_Set_password);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
    Lay_EndRoundFrameTable10 ();

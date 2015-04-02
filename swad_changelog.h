@@ -108,6 +108,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.107.6: Apr 03, 2015	Changes in layout of form to change password. (183748 lines)
         Version 14.107.5: Apr 03, 2015	Changes in layout of form to change photo. (183718 lines)
         Version 14.107.4: Apr 03, 2015	Fixed bugs when changing user's ID, password and photo. (183699 lines)
         Version 14.107.3: Apr 02, 2015	Changes in icons in attendance events.

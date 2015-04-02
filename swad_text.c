@@ -4075,7 +4075,7 @@ const char *Txt_Change_password =
 #elif L==3
 	"Cambiar contrase&ntilde;a";
 #elif L==4
-	"Changer le mot de passe";
+	"Changer mot de passe";
 #elif L==5
 	"Cambiar contrase&ntilde;a";	// Okoteve traducción
 #elif L==6
@@ -33805,6 +33805,27 @@ const char *Txt_Send =
 	"Send";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Enviar";
+#endif
+
+const char *Txt_Set_password =
+#if   L==0
+	"Establir contrasenya";
+#elif L==1
+	"Passwort festlegen";
+#elif L==2
+	"Set password";
+#elif L==3
+	"Establecer contrase&ntilde;a";
+#elif L==4
+	"D&eacute;finir mot de passe";
+#elif L==5
+	"Establecer contrase&ntilde;a";	// Okoteve traducción
+#elif L==6
+	"Impostare password";
+#elif L==7
+	"Ustaw has&lstrok;o";
+#elif L==8
+	"Definir senha";
 #endif
 
 const char *Txt_Publish_announcement_OF_EXAM =

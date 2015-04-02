@@ -276,7 +276,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
 
    /***** Show current photo and help message *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">");
+                      "<td colspan=\"2\">");
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_NO_ZOOM);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
    fprintf (Gbl.F.Out,"</td>"
