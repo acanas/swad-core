@@ -775,24 +775,18 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 	 /***** Link to remove this exam announcement *****/
 	 Act_FormStart (ActRemExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_LinkFormSubmit (Txt_Remove,NULL);
-	 Lay_PutSendIcon ("delon",Txt_Remove,NULL);
-	 Act_FormEnd ();
+	 Act_PutIconLink ("delon",Txt_Remove);
 
 	 /***** Link to edit this exam announcement *****/
 	 Act_FormStart (ActEdiExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_LinkFormSubmit (Txt_Edit,NULL);
-	 Lay_PutSendIcon ("edit",Txt_Edit,NULL);
-	 Act_FormEnd ();
+	 Act_PutIconLink ("edit",Txt_Edit);
 	}
 
       /***** Link to print view *****/
       Act_FormStart (ActPrnExaAnn);
       Par_PutHiddenParamLong ("ExaCod",ExaCod);
-      Act_LinkFormSubmit (Txt_Print,NULL);
-      Lay_PutSendIcon ("print",Txt_Print,NULL);
-      Act_FormEnd ();
+      Act_PutIconLink ("print",Txt_Print);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

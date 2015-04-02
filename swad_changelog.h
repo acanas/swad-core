@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.107 (2015/04/02)"
+#define Log_PLATFORM_VERSION	"SWAD 14.107.1 (2015/04/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.107.1: Apr 02, 2015	Changes in icons in assignments. (183748 lines)
         Version 14.107:   Apr 02, 2015	Refactoring contextual menus. (183776 lines)
         Version 14.106.2: Apr 02, 2015	Refactoring some contextual menus. (183747 lines)
         Version 14.106.1: Apr 02, 2015	Changes in layout of icon with links. (183925 lines)

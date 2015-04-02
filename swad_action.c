@@ -4333,6 +4333,17 @@ void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
   }
 
 /*****************************************************************************/
+/****************** Show an icon with a link (without text) ******************/
+/*****************************************************************************/
+
+void Act_PutIconLink (const char *Icon,const char *Title)
+  {
+   Act_LinkFormSubmit (Title,NULL);
+   Lay_PutSendIcon (Icon,Title,NULL);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /***************** Adjust current action when no user's logged ***************/
 /*****************************************************************************/
 

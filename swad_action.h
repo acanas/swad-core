@@ -1345,6 +1345,7 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle);
 
 void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
                             const char *Icon,const char *Title);
+void Act_PutIconLink (const char *Icon,const char *Title);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
