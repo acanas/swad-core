@@ -152,13 +152,11 @@ void Pho_PutLinkToChangeMyPhoto (void)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
-   bool PhotoExists;
 
    /***** Link for changing / uploading the photo *****/
-   PhotoExists = Gbl.Usrs.Me.MyPhotoExists;
    Act_PutContextualLink (ActReqMyPho,NULL,
-                          "photo",PhotoExists ? Txt_Change_photo :
-		                                Txt_Upload_photo);
+                          "photo",Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
+		                                              Txt_Upload_photo);
   }
 
 /*****************************************************************************/
@@ -173,10 +171,15 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    char PhotoURL[PATH_MAX+1];
 
    /***** Link for changing / uploading the photo *****/
-   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
-   Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
-                          "photo",PhotoExists ? Txt_Change_photo :
-		                                Txt_Upload_photo);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Pho_PutLinkToChangeMyPhoto ();
+   else									// Not me
+     {
+      PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+      Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+			     "photo",PhotoExists ? Txt_Change_photo :
+						   Txt_Upload_photo);
+     }
   }
 
 /*****************************************************************************/

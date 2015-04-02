@@ -361,20 +361,14 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
 void ID_PutLinkToChangeUsrIDs (void)
   {
    extern const char *Txt_Change_IDs;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Link for changing the password *****/
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
-     {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-         Act_PutContextualLink (ActFrmUsrAcc,NULL,
-                                "arroba",Txt_Change_IDs);
-      else								// Not me
-         Act_PutContextualLink (ActFrmIDsOthUsr,Usr_PutParamOtherUsrCodEncrypted,
-                                "arroba",Txt_Change_IDs);
-     }
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Act_PutContextualLink (ActFrmUsrAcc,NULL,
+			     "arroba",Txt_Change_IDs);
+   else									// Not me
+      Act_PutContextualLink (ActFrmIDsOthUsr,Usr_PutParamOtherUsrCodEncrypted,
+			     "arroba",Txt_Change_IDs);
   }
 
 /*****************************************************************************/

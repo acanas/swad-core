@@ -814,14 +814,13 @@ void Pwd_PutLinkToChangeMyPassword (void)
 void Pwd_PutLinkToChangeOtherUsrPassword (void)
   {
    extern const char *Txt_Change_password;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Link for changing the password *****/
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Pwd_PutLinkToChangeMyPassword ();
+   else									// Not me
       Act_PutContextualLink (ActFrmPwdOthUsr,Usr_PutParamOtherUsrCodEncrypted,
                              "key",Txt_Change_password);
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

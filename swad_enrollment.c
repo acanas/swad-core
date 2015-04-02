@@ -2833,7 +2833,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      ID_PutLinkToChangeUsrIDs ();	// Put link (form) to change user's IDs
+      ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
      }
    if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
