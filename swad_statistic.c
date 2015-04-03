@@ -4771,7 +4771,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
             sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			   " FROM usr_data"
                            " WHERE InsCod='%ld'"
-			   " GROUP BY centres.InsCod"
+			   " GROUP BY InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
