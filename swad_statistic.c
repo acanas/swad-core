@@ -4685,7 +4685,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+	 sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
 			" FROM centres,degrees,courses,crs_usr"
 	                " WHERE centres.CtrCod=degrees.CtrCod"
 	                " AND degrees.DegCod=courses.DegCod"
@@ -4694,7 +4694,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+            sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
                            " WHERE institutions.CtyCod='%ld'"
                            " AND institutions.InsCod=centres.InsCod"
@@ -4709,7 +4709,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Sco_SCOPE_CTR:
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+            sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
 			   " FROM centres,degrees,courses,crs_usr"
                            " WHERE centres.InsCod='%ld'"
 	                   " AND centres.CtrCod=degrees.CtrCod"

@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.108 (2015/04/03)"
+#define Log_PLATFORM_VERSION	"SWAD 14.108.1 (2015/04/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.108.1: Apr 03, 2015	Fixed bug in statistic about institutions. (184137 lines)
         Version 14.108:   Apr 03, 2015	New statistic (figure) about institutions. (184136 lines)
         Version 14.107.8: Apr 03, 2015	Changes in statistics (figures about hierarchy). (183774 lines)
         Version 14.107.7: Apr 03, 2015	Changes in layout of sent / received messages. (183753 lines)
