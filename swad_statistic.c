@@ -4547,6 +4547,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
             sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			   " FROM centres"
                            " WHERE InsCod='%ld'"
+			   " GROUP BY InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -4600,6 +4601,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
 			   " FROM centres,degrees"
                            " WHERE centres.InsCod='%ld'"
 	                   " AND centres.CtrCod=degrees.CtrCod"
+			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -4656,6 +4658,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
                            " WHERE centres.InsCod='%ld'"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
+			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -4715,6 +4718,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
 	                   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -4767,6 +4771,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
             sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			   " FROM usr_data"
                            " WHERE InsCod='%ld'"
+			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
          break;
