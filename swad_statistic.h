@@ -90,8 +90,8 @@ typedef enum
 typedef enum
   {
    Sta_USERS,			// Number of users
-   Sta_USRS_RANKING,		// Users' ranking
-   Sta_DEGREES_AND_COURSES,	// Number of degrees and courses
+   Sta_USERS_RANKING,		// Users' ranking
+   Sta_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
    Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
    Sta_OER,			// Number of OERs (Open Educational Resources)
@@ -99,7 +99,7 @@ typedef enum
    Sta_TESTS,			// Number of test questions
    Sta_NOTIFY_EVENTS,		// Number of users per notify event
    Sta_NOTICES,			// Number of notices
-   Sta_MSGS_BETWEEN_USERS,	// Number of users' (sent and received) messages
+   Sta_MESSAGES,		// Number of users' (sent and received) messages
    Sta_FORUMS,			// Number of forums, threads and posts
    Sta_SURVEYS,			// Number of surveys
    Sta_PRIVACY,			// Number of users per privacity

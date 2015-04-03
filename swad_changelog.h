@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.107.7 (2015/04/03)"
+#define Log_PLATFORM_VERSION	"SWAD 14.107.8 (2015/04/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.107.8: Apr 03, 2015	Changes in statistics (figures about hierarchy). (183774 lines)
         Version 14.107.7: Apr 03, 2015	Changes in layout of sent / received messages. (183753 lines)
         Version 14.107.6: Apr 03, 2015	Changes in layout of form to change password. (183748 lines)
         Version 14.107.5: Apr 03, 2015	Changes in layout of form to change photo. (183718 lines)

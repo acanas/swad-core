@@ -3660,7 +3660,7 @@ void Sta_ShowUseOfPlatform (void)
    /***** Show the stat of use selected by user *****/
    switch (Gbl.Stat.UseStatType)
      {
-      case Sta_USRS_RANKING:
+      case Sta_USERS_RANKING:
 	 /***** Users ranking *****/
          Sta_GetAndShowUsersRanking ();
          break;
@@ -3668,7 +3668,7 @@ void Sta_ShowUseOfPlatform (void)
 	 /***** Number of users *****/
          Sta_GetAndShowUsersStats ();
          break;
-      case Sta_DEGREES_AND_COURSES:
+      case Sta_HIERARCHY:
          /***** Number of degrees and courses *****/
 	 Sta_GetAndShowDegCrsStats ();
          break;
@@ -3701,7 +3701,7 @@ void Sta_ShowUseOfPlatform (void)
          /***** Number of notices *****/
          Sta_GetAndShowNoticesStats ();
          break;
-      case Sta_MSGS_BETWEEN_USERS:
+      case Sta_MESSAGES:
          /***** Number of sent and received messages *****/
          Sta_GetAndShowMsgsStats ();
          break;
@@ -3798,7 +3798,7 @@ static void Sta_GetAndShowUsersRanking (void)
    extern const char *Txt_Messages;
    extern const char *Txt_Followers;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USRS_RANKING]);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING]);
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3867,7 +3867,7 @@ static void Sta_GetAndShowDegCrsStats (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_DEGREES_AND_COURSES]);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY]);
    Sta_WriteHeadDegsCrssInSWAD ();
    Sta_GetAndShowNumCtysInSWAD ();
    Sta_GetAndShowNumInssInSWAD ();
@@ -4016,7 +4016,9 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    /***** Write number of countries *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
-                      "%s:"
+                      "<img src=\"%s/cty16x16.gif\""
+                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
                       "%u"
@@ -4040,6 +4042,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
+            Gbl.Prefs.IconsURL,
+            Txt_Countries,
             Txt_Countries,
             NumCtysTotal,
             NumCtysWithInss,
@@ -4135,7 +4139,9 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    /***** Write number of institutions *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
-                      "%s:"
+                      "<img src=\"%s/ins16x16.gif\""
+                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
                       "%u"
@@ -4157,6 +4163,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
+            Gbl.Prefs.IconsURL,
+            Txt_Institutions,
             Txt_Institutions,
             NumInssTotal,
             NumInssWithCtrs,
@@ -4244,7 +4252,9 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    /***** Write number of centres *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
-                      "%s:"
+                      "<img src=\"%s/ctr16x16.gif\""
+                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
                       "%u"
@@ -4264,6 +4274,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
+            Gbl.Prefs.IconsURL,
+            Txt_Centres,
             Txt_Centres,
             NumCtrsTotal,
             NumCtrsWithDegs,
@@ -4343,7 +4355,9 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    /***** Write number of degrees *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
-                      "%s:"
+                      "<img src=\"%s/deg16x16.gif\""
+                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
                       "%u"
@@ -4361,6 +4375,8 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
+            Gbl.Prefs.IconsURL,
+            Txt_Degrees,
             Txt_Degrees,
             NumDegsTotal,
             NumDegsWithCrss,
@@ -4380,7 +4396,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    unsigned NumCrssWithTchs = 0;
    unsigned NumCrssWithStds = 0;
 
-   /***** Get number of degrees *****/
+   /***** Get number of courses *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
@@ -4429,10 +4445,12 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 	 break;
      }
 
-   /***** Write number of degrees *****/
+   /***** Write number of courses *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
-                      "%s:"
+                      "<img src=\"%s/crs16x16.gif\""
+                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
                       "%u"
@@ -4448,6 +4466,8 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
                       "%u"
                       "</td>"
                       "</tr>",
+            Gbl.Prefs.IconsURL,
+            Txt_Courses,
             Txt_Courses,
             NumCrssTotal,
             NumCrssWithTchs,
@@ -6271,7 +6291,7 @@ static void Sta_GetAndShowMsgsStats (void)
    NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MSGS_BETWEEN_USERS]);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES]);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"

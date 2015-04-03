@@ -36086,23 +36086,23 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 #endif
 	 ,
 #if   L==0
-	 "Titulaciones y asignaturas"	// Necessita traducció
+	 "Jerarquia"
 #elif L==1
-	 "Studieng&auml;nge und Kursen"
+	 "Hierarchie"
 #elif L==2
-	 "Degrees and courses"
+	 "Hierarchy"
 #elif L==3
-	 "Titulaciones y asignaturas"
+	 "Jerarqu&iacute;a"
 #elif L==4
-	 "&Eacute;tudes et mati&egrave;res"
+	 "Hi&eacute;rarchie"
 #elif L==5
-	 "Titulaciones y asignaturas"	// Okoteve traducción
+	 "Jerarqu&iacute;a"		// Okoteve traducción
 #elif L==6
-	 "Lauree e corsi"
+	 "Gerarchia"
 #elif L==7
-	 "Degrees and courses"		// Potrzebujesz tlumaczenie
+	 "Hierarchia"
 #elif L==8
-	 "Titula&ccedil;oes e disciplinas"
+	 "Hierarquia"
 #endif
 	 ,
 #if   L==0
