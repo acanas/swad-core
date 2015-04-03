@@ -123,13 +123,21 @@ static void Sta_WriteDegree (long DegCod);
 static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPagesGenerated,float TotalPagesGenerated,unsigned MaxBarWidth);
 static void Sta_WriteSelectedRangeOfDates (unsigned NumDays);
 
-static void Sta_GetAndShowDegCrsStats (void);
+static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
 static void Sta_GetAndShowNumCtysInSWAD (void);
 static void Sta_GetAndShowNumInssInSWAD (void);
 static void Sta_GetAndShowNumCtrsInSWAD (void);
 static void Sta_GetAndShowNumDegsInSWAD (void);
 static void Sta_GetAndShowNumCrssInSWAD (void);
+
+static void Sta_GetAndShowInstitutionsStats (void);
+static void Sta_GetAndShowInssOrderedByNumCtrs (void);
+static void Sta_GetAndShowInssOrderedByNumDegs (void);
+static void Sta_GetAndShowInssOrderedByNumCrss (void);
+static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void);
+static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
+static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
 
 static void Sta_GetAndShowUsersStats (void);
 static void Sta_GetAndShowUsersRanking (void);
@@ -3670,7 +3678,11 @@ void Sta_ShowUseOfPlatform (void)
          break;
       case Sta_HIERARCHY:
          /***** Number of degrees and courses *****/
-	 Sta_GetAndShowDegCrsStats ();
+	 Sta_GetAndShowHierarchyStats ();
+         break;
+      case Sta_INSTITUTIONS:
+         /***** Number of institutions with users *****/
+	 Sta_GetAndShowInstitutionsStats ();
          break;
       case Sta_SOCIAL_NETWORKS:
 	 /***** Number of users in social networks *****/
@@ -3860,10 +3872,11 @@ static void Sta_GetAndShowUsersRanking (void)
   }
 
 /*****************************************************************************/
-/*************** Get and show stats about degrees and courses ****************/
+/*********            Get and show stats about hierarchy           ***********/
+/********* (countries, institutions, centres, degrees and courses) ***********/
 /*****************************************************************************/
 
-static void Sta_GetAndShowDegCrsStats (void)
+static void Sta_GetAndShowHierarchyStats (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
 
@@ -4472,6 +4485,363 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
             NumCrssTotal,
             NumCrssWithTchs,
             NumCrssWithStds);
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInstitutionsStats (void)
+  {
+   /****** Institutions ordered by number of centres ******/
+   Sta_GetAndShowInssOrderedByNumCtrs ();
+
+   /****** Institutions ordered by number of degrees ******/
+   Sta_GetAndShowInssOrderedByNumDegs ();
+
+   /****** Institutions ordered by number of courses ******/
+   Sta_GetAndShowInssOrderedByNumCrss ();
+
+   /****** Institutions ordered by number of users in courses ******/
+   Sta_GetAndShowInssOrderedByNumUsrsInCrss ();
+
+   /****** Institutions ordered by number of users who claim to belong to them ******/
+   Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of centres *****/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInssOrderedByNumCtrs (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Centres;
+   char Query[1024];
+
+   /****** Institutions ordered by number of centres ******/
+   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de centros");	// Need translation
+
+   /***** Get institutions ordered by number of centres *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+			" FROM centres"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC");
+         break;
+      case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+        	           " FROM institutions,centres"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+			   " GROUP BY centres.InsCod"
+			   " ORDER BY N DESC",
+	             Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+      case Sco_SCOPE_CTR:
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+			   " FROM centres"
+                           " WHERE InsCod='%ld'"
+			   " ORDER BY N DESC",
+                     Gbl.CurrentIns.Ins.InsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   Sta_GetAndShowInss (Query,Txt_Centres);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of degrees *****/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInssOrderedByNumDegs (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Degrees;
+   char Query[1024];
+
+   /****** Institutions ordered by number of centres ******/
+   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de titulaciones");	// Need translation
+
+   /***** Get institutions ordered by number of degrees *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM centres,degrees"
+	                " WHERE centres.CtrCod=degrees.CtrCod"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC");
+         break;
+      case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+        	           " FROM institutions,centres,degrees"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+			   " GROUP BY centres.InsCod"
+			   " ORDER BY N DESC",
+	             Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+      case Sco_SCOPE_CTR:
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			   " FROM centres,degrees"
+                           " WHERE centres.InsCod='%ld'"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+			   " ORDER BY N DESC",
+                     Gbl.CurrentIns.Ins.InsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   Sta_GetAndShowInss (Query,Txt_Degrees);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of courses *****/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInssOrderedByNumCrss (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Courses;
+   char Query[1024];
+
+   /****** Institutions ordered by number of centres ******/
+   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de asignaturas");	// Need translation
+
+   /***** Get institutions ordered by number of courses *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM centres,degrees,courses"
+	                " WHERE centres.CtrCod=degrees.CtrCod"
+	                " AND degrees.DegCod=courses.DegCod"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC");
+         break;
+      case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+        	           " FROM institutions,centres,degrees,courses"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+	                   " AND degrees.DegCod=courses.DegCod"
+			   " GROUP BY centres.InsCod"
+			   " ORDER BY N DESC",
+	             Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+      case Sco_SCOPE_CTR:
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			   " FROM centres,degrees,courses"
+                           " WHERE centres.InsCod='%ld'"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+	                   " AND degrees.DegCod=courses.DegCod"
+			   " ORDER BY N DESC",
+                     Gbl.CurrentIns.Ins.InsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   Sta_GetAndShowInss (Query,Txt_Courses);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/***** Get and show stats about institutions ordered by users in courses *****/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Users;
+   char Query[1024];
+
+   /****** Institutions ordered by number of centres ******/
+   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas");	// Need translation
+
+   /***** Get institutions ordered by number of users in courses *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			" FROM centres,degrees,courses,crs_usr"
+	                " WHERE centres.CtrCod=degrees.CtrCod"
+	                " AND degrees.DegCod=courses.DegCod"
+	                " AND courses.CrsCod=crs_usr.CrsCod"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC");
+         break;
+      case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+        	           " FROM institutions,centres,degrees,courses,crs_usr"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+	                   " AND degrees.DegCod=courses.DegCod"
+	                   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY centres.InsCod"
+			   " ORDER BY N DESC",
+	             Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+      case Sco_SCOPE_CTR:
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
+			   " FROM centres,degrees,courses,crs_usr"
+                           " WHERE centres.InsCod='%ld'"
+	                   " AND centres.CtrCod=degrees.CtrCod"
+	                   " AND degrees.DegCod=courses.DegCod"
+	                   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " ORDER BY N DESC",
+                     Gbl.CurrentIns.Ins.InsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   Sta_GetAndShowInss (Query,Txt_Users);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/************* Get and show stats about institutions ordered by **************/
+/************* number of users who claim to belong to them      **************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Users;
+   char Query[1024];
+
+   /****** Institutions ordered by number of centres ******/
+   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas");	// Need translation
+
+   /***** Get institutions ordered by number of users who claim to belong to them *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+			" FROM usr_data"
+                        " WHERE InsCod>'0'"
+			" GROUP BY InsCod"
+			" ORDER BY N DESC");
+         break;
+      case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT usr_data.InsCod,COUNT(*) AS N"
+        	           " FROM institutions,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=usr_data.InsCod"
+			   " GROUP BY usr_data.InsCod"
+			   " ORDER BY N DESC",
+	             Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+      case Sco_SCOPE_CTR:
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
+			   " FROM usr_data"
+                           " WHERE InsCod='%ld'"
+			   " ORDER BY N DESC",
+                     Gbl.CurrentIns.Ins.InsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   Sta_GetAndShowInss (Query,Txt_Users);
+
+   Lay_EndRoundFrameTable10 ();
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
+  {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institution;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumInss;
+   unsigned NumIns;
+   struct Institution Ins;
+
+   /***** Query database *****/
+   if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+			 "%s"
+			 "</th>"
+			 "</tr>",
+	       Txt_Institution,
+	       TxtFigure);
+
+      for (NumIns = 0;
+	   NumIns < NumInss;
+	   NumIns++)
+	{
+	 /***** Get next institution *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /***** Get data of this institution (row[0]) *****/
+	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
+	    Lay_ShowErrorAndExit ("Institution not found.");
+
+	 /***** Write link to institution *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"%s\" style=\"text-align:left;\">",
+                  The_ClassFormul[Gbl.Prefs.Theme]);
+	 Act_FormStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Ins.InsCod);
+	 Act_LinkFormSubmit (Ins.ShortName,The_ClassFormul[Gbl.Prefs.Theme]);
+	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
+		       32,NULL,true);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 /***** Write number of centres (row[1]) *****/
+	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	                    "%s"
+	                    "</td></tr>",
+	          row[1]);
+	}
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

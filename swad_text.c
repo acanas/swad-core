@@ -36045,7 +36045,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES] =
 
 const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
    {
-#if   L==0
+#if   L==0				// Sta_USERS
 	 "Usuaris"
 #elif L==1
 	 "Benutzer"
@@ -36065,7 +36065,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Utilizadores"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_USERS_RANKING
 	 "R&agrave;nquing"
 #elif L==1
 	 "Rang"
@@ -36085,7 +36085,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Posi&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_HIERARCHY
 	 "Jerarquia"
 #elif L==1
 	 "Hierarchie"
@@ -36105,7 +36105,27 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Hierarquia"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_INSTITUTIONS
+	"Institucions"
+#elif L==1
+	"Hochschulen"
+#elif L==2
+	"Institutions"
+#elif L==3
+	"Instituciones"
+#elif L==4
+	"&Eacute;tablissements"
+#elif L==5
+	"Mbo'ehao"
+#elif L==6
+	"Istituzioni"
+#elif L==7
+	"Instytucje"
+#elif L==8
+	"Institu&ccedil;&otilde;es"
+#endif
+	 ,
+#if   L==0				// Sta_SOCIAL_NETWORKS
 	 "Webs / xarxes socials"
 #elif L==1
 	 "Webs / Social Networks"
@@ -36125,7 +36145,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Webs / redes sociais"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_FOLDERS_AND_FILES
 	 "Carpetes i fitxers"
 #elif L==1
 	 "Verzeichnisse und Dateien"
@@ -36145,7 +36165,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Diret&oacute;rios e arquivos"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_OER
 	 "Recursos Educatius Oberts (OER)"
 #elif L==1
 	 "Open Educational Resources (OER)"
@@ -36165,7 +36185,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Recursos Educacionais Abertos (OER)"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_ASSIGNMENTS
 	 "Activitats"
 #elif L==1
 	 "Aufgaben"
@@ -36185,7 +36205,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Atividades"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_TESTS
 	 "Tests"
 #elif L==1
 	 "Tests"
@@ -36205,7 +36225,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Testes"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_NOTIFY_EVENTS
 	 "Notificacions"
 #elif L==1
 	 "Anmeldungen"
@@ -36225,7 +36245,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Notifica&ccedil;&otilde;es"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_NOTICES
 	 "Avisos"
 #elif L==1
 	 "Ank&uuml;ndigungen"
@@ -36245,7 +36265,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Avisos"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_MESSAGES
 	 "Missatges"
 #elif L==1
 	 "Nachrichten"
@@ -36265,7 +36285,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Mensagens"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_FORUMS
 	 "F&ograve;rums"
 #elif L==1
 	 "Foren"
@@ -36285,7 +36305,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "F&oacute;runs"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_SURVEYS
 	 "Enquestes"
 #elif L==1
 	 "Umfragen"
@@ -36305,7 +36325,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Inqu&eacute;ritos"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_PRIVACY
 	"Privacitat"
 #elif L==1
 	"Geheimhaltung"
@@ -36325,7 +36345,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	"Privacidade"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_LANGUAGES
 	 "Idioma"
 #elif L==1
 	 "Sprache"
@@ -36345,7 +36365,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Lingua"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_LAYOUTS
 	 "Disseny"
 #elif L==1
 	 "layout"
@@ -36365,7 +36385,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Layout"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_THEMES
 	 "Tema (colors)"
 #elif L==1
 	 "Skin"
@@ -36385,7 +36405,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "Skin"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_ICON_SETS
 	 "Icones"
 #elif L==1
 	 "Symbole"
@@ -36405,7 +36425,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	 "&Iacute;cones"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_MENUS
 	"Men&uacute;"
 #elif L==1
 	"Men&uuml;"
@@ -36425,7 +36445,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
 	"Menu"
 #endif
 	 ,
-#if   L==0
+#if   L==0				// Sta_SIDE_COLUMNS
 	 "Columnes"
 #elif L==1
 	 "Spalten"

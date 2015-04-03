@@ -98,8 +98,11 @@ void Lay_PutConfirmButtonInline (const char *Text);
 void Lay_PutRemoveButton (const char *Text);
 
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title);
+void Lay_StartRoundFrame10 (const char *Width,const char *Title);
 void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable10 (void);
+void Lay_EndRoundFrame10 (void);
+
 void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);
 void Lay_RefreshNotifsAndConnected (void);

@@ -1067,6 +1067,16 @@ void Lay_WriteTitle (const char *Title)
 
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title)
   {
+   Lay_StartRoundFrame10 (Width,Title);
+
+   fprintf (Gbl.F.Out,"<table class=\"TABLE10");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
+   fprintf (Gbl.F.Out,"\">");
+  }
+
+void Lay_StartRoundFrame10 (const char *Width,const char *Title)
+  {
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<div class=\"FRAME10\"");
    if (Width)
@@ -1079,11 +1089,6 @@ void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const ch
 	                 "%s"
 	                 "</div>",
 	       Title);
-
-   fprintf (Gbl.F.Out,"<table class=\"TABLE10");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
-   fprintf (Gbl.F.Out,"\">");
   }
 
 // CellPadding must be 0, 1, 2, 4 or 8
@@ -1104,8 +1109,13 @@ void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
 
 void Lay_EndRoundFrameTable10 (void)
   {
-   fprintf (Gbl.F.Out,"</table>"
-		      "</div>"
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame10 ();
+  }
+
+void Lay_EndRoundFrame10 (void)
+  {
+   fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
   }
 
