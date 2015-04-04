@@ -14558,6 +14558,111 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[2] =
 #endif
 	};
 
+const char *Txt_Institutions_by_number_of_centres =
+#if   L==0
+	"Institucions segons nombre de centres";
+#elif L==1
+	"Hochschulen nach der Anzahl der Lehrinstitute";
+#elif L==2
+	"Institutions by number of centres";
+#elif L==3
+	"Instituciones seg&uacute;n n&uacute;mero de centros";
+#elif L==4
+	"&Eacute;tablissements par nombre de centres";
+#elif L==5
+	"Instituciones seg&uacute;n n&uacute;mero de centros";	// Okoteve traducción
+#elif L==6
+	"Istituzioni per numero di centri";
+#elif L==7
+	"Instytucje wed&lstrok;ug liczby o&sacute;rodk&oacute;w";
+#elif L==8
+	"Institu&ccedil;&otilde;es por n&uacute;mero de centros";
+#endif
+
+const char *Txt_Institutions_by_number_of_degrees =
+#if   L==0
+	"Institucions segons nombre de titulacions";
+#elif L==1
+	"Hochschulen nach der Anzahl der Studiengang";
+#elif L==2
+	"Institutions by number of degrees";
+#elif L==3
+	"Instituciones seg&uacute;n n&uacute;mero de titulaciones";
+#elif L==4
+	"&Eacute;tablissements par nombre d'&eacute;tudes";
+#elif L==5
+	"Instituciones seg&uacute;n n&uacute;mero de titulaciones";	// Okoteve traducción
+#elif L==6
+	"Istituzioni per numero di lauree";
+#elif L==7
+	"Instytucje wed&lstrok;ug liczby stopni";
+#elif L==8
+	"Institu&ccedil;&otilde;es por n&uacute;mero de titula&ccedil;&otilde;es";
+#endif
+
+const char *Txt_Institutions_by_number_of_courses =
+#if   L==0
+	"Institucions segons nombre de assignatures";
+#elif L==1
+	"Hochschulen nach der Anzahl der Kursen";
+#elif L==2
+	"Institutions by number of courses";
+#elif L==3
+	"Instituciones seg&uacute;n n&uacute;mero de asignaturas";
+#elif L==4
+	"&Eacute;tablissements par nombre de mati&egrave;res";
+#elif L==5
+	"Instituciones seg&uacute;n n&uacute;mero de asignaturas";	// Okoteve traducción
+#elif L==6
+	"Istituzioni per numero di corsi";
+#elif L==7
+	"Instytucje wed&lstrok;ug liczby kurs&otilde;w";
+#elif L==8
+	"Institu&ccedil;&otilde;es por n&uacute;mero de disciplinas";
+#endif
+
+const char *Txt_Institutions_by_number_of_users_in_courses =
+#if   L==0
+	"Institucions segons nombre d'usuaris en assignatures";
+#elif L==1
+	"Hochschulen nach der Anzahl der Benutzer in Kurse";
+#elif L==2
+	"Institutions by number of users in courses";
+#elif L==3
+	"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas";
+#elif L==4
+	"&Eacute;tablissements par nombre d'utilisateurs dans mati&egrave;res";
+#elif L==5
+	"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas";	// Okoteve traducción
+#elif L==6
+	"Istituzioni per numero di utenti in corsi";
+#elif L==7
+	"Instytucje wed&lstrok;ug liczby u&zdot;ytkownik&oacute;w w kurs&otilde;w";
+#elif L==8
+	"Institu&ccedil;&otilde;es por n&uacute;mero de usu&aacute;rios em disciplinas";
+#endif
+
+const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them =
+#if   L==0
+	"Institucions segons nombre d'usuaris que diuen pert&agrave;nyer-hi";
+#elif L==1
+	"Hochschulen nach der Anzahl der Benutzer, die behaupten, zu ihnen geh&ouml;ren";
+#elif L==2
+	"Institutions by number of users who claim to belong to them";
+#elif L==3
+	"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas";
+#elif L==4
+	"&Eacute;tablissements par nombre d'utilisateurs qui pr&eacute;tendent leur appartiennent";
+#elif L==5
+	"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas";	// Okoteve traducción
+#elif L==6
+	"Istituzioni per numero di utenti che affermano di appartenere a loro";
+#elif L==7
+	"Instytucje wed&lstrok;ug liczby u&zdot;ytkownik&oacute;w, kt&oacute;rzy twierdz&aogon;, &zdot;e nale&zdot;&aogon; do nich";
+#elif L==8
+	"Institu&ccedil;&otilde;es por n&uacute;mero de usu&aacute;rios que afirmam pertencer a elas";
+#endif
+
 const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Institucions de %s";
@@ -18011,9 +18116,9 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==0
 	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==1
-	"Hochschulen, Lehrinstitute, Studiengang und anh&auml;ngig Kursen"
+	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
 #elif L==2
-	"Institutions, centres, degrees and pending courses"
+	"Pending institutions, centres, degrees and courses"
 #elif L==3
 	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
 #elif L==4

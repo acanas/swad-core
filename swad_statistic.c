@@ -4516,11 +4516,12 @@ static void Sta_GetAndShowInstitutionsStats (void)
 static void Sta_GetAndShowInssOrderedByNumCtrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_by_number_of_centres;
    extern const char *Txt_Centres;
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de centros");	// Need translation
+   Lay_StartRoundFrameTable10 ("100%",2,Txt_Institutions_by_number_of_centres);
 
    /***** Get institutions ordered by number of centres *****/
    switch (Gbl.Scope.Current)
@@ -4567,11 +4568,12 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
 static void Sta_GetAndShowInssOrderedByNumDegs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_by_number_of_degrees;
    extern const char *Txt_Degrees;
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de titulaciones");	// Need translation
+   Lay_StartRoundFrameTable10 ("100%",2,Txt_Institutions_by_number_of_degrees);
 
    /***** Get institutions ordered by number of degrees *****/
    switch (Gbl.Scope.Current)
@@ -4621,11 +4623,12 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
 static void Sta_GetAndShowInssOrderedByNumCrss (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_by_number_of_courses;
    extern const char *Txt_Courses;
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de asignaturas");	// Need translation
+   Lay_StartRoundFrameTable10 ("100%",2,Txt_Institutions_by_number_of_courses);
 
    /***** Get institutions ordered by number of courses *****/
    switch (Gbl.Scope.Current)
@@ -4678,11 +4681,12 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_by_number_of_users_in_courses;
    extern const char *Txt_Users;
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de usuarios en asignaturas");	// Need translation
+   Lay_StartRoundFrameTable10 ("100%",2,Txt_Institutions_by_number_of_users_in_courses);
 
    /***** Get institutions ordered by number of users in courses *****/
    switch (Gbl.Scope.Current)
@@ -4739,11 +4743,12 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable10 ("100%",2,"Instituciones seg&uacute;n n&uacute;mero de usuarios que dicen pertenecer a ellas");	// Need translation
+   Lay_StartRoundFrameTable10 ("100%",2,Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them);
 
    /***** Get institutions ordered by number of users who claim to belong to them *****/
    switch (Gbl.Scope.Current)
@@ -4796,12 +4801,16 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
    MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
+   unsigned NumOrder;
+   unsigned NumberLastRow;
+   unsigned NumberThisRow;
    struct Institution Ins;
 
    /***** Query database *****/
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
      {
       fprintf (Gbl.F.Out,"<tr>"
+			 "<th></th>"
 			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
 			 "%s"
 			 "</th>"
@@ -4812,22 +4821,36 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       Txt_Institution,
 	       TxtFigure);
 
-      for (NumIns = 0;
-	   NumIns < NumInss;
+      for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
+	   NumIns <= NumInss;
 	   NumIns++)
 	{
 	 /***** Get next institution *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 /***** Get data of this institution (row[0]) *****/
+	 /* Get data of this institution (row[0]) */
 	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
-	 /***** Write link to institution *****/
+	 /* Get statistic (row[1]) */
+	 if (sscanf (row[1],"%u",&NumberThisRow) != 1)
+            Lay_ShowErrorAndExit ("Error in statistic");
+
+	 /***** Number of order *****/
+	 if (NumberThisRow != NumberLastRow)
+	    NumOrder = NumIns;
 	 fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"text-align:left;\">",
+	                    "<td class=\"DAT\" style=\"text-align:right;\">"
+	                    "%u"
+	                    "</td>",
+	          NumOrder);
+
+	 /***** Write link to institution *****/
+	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
                   The_ClassFormul[Gbl.Prefs.Theme]);
+
+	 /* Icon and name of this institution */
 	 Act_FormStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Ins.ShortName,The_ClassFormul[Gbl.Prefs.Theme]);
@@ -4835,13 +4858,17 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 		       32,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
 	 Act_FormEnd ();
+
 	 fprintf (Gbl.F.Out,"</td>");
 
-	 /***** Write number of centres (row[1]) *****/
+	 /***** Write statistic *****/
 	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                    "%s"
-	                    "</td></tr>",
-	          row[1]);
+	                    "%u"
+	                    "</td>"
+	                    "</tr>",
+	          NumberThisRow);
+
+	 NumberLastRow = NumberThisRow;
 	}
      }
 
