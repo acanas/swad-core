@@ -1695,7 +1695,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 void Inf_EditPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_Send;
+   extern const char *Txt_Save;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
 
@@ -1725,7 +1725,7 @@ void Inf_EditPlainTxtInfo (void)
    // fprintf (Gbl.F.Out,"<br />");
 
    /***** Send and undo buttons *****/
-   Lay_PutCreateButton (Txt_Send);
+   Lay_PutConfirmButton (Txt_Save);
    Act_FormEnd ();
   }
 
