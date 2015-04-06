@@ -25723,6 +25723,27 @@ const char *Txt_Option_under_development =
 	"Op&ccedil;&atilde;o em desenvolvimento.";
 #endif
 
+const char *Txt_optional =
+#if   L==0
+	"opcional";
+#elif L==1
+	"wahlweise";
+#elif L==2
+	"optional";
+#elif L==3
+	"opcional";
+#elif L==4
+	"en option";
+#elif L==5
+	"opcional";			// Okoteve traducción
+#elif L==6
+	"opzionale";
+#elif L==7
+	"do wyboru";
+#elif L==8
+	"opcional";
+#endif
+
 const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"...o pot crear un novo enlla&ccedil;"

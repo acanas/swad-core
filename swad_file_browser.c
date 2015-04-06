@@ -7861,6 +7861,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X;
    extern const char *Txt_URL;
    extern const char *Txt_Save_as;
+   extern const char *Txt_optional;
 
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_link);
@@ -7905,7 +7906,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /* Link name */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:right;\">"
-	              "<label class=\"%s\">%s:</label>"
+	              "<label class=\"%s\">%s (%s):</label>"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewLinkName\""
@@ -7913,7 +7914,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Save_as);
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
 
    /* Button to send */
    Lay_PutCreateButton (Txt_Create_link);

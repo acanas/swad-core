@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.109.1 (2015/04/06)"
+#define Log_PLATFORM_VERSION	"SWAD 14.109.2 (2015/04/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.109.2: Apr 06, 2015	Changed text in file browser. (184347 lines)
         Version 14.109.1: Apr 06, 2015	Changed text of button in course info. (184325 lines)
         Version 14.109:   Apr 06, 2015	Links in file browsers can be uploaded with a name. (184324 lines)
         Version 14.108.4: Apr 04, 2015	Changes in statistic about institutions. (184267 lines)
