@@ -58,13 +58,1236 @@
 
 	<tr>
 	<td align="center">
-		Last update: Jan 04, 2015
+		Last update: April 04, 2015
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 14.108.4: Apr 04, 2015</dt>
+							<dd>
+							Changes in statistic about institutions. (184267 lines)
+							</dd>
+		<dt>Version 14.108.3: Apr 03, 2015</dt>
+							<dd>
+							Fixed bug in statistic about institutions. (184144 lines)
+							</dd>
+		<dt>Version 14.108.2: Apr 03, 2015</dt>
+							<dd>
+							Fixed bug in statistic about institutions. (184142 lines)
+							</dd>
+		<dt>Version 14.108.1: Apr 03, 2015</dt>
+							<dd>
+							Fixed bug in statistic about institutions. (184137 lines)
+							</dd>
+		<dt>Version 14.108:   Apr 03, 2015</dt>
+							<dd>
+							New statistic (figure) about institutions. (184136 lines)
+							</dd>
+		<dt>Version 14.107.8: Apr 03, 2015</dt>
+							<dd>
+							Changes in statistics (figures about hierarchy). (183774 lines)
+							</dd>
+		<dt>Version 14.107.7: Apr 03, 2015</dt>
+							<dd>
+							Changes in layout of sent / received messages. (183753 lines)
+							</dd>
+		<dt>Version 14.107.6: Apr 03, 2015</dt>
+							<dd>
+							Changes in layout of form to change password. (183748 lines)
+							</dd>
+		<dt>Version 14.107.5: Apr 03, 2015</dt>
+							<dd>
+							Changes in layout of form to change photo. (183718 lines)
+							</dd>
+		<dt>Version 14.107.4: Apr 03, 2015</dt>
+							<dd>
+							Fixed bugs when changing user's ID, password and photo. (183699 lines)
+							</dd>
+		<dt>Version 14.107.3: Apr 02, 2015</dt>
+							<dd>
+							Changes in icons in attendance events.<br />
+							Fixed bug in assignments. (183702 lines)
+							</dd>
+		<dt>Version 14.107.2: Apr 02, 2015</dt>
+							<dd>
+							Changes in icons in surveys. (183717 lines)
+							</dd>
+		<dt>Version 14.107.1: Apr 02, 2015</dt>
+							<dd>
+							Changes in icons in assignments. (183748 lines)
+							</dd>
+		<dt>Version 14.107:   Apr 02, 2015</dt>
+							<dd>
+							Refactoring contextual menus. (183776 lines)
+							</dd>
+		<dt>Version 14.106.2: Apr 02, 2015</dt>
+							<dd>
+							Refactoring some contextual menus. (183747 lines)
+							</dd>
+		<dt>Version 14.106.1: Apr 02, 2015</dt>
+							<dd>
+							Changes in layout of icon with links. (183925 lines)
+							</dd>
+		<dt>Version 14.106:   Apr 02, 2015</dt>
+							<dd>
+							Lot of changes in layout of icon with links. (183909 lines)
+							</dd>
+		<dt>Version 14.105.3: Apr 01, 2015</dt>
+							<dd>
+							Changes in layout of course configuration and exam announcements. (183912 lines)
+							</dd>
+		<dt>Version 14.105.2: Mar 30, 2015</dt>
+							<dd>
+							Some messages translated. (183941 lines)
+							</dd>
+		<dt>Version 14.105.1: Mar 30, 2015</dt>
+							<dd>
+							Shared record card is shown after updating course record card. (183937 lines)
+							</dd>
+		<dt>Version 14.105:   Mar 30, 2015</dt>
+							<dd>
+							Removed option in the assessment tab to view course card. (183932 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='299';
+							</code></small>
+							</dd>
+		<dt>Version 14.104.6: Mar 30, 2015</dt>
+							<dd>
+							Changes in course cards. (184030 lines)
+							</dd>
+		<dt>Version 14.104.5: Mar 29, 2015</dt>
+							<dd>
+							Changes in course cards. (184023 lines)
+							</dd>
+		<dt>Version 14.104.4: Mar 29, 2015</dt>
+							<dd>
+							Changes in layout of record cards. (184047 lines)
+							</dd>
+		<dt>Version 14.104.3: Mar 29, 2015</dt>
+							<dd>
+							Changes in layout of course record cards. (184048 lines)
+							</dd>
+		<dt>Version 14.104.2: Mar 29, 2015</dt>
+							<dd>
+							Changes in layout of record cards. (184042 lines)
+							</dd>
+		<dt>Version 14.104.1: Mar 29, 2015</dt>
+							<dd>
+							Changes in layout of record cards. (184039 lines)
+							</dd>
+		<dt>Version 14.104:   Mar 29, 2015</dt>
+							<dd>
+							Changes in layout of record cards. (184021 lines)
+							</dd>
+		<dt>Version 14.103:   Mar 29, 2015</dt>
+							<dd>
+							New table to ban users out of ranking. (184014 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS usr_banned (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 14.102.12:Mar 28, 2015</dt>
+							<dd>
+							Some help messages changed. (183953 lines)
+							</dd>
+		<dt>Version 14.102.11:Mar 28, 2015</dt>
+							<dd>
+							Some help messages changed. (183943 lines)
+							</dd>
+		<dt>Version 14.102.10:Mar 28, 2015</dt>
+							<dd>
+							Create user's figures when a user account is created. (183942 lines)
+							</dd>
+		<dt>Version 14.102.9: Mar 28, 2015</dt>
+							<dd>
+							Changes in help messages while filling in user's record card. (183927 lines)
+							</dd>
+		<dt>Version 14.102.8: Mar 27, 2015</dt>
+							<dd>
+							Fixed bug in form to edit account. (183989 lines)
+							</dd>
+		<dt>Version 14.102.7: Mar 27, 2015</dt>
+							<dd>
+							Minor change in help text. (183988 lines)
+							</dd>
+		<dt>Version 14.102.6: Mar 27, 2015</dt>
+							<dd>
+							Changes in layout of sign up. (183987 lines)
+							</dd>
+		<dt>Version 14.102.5: Mar 27, 2015</dt>
+							<dd>
+							Changes in layout of log in. (183909 lines)
+							</dd>
+		<dt>Version 14.102.4: Mar 25, 2015</dt>
+							<dd>
+							Fixed bug in ranking. (183883 lines)
+							</dd>
+		<dt>Version 14.102.3: Mar 25, 2015</dt>
+							<dd>
+							Fixed bug in record. (183882 lines)
+							</dd>
+		<dt>Version 14.102.2: Mar 25, 2015</dt>
+							<dd>
+							Fixed bug in record. (183882 lines)
+							</dd>
+		<dt>Version 14.102.1: Mar 24, 2015</dt>
+							<dd>
+							Fixed minor bugs. (183871 lines)
+							</dd>
+		<dt>Version 14.102:   Mar 24, 2015</dt>
+							<dd>
+							Changes in some update buttons. (183865 lines)
+							</dd>
+		<dt>Version 14.101:   Mar 24, 2015</dt>
+							<dd>
+							Fixed bug in form to create a new account.<br />
+							Fixed bug in statistics.<br />
+							New design of buttons. (183753 lines)
+							</dd>
+		<dt>Version 14.100.3: Mar 24, 2015</dt>
+							<dd>
+							Fixed bug in link to institution in record. (183753 lines)
+							</dd>
+		<dt>Version 14.100.2: Mar 24, 2015</dt>
+							<dd>
+							Changes in profile.<br />
+							Link to institution in record. (183752 lines)
+							</dd>
+		<dt>Version 14.100.1: Mar 24, 2015</dt>
+							<dd>
+							Only font-awesome icons for notifications. (183724 lines)
+							</dd>
+		<dt>Version 14.100:   Mar 23, 2015</dt>
+							<dd>
+							Notification when a user gets a new follower. (183723 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000) WHERE NotifNtfEvents<>0;
+							</code></small>
+							</dd>
+		<dt>Version 14.99.2:  Mar 23, 2015</dt>
+							<dd>
+							Ranking attending to number of followers. (183614 lines)
+							</dd>
+		<dt>Version 14.99.1:  Mar 21, 2015</dt>
+							<dd>
+							Change in file_view to accelerate queries. (183521 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE INDEX UsrCod ON file_view (UsrCod);
+							</code></small>
+							</dd>
+		<dt>Version 14.99:    Mar 21, 2015</dt>
+							<dd>
+							Icons instead of text in user's profile.<br />
+							Lot of changes in layout of user's profile. (183519 lines)
+							</dd>
+		<dt>Version 14.98.5:  Mar 21, 2015</dt>
+							<dd>
+							New icons for some options. (183431 lines)
+							</dd>
+		<dt>Version 14.98.4:  Mar 20, 2015</dt>
+							<dd>
+							Fixed bugs in marks. (183430 lines)
+							</dd>
+		<dt>Version 14.98.3:  Mar 19, 2015</dt>
+							<dd>
+							Changes in user's profile to speedup page generation. (183397 lines)
+							</dd>
+		<dt>Version 14.98.2:  Mar 19, 2015</dt>
+							<dd>
+							Fixed bug in record related to follow/unfollow. (183366 lines)
+							</dd>
+		<dt>Version 14.98.1:  Mar 19, 2015</dt>
+							<dd>
+							Changes in lists of following and followers. (183360 lines)
+							</dd>
+		<dt>Version 14.98:    Mar 19, 2015</dt>
+							<dd>
+							Show lists of following and followers. (183300 lines)
+							</dd>
+		<dt>Version 14.97:    Mar 18, 2015</dt>
+							<dd>
+							Show number of following and followers in user's profile. (183130 lines)
+							</dd>
+		<dt>Version 14.96.3:  Mar 18, 2015</dt>
+							<dd>
+							Changes in record cards. (183017 lines)
+							</dd>
+		<dt>Version 14.96.2:  Mar 18, 2015</dt>
+							<dd>
+							Changes in record cards. (183011 lines)
+							</dd>
+		<dt>Version 14.96.1:  Mar 18, 2015</dt>
+							<dd>
+							Changes in user's profile. (183015 lines)
+							</dd>
+		<dt>Version 14.96:    Mar 18, 2015</dt>
+							<dd>
+							New layout in record cards. (183011 lines)
+							</dd>
+		<dt>Version 14.95.1:  Mar 18, 2015</dt>
+							<dd>
+							Show user's profile after followin or unfollowing. (182985 lines)
+							</dd>
+		<dt>Version 14.95:    Mar 18, 2015</dt>
+							<dd>
+							New module swad_follow for follow users. (182903 lines)<br />
+							1 change necessary in Makefile:<br />
+							<small><code>
+Add swad_follow.o to list of object files<br />
+							</code></small>
+							3 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS usr_follow (FollowerCod INT NOT NULL,FollowedCod INT NOT NULL,FollowTime DATETIME NOT NULL,UNIQUE INDEX (FollowerCod,FollowedCod),UNIQUE INDEX (FollowedCod,FollowerCod),INDEX (FollowTime));<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1410','es','N','Seguir a un usuario');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1411','es','N','Dejar de seguir a un usuario');
+							</code></small>
+							</dd>
+		<dt>Version 14.94.4:  Mar 17, 2015</dt>
+							<dd>
+							Changes in ranking layout. (182679 lines)
+							</dd>
+		<dt>Version 14.94.3:  Mar 17, 2015</dt>
+							<dd>
+							Changes in record fonts. (182667 lines)
+							</dd>
+		<dt>Version 14.94.2:  Mar 17, 2015</dt>
+							<dd>
+								Fixed bug in ranking. (182668 lines)
+							</dd>
+		<dt>Version 14.94.1:  Mar 17, 2015</dt>
+							<dd>
+							Fixed bug in user's profile. (182667 lines)
+							</dd>
+		<dt>Version 14.94:    Mar 17, 2015</dt>
+							<dd>
+							Ranking for downloads, forum posts and messages in user's profile. (182666 lines)
+							</dd>
+		<dt>Version 14.93.4:  Mar 17, 2015</dt>
+							<dd>
+							Links in user's figures to ranking. (182661 lines)
+							</dd>
+		<dt>Version 14.93.3:  Mar 16, 2015</dt>
+							<dd>
+							Changes in rankings. (182630 lines)
+							</dd>
+		<dt>Version 14.93.2:  Mar 16, 2015</dt>
+							<dd>
+							New rankings for downloads, forum posts and messages sent. (182628 lines)
+							</dd>
+		<dt>Version 14.93.1:  Mar 16, 2015</dt>
+							<dd>
+							Photos and links to users' profiles in users' ranking. (182560 lines)
+							</dd>
+		<dt>Version 14.93:    Mar 16, 2015</dt>
+							<dd>
+							Users' ranking. (182527 lines)
+							</dd>
+		<dt>Version 14.92.2:  Mar 15, 2015</dt>
+							<dd>
+							Fixed minor bug in photo edition. (182208 lines)
+							</dd>
+		<dt>Version 14.92.1:  Mar 14, 2015</dt>
+							<dd>
+							Changes on request of a nickname to view user's profile. (182205 lines)
+							</dd>
+		<dt>Version 14.92:    Mar 14, 2015</dt>
+							<dd>
+							New module swad_profile for public user's profile. (182202 lines)<br />
+							1 change necessary in Makefile:<br />
+							<small><code>
+Add swad_profile.o to list of object files
+							</code></small>
+							</dd>
+		<dt>Version 14.91.3:  Mar 14, 2015</dt>
+							<dd>
+							By default, the logged user's nickname is shown in form to view user's profile.<br />
+							Action to view QR code is now public. (182108 lines)
+							</dd>
+		<dt>Version 14.91.2:  Mar 14, 2015</dt>
+							<dd>
+							URL of public profile is embedded under user's photo in record card.<br />
+							Changes in layout of record card. (182124 lines)
+							</dd>
+		<dt>Version 14.91.1:  Mar 14, 2015</dt>
+							<dd>
+							Current figures separated from historic figures in layout of public user profile.<br />
+							Show only number of files, not folder or links. (182112 lines)
+							</dd>
+		<dt>Version 14.91:    Mar 14, 2015</dt>
+							<dd>
+							Statistics for number of file views added to user figures. (182091 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_figures ADD COLUMN NumFileViews INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1409','es','N','Calcular n&uacute;mero de descargas de archivos');
+							</code></small>
+							</dd>
+		<dt>Version 14.90.4:  Mar 13, 2015</dt>
+							<dd>
+							Changes in layout of public user profile. (181885 lines)
+							</dd>
+		<dt>Version 14.90.3:  Mar 13, 2015</dt>
+							<dd>
+							Fixed bug in connected users when the scope is a country. (181884 lines)
+							</dd>
+		<dt>Version 14.90.2:  Mar 13, 2015</dt>
+							<dd>
+							Fixed minor bug in layout of user's figures. (181831 lines)
+							</dd>
+		<dt>Version 14.90.1:  Mar 13, 2015</dt>
+							<dd>
+							Fixed bug in form used to upload files. (181827 lines)
+							</dd>
+		<dt>Version 14.90:    Mar 13, 2015</dt>
+							<dd>
+							Animated gif icon when calculating user's figures.<br />
+							Changes in all submit links. (181826 lines)
+							</dd>
+		<dt>Version 14.89.1:  Mar 13, 2015</dt>
+							<dd>
+							Optimization in database query for first click time. (181771 lines)
+							</dd>
+		<dt>Version 14.89:    Mar 13, 2015</dt>
+							<dd>
+							Lots of changes related with forms and photos. (181769 lines)
+							</dd>
+		<dt>Version 14.88:    Mar 12, 2015</dt>
+							<dd>
+							Changes in layout of public user profile. (181718 lines)
+							</dd>
+		<dt>Version 14.87.4:  Mar 11, 2015</dt>
+							<dd>
+							Added indexes to usr_figures. (181629 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+CREATE INDEX FirstClickTime ON usr_figures (FirstClickTime);<br />
+CREATE INDEX NumClicks ON usr_figures (NumClicks);
+							</code></small>
+							</dd>
+		<dt>Version 14.87.3:  Mar 11, 2015</dt>
+							<dd>
+							Fix bug comparing first click dates in user's figures. (181623 lines)
+							</dd>
+		<dt>Version 14.87.2:  Mar 11, 2015</dt>
+							<dd>
+							Fix bug comparing first click dates in user's figures. (181614 lines)
+							</dd>
+		<dt>Version 14.87.1:  Mar 11, 2015</dt>
+							<dd>
+							Fix style in CSS and record. (181613 lines)
+							</dd>
+		<dt>Version 14.87:    Mar 11, 2015</dt>
+							<dd>
+							Ranking according to the number of clicks. (181611 lines)
+							</dd>
+		<dt>Version 14.86:    Mar 11, 2015</dt>
+							<dd>
+							Show user's figures per days. (181525 lines)
+							</dd>
+		<dt>Version 14.85.2:  Mar 11, 2015</dt>
+							<dd>
+							Refactoring in user's figures. (181478 lines)
+							</dd>
+		<dt>Version 14.85.1:  Mar 11, 2015</dt>
+							<dd>
+							Remove user's figures when removing user's account. (181472 lines)
+							</dd>
+		<dt>Version 14.85:    Mar 11, 2015</dt>
+							<dd>
+							Number of messages sent is stored in user's figures. (181457 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_figures ADD COLUMN NumForPst INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1408','es','N','Calcular n&uacute;mero de mensajes en foros');
+							</code></small>
+							</dd>
+		<dt>Version 14.84:    Mar 10, 2015</dt>
+							<dd>
+							Number of messages sent is stored in user's figures. (181374 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_figures ADD COLUMN NumMsgSnt INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1407','es','N','Calcular n&uacute;mero de mensajes enviados');
+							</code></small>
+							</dd>
+		<dt>Version 14.83:    Mar 10, 2015</dt>
+							<dd>
+							New action to compute first click when not available in public profile. (181287 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_figures CHANGE COLUMN NumClicks NumClicks INT NOT NULL DEFAULT -1;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1405','es','N','Calcular fecha del primer clic');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1406','es','N','Calcular n&uacute;mero de clics');
+							</code></small>
+							</dd>
+		<dt>Version 14.82.1:  Mar 10, 2015</dt>
+							<dd>
+							Added new social networks. (181143 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'quitter', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 14.82:    Mar 10, 2015</dt>
+							<dd>
+							New database table usr_figures. (179898 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATETIME NOT NULL,NumClicks INT NOT NULL DEFAULT 0,PRIMARY KEY(UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 14.81.4:  Mar 09, 2015</dt>
+							<dd>
+							Information about number of public files in user's public profile. (179733 lines)
+							</dd>
+		<dt>Version 14.81.3:  Mar 09, 2015</dt>
+							<dd>
+							Information about number of files in user's public profile. (179670 lines)
+							</dd>
+		<dt>Version 14.81.2:  Mar 09, 2015</dt>
+							<dd>
+							Information about number of courses in user's public profile. (179641 lines)
+							</dd>
+		<dt>Version 14.81.1:  Mar 09, 2015</dt>
+							<dd>
+							Information about number of messages sent in user's public profile. (179545 lines)
+							</dd>
+		<dt>Version 14.81:    Mar 09, 2015</dt>
+							<dd>
+							Information about number of forum posts in user's public profile. (179512 lines)
+							</dd>
+		<dt>Version 14.80.19: Mar 09, 2015</dt>
+							<dd>
+							Fixed bug in web service, reported by Juan Miguel Boyero Corral. (179482 lines)
+							</dd>
+		<dt>Version 14.80.18: Mar 09, 2015</dt>
+							<dd>
+							Fixed bug in statistic of degrees and courses. (179481 lines)
+							</dd>
+		<dt>Version 14.80.17: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of users. (179480 lines)
+							</dd>
+		<dt>Version 14.80.16: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of degrees and courses. (179439 lines)
+							</dd>
+		<dt>Version 14.80.15: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of webs / social networks. (179393 lines)
+							</dd>
+		<dt>Version 14.80.14: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of OERs. (179379 lines)
+							</dd>
+		<dt>Version 14.80.13: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of assignments. (179362 lines)
+							</dd>
+		<dt>Version 14.80.12: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of tests. (179340 lines)
+							</dd>
+		<dt>Version 14.80.11: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of notifications. (179267 lines)
+							</dd>
+		<dt>Version 14.80.10: Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of notices. (179211 lines)
+							</dd>
+		<dt>Version 14.80.9:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of messages. (179187 lines)
+							</dd>
+		<dt>Version 14.80.8:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of forums. (179138 lines)
+							</dd>
+		<dt>Version 14.80.7:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of surveys. (179021 lines)
+							</dd>
+		<dt>Version 14.80.6:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of columns. (178987 lines)
+							</dd>
+		<dt>Version 14.80.5:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of menu. (178974 lines)
+							</dd>
+		<dt>Version 14.80.4:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of icon set. (178961 lines)
+							</dd>
+		<dt>Version 14.80.3:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of theme. (178948 lines)
+							</dd>
+		<dt>Version 14.80.2:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of layout. (178936 lines)
+							</dd>
+		<dt>Version 14.80.1:  Mar 09, 2015</dt>
+							<dd>
+							Scope country for statistic of language. (178923 lines)
+							</dd>
+		<dt>Version 14.80:    Mar 09, 2015</dt>
+							<dd>
+							New statistic for privacy. (178909 lines)
+							</dd>
+		<dt>Version 14.79.6:  Mar 08, 2015</dt>
+							<dd>
+							Check if file "swad.lock" exists to disable SWAD. (178736 lines)
+							</dd>
+		<dt>Version 14.79.5:  Mar 08, 2015</dt>
+							<dd>
+							Fixed bug when refreshing connected users. (178730 lines)
+							</dd>
+		<dt>Version 14.79.4:  Mar 07, 2015</dt>
+							<dd>
+							Parameter "CtyCod" is renamed to "cty".<br />
+							Parameter "InsCod" is renamed to "ins".<br />
+							Parameter "CtrCod" is renamed to "ctr".<br />
+							Parameter "DegCod" is renamed to "deg".<br />
+							Parameter "CrsCod" is renamed to "crs", but "CrsCod" is allowed for compatibility with old links.<br />
+							Parameter "Usr" is renamed to "usr".<br />
+							Parameter "Layout" is not allowed with GET method.<br />
+							Parameter "IdSes" is renamed to "ses".<br />
+							Parameter "MailKey" is renamed to "key". (178699 lines)
+							</dd>
+		<dt>Version 14.79.3:  Mar 07, 2015</dt>
+							<dd>
+							Parameter "UsrNick" is renamed to "Usr".<br />
+							URL is shown in public profile.<br />
+							Language in direct URLs. (178677 lines)
+							</dd>
+		<dt>Version 14.79.2:  Mar 06, 2015</dt>
+							<dd>
+							Public profile is shown depending on visibility. (178759 lines)
+							</dd>
+		<dt>Version 14.79.1:  Mar 06, 2015</dt>
+							<dd>
+							Add options to change visibility of public profile. (178769 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_data ADD COLUMN ProfileVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PhotoVisibility;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1403','es','N','Editar privacidad');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1404','es','N','Cambiar privacidad perfil p&uacute;blico');
+							</code></small>
+							</dd>
+		<dt>Version 14.79:    Mar 06, 2015</dt>
+							<dd>
+							New module swad_privacy. (178678 lines)<br />
+							1 change necessary in Makefile:<br />
+							<small><code>
+Add swad_privacy.o to list of object files
+							</code></small>
+							</dd>
+		<dt>Version 14.78.3:  Mar 06, 2015</dt>
+							<dd>
+							Changes in messages about privacity. (178631 lines)
+							</dd>
+		<dt>Version 14.78.2:  Mar 06, 2015</dt>
+							<dd>
+							New action to edit privacy options. (178630 lines)
+							</dd>
+		<dt>Version 14.78.1:  Mar 06, 2015</dt>
+							<dd>
+							New link to privacy options (unfinished). (178595 lines)
+							</dd>
+		<dt>Version 14.78:    Mar 06, 2015</dt>
+							<dd>
+							Four degrees of visibility in photos.<br />
+							Field PublicPhoto is replaced by field PhotoVisibility in usr_data table. (178577 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PublicPhoto;<br />
+UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';<br />
+UPDATE usr_data SET PhotoVisibility='system' WHERE PublicPhoto='Y';<br />
+ALTER TABLE usr_data DROP COLUMN PublicPhoto;
+							</code></small>
+							</dd>
+		<dt>Version 14.77.3:  Mar 05, 2015</dt>
+							<dd>
+							Changes in shared record. (178509 lines)
+							</dd>
+		<dt>Version 14.77.2:  Mar 05, 2015</dt>
+							<dd>
+							Changes in shared record. (178504 lines)
+							</dd>
+		<dt>Version 14.77.1:  Mar 05, 2015</dt>
+							<dd>
+							New option to select the user and then go to his/her public user's profile. (178475 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1401','es','N','Solicitar perfil de usuario');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver perfil de usuario');
+							</code></small>
+							</dd>
+		<dt>Version 14.77:    Mar 04, 2015</dt>
+							<dd>
+							New parameter "UsrNick" to go to a public user's profile. (178406 lines)
+							</dd>
+		<dt>Version 14.76.5:  Mar 03, 2015</dt>
+							<dd>
+							Added new social networks, suggested by Marta Gómez Macías. (178293 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 14.76.4:  Mar 03, 2015	Nickname is always visible on record. (178270 lines)
+							</dd>
+		<dt>Version 14.76.3:  Mar 03, 2015</dt>
+							<dd>
+							Fixed bug while sending a message to a guest. (178274 lines)
+							</dd>
+		<dt>Version 14.76.2:  Mar 02, 2015</dt>
+							<dd>
+							Button in student record to view student's attendance. (178242 lines)
+							</dd>
+		<dt>Version 14.76.1:  Mar 02, 2015</dt>
+							<dd>
+							Button in student record to view student's test exams. (178225 lines)
+							</dd>
+		<dt>Version 14.76:    Mar 02, 2015</dt>
+							<dd>
+							Button in student record to view student's works. (178197 lines)
+							</dd>
+		<dt>Version 14.75.2:  Mar 02, 2015</dt>
+							<dd>
+							New icon for new notifications. (178176 lines)
+							</dd>
+		<dt>Version 14.75.1:  Mar 02, 2015</dt>
+							<dd>
+							Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178175 lines)
+							</dd>
+		<dt>Version 14.75:    Feb 27, 2015</dt>
+							<dd>
+							Fixed bug when getting user's IDs from marks tables. (178172 lines)
+							</dd>
+		<dt>Version 14.74.12: Feb 23, 2015</dt>
+							<dd>
+							Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178119 lines)
+							</dd>
+		<dt>Version 14.74.11: Feb 10, 2015</dt>
+							<dd>
+							Changes in swad.js. (178060 lines)
+							</dd>
+		<dt>Version 14.74.10: Feb 10, 2015</dt>
+							<dd>
+							Removed meta tag. (178060 lines)
+							</dd>
+		<dt>Version 14.74.9:  Feb 10, 2015</dt>
+							<dd>
+							Description/keywords meta tags and canonical URL added to head. (178060 lines)
+							</dd>
+		<dt>Version 14.74.8:  Feb 10, 2015</dt>
+							<dd>
+							Fixed bug in degree logo. (178045 lines)
+							</dd>
+		<dt>Version 14.74.7:  Feb 08, 2015</dt>
+							<dd>
+							Link to register/remove several users. (178029 lines)
+							</dd>
+		<dt>Version 14.74.6:  Feb 08, 2015</dt>
+							<dd>
+							Changes in layout of form to register/remove one user. (178009 lines)
+							</dd>
+		<dt>Version 14.74.5:  Feb 08, 2015</dt>
+							<dd>
+							Changes in layout of form to register/remove users. (178038 lines)
+							</dd>
+		<dt>Version 14.74.4:  Feb 08, 2015</dt>
+							<dd>
+							Changes in layout of form to register/remove users. (178000 lines)
+							</dd>
+		<dt>Version 14.74.3:  Feb 08, 2015</dt>
+							<dd>
+							Button to view banners.<br />
+							Button to view mail domains.<br />
+							Button to view institutional links.<br />
+							Button to view plugins.<br />
+							Button to view departments.<br />
+							Button to view holidays.<br />
+							Button to view places. (178027 lines)
+							</dd>
+		<dt>Version 14.74.2:  Feb 08, 2015</dt>
+							<dd>
+							Fixed bug in banners. (177994 lines)
+							</dd>
+		<dt>Version 14.74.1:  Feb 06, 2015</dt>
+							<dd>
+							Fixed bug in shared files. (177986 lines)
+							</dd>
+		<dt>Version 14.74:    Feb 05, 2015</dt>
+							<dd>
+							Shared files for institution, centre and degree. (177982 lines)
+							</dd>
+		<dt>Version 14.73.5:  Feb 05, 2015</dt>
+							<dd>
+							New message when user does not belong to any course. (177170 lines)
+							</dd>
+		<dt>Version 14.73.4:  Feb 04, 2015</dt>
+							<dd>
+							Changes in institution configuration. (177103 lines)
+							</dd>
+		<dt>Version 14.73.3:  Feb 04, 2015</dt>
+							<dd>
+							Changes in degree configuration. (177080 lines)
+							</dd>
+		<dt>Version 14.73.2:  Feb 04, 2015</dt>
+							<dd>
+							Changes in centre configuration. (177057 lines)
+							</dd>
+		<dt>Version 14.73.1:  Feb 04, 2015</dt>
+							<dd>
+							Fixed bug in logo of centre. (177012 lines)
+							</dd>
+		<dt>Version 14.73:    Feb 03, 2015</dt>
+							<dd>
+							New options to remove institution, centre and degree icons. (177007 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1341','es','N','Eliminar logo de instituci&oacute;n');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1342','es','N','Eliminar logo de centro');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1343','es','N','Eliminar logo de titulaci&oacute;n');
+							</code></small>
+							</dd>
+		<dt>Version 14.72.6:  Feb 03, 2015</dt>
+							<dd>
+							Changes in icons for degrees and centres. (176883 lines)
+							</dd>
+		<dt>Version 14.72.5:  Feb 01, 2015</dt>
+							<dd>
+							Changed related to administrators. (176805 lines)
+							</dd>
+		<dt>Version 14.72.4:  Feb 01, 2015</dt>
+							<dd>
+							Refactoring of registering and removing admins. (176787 lines)
+							</dd>
+		<dt>Version 14.72.3:  Feb 01, 2015</dt>
+							<dd>
+								Refactoring of registering and removing admins. (177139 lines)
+							</dd>
+		<dt>Version 14.72.2:  Feb 01, 2015</dt>
+							<dd>
+							Refactoring of registering and removing admins. (177496 lines)
+							</dd>
+		<dt>Version 14.72.1:  Feb 01, 2015</dt>
+							<dd>
+							New options to register and remove institution and centre admins. (177477 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='A&ntilde;adir administrador de titulaci&oacute;n' WHERE ActCod='586' AND Language='es';<br />
+UPDATE actions SET Txt='Eliminar administrador de titulaci&oacute;n' WHERE ActCod='584' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1337','es','N','A&ntilde;adir administrador de instituci&oacute;n');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1338','es','N','Eliminar administrador de instituci&oacute;n');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1339','es','N','A&ntilde;adir administrador de centro');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1340','es','N','Eliminar administrador de centro');
+							</code></small>
+							</dd>
+		<dt>Version 14.72:    Jan 31, 2015</dt>
+							<dd>
+							New options to register and remove institution and centre admins (not finished). (176934 lines)
+							</dd>
+		<dt>Version 14.71:    Jan 29, 2015</dt>
+							<dd>
+							New table admin to store system, institution, centre or degree admins. (176255 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS admin (UsrCod INT NOT NULL,Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,Cod INT NOT NULL,UNIQUE INDEX(UsrCod,Scope,Cod));<br />
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Deg',DegCod FROM deg_admin WHERE DegCod>'0';<br />
+INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Sys',DegCod FROM deg_admin WHERE DegCod='-2';<br />
+DROP TABLE IF EXISTS deg_admin;
+							</code></small>
+							</dd>
+		<dt>Version 14.70.6:  Jan 28, 2015</dt>
+							<dd>
+							Buttons to view list of institutions, centres, degrees and courses in information options. (176242 lines)
+							</dd>
+		<dt>Version 14.70.5:  Jan 28, 2015</dt>
+							<dd>
+							Links in list of countries, institutions, centres and degrees now go to information options. (176219 lines)
+							</dd>
+		<dt>Version 14.70.4:  Jan 28, 2015</dt>
+							<dd>
+							Links in breadcrumbs now go to information options. (176218 lines)
+							</dd>
+		<dt>Version 14.70.3:  Jan 28, 2015</dt>
+							<dd>
+							Some button messages changed.<br />
+							Buttons to view when editing. (176217 lines)
+							</dd>
+		<dt>Version 14.70.2:  Jan 27, 2015</dt>
+							<dd>
+							Changed permissions in documents zones of institution, centre and degree. (176188 lines)
+							</dd>
+		<dt>Version 14.70.1:  Jan 27, 2015</dt>
+							<dd>
+							Fixed bug when removing a user from a course. (176187 lines)
+							</dd>
+		<dt>Version 14.70:    Jan 26, 2015</dt>
+							<dd>
+							Fixed bugs in statistics about sizes of file browsers.<br />
+                                        		Statistics about sizes of group zones.<br />
+                                      			New scope (country) in statistics about sizes of file browsers. (176181 lines)
+							</dd>
+		<dt>Version 14.69.2:  Jan 26, 2015</dt>
+							<dd>
+							Fixed bugs in statistics about sizes of file browsers. (175864 lines)
+							</dd>
+		<dt>Version 14.69.1:  Jan 26, 2015</dt>
+							<dd>
+							Code refactoring related to file browsers. (175822 lines)
+							</dd>
+		<dt>Version 14.69:    Jan 26, 2015</dt>
+							<dd>
+							Changes in search of documents. (175818 lines)
+							</dd>
+		<dt>Version 14.68.2:  Jan 25, 2015</dt>
+							<dd>
+							Fixed bugs in search of documents.<br />
+							Search of user's documents now extended to institution, centre and degree. (175644 lines)
+							</dd>
+		<dt>Version 14.68.1:  Jan 25, 2015</dt>
+							<dd>
+							Changes in codes stores in expanded_folders table. (175618 lines)<br />
+							7 changes necessary in database:<br />
+							<small><code>
+UPDATE expanded_folders SET FileBrowser='3' WHERE FileBrowser='1';<br />
+UPDATE expanded_folders SET FileBrowser='8' WHERE FileBrowser='2';<br />
+UPDATE expanded_folders SET FileBrowser='11' WHERE FileBrowser='10';<br />
+UPDATE expanded_folders SET FileBrowser='13' WHERE FileBrowser='12';<br />
+UPDATE expanded_folders SET FileBrowser='17' WHERE FileBrowser='16';<br />
+UPDATE expanded_folders SET FileBrowser='19' WHERE FileBrowser='18';<br />
+UPDATE expanded_folders SET FileBrowser='21' WHERE FileBrowser='20';
+							</code></small>
+							</dd>
+		<dt>Version 14.68:    Jan 25, 2015</dt>
+							<dd>
+							Changes in file_browser_size table. (175606 lines)<br />
+							9 changes necessary in database:<br />
+							<small><code>
+DROP INDEX FileBrowser ON file_browser_size;<br />
+DROP INDEX UsrCod ON file_browser_size;<br />
+ALTER TABLE file_browser_size CHANGE COLUMN UsrCod ZoneUsrCod INT NOT NULL DEFAULT -1,ADD INDEX (ZoneUsrCod);<br />
+ALTER TABLE file_browser_size ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser;<br />
+UPDATE file_browser_size SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';<br />
+UPDATE file_browser_size SET Cod=GrpCod WHERE GrpCod>'0';<br />
+ALTER TABLE file_browser_size DROP COLUMN CrsCod;<br />
+ALTER TABLE file_browser_size DROP COLUMN GrpCod;<br />
+CREATE UNIQUE INDEX FileBrowser ON file_browser_size (FileBrowser,Cod,ZoneUsrCod);
+							</code></small>
+							</dd>
+		<dt>Version 14.67.1:  Jan 25, 2015</dt>
+							<dd>
+							Fixed bugs in file browsers. (175395 lines)
+							</dd>
+		<dt>Version 14.67:    Jan 25, 2015</dt>
+							<dd>
+							Changes in files table. (175369 lines)<br />
+							17 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE files ADD COLUMN ZoneUsrCod2 INT NOT NULL DEFAULT -1 AFTER FileBrowser;<br />
+UPDATE files SET ZoneUsrCod2=ZoneUsrCod;<br />
+ALTER TABLE files DROP COLUMN ZoneUsrCod;<br />
+ALTER TABLE files CHANGE COLUMN ZoneUsrCod2 ZoneUsrCod INT NOT NULL DEFAULT -1;<br />
+ALTER TABLE files ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (FileBrowser,Cod,ZoneUsrCod);<br />
+CREATE INDEX ZoneUsrCod ON files (ZoneUsrCod);<br />
+UPDATE files SET Cod=InsCod WHERE InsCod>'0';<br />
+UPDATE files SET Cod=CtrCod WHERE CtrCod>'0';<br />
+UPDATE files SET Cod=DegCod WHERE DegCod>'0';<br />
+UPDATE files SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';<br />
+UPDATE files SET Cod=GrpCod WHERE GrpCod>'0';<br />
+ALTER TABLE files DROP COLUMN InsCod;<br />
+ALTER TABLE files DROP COLUMN CtrCod;<br />
+ALTER TABLE files DROP COLUMN DegCod;<br />
+ALTER TABLE files DROP COLUMN CrsCod;<br />
+ALTER TABLE files DROP COLUMN GrpCod;<br />
+DROP INDEX Location ON files;
+							</code></small>
+							</dd>
+		<dt>Version 14.66.1:  Jan 24, 2015</dt>
+							<dd>
+							Fixed bug in clipboard. (175404 lines)
+							</dd>
+		<dt>Version 14.66:    Jan 24, 2015</dt>
+							<dd>
+							Changes in clipboard table. (175401 lines)<br />
+							13 changes necessary in database:<br />
+							<small><code>
+DROP INDEX FileBrowser ON clipboard;<br />
+ALTER TABLE clipboard ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (FileBrowser,Cod);<br />
+CREATE INDEX WorksUsrCod ON clipboard (WorksUsrCod);<br />
+UPDATE clipboard SET Cod=InsCod WHERE InsCod>'0';<br />
+UPDATE clipboard SET Cod=CtrCod WHERE CtrCod>'0';<br />
+UPDATE clipboard SET Cod=DegCod WHERE DegCod>'0';<br />
+UPDATE clipboard SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';<br />
+UPDATE clipboard SET Cod=GrpCod WHERE GrpCod>'0';<br />
+ALTER TABLE clipboard DROP COLUMN InsCod;<br />
+ALTER TABLE clipboard DROP COLUMN CtrCod;<br />
+ALTER TABLE clipboard DROP COLUMN DegCod;<br />
+ALTER TABLE clipboard DROP COLUMN CrsCod;<br />
+ALTER TABLE clipboard DROP COLUMN GrpCod;
+							</code></small>
+							</dd>
+		<dt>Version 14.65:    Jan 24, 2015</dt>
+							<dd>
+							Changes in expanded_folders table. (175394 lines)<br />
+							13 changes necessary in database:<br />
+							<small><code>
+DROP INDEX UsrCod ON expanded_folders;<br />
+ALTER TABLE expanded_folders ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (UsrCod,FileBrowser,Cod), ADD INDEX (FileBrowser,Cod);<br />
+CREATE INDEX WorksUsrCod ON expanded_folders (WorksUsrCod);<br />
+UPDATE expanded_folders SET Cod=InsCod WHERE InsCod>'0';<br />
+UPDATE expanded_folders SET Cod=CtrCod WHERE CtrCod>'0';<br />
+UPDATE expanded_folders SET Cod=DegCod WHERE DegCod>'0';<br />
+UPDATE expanded_folders SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';<br />
+UPDATE expanded_folders SET Cod=GrpCod WHERE GrpCod>'0';<br />
+ALTER TABLE expanded_folders DROP COLUMN InsCod;<br />
+ALTER TABLE expanded_folders DROP COLUMN CtrCod;<br />
+ALTER TABLE expanded_folders DROP COLUMN DegCod;<br />
+ALTER TABLE expanded_folders DROP COLUMN CrsCod;<br />
+ALTER TABLE expanded_folders DROP COLUMN GrpCod;
+							</code></small>
+							</dd>
+		<dt>Version 14.64:    Jan 22, 2015</dt>
+							<dd>
+							Changes in last accesses to group file browsers. (175510 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'11',GrpCod,LastAccDownloadGrp FROM crs_grp_usr WHERE LastAccDownloadGrp>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'5',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccCommonGrp>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'13',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccMarksGrp>0;<br />
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccDownloadGrp;<br />
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccCommonGrp;<br />
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccMarksGrp;
+							</code></small>
+							</dd>
+		<dt>Version 14.63.6:  Jan 22, 2015</dt>
+							<dd>
+							Changes in last accesses to course file browsers. (175588 lines)<br />
+							10 changes necessary in database:<br />
+							<small><code>
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'3',CrsCod,LastAccDownloadCrs FROM crs_usr WHERE LastAccDownloadCrs>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'4',CrsCod,LastAccCommonCrs FROM crs_usr WHERE LastAccCommonCrs>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'8',CrsCod,LastAccMarksCrs FROM crs_usr WHERE LastAccMarksCrs>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'14',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccMyWorks>0;<br />
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'15',CrsCod,LastAccMyWorks FROM crs_usr WHERE LastAccCrsWorks>0;<br />
+ALTER TABLE crs_usr DROP COLUMN LastAccDownloadCrs;<br />
+ALTER TABLE crs_usr DROP COLUMN LastAccCommonCrs;<br />
+ALTER TABLE crs_usr DROP COLUMN LastAccMarksCrs;<br />
+ALTER TABLE crs_usr DROP COLUMN LastAccMyWorks;<br />
+ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;
+							</code></small>
+							</dd>
+		<dt>Version 14.63.5:  Jan 22, 2015</dt>
+							<dd>
+							Changes in last accesses to file browsers (briefcases). (? lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;<br />
+ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
+							</code></small>
+							</dd>
+		<dt>Version 14.63.4:  Jan 21, 2015</dt>
+							<dd>
+							Fixed bug in listing of degree administrators, reported by Antonio Fernández Ares. (175548 lines)
+							</dd>
+		<dt>Version 14.63.3:  Jan 21, 2015</dt>
+							<dd>
+							Fixed bug when expanding folders, reported by Nadir Román Guerrero and others. (175545 lines)
+							</dd>
+		<dt>Version 14.63.2:  Jan 21, 2015</dt>
+							<dd>
+							Fixed bug in search of courses. (175542 lines)
+							</dd>
+		<dt>Version 14.63.1:  Jan 21, 2015</dt>
+							<dd>
+							Remove last accesses to file browsers related with an institution, a centre or a degree. (175531 lines)
+							</dd>
+		<dt>Version 14.63:    Jan 21, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution. (175512 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,LastClick DATETIME NOT NULL,UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+							</code></small>
+							</dd>
+		<dt>Version 14.62.4:  Jan 20, 2015</dt>
+							<dd>
+							Fixed bug in search of courses. (175443 lines)
+							</dd>
+		<dt>Version 14.62.3:  Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (? lines)
+							</dd>
+		<dt>Version 14.62.2:  Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (175407 lines)
+							</dd>
+		<dt>Version 14.62.1:  Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (175371 lines)
+							</dd>
+		<dt>Version 14.62:    Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (175296 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE expanded_folders ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);<br />
+ALTER TABLE expanded_folders ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);<br />
+ALTER TABLE expanded_folders ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+							</code></small>
+							</dd>
+		<dt>Version 14.61:    Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (175112 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE files ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FilCod;<br />
+ALTER TABLE files ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;<br />
+ALTER TABLE files ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod;<br />
+DROP INDEX CrsCod ON files;<br />
+DROP INDEX CrsCod_GrpCod_ZoneUsrCod_FileBrowser ON files;<br />
+CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
+							</code></small>
+							</dd>
+		<dt>Version 14.60:    Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (175079 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE clipboard ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);<br />
+ALTER TABLE clipboard ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);<br />
+ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+							</code></small>
+							</dd>
+		<dt>Version 14.59.3:  Jan 20, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (174862 lines)
+							</dd>
+		<dt>Version 14.59.2:  Jan 19, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (174864 lines)
+							</dd>
+		<dt>Version 14.59.1:  Jan 19, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (174711 lines)
+							</dd>
+		<dt>Version 14.59:    Jan 19, 2015</dt>
+							<dd>
+							See/admin documents of degree, centre and institution (not finished). (174559 lines)
+							</dd>
+		<dt>Version 14.58.1:  Jan 18, 2015</dt>
+							<dd>
+							Fixed minor bugs in layout. (174178 lines)
+							</dd>
+		<dt>Version 14.58:    Jan 18, 2015</dt>
+							<dd>
+							New options to see/admin documents of degree, centre and institution (not finished). (174174 lines)
+							</dd>
+		<dt>Version 14.57.3:  Jan 18, 2015</dt>
+							<dd>
+							Fixed bug in statistics. (173694 lines)
+							</dd>
+		<dt>Version 14.57.2:  Jan 18, 2015</dt>
+							<dd>
+							Icon of institution, centre or degree is not drawn on title when logo does not exist. (173693 lines)
+							</dd>
+		<dt>Version 14.57.1:  Jan 17, 2015</dt>
+							<dd>
+							Code refactoring related to logos of institutions, centres and degrees. (173674 lines)
+							</dd>
+		<dt>Version 14.57:    Jan 17, 2015</dt>
+							<dd>
+							New option to upload logo of degree. (173720 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Cambiar logo de titulaci&oacute;n' WHERE ActCod='553' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1246','es','N','Solicitar env&iacute;o de logo de titulaci&oacute;n');<br />
+ALTER TABLE degrees DROP COLUMN Logo;
+							</code></small>
+							</dd>
+		<dt>Version 14.56:    Jan 17, 2015</dt>
+							<dd>
+							New module swad_logo for drawing logos of institutions, centres and degrees.<br />
+							New option to upload logo of institution. (173735 lines)<br />
+							1 change necessary in Makefile:<br />
+							<small><code>
+Add swad_logo.o to list of object files<br />
+							</code></small>
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Cambiar logo de instituci&oacute;n' WHERE ActCod='699' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1245','es','N','Solicitar env&iacute;o de logo de instituci&oacute;n');<br />
+ALTER TABLE institutions DROP COLUMN Logo;
+							</code></small>
+							</dd>
+		<dt>Version 14.55.5:  Jan 16, 2015</dt>
+							<dd>
+							Code refactoring related to maps of countries. (173573 lines)
+							</dd>
+		<dt>Version 14.55.4:  Jan 16, 2015</dt>
+							<dd>
+							Fixed bugs in enrollment.<br />
+							New MIME type, suggested by Francisco Oca&ntilde;a Lara. (173576 lines)
+							</dd>
+		<dt>Version 14.55.3:  Jan 16, 2015</dt>
+							<dd>
+							Link in course information to request registration in course.<br />
+							Fixed bug in enrollment. (173570 lines)
+							</dd>
+		<dt>Version 14.55.2:  Jan 15, 2015</dt>
+							<dd>
+							Logo of centre, degree, institution or country in title. (173546 lines)
+							</dd>
+		<dt>Version 14.55.1:  Jan 14, 2015</dt>
+							<dd>
+							Fixed bug in user's photo. (173510 lines)
+							</dd>
+		<dt>Version 14.55:    Jan 14, 2015</dt>
+							<dd>
+							New option to upload logo of a centre. (173509 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Cambiar logo de centro' WHERE ActCod='1051' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de logo de centro');<br />
+ALTER TABLE centres DROP COLUMN Logo;
+							</code></small>
+							</dd>
+		<dt>Version 14.54.7:  Jan 13, 2015</dt>
+							<dd>
+							Fixed bug in edition of centres. (173349 lines)
+							</dd>
+		<dt>Version 14.54.6:  Jan 13, 2015</dt>
+							<dd>
+							Tab and menu icons always in 64x64 pixels. (173348 lines)
+							</dd>
+		<dt>Version 14.54.5:  Jan 13, 2015</dt>
+							<dd>
+							Icons for institutions, centres and degrees always in 64x64 pixels. (173346 lines)
+							</dd>
+		<dt>Version 14.54.4:  Jan 13, 2015</dt>
+							<dd>
+							Fized bug in photos. (173345 lines)
+							</dd>
+		<dt>Version 14.54.3:  Jan 06, 2015</dt>
+							<dd>
+							Changes in themes and colors. (173344 lines)
+							</dd>
+		<dt>Version 14.54.2:  Jan 05, 2015</dt>
+							<dd>
+							Changes in yellow theme. (173339 lines)
+							</dd>
 		<dt>Version 14.54.1:  Jan 04, 2015</dt>
 							<dd>
 							Removed unused fields in user's data. (173338 lines)<br />

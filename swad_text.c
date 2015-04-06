@@ -33396,6 +33396,27 @@ const char *Txt_Save =
 	"Salvar";
 #endif
 
+const char *Txt_Save_as =
+#if   L==0
+	"Guardar com";
+#elif L==1
+	"Speichern unter";
+#elif L==2
+	"Save as";
+#elif L==3
+	"Guardar como";
+#elif L==4
+	"Enregistrer sous";
+#elif L==5
+	"Guardar como";	// Okoteve traducción
+#elif L==6
+	"Salva come";
+#elif L==7
+	"Zapisz jako";
+#elif L==8
+	"Salvar como";
+#endif
+
 const char *Txt_Save_changes =
 #if   L==0
 	"Desar canvis";
@@ -46565,25 +46586,46 @@ const char *Txt_Update_students_according_to_selected_groups =
 	"Atualizar os estudantes de acordo com grupos selecionados";
 #endif
 
+const char *Txt_UPLOAD_FILE_Invalid_link =
+#if   L==0
+	"Enlace no v&aacute;lido.";	// Necessita traduccio
+#elif L==1
+	"Invalid link.";		// Need Übersetzung
+#elif L==2
+	"Invalid link.";
+#elif L==3
+	"Enlace no v&aacute;lido.";
+#elif L==4
+	"Invalid link.";		// Besoin de traduction
+#elif L==5
+	"Enlace no v&aacute;lido.";	// Okoteve traducción
+#elif L==6
+	"Link non valido.";
+#elif L==7
+	"Invalid link.";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Invalid link.";		// Necessita de tradução
+#endif
+
 const char *Txt_UPLOAD_FILE_Invalid_name =
 #if   L==0
 	"Nombre no v&aacute;lido.";	// Necessita traduccio
 #elif L==1
-	"Invalid name.";	// Need Übersetzung
+	"Invalid name.";		// Need Übersetzung
 #elif L==2
 	"Invalid name.";
 #elif L==3
 	"Nombre no v&aacute;lido.";
 #elif L==4
-	"Invalid name.";	// Besoin de traduction
+	"Invalid name.";		// Besoin de traduction
 #elif L==5
 	"Nombre no v&aacute;lido.";	// Okoteve traducción
 #elif L==6
 	"Nome non valido.";
 #elif L==7
-	"Invalid name.";	// Potrzebujesz tlumaczenie
+	"Invalid name.";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"Invalid name.";	// Necessita de tradução
+	"Invalid name.";		// Necessita de tradução
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to include %s in the following sentences

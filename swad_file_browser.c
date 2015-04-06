@@ -2067,8 +2067,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreLnkAsgUsr:
       case ActCreLnkWrkUsr:
       case ActCreLnkBrf:
-	 /* Get the new link */
-	 Par_GetParToText ("NewLink",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
+	 /* Get the name of the new link */
+	 Par_GetParToText ("NewLinkName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
       default:
 	 break;
@@ -7648,17 +7648,9 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
    /* Folder */
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"%s\""
-                      " style=\"width:30%%; text-align:right;\">"
-                      "%s:"
-                      "</td>"
-                      "<td style=\"width:70%%; text-align:left;\">"
-                      "<input type=\"text\" name=\"NewFolderName\" size=\"32\" maxlength=\"40\" value=\"\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>"
+                      "<input type=\"text\" name=\"NewLink\""
+                      " size=\"32\" maxlength=\"40\" value=\"\" />",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Folder);
 
    /* Button to send */
@@ -7797,7 +7789,8 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
          break;
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" size=\"50\" maxlength=\"100\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
+	              " size=\"50\" maxlength=\"100\" value=\"\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /* Button to send */
@@ -7867,6 +7860,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_Create_link;
    extern const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X;
    extern const char *Txt_URL;
+   extern const char *Txt_Save_as;
 
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_link);
@@ -7895,18 +7889,31 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
    /* URL */
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"%s\""
-                      " style=\"width:30%%; text-align:right;\">"
-                      "%s:"
+   fprintf (Gbl.F.Out,"<table>"
+	              "<tr>"
+	              "<td style=\"text-align:right;\">"
+	              "<label class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td style=\"width:70%%; text-align:left;\">"
-                      "<input type=\"text\" name=\"NewLink\" size=\"80\" maxlength=\"%u\" value=\"\" />"
+                      "<td style=\"text-align:left;\">"
+                      "<input type=\"text\" name=\"NewLinkURL\""
+                      " size=\"40\" maxlength=\"%u\" value=\"\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_URL,
+            PATH_MAX);
+
+   /* Link name */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td style=\"text-align:right;\">"
+	              "<label class=\"%s\">%s:</label>"
+                      "</td>"
+                      "<td style=\"text-align:left;\">"
+                      "<input type=\"text\" name=\"NewLinkName\""
+                      " size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_URL,PATH_MAX);
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_Save_as);
 
    /* Button to send */
    Lay_PutCreateButton (Txt_Create_link);
@@ -8338,12 +8345,13 @@ void Brw_RecLinkFileBrowser (void)
    extern const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name;
    extern const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y;
-   extern const char *Txt_UPLOAD_FILE_Invalid_name;
+   extern const char *Txt_UPLOAD_FILE_Invalid_link;
    extern const char *Txt_You_can_not_create_links_here;
-   char URLWithoutEndingSlash[NAME_MAX+1];	// TODO: It should be PATH_MAX
+   char URL[PATH_MAX+1];
+   char URLWithoutEndingSlash[PATH_MAX+1];
    size_t LengthURL;
    char URLUntilLastFilename[PATH_MAX+1];
-   char LastFilenameInURL[NAME_MAX+1];
+   char FileName[NAME_MAX+1];
    char Path[PATH_MAX+1];
    FILE *FileURL;
    char PathCompleteInTreeIncludingFile[PATH_MAX+1];
@@ -8359,42 +8367,53 @@ void Brw_RecLinkFileBrowser (void)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** Create a new file to store URL ****/
-      /*
-         Gbl.FileBrowser.NewFilFolLnkName holds the URL of the new link
-         Example:
-         URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
-         File in swad: 64-ia-32-architectures-software-developer-manual-325462.pdf.url
-      */
-      if ((LengthURL = strlen (Gbl.FileBrowser.NewFilFolLnkName)))
+      Par_GetParToText ("NewLinkURL",URL,PATH_MAX);
+      if ((LengthURL = strlen (URL)))
 	{
-	 strncpy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
-	 URLWithoutEndingSlash[NAME_MAX] = '\0';
+	 if (Gbl.FileBrowser.NewFilFolLnkName[0])
+	    /*
+	    Gbl.FileBrowser.NewFilFolLnkName holds the name given by me in the form
+	    Example:
+	    Name given by me: intel-architectures.pdf
+	    File in swad: intel-architectures.pdf.url
+	    */
+	    strncpy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
+	 else
+	    /*
+	    Gbl.FileBrowser.NewFilFolLnkName is empty
+	    URL holds the URL given by me in the form
+	    Example:
+	    URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
+	    File in swad: 64-ia-32-architectures-software-developer-manual-325462.pdf.url
+	    */
+	    strncpy (URLWithoutEndingSlash,URL,PATH_MAX);
+	 URLWithoutEndingSlash[PATH_MAX] = '\0';
 
-         /* Remove possible final '/' from URL */
+	 /* Remove possible final '/' from URL */
 	 if (URLWithoutEndingSlash[LengthURL - 1] == '/')
-            URLWithoutEndingSlash[LengthURL - 1] = '\0';
+	    URLWithoutEndingSlash[LengthURL - 1] = '\0';
 
-         /* Get the last name in URL-without-ending-slash */
+	 /* Get the last name in URL-without-ending-slash */
 	 Str_SplitFullPathIntoPathAndFileName (URLWithoutEndingSlash,
 					       URLUntilLastFilename,
-					       LastFilenameInURL);
+					       FileName);
 
 	 /* Convert the last name in URL to a valid filename */
-	 if (Str_ConvertFilFolLnkNameToValid (LastFilenameInURL))	// Gbl.Message contains feedback text
+	 if (Str_ConvertFilFolLnkNameToValid (FileName))	// Gbl.Message contains feedback text
 	   {
-	    /* The name of the file with the link will be the LastFilenameInURL.url */
+	    /* The name of the file with the link will be the FileName.url */
 	    sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
-	    if (strlen (Path) + 1 + strlen (LastFilenameInURL) + strlen (".url") > PATH_MAX)
+	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
 	    strcat (Path,"/");
-	    strcat (Path,LastFilenameInURL);
+	    strcat (Path,FileName);
 	    strcat (Path,".url");
 
 	    /* Check if the URL file exists */
 	    if (Fil_CheckIfPathExists (Path))
 	      {
 	       sprintf (Gbl.Message,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
-			LastFilenameInURL);
+			FileName);
 	       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	      }
 	    else	// URL file does not exist
@@ -8403,7 +8422,7 @@ void Brw_RecLinkFileBrowser (void)
 	       if ((FileURL = fopen (Path,"wb")) != NULL)
 		 {
 		  /* Write URL */
-		  fprintf (FileURL,"%s",Gbl.FileBrowser.NewFilFolLnkName);
+		  fprintf (FileURL,"%s",URL);
 
 		  /* Close file */
 		  fclose (FileURL);
@@ -8415,7 +8434,7 @@ void Brw_RecLinkFileBrowser (void)
 		    {
 		     Brw_RemoveTree (Path);
 		     sprintf (Gbl.Message,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
-			      LastFilenameInURL);
+			      FileName);
 		     Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 		    }
 		  else
@@ -8427,7 +8446,7 @@ void Brw_RecLinkFileBrowser (void)
 		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
 
 		     /* Add entry to the table of files/folders */
-		     sprintf (PathCompleteInTreeIncludingFile,"%s/%s.url",Gbl.FileBrowser.Priv.FullPathInTree,LastFilenameInURL);
+		     sprintf (PathCompleteInTreeIncludingFile,"%s/%s.url",Gbl.FileBrowser.Priv.FullPathInTree,FileName);
 		     FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
 					       PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
@@ -8435,7 +8454,7 @@ void Brw_RecLinkFileBrowser (void)
 		     Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,Brw_IS_FOLDER,
 					    Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 		     sprintf (Gbl.Message,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
-			      LastFilenameInURL,FileNameToShow);
+			      FileName,FileNameToShow);
 		     Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
 		     FileMetadata.FilCod = FilCod;
@@ -8467,11 +8486,9 @@ void Brw_RecLinkFileBrowser (void)
 		 }
 	      }
 	   }
-	 else	// Link name not valid
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	}
-      else	// Link name not valid
-	 Lay_ShowAlert (Lay_WARNING,Txt_UPLOAD_FILE_Invalid_name);
+      else	// Link URL not valid
+	 Lay_ShowAlert (Lay_WARNING,Txt_UPLOAD_FILE_Invalid_link);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_create_links_here);	// It's difficult, but not impossible that a user sees this message

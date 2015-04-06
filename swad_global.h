@@ -505,7 +505,7 @@ struct Globals
 	 char PathInTreeExceptFileOrFolder[PATH_MAX+1];
 	 char FullPathInTree[PATH_MAX+1];
 	} Priv;
-      char NewFilFolLnkName[NAME_MAX+1];	// TODO: It should be PATH_MAX (for URL in links)
+      char NewFilFolLnkName[NAME_MAX+1];
       char FilFolLnkName[NAME_MAX+1];
       Brw_FileType_t FileType;
       unsigned Level;
