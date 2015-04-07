@@ -161,7 +161,7 @@ static void Crs_Configuration (bool PrintView)
    unsigned Year;
    unsigned Semester;
    struct Ind_IndicatorsCrs Indicators;
-   bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
+   bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
    /***** Messages and links above the frame *****/
@@ -169,7 +169,7 @@ static void Crs_Configuration (bool PrintView)
      {
       /* Get indicators and show warning */
       Ind_GetIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,&Indicators);
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
 	  Indicators.CountIndicators < Ind_NUM_INDICATORS)
 	{
 	 /* Warning alert */
@@ -192,8 +192,8 @@ static void Crs_Configuration (bool PrintView)
       Act_PutContextualLink (ActPrnCrsInf,NULL,"print",Txt_Print);
 
       /* Link to request enrollment in the current course */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST__ ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_VISITOR)
+      if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
          Enr_PutLinkToRequestSignUp ();
 
       fprintf (Gbl.F.Out,"</div>");
@@ -398,7 +398,7 @@ static void Crs_Configuration (bool PrintView)
                          "</td>"
                          "</tr>",
                The_ClassFormul[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumTchs);
+               Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumTchs);
 
       /***** Number of students *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -412,7 +412,7 @@ static void Crs_Configuration (bool PrintView)
                          "</td>"
                          "</tr>",
                The_ClassFormul[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
+               Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
 
       /***** Indicators *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -967,7 +967,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActSeeDeg,ActSeeCrs);
 
       /***** Put link (form) to edit courses in current degree *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
          Lay_PutFormToEdit (ActEdiCrs);
 
       /***** Show list of courses *****/
@@ -1425,7 +1425,7 @@ static void Crs_ListCoursesForEdition (void)
             /* Degree */
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
         	               " vertical-align:middle;\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+            if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
               {
                Act_FormStart (ActChgCrsDeg);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
@@ -1551,7 +1551,7 @@ static void Crs_ListCoursesForEdition (void)
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
             fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
         	               " vertical-align:middle;\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM &&
+            if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
         	StatusTxt == Crs_STATUS_PENDING)
               {
                Act_FormStart (ActChgCrsSta);
@@ -1600,7 +1600,7 @@ static void Crs_ListCoursesForEdition (void)
 
 static bool Crs_CheckIfICanEdit (struct Course *Crs)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||		// I am a degree administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||		// I am a degree administrator or higher
                   ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&		// Course is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));		// I am the requester
   }
@@ -1663,9 +1663,9 @@ static void Crs_PutFormToCreateCourse (void)
    unsigned Semester;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
       Act_FormStart (ActNewCrs);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
       Act_FormStart (ActReqCrs);
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
@@ -2211,10 +2211,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Crs->FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
 
    /***** Get number of students *****/
-   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_ROLE_STUDENT,Crs->CrsCod);
+   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs->CrsCod);
 
    /***** Get number of teachers *****/
-   Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_ROLE_TEACHER,Crs->CrsCod);
+   Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
 
    Crs->NumUsrs = Crs->NumStds + Crs->NumTchs;
   }
@@ -2531,9 +2531,9 @@ void Crs_ChangeCrsDegree (void)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    /* Check if I have permission to change course to this degree */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       ICanChangeCrsToNewDeg = true;
-   else	if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM)
+   else	if (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM)
       ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
                                                    Sco_SCOPE_DEG,
                                                    NewDeg.DegCod);
@@ -3280,8 +3280,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of students and teachers in this course *****/
-   NumStds = Usr_GetNumUsrsInCrs (Rol_ROLE_STUDENT,CrsCod);
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_ROLE_TEACHER,CrsCod);
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+   NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
    if (NumStds + NumTchs)
      {
       Style = "DAT_N";
@@ -3390,7 +3390,7 @@ void Crs_UpdateCrsLast (void)
    char Query[256];
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_STUDENT)
+       Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT)
      {
       /***** Update my last access to current course *****/
       sprintf (Query,"REPLACE INTO crs_last (CrsCod,LastTime)"

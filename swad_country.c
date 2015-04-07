@@ -99,7 +99,7 @@ void Cty_SeeCtyWithPendingInss (void)
    /***** Get countries with pending institutions *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
          sprintf (Query,"SELECT institutions.CtyCod,COUNT(*)"
                         " FROM institutions,countries"
                         " WHERE (institutions.Status & %u)<>0"
@@ -283,7 +283,7 @@ static void Cty_Configuration (bool PrintView)
 			    "</tr>");
 
 	 /* Map attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM && !PrintView)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\""
@@ -438,8 +438,8 @@ static void Cty_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_ROLE_TEACHER,Gbl.CurrentCty.Cty.CtyCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -453,8 +453,8 @@ static void Cty_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_ROLE_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
 	}
 
       /***** End frame *****/
@@ -510,7 +510,7 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Put link (form) to edit countries *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_PutFormToEdit (ActEdiCty);
 
    /***** Table head *****/
@@ -592,8 +592,8 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write stats of this country */
-      NumStds = Usr_GetNumUsrsInCountry (Rol_ROLE_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod);
-      NumTchs = Usr_GetNumUsrsInCountry (Rol_ROLE_TEACHER,Gbl.Ctys.Lst[NumCty].CtyCod);
+      NumStds = Usr_GetNumUsrsInCountry (Rol_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod);
+      NumTchs = Usr_GetNumUsrsInCountry (Rol_TEACHER,Gbl.Ctys.Lst[NumCty].CtyCod);
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
 	                 " style=\"text-align:right; background-color:%s;\">"
 	                 "%u"
@@ -632,9 +632,9 @@ void Cty_ListCountries2 (void)
                       "</tr>");
 
    /***** Write institutions and users with other country *****/
-   NumUsrsInOtherCtys = Usr_GetNumUsrsInCountry (Rol_ROLE_UNKNOWN,0);	// Here Rol_ROLE_UNKNOWN means "all users"
-   NumStds            = Usr_GetNumUsrsInCountry (Rol_ROLE_STUDENT,0);
-   NumTchs            = Usr_GetNumUsrsInCountry (Rol_ROLE_TEACHER,0);
+   NumUsrsInOtherCtys = Usr_GetNumUsrsInCountry (Rol_UNKNOWN,0);	// Here Rol_ROLE_UNKNOWN means "all users"
+   NumStds            = Usr_GetNumUsrsInCountry (Rol_STUDENT,0);
+   NumTchs            = Usr_GetNumUsrsInCountry (Rol_TEACHER,0);
    NumInssInOtherCtys = Ins_GetNumInssInCty (0);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
@@ -662,9 +662,9 @@ void Cty_ListCountries2 (void)
    NumInssWithCountry += NumInssInOtherCtys;
 
    /***** Write institutions with no country *****/
-   NumStds = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_STUDENT);
-   NumTchs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_TEACHER);
-   NumUsrs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_ROLE_UNKNOWN);	// NumUsrs >= NumStds + NumTchs
+   NumStds = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_STUDENT);
+   NumTchs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_TEACHER);
+   NumUsrs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_UNKNOWN);	// NumUsrs >= NumStds + NumTchs
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
                       "<td class=\"DAT\" style=\"text-align:left;\">"

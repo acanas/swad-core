@@ -440,8 +440,8 @@ static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewE
    /***** Create link for creation of a new exam announcement *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Act_PutContextualLink (ActEdiExaAnn,NULL,
                                 "new",Txt_New_announcement_OF_EXAM);
@@ -769,8 +769,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
       fprintf (Gbl.F.Out,"<tr>" \
 	                 "<td style=\"text-align:left;\">");
 
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
 	 /***** Link to remove this exam announcement *****/
 	 Act_FormStart (ActRemExaAnn);

@@ -342,10 +342,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      }
    */
    /***** Number of courses in which the user is teacher or student *****/
-   if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_TEACHER)))
+   if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER)))
      {
-      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_TEACHER);
-      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_TEACHER,Rol_ROLE_STUDENT);
+      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_TEACHER);
+      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_STUDENT);
       fprintf (Gbl.F.Out,"<tr>"
 		         "<td class=\"PRF_ICON_CONTAINER\">"
                          "<img src=\"%s/tch64x64.gif\" title=\"%s\""
@@ -357,7 +357,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 			 "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,
-	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][UsrDat->Sex],
+	       Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
 	       NumCrssUsrIsTeacher,
 	       (NumCrssUsrIsTeacher == 1) ? Txt_course :
 		                            Txt_courses,
@@ -366,10 +366,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	       NumStds,
 	       Txt_students_ABBREVIATION);
      }
-   if ((NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_ROLE_STUDENT)))
+   if ((NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STUDENT)))
      {
-      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_TEACHER);
-      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_ROLE_STUDENT,Rol_ROLE_STUDENT);
+      NumTchs = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_TEACHER);
+      NumStds = Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_STUDENT);
       fprintf (Gbl.F.Out,"<tr>"
 		         "<td class=\"PRF_ICON_CONTAINER\">"
                          "<img src=\"%s/std64x64.gif\" title=\"%s\""
@@ -381,7 +381,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 			 "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,
-	       Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][UsrDat->Sex],
+	       Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
 	       NumCrssUsrIsStudent,
 	       (NumCrssUsrIsStudent == 1) ? Txt_course :
 	                                    Txt_courses,

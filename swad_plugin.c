@@ -81,7 +81,7 @@ void Plg_ListPlugins (void)
    struct Plugin *Plg;
    char URL[Cns_MAX_LENGTH_WWW+Ses_LENGTH_SESSION_ID+1];
 
-   if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Option_under_development);
       return;
@@ -91,7 +91,7 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Put link (form) to edit plugins *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Plg_PutFormToEditPlugins ();
 
    /***** Table start *****/

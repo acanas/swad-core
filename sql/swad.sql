@@ -308,7 +308,8 @@ CREATE TABLE IF NOT EXISTS crs_info_src (
 CREATE TABLE IF NOT EXISTS crs_info_txt (
 	CrsCod INT NOT NULL DEFAULT -1,
 	InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,
-	InfoTxt LONGTEXT NOT NULL,
+	InfoTxtHTML LONGTEXT NOT NULL,
+	InfoTxtMD LONGTEXT NOT NULL,
 	UNIQUE INDEX(CrsCod,InfoType));
 --
 -- Table crs_last: stores last access to courses from students or teachers

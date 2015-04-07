@@ -294,7 +294,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                               " AND usr_data.DptCod='%ld'"
                               " ORDER BY degrees.FullName,courses.FullName",
                         Gbl.Stat.DegTypCod,
-                        (unsigned) Rol_ROLE_TEACHER,
+                        (unsigned) Rol_TEACHER,
                         Gbl.Stat.DptCod);
             else
                sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -305,7 +305,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                               " AND crs_usr.UsrCod=usr_data.UsrCod"
                               " AND usr_data.DptCod='%ld'"
                               " ORDER BY degrees.FullName,courses.FullName",
-                        (unsigned) Rol_ROLE_TEACHER,
+                        (unsigned) Rol_TEACHER,
                         Gbl.Stat.DptCod);
            }
          else
@@ -338,7 +338,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " AND usr_data.DptCod='%ld'"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCty.Cty.CtyCod,
-                     (unsigned) Rol_ROLE_TEACHER,
+                     (unsigned) Rol_TEACHER,
                      Gbl.Stat.DptCod);
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -363,7 +363,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " AND usr_data.DptCod='%ld'"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentIns.Ins.InsCod,
-                     (unsigned) Rol_ROLE_TEACHER,
+                     (unsigned) Rol_TEACHER,
                      Gbl.Stat.DptCod);
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -386,7 +386,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " AND usr_data.DptCod='%ld'"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCtr.Ctr.CtrCod,
-                     (unsigned) Rol_ROLE_TEACHER,
+                     (unsigned) Rol_TEACHER,
                      Gbl.Stat.DptCod);
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -408,7 +408,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " AND usr_data.DptCod='%ld'"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentDeg.Deg.DegCod,
-                     (unsigned) Rol_ROLE_TEACHER,
+                     (unsigned) Rol_TEACHER,
                      Gbl.Stat.DptCod);
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -432,7 +432,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCrs.Crs.CrsCod,
                      Gbl.CurrentCrs.Crs.CrsCod,
-                     (unsigned) Rol_ROLE_TEACHER,
+                     (unsigned) Rol_TEACHER,
                      Gbl.Stat.DptCod);
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
@@ -1050,8 +1050,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                break;
             case Ind_INDICATORS_FULL:
                /* Get number of users */
-               NumStds = Usr_GetNumUsrsInCrs (Rol_ROLE_STUDENT,CrsCod);
-               NumTchs = Usr_GetNumUsrsInCrs (Rol_ROLE_TEACHER,CrsCod);
+               NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+               NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
 
                fprintf (Gbl.F.Out,"<tr>"
                                   "<td class=\"%s\" style=\"text-align:left;"

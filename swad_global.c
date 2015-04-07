@@ -159,7 +159,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.RoleFromSession              =
    Gbl.Usrs.Me.LoggedRole                   =
    Gbl.Usrs.Me.LoggedRoleBeforeCloseSession =
-   Gbl.Usrs.Me.MaxRole                      = Rol_ROLE_UNKNOWN;
+   Gbl.Usrs.Me.MaxRole                      = Rol_UNKNOWN;
    Gbl.Usrs.Me.IBelongToCurrentIns = false;
    Gbl.Usrs.Me.IBelongToCurrentCtr = false;
    Gbl.Usrs.Me.IBelongToCurrentDeg = false;
@@ -439,7 +439,7 @@ void Gbl_InitializeGlobals (void)
    /* Related to imported data from external site */
    Gbl.Imported.ExternalUsrId[0] = '\0';
    Gbl.Imported.ExternalSesId[0] = '\0';
-   Gbl.Imported.ExternalRole = Rol_ROLE_UNKNOWN;
+   Gbl.Imported.ExternalRole = Rol_UNKNOWN;
 
    Gbl.WebService.Function = Svc_unknown;
   }

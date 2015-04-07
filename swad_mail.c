@@ -97,7 +97,7 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Put link (form) to edit mail domains *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Mai_PutFormToEditMailDomains ();
 
    /***** Table head *****/

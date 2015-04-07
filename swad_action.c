@@ -4370,7 +4370,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
 
 void Act_AdjustCurrentAction (void)
   {
-   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_ROLE_TEACHER));
+   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
 
    /***** Don't adjust anything when current action is not a menu option *****/
    if (Gbl.CurrentAct != Act_Actions[Gbl.CurrentAct].SuperAction)	// It is not a menu option
@@ -4473,7 +4473,7 @@ void Act_AdjustCurrentAction (void)
       /***** Depending on the role I am logged... *****/
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_STUDENT:
+         case Rol_STUDENT:
             switch (Gbl.CurrentAct)
               {
                case ActAutUsrInt:
@@ -4506,7 +4506,7 @@ void Act_AdjustCurrentAction (void)
                   /* If I have no photo, and current action is not available for unknown users,
                      then update number of clicks without photo */
                   if (!Gbl.Usrs.Me.MyPhotoExists)
-                     if (!(Act_Actions[Gbl.CurrentAct].PermisIfIBelongToCrs & (1 << Rol_ROLE_UNKNOWN)) &&	// If current action is not available for unknown users...
+                     if (!(Act_Actions[Gbl.CurrentAct].PermisIfIBelongToCrs & (1 << Rol_UNKNOWN)) &&	// If current action is not available for unknown users...
                          Gbl.CurrentAct != ActReqMyPho)	// ...and current action is not ActReqMyPho...
                         if ((Gbl.Usrs.Me.NumAccWithoutPhoto = Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
 	                  {
@@ -4523,7 +4523,7 @@ void Act_AdjustCurrentAction (void)
             if (Gbl.CurrentAct == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
                Gbl.CurrentCrs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
             break;
-         case Rol_ROLE_TEACHER:
+         case Rol_TEACHER:
             if (Gbl.CurrentAct == ActReqTst ||
                 Gbl.CurrentAct == ActEdiTstQst)
                /***** If current course has tests and pluggable is unknown,

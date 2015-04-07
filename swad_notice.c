@@ -312,8 +312,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
      {
       ICanEditNotices = (
                          TypeNoticesListing == Not_LIST_FULL_NOTICES &&
-                         (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-                         Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+                         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
                         );
 
 

@@ -81,7 +81,7 @@ void Cht_ShowChatRooms (void)
    /***** List available chat rooms *****/
    Cht_ShowListOfAvailableChatRooms ();
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();
   }
 
@@ -135,8 +135,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
             Gbl.Prefs.IconsURL,Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
-   IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_STUDENT &&
-                           Gbl.Usrs.Me.LoggedRole != Rol_ROLE_TEACHER &&
+   IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_STUDENT &&
+                           Gbl.Usrs.Me.LoggedRole != Rol_TEACHER &&
                            !Gbl.Usrs.Me.MyDegrees.Num);
    sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
@@ -149,16 +149,16 @@ void Cht_ShowListOfAvailableChatRooms (void)
    IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegrees.Num;
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:
-         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_ALL]);
+      case Rol_STUDENT:
+         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
 			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
 		  Gbl.Prefs.IconsURL);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
-      case Rol_ROLE_TEACHER:
-         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_ALL]);
+      case Rol_TEACHER:
+         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
 			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
@@ -440,22 +440,22 @@ void Cht_OpenChatWindow (void)
       sprintf (RoomFullName,"|%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
       strcat (ListRoomFullNames,RoomFullName);
      }
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
       if (strcmp (RoomCode,"GBL_STD"))
         {
          strcat (ListRoomCodes,"|#GBL_STD");
          sprintf (RoomShortName,"|%s",Txt_Students_ABBREVIATION);
          strcat (ListRoomShortNames,RoomShortName);
-         sprintf (RoomFullName,"|%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_ALL]);
+         sprintf (RoomFullName,"|%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_ALL]);
          strcat (ListRoomFullNames,RoomFullName);
         }
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
       if (strcmp (RoomCode,"GBL_TCH"))
         {
          strcat (ListRoomCodes,"|#GBL_TCH");
          sprintf (RoomShortName,"|%s",Txt_Teachers_ABBREVIATION);
          strcat (ListRoomShortNames,RoomShortName);
-         sprintf (RoomFullName,"|%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_ROLE_TEACHER][Usr_SEX_ALL]);
+         sprintf (RoomFullName,"|%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_ALL]);
          strcat (ListRoomFullNames,RoomFullName);
         }
    for (NumMyDeg = 0;

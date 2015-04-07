@@ -224,9 +224,9 @@ void TT_ShowClassTimeTable (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;
    bool PutEditButton = (Gbl.CurrentAct == ActSeeCrsTimTbl &&
-                         Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
+                         Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool PutEditOfficeHours = (Gbl.CurrentAct == ActSeeMyTimTbl &&
-                              (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_ROLE_TEACHER)));
+                              (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
    bool PrintView = (Gbl.CurrentAct == ActPrnCrsTimTbl ||
 	             Gbl.CurrentAct == ActPrnMyTimTbl);
 

@@ -96,7 +96,7 @@ void Dpt_SeeDepts (void)
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Put link (form) to edit departments *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	  Dpt_PutFormToEditDpts ();
 
       /***** Table head *****/
@@ -179,7 +179,7 @@ void Dpt_SeeDepts (void)
 			 "</tr>",
 	       Txt_Department_unspecified,
 	       Sta_GetTotalNumberOfUsers (Sco_SCOPE_INS,
-					  Rol_ROLE_TEACHER) - NumTchsInsWithDpt);
+					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/
       Lay_EndRoundFrameTable10 ();
@@ -303,8 +303,8 @@ void Dpt_GetListDepartments (long InsCod)
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
 		     " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       InsCod,(unsigned) Rol_ROLE_TEACHER,
-	       InsCod,(unsigned) Rol_ROLE_TEACHER,
+	       InsCod,(unsigned) Rol_TEACHER,
+	       InsCod,(unsigned) Rol_TEACHER,
 	       OrderBySubQuery);
    else			// All the departments
       sprintf (Query,"(SELECT departments.DptCod,departments.InsCod,"
@@ -322,8 +322,8 @@ void Dpt_GetListDepartments (long InsCod)
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
 		     " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       (unsigned) Rol_ROLE_TEACHER,
-	       (unsigned) Rol_ROLE_TEACHER,
+	       (unsigned) Rol_TEACHER,
+	       (unsigned) Rol_TEACHER,
 	       OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get departments");
 
@@ -415,8 +415,8 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
                      " WHERE DptCod='%ld' AND DptCod NOT IN"
                      " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
                      " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))",
-               Dpt->DptCod,(unsigned) Rol_ROLE_TEACHER,
-               Dpt->DptCod,(unsigned) Rol_ROLE_TEACHER);
+               Dpt->DptCod,(unsigned) Rol_TEACHER,
+               Dpt->DptCod,(unsigned) Rol_TEACHER);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a department");
 
       if (NumRows) // Department found...

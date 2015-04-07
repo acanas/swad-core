@@ -135,7 +135,7 @@ void Ses_CloseSession (void)
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
       Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-      Gbl.Usrs.Me.LoggedRole = Rol_ROLE_UNKNOWN;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
+      Gbl.Usrs.Me.LoggedRole = Rol_UNKNOWN;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
       Gbl.Usrs.Me.MyCourses.Filled = false;
       Gbl.Usrs.Me.MyCourses.Num = 0;
 
@@ -276,7 +276,7 @@ bool Ses_GetSessionData (void)
 
       /***** Get logged user type (row[2]) *****/
       if (sscanf (row[2],"%u",&Gbl.Usrs.Me.RoleFromSession) != 1)
-         Gbl.Usrs.Me.RoleFromSession = Rol_ROLE_UNKNOWN;
+         Gbl.Usrs.Me.RoleFromSession = Rol_UNKNOWN;
 
       /***** Get country code (row[3]) *****/
       Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);

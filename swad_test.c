@@ -252,9 +252,9 @@ void Tst_ShowFormAskTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Put form to go to test edition and configuration *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
+       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
@@ -314,7 +314,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
   {
    extern const char *Txt_Results_tests;
 
-   Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ActReqSeeMyTstExa :
+   Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
 	                                                               ActReqSeeUsrTstExa,
 	                  NULL,"file",Txt_Results_tests);
   }
@@ -411,7 +411,7 @@ void Tst_ShowNewTestExam (void)
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
 
             /***** Update date-time of my next allowed access to test *****/
-            if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+            if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
                Tst_UpdateLastAccTst ();
            }
 
@@ -568,7 +568,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    unsigned Year,Month,Day,Hour,Minute,Second;
 
    /***** Superusers are allowed to do all test they want *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
@@ -889,7 +889,7 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 	    (*NumQstsNotBlank)++;
 
 	 /***** Update the number of accesses and the score of this question *****/
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
 	    Tst_UpdateScoreQst (QstCod,ScoreThisQst,AnswerIsNotBlank);
 	}
       else
@@ -5951,8 +5951,8 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
    Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)
@@ -5970,8 +5970,8 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 
          /***** Put list of users to select some of them *****/
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
-         Usr_ListUsersToSelect (Rol_ROLE_TEACHER);
-         Usr_ListUsersToSelect (Rol_ROLE_STUDENT);
+         Usr_ListUsersToSelect (Rol_TEACHER);
+         Usr_ListUsersToSelect (Rol_STUDENT);
          Lay_EndRoundFrameTable10 ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -5987,7 +5987,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_ROLE_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
@@ -6206,7 +6206,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    double TotalScoreOfAllExams = 0.0;
    unsigned NumExamsVisibleByTchs = 0;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   bool IAmATeacher = (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER);
+   bool IAmATeacher = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool ICanViewExam;
    bool ICanViewScore;
    char *ClassDat;
@@ -6489,15 +6489,15 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    fprintf (Gbl.F.Out," style=\"text-align:left; vertical-align:top;"
 	              " background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? ActSeeRecOneStd :
+   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT");
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,
-                   (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
-                                                                     (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)));
+                   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
+                                                                     (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)));
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
@@ -6567,7 +6567,7 @@ void Tst_ShowOneTestExam (void)
       case ActSeeOneTstExaMe:
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)		// The exam is not mine
 	    Lay_ShowErrorAndExit ("You can not view this test exam.");
-	 if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_TEACHER)
+	 if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
 	   {
 	    // Students only can view score if feedback type allows it
             Tst_GetConfigTstFromDB ();	// To get feedback type

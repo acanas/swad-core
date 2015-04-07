@@ -220,9 +220,9 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_Centres,						// Sch_SEARCH_CENTRES
 	Txt_Degrees,						// Sch_SEARCH_DEGREES
 	Txt_Courses,						// Sch_SEARCH_COURSES
-	Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],// Sch_SEARCH_TEACHERS
-	Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_Abc[Rol_ROLE_GUEST__  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
+	Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],// Sch_SEARCH_TEACHERS
+	Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],// Sch_SEARCH_STUDENTS
+        Txt_ROLES_PLURAL_Abc[Rol__GUEST_  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
 	Txt_Open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
 	Txt_DOCUM_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
 	Txt_My_documents,					// Sch_SEARCH_MY_DOCUMENTS
@@ -539,9 +539,9 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchCentresInDB (RangeQuery);
 	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
-	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_TEACHER);
-	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_STUDENT);
-	 NumResults += Sch_SearchUsrsInDB (Rol_ROLE_GUEST__);
+	 NumResults += Sch_SearchUsrsInDB (Rol_TEACHER);
+	 NumResults += Sch_SearchUsrsInDB (Rol_STUDENT);
+	 NumResults += Sch_SearchUsrsInDB (Rol__GUEST_);
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
@@ -559,13 +559,13 @@ static void Sch_SearchInDB (void)
 	 NumResults = Sch_SearchCoursesInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_TEACHERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_TEACHER);
+	 NumResults = Sch_SearchUsrsInDB (Rol_TEACHER);
 	 break;
       case Sch_SEARCH_STUDENTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_STUDENT);
+	 NumResults = Sch_SearchUsrsInDB (Rol_STUDENT);
 	 break;
       case Sch_SEARCH_GUESTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_ROLE_GUEST__);
+	 NumResults = Sch_SearchUsrsInDB (Rol__GUEST_);
 	 break;
       case Sch_SEARCH_OPEN_DOCUMENTS:
 	 NumResults = Sch_SearchOpenDocumentsInDB (RangeQuery);
@@ -726,8 +726,8 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_ROLE_TEACHER ? Sch_SEARCH_TEACHERS :
-		                           (Role == Rol_ROLE_STUDENT ? Sch_SEARCH_STUDENTS :
+   if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_TEACHER ? Sch_SEARCH_TEACHERS :
+		                           (Role == Rol_STUDENT ? Sch_SEARCH_STUDENTS :
 		                        		               Sch_SEARCH_GUESTS)))
       /***** Split user string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,

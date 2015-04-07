@@ -713,6 +713,7 @@ Str_FROM_HTML
 ChangeTo can be:
 Str_DONT_CHANGE
 Str_TO_TEXT
+Str_TO_MARKDOWN
 Str_TO_HTML
 Str_TO_RIGOROUS_HTML
 For example the string "Nueva++de+San+Ant%F3n"
@@ -768,24 +769,18 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      break;
                   case '%':        /***** Change "%XX" --> "&#decimal_number;" *****/
                      IsSpecialChar = true;
-                     /* Get the value of the special char */
-                  /*   if (sscanf (PtrSrc+1,"%4X",&SpecialChar) == 1)
-                        LengthSpecStrSrc = 5;
-                     else if (sscanf (PtrSrc+1,"%3X",&SpecialChar) == 1)
-                        LengthSpecStrSrc = 4;
-                     else if (sscanf (PtrSrc+1,"%2X",&SpecialChar) == 1)
-                        LengthSpecStrSrc = 3;
-                     else if (sscanf (PtrSrc+1,"%1X",&SpecialChar) == 1)
-                        LengthSpecStrSrc = 2; */ // TODO: BUG -> Fix it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
                      sscanf (PtrSrc+1,"%2X",&SpecialChar);
                      LengthSpecStrSrc = 3;
-
                      break;
                   case '\'':       /***** Change "'" --> "&#39;" to avoid SQL code injection *****/
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
                      SpecialChar = 0x27;
+                     break;
+                  case '\\':
+                     IsSpecialChar = true;
+                     LengthSpecStrSrc = 1;
+                     SpecialChar = 0x5C;
                      break;
                   default:
                      IsSpecialChar = false;
@@ -807,6 +802,11 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
                      SpecialChar = 0x27;
+                     break;
+                  case '\\':
+                     IsSpecialChar = true;
+                     LengthSpecStrSrc = 1;
+                     SpecialChar = 0x5C;
                      break;
                   default:
                      if ((unsigned char) *PtrSrc < 0x20)
@@ -873,7 +873,14 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = true;
                   break;
                case 0x22:  /* "%22" --> "&#34;" (double comilla) */
-                  sprintf (StrSpecialChar,"&#34;");        // Double comilla is always stored as HTML code to avoid problems when displaying it
+        	  if (ChangeTo == Str_TO_MARKDOWN)
+        	    {	// Escape sequence for database, two characters
+        	     StrSpecialChar[0] = '\\';	// 1. An inverted bar
+        	     StrSpecialChar[1] = '\"';	// 2. A double comilla
+        	     StrSpecialChar[2] = '\0';	// End of string
+        	    }
+        	  else
+                     sprintf (StrSpecialChar,"&#34;");	// Double comilla is stored as HTML code to avoid problems when displaying it
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -883,13 +890,19 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x26:  /* "%26" --> "&#38;" (&) */
-                  // sprintf (StrSpecialChar,"&#38;");        // Ampersand is always stored as HTML code to avoid problems when displaying it
                   strcpy (StrSpecialChar,"&");
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x27:  /* "%27" --> "&#39;" (single comilla) */
-                  sprintf (StrSpecialChar,"&#39;");        // Comilla is always stored as HTML code to avoid problem when querying database (SQL code injection)
+        	  if (ChangeTo == Str_TO_MARKDOWN)
+        	    {	// Escape sequence for database, two characters
+        	     StrSpecialChar[0] = '\\';	// 1. An inverted bar
+        	     StrSpecialChar[1] = '\'';	// 2. A single comilla
+        	     StrSpecialChar[2] = '\0';	// End of string
+        	    }
+        	  else
+        	     sprintf (StrSpecialChar,"&#39;");	// Single comilla is stored as HTML code to avoid problem when querying database (SQL code injection)
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -914,17 +927,35 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x3C:  /* "%3C" --> "&#60;" (<) */
-                  strcpy (StrSpecialChar,"&#60;"); // "<" is always stored as HTML code to avoid problems when displaying it
+        	  if (ChangeTo == Str_TO_MARKDOWN)
+                     strcpy (StrSpecialChar,"<");
+        	  else
+                     strcpy (StrSpecialChar,"&#60;"); // "<" is stored as HTML code to avoid problems when displaying it
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3E:  /* "%3E" --> "&#62;" (>) */
-                  strcpy (StrSpecialChar,"&#62;"); // ">" is always stored as HTML code to avoid problems when displaying it
+        	  if (ChangeTo == Str_TO_MARKDOWN)
+                     strcpy (StrSpecialChar,">");
+        	  else
+        	     strcpy (StrSpecialChar,"&#62;"); // ">" is stored as HTML code to avoid problems when displaying it
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3F:  /* "%3F" --> "?" */
                   strcpy (StrSpecialChar,"?");
+                  NumPrintableCharsFromReturn++;
+                  ThereIsSpaceChar = false;
+                  break;
+                case 0x5C:  /* "%5C" --> "&#92;" (\) */
+        	  if (ChangeTo == Str_TO_MARKDOWN)
+        	    {	// Escape sequence for database, two characters
+        	     StrSpecialChar[0] = '\\';	// 1. An inverted bar
+        	     StrSpecialChar[1] = '\\';	// 2. An inverted bar
+        	     StrSpecialChar[2] = '\0';	// End of string
+        	    }
+        	  else
+                     strcpy (StrSpecialChar,"&#92;"); // "\" is stored as HTML code to avoid problems when displaying it
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1000,8 +1031,9 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   break;
                default: /* The rest of special chars are stored as special code */
                   sprintf (StrSpecialChar,
-                           ChangeTo == Str_TO_TEXT ? "%c" :
-                        	                     "&#%u;",
+                           (ChangeTo == Str_TO_TEXT ||
+                            ChangeTo == Str_TO_MARKDOWN) ? "%c" :
+                        	                           "&#%u;",
                 	   SpecialChar);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;

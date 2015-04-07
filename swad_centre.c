@@ -113,7 +113,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    /***** Get centres with pending degrees *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_CTR_ADM:
+      case Rol_CTR_ADM:
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
                         " FROM degrees,ctr_admin,centres"
                         " WHERE (degrees.Status & %u)<>0"
@@ -122,7 +122,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                         " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
                   (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
                         " FROM degrees,centres"
                         " WHERE (degrees.Status & %u)<>0"
@@ -275,7 +275,7 @@ static void Ctr_Configuration (bool PrintView)
          Act_PutContextualLink (ActPrnCtrInf,NULL,"print",Txt_Print);
 
 	 /* Links to upload logo and photo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	   {
 	    Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
 	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
@@ -330,7 +330,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "</tr>");
 
 	 /* Photo attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM && !PrintView)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\""
@@ -493,8 +493,8 @@ static void Ctr_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_ROLE_TEACHER,Gbl.CurrentCtr.Ctr.CtrCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -508,8 +508,8 @@ static void Ctr_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassFormul[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_ROLE_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
 
       /***** End frame *****/
@@ -535,7 +535,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActUnk,ActUnk);
 
       /***** Put link (form) to edit centres in current institution *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_GUEST__)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
          Lay_PutFormToEdit (ActEdiCtr);
 
       /***** List centres *****/
@@ -790,9 +790,9 @@ void Ctr_GetListCentres (long InsCod)
 		     " AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
 	       InsCod,
-	       (unsigned) Rol_ROLE_TEACHER,
+	       (unsigned) Rol_TEACHER,
 	       InsCod,InsCod,
-	       (unsigned) Rol_ROLE_TEACHER,
+	       (unsigned) Rol_TEACHER,
 	       OrderBySubQuery);
    else			// InsCod <= 0 ==> all the centres
       sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
@@ -812,8 +812,8 @@ void Ctr_GetListCentres (long InsCod)
 		     " WHERE crs_usr.Role='%u'"
 		     " AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       (unsigned) Rol_ROLE_TEACHER,
-	       (unsigned) Rol_ROLE_TEACHER,
+	       (unsigned) Rol_TEACHER,
+	       (unsigned) Rol_TEACHER,
 	       OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get centres");
 
@@ -917,9 +917,9 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
                      " WHERE crs_usr.Role='%u'"
                      " AND crs_usr.UsrCod=usr_data.UsrCod))",
                Ctr->CtrCod,
-               (unsigned) Rol_ROLE_TEACHER,
+               (unsigned) Rol_TEACHER,
                Ctr->CtrCod,
-               (unsigned) Rol_ROLE_TEACHER);
+               (unsigned) Rol_TEACHER);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a centre")) // Centre found...
         {
          /* Get row */
@@ -1206,7 +1206,7 @@ static void Ctr_ListCentresForEdition (void)
       /* Institution */
       fprintf (Gbl.F.Out,"<td class=\"DAT\""
 	                 " style=\"text-align:left; vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)	// I can select institution
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// I can select institution
 	{
 	 Act_FormStart (ActChgCtrIns);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
@@ -1334,7 +1334,7 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left; vertical-align:middle;\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM &&
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgCtrSta);
@@ -1382,7 +1382,7 @@ static void Ctr_ListCentresForEdition (void)
 
 static bool Ctr_CheckIfICanEdit (struct Centre *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM ||		// I am an institution administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||		// I am an institution administrator or higher
                   ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&		// Centre is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));		// I am the requester
   }
@@ -1973,9 +1973,9 @@ static void Ctr_PutFormToCreateCentre (void)
    Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Start form *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       Act_FormStart (ActNewCtr);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol_ROLE_GUEST__)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
       Act_FormStart (ActReqCtr);
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");

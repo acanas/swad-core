@@ -747,6 +747,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BLUE_FORM_BOLD		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 .YELLOW_FORM_BOLD	{color:#7C4D2A; font-size:11pt; font-weight:bold;}
 
+/********************************* Course info *******************************/
+#crs_info
+	{
+	margin:0;
+	padding:0 10px;
+	color:#404040;
+	}
+
+/*****************************************************************************/
 
 .FILENAME		{color:#404040; font-size:14pt; font-weight:bold;}
 

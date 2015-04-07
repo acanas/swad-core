@@ -444,6 +444,12 @@ static void Lay_WriteScripts (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/swad.js\">"
                       "</script>\n",
 	    Cfg_HTTPS_URL_SWAD_PUBLIC);
+
+   /***** Script for MathJax *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+	              " src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
+	              "</script>\n");
+
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
      {
       Lay_WriteScriptInit ();

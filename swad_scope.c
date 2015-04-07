@@ -229,16 +229,16 @@ void Sco_SetScopesForListingGuests (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_CTR_ADM:
+      case Rol_CTR_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
 	 Gbl.Scope.Default = Sco_SCOPE_CTR;
 	 break;
-      case Rol_ROLE_INS_ADM:
+      case Rol_INS_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS |
 		             1 << Sco_SCOPE_CTR;
 	 Gbl.Scope.Default = Sco_SCOPE_INS;
 	 break;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
 	                     1 << Sco_SCOPE_CTY     |
 		             1 << Sco_SCOPE_INS |
@@ -260,16 +260,16 @@ void Sco_SetScopesForListingStudents (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:
-      case Rol_ROLE_TEACHER:
+      case Rol_STUDENT:
+      case Rol_TEACHER:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
 	 Gbl.Scope.Default = Sco_SCOPE_CRS;
 	 break;
-      case Rol_ROLE_DEG_ADM:
+      case Rol_DEG_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
 	 Gbl.Scope.Default = Sco_SCOPE_DEG;
 	 break;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
 	                     1 << Sco_SCOPE_CTY     |
 		             1 << Sco_SCOPE_INS |

@@ -130,8 +130,8 @@ void Att_SeeAttEvents (void)
    /* Put link (form) to create a bew attendance event */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          Att_PutFormToCreateNewAttEvent ();
 	 Att_PutFormToListStds ();
          break;
@@ -220,7 +220,7 @@ static void Att_ShowAllAttEvents (void)
 		      "</th>"
 		      "</tr>",
 	    Txt_Event,
-	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+	    Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write all the attendance events *****/
    for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
@@ -344,8 +344,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    /* Forms to remove/edit this attendance event */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          Att_PutFormsToRemEditOneAttEvent (Att->AttCod,Att->Hidden);
          break;
       default:
@@ -549,8 +549,8 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
    /***** Get list of attendance events from database *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          HiddenSubQuery[0] = '\0';
          break;
       default:
@@ -1858,11 +1858,11 @@ void Att_SeeOneAttEvent (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:
+      case Rol_STUDENT:
 	 Att_ListAttOnlyMeAsStudent (&Att);
 	 break;
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
 	 /***** Show list of students *****/
          Att_ListAttStudents (&Att);
          break;
@@ -1913,7 +1913,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 		      "%s"
 		      "</th>"
 		      "</tr>",
-	    Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 	    Txt_Student_comment,
 	    Txt_Teachers_comment);
 
@@ -1949,7 +1949,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -1984,7 +1984,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                          "%s"
                          "</th>"
                          "</tr>",
-               Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+               Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
                Txt_Student_comment,
                Txt_Teachers_comment);
 
@@ -2013,7 +2013,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
@@ -2061,7 +2061,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	    BgColor,UsrDat->EncryptedUsrCod);
    if (Present)	// This student has attended to the event?
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)	// A student can not change his attendance
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// A student can not change his attendance
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," />"
 	              "</td>");
@@ -2114,7 +2114,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">",
 	    BgColor);
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT && Att->Open)	// Show with form
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Att->Open)	// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
 	       UsrDat->UsrCod,CommentStd);
    else								// Show without form
@@ -2129,7 +2129,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">",
 	    BgColor);
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)	// Show with form
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)	// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
 	       UsrDat->UsrCod,CommentTch);
    else	if (Att->CommentTchVisible)			// Show without form
@@ -2280,7 +2280,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstStds *****/
    /* Get list of students in the groups selected */
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)	// If there are students in the groups selected...
      {
@@ -2362,7 +2362,7 @@ void Att_RegisterStudentsInAttEvent (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
    else	// Gbl.Usrs.LstStds.NumUsrs == 0
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_ROLE_STUDENT]);
+      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
 
    /***** Show the attendance event again *****/
    Gbl.AttEvents.AttCod = Att.AttCod;
@@ -2623,7 +2623,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
    Usr_ShowFormsToSelectUsrListType (ActReqLstAttStd);
 
    /***** Get and order lists of users from current course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -2640,7 +2640,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
 
          /* Write list of students to select some of them */
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
-         Usr_ListUsersToSelect (Rol_ROLE_STUDENT);
+         Usr_ListUsersToSelect (Rol_STUDENT);
          Lay_EndRoundFrameTable10 ();
 
 	 /* Free list of attendance events */
@@ -2656,7 +2656,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
@@ -2973,7 +2973,7 @@ static void Att_ListEventsToSelect (void)
 		      "</th>"
 		      "</tr>",
 	    Txt_Event,
-	    Txt_ROLES_PLURAL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+	    Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** List the events *****/
    for (NumAttEvent = 0, Gbl.RowEvenOdd = 0;
@@ -3137,7 +3137,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
                       "</th>",
             Gbl.Usrs.Listing.WithPhotos ? 4 :
         	                          3,
-            Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+            Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;

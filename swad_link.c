@@ -80,7 +80,7 @@ void Lnk_SeeLinks (void)
    Lnk_GetListLinks ();
 
    /***** Put link (form) to edit links *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lnk_PutFormToEditLinks ();
 
    /***** Table head *****/

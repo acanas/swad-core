@@ -692,19 +692,21 @@ mysql> DESCRIBE crs_info_src;
    /***** Table crs_info_txt *****/
 /*
 mysql> DESCRIBE crs_info_txt;
-+----------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                                                       | Null | Key | Default | Extra |
-+----------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| CrsCod   | int(11)                                                                                    | NO   | PRI | -1      |       |
-| InfoType | enum('intro','description','theory','practices','bibliography','FAQ','links','assessment') | NO   | PRI | NULL    |       |
-| InfoTxt  | longtext                                                                                   | NO   |     | NULL    |       |
-+----------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
++-------------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field       | Type                                                                                       | Null | Key | Default | Extra |
++-------------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| CrsCod      | int(11)                                                                                    | NO   | PRI | -1      |       |
+| InfoType    | enum('intro','description','theory','practices','bibliography','FAQ','links','assessment') | NO   | PRI | NULL    |       |
+| InfoTxtHTML | longtext                                                                                   | NO   |     | NULL    |       |
+| InfoTxtMD   | longtext                                                                                   | NO   |     | NULL    |       |
++-------------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_txt ("
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
-                   "InfoTxt LONGTEXT NOT NULL,"
+                   "InfoTxtHTML LONGTEXT NOT NULL,"
+                   "InfoTxtMD LONGTEXT NOT NULL,"
                    "UNIQUE INDEX(CrsCod,InfoType))");
 
       /***** Table crs_last *****/

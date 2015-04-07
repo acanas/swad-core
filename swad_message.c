@@ -138,7 +138,7 @@ void Msg_ListEMails (void)
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -228,7 +228,7 @@ void Msg_ListEMails (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
@@ -277,7 +277,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
    /***** Get list of users belonging to the current course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Get and update type of list, number of columns in class photo
              and preference about view photos *****/
@@ -290,8 +290,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
-      Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+      Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
+      Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
       if (Gbl.Usrs.LstTchs.NumUsrs ||
           Gbl.Usrs.LstStds.NumUsrs)
@@ -323,8 +323,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
       /* Draw two lists of users with the recipients: one with the teachers of the course and another one with the students */
-      Usr_ListUsersToSelect (Rol_ROLE_TEACHER);
-      Usr_ListUsersToSelect (Rol_ROLE_STUDENT);
+      Usr_ListUsersToSelect (Rol_TEACHER);
+      Usr_ListUsersToSelect (Rol_STUDENT);
 
       /* Other users (nicknames) */
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients (Gbl.Msg.IsReply);
@@ -376,7 +376,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 	              " background-color:%s;\"",
             VERY_LIGHT_BLUE);
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\">%s:",
 	       Colspan,Txt_Other_recipients);
    else
@@ -389,7 +389,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
                       "<td",
             Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," style=\"text-align:left;\">"
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
@@ -583,7 +583,7 @@ void Msg_RecMsgFromUsr (void)
    /***** If there are no recipients... *****/
    if ((NumRecipients = Usr_CountNumUsrsInEncryptedList ()))
      {
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT &&
+      if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
           NumRecipients > Cfg_MAX_RECIPIENTS)
         {
          /* Write warning message */
@@ -1792,7 +1792,7 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
    sprintf (Query,"SELECT COUNT(*) FROM msg_snt,crs_usr"
                   " WHERE msg_snt.CrsCod='%ld' AND crs_usr.CrsCod='%ld' AND crs_usr.Role='%u'"
                   " AND msg_snt.UsrCod=crs_usr.UsrCod",
-                  CrsCod,CrsCod,(unsigned) Rol_ROLE_TEACHER);
+                  CrsCod,CrsCod,(unsigned) Rol_TEACHER);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of messages sent by teachers");
   }
 
@@ -2662,7 +2662,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td style=\"text-align:left;\">");
       if (TypeOfMessages == Msg_MESSAGES_RECEIVED &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_VISITOR)
+	  Gbl.Usrs.Me.LoggedRole >= Rol_VISITOR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,Subject,FromThisCrs,Replied,
                                UsrDat.EncryptedUsrCod);
@@ -3030,7 +3030,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
      }
    else
       fprintf (Gbl.F.Out,"[%s]",
-               Txt_ROLES_SINGUL_abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
+               Txt_ROLES_SINGUL_abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "</table>");

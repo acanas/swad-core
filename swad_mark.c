@@ -620,7 +620,7 @@ void Mrk_ShowMyMarks (void)
 
 
    /***** Set the student whose marks will be shown *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)	// If I am logged as student...
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// If I am logged as student...
       UsrDat = &Gbl.Usrs.Me.UsrDat;			// ...use my list of IDs
    else							// If I am logged as teacher, administrator, superuser...
      {
@@ -635,7 +635,7 @@ void Mrk_ShowMyMarks (void)
          else
            {
             UsrIsOK = false;
-            Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
+            Usr_ShowWarningNoUsersFound (Rol_STUDENT);
            }
         }
       else					// Course zone
@@ -648,7 +648,7 @@ void Mrk_ShowMyMarks (void)
          else
            {
             UsrIsOK = false;
-            Usr_ShowWarningNoUsersFound (Rol_ROLE_STUDENT);
+            Usr_ShowWarningNoUsersFound (Rol_STUDENT);
            }
         }
      }

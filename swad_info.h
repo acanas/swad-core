@@ -88,8 +88,10 @@ void Inf_SetInfoSrcIntoDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t Inf
 void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
 Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
 Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
-void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,const char *InfoTxt);
-void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,char *InfoTxt,size_t MaxLength);
+void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
+                           const char *InfoTxtHTML,const char *InfoTxtMD);
+void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
+                           char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength);
 bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType);
 int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer);
 void Inf_EditPlainTxtInfo (void);

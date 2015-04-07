@@ -970,7 +970,7 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
       if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
 	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_ROLE_STUDENT)
+	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_STUDENT)
 	 Rec_ShowRecordOneStdCrs ();
   }
 
@@ -989,7 +989,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /***** Link to edit record fields *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
       Rec_PutLinkToEditRecordFields ();
 
    /***** Link to print view *****/
@@ -1009,10 +1009,10 @@ static void Rec_ShowRecordOneStdCrs (void)
 
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
      {
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	 Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-      else if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT &&
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
 	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
 	 Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD,&Gbl.Usrs.Other.UsrDat);
      }
@@ -1060,7 +1060,7 @@ void Rec_ListRecordsStdsCrs (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to edit record fields */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
          Rec_PutLinkToEditRecordFields ();
 
       /* Link to print view */
@@ -1098,7 +1098,7 @@ void Rec_ListRecordsStdsCrs (void)
 
             /* Record of the student in the course */
             if (Gbl.CurrentCrs.Records.LstFields.Num &&		// There are fields in the record
-        	(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER ||	// I am teacher in this course
+        	(Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// I am teacher in this course
         	 UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// I am student in this course and it's me
                Rec_ShowCrsRecord (TypeOfView,&UsrDat);
 
@@ -1131,7 +1131,7 @@ void Rec_GetUsrAndShowRecordOneTchCrs (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
       if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
 	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_ROLE_TEACHER)
+	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_TEACHER)
 	 Rec_ShowRecordOneTchCrs ();
   }
 
@@ -1652,7 +1652,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_ROLE_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
         {
          /* Get text of the form */
@@ -1675,7 +1675,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_ROLE_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
         {
          /***** Check if already exists this field for this user in database *****/
@@ -1802,7 +1802,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_ROLE_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
          /* Allocate memory for the texts of the fields */
          if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
@@ -1820,7 +1820,7 @@ void Rec_FreeMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_ROLE_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
          /* Free memory of the text of the field */
          if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text)
@@ -1976,12 +1976,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    const char *ClassData;
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT);	// My current role is student
-   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);	// My current role is teacher
-   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);	// My current role is superuser
-   bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER));	// He/she already is a teacher in any course
-   bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ||
-	                         UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER);
+   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
+   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
+   bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_TEACHER));	// He/she already is a teacher in any course
+   bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
+	                         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
    bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                        TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
    bool RoleForm = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
@@ -1992,10 +1992,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
                     (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
-                     Gbl.Usrs.Me.LoggedRole > Rol_ROLE_TEACHER));
+                     Gbl.Usrs.Me.LoggedRole > Rol_TEACHER));
    bool PutFormLinks;	// Put links (forms) inside record card
    bool ShowEmail = (ItsMe ||
-	             Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	             Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	             DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
@@ -2007,7 +2007,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 TypeOfView == Rec_RECORD_PRINT) &&
 		        (IAmLoggedAsTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
    bool ShowID = (ItsMe ||
-	          Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	          Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	          DataForm ||
 	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
@@ -2020,7 +2020,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	              TypeOfView == Rec_RECORD_PRINT) &&
 		     IAmLoggedAsTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
    bool ShowData = ItsMe ||
-	           Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM ||
+	           Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	           UsrDat->Accepted;
    bool ShowIDRows = (TypeOfView != Rec_RECORD_PUBLIC);
    bool ShowAddressRows = (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
@@ -2030,15 +2030,15 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   ((TypeOfView == Rec_RECORD_LIST          ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
-			    UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT));
+			    UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
    bool ShowTeacherRows = (((TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 			     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
 			     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
 			     TypeOfView == Rec_MY_COURSE_RECORD_CHECK) &&
-			    (UsrDat->Roles & (1 << Rol_ROLE_TEACHER))) ||	// He/she (me, really) is a teacher in any course
+			    (UsrDat->Roles & (1 << Rol_TEACHER))) ||	// He/she (me, really) is a teacher in any course
 			   ((TypeOfView == Rec_RECORD_LIST ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
-			    UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER));	// He/she is a teacher in the current course
+			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
    Usr_Sex_t Sex;
    Rol_Role_t Role;
    Rol_Role_t DefaultRoleInCurrentCrs;
@@ -2191,7 +2191,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   IAmLoggedAsTeacher ||
 	   IAmLoggedAsSysAdm))
 	{
-	 Act_FormStart ((UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
+	 Act_FormStart ((UsrDat->RoleInCurrentCrsDB == Rol_STUDENT) ? ActSeeRecOneStd :
 									   ActSeeRecOneTch);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
@@ -2207,11 +2207,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       /***** Button to admin user *****/
       if (ItsMe ||
-	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER) ||
-	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM) ||
-	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADM) ||
-	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM) ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ||
+	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM) ||
+	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM) ||
+	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
 	 Act_FormStart (ActReqMdfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -2227,7 +2227,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	}
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// A course is selected
-	  UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT &&	// He/she is a student in the current course
+	  UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
 	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
 	{
 	 /***** Button to view user's assignments and works *****/
@@ -2486,11 +2486,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    switch (TypeOfView)
 	      {
 	       case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
-		  DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
-											Rol_ROLE_STUDENT;
+		  DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_TEACHER)) ? Rol_TEACHER :
+											Rol_STUDENT;
 		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
-		  for (Role = Rol_ROLE_STUDENT;
-		       Role <= Rol_ROLE_TEACHER;
+		  for (Role = Rol_STUDENT;
+		       Role <= Rol_TEACHER;
 		       Role++)
 		    {
 		     fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -2502,12 +2502,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  fprintf (Gbl.F.Out,"</select>");
 		  break;
 	       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:	// The other user already exists in the platform
-		  if (UsrDat->RoleInCurrentCrsDB < Rol_ROLE_STUDENT)	// The other user does not belong to current course
+		  if (UsrDat->RoleInCurrentCrsDB < Rol_STUDENT)	// The other user does not belong to current course
 		    {
 		     /* If there is a request of this user, default role is the requested role */
-		     if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_ROLE_UNKNOWN)
-			DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_ROLE_TEACHER)) ? Rol_ROLE_TEACHER :
-											      Rol_ROLE_STUDENT;
+		     if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_UNKNOWN)
+			DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_TEACHER)) ? Rol_TEACHER :
+											      Rol_STUDENT;
 		    }
 		  else
 		     DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
@@ -2515,18 +2515,18 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
 		  switch (Gbl.Usrs.Me.LoggedRole)
 		    {
-		     case Rol_ROLE_GUEST__:
-		     case Rol_ROLE_VISITOR:
-		     case Rol_ROLE_STUDENT:
+		     case Rol__GUEST_:
+		     case Rol_VISITOR:
+		     case Rol_STUDENT:
 			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
 				 (unsigned) Gbl.Usrs.Me.LoggedRole,
 				 Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 			break;
-		     case Rol_ROLE_TEACHER:
-			for (Role = Rol_ROLE_STUDENT;
-			     Role <= Rol_ROLE_TEACHER;
+		     case Rol_TEACHER:
+			for (Role = Rol_STUDENT;
+			     Role <= Rol_TEACHER;
 			     Role++)
-			   if (Role == Rol_ROLE_STUDENT ||
+			   if (Role == Rol_STUDENT ||
 			       (UsrDat->Roles & (1 << Role)))	// A teacher can not upgrade a student (in all other courses) to teacher
 			     {
 			      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -2536,10 +2536,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				       Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 			     }
 			break;
-		     case Rol_ROLE_DEG_ADM:
-		     case Rol_ROLE_SYS_ADM:
-			for (Role = Rol_ROLE_STUDENT;
-			     Role <= Rol_ROLE_TEACHER;
+		     case Rol_DEG_ADM:
+		     case Rol_SYS_ADM:
+			for (Role = Rol_STUDENT;
+			     Role <= Rol_TEACHER;
 			     Role++)
 			  {
 			   fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -2558,16 +2558,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
 		  switch (Gbl.Usrs.Me.LoggedRole)
 		    {
-		     case Rol_ROLE_TEACHER:	// A teacher only can create students
+		     case Rol_TEACHER:	// A teacher only can create students
 			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
-				 (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+				 (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 			break;
-		     case Rol_ROLE_DEG_ADM:	// An administrator or a superuser can create students and teachers
-		     case Rol_ROLE_SYS_ADM:
+		     case Rol_DEG_ADM:	// An administrator or a superuser can create students and teachers
+		     case Rol_SYS_ADM:
 			fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
 					   "<option value=\"%u\">%s</option>",
-				 (unsigned) Rol_ROLE_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
-				 (unsigned) Rol_ROLE_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
+				 (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+				 (unsigned) Rol_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
 			break;
 		     default:	// The rest of users can not register other users
 			break;
@@ -3054,7 +3054,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		 {
 		  // Don't show groups if I don't belong to course
 		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT));
+		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
 		 }
 	       else
 		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
@@ -3125,25 +3125,25 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
    /***** Check if I can register a user
           with the received role in current course *****/
    /* Received role must be student or teacher */
-   if (!(Role == Rol_ROLE_STUDENT ||
-         Role == Rol_ROLE_TEACHER))
+   if (!(Role == Rol_STUDENT ||
+         Role == Rol_TEACHER))
       Lay_ShowErrorAndExit ("Wrong user's role.");
 
    /* Check for other possible errors */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:		// I am logged as student
+      case Rol_STUDENT:		// I am logged as student
          /* A student can only change his/her data, but not his/her role */
-	 if (Role != Rol_ROLE_STUDENT)
+	 if (Role != Rol_STUDENT)
             Lay_ShowErrorAndExit ("Wrong user's role.");
 	 break;
-      case Rol_ROLE_TEACHER:		// I am logged as teacher
+      case Rol_TEACHER:		// I am logged as teacher
 	 /* A teacher can only register another user as teacher
 	    if the other is already teacher in any course.
 	    That is, a teacher can not upgrade a student
 	    (in all other courses) to teacher */
-         if (Role == Rol_ROLE_TEACHER &&				// He/she will be a teacher in current course
-             !(Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_ROLE_TEACHER)))	// He/she was not a teacher in any course
+         if (Role == Rol_TEACHER &&				// He/she will be a teacher in current course
+             !(Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER)))	// He/she was not a teacher in any course
             Lay_ShowErrorAndExit ("Wrong user's role.");
          break;
       default:
@@ -3271,13 +3271,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumIns;
    unsigned NumCtr;
    unsigned NumDpt;
-   bool IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_ROLE_TEACHER));
+   bool IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
 
    /***** If there is no institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0 ||
        Gbl.Usrs.Me.UsrDat.InsCod < 0)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_institution);
-   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_ROLE_TEACHER)) &&
+   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER)) &&
             (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
              Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0))
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);

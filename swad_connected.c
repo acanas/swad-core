@@ -95,7 +95,7 @@ void Con_ShowConnectedUsrs (void)
                       "<td style=\"padding-bottom:10px; text-align:center;\">");
    Act_FormStart (ActLstCon);
    Gbl.Scope.Current = Sco_SCOPE_CRS;
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
 	       The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
@@ -317,8 +317,8 @@ void Con_ShowGlobalConnectedUsrs (void)
                       "</td>"
                       "</tr>",
             StdsTotal,
-            (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN] :
-                               Txt_ROLES_PLURAL_abc  [Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN]);
+            (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
+                               Txt_ROLES_PLURAL_abc  [Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of teachers *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -328,8 +328,8 @@ void Con_ShowGlobalConnectedUsrs (void)
                       "</td>"
                       "</tr>",
             TchsTotal,
-            (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN] :
-                               Txt_ROLES_PLURAL_abc  [Rol_ROLE_TEACHER][Usr_SEX_UNKNOWN]);
+            (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
+                               Txt_ROLES_PLURAL_abc  [Rol_TEACHER][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of users who do not belong to any course *****/
    if (WithoutCoursesTotal)
@@ -340,8 +340,8 @@ void Con_ShowGlobalConnectedUsrs (void)
                          "</td>"
                          "</tr>",
                WithoutCoursesTotal,
-               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN] :
-                                            Txt_ROLES_PLURAL_abc  [Rol_ROLE_GUEST__][Usr_SEX_UNKNOWN]);
+               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
+                                            Txt_ROLES_PLURAL_abc  [Rol__GUEST_][Usr_SEX_UNKNOWN]);
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>"
@@ -358,10 +358,10 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
    Gbl.Usrs.Connected.NumUsrsToList = 0;
 
    /***** Number of teachers *****/
-   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_ROLE_TEACHER);
+   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_TEACHER);
 
    /***** Number of students *****/
-   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_ROLE_STUDENT);
+   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_STUDENT);
   }
 
 /*****************************************************************************/
@@ -441,7 +441,7 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
      }
    fprintf (Gbl.F.Out,"<span class=\"%s\">%u %s %s</span>",
             The_ClassConnected[Gbl.Prefs.Theme],
-            Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_ROLE_UNKNOWN,&UsrSex),
+            Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&UsrSex),
             Txt_from,
             LocationName);
 
@@ -461,15 +461,15 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
    switch (Gbl.Usrs.Connected.WhereToShow)
      {
       case Con_SHOW_ON_MAIN_ZONE:
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_ROLE_TEACHER);
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_ROLE_STUDENT);
+         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TEACHER);
+         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STUDENT);
          break;
       case Con_SHOW_ON_RIGHT_COLUMN:
          Gbl.Usrs.Connected.NumUsr        = 0;
          Gbl.Usrs.Connected.NumUsrs       = 0;
          Gbl.Usrs.Connected.NumUsrsToList = 0;
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_ROLE_TEACHER);
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_ROLE_STUDENT);
+         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_TEACHER);
+         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_STUDENT);
          break;
      }
 
@@ -489,10 +489,10 @@ static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role
    /***** Get number of connected users who belong to current course *****/
    switch (Role)
      {
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
          Gbl.Usrs.Connected.NumTchs = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.SexTchs);
          break;
-      case Rol_ROLE_STUDENT:
+      case Rol_STUDENT:
          Gbl.Usrs.Connected.NumStds = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.SexStds);
          break;
       default:
@@ -501,7 +501,7 @@ static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role
 
    /***** List connected users belonging to this course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
   }
 
@@ -533,27 +533,27 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
       case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
+         if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
             return;
          break;
       case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_INS_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
             return;
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_CTR_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
             return;
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+         if (!(Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
+               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
             return;
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
             return;
          break;
       default:
@@ -581,11 +581,11 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    /***** Write number of connected users who belong to current course *****/
    switch (Role)
      {
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
          NumUsrsThisRole = Gbl.Usrs.Connected.NumTchs;
          UsrSex = Gbl.Usrs.Connected.SexTchs;
          break;
-      case Rol_ROLE_STUDENT:
+      case Rol_STUDENT:
          NumUsrsThisRole = Gbl.Usrs.Connected.NumStds;
          UsrSex = Gbl.Usrs.Connected.SexStds;
          break;
@@ -633,7 +633,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
       */
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
-               Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
             return;
          break;
       default:
@@ -674,8 +674,8 @@ void Con_UpdateMeInConnectedList (void)
    Rol_Role_t MyRoleInConnected;
 
    /***** Which role will be stored in connected table? *****/
-   MyRoleInConnected = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ||
-                        Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER) ? Gbl.Usrs.Me.LoggedRole :
+   MyRoleInConnected = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
+                        Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ? Gbl.Usrs.Me.LoggedRole :
                                                                       Gbl.Usrs.Me.MaxRole;
 
    /***** Update my entry in connected list. The role which is stored is the role of the last click *****/
@@ -713,7 +713,7 @@ static unsigned Con_GetConnectedGuestsTotal (void)
    /***** Get number of connected users not belonging to any course *****/
    sprintf (Query,"SELECT COUNT(*) FROM connected"
 	          " WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_ROLE_GUEST__);
+            (unsigned) Rol__GUEST_);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected users who not belong to any course");
   }
 
@@ -730,7 +730,7 @@ static unsigned Con_GetConnectedStdsTotal (void)
 
    /***** Get number of connected students from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_ROLE_STUDENT);
+            (unsigned) Rol_STUDENT);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected students");
   }
 
@@ -747,7 +747,7 @@ static unsigned Con_GetConnectedTchsTotal (void)
 
    /***** Get number of connected teachers from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_ROLE_TEACHER);
+            (unsigned) Rol_TEACHER);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected teachers");
   }
 
@@ -770,7 +770,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM connected,usr_data"
                            " WHERE connected.UsrCod=usr_data.UsrCod");
@@ -783,7 +783,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
                            " WHERE institutions.CtyCod='%ld'"
@@ -809,7 +809,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      (unsigned) Role);
          break;
       case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM centres,degrees,courses,crs_usr,connected,usr_data"
                            " WHERE centres.InsCod='%ld'"
@@ -833,7 +833,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM degrees,courses,crs_usr,connected,usr_data"
                            " WHERE degrees.CtrCod='%ld'"
@@ -855,7 +855,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      (unsigned) Role);
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM courses,crs_usr,connected,usr_data"
                            " WHERE courses.DegCod='%ld'"
@@ -875,7 +875,7 @@ static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Ro
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (Role == Rol_ROLE_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
+         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
             sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
                            " FROM crs_usr,connected,usr_data"
                            " WHERE crs_usr.CrsCod='%ld'"
@@ -1036,7 +1036,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	              " vertical-align:middle; background-color:%s;\">",
 	    Font,Color);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
-   Act_FormStartId ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
+   Act_FormStartId ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
 	                                         ActSeeRecOneTch,
 	            Gbl.FormId);
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
@@ -1229,7 +1229,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                   Font,Gbl.ColorRows[Gbl.RowEvenOdd]);
          if (PutLinkToRecord)
            {
-	    Act_FormStart ((Role == Rol_ROLE_STUDENT) ? ActSeeRecOneStd :
+	    Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
 							ActSeeRecOneTch);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	    Act_LinkFormSubmit (UsrDat.FullName,Font);

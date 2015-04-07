@@ -266,11 +266,11 @@ static bool Svy_CheckIfICanCreateSvy (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
          return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case Rol_ROLE_DEG_ADM:
+      case Rol_DEG_ADM:
          return (Gbl.CurrentDeg.Deg.DegCod > 0);
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
          return true;
       default:
          return false;
@@ -490,8 +490,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Users);
-   for (Role = Rol_ROLE_STUDENT, RolesSelected = false;
-	Role <= Rol_ROLE_TEACHER;
+   for (Role = Rol_STUDENT, RolesSelected = false;
+	Role <= Rol_TEACHER;
 	Role++)
      {
       if (RolesSelected)
@@ -797,7 +797,7 @@ void Svy_GetListSurveys (void)
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_SYS_ADM:
+         case Rol_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -812,12 +812,12 @@ void Svy_GetListSurveys (void)
                OrderBySubQuery);
      }
    else if ((Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.CurrentCrs.Crs.CrsCod < 0) ||		// If degree selected, but no course selected
-             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM)				// or if I am a degree administrator
+             Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM)				// or if I am a degree administrator
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_DEG_ADM:
-         case Rol_ROLE_SYS_ADM:
+         case Rol_DEG_ADM:
+         case Rol_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -834,12 +834,12 @@ void Svy_GetListSurveys (void)
                OrderBySubQuery);
      }
    else	if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-            Gbl.Usrs.Me.LoggedRole != Rol_ROLE_DEG_ADM)
+            Gbl.Usrs.Me.LoggedRole != Rol_DEG_ADM)
      {
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_TEACHER:
-         case Rol_ROLE_SYS_ADM:
+         case Rol_TEACHER:
+         case Rol_SYS_ADM:
             HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
             break;
          default:
@@ -1005,7 +1005,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
          Can I edit survey? */
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_STUDENT:
+         case Rol_STUDENT:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0) &&
                                           Svy->Status.Visible &&
                                           Svy->Status.Open &&
@@ -1014,19 +1014,19 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
                                           Svy->Status.IHaveAnswered;
             Svy->Status.ICanEdit = false;
             break;
-         case Rol_ROLE_TEACHER:
+         case Rol_TEACHER:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0) &&
                                           !Svy->Status.ICanAnswer;
             Svy->Status.ICanEdit = Svy->CrsCod > 0 &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
-         case Rol_ROLE_DEG_ADM:
+         case Rol_DEG_ADM:
             Svy->Status.ICanViewResults = false;
             Svy->Status.ICanEdit = Svy->DegCod > 0 &&
                                    Svy->CrsCod < 0 &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
-         case Rol_ROLE_SYS_ADM:
+         case Rol_SYS_ADM:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0);
             Svy->Status.ICanEdit = true;
             break;
@@ -1531,7 +1531,7 @@ void Svy_RequestCreatOrEditSvy (void)
       Svy.DateTimes[Svy_END_TIME  ].Time.Minute = 59;
       Svy.DateTimes[Svy_END_TIME  ].Time.Second = 59;
       Svy.Title[0] = '\0';
-      Svy.Roles = (1 << Rol_ROLE_STUDENT);
+      Svy.Roles = (1 << Rol_STUDENT);
       Svy.NumQsts = 0;
       Svy.NumUsrs = 0;
       Svy.Status.Visible = true;
@@ -1697,7 +1697,7 @@ static bool Svy_SetDefaultAndAllowedForEdition (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
          if (Gbl.CurrentCrs.Crs.CrsCod > 0)
            {
             Gbl.Scope.Default = Sco_SCOPE_CRS;
@@ -1705,7 +1705,7 @@ static bool Svy_SetDefaultAndAllowedForEdition (void)
             return true;
            }
          return false;
-       case Rol_ROLE_DEG_ADM:
+       case Rol_DEG_ADM:
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
            {
             Gbl.Scope.Default = Sco_SCOPE_DEG;
@@ -1713,7 +1713,7 @@ static bool Svy_SetDefaultAndAllowedForEdition (void)
             return true;
            }
          return false;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
          Gbl.Scope.Default = Sco_SCOPE_SYS;
          Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
 	                     // 1 << Sco_SCOPE_CTY     |	// TODO: Add this scope

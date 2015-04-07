@@ -131,13 +131,13 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
    /* Check if I have permission to change user's photo */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
 	 return Usr_CheckIfUsrBelongsToCrs (UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
-      case Rol_ROLE_DEG_ADM:
+      case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */
 	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
 	 return true;
       default:
 	 return false;

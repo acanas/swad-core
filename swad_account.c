@@ -606,10 +606,10 @@ bool Acc_CheckIfICanEliminateAccount (bool ItsMe)
    // A user logged as superuser can eliminate any user except her/him
    // Other users only can eliminate themselves
    return (( ItsMe &&								// It's me
-	    (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_ROLE_SYS_ADM)) == 0)	// I can not be superuser
+	    (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_SYS_ADM)) == 0)	// I can not be superuser
 	   ||
            (!ItsMe &&								// It's not me
-             Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM));			// I am logged as superuser
+             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));			// I am logged as superuser
   }
 
 /*****************************************************************************/

@@ -188,7 +188,7 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
         	  UsrDat.UsrCod = ListUsrCodsForThisID.Lst[NumUsrFoundForThisID];
 		  Usr_GetUsrDataFromUsrCod (&UsrDat);	// Get data of the first user in list
 
-		  if (UsrDat.RoleInCurrentCrsDB <= Rol_ROLE_STUDENT)
+		  if (UsrDat.RoleInCurrentCrsDB <= Rol_STUDENT)
 		    {
 		     /* Update user's data if only one user with this ID */
 		     if (ListUsrCodsForThisID.NumUsrs == 1)	// Only one user with this ID
@@ -215,11 +215,11 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 			  }
 		       }
 
-		     if (UsrDat.RoleInCurrentCrsDB == Rol_ROLE_STUDENT)	// He/she was already a student in current course
+		     if (UsrDat.RoleInCurrentCrsDB == Rol_STUDENT)	// He/she was already a student in current course
 			Enr_AcceptUsrInCrs (UsrDat.UsrCod);
 		     else						// He/she not belonged to the current course
 			/* Register user as student in the current course */
-			Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
+			Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_STUDENT,
 						     Cns_QUIET,Enr_SET_ACCEPTED_TO_TRUE);
 
 		     /* Register user in the selected groups */
@@ -254,7 +254,7 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 		  UsrDat.Email[0] = '\0';
 
 	       /* Register user as student in the current course */
-	       Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_ROLE_STUDENT,
+	       Enr_RegisterUsrInCurrentCrs (&UsrDat,Rol_STUDENT,
 					    Cns_QUIET,Enr_SET_ACCEPTED_TO_TRUE);
 
 	       /* Register user in the selected groups */
@@ -329,7 +329,7 @@ bool Imp_GetImpSessionData (void)
 
       /***** Get imported user's (external) role (row[2]) *****/
       if (sscanf (row[2],"%u",&Gbl.Imported.ExternalRole) != 1)
-         Gbl.Imported.ExternalRole = Rol_ROLE_UNKNOWN;
+         Gbl.Imported.ExternalRole = Rol_UNKNOWN;
 
       Result = true;
      }
@@ -380,7 +380,7 @@ static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
 
       if (Gbl.Imported.ExternalUsrId[0] &&
           Gbl.Imported.ExternalSesId[0] &&
-          Gbl.Imported.ExternalRole == Rol_ROLE_TEACHER)
+          Gbl.Imported.ExternalRole == Rol_TEACHER)
         {
          /***** Parameters to command used to import data are passed through a temporary file *****/
          /* If the private directory does not exist, create it */
@@ -564,7 +564,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
                             "</td>" \
                             "<td class=\"DAT\""
                             " style=\"text-align:left; vertical-align:top;\">",
-                  NumStds,Txt_ROLES_PLURAL_abc[Rol_ROLE_STUDENT][Usr_SEX_UNKNOWN],
+                  NumStds,Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
                   NumStds ? ":" :
                 	    "");
          if (NumStds)

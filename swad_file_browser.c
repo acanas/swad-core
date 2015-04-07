@@ -1466,7 +1466,7 @@ void Brw_GetParAndInitFileBrowser (void)
      {
       /***** Documents of institution *****/
       case ActSeeAdmDocIns:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	    /* These roles can edit documents of institution */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_INS;
 	 else
@@ -1532,7 +1532,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of centre *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	    /* These roles can edit documents of centre */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_CTR;
 	 else
@@ -1598,7 +1598,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of degree *****/
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
 	    /* These roles can edit documents of degree */
 	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_DEG;
 	 else
@@ -1667,8 +1667,8 @@ void Brw_GetParAndInitFileBrowser (void)
          /* Set file browser type acording to last group accessed */
 	 switch (Gbl.Usrs.Me.LoggedRole)
 	   {
-	    case Rol_ROLE_TEACHER:
-	    case Rol_ROLE_SYS_ADM:
+	    case Rol_TEACHER:
+	    case Rol_SYS_ADM:
 	       /* These roles can edit documents of course/groups */
 	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_ADMI_DOCUM_GRP :
 								         Brw_ADMI_DOCUM_CRS;
@@ -1897,7 +1897,7 @@ void Brw_GetParAndInitFileBrowser (void)
       /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT) ?
+         Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT) ?
 				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_SHOW_MARKS_GRP :
 								  Brw_SHOW_MARKS_CRS) :
 				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_ADMI_MARKS_GRP :
@@ -2078,7 +2078,7 @@ void Brw_GetParAndInitFileBrowser (void)
    // If I belong to the current course or I am superuser, or file browser is briefcase ==> get whether show full tree from form
    // Else ==> show full tree (only public files)
    Gbl.FileBrowser.ShowOnlyPublicFiles = false;
-   if (Gbl.Usrs.Me.LoggedRole != Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
@@ -2850,8 +2850,8 @@ void Brw_AskEditWorksCrs (void)
    Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)
@@ -2868,8 +2868,8 @@ void Brw_AskEditWorksCrs (void)
 
          /* Put list of users to select some of them */
          Lay_StartRoundFrameTable10 (NULL,0,NULL);
-         Usr_ListUsersToSelect (Rol_ROLE_TEACHER);
-         Usr_ListUsersToSelect (Rol_ROLE_STUDENT);
+         Usr_ListUsersToSelect (Rol_TEACHER);
+         Usr_ListUsersToSelect (Rol_STUDENT);
          Lay_EndRoundFrameTable10 ();
 
          /* Button to send the form */
@@ -2879,7 +2879,7 @@ void Brw_AskEditWorksCrs (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_ROLE_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
@@ -3156,14 +3156,14 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Start form to send a message to this user *****/
    fprintf (Gbl.F.Out,"<td class=\"MSG_AUT\" style=\"width:160px;"
 	              " text-align:left; vertical-align:top;\">");
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_ROLE_STUDENT ? ActSeeRecOneStd :
+   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,
-                   UsrDat->RoleInCurrentCrsDB == Rol_ROLE_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
-                                                                    (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER));
+                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
+                                                                    (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");
@@ -3332,8 +3332,8 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_WriteTopBeforeShowingFileBrowser (void)
   {
-   bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER  );
-   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM);
+   bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER  );
+   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
@@ -3342,27 +3342,27 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocIns);
 	 break;
       case Brw_ADMI_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocIns);
 	 break;
       case Brw_SHOW_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCtr);
 	 break;
       case Brw_ADMI_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCtr);
 	 break;
       case Brw_SHOW_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocDeg);
 	 break;
       case Brw_ADMI_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_DEG_ADM)
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocDeg);
 	 break;
       case Brw_SHOW_DOCUM_CRS:
@@ -3607,7 +3607,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	 break;
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
-         if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+         if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
             sprintf (Subtitle,"(%s)",
                      Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
 	 else
@@ -4865,7 +4865,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 	              "</td>");
 
    /***** Put icon to download ZIP of folder *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_STUDENT &&	// Only ZIP folders if I am student, teacher...
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT &&	// Only ZIP folders if I am student, teacher...
        !SeeMarks)					// Do not ZIP folders when seeing marks
      {
       fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
@@ -7649,7 +7649,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /* Folder */
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>"
-                      "<input type=\"text\" name=\"NewLink\""
+                      "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"32\" maxlength=\"40\" value=\"\" />",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Folder);
 
@@ -8767,20 +8767,20 @@ void Brw_ShowFileMetadata (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_TEACHER)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -8928,7 +8928,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else
 	    /* Unknown publisher */
-	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_ROLE_UNKNOWN][Usr_SEX_UNKNOWN]);
+	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN]);
 	 fprintf (Gbl.F.Out,"</td>"
 	                    "</tr>");
 
@@ -9187,20 +9187,20 @@ void Brw_DownloadFile (void)
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOCUM_INS:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_INS_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CTR:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_CTR_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_DEG:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_DEG_ADM)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
 	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_ROLE_TEACHER)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -9342,7 +9342,7 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 	    else									// The file has no publisher
 	      {
 	       ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
+	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 		  return true;
 	      }
@@ -10530,7 +10530,7 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char *OldPath,const char
 static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
   {
    /***** I must be student, teacher, admin or superuser to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.MaxRole < Rol_STUDENT)
       return false;
 
    /***** Set depending on browser, level, logged role... *****/
@@ -10551,7 +10551,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
                   (Level > 1 &&
                    !Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
                    Gbl.FileBrowser.Asg.ICanDo &&	// If I can do this assignment
-                   (Gbl.FileBrowser.Asg.Open || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER))));
+                   (Gbl.FileBrowser.Asg.Open || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
       default:
          return (Level != 0 &&
                  Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type]);
@@ -10565,7 +10565,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
   {
    /***** I must be student, teacher, admin or superuser to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.MaxRole < Rol_STUDENT)
       return false;
 
    /***** Have I premission to create/paste a new file or folder into the folder? *****/
@@ -10578,7 +10578,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
                   (!Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
                    Gbl.FileBrowser.Asg.ICanDo &&	// If I can do this assignment
                    (Gbl.FileBrowser.Asg.Open ||
-                    Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER))));
+                    Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
      }
@@ -10603,7 +10603,7 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:	// If I am a student, I can modify the file/folder if I am the publisher
+      case Rol_STUDENT:	// If I am a student, I can modify the file/folder if I am the publisher
          /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
          sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
                         " WHERE FileBrowser='%u' AND Cod='%ld'"
@@ -10626,9 +10626,9 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void)
          DB_FreeMySQLResult (&mysql_res);
 
          return (Gbl.Usrs.Me.UsrDat.UsrCod == PublisherUsrCod);	// Am I the publisher of subtree?
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_DEG_ADM:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_DEG_ADM:
+      case Rol_SYS_ADM:
          return true;
       default:
          return false;

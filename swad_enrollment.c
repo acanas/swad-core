@@ -154,8 +154,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
    if (NewRole != OldRole)        // The role must be updated
      {
       /***** Check if user's role is allowed *****/
-      if (!(NewRole == Rol_ROLE_STUDENT ||
-	    NewRole == Rol_ROLE_TEACHER))
+      if (!(NewRole == Rol_STUDENT ||
+	    NewRole == Rol_TEACHER))
 	 Lay_ShowErrorAndExit ("Wrong role.");
 
       /***** Update the role of a user in a course *****/
@@ -196,8 +196,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    bool NotifyByEmail;
 
    /***** Check if user's role is allowed *****/
-   if (!(NewRole == Rol_ROLE_STUDENT ||
-	 NewRole == Rol_ROLE_TEACHER))
+   if (!(NewRole == Rol_STUDENT ||
+	 NewRole == Rol_TEACHER))
       Lay_ShowErrorAndExit ("Wrong role.");
 
    /***** Register user in current course in database *****/
@@ -446,36 +446,36 @@ void Enr_ReqAdminUsrs (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_GUEST__:
-      case Rol_ROLE_VISITOR:
-      case Rol_ROLE_STUDENT:
+      case Rol__GUEST_:
+      case Rol_VISITOR:
+      case Rol_STUDENT:
 	 Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_DEG_ADM:
+      case Rol_DEG_ADM:
 	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_CTR_ADM:
+      case Rol_CTR_ADM:
 	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_INS_ADM:
+      case Rol_INS_ADM:
 	 if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs ();
 	 else
@@ -520,7 +520,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
       Enr_PutLinkToRemAllStdsThisCrs ();
 
    /* Put link to remove old users */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Enr_PutLinkToRemOldUsrs ();
 
    fprintf (Gbl.F.Out,"</div>");
@@ -847,7 +847,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Register user in course / Modify user's data *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
+       Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
      {
       sprintf (Gbl.Message,UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
 		                                      Txt_Modify_user_in_the_course_X) :
@@ -874,7 +874,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    /***** Register user as administrator of degree *****/
 	    if (!UsrIsDegAdmin &&
-		Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+		Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	      {
 	       sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_degree_X,
 			Gbl.CurrentDeg.Deg.ShortName);
@@ -893,7 +893,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
 	 /***** Register user as administrator of centre *****/
 	 if (!UsrIsCtrAdmin &&
-	     Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+	     Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	   {
 	    sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_centre_X,
 		     Gbl.CurrentCtr.Ctr.ShortName);
@@ -913,7 +913,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
       /***** Register user as administrator of institution *****/
       if (!UsrIsInsAdmin &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
 	 sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_institution_X,
 		  Gbl.CurrentIns.Ins.ShortName);
@@ -958,7 +958,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    /***** Remove user as an administrator of the degree *****/
 	    if (UsrIsDegAdmin &&
-		(ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM))
+		(ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM))
 	      {
 	       sprintf (Gbl.Message,
 			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
@@ -979,7 +979,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
           /***** Remove user as an administrator of the centre *****/
 	  if (UsrIsCtrAdmin &&
-	     (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM))
+	     (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM))
 	   {
 	    sprintf (Gbl.Message,
 		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
@@ -1001,7 +1001,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
       /***** Remove user as an administrator of the institution *****/
       if (UsrIsInsAdmin &&
-	  (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM))
+	  (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
 	{
 	 sprintf (Gbl.Message,
 		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
@@ -1087,7 +1087,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	       Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
 
    /***** Only for superusers *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out,"<li>"
                          "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" />"
                          "%s</li>",
@@ -1122,7 +1122,7 @@ void Enr_ReceiveFormUsrsCrs (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    long LongNum;
-   Rol_Role_t RegRemRole = Rol_ROLE_STUDENT;
+   Rol_Role_t RegRemRole = Rol_STUDENT;
    struct
      {
       bool RemoveUsrs;
@@ -1155,13 +1155,13 @@ void Enr_ReceiveFormUsrsCrs (void)
    if (UnsignedStr[0])
       switch ((RegRemRole = Rol_ConvertUnsignedStrToRole (UnsignedStr)))
         {
-         case Rol_ROLE_STUDENT:
+         case Rol_STUDENT:
             break;
-         case Rol_ROLE_TEACHER:
+         case Rol_TEACHER:
             switch (Gbl.Usrs.Me.LoggedRole)        // Can I register/remove teachers?
               {
-               case Rol_ROLE_DEG_ADM:
-               case Rol_ROLE_SYS_ADM:                // Yes, I can
+               case Rol_DEG_ADM:
+               case Rol_SYS_ADM:                // Yes, I can
                   break;
                default:                                // No, I can not (TODO: teachers should be able to register/remove existing teachers)
                   Lay_ShowErrorAndExit ("You are not allowed to perform this action.");	// If user manipulated the form
@@ -1209,7 +1209,7 @@ void Enr_ReceiveFormUsrsCrs (void)
 	       WhatToDo.RegisterUsrs = true;
 	       break;
 	    case Enr_ELIMINATE_USRS_FROM_PLATFORM:
-	       if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	       if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 		 {
 		  WhatToDo.RemoveUsrs = true;
 		  WhatToDo.RemoveSpecifiedUsrs = true;
@@ -1251,7 +1251,7 @@ void Enr_ReceiveFormUsrsCrs (void)
 
 	 /***** A student can't belong to more than one group when the type of group only allows to register in one group *****/
 	 if (WhatToDo.RegisterUsrs &&
-	     RegRemRole == Rol_ROLE_STUDENT &&
+	     RegRemRole == Rol_STUDENT &&
 	     LstGrps.NumGrps >= 2)
 	    /* Check if I have selected more than one group of single enrollment */
 	    if (!Grp_CheckIfSelectionGrpsIsValid (&LstGrps))
@@ -1280,12 +1280,12 @@ void Enr_ReceiveFormUsrsCrs (void)
 	 /***** Get list of users in current course *****/
 	 switch (RegRemRole)
 	   {
-	    case Rol_ROLE_STUDENT:
-	       Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+	    case Rol_STUDENT:
+	       Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 	       LstCurrentUsrs = &Gbl.Usrs.LstStds;
 	       break;
-	    case Rol_ROLE_TEACHER:
-	       Usr_GetUsrsLst (Rol_ROLE_TEACHER,Sco_SCOPE_CRS,NULL,false);
+	    case Rol_TEACHER:
+	       Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
 	       LstCurrentUsrs = &Gbl.Usrs.LstTchs;
 	       break;
 	    default:
@@ -1304,7 +1304,7 @@ void Enr_ReceiveFormUsrsCrs (void)
 
 	    /***** Loop 1: go through form list setting if a student must be removed *****/
 	    /* Step a: Get students from a list of official groups */
-	    if (RegRemRole == Rol_ROLE_STUDENT)
+	    if (RegRemRole == Rol_STUDENT)
 	      {
 	       Ptr = ListExternalGrpCods;
 	       while (*Ptr)
@@ -1442,7 +1442,7 @@ void Enr_ReceiveFormUsrsCrs (void)
       if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
 	{
 	 /***** Step a: Get users from a list of official groups *****/
-	 if (RegRemRole == Rol_ROLE_STUDENT)
+	 if (RegRemRole == Rol_STUDENT)
 	   {
 	    Ptr = ListExternalGrpCods;
 	    while (*Ptr)
@@ -1606,8 +1606,8 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered)
   {
    /***** Check if I can register this user *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
-       RegRemRole != Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
+       RegRemRole != Rol_STUDENT)
       Lay_ShowErrorAndExit ("A teacher only can register new users if they are students.");
 
    /***** Check if the record of the user exists and get the type of user *****/
@@ -1723,7 +1723,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumStds;
 
-   if ((NumStds = Usr_GetNumUsrsInCrs (Rol_ROLE_STUDENT,Gbl.CurrentCrs.Crs.CrsCod)))
+   if ((NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Gbl.CurrentCrs.Crs.CrsCod)))
      {
       /***** Write message to confirm the removing *****/
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
@@ -1739,7 +1739,7 @@ void Enr_AskRemAllStdsThisCrs (void)
      }
    else
      {
-      sprintf (Gbl.Message,Txt_No_users_found[Rol_ROLE_STUDENT],
+      sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
@@ -1765,7 +1765,7 @@ void Enr_RemAllStdsThisCrs (void)
 	}
       else
 	{
-	 sprintf (Gbl.Message,Txt_No_users_found[Rol_ROLE_STUDENT],
+	 sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
 		  Gbl.CurrentCrs.Crs.FullName);
 	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	}
@@ -1784,7 +1784,7 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 
    /***** Get list of students in current course *****/
    Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all the students of the current course
-   Usr_GetUsrsLst (Rol_ROLE_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
    NumStdsInCrs = Gbl.Usrs.LstStds.NumUsrs;
 
    /***** Remove all the students *****/
@@ -1813,15 +1813,15 @@ void Enr_ReqSignUpInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_STUDENT)
      {
       sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
-   else if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_GUEST__ ||
-	    Gbl.Usrs.Me.LoggedRole == Rol_ROLE_VISITOR)
+   else if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
+	    Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
       /***** Show form to modify only the user's role or the user's data *****/
       Rec_ShowFormSignUpWithMyCommonRecord ();
    else
@@ -1846,7 +1846,7 @@ void Enr_SignUpInCrs (void)
    unsigned NumUsrsToBeNotifiedByEMail;
 
    /***** Check if I already belong to course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_STUDENT)
      {
       sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
@@ -1860,8 +1860,8 @@ void Enr_SignUpInCrs (void)
       RoleFromForm = Rol_ConvertUnsignedStrToRole (UnsignedStr);
 
       /* Check if role is correct */
-      if (!(RoleFromForm == Rol_ROLE_STUDENT ||
-            RoleFromForm == Rol_ROLE_TEACHER))
+      if (!(RoleFromForm == Rol_STUDENT ||
+            RoleFromForm == Rol_TEACHER))
          Lay_ShowErrorAndExit ("Wrong role.");
 
       /***** Try to get and old request of the same user in the same course from database *****/
@@ -1908,7 +1908,7 @@ void Enr_SignUpInCrs (void)
       /***** Notify teachers or admins by e-mail about the new enrollment request *****/
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
-      if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_ROLE_TEACHER)
+      if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_TEACHER)
 	{
          NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLLMENT_REQUEST,ReqCod);
          Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
@@ -2013,8 +2013,8 @@ void Enr_AskIfRejectSignUp (void)
       else        // User does not belong to this course
         {
          Role = Rol_GetRequestedRole (Gbl.Usrs.Other.UsrDat.UsrCod);
-         if (Role == Rol_ROLE_STUDENT ||
-             Role == Rol_ROLE_TEACHER)
+         if (Role == Rol_STUDENT ||
+             Role == Rol_TEACHER)
            {
             /* Ask if reject */
             sprintf (Gbl.Message,Txt_Do_you_really_want_to_reject_the_enrollment_request_,
@@ -2154,12 +2154,12 @@ void Enr_ShowEnrollmentRequests (void)
       /* Set default roles */
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_ROLE_TEACHER:
-            Roles = (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER);
+         case Rol_TEACHER:
+            Roles = (1 << Rol_STUDENT) | (1 << Rol_TEACHER);
             break;
-         case Rol_ROLE_DEG_ADM:
-         case Rol_ROLE_SYS_ADM:
-            Roles = (1 << Rol_ROLE_TEACHER);
+         case Rol_DEG_ADM:
+         case Rol_SYS_ADM:
+            Roles = (1 << Rol_TEACHER);
             break;
          default:
             Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2183,7 +2183,7 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_SYS:                // Show requesters for the whole platform
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_ROLE_TEACHER:
+            case Rol_TEACHER:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
@@ -2193,7 +2193,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Roles);
                break;
-            case Rol_ROLE_DEG_ADM:
+            case Rol_DEG_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
@@ -2204,7 +2204,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Roles);
                break;
-           case Rol_ROLE_SYS_ADM:
+           case Rol_SYS_ADM:
                sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr_requests WHERE ((1<<Role)&%u)<>0"
                               " ORDER BY RequestTime DESC",
@@ -2218,7 +2218,7 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_INS:                // Show requesters for the current institution
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_ROLE_TEACHER:
+            case Rol_TEACHER:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,centres,degrees,courses,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
@@ -2233,7 +2233,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentIns.Ins.InsCod,
                         Roles);
                break;
-            case Rol_ROLE_DEG_ADM:
+            case Rol_DEG_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
@@ -2248,7 +2248,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentIns.Ins.InsCod,
                         Roles);
                break;
-           case Rol_ROLE_SYS_ADM:
+           case Rol_SYS_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM centres,degrees,courses,crs_usr_requests"
                               " WHERE centres.InsCod='%ld'"
@@ -2268,7 +2268,7 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_CTR:                // Show requesters for the current centre
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_ROLE_TEACHER:
+            case Rol_TEACHER:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,degrees,courses,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
@@ -2282,7 +2282,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         Roles);
                break;
-            case Rol_ROLE_DEG_ADM:
+            case Rol_DEG_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,degrees,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
@@ -2296,7 +2296,7 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         Roles);
                break;
-           case Rol_ROLE_SYS_ADM:
+           case Rol_SYS_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM degrees,courses,crs_usr_requests"
                               " WHERE degrees.CtrCod='%ld'"
@@ -2315,7 +2315,7 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_DEG:        // Show requesters for the current degree
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_ROLE_TEACHER:
+            case Rol_TEACHER:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,courses,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
@@ -2328,8 +2328,8 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentDeg.Deg.DegCod,
                         Roles);
                break;
-            case Rol_ROLE_DEG_ADM:
-            case Rol_ROLE_SYS_ADM:
+            case Rol_DEG_ADM:
+            case Rol_SYS_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM courses,crs_usr_requests"
                               " WHERE courses.DegCod='%ld'"
@@ -2347,9 +2347,9 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_CRS:        // Show requesters for the current course
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_ROLE_TEACHER:
-            case Rol_ROLE_DEG_ADM:
-            case Rol_ROLE_SYS_ADM:
+            case Rol_TEACHER:
+            case Rol_DEG_ADM:
+            case Rol_SYS_ADM:
                sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr_requests"
                               " WHERE CrsCod='%ld'"
@@ -2599,36 +2599,36 @@ void Enr_ReqRegRemUsr (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_GUEST__:
-      case Rol_ROLE_VISITOR:
-      case Rol_ROLE_STUDENT:
+      case Rol__GUEST_:
+      case Rol_VISITOR:
+      case Rol_STUDENT:
 	 Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_TEACHER:
+      case Rol_TEACHER:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_DEG_ADM:
+      case Rol_DEG_ADM:
 	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_CTR_ADM:
+      case Rol_CTR_ADM:
 	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_INS_ADM:
+      case Rol_INS_ADM:
 	 if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 else
 	    Enr_AskIfRegRemMe ();
 	 break;
-      case Rol_ROLE_SYS_ADM:
+      case Rol_SYS_ADM:
 	 Enr_ReqAnotherUsrIDToRegisterRemove ();
 	 break;
       default:
@@ -2647,14 +2647,14 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
 
    /***** Put contextual links *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
-       Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          /* Put link to go to admin several users */
 	 Enr_PutLinkToAdminSeveralUsrs ();
-      else if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
          /* Put link to remove old users */
 	 Enr_PutLinkToRemOldUsrs ();
 
@@ -2803,7 +2803,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
       if (NewUsrIDValid)
 	{
 	 /* Initialize some data of this new user */
-	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_ROLE_STUDENT;
+	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_STUDENT;
 	 Gbl.Usrs.Other.UsrDat.Roles = (1 << Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB);
 
 	 /***** Show form to enter the data of a new user *****/
@@ -2885,9 +2885,9 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/centre/degree */
-	 ICanRegister = ((Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM) ||
-                         (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM) ||
-                         (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM));
+	 ICanRegister = ((Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM) ||
+                         (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM) ||
+                         (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
          if (ICanRegister)
            {
             /***** Register administrator in current institution/centre/degree in database *****/
@@ -2979,7 +2979,7 @@ static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
       // A teacher can remove a student or himself
       // An administrator can remove anyone
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      ICanRemove = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT ? ItsMe :
+      ICanRemove = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ItsMe :
                                                                  (Gbl.Usrs.Me.LoggedRole >= Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB));
       if (ICanRemove)
 	 switch (ReqDelOrDelUsr)
@@ -3079,9 +3079,9 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
          /* Check if it's forbidden to remove an administrator */
          ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
          ICanRemove = (ItsMe ||
-                       (Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM) ||
-                       (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM) ||
-                       (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM));
+                       (Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM) ||
+                       (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM) ||
+                       (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
          if (ICanRemove)
            {
             /* Check if the other user is an admin of the current institution/centre/degree */
@@ -3141,9 +3141,9 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
       if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/centre/degree */
-	 ICanRegister = ((Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM) ||
-                         (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM) ||
-                         (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM));
+	 ICanRegister = ((Scope == Sco_SCOPE_DEG && Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM) ||
+                         (Scope == Sco_SCOPE_CTR && Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM) ||
+                         (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
          if (ICanRegister)
            {
             if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is yet an administrator of current institution/centre/degree
@@ -3209,8 +3209,8 @@ void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void)
 
       /***** Get new role *****/
       NewRole = Rec_GetRoleFromRecordForm ();
-      if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER &&
-	  NewRole != Rol_ROLE_STUDENT)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
+	  NewRole != Rol_STUDENT)
 	 Lay_ShowErrorAndExit ("A teacher only can create new users as students.");
 
       /***** Get user's name from form *****/
@@ -3275,10 +3275,10 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 	    switch ((RegRemAction = (Enr_RegRemOneUsrAction_t) UnsignedNum))
 	      {
 	       case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 		    {
-		     IAmTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_TEACHER);			// I am logged as teacher
-		     HeIsTeacher = (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_ROLE_TEACHER));	// He/she is already a teacher in any course
+		     IAmTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);			// I am logged as teacher
+		     HeIsTeacher = (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER));	// He/she is already a teacher in any course
 		     ICanChangeUsrName = ItsMe ||
 			                 !(IAmTeacher && HeIsTeacher);	// A teacher can not change another teacher's name
 
@@ -3318,46 +3318,46 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 		     Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_DEGREE_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+		  if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 		     Enr_ReqAddAdm (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
 		                    Gbl.CurrentDeg.Deg.FullName);
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_CENTRE_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+		  if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 		     Enr_ReqAddAdm (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
 		                    Gbl.CurrentCtr.Ctr.FullName);
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+		  if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 		     Enr_ReqAddAdm (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
 		                    Gbl.CurrentIns.Ins.FullName);
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_USR_FROM_CRS:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_TEACHER)
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 		     Enr_ReqRemUsrFromCrs ();
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_DEGREE_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_CTR_ADM)
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 		     Enr_ReqRemAdmOfDeg ();
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_CENTRE_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_ROLE_INS_ADM)
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 		     Enr_ReqRemAdmOfCtr ();
 		  else
 		     Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 		     Enr_ReqRemAdmOfIns ();
 		  else
 		     Error = true;

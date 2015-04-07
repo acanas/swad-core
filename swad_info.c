@@ -291,7 +291,8 @@ static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead);
 static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType);
 static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType);
 static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL);
-static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType);
+static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType);
+static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType);
 
 /*****************************************************************************/
 /******** Show course info (theory, practices, bibliography, etc.) ***********/
@@ -319,13 +320,13 @@ void Inf_ShowInfo (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_STUDENT:
+      case Rol_STUDENT:
          /* Put checkbox to force students to read this couse info */
          if (MustBeRead)
             Inf_PutFormToConfirmIHaveReadInfo (InfoType);
          break;
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          /* Put link (form) to edit this course info */
          Inf_PutFormToEditInfo (InfoType);
 
@@ -375,8 +376,10 @@ void Inf_ShowInfo (void)
            }
          break;
       case Inf_INFO_SRC_PLAIN_TEXT:
+         Inf_ShowPlainTxtInfo (InfoType);
+         break;
       case Inf_INFO_SRC_RICH_TEXT:
-         Inf_ShowTxtInfo (InfoType);
+         Inf_ShowRichTxtInfo (InfoType);
          break;
       case Inf_INFO_SRC_PAGE:
 	       // TODO: Remove the following lines, here only for debug purposes
@@ -1469,14 +1472,16 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 /********** Set info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,const char *InfoTxt)
+void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
+                           const char *InfoTxtHTML,const char *InfoTxtMD)
   {
    char Query[256+Cns_MAX_BYTES_LONG_TEXT];
 
    /***** Insert or replace info source for a specific type of course information *****/
-   sprintf (Query,"REPLACE INTO crs_info_txt (CrsCod,InfoType,InfoTxt)"
-                  " VALUES ('%ld','%s','%s')",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType],InfoTxt);
+   sprintf (Query,"REPLACE INTO crs_info_txt"
+	          " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
+                  " VALUES ('%ld','%s','%s','%s')",
+            CrsCod,Inf_NamesInDBForInfoType[InfoType],InfoTxtHTML,InfoTxtMD);
    DB_QueryREPLACE (Query,"can not update info text");
   }
 
@@ -1484,7 +1489,8 @@ void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,const char *InfoT
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,char *InfoTxt,size_t MaxLength)
+void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
+                           char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1493,7 +1499,7 @@ void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,char *InfoTxt,size_t MaxLengt
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   sprintf (Query,"SELECT InfoTxt FROM crs_info_txt"
+   sprintf (Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
             Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
@@ -1503,11 +1509,28 @@ void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,char *InfoTxt,size_t MaxLengt
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      strncpy (InfoTxt,row[0],MaxLength);
-      InfoTxt[MaxLength] = '\0';
+
+      /* Get text in HTML format (not rigorous) */
+      if (InfoTxtHTML)
+	{
+	 strncpy (InfoTxtHTML,row[0],MaxLength);
+         InfoTxtHTML[MaxLength] = '\0';
+	}
+
+      /* Get text in Markdown format */
+      if (InfoTxtMD)
+	{
+	 strncpy (InfoTxtMD,row[1],MaxLength);
+	 InfoTxtMD[MaxLength] = '\0';
+	}
      }
    else
-      InfoTxt[0] = '\0';
+     {
+      if (InfoTxtHTML)
+         InfoTxtHTML[0] = '\0';
+      if (InfoTxtMD)
+         InfoTxtMD[0]   = '\0';
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1530,7 +1553,7 @@ bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   sprintf (Query,"SELECT InfoTxt FROM crs_info_txt"
+   sprintf (Query,"SELECT InfoTxtHTML FROM crs_info_txt"
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
@@ -1555,16 +1578,16 @@ bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
 /********************* Show information about the course *********************/
 /*****************************************************************************/
 
-static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType)
+static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_No_information_available;
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,Txt,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
-   if (Txt[0])
+   if (TxtHTML[0])
      {
       /***** Start table *****/
       Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
@@ -1572,20 +1595,110 @@ static void Inf_ShowTxtInfo (Inf_InfoType_t InfoType)
       if (InfoType == Inf_INTRODUCTION ||
           InfoType == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:left;\">"
                          "<p class=\"DAT\" style=\"text-align:justify;\">");
 
       /***** Convert to respectful HTML and insert links *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Txt,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
+      Str_InsertLinkInURLs (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /***** Write text *****/
-      fprintf (Gbl.F.Out,"%s",Txt);
+      fprintf (Gbl.F.Out,"%s",TxtHTML);
 
       /***** Finish table *****/
       fprintf (Gbl.F.Out,"</p>"
+	                 "</td>"
+	                 "</tr>");
+      Lay_EndRoundFrameTable10 ();
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+  }
+
+/*****************************************************************************/
+/********************* Show information about the course *********************/
+/*****************************************************************************/
+
+static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
+  {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_No_information_available;
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
+   char PathFileMD[PATH_MAX+1];
+   char PathFileHTML[PATH_MAX+1];
+   FILE *FileMD;		// Temporary Markdown file
+   FILE *FileHTML;		// Temporary HTML file
+   char Command[512+PATH_MAX*2]; // Command to call the program of preprocessing of photos
+   int ReturnCode;
+
+   /***** Get info text from database *****/
+   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
+
+   // Lay_ShowAlert (Lay_INFO,TxtHTML);
+   // Lay_ShowAlert (Lay_INFO,TxtMD);
+
+   if (TxtMD[0])
+     {
+      /***** Start table *****/
+      Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+
+      if (InfoType == Inf_INTRODUCTION ||
+          InfoType == Inf_TEACHING_GUIDE)
+         Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td style=\"text-align:left;\">"
+                         "<div id=\"crs_info\">");
+
+      /***** Store text into a temporary .md file in HTML output directory *****/
+      // TODO: change to another directory?
+      /* Create a unique name for the .md file */
+      sprintf (PathFileMD,"%s/%s/%s.md",
+	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+      sprintf (PathFileHTML,"%s/%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+
+      /* Open Markdown file for writing */
+      if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
+	 Lay_ShowErrorAndExit ("Can not create temporary Markdown file.");
+
+      /* Write text into Markdown file */
+      fprintf (FileMD,"%s",TxtMD);
+
+      /* Close Markdown file */
+      fclose (FileMD);
+
+      /***** Convert from Markdown to HTML *****/
+      sprintf (Command,"iconv -f ISO-8859-1 -t UTF-8 %s"
+	               " | pandoc --mathjax -f markdown -t html"
+	               " | iconv -f UTF-8 -t ISO-8859-1 -o %s",
+	      PathFileMD,
+	      PathFileHTML);
+      ReturnCode = system (Command);
+      if (ReturnCode == -1)
+	 Lay_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
+
+      /***** Remove Markdown file *****/
+      unlink (PathFileMD);
+
+      /***** Copy HTML file just created to HTML output *****/
+      /* Open temporary HTML file for reading */
+      if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
+	 Lay_ShowErrorAndExit ("Can not open temporary Markdown file.");
+
+      /* Copy from temporary HTML file to output file */
+      Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
+
+      /* Close and remove temporary HTML file */
+      fclose (FileHTML);
+      unlink (PathFileHTML);
+
+      /***** Finish table *****/
+      fprintf (Gbl.F.Out,"</div>"
 	                 "</td>"
 	                 "</tr>");
       Lay_EndRoundFrameTable10 ();
@@ -1603,7 +1716,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    char FileNameHTMLTmp[PATH_MAX+1];
    FILE *FileHTMLTmp;
    size_t Length;
@@ -1612,9 +1725,9 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,Txt,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
-   if (Txt[0])
+   if (TxtHTML[0])
      {
       /***** Create a unique name for the file *****/
       sprintf (FileNameHTMLTmp,"%s/%s/%s_info.html",
@@ -1644,11 +1757,11 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Txt,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
+      Str_InsertLinkInURLs (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /* Write text */
-      fprintf (FileHTMLTmp,"%s",Txt);
+      fprintf (FileHTMLTmp,"%s",TxtHTML);
 
       /***** Write end of page into file *****/
       fprintf (FileHTMLTmp,"</p>\n"
@@ -1697,7 +1810,7 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Start table *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[InfoType]);
@@ -1708,7 +1821,7 @@ void Inf_EditPlainTxtInfo (void)
       Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,Txt,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1718,11 +1831,10 @@ void Inf_EditPlainTxtInfo (void)
 	              "</textarea>"
 	              "</td>"
 	              "</tr>",
-            Txt);
+            TxtHTML);
 
    /***** End of table *****/
    Lay_EndRoundFrameTable10 ();
-   // fprintf (Gbl.F.Out,"<br />");
 
    /***** Send and undo buttons *****/
    Lay_PutConfirmButton (Txt_Save);
@@ -1736,21 +1848,12 @@ void Inf_EditPlainTxtInfo (void)
 void Inf_EditRichTxtInfo (void)
   {
    extern const char *Txt_The_rich_text_editor_is_not_yet_available;
-   extern const char *Txt_Send;
+   extern const char *Txt_Save;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Under test... *****/
-   /*
-+--------+----------+---------------------+
-| UsrCod | UsrID    | CreatTime           |
-+--------+----------+---------------------+
-|   1346 | 24243619 | 2013-11-25 00:29:13 |
-|  24383 | 53590723 | 2013-11-25 00:29:13 |
-+--------+----------+---------------------+
-    */
-   if (Gbl.Usrs.Me.UsrDat.UsrCod != 1346 &&
-       Gbl.Usrs.Me.UsrDat.UsrCod != 24383)	// TODO: Remove this when rich text editor is available
+   if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)	// TODO: Remove this when rich text editor is available
      {
       Lay_ShowAlert (Lay_WARNING,Txt_The_rich_text_editor_is_not_yet_available);
 
@@ -1768,7 +1871,7 @@ void Inf_EditRichTxtInfo (void)
       Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,Txt,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1778,14 +1881,13 @@ void Inf_EditRichTxtInfo (void)
 	              "</textarea>"
 	              "</td>"
 	              "</tr>",
-            Txt);
+            TxtHTML);
 
    /***** End of table *****/
    Lay_EndRoundFrameTable10 ();
-   // fprintf (Gbl.F.Out,"<br />");
 
    /***** Send and undo buttons *****/
-   Lay_PutCreateButton (Txt_Send);
+   Lay_PutConfirmButton (Txt_Save);
    Act_FormEnd ();
   }
 
@@ -1796,19 +1898,26 @@ void Inf_EditRichTxtInfo (void)
 void Inf_RecAndChangePlainTxtInfo (void)
   {
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Get text with course information from form *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_LONG_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
+   Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
+                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
+   Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
+                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Txt);
+   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
+                         Txt_HTMLFormat,Txt_MarkdownFormat);
 
-   /***** Change info source to text in database *****/
+   /***** Change info source to "plain text" in database *****/
    Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt[0] ? Inf_INFO_SRC_PLAIN_TEXT :
-	                          Inf_INFO_SRC_NONE);
-   if (Txt[0])
+                         Txt_HTMLFormat[0] ? Inf_INFO_SRC_PLAIN_TEXT :
+	                                     Inf_INFO_SRC_NONE);
+   if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
    else
@@ -1823,19 +1932,26 @@ void Inf_RecAndChangePlainTxtInfo (void)
 void Inf_RecAndChangeRichTxtInfo (void)
   {
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
-   char Txt[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Get text with course information from form *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_LONG_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
+   Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
+                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
+   Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
+                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Txt);
+   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
+                         Txt_HTMLFormat,Txt_MarkdownFormat);
 
-   /***** Change info source to text in database *****/
+   /***** Change info source to "rich text" in database *****/
    Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt[0] ? Inf_INFO_SRC_RICH_TEXT :
-	                          Inf_INFO_SRC_NONE);
-   if (Txt[0])
+                         Txt_HTMLFormat[0] ? Inf_INFO_SRC_RICH_TEXT :
+	                                     Inf_INFO_SRC_NONE);
+   if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
    else

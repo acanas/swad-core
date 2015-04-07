@@ -101,8 +101,8 @@ void Asg_SeeAssignments (void)
    /***** Put link (form) to create a bew assignment *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          Asg_PutFormToCreateNewAsg ();
          break;
       default:
@@ -319,8 +319,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Forms to remove/edit this assignment */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
          break;
       default:
@@ -554,8 +554,8 @@ void Asg_GetListAssignments (void)
    /***** Get list of assignments from database *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_ROLE_TEACHER:
-      case Rol_ROLE_SYS_ADM:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
          HiddenSubQuery[0] = '\0';
          break;
       default:
@@ -1722,7 +1722,7 @@ static bool Asg_CheckIfICanDoThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
      {
       /***** Get if I can do an assignment from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM assignments"

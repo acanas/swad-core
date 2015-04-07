@@ -67,7 +67,7 @@ unsigned Rol_GetNumAvailableRoles (void)
    Rol_Role_t Role;
    unsigned NumAvailableRoles = 0;
 
-   for (Role = Rol_ROLE_GUEST__;
+   for (Role = Rol__GUEST_;
         Role < Rol_NUM_ROLES;
         Role++)
       if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -82,11 +82,11 @@ unsigned Rol_GetNumAvailableRoles (void)
 
 Rol_Role_t Rol_GetMaxRole (unsigned Roles)
   {
-   if (Roles & (1 << Rol_ROLE_TEACHER))
-      return Rol_ROLE_TEACHER;
-   if (Roles & (1 << Rol_ROLE_STUDENT))
-      return Rol_ROLE_STUDENT;
-   return Rol_ROLE_GUEST__;
+   if (Roles & (1 << Rol_TEACHER))
+      return Rol_TEACHER;
+   if (Roles & (1 << Rol_STUDENT))
+      return Rol_STUDENT;
+   return Rol__GUEST_;
   }
 
 /*****************************************************************************/
@@ -108,9 +108,9 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
            NumMyIns++)
          if (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod == InsCod)
             return Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].MaxRole;
-      return Rol_ROLE_GUEST__;
+      return Rol__GUEST_;
      }
-   return Rol_ROLE_UNKNOWN;   // No degree
+   return Rol_UNKNOWN;   // No degree
   }
 
 /*****************************************************************************/
@@ -132,9 +132,9 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
            NumMyCtr++)
          if (Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].CtrCod == CtrCod)
             return Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].MaxRole;
-      return Rol_ROLE_GUEST__;
+      return Rol__GUEST_;
      }
-   return Rol_ROLE_UNKNOWN;   // No centre
+   return Rol_UNKNOWN;   // No centre
   }
 
 /*****************************************************************************/
@@ -156,9 +156,9 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
            NumMyDeg++)
          if (Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].DegCod == DegCod)
             return Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].MaxRole;
-      return Rol_ROLE_GUEST__;
+      return Rol__GUEST_;
      }
-   return Rol_ROLE_UNKNOWN;   // No degree
+   return Rol_UNKNOWN;   // No degree
   }
 
 /*****************************************************************************/
@@ -180,9 +180,9 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
            NumMyCrs++)
          if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == CrsCod)
             return Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].Role;
-      return Rol_ROLE_GUEST__;
+      return Rol__GUEST_;
      }
-   return Rol_ROLE_UNKNOWN;   // No course
+   return Rol_UNKNOWN;   // No course
   }
 
 /*****************************************************************************/
@@ -209,13 +209,13 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
          Role = Rol_ConvertUnsignedStrToRole (row[0]);
         }
       else                // User does not belong to the course
-         Role = Rol_ROLE_UNKNOWN;
+         Role = Rol_UNKNOWN;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else        // No course
-      Role = Rol_ROLE_UNKNOWN;
+      Role = Rol_UNKNOWN;
 
    return Role;
   }
@@ -244,7 +244,7 @@ unsigned Rol_GetRolesInAllCrss (long UsrCod)
         NumRole++)
      {
       row = mysql_fetch_row (mysql_res);
-      if ((Role = Rol_ConvertUnsignedStrToRole (row[0])) != Rol_ROLE_UNKNOWN)
+      if ((Role = Rol_ConvertUnsignedStrToRole (row[0])) != Rol_UNKNOWN)
          Roles |= (1 << Role);
      }
 
@@ -263,9 +263,9 @@ Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr)
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_ROLE_UNKNOWN :
+      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_UNKNOWN :
                                               (Rol_Role_t) UnsignedNum;
-   return Rol_ROLE_UNKNOWN;
+   return Rol_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -301,7 +301,7 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
       fprintf (Gbl.F.Out," style=\"width:%upx;\"",SelectorWidth[Gbl.Prefs.Layout]);
    fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\">",
             Gbl.FormId);
-   for (Role = Rol_ROLE_GUEST__;
+   for (Role = Rol__GUEST_;
         Role < Rol_NUM_ROLES;
         Role++)
      if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -354,8 +354,8 @@ void Rol_WriteSelectorRoles (unsigned Roles)
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
-   for (Role = Rol_ROLE_STUDENT;
-        Role <= Rol_ROLE_TEACHER;
+   for (Role = Rol_STUDENT;
+        Role <= Rol_TEACHER;
         Role++)
      {
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
@@ -402,8 +402,8 @@ void Rol_PutAllRolesRegRemUsrsCrs (void)
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul style=\"list-style-type:none; text-align:left;\" class=\"%s\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
-   Rol_PutOneRoleRegRemUsrsCrs (Rol_ROLE_STUDENT,true);
-   Rol_PutOneRoleRegRemUsrsCrs (Rol_ROLE_TEACHER,false);
+   Rol_PutOneRoleRegRemUsrsCrs (Rol_STUDENT,true);
+   Rol_PutOneRoleRegRemUsrsCrs (Rol_TEACHER,false);
    fprintf (Gbl.F.Out,"</ul>"
                       "</div>");
   }
@@ -423,8 +423,8 @@ static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    switch (Gbl.Usrs.Me.LoggedRole)      // Can I select type of user?
      {
-      case Rol_ROLE_DEG_ADM:
-      case Rol_ROLE_SYS_ADM:                // Yes, I can
+      case Rol_DEG_ADM:
+      case Rol_SYS_ADM:                // Yes, I can
          break;
       default:                                // No, I can not
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -443,7 +443,7 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Rol_Role_t Role = Rol_ROLE_UNKNOWN;
+   Rol_Role_t Role = Rol_UNKNOWN;
 
    /***** Get requested role from database *****/
    sprintf (Query,"SELECT Role FROM crs_usr_requests"

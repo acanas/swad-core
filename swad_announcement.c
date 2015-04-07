@@ -74,7 +74,7 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *Txt_New_announcement;
 
    /***** Put link (form) to create a new announcement *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Act_PutContextualLink (ActWriAnn,NULL,"new",Txt_New_announcement);
@@ -229,8 +229,8 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       /* Users' roles who can view this announcement */
       fprintf (Gbl.F.Out,"<p class=\"DAT\">%s:",
 	       Txt_Users);
-      for (Role = Rol_ROLE_STUDENT, RolesSelected = false;
-	   Role <= Rol_ROLE_TEACHER;
+      for (Role = Rol_STUDENT, RolesSelected = false;
+	   Role <= Rol_TEACHER;
 	   Role++)
 	 if (Roles & (1 << Role))
 	   {
@@ -353,8 +353,8 @@ void Ann_ShowFormAnnouncement (void)
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">",
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_ROLE_STUDENT |
-                           1 << Rol_ROLE_TEACHER);
+   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
+                           1 << Rol_TEACHER);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

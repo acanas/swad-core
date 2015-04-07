@@ -48,12 +48,6 @@ extern struct Globals Gbl;
 /*********************** Private types and constants *************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Par_PARAM_SINGLE,
-   Par_PARAM_MULTIPLE,
-  } tParamType; // Parameter is present only one time / multiple times
-
 /*****************************************************************************/
 /****************************** Private variables ****************************/
 /*****************************************************************************/
@@ -61,9 +55,6 @@ typedef enum
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
-
-static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
-                                  char *ParamValue,size_t MaxBytes);
 
 /*****************************************************************************/
 /*** Read all parameters passed to this CGI and store for later processing ***/
@@ -419,8 +410,8 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
 #define Par_LENGTH_OF_STR_BEFORE_PARAM	  38	// Length of "CONTENT-DISPOSITION: FORM-DATA; NAME=\""
 #define Par_MAX_BYTES_STR_AUX		1024
 
-static unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
-                                  char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
+                           char *ParamValue,size_t MaxBytes)
   {
    static const char *StringBeforeParam = "CONTENT-DISPOSITION: FORM-DATA; NAME=\"";
    size_t BytesToCopy;

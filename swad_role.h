@@ -47,16 +47,16 @@
 #define Rol_NUM_ROLES 9
 typedef enum
   {
-   Rol_ROLE_UNKNOWN = 0,	// User not logged in
-   Rol_ROLE_GUEST__ = 1,	// User not belonging to any course
-   Rol_ROLE_VISITOR = 2,	// Student or teacher in other courses...
-   	   	   	   	// ...but not belonging to the current course
-   Rol_ROLE_STUDENT = 3,	// Student in current course
-   Rol_ROLE_TEACHER = 4,	// Teacher in current course
-   Rol_ROLE_DEG_ADM = 5,	// Degree administrator
-   Rol_ROLE_CTR_ADM = 6,	// Centre administrator
-   Rol_ROLE_INS_ADM = 7,	// Institution administrator
-   Rol_ROLE_SYS_ADM = 8,	// System administrator (superuser)
+   Rol_UNKNOWN = 0,	// User not logged in
+   Rol__GUEST_ = 1,	// User not belonging to any course
+   Rol_VISITOR = 2,	// Student or teacher in other courses...
+   	   	   	// ...but not belonging to the current course
+   Rol_STUDENT = 3,	// Student in current course
+   Rol_TEACHER = 4,	// Teacher in current course
+   Rol_DEG_ADM = 5,	// Degree administrator
+   Rol_CTR_ADM = 6,	// Centre administrator
+   Rol_INS_ADM = 7,	// Institution administrator
+   Rol_SYS_ADM = 8,	// System administrator (superuser)
   } Rol_Role_t;
 
 /*****************************************************************************/

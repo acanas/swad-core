@@ -35,6 +35,12 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Par_PARAM_SINGLE,
+   Par_PARAM_MULTIPLE,
+  } tParamType; // Parameter is present only one time / multiple times
+
 #define Par_SEPARATOR_PARAM_MULTIPLE	10	// Must be 1 <= character <= 31
 
 /*****************************************************************************/
@@ -49,6 +55,8 @@ unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxByte
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
 unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces);
+unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
+                           char *ParamValue,size_t MaxBytes);
 
 bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst);

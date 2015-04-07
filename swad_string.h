@@ -59,6 +59,7 @@ typedef enum
    Str_TO_RIGOROUS_HTML,
    Str_TO_HTML,
    Str_TO_TEXT,
+   Str_TO_MARKDOWN,
    } Str_ChangeTo_t;
 
 /*****************************************************************************/

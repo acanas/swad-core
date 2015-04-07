@@ -1082,7 +1082,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 			   " AND Role='%u'",	// Notify teachers only
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     (unsigned) Rol_ROLE_TEACHER);
+		     (unsigned) Rol_TEACHER);
 	 else	// Course without teachers
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
@@ -1113,7 +1113,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	       sprintf (Query,"SELECT UsrCod FROM crs_usr"
 			      " WHERE CrsCod='%ld' AND Role='%u' AND UsrCod<>'%ld'",
 			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Rol_ROLE_TEACHER,
+			(unsigned) Rol_TEACHER,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
