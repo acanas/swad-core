@@ -52,7 +52,6 @@ table td
 	}
 img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
-p			{margin:0;}
 hr.WHITE_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
@@ -752,7 +751,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	margin:0;
 	padding:0 10px;
-	color:#404040;
+	color:inherit;
+	}
+#crs_info table
+	{
+	border: 1px solid grey;
+	}
+#crs_info th
+	{
+	border:1px solid grey;
+	background-color:#F0F0F0;
+	padding:5px;
+	}
+#crs_info td
+	{
+	border:1px solid grey;
+	padding:5px;
 	}
 
 /*****************************************************************************/

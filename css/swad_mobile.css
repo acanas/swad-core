@@ -51,7 +51,6 @@ table td
 	}
 img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
-p			{margin:0;}
 
 /************************* Users connected globally **************************/
 .CONNECTED
@@ -563,7 +562,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	margin:0;
 	padding:0 10px;
-	color:#404040;
+	color:inherit;
+	}
+#crs_info table
+	{
+	border: 1px solid grey;
+	}
+#crs_info th
+	{
+	border:1px solid grey;
+	background-color:#F0F0F0;
+	padding:5px;
+	}
+#crs_info td
+	{
+	border:1px solid grey;
+	padding:5px;
 	}
 
 /*****************************************************************************/

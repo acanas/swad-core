@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.110 (2015/04/07)"
+#define Log_PLATFORM_VERSION	"SWAD 14.110.1 (2015/04/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.110.1: Apr 08, 2015	Changes in CSS. (184539 lines)
         Version 14.110:   Apr 07, 2015	Testing rich text editor using Markdown, suggested by Pedro A. García Sánchez. (184508 lines)
 					Fixed bug in file browser, reported by Eva Martínez Ortigosa.
 					2 changes necessary in database:
