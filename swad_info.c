@@ -1015,13 +1015,13 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoT
 
 void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
   {
-   extern const char *Txt_Edit_text;
+   extern const char *Txt_Edit_plain_text;
 
    /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Send button *****/
-   Lay_PutConfirmButton (Txt_Edit_text);
+   Lay_PutConfirmButton (Txt_Edit_plain_text);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1033,13 +1033,13 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTy
 
 void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
   {
-   extern const char *Txt_Edit_text;
+   extern const char *Txt_Edit_rich_text;
 
    /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Send button *****/
-   Lay_PutConfirmButton (Txt_Edit_text);
+   Lay_PutConfirmButton (Txt_Edit_rich_text);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1632,7 +1632,8 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
    char PathFileHTML[PATH_MAX+1];
    FILE *FileMD;		// Temporary Markdown file
    FILE *FileHTML;		// Temporary HTML file
-   char Command[512+PATH_MAX*2]; // Command to call the program of preprocessing of photos
+   char MathJaxURL[PATH_MAX];
+   char Command[512+PATH_MAX*3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
 
    /***** Get info text from database *****/
@@ -1673,11 +1674,25 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       fclose (FileMD);
 
       /***** Convert from Markdown to HTML *****/
-      sprintf (Command,"iconv -f ISO-8859-1 -t UTF-8 %s"
-	               " | pandoc --mathjax -f markdown -t html"
-	               " | iconv -f UTF-8 -t ISO-8859-1 -o %s",
-	      PathFileMD,
-	      PathFileHTML);
+#ifdef Cfg_MATHJAX_LOCAL
+      // Use the local copy of MathJax
+      sprintf (MathJaxURL,"=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC);
+#else
+      // Use the MathJax Content Delivery Network (CDN)
+      MathJaxURL[0] = '\0';
+#endif
+      // --ascii uses only ascii characters in output
+      //         (uses numerical entities instead of UTF-8)
+      //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
+      sprintf (Command,"iconv -f WINDOWS-1252 -t UTF-8 %s"
+	               " | "
+	               "pandoc --ascii --mathjax%s -f markdown -t html5"
+	               " | "
+	               "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
+	       PathFileMD,
+	       MathJaxURL,
+	       PathFileHTML);
       ReturnCode = system (Command);
       if (ReturnCode == -1)
 	 Lay_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
@@ -1688,7 +1703,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       /***** Copy HTML file just created to HTML output *****/
       /* Open temporary HTML file for reading */
       if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open temporary Markdown file.");
+	 Lay_ShowErrorAndExit ("Can not open temporary HTML file.");
 
       /* Copy from temporary HTML file to output file */
       Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
@@ -1826,7 +1841,7 @@ void Inf_EditPlainTxtInfo (void)
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center;\">"
-	              "<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
+	              "<textarea name=\"Txt\" cols=\"100\" rows=\"20\">"
 	              "%s"
 	              "</textarea>"
 	              "</td>"
@@ -1847,24 +1862,15 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
-   extern const char *Txt_The_rich_text_editor_is_not_yet_available;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_RICH_TEXT_EDITOR_HELP;
    extern const char *Txt_Save;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Under test... *****/
-   if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)	// TODO: Remove this when rich text editor is available
-     {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_rich_text_editor_is_not_yet_available);
-
-      /***** Show again the form to select and send course info *****/
-      Inf_FormsToSelSendInfo ();
-      return;
-     }
-
    /***** Start table *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[InfoType]);
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
 
    if (InfoType == Inf_INTRODUCTION ||
        InfoType == Inf_TEACHING_GUIDE)
@@ -1875,8 +1881,9 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">"
-	              "<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
+	              "<td style=\"text-align:center;\">");
+   Lay_ShowAlert (Lay_INFO,Txt_RICH_TEXT_EDITOR_HELP);
+   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"100\" rows=\"20\">"
 	              "%s"
 	              "</textarea>"
 	              "</td>"

@@ -9288,25 +9288,46 @@ const char *Txt_Edit_survey =
 	"Editar inqu&eacute;rito";
 #endif
 
-const char *Txt_Edit_text =
+const char *Txt_Edit_plain_text =
 #if   L==0
-	"Editar text";
+	"Editar text sense format";
 #elif L==1
-	"Text bearbeiten";
+	"Plain Text bearbeiten";
 #elif L==2
-	"Edit text";
+	"Edit plain text";
 #elif L==3
-	"Editar texto";
+	"Editar texto sin formato";
 #elif L==4
-	"&Eacute;diter texte";
+	"&Eacute;diter texte simple";
 #elif L==5
-	"Editar texto";	// Okoteve traducción
+	"Editar texto sin formato";	// Okoteve traducción
 #elif L==6
-	"Editare testo";
+	"Editare testo normale";
 #elif L==7
-	"Edycja tekstu";
+	"Edycja tekstu zwyk&lstrok;y";
 #elif L==8
-	"Editar texto";
+	"Editar texto simples";
+#endif
+
+const char *Txt_Edit_rich_text =
+#if   L==0
+	"Editar text enriquit";
+#elif L==1
+	"Rich Text bearbeiten";
+#elif L==2
+	"Edit rich text";
+#elif L==3
+	"Editar texto enriquecido";
+#elif L==4
+	"&Eacute;diter texte enrichi";
+#elif L==5
+	"Editar texto enriquecido";	// Okoteve traducción
+#elif L==6
+	"Editare testo formattato";
+#elif L==7
+	"Edycja tekstu sformatowany";
+#elif L==8
+	"Editar texto rico";
 #endif
 
 const char *Txt_eg_A_B =
@@ -14039,21 +14060,21 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 #endif
 	   ,
 #if   L==0
-	   "editor de texto plano"	// Necessita traduccio
+	   "editor de text sense format"
 #elif L==1
 	   "Plain Text Editor"
 #elif L==2
 	   "plain text editor"
 #elif L==3
-	   "editor de texto plano"
+	   "editor de texto sin formato"
 #elif L==4
 	   "&eacute;diteur de texte simple"
 #elif L==5
-	   "editor de texto plano"	// Okoteve traducción
+	   "editor de texto sin formato"		// Okoteve traducción
 #elif L==6
 	   "editor di testo normale"
 #elif L==7
-	   "edytor tekstu"
+	   "edytor tekstu zwyk&lstrok;y"
 #elif L==8
 	   "editor de texto simples"
 #endif
@@ -14073,9 +14094,9 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
 #elif L==6
 	   "editor di testo formattato"
 #elif L==7
-	   "rich text editor"			// Potrzebujesz tlumaczenie
+	   "edytor tekstu sformatowany"
 #elif L==8
-	   "rich text editor"			// Necessita de tradução
+	   "editor de texto rico"
 #endif
 	   ,
 #if   L==0
@@ -27664,28 +27685,7 @@ const char *Txt_Quota_exceeded =
 #elif L==8
 	"Quota excedida!";
 #endif
-/*
-const char *Txt_Ranking =
-#if   L==0
-	 "R&agrave;nquing";
-#elif L==1
-	 "Rang";
-#elif L==2
-	 "Ranking";
-#elif L==3
-	 "Ranking";
-#elif L==4
-	 "Classement";
-#elif L==5
-	 "Ranking";	// Okoteve traducción
-#elif L==6
-	 "Posto";
-#elif L==7
-	 "Ranking";
-#elif L==8
-	 "Posi&ccedil;&atilde;o";
-#endif
-*/
+
 const char *Txt_ReaBRders =
 #if   L==0
 	"Lec-<br />tores";	// Necessita traduccio
@@ -29691,6 +29691,63 @@ const char *Txt_Retype_password =
 	"Powt&oacute;rz has&lstrok;o";
 #elif L==8
 	"Redigite a senha";
+#endif
+
+const char *Txt_RICH_TEXT_EDITOR_HELP =
+#if   L==0
+	"Pot formatar el text usant"
+	" <a href=\"http://ca.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" A m&eacute;s pot escriure f&oacute;rmules en"
+	" <a href=\"https://ca.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" entre dues $ o dues $$.";
+#elif L==1
+	"Sie k&ouml;nnen den Text zu formatieren mit"
+	" <a href=\"http://de.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Sie k&ouml;nnen"
+	" <a href=\"https://de.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" Formeln auch zwischen zwei $ oder zwei $$.";
+#elif L==2
+	"You can format the text using"
+	" <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" You can also type"
+	" <a href=\"https://en.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" formulas between two $ or two $$.";
+#elif L==3
+	"Puede formatear el texto usando"
+	" <a href=\"http://es.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Adem&aacute;s puede escribir f&oacute;rmulas en"
+	" <a href=\"https://es.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" entre dos $ o dos $$.";
+#elif L==4
+	"Vous pouvez formater le texte en utilisant"
+	" <a href=\"http://fr.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Vous pouvez &eacute;galement taper des formules"
+	" <a href=\"https://fr.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" entre deux $ ou deux $$.";
+#elif L==5
+	"Puede formatear el texto usando"
+	" <a href=\"http://es.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Adem&aacute;s puede escribir f&oacute;rmulas en"
+	" <a href=\"https://es.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" entre dos $ o dos $$.";	// Okoteve traducción
+#elif L==6
+	"&Egrave; possibile formattare il testo con"
+	" <a href=\"http://it.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" &Egrave; inoltre possibile digitare formule"
+	" <a href=\"https://it.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" tra due $ o due $$.";
+#elif L==7
+	"Mo&zdot;esz formatowa&cacute; tekst za pomoc&aogon;"
+	" <a href=\"http://pl.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Mo&zdot;esz r&oacute;wnie&zdot; wpisa&cacute; formu&lstrok;y"
+	" <a href=\"https://pl.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" mi&eogon;dzy dwoma $ lub dw&oacute;ch $$.";
+#elif L==8
+	"Voc&ecirc; pode formatar o texto usando"
+	" <a href=\"http://pt.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
+	" Voc&ecirc; tamb&eacute;m pode digitar f&oacute;rmulas"
+	" <a href=\"https://pt.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
+	" entre duas $ ou duas $$.";
 #endif
 
 const char *Txt_Role =
@@ -41891,27 +41948,6 @@ const char *Txt_The_requested_group_changes_were_successful =
 	"The requested group changes were successful.";				// Potrzebujesz tlumaczenie
 #elif L==8
 	"The requested group changes were successful.";				// Necessita de tradução
-#endif
-
-const char *Txt_The_rich_text_editor_is_not_yet_available =
-#if   L==0
-	"L'editor de text enriquit encara no est&agrave; disponible.";
-#elif L==1
-	"Der Rich Text Editor ist noch nicht verfügbar.";
-#elif L==2
-	"The rich text editor is not yet available.";
-#elif L==3
-        "El editor de texto enriquecido a&uacute;n no est&aacute; disponible.";
-#elif L==4
-        "L'&eacute;diteur de texte riche n'est pas encore disponible.";
-#elif L==5
-        "El editor de texto enriquecido a&uacute;n no est&aacute; disponible.";	// Okoteve traducción
-#elif L==6
-        "Il rich text editor non &egrave; ancora disponibile.";
-#elif L==7
-        "Edytor tekstu nie jest jeszcze dost&eogon;pna.";
-#elif L==8
-        "O editor de texto rico ainda n&atilde;o est&aacute; disponível.";
 #endif
 
 const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B =	// Warning: it is very important to include four %s in the following sentences
