@@ -446,10 +446,20 @@ static void Lay_WriteScripts (void)
 	    Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /***** Script for MathJax *****/
+#ifdef Cfg_MATHJAX_LOCAL
+   // Use the local copy of MathJax
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
+	              " src=\"%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
+	              "</script>\n",
+	    Cfg_HTTPS_URL_SWAD_PUBLIC);
+#else
+   // Use the MathJax Content Delivery Network (CDN)
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+	              " src=\"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
 	              "</script>\n");
+#endif
 
+   /***** Scripts used only in main window *****/
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
      {
       Lay_WriteScriptInit ();

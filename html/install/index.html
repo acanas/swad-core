@@ -57,6 +57,7 @@
 		<li><a href="#swad-files">Creating SWAD directories and files</a></li>
 		<li><a href="#swad-icons">Installing SWAD icons</a></li>
 		<li><a href="#dropzone">Installing DropzoneJS</a></li>
+		<li><a href="#mathjax">Installing MathJax</a></li>
 		<li><a href="#gsoap">Compiling and installing gSOAP, required to compile SWAD core</a></li>
 		<li><a href="#compile-swad">Compiling and installing SWAD core</a></li>
 		<li><a href="#fotomaton">Installing photo processing program <code>fotomaton</code></a></li>
@@ -455,6 +456,71 @@
 
 	</ul>
 
+	<p>
+	SWAD needs <code>pandoc</code> 1.10 or later
+	and <code>iconv</code>
+	to convert from Markdown format to HTML format.
+	</p>
+
+	<ul>
+
+	<li>
+	To install <code>pandoc</code>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<p>
+		You probably need to install the latest epel-release rpm from
+		<a href="http://dl.fedoraproject.org/pub/epel/6/x86_64/">http://dl.fedoraproject.org/pub/epel/6/x86_64/</a>:<br />
+		<code>wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</code><br />
+		<code>rpm -Uvh epel-release*rpm</code><br />
+		
+		Then you can download pandoc rpm from <a href="http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html">http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html</a>:<br />
+		<code>wget http://dl.fedoraproject.org/pub/epel/6/x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm</code><br />
+		and install it:<br /> 
+		<code>yum install pandoc</code><br />
+		Unfortunately this rpm is too old, but the following rmp for Fedora works in CentOS:<br />
+		<code>wget https://petersen.fedorapeople.org/pandoc-standalone/epel-5/x86_64/pandoc-1.12.4.2-1.x86_64.rpm</code>
+		</p>
+
+		<p>
+		If you do not find a valid pandoc binary package, try to install the Haskell platform by following the instructions in
+		<a href="https://medium.com/@jtpaasch/install-haskell-on-centos-5be42b76c7a4">https://medium.com/@jtpaasch/install-haskell-on-centos-5be42b76c7a4</a>:<br />
+		<code>yum install haskell-platform</code><br />
+
+		Once Haskell is installed, follow the instructions in
+		<a href="http://johnmacfarlane.net/pandoc/installing.html#installing-from-source">http://johnmacfarlane.net/pandoc/installing.html#installing-from-source</a>:<br />
+		<code>cabal update</code><br />
+		<code>cabal install pandoc pandoc-citeproc</code><br />
+
+		This probably will fail due to an old version of the Glasgow Haskell Compiler (GHC).
+		Update it as indicated in
+		<a href="https://gist.github.com/grownseed/4fd2e91eca829cc039de">https://gist.github.com/grownseed/4fd2e91eca829cc039de</a>:<br />
+
+		<code>wget https://www.haskell.org/ghc/dist/7.8.4/ghc-7.8.4-x86_64-unknown-linux-centos65.tar.bz2</code><br />
+		<code>tar xf ghc-7.8.4-x86_64-unknown-linux-centos65.tar.bz2</code><br />
+		<code>cd ghc-7.8.4</code><br />
+		<code>./configure</code><br />
+		<code>make install</code><br />
+		
+		Then repeat:<br >
+		<code>cabal update</code><br />
+		<code>cabal install pandoc pandoc-citeproc</code>
+		</p>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install pandoc</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	</ul>
+
 	</li>
 
 	<li>
@@ -478,6 +544,12 @@
 		<p>
 		Activate the cgi module:<br />
 			<code>sudo a2enmod cgi</code><br />
+			<code>sudo service apache2 restart</code><br />
+		</p>
+		<p>
+		Optionally, if you want to rewrite some URIs,
+		activate the rewrite module:<br />
+			<code>sudo a2enmod rewrite</code><br />
 			<code>sudo service apache2 restart</code><br />
 		</p>
 		<p>
@@ -614,12 +686,24 @@
 		</li>
 
 		<li>
-		In the options for the directory <code>/var/www/</code>,
+		Inside the options for the directory <code>/var/www/</code>,
 		search the line:<br />
 		<code>Options Indexes FollowSymLinks</code><br />
 		and replace it by:<br />
 		<code>Options FollowSymLinks</code><br />
 		Remove <code>Indexes</code> to not list files in directories.
+		</li>
+
+		<li>
+		Optionally, if you want to rewrite some URIs,
+		inside the options for the directory <code>/var/www/</code>,
+		add lines like the following before <code>&lt;/Directory&gt;</code>:<br />
+		<code>RewriteEngine On</code><br />
+		<code>RewriteRule /institution/([^/]+)/?$ /swad/index.html?InsCod=$1</code><br />
+		<code>RewriteRule /centre/([^/]+)/?$ /swad/index.html?CtrCod=$1</code><br />
+		<code>RewriteRule /degree/([^/]+)/?$ /swad/index.html?DegCod=$1</code><br />
+		<code>RewriteRule /course/([^/]+)/?$ /swad/index.html?CrsCod=$1</code><br />
+		<code>RewriteRule /user/([^/]+)/?$ /swad/?Usr=$1</code>
 		</li>
 
 		</ul>
@@ -1258,6 +1342,42 @@
 	<td width="50%" valign="top">
 		<code>sudo cp -R /home/&lt;user_directory&gt;/swad/swad-core/dropzone /var/www/html/swad/</code><br />
 		<code>sudo chown -R www-data:www-data /var/www/html/swad/dropzone</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	</li>
+
+	<li>
+
+	<h2><a name="mathjax">Installing MathJax</a></h2>
+
+	<p>
+	<a href="http://docs.mathjax.org/">MathJax</a> is a Javascript library required to display math.
+	In SWAD, it is used in combination with Markdown and Pandoc.
+	To install it, follow the instructions in
+	<a href="http://docs.mathjax.org/en/latest/installation.html">http://docs.mathjax.org/en/latest/installation.html</a>.
+	The directory downloaded and uncompressed must be located inside your main HTML directory
+	<code>/var/www/html/swad/</code>:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>mv your-downloaded-copy-of-mathjax /var/www/html/swad/MathJax</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/MathJax</code><br />
+		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		it should be necessary to change the permissions of the directory <code>dropzone</code> and its contents:<br />
+			<code>ls -lZ /var/www/html/swad/</code><br />
+			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/MathJax</code><br />
+			<code>ls -lZ /var/www/html/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo mv your-downloaded-copy-of-mathjax /var/www/html/swad/MathJax</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/MathJax</code>
 	</td>
 	</tr>
 	</table>

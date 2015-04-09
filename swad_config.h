@@ -428,6 +428,9 @@
 /* HTML file weitten at foot of page */
 #define Cfg_PATH_AND_FILE_REL_HTML_PRIVATE	"./foot.html"
 
+/* Comment the following line if you do not want a local copy of MathJax */
+#define Cfg_MATHJAX_LOCAL
+
 /*****************************************************************************/
 /************************ Commands called by this CGI ************************/
 /*****************************************************************************/
