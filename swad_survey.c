@@ -401,7 +401,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Act_FormEnd ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s: %u; %s: %u</p></td>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
+	              "</td>",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_No_of_questions,
