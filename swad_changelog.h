@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.110.4 (2015/04/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.110.5 (2015/04/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.110.5: Apr 11, 2015	Fixed bug in tests. (184685 lines)
         Version 14.110.4: Apr 11, 2015	Changes in MathJax configuration. (184685 lines)
         Version 14.110.3: Apr 09, 2015	Changes in conversion from Markdown to HTML5 using pandoc. (184599 lines)
         Version 14.110.2: Apr 09, 2015	Changes in CSS and scripts.

@@ -583,9 +583,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 /************************ Help for the text editor ***************************/
 .HELP_EDIT
 	{
-	margin-bottom:10px;
+	margin:10px;
+	text-align:center;
 	color:#808080;
-	font-size:8pt;
+	font-size:10pt;
 	}
 
 /*****************************************************************************/

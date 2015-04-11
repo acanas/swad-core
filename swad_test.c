@@ -4218,6 +4218,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          Lay_WriteTitle (Txt_New_question);
      }
 
+   /***** Help for text editor *****/
+   Lay_HelpPlainEditor ();
+
    /***** Start form *****/
    Act_FormStart (ActRcvTstQst);
    if (Gbl.Test.QstCod != -1)	// If the question already has assigned a code
@@ -4313,14 +4316,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
-                      "<textarea name=\"Feedback\" cols=\"70\" rows=\"8\">"
-                      "%s"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
+                      "<textarea name=\"Feedback\" cols=\"70\" rows=\"8\">",
             The_ClassFormul[Gbl.Prefs.Theme],
-            Txt_Feedback,
-            Feedback);
+            Txt_Feedback);
    if (Feedback)
       if (Feedback[0])
 	 fprintf (Gbl.F.Out,"%s",Feedback);
