@@ -988,9 +988,9 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 	             StemRigorousHTML,StemLength,false);
 
    /***** Write the stem *****/
-   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
-	              "<tt>%s</tt>"
-	              "</p>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:justify;\">"
+	              "%s"
+	              "</div>",
 	    ClassStem,StemRigorousHTML);
 
    /***** Free memory allocated for the stem *****/
@@ -1019,9 +1019,9 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
 	 /***** Write the feedback *****/
-	 fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
-			    "<tt>%s</tt>"
-			    "</p>",
+	 fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:justify;\">"
+			    "%s"
+			    "</div>",
 		  ClassFeedback,FeedbackRigorousHTML);
 
 	 /***** Free memory allocated for the feedback *****/
@@ -2800,9 +2800,9 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             /* Write the text of the answer */
             fprintf (Gbl.F.Out,"<td class=\"TEST_EDI\" style=\"text-align:left;"
 	                       " vertical-align:top;\">"
-        	               "<p style=\"text-align:justify;\">"
-        	               "<tt>%s</tt>"
-        	               "</p>"
+        	               "<div style=\"text-align:justify;\">"
+        	               "%s"
+        	               "</div>"
         	               "</td>",
                      Answer);
 
@@ -2811,9 +2811,9 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               " style=\"text-align:left;"
         	               " vertical-align:top;\">");
             if (LengthFeedback)
-	       fprintf (Gbl.F.Out,"<p style=\"text-align:justify;\">"
-		                  "<tt>%s</tt>"
-		                  "</p>",
+	       fprintf (Gbl.F.Out,"<div style=\"text-align:justify;\">"
+		                  "%s"
+		                  "</div>",
 			Feedback);
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");
@@ -3091,9 +3091,9 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"TEST_EXA\" style=\"text-align:left;"
 	                 " vertical-align:top;\">"
-	                 "<p style=\"text-align:justify;\">"
-	                 "<tt>%s</tt>"
-	                 "</p>"
+	                 "<div style=\"text-align:justify;\">"
+	                 "%s"
+	                 "</div>"
 	                 "</td>"
 	                 "</tr>",
                Gbl.Test.Answer.Options[NumOpt].Text);
@@ -3254,16 +3254,16 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /* Answer text and feedback */
       fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;\">"
-	                 "<p class=\"TEST_EXA\" style=\"text-align:justify;\">"
-	                 "<tt>%s</tt>"
-	                 "</p>",
+	                 "<div class=\"TEST_EXA\" style=\"text-align:justify;\">"
+	                 "%s"
+	                 "</div>",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
-	       fprintf (Gbl.F.Out,"<p class=\"TEST_EXA_LIGHT\" style=\"text-align:justify;\">"
-				  "<tt>%s</tt>"
-				  "</p>",
+	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\" style=\"text-align:justify;\">"
+				  "%s"
+				  "</div>",
 			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -3460,17 +3460,17 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
          /* Answer text and feedback */
          fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
                             " vertical-align:top;\">"
-                            "<p class=\"ANS\" style=\"text-align:justify;\">"
+                            "<div class=\"ANS\" style=\"text-align:justify;\">"
                             "%s"
-                            "</p>",
+                            "</div>",
                   Gbl.Test.Answer.Options[NumOpt].Text);
 	 if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
-		  fprintf (Gbl.F.Out,"<p class=\"TEST_EXA_LIGHT\""
+		  fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\""
 			             " style=\"text-align:justify;\">"
-				     "<tt>%s</tt>"
-				     "</p>",
+				     "%s"
+				     "</div>",
 			   Gbl.Test.Answer.Options[NumOpt].Feedback);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -4095,7 +4095,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Answer;
    extern const char *Txt_Shuffle;
    extern const char *Txt_Save;
-   char Title[256];
+   char Title[512];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4112,9 +4112,6 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       Tst_InitQst ();
       if (Tst_GetQstCod ())	// If parameter QstCod received ==> question already exists in the database
         {
-         sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-         Lay_WriteTitle (Title);
-
          /***** Get the type of answer and the stem from the database *****/
          /* Get the question from database */
          sprintf (Query,"SELECT AnsType,Shuffle,Stem,Feedback"
@@ -4214,19 +4211,26 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
         }
-      else
-         Lay_WriteTitle (Txt_New_question);
      }
 
-   /***** Help for text editor *****/
-   Lay_HelpPlainEditor ();
-
-   /***** Start form *****/
+   /***** Start form and table *****/
    Act_FormStart (ActRcvTstQst);
-   if (Gbl.Test.QstCod != -1)	// If the question already has assigned a code
+   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
+     {
       Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
 
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
+      Lay_StartRoundFrameTable10 (NULL,2,Title);
+     }
+   else
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_question);
+
+   /***** Help for text editor *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\">");
+   Lay_HelpPlainEditor ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** Get tags already existing for questions in current course *****/
    NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res);
@@ -4502,14 +4506,24 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	                 "</td>"
 	                 "</tr>");
      }
-
-   /***** Send and undo buttons *****/
    fprintf (Gbl.F.Out,"</table>"
-	              "</tr>"
-	              "</table>");
+	              "</td>"
+	              "</tr>");
+
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td colspan=\"2\">");
    Lay_PutConfirmButton (Txt_Save);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End table *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
    Act_FormEnd ();
 
+   /***** Free memory for answers *****/
    Tst_FreeTextChoiceAnswers ();
   }
 

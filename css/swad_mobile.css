@@ -662,6 +662,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .STATUS_RED		{color:#FF0000; font-size:14pt;}
 .STATUS_RED_LIGHT	{color:#F98A8A; font-size:14pt;}
 
+/********************************** Tests ************************************/
 .ANS			{color:#404040; font-size:16pt; font-weight:bold;}
 .ANS_OK			{color:#008000; font-size:16pt; font-weight:bold;}
 .ANS_BAD		{color:#FF0000; font-size:16pt; font-weight:bold;}

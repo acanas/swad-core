@@ -851,15 +851,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 .STATUS_RED		{color:#FF0000; font-size:10pt;}
 .STATUS_RED_LIGHT	{color:#F98A8A; font-size:10pt;}
 
+/********************************** Tests ************************************/
 .ANS			{color:#404040; font-size:12pt; font-weight:bold;}
 .ANS_OK			{color:#008000; font-size:12pt; font-weight:bold;}
 .ANS_BAD		{color:#FF0000; font-size:12pt; font-weight:bold;}
 .TST_TIT		{color:#404040; font-size:14pt;}
 .TEST			{color:#404040; font-size:10pt;}
-.TEST_EXA		{font-family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#404040; font-size:10pt;}
-.TEST_EXA_LIGHT		{font-family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#A0A0A0; font-size:10pt;}
-.TEST_EDI		{font-family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#404040; font-size:10pt;}
-.TEST_EDI_LIGHT		{font-family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#A0A0A0; font-size:10pt;}
+.TEST_EXA		{color:#404040; font-size:10pt;}
+.TEST_EXA_LIGHT		{color:#A0A0A0; font-size:10pt;}
+.TEST_EDI		{color:#404040; font-size:10pt;}
+.TEST_EDI_LIGHT		{color:#A0A0A0; font-size:10pt;}
 
 .HOR			{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#345C6C; font-size:8pt; line-height:110%; letter-spacing:0;}
 .FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
