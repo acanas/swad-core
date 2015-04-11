@@ -229,7 +229,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
      };
    Sch_WhatToSearch_t WhatToSearch;
 
-   /***** Form start *****/
+   /***** Start form *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (Action);
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Search);
@@ -274,7 +274,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"<br />");
    Lay_PutConfirmButton (Txt_Search);
 
-   /***** Form end *****/
+   /***** End form *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
    Lay_EndRoundFrameTable10 ();

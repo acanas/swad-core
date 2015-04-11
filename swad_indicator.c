@@ -182,7 +182,7 @@ void Ind_ReqIndicatorsCourses (void)
 	              "</tr>"
 	              "</table>");
 
-   /* Form end */
+   /* End form */
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</td>"

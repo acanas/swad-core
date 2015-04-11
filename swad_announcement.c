@@ -314,7 +314,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
-   /***** Form start *****/
+   /***** Start form *****/
    Act_FormStart (ActRcvAnn);
 
    /***** Start frame *****/
@@ -368,7 +368,7 @@ void Ann_ShowFormAnnouncement (void)
    /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

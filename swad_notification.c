@@ -1819,7 +1819,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if ((NumUnseenNtfs = Ntf_GetNumberOfAllMyUnseenNtfs ()) != 0)
       NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
 
-   /***** Form start *****/
+   /***** Start form *****/
    Act_FormStartId (ActSeeNewNtf,"form_ntf");
    Act_LinkFormSubmitId (Txt_See_notifications,
                          The_ClassNotif[Gbl.Prefs.Theme],"form_ntf");
@@ -1852,7 +1852,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
                   Txt_NOTIF_new_PLURAL);
      }
 
-   /***** Form end *****/
+   /***** End form *****/
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }

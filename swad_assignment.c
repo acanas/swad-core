@@ -1106,7 +1106,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
      }
 
-   /***** Form start *****/
+   /***** Start form *****/
    if (ItsANewAssignment)
       Act_FormStart (ActNewAsg);
    else
@@ -1222,7 +1222,7 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Table end *****/
    Lay_EndRoundFrameTable10 ();
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"<br />");
 

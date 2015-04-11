@@ -1553,7 +1553,7 @@ void Svy_RequestCreatOrEditSvy (void)
       Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
      }
 
-   /***** Form start *****/
+   /***** Start form *****/
    if (ItsANewSurvey)
       Act_FormStart (ActNewSvy);
    else
@@ -1677,7 +1677,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
 
    /***** Show questions of the survey ready to be edited *****/
@@ -3080,7 +3080,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       /***** Button to create/modify survey *****/
       Lay_PutConfirmButton (Txt_Send_survey);
 
-      /***** Form end *****/
+      /***** End form *****/
       Act_FormEnd ();
      }
    else

@@ -519,7 +519,7 @@ void Sta_AskSeeCrsAccesses (void)
          /***** Submit button *****/
          Lay_PutConfirmButton (Txt_Show_visits);
 
-         /***** Form end *****/
+         /***** End form *****/
          Act_FormEnd ();
 
          /* Free the memory used by the list of users */
@@ -648,7 +648,7 @@ void Sta_AskSeeGblAccesses (void)
    /***** Submit button *****/
    Lay_PutConfirmButton (Txt_Show_visits);
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -3640,7 +3640,7 @@ void Sta_ReqUseOfPlatform (void)
    /***** Submit button *****/
    Lay_PutConfirmButton (Txt_Show_statistic);
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

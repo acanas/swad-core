@@ -1371,7 +1371,7 @@ void Usr_WriteFormLogin (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Form start *****/
+   /***** Start form *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActAutUsrInt);
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Log_in);
@@ -6349,7 +6349,7 @@ void Usr_SeeGuests (void)
          /***** Draw a class photo with students of the course *****/
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
-         /* Form start */
+         /* Start form */
 	 Act_FormStart (ActSeeRecSevInv);
 	 Grp_PutParamsCodGrps ();
 
@@ -6517,7 +6517,7 @@ void Usr_SeeStudents (void)
          /***** Draw a class photo with students of the course *****/
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
-         /* Form start */
+         /* Start form */
          if (ICanViewRecords)
            {
 	    Act_FormStart (ActSeeRecSevStd);
@@ -6655,7 +6655,7 @@ void Usr_SeeTeachers (void)
          /***** Draw a class photo with teachers of the course *****/
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
-         /* Form start */
+         /* Start form */
          if (ICanViewRecords)
             Act_FormStart (ActSeeRecSevTch);
 

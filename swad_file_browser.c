@@ -2861,7 +2861,7 @@ void Brw_AskEditWorksCrs (void)
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Draw class photos to select users *****/
-         /* Form start */
+         /* Start form */
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
@@ -2881,7 +2881,7 @@ void Brw_AskEditWorksCrs (void)
          /* Frame end */
          Lay_EndRoundFrameTable10 ();
 
-         /* Form end */
+         /* End form */
          Act_FormEnd ();
         }
      }
@@ -3052,7 +3052,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
       /* Get list of group with file zones which I belong to */
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
-   /***** Form start *****/
+   /***** Start form *****/
    Act_FormStart (Brw_ActChgZone[Gbl.FileBrowser.Type]);
 
    /***** List start *****/
@@ -11136,7 +11136,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	                 " vertical-align:top; background-color:%s;\">",
 	       BgColor);
 
-      /* Form start */
+      /* Start form */
       if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	{
          Act_FormGoToStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);	// Go to another course

@@ -93,7 +93,7 @@ void Not_ShowFormNotice (void)
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   /***** Form start *****/
+   /***** Start form *****/
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
@@ -122,7 +122,7 @@ void Not_ShowFormNotice (void)
    /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
 
-   /***** Form end *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

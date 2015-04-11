@@ -5972,7 +5972,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
-         /***** Form start *****/
+         /***** Start form *****/
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
          fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
@@ -6020,7 +6020,7 @@ void Tst_SelDatesToSeeMyTstExams (void)
   {
    extern const char *Txt_See_exams;
 
-   /***** Form start *****/
+   /***** Start form *****/
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/

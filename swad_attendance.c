@@ -358,14 +358,14 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"2\""
-	              " style=\"text-align:left; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" style=\"text-align:left;"
+	              " vertical-align:top; background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
 
-   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">%s</p>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:justify;\">%s</div>",
             Att->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Txt);
@@ -1073,7 +1073,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_GetAttEventTxtFromDB (Att.AttCod,Txt);
      }
 
-   /***** Form start *****/
+   /***** Start form *****/
    if (ItsANewAttEvent)
       Act_FormStart (ActNewAtt);
    else
@@ -1184,18 +1184,21 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Groups *****/
    Att_ShowLstGrpsToEditAttEvent (Att.AttCod);
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
-
    /***** New attendance event *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\">");
    if (ItsANewAttEvent)
       Lay_PutCreateButton (Txt_Create_event);
    else
       Lay_PutConfirmButton (Txt_Modify_event);
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
-   /***** Form end *****/
+   /***** Table end *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"<br />");
 
    /***** Show current attendance events *****/
    Att_ShowAllAttEvents ();
@@ -1604,7 +1607,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
             Att->Hidden ? "ASG_GRP_LIGHT" :
         	          "ASG_GRP",
             (NumGrps == 1) ? Txt_Group  :
@@ -1638,7 +1641,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
 
-   fprintf (Gbl.F.Out,"</p>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1838,6 +1841,7 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
 
 void Att_SeeOneAttEvent (void)
   {
+   extern const char *Txt_Event;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -1851,7 +1855,7 @@ void Att_SeeOneAttEvent (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Event);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
    Lay_EndRoundFrameTable10 ();
@@ -1886,7 +1890,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /***** Get my preference about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
-   /***** Form start *****/
+   /***** Start form *****/
    if (Att->Open)
      {
       Act_FormStart (ActRecAttMe);
@@ -1938,6 +1942,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
 static void Att_ListAttStudents (struct AttendanceEvent *Att)
   {
+   extern const char *Txt_Attendance;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1959,14 +1964,14 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Form start *****/
+      /***** Start form *****/
       Act_FormStart (ActRecAttStd);
       Att_PutParamAttCod (Att->AttCod);
       Grp_PutParamsCodGrps ();
 
       /***** List students' data *****/
       /* Header */
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th></th>"
@@ -2001,13 +2006,18 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
            }
         }
 
-      /* Footer */
+      /* Send button */
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"8\">");
+      Lay_PutConfirmButton (Txt_Save);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "<tr>");
+
+      /* End frame */
       Lay_EndRoundFrameTable10 ();
 
-      /***** Send button *****/
-      Lay_PutConfirmButton (Txt_Save);
+      /***** End form *****/
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2609,6 +2619,7 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 
 void Usr_ReqListAttendanceStdsCrs (void)
   {
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_list;
 
    /***** Get and update type of list,
@@ -2633,23 +2644,28 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Usr_GetListSelectedUsrs ();
 
          /***** Draw a class photo with students of the course *****/
-         /* Form start */
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+         /* Start form */
          Act_FormStart (ActSeeLstAttStd);
          Grp_PutParamsCodGrps ();
 
-         /* Write list of students to select some of them */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
-         Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTable10 ();
+         /* Start frame */
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
-	 /* Free list of attendance events */
-         Att_FreeListAttEvents ();
+         /* Write list of students to select some of them */
+         Usr_ListUsersToSelect (Rol_STUDENT);
 
          /* Send button */
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td>");
          Lay_PutConfirmButton (Txt_Show_list);
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+
+         /* End frame */
+         Lay_EndRoundFrameTable10 ();
+
+         /* End form */
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</div>");
 
          /***** Free memory used for by the list of users *****/
          Usr_FreeListsEncryptedUsrCods ();
@@ -2723,8 +2739,6 @@ void Usr_ListAttendanceStdsCrs (void)
       /***** Show details or put button to show details *****/
       if (Gbl.AttEvents.ShowDetails)
          Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
-      else if (Gbl.CurrentAct == ActSeeLstAttStd)
-	 Att_PutButtonToShowDetails ();
 
       /***** Free memory for list of attendance events selected *****/
       free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -3112,6 +3126,17 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 		      "</td>"
 		      "</tr>",
 	    Total);
+
+   /***** Button to show more details *****/
+   if (Gbl.CurrentAct == ActSeeLstAttStd && !Gbl.AttEvents.ShowDetails)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"%u\">",
+	       4 + Gbl.AttEvents.Num + 1);
+      Att_PutButtonToShowDetails ();
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
 
    /***** End frame *****/
    Lay_EndRoundFrameTable10 ();
