@@ -97,6 +97,8 @@ static void Lay_ShowRightColumn (void);
 
 static void Lay_WriteFootFromHTMLFile (void);
 
+static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const char *Equation);
+
 /*****************************************************************************/
 /*********************** Write the start of the page *************************/
 /*****************************************************************************/
@@ -446,6 +448,17 @@ static void Lay_WriteScripts (void)
 	    Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /***** Script for MathJax *****/
+   // MathJax configuration
+   /*
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+	              " window.MathJax = {"
+	              "  tex2jax: {"
+	              "   inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
+	              "   processEscapes: true"
+	              "  }"
+	              " };"
+	              "</script>");
+   */
 #ifdef Cfg_MATHJAX_LOCAL
    // Use the local copy of MathJax
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
@@ -1615,4 +1628,44 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 	    Gbl.Prefs.IconsURL,
 	    IsLastItemInLevel[Level] ? "subend" :
 				       "submid");
+  }
+/*****************************************************************************/
+/************************** Help for the text editor *************************/
+/*****************************************************************************/
+
+void Lay_HelpPlainEditor (void)
+  {
+   extern const char *Txt_TEXT_plain;
+
+   Lay_HelpTextEditor (Txt_TEXT_plain,
+                       "\\(LaTeX\\)",
+                       "$$LaTeX$$, \\[LaTeX\\]");
+  }
+
+void Lay_HelpRichEditor (void)
+  {
+   Lay_HelpTextEditor ("<a href=\"http://johnmacfarlane.net/pandoc/README.html#pandocs-markdown\""
+	               " target=\"_blank\">Markdown + Pandoc</a>",
+                       "$LaTeX$",
+                       "$$LaTeX$$");
+  }
+
+static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const char *Equation)
+  {
+   extern const char *Txt_Text;
+   extern const char *Txt_Inline_math;
+   extern const char *Txt_Equation_centered;
+
+   fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">"
+	              "<code>"
+	              "%s: %s"
+                      "&nbsp;&nbsp;&nbsp;"
+                      "%s: %s"
+                      "&nbsp;&nbsp;&nbsp;"
+                      "%s: %s"
+                      "</code>"
+                      "</div>",
+            Txt_Text,Text,
+            Txt_Inline_math,InlineMath,
+            Txt_Equation_centered,Equation);
   }

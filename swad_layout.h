@@ -121,4 +121,7 @@ void Lay_AdvertisementMobile (void);
 
 void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);
 
+void Lay_HelpPlainEditor (void);
+void Lay_HelpRichEditor (void);
+
 #endif

@@ -1840,19 +1840,18 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">"
-	              "<textarea name=\"Txt\" cols=\"100\" rows=\"20\">"
+	              "<td style=\"text-align:center;\">");
+   Lay_HelpPlainEditor ();
+   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>"
-	              "</td>"
-	              "</tr>",
+	              "</textarea>",
             TxtHTML);
-
-   /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** Send and undo buttons *****/
    Lay_PutConfirmButton (Txt_Save);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End form *****/
+   Lay_EndRoundFrameTable10 ();
    Act_FormEnd ();
   }
 
@@ -1863,12 +1862,11 @@ void Inf_EditPlainTxtInfo (void)
 void Inf_EditRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_RICH_TEXT_EDITOR_HELP;
    extern const char *Txt_Save;
    Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Start table *****/
+   /***** Start form *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[InfoType]);
    Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
 
@@ -1882,19 +1880,17 @@ void Inf_EditRichTxtInfo (void)
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:center;\">");
-   Lay_ShowAlert (Lay_INFO,Txt_RICH_TEXT_EDITOR_HELP);
-   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"100\" rows=\"20\">"
+   Lay_HelpRichEditor ();
+   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>"
-	              "</td>"
-	              "</tr>",
+	              "</textarea>",
             TxtHTML);
-
-   /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** Send and undo buttons *****/
    Lay_PutConfirmButton (Txt_Save);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End form *****/
+   Lay_EndRoundFrameTable10 ();
    Act_FormEnd ();
   }
 

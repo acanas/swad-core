@@ -35,7 +35,7 @@ body
 	}
 input			{font-size:10pt; vertical-align:middle;}
 select			{font-size:10pt;}
-textarea		{font-size:8pt;}
+textarea		{font-size:10pt;}
 table
 	{
 	border-width:0;
@@ -767,6 +767,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	border:1px solid grey;
 	padding:5px;
+	}
+
+/************************ Help for the text editor ***************************/
+.HELP_EDIT
+	{
+	margin-bottom:10px;
+	color:#808080;
+	font-size:8pt;
 	}
 
 /*****************************************************************************/

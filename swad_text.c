@@ -9870,6 +9870,27 @@ const char *Txt_Enter_from_X =	// Warning: it is very important to include %s in
 	"Digite partir %s";
 #endif
 
+const char *Txt_Equation_centered =
+#if   L==0
+	"Equaci&oacute; centrada";
+#elif L==1
+	"Gleichung zentriert";
+#elif L==2
+	"Equation centered";
+#elif L==3
+	"Ecuaci&oacute;n centrada";
+#elif L==4
+	"Equation centr&eacute;";
+#elif L==5
+	"Ecuaci&oacute;n centrada";	// Okoteve traducción
+#elif L==6
+	"Equazione centrato";
+#elif L==7
+	"R&oacute;wnanie centered";
+#elif L==8
+	"equa&ccedil;&atilde;o centrado";
+#endif
+
 const char *Txt_Error_getting_data_from_a_recipient =
 #if   L==0
 	"Error obteniendo datos de un destinatario.";	// Necessita traduccio
@@ -14262,6 +14283,27 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 	 "Externa p&aacute;gina"
 #endif
 	};
+
+const char *Txt_Inline_math =
+#if   L==0
+	"F&oacute;rmula en par&agrave;graf";
+#elif L==1
+	"Inline Mathematik";
+#elif L==2
+	"Inline math";
+#elif L==3
+	"F&oacute;rmula en p&aacute;rrafo";
+#elif L==4
+	"Formule au paragraphe";
+#elif L==5
+	"F&oacute;rmula en p&aacute;rrafo";	// Okoteve traducción
+#elif L==6
+	"Matematica inline";
+#elif L==7
+	"Jazda matematyki";
+#elif L==8
+	"Fórmula em par&aacute;grafo";
+#endif
 
 const char *Txt_Institution =
 #if   L==0
@@ -29693,63 +29735,6 @@ const char *Txt_Retype_password =
 	"Redigite a senha";
 #endif
 
-const char *Txt_RICH_TEXT_EDITOR_HELP =
-#if   L==0
-	"Pot formatar el text usant"
-	" <a href=\"http://ca.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" A m&eacute;s pot escriure f&oacute;rmules en"
-	" <a href=\"https://ca.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" entre dues $ o dues $$.";
-#elif L==1
-	"Sie k&ouml;nnen den Text zu formatieren mit"
-	" <a href=\"http://de.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Sie k&ouml;nnen"
-	" <a href=\"https://de.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" Formeln auch zwischen zwei $ oder zwei $$.";
-#elif L==2
-	"You can format the text using"
-	" <a href=\"http://en.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" You can also type"
-	" <a href=\"https://en.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" formulas between two $ or two $$.";
-#elif L==3
-	"Puede formatear el texto usando"
-	" <a href=\"http://es.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Adem&aacute;s puede escribir f&oacute;rmulas en"
-	" <a href=\"https://es.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" entre dos $ o dos $$.";
-#elif L==4
-	"Vous pouvez formater le texte en utilisant"
-	" <a href=\"http://fr.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Vous pouvez &eacute;galement taper des formules"
-	" <a href=\"https://fr.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" entre deux $ ou deux $$.";
-#elif L==5
-	"Puede formatear el texto usando"
-	" <a href=\"http://es.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Adem&aacute;s puede escribir f&oacute;rmulas en"
-	" <a href=\"https://es.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" entre dos $ o dos $$.";	// Okoteve traducción
-#elif L==6
-	"&Egrave; possibile formattare il testo con"
-	" <a href=\"http://it.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" &Egrave; inoltre possibile digitare formule"
-	" <a href=\"https://it.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" tra due $ o due $$.";
-#elif L==7
-	"Mo&zdot;esz formatowa&cacute; tekst za pomoc&aogon;"
-	" <a href=\"http://pl.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Mo&zdot;esz r&oacute;wnie&zdot; wpisa&cacute; formu&lstrok;y"
-	" <a href=\"https://pl.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" mi&eogon;dzy dwoma $ lub dw&oacute;ch $$.";
-#elif L==8
-	"Voc&ecirc; pode formatar o texto usando"
-	" <a href=\"http://pt.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a>."
-	" Voc&ecirc; tamb&eacute;m pode digitar f&oacute;rmulas"
-	" <a href=\"https://pt.wikipedia.org/wiki/LaTeX\" target=\"_blank\">LaTeX</a>"
-	" entre duas $ ou duas $$.";
-#endif
-
 const char *Txt_Role =
 #if   L==0
 	"Rol";
@@ -38507,6 +38492,48 @@ const char *Txt_Test_result =
 	"Test result";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Resultado do teste";
+#endif
+
+const char *Txt_Text =
+#if   L==0
+	"Text";
+#elif L==1
+	"Text";
+#elif L==2
+	"Text";
+#elif L==3
+	"Texto";
+#elif L==4
+	"Texte";
+#elif L==5
+	"Texto";	// Okoteve traducción
+#elif L==6
+	"Testo";
+#elif L==7
+	"Tekst";
+#elif L==8
+	"Texto";
+#endif
+
+const char *Txt_TEXT_plain =
+#if   L==0
+	 "sense format";
+#elif L==1
+	 "Plain";
+#elif L==2
+	 "plain";
+#elif L==3
+	 "sin formato";
+#elif L==4
+	 "plain";
+#elif L==5
+	 "sin formato";	// Okoteve traducción
+#elif L==6
+	 "normale";
+#elif L==7
+	 "zwykly";
+#elif L==8
+	 "plano";
 #endif
 
 const char *Txt_Thanks_for_answering_the_survey =
