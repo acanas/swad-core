@@ -418,33 +418,6 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
                Gbl.ColorRows[Gbl.RowEvenOdd]);
    fprintf (Gbl.F.Out,"\">");
    Svy_WriteStatus (&Svy);
-
-   if (!ShowOnlyThisSvyComplete)
-     {
-      /* Possible button to answer this survey */
-      if (Svy.Status.ICanAnswer)
-        {
-         Act_FormStart (ActSeeOneSvy);
-         Svy_PutParamSvyCod (Svy.SvyCod);
-         Svy_PutHiddenParamSvyOrderType ();
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutConfirmButton (Txt_Answer_survey);
-         Act_FormEnd ();
-        }
-      /* Possible button to see the result of the survey */
-      else if (Svy.Status.ICanViewResults)
-        {
-         Act_FormStart (ActSeeOneSvy);
-         Svy_PutParamSvyCod (Svy.SvyCod);
-         Svy_PutHiddenParamSvyOrderType ();
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutConfirmButton (Txt_View_survey_results);
-         Act_FormEnd ();
-        }
-     }
-
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -472,7 +445,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    fprintf (Gbl.F.Out,"\">");
 
    /* Scope of the survey */
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Scope);
@@ -484,10 +457,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
                Txt_Degree,Gbl.CurrentDeg.Deg.ShortName);
    else
       fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</p>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* Users' roles who can answer the survey */
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s:",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s:",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Users);
@@ -505,7 +478,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
      }
-   fprintf (Gbl.F.Out,"</p>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* Groups whose users can answer this survey */
    if (Svy.CrsCod > 0)
@@ -518,21 +491,54 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
-                      "<br />%s<br />&nbsp;</p></td>"
+                      "%s"
+                      "</p>"
+                      "</td>"
                       "</tr>",
             Svy.Status.Visible ? "DAT" :
         	                 "DAT_LIGHT",
             Txt);
 
    /***** Write questions of this survey *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"4\"");
    if (ShowOnlyThisSvyComplete)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"4\">");
+      fprintf (Gbl.F.Out,">");
+
+      /* Write questions of this survey **/
       Svy_ListSvyQuestions (&Svy,SvyQst);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
      }
+   else
+     {
+      fprintf (Gbl.F.Out," style=\"background-color:%s;\">",
+		  Gbl.ColorRows[Gbl.RowEvenOdd]);
+
+      /* Possible button to answer this survey */
+      if (Svy.Status.ICanAnswer)
+        {
+         Act_FormStart (ActSeeOneSvy);
+         Svy_PutParamSvyCod (Svy.SvyCod);
+         Svy_PutHiddenParamSvyOrderType ();
+         Grp_PutParamWhichGrps ();
+         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Lay_PutConfirmButton (Txt_Answer_survey);
+         Act_FormEnd ();
+        }
+      /* Possible button to see the result of the survey */
+      else if (Svy.Status.ICanViewResults)
+        {
+	 Act_FormStart (ActSeeOneSvy);
+         Svy_PutParamSvyCod (Svy.SvyCod);
+         Svy_PutHiddenParamSvyOrderType ();
+         Grp_PutParamWhichGrps ();
+         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Lay_PutConfirmButton (Txt_View_survey_results);
+         Act_FormEnd ();
+        }
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -1489,7 +1495,7 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Txt_Description;
    extern const char *Txt_Users;
    extern const char *Txt_Create_survey;
-   extern const char *Txt_Modify_survey;
+   extern const char *Txt_Save;
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
@@ -1671,7 +1677,7 @@ void Svy_RequestCreatOrEditSvy (void)
    if (ItsANewSurvey)
       Lay_PutCreateButton (Txt_Create_survey);
    else
-      Lay_PutConfirmButton (Txt_Modify_survey);
+      Lay_PutConfirmButton (Txt_Save);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -2162,7 +2168,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get groups of a survey");
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
             Svy->Status.Visible ? "ASG_GRP" :
         	                  "ASG_GRP_LIGHT",
             NumRows == 1 ? Txt_Group  :
@@ -2196,7 +2202,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
 
-   fprintf (Gbl.F.Out,"</p>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2364,6 +2370,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_Save;
+   extern const char *Txt_Create_question;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2512,7 +2519,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Lay_PutConfirmButton (Txt_Save);
    else
-      Lay_PutCreateButton (Txt_Save);
+      Lay_PutCreateButton (Txt_Create_question);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -2940,6 +2947,10 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
+   bool Editing = (Gbl.CurrentAct == ActEdiOneSvy ||
+	           Gbl.CurrentAct == ActEdiOneSvyQst ||
+	           Gbl.CurrentAct == ActRcvSvyQst);
+   bool FormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
@@ -2947,19 +2958,15 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
-   if (Svy->Status.ICanAnswer)
+   if (FormAnswerSurvey)
      {
       /***** Start form to send answers to survey *****/
       Act_FormStart (ActAnsSvy);
       Svy_PutParamSvyCod (Svy->SvyCod);
      }
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
-   /***** Heading title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT\" style=\"text-align:center;\">");
-   Lay_WriteTitle (Txt_Survey_questions);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\">");
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Survey_questions);
 
    if (NumQsts)
      {
@@ -3066,46 +3073,41 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	                 "</tr>",
                Txt_This_survey_has_no_questions);
 
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
-	              "</tr>");
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Svy->Status.ICanAnswer)
+   if (FormAnswerSurvey)
      {
-      /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
-
       /***** Button to create/modify survey *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"5\">");
       Lay_PutConfirmButton (Txt_Send_survey);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
+   else if (Svy->Status.ICanEdit && Editing)
+     {
+      /***** Put form to add a new question in this survey *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"5\">");
+      Act_FormStart (ActEdiOneSvyQst);
+      Svy_PutParamSvyCod (Svy->SvyCod);
+      Svy_PutHiddenParamSvyOrderType ();
+      Grp_PutParamWhichGrps ();
+      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+      Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
+      Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
 
+   /***** Table end *****/
+   Lay_EndRoundFrameTable10 ();
+
+   if (FormAnswerSurvey)
       /***** End form *****/
       Act_FormEnd ();
-     }
-   else
-     {
-      if (Svy->Status.ICanEdit)
-        {
-         /***** Put form to add a new question in this survey *****/
-         fprintf (Gbl.F.Out,"<tr>"
-	                    "<td style=\"text-align:center;\">");
-         Act_FormStart (ActEdiOneSvyQst);
-         Svy_PutParamSvyCod (Svy->SvyCod);
-         Svy_PutHiddenParamSvyOrderType ();
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
-         Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
-         Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-        }
-
-      /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
-     }
   }
 
 /*****************************************************************************/
@@ -3140,9 +3142,9 @@ static void Svy_WriteQstStem (const char *Stem,const char *TextStyle)
    /* Write the stem */
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:top; background-color:%s;\">"
-                      "<p style=\"text-align:justify;\">"
+                      "<div style=\"text-align:justify;\">"
                       "<tt>%s</tt>"
-                      "</p>",
+                      "</div>",
 	    TextStyle,Gbl.ColorRows[Gbl.RowEvenOdd],HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */

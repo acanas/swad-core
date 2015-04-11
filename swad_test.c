@@ -4095,6 +4095,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Answer;
    extern const char *Txt_Shuffle;
    extern const char *Txt_Save;
+   extern const char *Txt_Create_question;
    char Title[512];
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -4513,7 +4514,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\">");
-   Lay_PutConfirmButton (Txt_Save);
+   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
+      Lay_PutConfirmButton (Txt_Save);
+   else
+      Lay_PutCreateButton (Txt_Create_question);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

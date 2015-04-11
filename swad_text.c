@@ -5848,6 +5848,27 @@ const char *Txt_Create_plugin =
 	"Criar plugin";
 #endif
 
+const char *Txt_Create_question =
+#if   L==0
+	"Crear pregunta";
+#elif L==1
+	"Frage erstellen";
+#elif L==2
+	"Create question";
+#elif L==3
+	"Crear pregunta";
+#elif L==4
+	"Cr&eacute;er question";
+#elif L==5
+	"Crear pregunta";	// Okoteve traducción
+#elif L==6
+	"Crea domanda";
+#elif L==7
+	"Tworzenie pytanie";
+#elif L==8
+	"Criar quest&atilde;o";
+#endif
+
 const char *Txt_Create_record_field =
 #if   L==0
 	"Crear campo de ficha";	// Necessita traduccio
@@ -20544,48 +20565,6 @@ const char *Txt_minutes =
 	"minutos";
 #endif
 
-const char *Txt_Modify_assignment =
-#if   L==0
-	"Modificar actividad";	// Necessita traduccio
-#elif L==1
-	"&Auml;ndern Aufgabe";
-#elif L==2
-	"Modify assignment";
-#elif L==3
-	"Modificar actividad";
-#elif L==4
-	"Modifier activit&eacute;";
-#elif L==5
-	"Modificar actividad";	// Okoteve traducción
-#elif L==6
-	"Modifica attivit&agrave;";
-#elif L==7
-	"Modyfikacja zadania";
-#elif L==8
-	"Modificar atividade";
-#endif
-
-const char *Txt_Modify_event =
-#if   L==0
-	"Modificar evento";	// Necessita traduccio
-#elif L==1
-	"&Auml;ndern Ereignis";
-#elif L==2
-	"Modify event";
-#elif L==3
-	"Modificar evento";
-#elif L==4
-	"Modifier &eacute;v&eacute;nement";
-#elif L==5
-	"Modificar evento";	// Okoteve traducción
-#elif L==6
-	"Modifica evento";
-#elif L==7
-	"Modyfikacja wydarzenie";
-#elif L==8
-	"Modificar evento";
-#endif
-
 const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Modificarme en l'assignatura <strong>%s</strong>";
@@ -20626,27 +20605,6 @@ const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important t
 	"Modyfikacja u&zdot;ytkownika w kurs <strong>%s</strong>";
 #elif L==8
 	"Modificar utilizador na disciplina <strong>%s</strong>";
-#endif
-
-const char *Txt_Modify_survey =
-#if   L==0
-	"Modifier sondage";	// Necessita traduccio
-#elif L==1
-	"&Auml;ndern Umfrage";
-#elif L==2
-	"Modify survey";
-#elif L==3
-	"Modificar encuesta";
-#elif L==4
-	"Modifier sondage";
-#elif L==5
-	"Modificar encuesta";	// Okoteve traducción
-#elif L==6
-	"Modifica sondaggio";
-#elif L==7
-	"Badanie Modyfikuj";
-#elif L==8
-	"Modificar inqu&eacute;rito";
 #endif
 
 const char *Txt_Month =

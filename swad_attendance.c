@@ -1024,7 +1024,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
-   extern const char *Txt_Modify_event;
+   extern const char *Txt_Save;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
    Att_StartOrEndTime_t StartOrEndTime;
@@ -1190,7 +1190,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    if (ItsANewAttEvent)
       Lay_PutCreateButton (Txt_Create_event);
    else
-      Lay_PutConfirmButton (Txt_Modify_event);
+      Lay_PutConfirmButton (Txt_Save);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -2656,7 +2656,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
 
          /* Send button */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td>");
+                            "<td colspan=\"10\">");
          Lay_PutConfirmButton (Txt_Show_list);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");

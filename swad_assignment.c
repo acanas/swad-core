@@ -1054,7 +1054,7 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Txt_Folder;
    extern const char *Txt_Description;
    extern const char *Txt_Create_assignment;
-   extern const char *Txt_Modify_assignment;
+   extern const char *Txt_Save;
    struct Assignment Asg;
    bool ItsANewAssignment;
    Asg_StartOrEndTime_t StartOrEndTime;
@@ -1215,7 +1215,7 @@ void Asg_RequestCreatOrEditAsg (void)
    if (ItsANewAssignment)
       Lay_PutCreateButton (Txt_Create_assignment);
    else
-      Lay_PutConfirmButton (Txt_Modify_assignment);
+      Lay_PutConfirmButton (Txt_Save);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
