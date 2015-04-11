@@ -2834,6 +2834,7 @@ static bool Brw_CheckIfQuotaExceded (void)
 
 void Brw_AskEditWorksCrs (void)
   {
+   extern const char *Txt_Users;
    extern const char *Txt_View_works;
 
    /***** Get parameters related to file browser *****/
@@ -2861,21 +2862,27 @@ void Brw_AskEditWorksCrs (void)
         {
          /***** Draw class photos to select users *****/
          /* Form start */
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
 
          /* Put list of users to select some of them */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_Users);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTable10 ();
 
          /* Button to send the form */
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td>");
          Lay_PutConfirmButton (Txt_View_works);
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+
+         /* Frame end */
+         Lay_EndRoundFrameTable10 ();
+
+         /* Form end */
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</div>");
         }
      }
    else

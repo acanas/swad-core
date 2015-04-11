@@ -770,7 +770,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"UsrsIDs\" cols=\"90\" rows=\"15\">",
+                      "<textarea name=\"UsrsIDs\" cols=\"72\" rows=\"10\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
 
