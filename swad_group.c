@@ -228,6 +228,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *Txt_Groups;
    extern const char *Txt_All_groups;
    extern const char *Txt_Update_students;
    extern const char *Txt_Update_students_according_to_selected_groups;
@@ -246,7 +247,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Usr_PutExtraParamsUsrList (NextAction);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Groups);
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<tr>"

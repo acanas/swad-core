@@ -668,10 +668,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ANS_BAD		{color:#FF0000; font-size:16pt; font-weight:bold;}
 .TST_TIT		{color:#404040; font-size:20pt;}
 .TEST			{color:#404040; font-size:14pt;}
-.TEST_EXA		{font-Family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#404040; font-size:14pt;}
-.TEST_EXA_LIGHT		{font-Family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#A0A0A0; font-size:14pt;}
-.TEST_EDI		{font-Family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#404040; font-size:14pt;}
-.TEST_EDI_LIGHT		{font-Family:"Courier New", "DejaVu LGC Sans Mono", "Bitstream Vera Sans Mono", monospace; color:#A0A0A0; font-size:14pt;}
+.TEST_EXA		{color:#404040; font-size:14pt;}
+.TEST_EXA_LIGHT		{color:#A0A0A0; font-size:14pt;}
+.TEST_EDI		{color:#404040; font-size:14pt;}
+.TEST_EDI_LIGHT		{color:#A0A0A0; font-size:14pt;}
 
 .HOR			{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#345C6C; font-size:12pt; line-height:110%; letter-spacing:0;}
 .FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
