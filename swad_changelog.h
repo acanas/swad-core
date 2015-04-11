@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.110.10 (2015/04/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.110.11 (2015/04/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.110.11:Apr 11, 2015	Changes in layout of selection of class photo / list. (184722 lines)
         Version 14.110.10:Apr 11, 2015	Changes in layout of selection of groups. (184725 lines)
         Version 14.110.9: Apr 11, 2015	Changes in layout of edition of a new assignment. (184723 lines)
         Version 14.110.8: Apr 11, 2015	Help on writing forum posts.

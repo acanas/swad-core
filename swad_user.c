@@ -4710,16 +4710,15 @@ void Usr_FreeListOtherRecipients (void)
   }
 
 /*****************************************************************************/
-/******************** List users to select some of them **********************/
+/*************************** Selection of list type **************************/
 /*****************************************************************************/
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable10 (NULL,8,"Tipo de lista");	// Need translation!!!
 
-   /***** 1st row *****/
-   /* Put a button to select USR_CLASS_ROOM */
+   /***** Select USR_CLASS_ROOM *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:middle;\">",
@@ -4735,13 +4734,10 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
 
-   /***** 2nd row *****/
-   /* Put a button to select Usr_LIST */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:left;"
+   /***** Select Usr_LIST *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
 	              " vertical-align:middle;\">",
             Gbl.Usrs.Me.ListType == Usr_LIST ? "USR_LIST_TYPE_ON" :
         	                               "USR_LIST_TYPE_OFF");
@@ -4778,7 +4774,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormulNB[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" class=\"ICON16x16\" />"
-                      " %s&nbsp;</a>",
+                      " %s</a>",
             Gbl.Prefs.IconsURL,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
