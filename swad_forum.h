@@ -144,7 +144,6 @@ void For_ShowThrPsts (void);
 void For_GetParamsForum (void);
 void For_PutHiddenParamThrCod (long ThrCod);
 void For_ShowForumLevel2 (long ThrCod);
-void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
 void For_RecForumPst (void);
 void For_DelPst (void);
 void For_ReqDelThr (void);

@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.110.7 (2015/04/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.110.8 (2015/04/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.110.8: Apr 11, 2015	Help on writing forum posts.
+                                        Changes in layout of edition of a new forum post. (184718 lines)
         Version 14.110.7: Apr 11, 2015	Help on writing messages.
                                         Changes in layout of edition of a new message. (184719 lines)
         Version 14.110.6: Apr 11, 2015	Help on edition of test questions.

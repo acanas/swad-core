@@ -13514,27 +13514,6 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	" voc&ecirc; receber&aacute; um e-mail com uma nova senha.";
 #endif
 
-const char *Txt_If_you_send_this_message_you_will_appear_as_its_author =
-#if   L==0
-	"si env&iacute;a este mensaje, usted aparecer&aacute; como autor";	// Necessita traduccio
-#elif L==1
-	"Wenn Senden diese Nachricht, Sie wird als dessen Urheber";
-#elif L==2
-	"if you send this message, you will appear as its author";
-#elif L==3
-	"si env&iacute;a este mensaje, usted aparecer&aacute; como autor";
-#elif L==4
-	"si vous envoyez ce message, vous appara&icirc;trez comme son auteur";
-#elif L==5
-	"si env&iacute;a este mensaje, usted aparecer&aacute; como autor";	// Okoteve traducción
-#elif L==6
-	"se invii questo messaggio, apparirai come suo autore";
-#elif L==7
-	"jesli wyslesz te wiadomosc, pojawi sie jako jego autor";
-#elif L==8
-	"se voc&ecirc; enviar esta mensagem, voc&ecirc; vai aparecer como o seu autor";
-#endif
-
 const char *Txt_Image =
 #if   L==0
 	"Imatge";
@@ -44552,6 +44531,27 @@ const char *Txt_This_survey_has_no_questions =
 	"Badanie to nie ma pytania";
 #elif L==8
 	"Este inqu&eacute;rito n&atilde;o tem perguntas";
+#endif
+
+const char *Txt_Thread =
+#if   L==0
+	"Discussi&oacute;";
+#elif L==1
+	"Thread";
+#elif L==2
+	"Thread";
+#elif L==3
+	"Discusi&oacute;n";
+#elif L==4
+	"Fil";
+#elif L==5
+	"Discusi&oacute;n";	// Okoteve traducción
+#elif L==6
+	"Discussione";
+#elif L==7
+	"W&aogon;tek";
+#elif L==8
+	"Thread";
 #endif
 
 const char *Txt_thread =

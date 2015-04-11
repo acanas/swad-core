@@ -260,6 +260,9 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,const char *Time);
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
+
+static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
+
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
@@ -862,7 +865,8 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Forums;
+   extern const char *Txt_Thread;
+   extern const char *Txt_Messages;
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
    char Query[1024];
@@ -894,7 +898,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_GetThrReadTime (ThrCod,ReadTime);
 
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forums);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Thread);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -982,7 +986,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
 
       /***** Show posts from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable10 (NULL,0,Txt_Messages);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td style=\"width:100%%; text-align:center;\">"
 	                 "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">");
@@ -2359,7 +2363,8 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 void For_ShowForumThrs (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Forums;
+   extern const char *Txt_Forum;
+   extern const char *Txt_Threads;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
    extern const char *Txt_FORUM_THREAD_ORDER[2];
@@ -2462,7 +2467,7 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forums);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forum);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -2496,7 +2501,7 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Start table *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_Threads);
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3691,12 +3696,11 @@ void For_ShowForumLevel2 (long ThrCod)
 /********************** Show an area to write a message **********************/
 /*****************************************************************************/
 
-void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
+static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_message;
    extern const char *Txt_New_thread;
-   extern const char *Txt_If_you_send_this_message_you_will_appear_as_its_author;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Send_message;
@@ -3711,24 +3715,16 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
 
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-	              "<td></td>"
-                      "<td style=\"text-align:left;\">"
-                      "<span class=\"%s\">%s</span>"
-                      "<span class=\"DAT\"> (%s)</span></td>",
-            The_ClassFormul[Gbl.Prefs.Theme],
-            IsReply ? Txt_New_message :
-        	      Txt_New_thread,
-            Txt_If_you_send_this_message_you_will_appear_as_its_author);
-
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,IsReply ? Txt_New_message :
+        	                                Txt_New_thread);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\""
 	              " style=\"text-align:right; vertical-align:top;\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"Subject\" cols=\"75\" rows=\"2\">",
+                      "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
    if (IsReply)	// If writing a reply to a message of an existing thread
@@ -3742,15 +3738,25 @@ void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"Content\" cols=\"75\" rows=\"15\">"
+                      "<textarea name=\"Content\" cols=\"72\" rows=\"15\">"
                       "</textarea>"
                       "</td>"
-                      "</tr>"
-                      "</table>",
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
+   /***** Help for text editor and send button *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\">");
+   Lay_HelpPlainEditor ();
    Lay_PutCreateButton (Txt_Send_message);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTable10 ();
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 

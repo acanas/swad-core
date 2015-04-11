@@ -342,9 +342,10 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Subject and content *****/
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
-      /***** Send button *****/
+      /***** Help for text editor and send button *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"2\">");
+      Lay_HelpPlainEditor ();
       Lay_PutCreateButton (Txt_Send_message);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
@@ -508,13 +509,6 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
      }
    fprintf (Gbl.F.Out,"</textarea>"
 	              "</td>"
-	              "</tr>");
-
-   /***** Help for text editor *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\">");
-   Lay_HelpPlainEditor ();
-   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
