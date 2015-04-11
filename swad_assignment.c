@@ -1209,14 +1209,18 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Groups *****/
    Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
-
    /***** New assignment *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\">");
    if (ItsANewAssignment)
       Lay_PutCreateButton (Txt_Create_assignment);
    else
       Lay_PutConfirmButton (Txt_Modify_assignment);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** Table end *****/
+   Lay_EndRoundFrameTable10 ();
 
    /***** Form end *****/
    Act_FormEnd ();
