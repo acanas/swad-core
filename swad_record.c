@@ -99,7 +99,7 @@ void Rec_ReqEditRecordFields (void)
      {
       Lay_StartRoundFrameTable10 (NULL,2,Txt_Record_fields);
       Rec_ListFieldsRecordsForEdition ();
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else	// No fields of records found for current course in the database
      {
@@ -320,17 +320,10 @@ void Rec_ShowFormCreateRecordField (void)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"4\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_record_field);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_record_field);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -1178,7 +1171,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1274,7 +1267,7 @@ void Rec_ListRecordsTchsCrs (void)
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);
 	       fprintf (Gbl.F.Out,"</td>"
 				  "</tr>");
-	       Lay_EndRoundFrameTable10 ();
+	       Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
               }
 
             fprintf (Gbl.F.Out,"</div>");
@@ -1610,19 +1603,14 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          DB_FreeMySQLResult (&mysql_res);
         }
 
-   /***** Button to save changes *****/
+   /***** Button to save changes and end frame *****/
    if (DataForm)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" style=\"text-align:center;\">");
-      Lay_PutConfirmButton (Txt_Save);
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
      }
-
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   else
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3075,7 +3063,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3504,7 +3492,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

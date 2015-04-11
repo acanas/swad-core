@@ -747,7 +747,7 @@ static void Tst_WriteTestHead (unsigned NumTst)
 
 static void Tst_WriteTestFoot (void)
   {
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1451,7 +1451,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1521,7 +1521,7 @@ static void Tst_ShowFormEditTags (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1700,10 +1700,10 @@ static void Tst_ShowFormConfigTst (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 ();
-   Lay_PutConfirmButton (Txt_Save);
    Act_FormEnd ();
   }
 
@@ -2045,7 +2045,7 @@ static void Tst_ShowFormAnswerTypes (void)
      }
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2652,7 +2652,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4511,18 +4511,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\">");
+   /***** Send button and end frame *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Lay_PutConfirmButton (Txt_Save);
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
    else
-      Lay_PutCreateButton (Txt_Create_question);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -5954,6 +5947,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 
 void Tst_SelUsrsToSeeUsrsTstExams (void)
   {
+   extern const char *Txt_Users;
    extern const char *Txt_See_exams;
 
    /***** Get and update type of list, number of columns in class photo
@@ -5985,10 +5979,10 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
                             "<td colspan=\"2\" style=\"text-align:left;\">");
 
          /***** Put list of users to select some of them *****/
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_Users);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTable10 ();
+         Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -6111,7 +6105,7 @@ void Tst_ShowUsrsTestResults (void)
 	}
 
       /***** End of the table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else	// If no users are selected...
      {
@@ -6198,7 +6192,7 @@ void Tst_ShowMyTestResults (void)
    Tst_ShowResultsOfTestExams (&Gbl.Usrs.Me.UsrDat);
 
    /***** End of the table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

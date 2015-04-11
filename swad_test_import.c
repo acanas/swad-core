@@ -985,7 +985,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 static void TsI_WriteEndingListImportedQst (void)
   {
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

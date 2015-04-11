@@ -214,7 +214,7 @@ void Msg_ListEMails (void)
                             "</tr>");
 
          /***** End of the frame used to list the e-mails *****/
-         Lay_EndRoundFrameTable10 ();
+         Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
          /***** Icon to open the client e-mail program *****/
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
@@ -346,12 +346,11 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"2\">");
       Lay_HelpPlainEditor ();
-      Lay_PutCreateButton (Txt_Send_message);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Send_message);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -1651,7 +1650,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       fprintf (Gbl.F.Out,"</table>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -3570,7 +3569,7 @@ void Msg_ListBannedUsrs (void)
         }
 
       /***** End of table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

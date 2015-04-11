@@ -213,7 +213,7 @@ void Syl_EditSyllabus (void)
       fprintf (Gbl.F.Out,"</table>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       if (!Gbl.CurrentCrs.Syllabus.EditionIsActive)
          fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\""

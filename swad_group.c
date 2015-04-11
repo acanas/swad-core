@@ -286,7 +286,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 	              "</tr>");
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1248,7 +1248,7 @@ static void Grp_ListGroupTypesForEdition (void)
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1430,7 +1430,7 @@ static void Grp_ListGroupsForEdition (void)
         }
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1602,7 +1602,7 @@ unsigned Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	 NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -1748,7 +1748,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -2143,17 +2143,10 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"<td></td>"
 	              "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_type_of_group);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -2226,15 +2219,8 @@ static void Grp_PutFormToCreateGroup (void)
    fprintf (Gbl.F.Out,"<td></td>"
 		      "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_group);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_group);
 
    /***** End of form *****/
    Act_FormEnd ();

@@ -234,24 +234,34 @@ void Pwd_ShowFormSendNewPwd (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
+   extern const char *Txt_Password;
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Email_new_password;
-
-   /***** Help text *****/
-   Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
 
    /***** Start of form *****/
    Act_FormStart (ActSndNewPwd);
 
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Password);
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td style=\"align:center;\">");
+
+   /***** Help text *****/
+   Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
+
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
-	              "%s:&nbsp;"
-                      "<input type=\"text\" name=\"UsrId\" size=\"8\" maxlength=\"%u\" value=\"%s\" />"
-                      "</div>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "%s:"
+                      "</label>"
+                      "<input type=\"text\" name=\"UsrId\" size=\"8\" maxlength=\"%u\" value=\"%s\" />",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
+   /***** Send button and end table *****/
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Email_new_password);
+
    /***** End form *****/
-   Lay_PutConfirmButton (Txt_Email_new_password);
    Act_FormEnd ();
   }
 
@@ -673,7 +683,7 @@ void Pwd_ShowFormChgPwd (void)
    /***** Start form *****/
    Act_FormStart (ActChgPwd);
 
-   /***** Start table *****/
+   /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Password);
 
    /* Current password */
@@ -704,13 +714,11 @@ void Pwd_ShowFormChgPwd (void)
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutConfirmButton (IHaveAPasswordInDB ? Txt_Change_password :
-	                                      Txt_Set_password);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,
+                             IHaveAPasswordInDB ? Txt_Change_password :
+	                                          Txt_Set_password);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 

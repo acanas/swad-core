@@ -105,7 +105,7 @@ void Lnk_SeeLinks (void)
 		  Gbl.Links.Lst[NumLnk].ShortName);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free list of links *****/
@@ -351,7 +351,7 @@ static void Lnk_ListLinksForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -617,15 +617,8 @@ static void Lnk_PutFormToCreateLink (void)
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Lnk->WWW);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"5\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_link);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_link);
 
    /***** End of form *****/
    Act_FormEnd ();

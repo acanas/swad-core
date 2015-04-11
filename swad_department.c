@@ -182,7 +182,7 @@ void Dpt_SeeDepts (void)
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Free list of departments *****/
       Dpt_FreeListDepartments ();
@@ -595,7 +595,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                Dpt->NumTchs);
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -941,15 +941,8 @@ static void Dpt_PutFormToCreateDepartment (void)
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Dpt->WWW);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"4\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_department);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_department);
 
    /***** End of form *****/
    Act_FormEnd ();

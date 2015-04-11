@@ -525,13 +525,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** Form to send students to be enrolled / removed *****/
+   Act_FormStart (ActRcvFrmMdfUsrCrs);
+
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_several_users);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td>");
-
-   /***** Form to send students to be enrolled / removed *****/
-   Act_FormStart (ActRcvFrmMdfUsrCrs);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
@@ -601,22 +601,21 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 	}
      }
 
-   /***** Step 5: Button to register / remove students *****/
+   /***** Step 5: Confirm register / remove students *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_5_Confirm_the_enrollment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
-   Lay_PutConfirmButton (Txt_Confirm);
+
+   /***** Send button and end frame *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End of form *****/
    Act_FormEnd ();
-
-   /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 ();
   }
 
 /*****************************************************************************/
@@ -2519,8 +2518,8 @@ void Enr_ShowEnrollmentRequests (void)
             Enr_RemoveEnrollmentRequest (Crs.CrsCod,UsrDat.UsrCod);
         }
 
-      /* End of table */
-      Lay_EndRoundFrameTable10 ();
+      /* End frame */
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);
@@ -2672,7 +2671,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

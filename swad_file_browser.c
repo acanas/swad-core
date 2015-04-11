@@ -2870,16 +2870,7 @@ void Brw_AskEditWorksCrs (void)
          Lay_StartRoundFrameTable10 (NULL,0,Txt_Users);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-
-         /* Button to send the form */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td>");
-         Lay_PutConfirmButton (Txt_View_works);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /* Frame end */
-         Lay_EndRoundFrameTable10 ();
+         Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_View_works);
 
          /* End form */
          Act_FormEnd ();
@@ -2993,7 +2984,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	}
 
       /***** End of the table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else	// If no users are selected...
      {
@@ -3326,11 +3317,7 @@ static void Brw_ShowFileBrowser (void)
       Brw_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
 
    /***** End of table *****/
-   if (Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_CRS ||
-       Gbl.FileBrowser.Type == Brw_ADMI_WORKS_CRS)
-      Lay_EndRoundFrameTable10 ();
-   else
-      Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7628,14 +7615,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
 
-   /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_folder);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">");
-   sprintf (Gbl.Message,Txt_You_can_create_a_new_folder_inside_the_folder_X,
-	    FileNameToShow);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
+   /***** Start form *****/
    Act_FormStart (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -7654,20 +7634,27 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
-   /* Folder */
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_folder);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td style=\"text-align:center;\">");
+   sprintf (Gbl.Message,Txt_You_can_create_a_new_folder_inside_the_folder_X,
+	    FileNameToShow);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+   /***** Folder *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
-                      " size=\"32\" maxlength=\"40\" value=\"\" />",
+                      " size=\"32\" maxlength=\"40\" value=\"\" />"
+                      "</td>"
+		      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Folder);
 
-   /* Button to send */
-   Lay_PutCreateButton (Txt_Create_folder);
-   Act_FormEnd ();
+   /* Button to send and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_folder);
 
-   /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -7685,6 +7672,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
+
    Lay_StartRoundFrameTable10 ("100%",0,Txt_Upload_files);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td style=\"text-align:center;\">");
@@ -7756,7 +7744,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -7771,6 +7760,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style='display:none;'>");
+
    Lay_StartRoundFrameTable10 (NULL,0,Txt_Upload_file);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td style=\"text-align:center;\">");
@@ -7807,7 +7797,8 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -7821,14 +7812,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    extern const char *Txt_Paste;
    extern const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X;
 
-   /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Paste);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">");
-   sprintf (Gbl.Message,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
-	    FileNameToShow);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
+   /***** Start form *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -7847,14 +7831,21 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
 
-   /* Button to send */
-   Lay_PutCreateButton (Txt_Paste);
-   Act_FormEnd ();
-
-   /***** End frame *****/
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Paste);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td style=\"text-align:center;\">");
+   sprintf (Gbl.Message,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
+	    FileNameToShow);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Paste);
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -7870,14 +7861,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_Save_as;
    extern const char *Txt_optional;
 
-   /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_link);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">");
-   sprintf (Gbl.Message,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
-	    FileNameToShow);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
+   /***** Start form *****/
    Act_FormStart (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -7895,6 +7879,14 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
          break;
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,Gbl.FileBrowser.FilFolLnkName);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_Create_link);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td style=\"text-align:center;\">");
+   sprintf (Gbl.Message,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
+	    FileNameToShow);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /* URL */
    fprintf (Gbl.F.Out,"<table>"
@@ -7920,17 +7912,16 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       " size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
-                      "</table>",
+                      "</table>"
+                      "</td>"
+		      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
 
-   /* Button to send */
-   Lay_PutCreateButton (Txt_Create_link);
-   Act_FormEnd ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_link);
 
-   /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -8831,11 +8822,6 @@ void Brw_ShowFileMetadata (void)
 	 Brw_LimitLengthFileNameToShow (FileMetadata.FileType,
 	                                Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 
-	 /***** Start frame *****/
-	 Lay_StartRoundFrameTable10Shadow (NULL,0);
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"text-align:center;\">");
-
 	 /***** Start form to update the metadata of a file *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
@@ -8886,8 +8872,8 @@ void Brw_ShowFileMetadata (void)
 				Gbl.FileBrowser.FilFolLnkName);
 	   }
 
-	 /***** Start table *****/
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+	 /***** Start frame *****/
+	 Lay_StartRoundFrameTable10Shadow (NULL,2);
 
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -9077,19 +9063,14 @@ void Brw_ShowFileMetadata (void)
 		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_views,
 		  FileMetadata.NumPublicViews);
 
-	 /***** End form and table *****/
-	 fprintf (Gbl.F.Out,"</table>");
-
+	 /***** End frame *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    Lay_PutConfirmButton (Txt_Save_file_properties);
+	    Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save_file_properties);
 	    Act_FormEnd ();
 	   }
-
-	 /***** End frame *****/
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	 Lay_EndRoundFrameTable10 ();
+	 else
+	    Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
 	 /***** Mark possible notifications as seen *****/
 	 switch (Gbl.FileBrowser.Type)
@@ -10931,7 +10912,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 			 "</tr>");
 
       /* Table end */
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

@@ -77,6 +77,14 @@ typedef enum
 
 #define Lay_LAYOUT_DEFAULT Lay_LAYOUT_DESKTOP
 
+typedef enum
+  {
+   Lay_NO_BUTTON,
+   Lay_CREATE_BUTTON,
+   Lay_CONFIRM_BUTTON,
+   Lay_REMOVE_BUTTON,
+  } Lay_Button_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -100,8 +108,8 @@ void Lay_PutRemoveButton (const char *Text);
 void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title);
 void Lay_StartRoundFrame10 (const char *Width,const char *Title);
 void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding);
-void Lay_EndRoundFrameTable10 (void);
-void Lay_EndRoundFrame10 (void);
+void Lay_EndRoundFrameTable10 (Lay_Button_t Button,const char *TxtButton);
+void Lay_EndRoundFrame10 (Lay_Button_t Button,const char *TxtButton);
 
 void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);

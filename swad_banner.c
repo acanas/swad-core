@@ -112,7 +112,7 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].ShortName);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -399,7 +399,7 @@ static void Ban_ListBannersForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -774,15 +774,8 @@ static void Ban_PutFormToCreateBanner (void)
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Ban->WWW);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_banner);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End of form *****/
    Act_FormEnd ();

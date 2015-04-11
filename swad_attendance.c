@@ -46,7 +46,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /****************************** Private constants ****************************/
@@ -229,7 +228,7 @@ static void Att_ShowAllAttEvents (void)
       Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1184,18 +1183,11 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Groups *****/
    Att_ShowLstGrpsToEditAttEvent (Att.AttCod);
 
-   /***** New attendance event *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\">");
+   /***** Button and end frame *****/
    if (ItsANewAttEvent)
-      Lay_PutCreateButton (Txt_Create_event);
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_event);
    else
-      Lay_PutConfirmButton (Txt_Save);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-
-   /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1248,7 +1240,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AttCod,Grp_ATT_EVENT);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -1858,7 +1850,7 @@ void Att_SeeOneAttEvent (void)
    Lay_StartRoundFrameTable10 (NULL,2,Txt_Event);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
@@ -1925,7 +1917,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Att_WriteRowStdToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
 
    /* Footer */
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    if (Att->Open)
      {
@@ -2006,15 +1998,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
            }
         }
 
-      /* Send button */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"8\">");
-      Lay_PutConfirmButton (Txt_Save);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "<tr>");
-
-      /* End frame */
-      Lay_EndRoundFrameTable10 ();
+      /* Send button and end frame */
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -2654,15 +2639,8 @@ void Usr_ReqListAttendanceStdsCrs (void)
          /* Write list of students to select some of them */
          Usr_ListUsersToSelect (Rol_STUDENT);
 
-         /* Send button */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"10\">");
-         Lay_PutConfirmButton (Txt_Show_list);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /* End frame */
-         Lay_EndRoundFrameTable10 ();
+         /* Send button and end frame */
+         Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Show_list);
 
          /* End form */
          Act_FormEnd ();
@@ -3051,7 +3029,7 @@ static void Att_ListEventsToSelect (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** End form *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
@@ -3139,7 +3117,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -3317,7 +3295,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

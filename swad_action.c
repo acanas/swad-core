@@ -4738,7 +4738,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

@@ -123,7 +123,7 @@ void Con_ShowConnectedUsrs (void)
 	              "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -144,7 +144,7 @@ void Con_ShowLastClicks (void)
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

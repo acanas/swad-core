@@ -888,7 +888,7 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
 		      "</tr>");
 
    /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -949,7 +949,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /* End of table */
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Form to choice between alternatives *****/
    /* Start of form and table */
@@ -987,7 +987,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /* End of table and form */
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
    Act_FormEnd ();
   }
 
@@ -1612,7 +1612,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out,"</p>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
@@ -1716,7 +1716,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out,"</div>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
@@ -1846,12 +1846,11 @@ void Inf_EditPlainTxtInfo (void)
 	              "%s"
 	              "</textarea>",
             TxtHTML);
-   Lay_PutConfirmButton (Txt_Save);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End form *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
@@ -1885,12 +1884,11 @@ void Inf_EditRichTxtInfo (void)
 	              "%s"
 	              "</textarea>",
             TxtHTML);
-   Lay_PutConfirmButton (Txt_Save);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End form *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 

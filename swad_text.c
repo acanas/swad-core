@@ -15499,6 +15499,27 @@ const char *Txt_List_of_nicks_emails_or_IDs =
 	"Lista de @alcunhas, e-mails ou n&ordm;s. identif.";
 #endif
 
+const char *Txt_List_type =
+#if   L==0
+	"Tipus de llista";
+#elif L==1
+	"Listentyp";
+#elif L==2
+	"List type";
+#elif L==3
+	"Tipo de lista";
+#elif L==4
+	"Type de liste";
+#elif L==5
+	"Tipo de lista";	// Okoteve traducción
+#elif L==6
+	"Tipo di lista";
+#elif L==7
+	"Typ listy";
+#elif L==8
+	"Tipo de lista";
+#endif
+
 const char *Txt_Links =
 #if   L==0
 	"Enlla&ccedil;os";

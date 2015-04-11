@@ -192,7 +192,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
@@ -467,7 +467,7 @@ static void Ins_Configuration (bool PrintView)
 	}
 
       /***** End of the frame *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
   }
 
@@ -522,7 +522,7 @@ static void Ins_ListInstitutionsForSeeing (void)
       Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1293,7 +1293,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1846,15 +1846,8 @@ static void Ins_PutFormToCreateInstitution (void)
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"11\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_institution);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2170,7 +2163,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

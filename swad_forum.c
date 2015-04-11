@@ -947,7 +947,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    LastSubject[0] = '\0';
    if (NumPsts)		// If there are posts...
@@ -1034,7 +1034,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
       fprintf (Gbl.F.Out,"</table>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -1745,7 +1745,7 @@ void For_ShowForumList (void)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2491,7 +2491,7 @@ void For_ShowForumThrs (void)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** List the threads *****/
    if (NumThrs)
@@ -2559,7 +2559,7 @@ void For_ShowForumThrs (void)
       For_ListForumThrs (ThrCods,&PaginationThrs);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Write links to all the pages in the listing of threads *****/
       if (PaginationThrs.MoreThanOnePage)
@@ -3745,16 +3745,15 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
-   /***** Help for text editor and send button *****/
+   /***** Help for text editor *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\">");
    Lay_HelpPlainEditor ();
-   Lay_PutCreateButton (Txt_Send_message);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Send_message);
 
    /***** End form *****/
    Act_FormEnd ();

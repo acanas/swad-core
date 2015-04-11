@@ -254,7 +254,7 @@ void Deg_SeeDegWithPendingCrss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
@@ -482,7 +482,7 @@ static void Deg_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
   }
 
@@ -1135,7 +1135,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1219,7 +1219,7 @@ static void Deg_ListDegreeTypesForEdition (void)
                Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs);
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1244,7 +1244,7 @@ static void Deg_ListDegreesForSeeing (void)
       Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1683,7 +1683,7 @@ static void Deg_ListDegreesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1788,17 +1788,10 @@ static void Deg_PutFormToCreateDegType (void)
         	                                      "");
 
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_type_of_degree);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -1956,17 +1949,10 @@ static void Deg_PutFormToCreateDegree (void)
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"14\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_degree);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_degree);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -4083,7 +4069,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

@@ -754,6 +754,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole)
   {
    char Query[256];
+   unsigned NumUsrs;
    // This query can be made in a unique, but slower, query
    // The temporary table achieves speedup from ~2s to few ms
 
@@ -778,12 +779,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                   " WHERE crs_usr.CrsCod=my_courses_tmp.CrsCod"
                   " AND crs_usr.Role='%u'",
             (unsigned) OthersRole);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
+   NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
    /***** Remove temporary table *****/
    sprintf (Query,"DROP TABLE IF EXISTS my_courses_tmp");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -1417,7 +1420,7 @@ void Usr_WriteFormLogin (void)
                       "</td>"
 	              "</tr>",
 	              Txt_Log_in);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
@@ -4715,8 +4718,10 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
+   extern const char *Txt_List_type;
+
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,8,"Tipo de lista");	// Need translation!!!
+   Lay_StartRoundFrameTable10 (NULL,8,Txt_List_type);
 
    /***** Select USR_CLASS_ROOM *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4754,7 +4759,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
 	              "</tr>");
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -5805,7 +5810,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 			Usr_NUM_MAIN_FIELDS_DATA_USR-3);
 	       Lay_StartRoundFrameTable10 (NULL,2,NULL);
 	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
-	       Lay_EndRoundFrameTable10 ();
+	       Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 	       fprintf (Gbl.F.Out,"</td>"
 				  "</tr>");
               }
@@ -5816,7 +5821,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free memory for teachers list *****/
@@ -5936,7 +5941,7 @@ void Usr_ListDataAdms (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else        // Gbl.Usrs.LstAdms.NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
@@ -6285,6 +6290,7 @@ void Usr_SeeGuests (void)
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
 
    /***** Get and update type of list,
@@ -6347,14 +6353,12 @@ void Usr_SeeGuests (void)
 	 fprintf (Gbl.F.Out,"</div>");
 
          /***** Draw a class photo with students of the course *****/
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
          /* Start form */
 	 Act_FormStart (ActSeeRecSevInv);
 	 Grp_PutParamsCodGrps ();
 
          /* Header */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6379,12 +6383,11 @@ void Usr_SeeGuests (void)
                break;
            }
 
-         Lay_EndRoundFrameTable10 ();
+         /* Send button and end frame */
+         Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Show_records);
 
-         /* Send button */
-         Lay_PutConfirmButton (Txt_Show_records);
+         /* End form */
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</div>");
 	}
      }
    else
@@ -6424,6 +6427,7 @@ void Usr_SeeStudents (void)
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
    bool ICanViewRecords;
 
@@ -6515,8 +6519,6 @@ void Usr_SeeStudents (void)
            }
 
          /***** Draw a class photo with students of the course *****/
-         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-
          /* Start form */
          if (ICanViewRecords)
            {
@@ -6525,7 +6527,7 @@ void Usr_SeeStudents (void)
            }
 
          /* Header */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6557,16 +6559,14 @@ void Usr_SeeStudents (void)
                break;
            }
 
-         Lay_EndRoundFrameTable10 ();
-
-         /* Send button */
+         /* Send button and end frame */
          if (ICanViewRecords)
            {
-            Lay_PutConfirmButton (Txt_Show_records);
+            Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Show_records);
             Act_FormEnd ();
            }
-
-         fprintf (Gbl.F.Out,"</div>");
+         else
+            Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 	}
      }
    else
@@ -6589,6 +6589,7 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    bool ICanViewRecords;
@@ -6660,7 +6661,7 @@ void Usr_SeeTeachers (void)
             Act_FormStart (ActSeeRecSevTch);
 
          /* Header */
-         Lay_StartRoundFrameTable10 (NULL,0,NULL);
+         Lay_StartRoundFrameTable10 (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6692,14 +6693,14 @@ void Usr_SeeTeachers (void)
                break;
            }
 
-         Lay_EndRoundFrameTable10 ();
-
+         /* Send button and end frame */
          if (ICanViewRecords)
            {
-            /* Send button */
-            Lay_PutConfirmButton (Txt_Show_records);
+            Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Show_records);
             Act_FormEnd ();
            }
+         else
+            Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
          fprintf (Gbl.F.Out,"</div>");
 	}
@@ -6757,7 +6758,7 @@ void Usr_SeeGstClassPhotoPrn (void)
                                                                                 -1L,
 				 -1L,-1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
@@ -6803,7 +6804,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
@@ -6857,7 +6858,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);

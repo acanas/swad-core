@@ -203,7 +203,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed);
@@ -513,7 +513,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
   }
 
@@ -582,7 +582,7 @@ static void Ctr_ListCentresForSeeing (void)
       Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1370,7 +1370,7 @@ static void Ctr_ListCentresForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -2087,7 +2087,7 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</tr>");
 
    /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2488,7 +2488,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

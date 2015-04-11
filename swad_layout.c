@@ -1136,14 +1136,33 @@ void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
    fprintf (Gbl.F.Out,"\">");
   }
 
-void Lay_EndRoundFrameTable10 (void)
+void Lay_EndRoundFrameTable10 (Lay_Button_t Button,const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame10 ();
+
+   Lay_EndRoundFrame10 (Button,TxtButton);
   }
 
-void Lay_EndRoundFrame10 (void)
+void Lay_EndRoundFrame10 (Lay_Button_t Button,const char *TxtButton)
   {
+   /***** Button *****/
+   if (TxtButton)
+      if (TxtButton[0])
+	 switch (Button)
+           {
+	    case Lay_NO_BUTTON:
+	       break;
+	    case Lay_CREATE_BUTTON:
+	       Lay_PutCreateButton (TxtButton);
+	       break;
+	    case Lay_CONFIRM_BUTTON:
+	       Lay_PutConfirmButton (TxtButton);
+	       break;
+	    case Lay_REMOVE_BUTTON:
+ 	       Lay_PutRemoveButton (TxtButton);
+	       break;
+          }
+
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
   }
@@ -1520,7 +1539,7 @@ void Lay_PutIconsToSelectLayout (void)
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1595,7 +1614,7 @@ void Lay_AdvertisementMobile (void)
                Gbl.Prefs.IconsURL);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       fprintf (Gbl.F.Out,"</div>");
      }

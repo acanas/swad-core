@@ -444,7 +444,7 @@ void Sta_AskSeeCrsAccesses (void)
          Usr_ListUsersToSelect (Rol_STUDENT);
 
          /* End the table */
-         Lay_EndRoundFrameTable10 ();
+         Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -1414,7 +1414,7 @@ static bool Sta_SeeAccesses (void)
 	}
 
       /* End of frame */
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3793,7 +3793,7 @@ static void Sta_GetAndShowUsersStats (void)
    Usr_GetAndShowNumUsrsInPlatform (Rol_TEACHER);
    Usr_GetAndShowNumUsrsInPlatform (Rol__GUEST_);	// Users not beloging to any course
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3868,7 +3868,7 @@ static void Sta_GetAndShowUsersRanking (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3887,7 +3887,7 @@ static void Sta_GetAndShowHierarchyStats (void)
    Sta_GetAndShowNumCtrsInSWAD ();
    Sta_GetAndShowNumDegsInSWAD ();
    Sta_GetAndShowNumCrssInSWAD ();
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4558,7 +4558,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
      }
    Sta_GetAndShowInss (Query,Txt_Centres);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4613,7 +4613,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
      }
    Sta_GetAndShowInss (Query,Txt_Degrees);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4671,7 +4671,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
      }
    Sta_GetAndShowInss (Query,Txt_Courses);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4732,7 +4732,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
      }
    Sta_GetAndShowInss (Query,Txt_Users);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -4786,7 +4786,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
      }
    Sta_GetAndShowInss (Query,Txt_Users);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -5028,7 +5028,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRIEF_USR,Txt_Virtual_pendrives);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -5890,7 +5890,7 @@ static void Sta_GetAndShowOERsStats (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6077,7 +6077,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
             NumNotif);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6246,7 +6246,7 @@ static void Sta_GetAndShowTestsStats (void)
             StyleTableCell,Stats.AvgScorePerQuestion);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6575,7 +6575,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
             StyleTableCell,NumEventsTotal,
             StyleTableCell,NumMailsTotal);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6663,7 +6663,7 @@ static void Sta_GetAndShowNoticesStats (void)
             NumTotalNotifications);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6765,7 +6765,7 @@ static void Sta_GetAndShowMsgsStats (void)
             NumMsgsReceivedAndNotified);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -6907,7 +6907,7 @@ static void Sta_GetAndShowForumStats (void)
    Sta_WriteForumTotalStats (&StatsForum);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7211,7 +7211,7 @@ static void Sta_GetAndShowSurveysStats (void)
             NumNotif);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7232,7 +7232,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
    /***** Privacy for public profile *****/
    Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Public_profile,"ProfileVisibility");
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 
@@ -7505,7 +7505,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7637,7 +7637,7 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7770,7 +7770,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -7906,7 +7906,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -8038,7 +8038,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -8170,7 +8170,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
         	              (float) NumUsrsTotal :
         	              0);
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

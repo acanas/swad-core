@@ -171,7 +171,7 @@ void Plc_SeePlaces (void)
 	       Ctr_GetNumCtrsTotal () - NumCtrsWithPlc);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Free list of places *****/
       Plc_FreeListPlaces ();
@@ -480,7 +480,7 @@ static void Plc_ListPlacesForEdition (void)
                Plc->NumCtrs);
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -714,17 +714,10 @@ static void Plc_PutFormToCreatePlace (void)
                       "</tr>",
             Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_place);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_place);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of formn *****/
+   /***** End formn *****/
    Act_FormEnd ();
   }
 

@@ -297,7 +297,7 @@ void TT_ShowClassTimeTable (void)
 	              "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -324,7 +324,7 @@ void TT_EditCrsTimeTable (void)
 	              "</tr>");
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -348,7 +348,7 @@ void TT_ShowMyTutTimeTable (void)
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

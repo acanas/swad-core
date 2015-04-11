@@ -1216,28 +1216,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 	              "</tr>" \
                       "</table>");
 
-   switch (TypeViewExamAnnouncement)
-     {
-      case Exa_NORMAL_VIEW:
-         break;
-      case Exa_PRINT_VIEW:
-         /* Bottom space used for signatures */
-         fprintf (Gbl.F.Out,"<div style=\"height:100px;\"></div>");
-         break;
-      case Exa_FORM_VIEW:
-	 /* Send button */
-	 if (ExaCod > 0)
-	    Lay_PutConfirmButton (Txt_Publish_announcement_OF_EXAM);
-	 else
-	    Lay_PutCreateButton (Txt_Publish_announcement_OF_EXAM);
-	 Act_FormEnd ();
-	 break;
-     }
+   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
+      /* Bottom space used for signatures */
+      fprintf (Gbl.F.Out,"<div style=\"height:100px;\"></div>");
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
+      Lay_EndRoundFrameTable10 ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
+	                                       Lay_CREATE_BUTTON,
+	                        Txt_Publish_announcement_OF_EXAM);
+   else
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();

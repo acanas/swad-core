@@ -1059,7 +1059,7 @@ mysql> DESCRIBE files;
                    "Cod INT NOT NULL DEFAULT -1,"
                    "ZoneUsrCod INT NOT NULL DEFAULT -1,"
                    "PublisherUsrCod INT NOT NULL,"
-                   "FileType TINYINT NOT NULL DEFAULT 0"
+                   "FileType TINYINT NOT NULL DEFAULT 0,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"

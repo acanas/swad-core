@@ -211,7 +211,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

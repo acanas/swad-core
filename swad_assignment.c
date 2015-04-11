@@ -198,7 +198,7 @@ static void Asg_ShowAllAssignments (void)
       Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg-1]);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1210,21 +1210,11 @@ void Asg_RequestCreatOrEditAsg (void)
    Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
 
    /***** New assignment *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\">");
    if (ItsANewAssignment)
-      Lay_PutCreateButton (Txt_Create_assignment);
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Lay_PutConfirmButton (Txt_Save);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End form *****/
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"<br />");
 
    /***** Show current assignments *****/
    Asg_ShowAllAssignments ();
@@ -1274,7 +1264,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AsgCod,Grp_ASSIGNMENT);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

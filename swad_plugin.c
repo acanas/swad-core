@@ -138,7 +138,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -460,7 +460,7 @@ static void Plg_ListPluginsForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -908,17 +908,10 @@ static void Plg_PutFormToCreatePlugin (void)
                       "</tr>",
             Cns_MAX_LENGTH_IP,Plg->IP);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_plugin);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_plugin);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 

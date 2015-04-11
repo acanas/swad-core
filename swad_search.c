@@ -269,15 +269,13 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 
    /***** String to find *****/
    Sch_PutFormToSearch (Gbl.Prefs.IconsURL);
-
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<br />");
-   Lay_PutConfirmButton (Txt_Search);
-
-   /***** End form *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Search);
+
+   /***** End form *****/
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }

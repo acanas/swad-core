@@ -166,7 +166,7 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays ();
@@ -587,7 +587,7 @@ static void Hld_ListHolidaysForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1005,15 +1005,8 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</tr>",
             Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name);
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"5\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_holiday);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_holiday);
 
    /***** End of form *****/
    Act_FormEnd ();

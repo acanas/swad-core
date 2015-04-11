@@ -146,7 +146,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -454,7 +454,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai->NumUsrs);
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -680,15 +680,8 @@ static void Mai_PutFormToCreateMailDomain (void)
             Mai_MAX_LENGTH_MAIL_INFO,Mai->Info);
 
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_mail_domain);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_mail_domain);
 
    /***** End of form *****/
    Act_FormEnd ();

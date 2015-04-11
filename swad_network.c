@@ -281,7 +281,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -495,7 +495,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -225,7 +225,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -284,7 +284,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

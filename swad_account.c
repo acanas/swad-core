@@ -168,15 +168,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and form end *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">"
-                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
-                      "%s"
-                      "</button>"
-                      "</td>"
-	              "</tr>",
-	              Txt_Create_account);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -231,7 +223,7 @@ void Acc_ShowFormChangeMyAccount (void)
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 

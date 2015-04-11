@@ -358,15 +358,8 @@ void Ann_ShowFormAnnouncement (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** Button to create announcement *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_announcement);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Button to create announcement and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Act_FormEnd ();

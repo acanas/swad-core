@@ -248,7 +248,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -312,7 +312,7 @@ void Svy_SeeOneSurvey (void)
    /***** Show survey *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (Svy.SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1671,18 +1671,11 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Groups *****/
    Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
 
-   /***** Button to create/modify survey *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   /***** Button to create/modify survey and end frame *****/
    if (ItsANewSurvey)
-      Lay_PutCreateButton (Txt_Create_survey);
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_survey);
    else
-      Lay_PutConfirmButton (Txt_Save);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1778,7 +1771,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],SvyCod,Grp_SURVEY);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -2354,7 +2347,7 @@ void Svy_RequestEditQuestion (void)
    /***** Show current survey *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2513,18 +2506,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
+   /***** Send button and end frame *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Lay_PutConfirmButton (Txt_Save);
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
    else
-      Lay_PutCreateButton (Txt_Create_question);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2856,7 +2842,7 @@ void Svy_ReceiveQst (void)
    /***** Show current survey *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3103,7 +3089,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    if (FormAnswerSurvey)
       /***** End form *****/
@@ -3318,7 +3304,7 @@ void Svy_RemoveQst (void)
    /***** Show current survey *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3352,7 +3338,7 @@ void Svy_ReceiveSurveyAnswers (void)
    /***** Show current survey *****/
    Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (Svy.SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

@@ -74,7 +74,7 @@ void Pre_EditPrefs (void)
    Pre_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Layout, theme, icon set, menu & side columns *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
@@ -364,7 +364,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

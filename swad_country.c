@@ -183,7 +183,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
@@ -458,7 +458,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
   }
 
@@ -690,7 +690,7 @@ void Cty_ListCountries2 (void)
             Ins_GetNumInssTotal () - NumInssWithCountry);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Div for Google Geochart *****/
    if (Gbl.CurrentAct == ActSeeCty)
@@ -1388,7 +1388,7 @@ static void Cty_ListCountriesForEdition (void)
         }
      }
 
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1741,15 +1741,8 @@ static void Cty_PutFormToCreateCountry (void)
 	       Txt_STR_LANG_ID[Lan],Cty_MAX_LENGTH_COUNTRY_WWW,Cty->WWW[Lan]);
      }
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"8\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_country);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_country);
 
    /***** End of form *****/
    Act_FormEnd ();

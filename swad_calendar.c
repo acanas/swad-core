@@ -172,7 +172,7 @@ void Cal_DrawCalendar (void)
    Exa_FreeListExamAnnouncements ();
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

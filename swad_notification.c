@@ -564,7 +564,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1687,15 +1687,12 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Notifications);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">");
-
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
-                      "<tr>"
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Notifications);
+   fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
 		      "%s"
@@ -1735,15 +1732,11 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</tr>");
      }
 
-   /***** End form *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_PutConfirmButton (Txt_Save_changes);
-   Act_FormEnd ();
+   /***** Button to save changes and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save_changes);
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

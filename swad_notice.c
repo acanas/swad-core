@@ -112,15 +112,8 @@ void Not_ShowFormNotice (void)
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
-   /***** Button to create announcement *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_notice);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Button to create notice and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -452,7 +445,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	{
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
-	 Lay_EndRoundFrameTable10 ();
+	 Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 	}
 
       /***** Free structure that stores the query result *****/

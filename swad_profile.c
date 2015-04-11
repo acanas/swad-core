@@ -139,31 +139,32 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
+   /***** Start form *****/
+   Act_FormStart (ActSeePubPrf);
+
    /***** Start frame *****/
    Lay_StartRoundFrameTable10 (NULL,2,Txt_View_public_profile);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>");
 
    /***** Form to request user's @nickname *****/
-   Act_FormStart (ActSeePubPrf);
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td>"
+                      "<div class=\"%s\" style=\"text-align:center;\">"
                       "%s: "
                       "<input type=\"text\" name=\"usr\""
                       " size=\"20\" maxlength=\"%u\" value=\"@%s\" />"
-                      "</div>",
+                      "</div>"
+                      "</td>"
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
             DefaultNickname);
 
-   /***** Send button*****/
-   Lay_PutConfirmButton (Txt_Continue);
-   Act_FormEnd ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Continue);
 
-   /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

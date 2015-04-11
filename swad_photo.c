@@ -291,19 +291,14 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
                       "<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
                       "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">",
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             UsrDat->UsrCod);
-   Lay_PutCreateButton (Txt_Upload_photo);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_photo);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1922,7 +1917,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2040,7 +2035,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Photos end *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
    else
       fprintf (Gbl.F.Out,"</table>");
   }

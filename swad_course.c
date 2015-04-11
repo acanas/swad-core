@@ -435,19 +435,13 @@ static void Crs_Configuration (bool PrintView)
                Gbl.Prefs.IconsURL,
                (Indicators.CountIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
         	                                                    "warning");
-
-      if (IsForm)
-        {
-	 fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"2\">");
-         Lay_PutConfirmButton (Txt_Save);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-        }
      }
 
-   /***** End of the frame *****/
-   Lay_EndRoundFrameTable10 ();
+   /***** Send button and end frame *****/
+   if (IsForm)
+      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+   else
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** End form *****/
    if (IsForm)
@@ -851,7 +845,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1328,7 +1322,7 @@ static void Crs_ListCoursesForSeeing (void)
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1588,7 +1582,7 @@ static void Crs_ListCoursesForEdition (void)
         }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1780,17 +1774,10 @@ static void Crs_PutFormToCreateCourse (void)
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"12\" style=\"text-align:center;\">");
-   Lay_PutCreateButton (Txt_Create_course);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_course);
 
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable10 ();
-
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -3229,7 +3216,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 ();
+      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
      }
 
    /***** Free structure that stores the query result *****/

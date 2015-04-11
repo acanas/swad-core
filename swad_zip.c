@@ -606,5 +606,5 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    fprintf (Gbl.F.Out,"</table>"
                       "</td>"
 		      "</tr>");
-   Lay_EndRoundFrameTable10 ();
+   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
