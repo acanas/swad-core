@@ -44766,7 +44766,7 @@ const char *Txt_time =
 
 const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	{
-   // TT_COURSE_TIMETABLE
+	// TT_COURSE_TIMETABLE
 #if   L==0
 	"Horari de classes de l'assignatura"
 #elif L==1
@@ -44787,7 +44787,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio"
 #endif
 	 ,
-   // TT_MY_TIMETABLE
+	// TT_MY_TIMETABLE
 #if   L==0
 	"Horari de les meves assignatures"
 #elif L==1
@@ -44808,7 +44808,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	 ,
-   // TT_TUTOR_TIMETABLE
+	// TT_TUTOR_TIMETABLE
 #if   L==0
 	"Horari de tutories"
 #elif L==1

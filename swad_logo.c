@@ -227,6 +227,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 void Log_RequestLogo (Sco_Scope_t Scope)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
    extern const char *Txt_Upload_logo;
@@ -275,31 +276,34 @@ void Log_RequestLogo (Sco_Scope_t Scope)
       fprintf (Gbl.F.Out,"</div>");
      }
 
+   /***** Start form to upload logo *****/
+   Act_FormStart (ActionRec);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Logo);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td style=\"text-align:center;\">");
+
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y,
 	    64,64);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   /***** Write a form to send logo *****/
-   Act_FormStart (ActionRec);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
-                      "%s:"
-                      "</td>"
-                      "<td style=\"text-align:left;\">"
+   /***** Upload logo *****/
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "%s:"
+	              "</label>"
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">",
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
-   Lay_PutCreateButton (Txt_Upload_logo);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-                      "</table>");
+
+   /***** Button to create announcement and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_logo);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 

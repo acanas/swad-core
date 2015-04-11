@@ -1839,9 +1839,18 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
 void Ctr_RequestPhoto (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
+
+   /***** Start form to upload photo *****/
+   Act_FormStart (ActRecCtrPho);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable10 (NULL,2,Txt_Photo);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td style=\"text-align:center;\">");
 
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y,
@@ -1849,27 +1858,21 @@ void Ctr_RequestPhoto (void)
 	    Ctr_PHOTO_REAL_HEIGHT);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   /***** Write a form to send photo *****/
-   Act_FormStart (ActRecCtrPho);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
-                      "%s:"
-                      "</td>"
-                      "<td style=\"text-align:left;\">"
+   /***** Upload photo *****/
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "%s:"
+	              "</label>"
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td colspan=\"2\" style=\"text-align:center;\">",
+                      "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
-   Lay_PutCreateButton (Txt_Upload_photo);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-                      "</table>");
 
+   /***** Button to create announcement and end frame *****/
+   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_photo);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 

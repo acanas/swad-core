@@ -103,12 +103,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.112 (2015/04/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.112 (2015/04/12)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.112:   Apr 11, 2015	Optimization in frames with ending buttons. (184568 lines)
+        Version 14.112:   Apr 12, 2015	Optimization in frames with ending buttons.
+					Changes in form to upload logo.
+					Changes in form to photo of centre.
+					Changes in edition of course timetable. (184572 lines)
         Version 14.111.1: Apr 11, 2015	Message translated. (184745 lines)
         Version 14.111:   Apr 11, 2015	Changes in layout of surveys.
 					Fixed bugs in surveys.

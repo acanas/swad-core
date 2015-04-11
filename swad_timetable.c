@@ -307,6 +307,7 @@ void TT_ShowClassTimeTable (void)
 void TT_EditCrsTimeTable (void)
   {
    extern const char *Txt_Show_timetable;
+   extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -314,7 +315,7 @@ void TT_EditCrsTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start of table *****/
-   Lay_StartRoundFrameTable10 ("98%",0,NULL);
+   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE]);
 
    /***** Editable time table *****/
    fprintf (Gbl.F.Out,"<tr>"

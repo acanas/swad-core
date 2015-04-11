@@ -71,7 +71,6 @@ void Msg_DelAllSntMsgs (void);
 void Msg_GetParamMsgsCrsCod (void);
 void Msg_GetParamFilterFromTo (void);
 void Msg_GetParamFilterContent (void);
-void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery);
 void Msg_DelSntMsg (void);
 void Msg_DelRecMsg (void);
 void Msg_ExpSntMsg (void);

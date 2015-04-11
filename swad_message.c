@@ -83,6 +83,8 @@ static long Msg_GetParamMsgCod (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
+static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery);
+
 static void Msg_ExpandSentMsg (long MsgCod);
 static void Msg_ExpandReceivedMsg (long MsgCod);
 static void Msg_ContractSentMsg (long MsgCod);
@@ -941,7 +943,7 @@ void Msg_GetParamFilterContent (void)
 /************************* Make "from"/"to" subquery *************************/
 /*****************************************************************************/
 
-void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery)
+static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery)
   {
    const char *Ptr;
    char SearchWord[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME+1];
@@ -1702,7 +1704,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
    PtrQuery = Gbl.Msg.FilterContent[0] ? SubQuery :
 	                                 Query;
 
-   if (FilterCrsCod >= 0)	// If origin course selected
+   if (FilterCrsCod > 0)	// If origin course selected
       switch (TypeOfMessages)
         {
          case Msg_MESSAGES_RECEIVED:
