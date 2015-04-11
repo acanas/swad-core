@@ -256,6 +256,7 @@ void Msg_FormMsgUsrs (void)
 static void Msg_PutFormMsgUsrs (const char *Content)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
@@ -302,7 +303,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                     Gbl.Usrs.LstStds.NumUsrs))
      {
-      /***** Form to select destinatary users and write the message *****/
+      /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
       if (Gbl.Msg.IsReply)
         {
@@ -311,36 +312,47 @@ static void Msg_PutFormMsgUsrs (const char *Content)
          Usr_PutParamOtherUsrCodEncrypted ();
         }
 
-      /* Start table */
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	                 "<tr>"
+      /***** Start frame *****/
+      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_message);
+
+      /***** Draw lists of users with the recipients *****/
+      fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s\" style=\"text-align:right;"
 	                 " vertical-align:top;\">"
 	                 "%s:"
 	                 "</td>"
-	                 "<td style=\"text-align:left;\">",
+	                 "<td style=\"text-align:left;\">"
+                         "<table>",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_MSG_To);
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
 
-      /* Draw two lists of users with the recipients: one with the teachers of the course and another one with the students */
+      /* Teachers */
       Usr_ListUsersToSelect (Rol_TEACHER);
+
+      /* Students */
       Usr_ListUsersToSelect (Rol_STUDENT);
 
       /* Other users (nicknames) */
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients (Gbl.Msg.IsReply);
 
       /* End of table */
-      Lay_EndRoundFrameTable10 ();
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</table>"
+                         "</td>"
 	                 "</tr>");
 
       /***** Subject and content *****/
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
-      fprintf (Gbl.F.Out,"</table>");
-
-      /***** Send and undo buttons *****/
+      /***** Send button *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"2\">");
       Lay_PutCreateButton (Txt_Send_message);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      /***** End frame *****/
+      Lay_EndRoundFrameTable10 ();
+
+      /***** End form *****/
       Act_FormEnd ();
      }
 
@@ -430,7 +442,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
-                      "<textarea name=\"Subject\" cols=\"75\" rows=\"2\">",
+                      "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
@@ -462,7 +474,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
-                         "<textarea name=\"Content\" cols=\"75\" rows=\"20\">",
+                         "<textarea name=\"Content\" cols=\"72\" rows=\"20\">",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
@@ -489,13 +501,20 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
-                         "<textarea name=\"Content\" cols=\"75\" rows=\"20\">%s",
+                         "<textarea name=\"Content\" cols=\"72\" rows=\"20\">%s",
                The_ClassFormul[Gbl.Prefs.Theme],
                Txt_MSG_Message,
                Content);
      }
    fprintf (Gbl.F.Out,"</textarea>"
 	              "</td>"
+	              "</tr>");
+
+   /***** Help for text editor *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"2\">");
+   Lay_HelpPlainEditor ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
