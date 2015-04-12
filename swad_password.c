@@ -242,24 +242,22 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Password);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_Password);
 
    /***** Help text *****/
    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:"
+	              "%s:&nbsp;"
                       "</label>"
-                      "<input type=\"text\" name=\"UsrId\" size=\"8\" maxlength=\"%u\" value=\"%s\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
+                      "<input type=\"text\" name=\"UsrId\""
+                      " size=\"8\" maxlength=\"%u\" value=\"%s\" />",
+            The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
+            Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end table *****/
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Email_new_password);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Email_new_password);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -684,7 +682,7 @@ void Pwd_ShowFormChgPwd (void)
    Act_FormStart (ActChgPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Password);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Password);
 
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
@@ -714,7 +712,7 @@ void Pwd_ShowFormChgPwd (void)
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and end form *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,
                              IHaveAPasswordInDB ? Txt_Change_password :
 	                                          Txt_Set_password);
 

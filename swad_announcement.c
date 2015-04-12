@@ -318,7 +318,7 @@ void Ann_ShowFormAnnouncement (void)
    Act_FormStart (ActRcvAnn);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_announcement);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_announcement);
 
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -359,7 +359,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "</tr>");
 
    /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_announcement);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_announcement);
 
    /***** End form *****/
    Act_FormEnd ();

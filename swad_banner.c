@@ -90,7 +90,7 @@ void Ban_SeeBanners (void)
       Ban_PutFormToEditBanners ();
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Banners);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Banners);
 
    /***** Write all the banners *****/
    for (NumBan = 0;
@@ -112,7 +112,7 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].ShortName);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -303,7 +303,7 @@ static void Ban_ListBannersForEdition (void)
    unsigned NumBan;
    struct Banner *Ban;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Banners);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Banners);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();
@@ -399,7 +399,7 @@ static void Ban_ListBannersForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -738,7 +738,7 @@ static void Ban_PutFormToCreateBanner (void)
    Act_FormStart (ActNewBan);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_banner);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_banner);
 
    /***** Write heading *****/
    Ban_PutHeadBanners ();
@@ -775,7 +775,7 @@ static void Ban_PutFormToCreateBanner (void)
             Cns_MAX_LENGTH_WWW,Ban->WWW);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_banner);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End of form *****/
    Act_FormEnd ();

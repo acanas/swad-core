@@ -254,11 +254,11 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
    /***** Form to request user's ID, @nickname or e-mail address *****/
    Act_FormStart (NextAction);
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s: "
+                      "</label>"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
-                      " size=\"20\" maxlength=\"%u\" />"
-                      "</div>",
+                      " size=\"20\" maxlength=\"%u\" />",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
             Usr_MAX_BYTES_USR_LOGIN);
@@ -529,9 +529,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Act_FormStart (ActRcvFrmMdfUsrCrs);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_several_users);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>");
+   Lay_StartRoundFrame (NULL,Txt_Admin_several_users);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
@@ -610,9 +608,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Confirm);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2172,7 +2168,7 @@ void Enr_ShowEnrollmentRequests (void)
    /* Send button */
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIcon (Txt_Update,Txt_Update);
+   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2375,7 +2371,7 @@ void Enr_ShowEnrollmentRequests (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th class=\"TIT_TBL\""
@@ -2519,7 +2515,7 @@ void Enr_ShowEnrollmentRequests (void)
         }
 
       /* End frame */
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);
@@ -2661,17 +2657,13 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Admin_one_user);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>");
+   Lay_StartRoundFrame (NULL,Txt_Admin_one_user);
 
    /***** Write form to request another user's ID *****/
    Enr_WriteFormToReqAnotherUsrID (ActReqMdfUsr);
 
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

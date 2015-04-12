@@ -267,7 +267,7 @@ void TT_ShowClassTimeTable (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TimeTableType]);
+   Lay_StartRoundFrameTable (NULL,0,Txt_TIMETABLE_TYPES[TimeTableType]);
 
    /***** Start time table drawing *****/
    if (TimeTableType == TT_COURSE_TIMETABLE)
@@ -297,7 +297,7 @@ void TT_ShowClassTimeTable (void)
 	              "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -314,18 +314,10 @@ void TT_EditCrsTimeTable (void)
    Act_PutContextualLink (ActSeeCrsTimTbl,NULL,"clock",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start of table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE]);
-
    /***** Editable time table *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE]);
    TT_ShowTimeTable (TT_COURSE_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -343,13 +335,9 @@ void TT_ShowMyTutTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -762,7 +750,7 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"min-width:540px; margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table style=\"min-width:560px; margin:0 auto;\">");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();

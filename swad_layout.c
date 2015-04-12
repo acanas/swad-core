@@ -110,31 +110,25 @@ void Lay_WriteStartOfPage (void)
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
    unsigned ColspanCentralPart = 3;	// Initialized to avoid warnning
-//   char QueryDebug[1024];
 
-   /***** If, when this function is called, the head is being written, or the head is already written ==>
-           ==> don't do anything *****/
+   /***** If, when this function is called, the head is being written
+          or the head is already written ==> don't do anything *****/
    if (Gbl.Layout.WritingHTMLStart ||
        Gbl.Layout.HTMLStartWritten)
       return;
-
-//   if (Gbl.Usrs.Me.UsrDat.UsrCod == 1346)
-//     {
-//      sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Act_Actions[ActRefLstClk].ActCod = %u --- Act_Actions[Gbl.CurrentAct].ActCod = %u')",
-//	       (unsigned) Act_Actions[ActRefLstClk].ActCod,(unsigned) Act_Actions[Gbl.CurrentAct].ActCod);
-//      DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
-//     }
 
    /***** Compute connected users *****/
    if (Gbl.CurrentAct == ActLstCon ||
        (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
         (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-        Gbl.CurrentCrs.Crs.CrsCod >= 0))	// Right column visible && There is a course selected
+        Gbl.CurrentCrs.Crs.CrsCod > 0))
+      // Right column visible && There is a course selected
       Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
    if (Gbl.CurrentAct == ActRefCon ||
-       Gbl.CurrentAct == ActRefLstClk)	// Don't generate a full HTML page, only refresh connected users
+       Gbl.CurrentAct == ActRefLstClk)
+     // Don't generate a full HTML page, only refresh connected users
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n");
       fprintf (Gbl.F.Out,"Cache-Control: max-age=0, no-cache, must-revalidate\r\n\r\n");
@@ -160,7 +154,8 @@ void Lay_WriteStartOfPage (void)
                    "<!DOCTYPE html>\n");
 
    /***** Write start of HTML code *****/
-   // WARNING: It is necessary to comment the line AddDefaultCharset UTF8 in httpd.conf to enable meta tag
+   // WARNING: It is necessary to comment the line 'AddDefaultCharset UTF8'
+   // in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
@@ -429,7 +424,8 @@ static void Lay_WriteRedirectionToMyLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\" content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
+   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
+	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
 	    Cfg_HTTPS_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
 	    Act_Actions[ActAutUsrChgLan].ActCod,
@@ -735,9 +731,10 @@ static void Lay_WritePageTopHeading (void)
          if (Gbl.Usrs.Me.Logged)
            {
             /* Number of new messages (not seen) */
-            fprintf (Gbl.F.Out,"<div id=\"msg\" style=\"padding-top:8px;\">");		// Used for AJAX based refresh
+            fprintf (Gbl.F.Out,"<div id=\"msg\""	// Used for AJAX based refresh
+        	               " style=\"padding-top:8px;\">");
             Ntf_WriteNumberOfNewNtfs ();
-            fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+            fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
            }
          break;
       case Lay_LAYOUT_MOBILE:
@@ -762,7 +759,7 @@ static void Lay_WritePageTopHeading (void)
      {
       case Lay_LAYOUT_DESKTOP:
          /***** 3rd. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
+         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
             fprintf (Gbl.F.Out,"<td style=\"width:128px;"
         	               " text-align:center; vertical-align:top;"
                                " background-image:url('%s/head_base_background_1x56.gif');"
@@ -786,12 +783,12 @@ static void Lay_WritePageTopHeading (void)
                             "<tr>");
 
          /***** 4th. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
+         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
            {
             fprintf (Gbl.F.Out,"<td style=\"width:128px; text-align:center;"
         	               " vertical-align:top;\">");
             Lay_ShowLeftColumn ();
-            fprintf (Gbl.F.Out,"</td>");	// End of first column
+            fprintf (Gbl.F.Out,"</td>");
            }
          break;
       case Lay_LAYOUT_MOBILE:
@@ -991,7 +988,7 @@ void Lay_PutFormToEdit (Act_Action_t Action)
 /**************** Put a icon with a text to submit a form ********************/
 /*****************************************************************************/
 
-void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
+void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
   {
    // margin is used because this form link may be placed after another one
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
@@ -1011,7 +1008,7 @@ void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text)
 /********** When clicked, the icon will be replaced by an animation **********/
 /*****************************************************************************/
 
-void Lay_PutCalculateIcon (const char *Alt,const char *Text)
+void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	              " style=\"margin:0 5px; display:inline;\">"
@@ -1094,9 +1091,9 @@ void Lay_WriteTitle (const char *Title)
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8
 
-void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title)
+void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char *Title)
   {
-   Lay_StartRoundFrame10 (Width,Title);
+   Lay_StartRoundFrame (Width,Title);
 
    fprintf (Gbl.F.Out,"<table class=\"TABLE10");
    if (CellPadding)
@@ -1104,7 +1101,7 @@ void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const ch
    fprintf (Gbl.F.Out,"\">");
   }
 
-void Lay_StartRoundFrame10 (const char *Width,const char *Title)
+void Lay_StartRoundFrame (const char *Width,const char *Title)
   {
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<div class=\"FRAME10\"");
@@ -1122,7 +1119,7 @@ void Lay_StartRoundFrame10 (const char *Width,const char *Title)
 
 // CellPadding must be 0, 1, 2, 4 or 8
 
-void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
+void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding)
   {
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<div class=\"FRAME10_SHADOW\"");
@@ -1136,14 +1133,27 @@ void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding)
    fprintf (Gbl.F.Out,"\">");
   }
 
-void Lay_EndRoundFrameTable10 (Lay_Button_t Button,const char *TxtButton)
+void Lay_EndRoundFrameTable (void)
   {
    fprintf (Gbl.F.Out,"</table>");
 
-   Lay_EndRoundFrame10 (Button,TxtButton);
+   Lay_EndRoundFrame ();
   }
 
-void Lay_EndRoundFrame10 (Lay_Button_t Button,const char *TxtButton)
+void Lay_EndRoundFrame (void)
+  {
+   fprintf (Gbl.F.Out,"</div>"
+		      "</div>");
+  }
+
+void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton)
+  {
+   fprintf (Gbl.F.Out,"</table>");
+
+   Lay_EndRoundFrameWithButton (Button,TxtButton);
+  }
+
+void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton)
   {
    /***** Button *****/
    if (TxtButton)
@@ -1517,7 +1527,7 @@ void Lay_PutIconsToSelectLayout (void)
    extern const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS];
    Lay_Layout_t Layout;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Layout);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Layout);
    fprintf (Gbl.F.Out,"<tr>");
    for (Layout = (Lay_Layout_t) 0;
 	Layout < Lay_NUM_LAYOUTS;
@@ -1539,7 +1549,7 @@ void Lay_PutIconsToSelectLayout (void)
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTableWithButton (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -1597,7 +1607,7 @@ void Lay_AdvertisementMobile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin-top:20px;\">");
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable10 (NULL,8,NULL);
+      Lay_StartRoundFrameTable (NULL,8,NULL);
 
       /***** Show advertisement *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1614,7 +1624,7 @@ void Lay_AdvertisementMobile (void)
                Gbl.Prefs.IconsURL);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameWithButton (Lay_NO_BUTTON,NULL);
 
       fprintf (Gbl.F.Out,"</div>");
      }

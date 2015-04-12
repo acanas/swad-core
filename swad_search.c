@@ -232,9 +232,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (Action);
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Search);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_Search);
 
    /***** Scope (whole platform, current centre, current degree or current course) *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
@@ -269,11 +267,9 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 
    /***** String to find *****/
    Sch_PutFormToSearch (Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Search);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Search);
 
    /***** End form *****/
    Act_FormEnd ();

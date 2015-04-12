@@ -81,7 +81,7 @@ void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
    sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString ("QRString",NicknameWithArroba);
    Act_LinkFormSubmit (Txt_QR_code,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
+   Lay_PutIconWithText ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
 	                                         NULL);
    Act_FormEnd ();
   }

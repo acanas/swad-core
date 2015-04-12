@@ -198,7 +198,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Surveys);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Surveys);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -248,7 +248,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -310,9 +310,7 @@ void Svy_SeeOneSurvey (void)
       Lay_ShowErrorAndExit ("Code of survey is missing.");
 
    /***** Show survey *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (Svy.SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -321,6 +319,7 @@ void Svy_SeeOneSurvey (void)
 
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool ShowOnlyThisSvyComplete)
   {
+   extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
@@ -335,6 +334,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Rol_Role_t Role;
    bool RolesSelected;
    char Txt[Cns_MAX_BYTES_TEXT+1];
+
+   /***** Start frame *****/
+   if (ShowOnlyThisSvyComplete)
+      Lay_StartRoundFrameTable (NULL,2,Txt_Survey);
 
    /***** Get data of this survey *****/
    Svy.SvyCod = SvyCod;
@@ -547,6 +550,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       Ntf_SetNotifAsSeen (Ntf_EVENT_SURVEY,
 	                  SvyCod,
 	                  Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** End frame *****/
+   if (ShowOnlyThisSvyComplete)
+      Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1573,9 +1580,9 @@ void Svy_RequestCreatOrEditSvy (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,
-                               ItsANewSurvey ? Txt_New_survey :
-                                               Txt_Edit_survey);
+   Lay_StartRoundFrameTable (NULL,2,
+                             ItsANewSurvey ? Txt_New_survey :
+                                             Txt_Edit_survey);
 
    /***** Survey for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1673,9 +1680,9 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Button to create/modify survey and end frame *****/
    if (ItsANewSurvey)
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_survey);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_survey);
    else
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1750,7 +1757,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 ("100%",0,NULL);
+      Lay_StartRoundFrameTable ("95%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1771,7 +1778,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],SvyCod,Grp_SURVEY);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -2345,9 +2352,7 @@ void Svy_RequestEditQuestion (void)
    Svy_ShowFormEditOneQst (SvyCod,&SvyQst,Txt);
 
    /***** Show current survey *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2429,10 +2434,10 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
      {
       sprintf (Gbl.Title,"%s %u",
                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
      }
    else
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_question);
+      Lay_StartRoundFrameTable (NULL,2,Txt_New_question);
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2508,9 +2513,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 
    /***** Send button and end frame *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    else
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_question);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2840,9 +2845,7 @@ void Svy_ReceiveQst (void)
    Svy_FreeTextChoiceAnswers (&SvyQst,Svy_MAX_ANSWERS_PER_QUESTION);
 
    /***** Show current survey *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -2918,7 +2921,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
    extern const char *The_ClassFormulB[The_NUM_THEMES];
-   extern const char *Txt_Survey_questions;
+   extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
    extern const char *Txt_Question;
@@ -2952,7 +2955,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Survey_questions);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Questions);
 
    if (NumQsts)
      {
@@ -3082,14 +3085,14 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
+      Lay_PutIconWithText ("new",Txt_New_question,Txt_New_question);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    if (FormAnswerSurvey)
       /***** End form *****/
@@ -3302,9 +3305,7 @@ void Svy_RemoveQst (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show current survey *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
@@ -3336,9 +3337,7 @@ void Svy_ReceiveSurveyAnswers (void)
      }
 
    /***** Show current survey *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
    Svy_ShowOneSurvey (Svy.SvyCod,&SvyQst,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/

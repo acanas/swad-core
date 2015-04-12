@@ -97,7 +97,7 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_notice);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_notice);
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -113,7 +113,7 @@ void Not_ShowFormNotice (void)
             Txt_MSG_Message);
 
    /***** Button to create notice and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_notice);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -381,7 +381,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	   {
 	    sprintf (StrWidth,"%upx",
 		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 40);
-            Lay_StartRoundFrameTable10 (StrWidth,2,Txt_All_notices);
+            Lay_StartRoundFrameTable (StrWidth,2,Txt_All_notices);
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td style=\"text-align:center;\">");
 	   }
@@ -445,7 +445,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	{
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
-	 Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	 Lay_EndRoundFrameTable ();
 	}
 
       /***** Free structure that stores the query result *****/

@@ -762,7 +762,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 ("500px",0,NULL);
+   Lay_StartRoundFrameTable ("500px",0,NULL);
 
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
      {
@@ -1224,11 +1224,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Lay_EndRoundFrameTable10 ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
+      Lay_EndRoundFrameTableWithButton ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
 	                                       Lay_CREATE_BUTTON,
 	                        Txt_Publish_announcement_OF_EXAM);
    else
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();

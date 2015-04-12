@@ -898,15 +898,13 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_GetThrReadTime (ThrCod,ReadTime);
 
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Thread);
+   Lay_StartRoundFrame (NULL,Txt_Thread);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul class=\"%s\" style=\"list-style-type:none;"
                       " padding:0; margin:0;"
                       " text-align:left; vertical-align:middle;\">",
@@ -944,10 +942,8 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    fprintf (Gbl.F.Out,"</li>"
 	              "</ul>"
-	              "</div>"
-	              "</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	              "</div>");
+   Lay_EndRoundFrame ();
 
    LastSubject[0] = '\0';
    if (NumPsts)		// If there are posts...
@@ -986,10 +982,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
 
       /***** Show posts from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_Messages);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"width:100%%; text-align:center;\">"
-	                 "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">");
+      Lay_StartRoundFrameTable (NULL,2,Txt_Messages);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1031,10 +1024,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
         	                Gbl.Usrs.Me.UsrDat.UsrCod);
         }
 
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -1617,15 +1607,13 @@ void For_ShowForumList (void)
    Usr_GetMyInstitutions ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forums);
+   Lay_StartRoundFrame (NULL,Txt_Forums);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
 
    /***** Write a link to top level of forums *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul class=\"%s\" style=\"list-style-type:none;"
                       " padding:0; margin:0;"
                       " text-align:left; vertical-align:middle;\">",
@@ -1742,10 +1730,8 @@ void For_ShowForumList (void)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>"
-	              "</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	              "</div>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1759,8 +1745,6 @@ static void For_PutFormWhichForums (void)
 
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td>");
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
@@ -1784,8 +1768,6 @@ static void For_PutFormWhichForums (void)
      }
    fprintf (Gbl.F.Out,"</ul>");
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
   }
 
 /*****************************************************************************/
@@ -2467,15 +2449,13 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Forum);
+   Lay_StartRoundFrame (NULL,Txt_Forum);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul class=\"%s\" style=\"list-style-type:none;"
                       " padding:0; margin:0;"
                       " text-align:left; vertical-align:middle;\">",
@@ -2488,10 +2468,8 @@ void For_ShowForumThrs (void)
 
    /* End table */
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>"
-	              "</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	              "</div>");
+   Lay_EndRoundFrame ();
 
    /***** List the threads *****/
    if (NumThrs)
@@ -2501,7 +2479,7 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Start table *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Threads);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Threads);
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2559,7 +2537,7 @@ void For_ShowForumThrs (void)
       For_ListForumThrs (ThrCods,&PaginationThrs);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Write links to all the pages in the listing of threads *****/
       if (PaginationThrs.MoreThanOnePage)
@@ -3716,8 +3694,8 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    For_PutAllHiddenParamsForum ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,IsReply ? Txt_New_message :
-        	                                Txt_New_thread);
+   Lay_StartRoundFrameTable (NULL,2,IsReply ? Txt_New_message :
+        	                              Txt_New_thread);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\""
 	              " style=\"text-align:right; vertical-align:top;\">"
@@ -3753,7 +3731,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Send_message);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
 
    /***** End form *****/
    Act_FormEnd ();

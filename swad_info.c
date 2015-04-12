@@ -874,21 +874,17 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[InfoType]);
 
    /***** Link to view in a new window *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">"
-		      "<a href=\"%s\" target=\"_blank\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
 	    URL,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("fullscreen",
-		    Txt_View_in_a_new_window,
-		    Txt_View_in_a_new_window);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   Lay_PutIconWithText ("fullscreen",
+		        Txt_View_in_a_new_window,
+		        Txt_View_in_a_new_window);
 
    /***** End of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -925,7 +921,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Forms for the different edition alternatives *****/
    /* Start of table */
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable (NULL,0,NULL);
 
    /* Forms */
    for (InfoSrc = (Inf_InfoSrc_t) 1;
@@ -949,12 +945,12 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /* End of table */
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Form to choice between alternatives *****/
    /* Start of form and table */
    Act_FormStart (Inf_ActionsSelecInfoSrc[InfoType]);
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable (NULL,0,NULL);
 
    /* Title */
    fprintf (Gbl.F.Out,"<tr>"
@@ -987,7 +983,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /* End of table and form */
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
    Act_FormEnd ();
   }
 
@@ -1590,7 +1586,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
    if (TxtHTML[0])
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+      Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
 
       if (InfoType == Inf_INTRODUCTION ||
           InfoType == Inf_TEACHING_GUIDE)
@@ -1612,7 +1608,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out,"</p>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
@@ -1645,7 +1641,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
    if (TxtMD[0])
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+      Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
 
       if (InfoType == Inf_INTRODUCTION ||
           InfoType == Inf_TEACHING_GUIDE)
@@ -1716,7 +1712,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out,"</div>"
 	                 "</td>"
 	                 "</tr>");
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
@@ -1829,7 +1825,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Start table *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[InfoType]);
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
 
    if (InfoType == Inf_INTRODUCTION ||
        InfoType == Inf_TEACHING_GUIDE)
@@ -1850,7 +1846,7 @@ void Inf_EditPlainTxtInfo (void)
 	              "</tr>");
 
    /***** End form *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
@@ -1867,7 +1863,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Start form *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[InfoType]);
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
+   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
 
    if (InfoType == Inf_INTRODUCTION ||
        InfoType == Inf_TEACHING_GUIDE)
@@ -1888,7 +1884,7 @@ void Inf_EditRichTxtInfo (void)
 	              "</tr>");
 
    /***** End form *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 

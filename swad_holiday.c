@@ -96,7 +96,7 @@ void Hld_SeeHolidays (void)
 	 Hld_PutFormToEditHlds ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Holidays);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Holidays);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Hld_ORDER_BY_PLACE;
 	   Order <= Hld_ORDER_BY_START_DATE;
@@ -166,7 +166,7 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays ();
@@ -473,7 +473,7 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Holidays);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Holidays);
 
    /***** Table head *****/
    Hld_PutHeadHolidays ();
@@ -587,7 +587,7 @@ static void Hld_ListHolidaysForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -918,7 +918,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Act_FormStart (ActNewHld);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_holiday);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_holiday);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1006,7 +1006,7 @@ static void Hld_PutFormToCreateHoliday (void)
             Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name);
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_holiday);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_holiday);
 
    /***** End of form *****/
    Act_FormEnd ();

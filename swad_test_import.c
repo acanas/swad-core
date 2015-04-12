@@ -97,7 +97,7 @@ void TsI_PutFormToExportQuestions (void)
 
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("export",Txt_Export_questions_to_XML_file,Txt_Export_questions);
+   Lay_PutIconWithText ("export",Txt_Export_questions_to_XML_file,Txt_Export_questions);
    Act_FormEnd ();
   }
 
@@ -116,7 +116,7 @@ void TsI_PutFormToImportQuestions (void)
 
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("import",Txt_Import_questions_from_XML_file,Txt_Import_questions);
+   Lay_PutIconWithText ("import",Txt_Import_questions_from_XML_file,Txt_Import_questions);
    Act_FormEnd ();
   }
 
@@ -264,7 +264,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
             The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("file",Txt_XML_file,Txt_XML_file);
+   Lay_PutIconWithText ("file",Txt_XML_file,Txt_XML_file);
   }
 
 /*****************************************************************************/
@@ -945,7 +945,7 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Question;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,NULL);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -985,7 +985,7 @@ static void TsI_WriteHeadingListImportedQst (void)
 static void TsI_WriteEndingListImportedQst (void)
   {
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

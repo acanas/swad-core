@@ -294,7 +294,7 @@ form			{margin:0; display:inline;}
 .FRAME10
 	{
 	margin:0;
-	padding:0;
+	padding:10px;
 	background-color:white;
 	border-radius:8px;
 	box-shadow:1px 1px 1px #CCC;
@@ -305,7 +305,7 @@ form			{margin:0; display:inline;}
 .FRAME10_SHADOW
 	{
 	margin:4px 0 14px 0;
-	padding:0;
+	padding:10px;
 	background-color:rgba(255,255,255,0.95);
 	border-width:1px;
 	border-style:solid;
@@ -318,12 +318,11 @@ form			{margin:0; display:inline;}
 	}
 .TABLE10
 	{
-	padding:10px;
 	width:100%;
 	}
 .TIT_TBL_10
 	{
-	margin:20px 10px 10px 10px;
+	margin:10px;
 	color:#808080;
 	font-size:20pt;
 	font-weight:bold;

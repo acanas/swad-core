@@ -147,7 +147,7 @@ void Msg_ListEMails (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Start of the frame used to list the e-mails *****/
-         Lay_StartRoundFrameTable10 (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
+         Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT_SMALL\""
                             " style=\"text-align:left;\">");
@@ -216,7 +216,7 @@ void Msg_ListEMails (void)
                             "</tr>");
 
          /***** End of the frame used to list the e-mails *****/
-         Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+         Lay_EndRoundFrameTable ();
 
          /***** Icon to open the client e-mail program *****/
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
@@ -225,7 +225,7 @@ void Msg_ListEMails (void)
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
                   Txt_Create_e_mail_message,
                   The_ClassFormulB[Gbl.Prefs.Theme]);
-         Lay_PutSendIcon ("editnewmsg",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
+         Lay_PutIconWithText ("editnewmsg",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
          fprintf (Gbl.F.Out,"</div>");
         }
      }
@@ -315,7 +315,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
         }
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_message);
+      Lay_StartRoundFrameTable (NULL,2,Txt_New_message);
 
       /***** Draw lists of users with the recipients *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -352,7 +352,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 			 "</tr>");
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Send_message);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -1566,7 +1566,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_LinkFormSubmitAnimated (Txt_Update_messages,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIcon (Txt_Update_messages,Txt_Update_messages);
+   Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
    Act_FormEnd ();
@@ -1627,14 +1627,10 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
                                                                                   Pag_MESSAGES_SENT,
                                         0,&Pagination);
 
-      /***** Show received messages in this page *****/
-      Lay_StartRoundFrameTable10 ("100%",0,
-                                  TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
-                                	                                    Txt_Messages_sent);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"width:100%%; text-align:center;\">"
-	                 "<table class=\"CELLS_PAD_2\""
-	                 " style=\"width:100%%;\">");
+      /***** Show received / sent messages in this page *****/
+      Lay_StartRoundFrameTable ("95%",2,
+                                TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
+                                	                                  Txt_Messages_sent);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1649,10 +1645,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
          Msg_ShowASentOrReceivedMessage (TypeOfMessages,NumMsg,MsgCod);
         }
 
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -2985,7 +2978,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
 		       The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("reply",Replied ? Txt_Reply_again :
+   Lay_PutIconWithText ("reply",Replied ? Txt_Reply_again :
 				      Txt_Reply,
 			    Replied ? Txt_Reply_again :
 				      Txt_Reply);
@@ -3521,7 +3514,7 @@ void Msg_ListBannedUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table with list of users *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Banned_users);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Banned_users);
 
       /***** List users *****/
       for (NumUsr = 1;
@@ -3536,8 +3529,6 @@ void Msg_ListBannedUsrs (void)
          /* Get user's data from database */
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
            {
-            fprintf (Gbl.F.Out,"<tr>");
-
             /* Put form to unban user */
             fprintf (Gbl.F.Out,"<tr>"
                                "<td class=\"BM\">");
@@ -3571,7 +3562,7 @@ void Msg_ListBannedUsrs (void)
         }
 
       /***** End of table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

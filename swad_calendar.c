@@ -130,7 +130,7 @@ void Cal_DrawCalendar (void)
       Act_PutContextualLink (ActPrnCal,NULL,"print",Txt_Print);
       fprintf (Gbl.F.Out,"</div>");
      }
-   Lay_StartRoundFrameTable10 (NULL,0,NULL);
+   Lay_StartRoundFrameTable (NULL,0,NULL);
    Lay_WriteHeaderClassPhoto (1,PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,
@@ -172,7 +172,7 @@ void Cal_DrawCalendar (void)
    Exa_FreeListExamAnnouncements ();
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

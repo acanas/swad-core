@@ -177,7 +177,7 @@ static void Att_ShowAllAttEvents (void)
       Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Events);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -228,7 +228,7 @@ static void Att_ShowAllAttEvents (void)
       Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1085,8 +1085,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,ItsANewAttEvent ? Txt_New_event :
-                                                        Txt_Edit_event);
+   Lay_StartRoundFrameTable (NULL,2,ItsANewAttEvent ? Txt_New_event :
+                                                      Txt_Edit_event);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1185,9 +1185,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Button and end frame *****/
    if (ItsANewAttEvent)
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_event);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
    else
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1219,7 +1219,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 ("100%",0,NULL);
+      Lay_StartRoundFrameTable ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1240,7 +1240,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AttCod,Grp_ATT_EVENT);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -1847,10 +1847,10 @@ void Att_SeeOneAttEvent (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Event);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Event);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
@@ -1891,7 +1891,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /***** List students' data *****/
    /* Header */
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,NULL);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th></th>"
@@ -1917,7 +1917,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Att_WriteRowStdToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Att);
 
    /* Footer */
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    if (Att->Open)
      {
@@ -1963,7 +1963,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /***** List students' data *****/
       /* Header */
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Attendance);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th></th>"
@@ -1999,7 +1999,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
         }
 
       /* Send button and end frame */
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -2634,13 +2634,13 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Grp_PutParamsCodGrps ();
 
          /* Start frame */
-         Lay_StartRoundFrameTable10 (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+         Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
          /* Write list of students to select some of them */
          Usr_ListUsersToSelect (Rol_STUDENT);
 
          /* Send button and end frame */
-         Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Show_list);
+         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_list);
 
          /* End form */
          Act_FormEnd ();
@@ -2952,7 +2952,7 @@ static void Att_ListEventsToSelect (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Events);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Events);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3023,13 +3023,13 @@ static void Att_ListEventsToSelect (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" style=\"text-align:center;\">");
       Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
+      Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** End form *****/
    if (Gbl.CurrentAct == ActSeeLstAttStd)
@@ -3053,7 +3053,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Attendance);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Attendance);
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3117,7 +3117,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -3279,7 +3279,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Details);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Details);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;
@@ -3295,7 +3295,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

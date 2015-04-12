@@ -143,7 +143,7 @@ static void Asg_ShowAllAssignments (void)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Assignments);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Assignments);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -198,7 +198,7 @@ static void Asg_ShowAllAssignments (void)
       Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg-1]);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1119,8 +1119,8 @@ void Asg_RequestCreatOrEditAsg (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,ItsANewAssignment ? Txt_New_assignment :
-                                                          Txt_Edit_assignment);
+   Lay_StartRoundFrameTable (NULL,2,ItsANewAssignment ? Txt_New_assignment :
+                                                        Txt_Edit_assignment);
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1211,9 +1211,9 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** New assignment *****/
    if (ItsANewAssignment)
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_assignment);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_assignment);
    else
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
    /***** Show current assignments *****/
@@ -1243,7 +1243,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
                Txt_Groups);
-      Lay_StartRoundFrameTable10 ("100%",0,NULL);
+      Lay_StartRoundFrameTable ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1264,7 +1264,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
             Grp_ListGrpsToEditAsgAttOrSvy (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],AsgCod,Grp_ASSIGNMENT);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

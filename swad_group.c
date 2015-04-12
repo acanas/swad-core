@@ -247,7 +247,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Usr_PutExtraParamsUsrList (NextAction);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Groups);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Groups);
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -281,12 +281,12 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 	              "<td colspan=\"7\" style=\"padding-top:10px;"
 	              " text-align:center;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIcon (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
+   Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1127,7 +1127,7 @@ static void Grp_ListGroupTypesForEdition (void)
    unsigned NumGrpTyp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Types_of_group);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_group);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1248,7 +1248,7 @@ static void Grp_ListGroupTypesForEdition (void)
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1309,7 +1309,7 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Groups);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Groups);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1430,7 +1430,7 @@ static void Grp_ListGroupsForEdition (void)
         }
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1592,7 +1592,7 @@ unsigned Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
       Grp_ShowWarningToStdsToChangeGrps ();
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_My_groups);
+   Lay_StartRoundFrameTable (NULL,2,Txt_My_groups);
 
    /***** List the groups the user belongs to for change *****/
    for (NumGrpTyp = 0;
@@ -1602,7 +1602,7 @@ unsigned Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	 NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -1738,7 +1738,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Groups);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Groups);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -1748,7 +1748,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -2059,7 +2059,7 @@ static void Grp_PutFormToCreateGroupType (void)
    Act_FormStart (ActNewGrpTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_type_of_group);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_type_of_group);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2144,7 +2144,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2164,7 +2164,7 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStart (ActNewGrp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_group);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_group);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();
@@ -2220,7 +2220,7 @@ static void Grp_PutFormToCreateGroup (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_group);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_group);
 
    /***** End of form *****/
    Act_FormEnd ();

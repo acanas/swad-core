@@ -204,7 +204,7 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,NULL);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -439,9 +439,9 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Send button and end frame *****/
    if (IsForm)
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    else
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
    /***** End form *****/
    if (IsForm)
@@ -578,10 +578,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char PathRelRSSFile[PATH_MAX+1];
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_My_courses);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div style=\"display:inline-block; margin:0 auto;\">"
+   Lay_StartRoundFrame (NULL,Txt_My_courses);
+   fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
                       "<ul class=\"%s\" style=\"list-style-type:none;"
                       " padding:0; margin:0;"
                       " text-align:left; vertical-align:middle;\">",
@@ -842,10 +840,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>"
-	              "</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	              "</div>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1223,7 +1219,7 @@ static void Crs_ListCoursesForSeeing (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForSeeing ();
 
    /***** List the courses *****/
@@ -1322,7 +1318,7 @@ static void Crs_ListCoursesForSeeing (void)
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1352,7 +1348,7 @@ static void Crs_ListCoursesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1582,7 +1578,7 @@ static void Crs_ListCoursesForEdition (void)
         }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1670,7 +1666,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Message);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Disabled icon to remove course *****/
@@ -1775,7 +1771,7 @@ static void Crs_PutFormToCreateCourse (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_course);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_course);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -3161,7 +3157,7 @@ unsigned Crs_ListCrssFound (const char *Query)
    if (NumCrss)
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Courses);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Courses);
 
       /* Number of courses found */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3216,7 +3212,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

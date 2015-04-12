@@ -280,9 +280,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Act_FormStart (ActionRec);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Logo);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_Logo);
 
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y,
@@ -291,17 +289,16 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
    /***** Upload logo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:"
+	              "%s:&nbsp;"
 	              "</label>"
-                      "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
-                      "</td>"
-                      "</tr>",
+                      "<input type=\"file\" name=\"%s\""
+                      " size=\"40\" maxlength=\"100\" value=\"\" />",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_logo);
+   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Upload_logo);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -319,7 +316,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
    /***** Link for removing the photo *****/
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("delon",Txt_Remove_logo,Txt_Remove_logo);
+   Lay_PutIconWithText ("delon",Txt_Remove_logo,Txt_Remove_logo);
    Act_FormEnd ();
   }
 

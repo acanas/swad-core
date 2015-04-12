@@ -4328,7 +4328,7 @@ void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
    if (FuncParams)
       FuncParams ();
    Act_LinkFormSubmit (Title,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon (Icon,Title,Title);
+   Lay_PutIconWithText (Icon,Title,Title);
    Act_FormEnd ();
   }
 
@@ -4339,7 +4339,7 @@ void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
 void Act_PutIconLink (const char *Icon,const char *Title)
   {
    Act_LinkFormSubmit (Title,NULL);
-   Lay_PutSendIcon (Icon,Title,NULL);
+   Lay_PutIconWithText (Icon,Title,NULL);
    Act_FormEnd ();
   }
 
@@ -4705,7 +4705,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
    char ActionStr[128];
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Frequent_actions);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Frequent_actions);
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;
@@ -4738,7 +4738,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

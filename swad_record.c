@@ -97,9 +97,9 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Record_fields);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Record_fields);
       Rec_ListFieldsRecordsForEdition ();
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else	// No fields of records found for current course in the database
      {
@@ -276,7 +276,7 @@ void Rec_ShowFormCreateRecordField (void)
    Act_FormStart (ActNewFie);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_New_record_field);
+   Lay_StartRoundFrameTable (NULL,0,Txt_New_record_field);
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -321,7 +321,7 @@ void Rec_ShowFormCreateRecordField (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_record_field);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1165,13 +1165,9 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /* Office hours */
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1261,13 +1257,9 @@ void Rec_ListRecordsTchsCrs (void)
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       Lay_StartRoundFrameTable10 (NULL,0,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td style=\"text-align:center;\">");
+	       Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);
-	       fprintf (Gbl.F.Out,"</td>"
-				  "</tr>");
-	       Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+	       Lay_EndRoundFrame ();
               }
 
             fprintf (Gbl.F.Out,"</div>");
@@ -1295,7 +1287,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("print",Txt_Print,Txt_Print);
+   Lay_PutIconWithText ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
@@ -1508,7 +1500,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
-   Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
+   Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1606,11 +1598,11 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    /***** Button to save changes and end frame *****/
    if (DataForm)
      {
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
       Act_FormEnd ();
      }
    else
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -2085,7 +2077,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
-   Lay_StartRoundFrameTable10 (StrRecordWidth,2,NULL);
+   Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3063,7 +3055,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -3271,9 +3263,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 ("560px",2,
-                               IAmTeacher ? Txt_Institution_centre_and_department :
-	                                    Txt_Institution);
+   Lay_StartRoundFrameTable ("560px",2,
+                             IAmTeacher ? Txt_Institution_centre_and_department :
+	                                  Txt_Institution);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3492,7 +3484,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

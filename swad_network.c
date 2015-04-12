@@ -227,7 +227,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Webs_social_networks);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Webs_social_networks);
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
@@ -281,7 +281,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -433,7 +433,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
                                         "can not get number of users with webs / social networks");
 
    /***** Number of users *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS]);
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS]);
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
@@ -495,7 +495,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
      }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

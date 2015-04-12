@@ -100,7 +100,7 @@ void Dpt_SeeDepts (void)
 	  Dpt_PutFormToEditDpts ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_Departments);
+      Lay_StartRoundFrameTable (NULL,0,Txt_Departments);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
@@ -182,7 +182,7 @@ void Dpt_SeeDepts (void)
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Free list of departments *****/
       Dpt_FreeListDepartments ();
@@ -490,7 +490,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Institution Ins;
    unsigned NumIns;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Departments);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Departments);
 
    /***** Table head *****/
    Dpt_PutHeadDepartments ();
@@ -595,7 +595,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                Dpt->NumTchs);
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -881,7 +881,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Act_FormStart (ActNewDpt);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_department);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_department);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -942,7 +942,7 @@ static void Dpt_PutFormToCreateDepartment (void)
             Cns_MAX_LENGTH_WWW,Dpt->WWW);
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_department);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_department);
 
    /***** End of form *****/
    Act_FormEnd ();

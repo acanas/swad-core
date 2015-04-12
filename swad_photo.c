@@ -272,7 +272,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Photo);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Photo);
 
    /***** Show current photo and help message *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -298,7 +298,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
             UsrDat->UsrCod);
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_photo);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Upload_photo);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1761,7 +1761,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
       Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
+      Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees *****/
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");
@@ -1861,7 +1861,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    bool TRIsOpen = false;
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Degrees);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Degrees);
 
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
@@ -1917,7 +1917,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1941,7 +1941,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Class photo start *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable (NULL,0,NULL);
    else
       fprintf (Gbl.F.Out,"<table>");
 
@@ -2035,7 +2035,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Photos end *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
    else
       fprintf (Gbl.F.Out,"</table>");
   }

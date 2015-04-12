@@ -116,7 +116,7 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Countries_with_pending_institutions);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Countries_with_pending_institutions);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
@@ -183,7 +183,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed);
@@ -245,7 +245,7 @@ static void Cty_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -458,7 +458,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
   }
 
@@ -514,7 +514,7 @@ void Cty_ListCountries2 (void)
       Lay_PutFormToEdit (ActEdiCty);
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Countries);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Countries);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"COUNTRY_MAP_SMALL\"></th>");
    for (Order = Cty_ORDER_BY_COUNTRY;
@@ -690,7 +690,7 @@ void Cty_ListCountries2 (void)
             Ins_GetNumInssTotal () - NumInssWithCountry);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Div for Google Geochart *****/
    if (Gbl.CurrentAct == ActSeeCty)
@@ -1279,7 +1279,7 @@ static void Cty_ListCountriesForEdition (void)
    struct Country *Cty;
    Txt_Language_t Lan;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Countries);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Countries);
 
    /***** Table head *****/
    Cty_PutHeadCountries ();
@@ -1388,7 +1388,7 @@ static void Cty_ListCountriesForEdition (void)
         }
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1667,7 +1667,7 @@ static void Cty_PutFormToCreateCountry (void)
    Act_FormStart (ActNewCty);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_country);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_country);
 
    /***** Write heading *****/
    Cty_PutHeadCountries ();
@@ -1742,7 +1742,7 @@ static void Cty_PutFormToCreateCountry (void)
      }
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_country);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_country);
 
    /***** End of form *****/
    Act_FormEnd ();

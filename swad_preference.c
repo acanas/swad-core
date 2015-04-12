@@ -68,13 +68,9 @@ void Pre_EditPrefs (void)
    char MailDomain[Cns_MAX_BYTES_STRING+1];
 
    /***** Language *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Language);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:center;\">");
+   Lay_StartRoundFrame (NULL,Txt_Language);
    Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
 
    /***** Layout, theme, icon set, menu & side columns *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
@@ -342,7 +338,7 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Columns);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Columns);
    fprintf (Gbl.F.Out,"<tr>");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
@@ -364,7 +360,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

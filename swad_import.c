@@ -509,7 +509,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
    if (NumGrps)
      {
       /***** Start table with groups *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th colspan=\"%u\" class=\"TIT_TBL\""
 	                 " style=\"text-align:center; vertical-align:top;\">",
@@ -592,7 +592,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
         }
 
       /***** End of table with courses *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

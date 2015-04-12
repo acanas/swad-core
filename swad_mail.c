@@ -101,7 +101,7 @@ void Mai_SeeMailDomains (void)
       Mai_PutFormToEditMailDomains ();
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Mail_domains_allowed_for_notifications);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Mail_domains_allowed_for_notifications);
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
@@ -146,7 +146,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -390,7 +390,7 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Mail_domains_allowed_for_notifications);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Mail_domains_allowed_for_notifications);
 
    /***** Table head *****/
    Mai_PutHeadMailDomains ();
@@ -454,7 +454,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai->NumUsrs);
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -649,7 +649,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_mail_domain);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_mail_domain);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -681,7 +681,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_mail_domain);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_mail_domain);
 
    /***** End of form *****/
    Act_FormEnd ();

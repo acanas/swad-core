@@ -128,7 +128,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Institutions_with_pending_centres);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Institutions_with_pending_centres);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
@@ -192,7 +192,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed);
@@ -261,7 +261,7 @@ static void Ins_Configuration (bool PrintView)
 	}
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -467,7 +467,7 @@ static void Ins_Configuration (bool PrintView)
 	}
 
       /***** End of the frame *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
   }
 
@@ -512,7 +512,7 @@ static void Ins_ListInstitutionsForSeeing (void)
    /***** Table head *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
    /***** Write all the institutions and their nuber of users *****/
@@ -522,7 +522,7 @@ static void Ins_ListInstitutionsForSeeing (void)
       Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1103,7 +1103,7 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -1293,7 +1293,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1768,7 +1768,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_institution_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
@@ -1847,7 +1847,7 @@ static void Ins_PutFormToCreateInstitution (void)
 		      "</tr>");
 
    /***** Send button and end of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_institution);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_institution);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2129,7 +2129,7 @@ unsigned Ins_ListInssFound (const char *Query)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Institutions);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Institutions);
 
       /* Number of institutions found */
       fprintf (Gbl.F.Out,"<tr>"
@@ -2163,7 +2163,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

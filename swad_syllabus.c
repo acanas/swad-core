@@ -196,10 +196,7 @@ void Syl_EditSyllabus (void)
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
       /***** Start of table *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_INFO_TITLE[InfoType]);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left;\">"
-	                 "<table class=\"CELLS_PAD_1\" style=\"width:100%%;\">");
+      Lay_StartRoundFrameTable (NULL,1,Txt_INFO_TITLE[InfoType]);
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus (InfoType);
@@ -210,10 +207,7 @@ void Syl_EditSyllabus (void)
                               Txt_Enter_a_new_item_here,true);
 
       /***** End of table *****/
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       if (!Gbl.CurrentCrs.Syllabus.EditionIsActive)
          fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\""

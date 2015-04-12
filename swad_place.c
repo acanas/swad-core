@@ -97,7 +97,7 @@ void Plc_SeePlaces (void)
 	 Plc_PutFormToEditPlcs ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable10 (NULL,0,Txt_Places);
+      Lay_StartRoundFrameTable (NULL,0,Txt_Places);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
@@ -171,7 +171,7 @@ void Plc_SeePlaces (void)
 	       Ctr_GetNumCtrsTotal () - NumCtrsWithPlc);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Free list of places *****/
       Plc_FreeListPlaces ();
@@ -412,7 +412,7 @@ static void Plc_ListPlacesForEdition (void)
    unsigned NumPlc;
    struct Place *Plc;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Places);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Places);
 
    /***** Table head *****/
    Plc_PutHeadPlaces ();
@@ -480,7 +480,7 @@ static void Plc_ListPlacesForEdition (void)
                Plc->NumCtrs);
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -685,7 +685,7 @@ static void Plc_PutFormToCreatePlace (void)
    Act_FormStart (ActNewPlc);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_place);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_place);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -715,7 +715,7 @@ static void Plc_PutFormToCreatePlace (void)
             Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_place);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
 
    /***** End formn *****/
    Act_FormEnd ();

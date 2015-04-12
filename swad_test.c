@@ -718,7 +718,7 @@ static void Tst_WriteTestHead (unsigned NumTst)
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,NULL);
    Lay_WriteHeaderClassPhoto (3,false,false,
                               Gbl.CurrentIns.Ins.InsCod,
                               Gbl.CurrentDeg.Deg.DegCod,
@@ -747,7 +747,7 @@ static void Tst_WriteTestHead (unsigned NumTst)
 
 static void Tst_WriteTestFoot (void)
   {
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1152,7 +1152,7 @@ static void Tst_PutFormToCreateNewTstQst (void)
    /***** Put form to create a new test question *****/
    Act_FormStart (ActEdiOneTstQst);
    Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("new",Txt_New_question,Txt_New_question);
+   Lay_PutIconWithText ("new",Txt_New_question,Txt_New_question);
    Act_FormEnd ();
   }
 
@@ -1389,7 +1389,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
    char TagText[Tst_MAX_BYTES_TAG+1];
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Tags);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Tags);
 
    /***** Select all tags *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -1451,7 +1451,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1478,17 +1478,7 @@ static void Tst_ShowFormEditTags (void)
    else
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
-
-      /***** Header of table with title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"%s\""
-	                 " style=\"text-align:center;\">"
-	                 "%s"
-	                 "</td>"
-	                 "</tr>",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_Tags);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Tags);
 
       /***** Show tags *****/
       for (NumRow = 0;
@@ -1521,8 +1511,7 @@ static void Tst_ShowFormEditTags (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
-      fprintf (Gbl.F.Out,"</div>");
+      Lay_EndRoundFrameTable ();
      }
 
    /* Free structure that stores the query result */
@@ -1597,7 +1586,7 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Configure_tests);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Configure_tests);
 
    /***** Tests are visible from plugins? *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1701,7 +1690,7 @@ static void Tst_ShowFormConfigTst (void)
 	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2004,7 +1993,7 @@ static void Tst_ShowFormAnswerTypes (void)
    const char *Ptr;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Types_of_answers);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Types_of_answers);
 
    /***** Select all types of answers *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2045,7 +2034,7 @@ static void Tst_ShowFormAnswerTypes (void)
      }
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -2392,6 +2381,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 
 static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
+   extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
    extern const char *Txt_Date;
@@ -2412,7 +2402,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Questions);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2652,7 +2642,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
      }
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -4221,10 +4211,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
 
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrameTable10 (NULL,2,Title);
+      Lay_StartRoundFrameTable (NULL,2,Title);
      }
    else
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_New_question);
+      Lay_StartRoundFrameTable (NULL,2,Txt_New_question);
 
    /***** Help for text editor *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4513,9 +4503,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Send button and end frame *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    else
-      Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_question);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -5979,10 +5969,11 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
                             "<td colspan=\"2\" style=\"text-align:left;\">");
 
          /***** Put list of users to select some of them *****/
-         Lay_StartRoundFrameTable10 (NULL,0,Txt_Users);
+         Lay_StartRoundFrameTable (NULL,0,Txt_Users);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+         Lay_EndRoundFrameTable ();
+
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -6076,6 +6067,7 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
 
 void Tst_ShowUsrsTestResults (void)
   {
+   extern const char *Txt_Exams;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
 
@@ -6089,7 +6081,7 @@ void Tst_ShowUsrsTestResults (void)
    if (Usr_CountNumUsrsInEncryptedList ())				// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -6105,7 +6097,7 @@ void Tst_ShowUsrsTestResults (void)
 	}
 
       /***** End of the table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else	// If no users are selected...
      {
@@ -6180,11 +6172,13 @@ static void Tst_ShowHeaderTestResults (void)
 
 void Tst_ShowMyTestResults (void)
   {
+   extern const char *Txt_Exams;
+
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrameTable10 (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
    Tst_ShowHeaderTestResults ();
 
    /***** List my results in test exams *****/
@@ -6192,7 +6186,7 @@ void Tst_ShowMyTestResults (void)
    Tst_ShowResultsOfTestExams (&Gbl.Usrs.Me.UsrDat);
 
    /***** End of the table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

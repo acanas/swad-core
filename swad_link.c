@@ -86,7 +86,7 @@ void Lnk_SeeLinks (void)
    /***** Table head *****/
    if (Gbl.Links.Num)
      {
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Links);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Links);
 
       /***** Write all the links *****/
       for (NumLnk = 0;
@@ -105,7 +105,7 @@ void Lnk_SeeLinks (void)
 		  Gbl.Links.Lst[NumLnk].ShortName);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free list of links *****/
@@ -282,7 +282,7 @@ static void Lnk_ListLinksForEdition (void)
    unsigned NumLnk;
    struct Link *Lnk;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Links);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Links);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -351,7 +351,7 @@ static void Lnk_ListLinksForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -588,7 +588,7 @@ static void Lnk_PutFormToCreateLink (void)
    Act_FormStart (ActNewLnk);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_link);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_link);
 
    /***** Write heading *****/
    Lnk_PutHeadLinks ();
@@ -618,7 +618,7 @@ static void Lnk_PutFormToCreateLink (void)
             Cns_MAX_LENGTH_WWW,Lnk->WWW);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_link);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
 
    /***** End of form *****/
    Act_FormEnd ();

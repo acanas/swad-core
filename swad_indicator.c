@@ -90,7 +90,7 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrss;
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Indicators_of_courses);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Indicators_of_courses);
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"text-align:center;\">");
@@ -177,7 +177,7 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\" style=\"text-align:center;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIcon (Txt_Update_indicators,Txt_Update_indicators);
+   Lay_PutCalculateIconWithText (Txt_Update_indicators,Txt_Update_indicators);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "</table>");
@@ -211,7 +211,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

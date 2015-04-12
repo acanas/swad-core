@@ -124,7 +124,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActCreUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
@@ -168,7 +168,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    Pwd_PutFormToGetNewPasswordTwice ();
 
    /***** Send button and form end *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_account);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -205,7 +205,7 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_User_account);
+   Lay_StartRoundFrameTable (NULL,2,Txt_User_account);
 
    /***** Nickname *****/
    Nck_ShowFormChangeUsrNickname ();
@@ -223,7 +223,7 @@ void Acc_ShowFormChangeMyAccount (void)
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 

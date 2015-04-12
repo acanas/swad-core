@@ -10395,6 +10395,27 @@ const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in th
 	"Exam of %s";		// Necessita de tradução
 #endif
 
+const char *Txt_Exams =
+#if   L==0
+	"Ex&agrave;mens";
+#elif L==1
+	"Pr&uuml;fungen";
+#elif L==2
+	"Exams";
+#elif L==3
+	"Ex&aacute;menes";
+#elif L==4
+	"Examens";
+#elif L==5
+	"Ex&aacute;menes";	// Okoteve traducción
+#elif L==6
+	"Esami";
+#elif L==7
+	"Egzaminy";
+#elif L==8
+	"Exames";
+#endif
+
 const char *Txt_exams =
 #if   L==0
 	"ex&agrave;mens";
@@ -37427,27 +37448,6 @@ const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to in
 	"Survey <strong>%s</strong> is now visible.";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
-const char *Txt_Survey_questions =
-#if   L==0
-	"Preguntas de la encuesta";	// Necessita traduccio
-#elif L==1
-	"Umfrage-Fragen";
-#elif L==2
-	"Survey questions";
-#elif L==3
-	"Preguntas de la encuesta";
-#elif L==4
-	"Questions du sondage";
-#elif L==5
-	"Preguntas de la encuesta";	// Okoteve traducción
-#elif L==6
-	"Domande di sondaggio";
-#elif L==7
-	"Survey questions";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Quest&otilde;es do inqu&eacute;rito";
 #endif
 
 const char *Txt_Survey_X_removed =	// Warning: it is very important to include %s in the following sentences

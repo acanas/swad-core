@@ -95,7 +95,7 @@ void Plg_ListPlugins (void)
       Plg_PutFormToEditPlugins ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Plugins);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Plugins);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -138,7 +138,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -353,7 +353,7 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Plugins);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Plugins);
 
    /***** Table head *****/
    Plg_PutHeadPlugins ();
@@ -460,7 +460,7 @@ static void Plg_ListPluginsForEdition (void)
                          "</tr>");
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -841,7 +841,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Act_FormStart (ActNewPlg);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_plugin);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_plugin);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -909,7 +909,7 @@ static void Plg_PutFormToCreatePlugin (void)
             Cns_MAX_LENGTH_IP,Plg->IP);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_plugin);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
    Act_FormEnd ();

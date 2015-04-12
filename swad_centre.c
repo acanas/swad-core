@@ -138,7 +138,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Centres_with_pending_degrees);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Centres_with_pending_degrees);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
@@ -203,7 +203,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed);
@@ -285,7 +285,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -513,7 +513,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
   }
 
@@ -572,7 +572,7 @@ static void Ctr_ListCentresForSeeing (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
    /***** Write all the centres and their nuber of teachers *****/
@@ -582,7 +582,7 @@ static void Ctr_ListCentresForSeeing (void)
       Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1153,7 +1153,7 @@ static void Ctr_ListCentresForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -1370,7 +1370,7 @@ static void Ctr_ListCentresForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1848,7 +1848,7 @@ void Ctr_RequestPhoto (void)
    Act_FormStart (ActRecCtrPho);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Photo);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Photo);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"text-align:center;\">");
 
@@ -1860,7 +1860,7 @@ void Ctr_RequestPhoto (void)
 
    /***** Upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:"
+	              "%s:&nbsp;"
 	              "</label>"
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
@@ -1870,7 +1870,7 @@ void Ctr_RequestPhoto (void)
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Upload_photo);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Upload_photo);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1986,7 +1986,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
@@ -2090,7 +2090,7 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</tr>");
 
    /***** End of frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2457,7 +2457,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Centres);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Centres);
 
       /* Number of centres found */
       fprintf (Gbl.F.Out,"<tr>"
@@ -2491,7 +2491,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

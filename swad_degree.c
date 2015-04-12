@@ -188,7 +188,7 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees_with_pending_courses);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Degrees_with_pending_courses);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
@@ -254,7 +254,7 @@ void Deg_SeeDegWithPendingCrss (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
@@ -321,7 +321,7 @@ static void Deg_Configuration (bool PrintView)
 
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable10 (NULL,2,NULL);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -482,7 +482,7 @@ static void Deg_Configuration (bool PrintView)
 	}
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
   }
 
@@ -1078,7 +1078,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
    unsigned NumDegTyp;
    const char *BgColor;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Types_of_degree);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
 
    /***** Write heading *****/
    Deg_PutHeadDegreeTypesForSeeing ();
@@ -1135,7 +1135,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1149,7 +1149,7 @@ static void Deg_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Types_of_degree);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
    Deg_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -1219,7 +1219,7 @@ static void Deg_ListDegreeTypesForEdition (void)
                Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs);
      }
 
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1234,7 +1234,7 @@ static void Deg_ListDegreesForSeeing (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Deg_PutHeadDegreesForSeeing ();
 
    /***** List the degrees *****/
@@ -1244,7 +1244,7 @@ static void Deg_ListDegreesForSeeing (void)
       Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1400,7 +1400,7 @@ static void Deg_ListDegreesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -1683,7 +1683,7 @@ static void Deg_ListDegreesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1757,7 +1757,7 @@ static void Deg_PutFormToCreateDegType (void)
    Act_FormStart (ActNewDegTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_New_type_of_degree);
+   Lay_StartRoundFrameTable (NULL,2,Txt_New_type_of_degree);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1789,7 +1789,7 @@ static void Deg_PutFormToCreateDegType (void)
 
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1823,7 +1823,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
-   Lay_StartRoundFrameTable10 (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
@@ -1950,7 +1950,7 @@ static void Deg_PutFormToCreateDegree (void)
 		      "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CREATE_BUTTON,Txt_Create_degree);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -4035,7 +4035,7 @@ unsigned Deg_ListDegsFound (const char *Query)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Degrees);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Degrees);
 
       /* Number of degrees found */
       fprintf (Gbl.F.Out,"<tr>"
@@ -4069,7 +4069,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 	}
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

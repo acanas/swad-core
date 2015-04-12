@@ -143,25 +143,21 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
    Act_FormStart (ActSeePubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_View_public_profile);
+   Lay_StartRoundFrame (NULL,Txt_View_public_profile);
 
    /***** Form to request user's @nickname *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div class=\"%s\" style=\"text-align:center;\">"
-                      "%s: "
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+                      "%s:&nbsp;"
+                      "</label>"
                       "<input type=\"text\" name=\"usr\""
-                      " size=\"20\" maxlength=\"%u\" value=\"@%s\" />"
-                      "</div>"
-                      "</td>"
-                      "</tr>",
+                      " size=\"20\" maxlength=\"%u\" value=\"@%s\" />",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
             DefaultNickname);
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Continue);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -441,7 +437,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Act_FormStart (ActCal1stClkTim);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+      Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -483,7 +479,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 Act_FormStart (ActCalNumClk);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>"
@@ -520,7 +516,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 Act_FormStart (ActCalNumFilVie);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>"
@@ -557,7 +553,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 Act_FormStart (ActCalNumForPst);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>"
@@ -594,7 +590,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 Act_FormStart (ActCalNumMsgSnt);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIcon (Txt_Calculate,Txt_Calculate);
+	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
       fprintf (Gbl.F.Out,"</td>"

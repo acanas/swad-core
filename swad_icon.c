@@ -69,7 +69,7 @@ void Ico_PutIconsToSelectIconSet (void)
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Icons);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Icons);
    fprintf (Gbl.F.Out,"<tr>");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
@@ -93,7 +93,7 @@ void Ico_PutIconsToSelectIconSet (void)
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

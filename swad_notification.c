@@ -315,7 +315,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable10 (NULL,2,Txt_Notifications);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"2\" class=\"TIT_TBL\""
                          " style=\"text-align:left;\">"
@@ -564,7 +564,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1650,7 +1650,7 @@ static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
 
    Act_FormStart (ActMrkNtfSee);
    Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutSendIcon ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
+   Lay_PutIconWithText ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
    Act_FormEnd ();
   }
 
@@ -1691,7 +1691,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Act_FormStart (ActChgNtfPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable10 (NULL,2,Txt_Notifications);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
@@ -1733,7 +1733,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
      }
 
    /***** Button to save changes and end frame *****/
-   Lay_EndRoundFrameTable10 (Lay_CONFIRM_BUTTON,Txt_Save_changes);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Act_FormEnd ();

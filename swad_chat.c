@@ -117,7 +117,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Chat_rooms);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Chat_rooms);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td>"
                       "<div style=\"display:inline-block; margin:0 auto;\">"
@@ -225,7 +225,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	              "</div>"
 	              "</td>"
                       "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -250,12 +250,11 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Table start *****/
-      Lay_WriteTitle (Txt_Rooms_with_users);
-      Lay_StartRoundFrameTable10 (NULL,0,NULL);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Rooms_with_users);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"TIT_TBL\""
 	                 " style=\"text-align:center; background-color:%s;\">"
-	                 "%s&nbsp;"
+	                 "%s"
 	                 "</td>"
                          "<td class=\"TIT_TBL\""
                          " style=\"text-align:left; background-color:%s;\">"
@@ -284,7 +283,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
      }
 
    /***** Free structure that stores the query result *****/

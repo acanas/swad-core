@@ -96,8 +96,8 @@ void Lay_WriteTitle (const char *Title);
 
 void Lay_PutFormToView (Act_Action_t Action);
 void Lay_PutFormToEdit (Act_Action_t Action);
-void Lay_PutSendIcon (const char *Icon,const char *Alt,const char *Text);
-void Lay_PutCalculateIcon (const char *Alt,const char *Text);
+void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
+void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
 
 void Lay_PutCreateButton (const char *Text);
 void Lay_PutCreateButtonInline (const char *Text);
@@ -105,11 +105,13 @@ void Lay_PutConfirmButton (const char *Text);
 void Lay_PutConfirmButtonInline (const char *Text);
 void Lay_PutRemoveButton (const char *Text);
 
-void Lay_StartRoundFrameTable10 (const char *Width,unsigned CellPadding,const char *Title);
-void Lay_StartRoundFrame10 (const char *Width,const char *Title);
-void Lay_StartRoundFrameTable10Shadow (const char *Width,unsigned CellPadding);
-void Lay_EndRoundFrameTable10 (Lay_Button_t Button,const char *TxtButton);
-void Lay_EndRoundFrame10 (Lay_Button_t Button,const char *TxtButton);
+void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char *Title);
+void Lay_StartRoundFrame (const char *Width,const char *Title);
+void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding);
+void Lay_EndRoundFrameTable (void);
+void Lay_EndRoundFrame (void);
+void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton);
+void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
 
 void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);

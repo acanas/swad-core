@@ -330,7 +330,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .FRAME10
 	{
 	margin:0;
-	padding:0;
+	padding:10px;
 	background-color:white;
 	border-radius:4px;
 	box-shadow:1px 1px 1px #CCC;
@@ -341,7 +341,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .FRAME10_SHADOW
 	{
 	margin:4px 0 14px 0;
-	padding:0;
+	padding:10px;
 	background-color:rgba(255,255,255,0.95);
 	border-width:1px;
 	border-style:solid;
@@ -354,12 +354,11 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	}
 .TABLE10
 	{
-	padding:10px;
 	width:100%;
 	}
 .TIT_TBL_10
 	{
-	margin:20px 10px 10px 10px;
+	margin:10px;
 	color:#808080;
 	font-size:16pt;
 	font-weight:bold;

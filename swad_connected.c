@@ -88,7 +88,7 @@ void Con_ShowConnectedUsrs (void)
             Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
-   Lay_StartRoundFrameTable10 (NULL,0,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,0,Gbl.Title);
 
    /***** Put form to update connected users *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -105,7 +105,7 @@ void Con_ShowConnectedUsrs (void)
       fprintf (Gbl.F.Out,"</div>");
      }
    Act_LinkFormSubmitAnimated (Txt_Update_connected_users,The_ClassFormulB[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIcon (Txt_Update_connected_users,Txt_Update_connected_users);
+   Lay_PutCalculateIconWithText (Txt_Update_connected_users,Txt_Update_connected_users);
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</td>"
@@ -123,7 +123,7 @@ void Con_ShowConnectedUsrs (void)
 	              "</tr>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -134,17 +134,14 @@ void Con_ShowLastClicks (void)
   {
    extern const char *Txt_Last_clicks_in_real_time;
 
-   Lay_StartRoundFrameTable10 (NULL,0,Txt_Last_clicks_in_real_time);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td>");
+   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time);
 
-   fprintf (Gbl.F.Out,"<div id=\"lastclicks\" style=\"text-align:center;\">");	// Used for AJAX based refresh
+   fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
+	              " style=\"text-align:center;\">");
    Con_GetAndShowLastClicks ();
-   fprintf (Gbl.F.Out,"</div>");						// Used for AJAX based refresh
+   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable10 (Lay_NO_BUTTON,NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -181,10 +178,8 @@ void Con_GetAndShowLastClicks (void)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
-   fprintf (Gbl.F.Out,"<table>");
-
-   /* Print table row */
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"TABLE10\">"
+                      "<tr>"
                       "<th class=\"TIT_TBL\""
                       " style=\"width:70px; text-align:left;\">"
                       "%s"
