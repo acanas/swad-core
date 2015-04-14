@@ -270,6 +270,7 @@ void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    		                   "");
    Str_LimitLengthHTMLStr (FullNameAndUsrID,50);
    strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// First user's ID
+   Str_ConvertToValidFileName (FullNameAndUsrID);
 
    sprintf (PathFolderUsrInsideCrs,"%s/usr/%02u/%ld",
 	    Gbl.CurrentCrs.PathPriv,

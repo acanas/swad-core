@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.113.1 (2015/04/14)"
+#define Log_PLATFORM_VERSION	"SWAD 14.113.2 (2015/04/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.113.2: Apr 14, 2015	Fixed bug when compressing users' works. (184486 lines)
         Version 14.113.1: Apr 14, 2015	Fixed bug when compressing users' works, reported by José Martínez Aroza. (184484 lines)
         Version 14.113:   Apr 12, 2015	Refactoring code related to frames. (184462 lines)
         Version 14.112.1: Apr 12, 2015	Refactoring code related to frames with ending buttons. (184583 lines)
