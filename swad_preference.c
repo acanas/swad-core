@@ -65,7 +65,7 @@ void Pre_EditPrefs (void)
   {
    extern const char *Txt_Language;
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
-   char MailDomain[Cns_MAX_BYTES_STRING+1];
+   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
 
    /***** Language *****/
    Lay_StartRoundFrame (NULL,Txt_Language);
@@ -101,7 +101,7 @@ void Pre_EditPrefs (void)
      {
       Ntf_PutFormChangeNotifSentByEMail ();
 
-      Str_GetMailBox (Gbl.Usrs.Me.UsrDat.Email,MailDomain,Cns_MAX_BYTES_STRING);
+      Str_GetMailBox (Gbl.Usrs.Me.UsrDat.Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
       if (!Mai_CheckIfMailDomainIsAllowedForNotifications (MailDomain))
          Lay_ShowAlert (Lay_WARNING,Txt_You_can_only_receive_email_notifications_if_);
      }

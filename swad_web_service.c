@@ -625,8 +625,8 @@ int swad__createAccount (struct soap *soap,
    strncpy (Gbl.Usrs.Me.UsrDat.Nickname,userNickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
    Gbl.Usrs.Me.UsrDat.Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
 
-   strncpy (Gbl.Usrs.Me.UsrDat.Email,userEmail,Cns_MAX_BYTES_STRING);
-   Gbl.Usrs.Me.UsrDat.Email[Cns_MAX_BYTES_STRING] = '\0';
+   strncpy (Gbl.Usrs.Me.UsrDat.Email,userEmail,Usr_MAX_BYTES_USR_EMAIL);
+   Gbl.Usrs.Me.UsrDat.Email[Usr_MAX_BYTES_USR_EMAIL] = '\0';
 
    ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
    Gbl.Usrs.Me.UsrDat.IDs.List[0].Confirmed = false;

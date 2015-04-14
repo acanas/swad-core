@@ -878,9 +878,9 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
    bool ArrobaFound = false;
 
    /***** An e-mail address must have a number of characters
-          5 <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA *****/
+          5 <= Length <= Mai_MAX_BYTES_USR_EMAIL *****/
    if (Length < 5 ||
-       Length > Cns_MAX_BYTES_STRING)
+       Length > Usr_MAX_BYTES_USR_EMAIL)
       return false;
 
    /***** An e-mail address can have digits, letters, '.', '-' and '_';
@@ -1131,8 +1131,9 @@ void Mai_ShowFormChangeUsrEmail (void)
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\" size=\"16\" maxlength=\"%u\" value=\"%s\" />",
-            Cns_MAX_BYTES_STRING,
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\""
+	              " size=\"16\" maxlength=\"%u\" value=\"%s\" />",
+            Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
    fprintf (Gbl.F.Out,"</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">");
@@ -1151,10 +1152,10 @@ void Mai_RemoveEmail (void)
   {
    extern const char *Txt_Email_X_removed;
    extern const char *Txt_You_can_not_delete_your_current_email;
-   char Email[Cns_MAX_BYTES_STRING+1];
+   char Email[Usr_MAX_BYTES_USR_EMAIL+1];
 
    /***** Get new e-mail from form *****/
-   Par_GetParToText ("Email",Email,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
 
    if (strcasecmp (Email,Gbl.Usrs.Me.UsrDat.Email))	// Only if not my current e-mail
      {
@@ -1198,10 +1199,10 @@ void Mai_UpdateEmail (void)
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char NewEmail[Cns_MAX_BYTES_STRING+1];
+   char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
 
    /***** Get new e-mail from form *****/
-   Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
      {
@@ -1402,7 +1403,7 @@ void Mai_ConfirmEmail (void)
    MYSQL_ROW row;
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1];
    long UsrCod;
-   char Email[Cns_MAX_BYTES_STRING+1];
+   char Email[Usr_MAX_BYTES_USR_EMAIL+1];
    bool KeyIsCorrect = false;
    bool Confirmed;
 
@@ -1472,7 +1473,6 @@ void Mai_ConfirmEmail (void)
    /***** Form to log in *****/
    Usr_WriteFormLogin ();
   }
-
 
 /*****************************************************************************/
 /****************** Create temporary file for mail content *******************/

@@ -1340,7 +1340,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    extern const char *Txt_TAB_Messages_NO_HTML[Txt_NUM_LANGUAGES];
    extern const char *Txt_Notifications_NO_HTML[Txt_NUM_LANGUAGES];
    extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[Txt_NUM_LANGUAGES];
-   char MailDomain[Cns_MAX_BYTES_STRING+1];
+   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1360,7 +1360,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    /***** Return 0 notifications and 0 mails when error *****/
    *NumNotif = *NumMails = 0;
 
-   Str_GetMailBox (ToUsrDat->Email,MailDomain,Cns_MAX_BYTES_STRING);
+   Str_GetMailBox (ToUsrDat->Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
    if (Mai_CheckIfMailDomainIsAllowedForNotifications (MailDomain))
      {
       /***** Get pending notifications of this user from database ******/

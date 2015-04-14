@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <dirent.h>		// For scandir, etc.
+#include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdlib.h>		// For system...
 #include <string.h>		// For strcpy...
@@ -245,9 +246,14 @@ void ZIP_CreateTmpDirForCompression (void)
 
 void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
-   char FullNameAndUsrID[(Usr_MAX_BYTES_NAME+1)*3+ID_MAX_LENGTH_USR_ID+1];
+   char FullNameAndUsrID[(Usr_MAX_BYTES_NAME+1)*3+
+                         ID_MAX_LENGTH_USR_ID+1+
+                         10+1];
    char PathFolderUsrInsideCrs[PATH_MAX+1];
-   char LinkRelTmpUsr[PATH_MAX+1];
+   char LinkTmpUsr[PATH_MAX+1];
+   char Link[PATH_MAX+1];
+   unsigned NumTry;
+   bool Success;
 
    /***** Create a link in the tree of compression
           with a name that identifies the owner
@@ -263,20 +269,35 @@ void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    	    UsrDat->FirstName[0] ? "-" :
    		                   "");
    Str_LimitLengthHTMLStr (FullNameAndUsrID,50);
-   strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// TODO: What user's ID from the list?
-   Str_ConvertToValidFileName (FullNameAndUsrID);
+   strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// First user's ID
 
    sprintf (PathFolderUsrInsideCrs,"%s/usr/%02u/%ld",
 	    Gbl.CurrentCrs.PathPriv,
 	    (unsigned) (UsrDat->UsrCod % 100),
 	    UsrDat->UsrCod);
-   sprintf (LinkRelTmpUsr,"%s/%s/%s/%s",
+   sprintf (LinkTmpUsr,"%s/%s/%s/%s",
 	    Cfg_PATH_SWAD_PRIVATE,
 	    Cfg_FOLDER_ZIP,
 	    Gbl.FileBrowser.ZIP.TmpDir,
 	    FullNameAndUsrID);
-   if (symlink (PathFolderUsrInsideCrs,LinkRelTmpUsr) != 0)
-      Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
+
+   /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
+   if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr) != 0)
+     {
+      for (Success = false, NumTry = 2;
+	   !Success && errno == EEXIST && NumTry<=1000;
+	   NumTry++)
+	{
+	 // Link exists ==> a former user share the same name and ID
+	 // (probably a unique user has created two or more accounts)
+	 sprintf (Link,"%s-%u",LinkTmpUsr,NumTry);
+	 if (symlink (PathFolderUsrInsideCrs,Link) == 0)
+	    Success = true;
+	}
+
+      if (!Success)
+	 Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
+     }
   }
 
 /*****************************************************************************/
@@ -499,7 +520,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 
 	       /***** Create clone of subdirectory *****/
 	       if (mkdir (PathFileClone,(mode_t) 0xFFF))
-		  Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
+		  Lay_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
 	       /***** Clone subtree starting at this this directory *****/
 	       FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);

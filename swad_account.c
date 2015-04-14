@@ -160,7 +160,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</tr>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Email,
-            Cns_MAX_BYTES_STRING,
+            Usr_MAX_BYTES_USR_EMAIL,
             Txt_HELP_email,
             NewEmail);
 
@@ -272,7 +272,7 @@ static void Acc_PrintAccountSeparator (void)
 bool Acc_CreateNewAccountAndLogIn (void)
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char NewEmail[Cns_MAX_BYTES_STRING+1];
+   char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
 
    if (Acc_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
@@ -361,7 +361,7 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
      }
 
    /***** Step 2/3: Get new e-mail from form *****/
-   Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
      {

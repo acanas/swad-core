@@ -274,7 +274,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
 	              " background-color:%s;\">"
-                      "<p class=\"%s\">%s</p>",
+                      "<div class=\"%s\">%s</div>",
             Gbl.ColorRows[Gbl.RowEvenOdd],
             Asg.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
@@ -340,7 +340,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
    fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
-                      "%s<br />&nbsp;</p>"
+                      "%s</p>"
                       "</td>"
                       "</tr>",
             Asg.Hidden ? "DAT_LIGHT" :
@@ -1649,7 +1649,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get groups of an assignment");
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<p class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
             Asg->Hidden ? "ASG_GRP_LIGHT" :
         	          "ASG_GRP",
             (NumRows == 1) ? Txt_Group  :
@@ -1683,7 +1683,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
 
-   fprintf (Gbl.F.Out,"</p>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

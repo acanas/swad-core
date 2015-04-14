@@ -2468,38 +2468,30 @@ void Str_ConvertToValidFileName (char *Str)
 	  *Ptr == '_' ||
 	  *Ptr == '-')
          continue;
-      switch (*Ptr)
-	{
-	 case ' ': *Ptr = '_'; break;
+      if (isspace ((int) *Ptr) ||
+	  *Ptr == '\xA0')
+	 *Ptr = '_';
+      else
+	 switch (*Ptr)
+	   {
+	    case 'á': case 'à': case 'ä': case 'â': *Ptr = 'a'; break;
+	    case 'é': case 'è': case 'ë': case 'ê': *Ptr = 'e'; break;
+	    case 'í': case 'ì': case 'ï': case 'î': *Ptr = 'i'; break;
+	    case 'ó': case 'ò': case 'ö': case 'ô': *Ptr = 'o'; break;
+	    case 'ú': case 'ù': case 'ü': case 'û': *Ptr = 'u'; break;
+	    case 'ñ': *Ptr = 'n'; break;
+	    case 'ç': *Ptr = 'c'; break;
 
-	 case 'á': *Ptr = 'a'; break;
-	 case 'é': *Ptr = 'e'; break;
-	 case 'í': *Ptr = 'i'; break;
-	 case 'ó': *Ptr = 'o'; break;
-	 case 'ú': *Ptr = 'u'; break;
-	 case 'ñ': *Ptr = 'n'; break;
-	 case 'ä': *Ptr = 'a'; break;
-	 case 'ë': *Ptr = 'e'; break;
-	 case 'ï': *Ptr = 'i'; break;
-	 case 'ö': *Ptr = 'o'; break;
-	 case 'ü': *Ptr = 'u'; break;
-         case 'ç': *Ptr = 'c'; break;
+	    case 'Á': case 'À': case 'Ä': case 'Â': *Ptr = 'A'; break;
+	    case 'É': case 'È': case 'Ë': case 'Ê': *Ptr = 'E'; break;
+	    case 'Í': case 'Ì': case 'Ï': case 'Î': *Ptr = 'I'; break;
+	    case 'Ó': case 'Ò': case 'Ö': case 'Ô': *Ptr = 'O'; break;
+	    case 'Ú': case 'Ù': case 'Ü': case 'Û': *Ptr = 'U'; break;
+	    case 'Ñ': *Ptr = 'N'; break;
+	    case 'Ç': *Ptr = 'C'; break;
 
-	 case 'Á': *Ptr = 'A'; break;
-	 case 'É': *Ptr = 'E'; break;
-	 case 'Í': *Ptr = 'I'; break;
-	 case 'Ó': *Ptr = 'O'; break;
-	 case 'Ú': *Ptr = 'U'; break;
-	 case 'Ñ': *Ptr = 'N'; break;
-	 case 'Ä': *Ptr = 'A'; break;
-	 case 'Ë': *Ptr = 'E'; break;
-	 case 'Ï': *Ptr = 'I'; break;
-	 case 'Ö': *Ptr = 'O'; break;
-	 case 'Ü': *Ptr = 'U'; break;
-         case 'Ç': *Ptr = 'C'; break;
-
-         default: *Ptr = '-'; break;
-	}
+	    default: *Ptr = '-'; break;
+	   }
      }
   }
 

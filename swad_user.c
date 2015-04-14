@@ -2588,7 +2588,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   char MailLink[7+Cns_MAX_BYTES_STRING+1];                // mailto:mail_address
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
 
    /***** Start row *****/
@@ -2670,7 +2670,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = false;
-   char MailLink[7+Cns_MAX_BYTES_STRING+1];                // mailto:mail_address
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
    bool ShowEmail = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
@@ -2991,7 +2991,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = false;
-   char MailLink[7+Cns_MAX_BYTES_STRING+1];                // mailto:mail_address
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
    bool ShowEmail = UsrDat->Accepted ||
                     Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
@@ -3164,7 +3164,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   char MailLink[7+Cns_MAX_BYTES_STRING+1];                // mailto:mail_address
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
 
    /***** Start row *****/

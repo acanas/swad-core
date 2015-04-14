@@ -2914,24 +2914,29 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    struct UsrData UsrDat;
 
    /***** Check the number of users whose works will be shown *****/
-   if (Usr_CountNumUsrsInEncryptedList ())				// If some users are selected...
+   if (Usr_CountNumUsrsInEncryptedList ())	// If some users are selected...
      {
       if (Gbl.FileBrowser.ZIP.CreateZIP)
 	{
-	 /***** Create zip file with the assignments and works of the selected users *****/
-	 /* Create temporary directory for the compression of assignments and works */
+	 /***** Create zip file
+	        with the assignments and works
+	        of the selected users *****/
+	 /* Create temporary directory
+	    for the compression of assignments and works */
 	 ZIP_CreateTmpDirForCompression ();
 
 	 /* Initialize structure with user's data */
 	 Usr_UsrDataConstructor (&UsrDat);
 
-	 /* Create temporary directory for each selected user inside the directory used for compression */
+	 /* Create temporary directory for each selected user
+	    inside the directory used for compression */
 	 Ptr = Gbl.Usrs.Select.All;
 	 while (*Ptr)
 	   {
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+	                                       Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))               // Get user's data from database
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
 	       if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
 		  ZIP_CreateDirCompressionUsr (&UsrDat);
 	   }
@@ -2943,7 +2948,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
          ZIP_CreateZIPAsgWrk ();
 	}
       else
-	 /***** Button to create a zip file with all the works of the selected users *****/
+	 /***** Button to create a zip file
+	        with all the works of the selected users *****/
 	 ZIP_PutButtonToCreateZIPAsgWrk ();
 
       /***** Write top before showing file browser *****/
@@ -2956,9 +2962,10 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Ptr = Gbl.Usrs.Select.All;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                                    Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))               // Get of the database the data of the user
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
 	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
 	      {
 	       /***** Show a row with the data of the owner of the works *****/

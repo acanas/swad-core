@@ -53,6 +53,7 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
+#define Usr_MAX_BYTES_USR_EMAIL			127
 #define Usr_MAX_LENGTH_USR_LOGIN		127	// @nick, e-mail or ID
 #define Usr_MAX_BYTES_USR_LOGIN			127
 
@@ -124,7 +125,7 @@ struct UsrData
    char FirstName	[Usr_MAX_BYTES_NAME+1];
    char FullName	[(Usr_MAX_BYTES_NAME+1)*3];
    Usr_Sex_t Sex;
-   char Email		[Cns_MAX_BYTES_STRING  +1];
+   char Email		[Usr_MAX_BYTES_USR_EMAIL+1];
    bool EmailConfirmed;
    char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
