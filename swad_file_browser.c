@@ -1201,6 +1201,7 @@ const char *Brw_MIMETypesAllowed[] =
    "application/x-ms-project",		// Microsoft Project mpp
    "application/x-msword",		// PDF?
    "application/x-mswrite",		// PDF
+   "application/x-octet-stream",	// PDF
    "application/x-rar",			// .rar
    "application/x-shockwave-flash",		// Flash
    "application/x-shockwave-flash2-preview",	// Flash

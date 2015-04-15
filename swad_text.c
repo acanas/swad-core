@@ -4632,6 +4632,72 @@ const char *Txt_Confirm_my_enrollment =
 	"Confirmar o meu registo";
 #endif
 
+const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
+#if   L==0
+	"Enhorabona! Ha creat el seu compte @%s."
+	" Ara %s li demanar&agrave; algunes dades per completar el seu perfil"
+	" i despr&eacute;s podr&agrave; sol·licitar la seva inscripci&oacute; en assignatures."
+	" Si no hi ha una assignatura,"
+	" vost&egrave; pot crear abans de sol·licitar la seva inscripci&oacute; en ella"
+	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
+#elif L==1
+	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Konto @%s erstellt."
+	" Jetzt %s finden Sie einige Daten in Ihrem Profil"
+	" vervollst&auml;ndigen anfordern und dann werden Sie in der Lage,"
+	" f&uuml;r die Einschreibung in Kurse an."
+	" Wenn ein Kurs nicht vorhanden ist,"
+	" k&ouml;nnen Sie es vor der Anwendung f&uuml;r die Immatrikulation in es zu erstellen"
+	" (das gleiche gilt f&uuml;r Einrichtungen, Zentren und Grad).";
+#elif L==2
+	"Congratulations! You have created your account @%s."
+	" Now %s will request you some data to complete your profile"
+	" and then you will be able to apply for enrollment in courses."
+	" If a course does not exist,"
+	" you can create it before applying for enrollment in it"
+	" (the same applies to institutions, centres and degrees).";
+#elif L==3
+	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
+	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil"
+	" y despu&eacute;s podr&aacute; solicitar su inscripci&oacute;n en asignaturas."
+	" Si una asignatura no existe,"
+	" usted puede crearla antes de solicitar su inscripci&oacute;n en ella"
+	" (lo mismo es aplicable a instituciones, centros y titulaciones).";
+#elif L==4
+	"F&eacute;licitations! Vous avez cr&eacute;&eacute; votre compte @%s."
+	" Maintenant %s vous demander&aacute; certaines donn&eacute;es pour compl&eacute;ter votre profil"
+	" et vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
+	" Si une mati&egrave;re ne existe pas,"
+	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
+	" (la m&ecirc;me chose se applique aux institutions, centres et degr&eacute;s).";
+#elif L==5
+	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
+	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil"
+	" y despu&eacute;s usted podr&aacute; solicitar su inscripci&oacute;n en asignaturas."
+	" Si una asignatura no existe,"
+	" usted puede crearla antes de solicitar su inscripci&oacute;n en ella"
+	" (lo mismo es aplicable a instituciones, centros y titulaciones).";	// Okoteve traducción
+#elif L==6
+	"Congratulazioni! Avete creato il vostro account %s."
+	" Ora %s chieder&agrave; alcuni dati per completare il tuo profilo"
+	" e allora si sar&agrave; in grado di applicare per l'iscrizione ai corsi."
+	" Se un corso non esiste, &egrave; possibile crearlo prima di applicare per l'iscrizione in esso"
+	" (lo stesso vale per le istituzioni, centri e gradi).";
+#elif L==7
+	"Gratulujemy! Utworzeniu konta @%s."
+	" Teraz %s zwr&oacute;ci Ci kilka danych, aby zako&nacute;czy&cacute; sw&oacute;j profil,"
+	" a nast&eogon;pnie b&eogon;dzie mo&zdot;na ubiega&cacute; si&eogon; o przyj&eogon;cie na kursy."
+	" Je&sacute;li kurs nie istnieje,"
+	" mo&zdot;na go utworzy&cacute; przed ubieganiem si&egrave; o przyj&eogon;cie w nim"
+	" (to samo odnosi si&eogon; do instytucji, plac&oacute;wek i stopni).";
+#elif L==8
+	"Parab&eaacute;ns! Voc&ecirc; criou seu ACC conta."
+	" Agora %s vai pedir-lhe alguns dados para completar o seu perfil"
+	" e, em seguida, voc&ecirc; ser&aacute; capaz de aplicar para a matrícula em cursos."
+	" Se um curso n&atilde;o existir,"
+	" voc&ecirc; pode cri&aacute;-lo antes de solicitar a inscri&ccedil;&atilde;o do mesmo"
+	" (o mesmo se aplica &agrave;s institui&ccedil;&otilde;es, centros e graus).";
+#endif
+
 const char *Txt_Connected_PLURAL =
 #if   L==0
 	"Connectats";
@@ -22048,27 +22114,6 @@ const char *Txt_Name =
 	"Nazwa";
 #elif L==8
 	"Nome";
-#endif
-
-const char *Txt_New_account_created =
-#if   L==0
-	"Nou compte creat.";
-#elif L==1
-	"Neues Konto erstellt.";
-#elif L==2
-	"New account created.";
-#elif L==3
-	"Nueva cuenta creada.";
-#elif L==4
-	"Nouveau compte cr&eacute;&eacute;.";
-#elif L==5
-	"Nueva cuenta creada.";	// Okoteve traducción
-#elif L==6
-	"Nuovo account creato.";
-#elif L==7
-	"Nowe konto utworzone.";
-#elif L==8
-	"Nova conta criada.";
 #endif
 
 const char *Txt_New_assignment =

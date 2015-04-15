@@ -523,12 +523,15 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
 
 void Acc_AfterCreationNewAccount (void)
   {
-   extern const char *Txt_New_account_created;
+   extern const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_;
 
    if (Gbl.Usrs.Me.Logged)	// If account has been created without problem, I am logged
      {
       /***** Show message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_New_account_created);
+      sprintf (Gbl.Message,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
+	       Gbl.Usrs.Me.UsrDat.Nickname,
+	       Cfg_PLATFORM_SHORT_NAME);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Show form with account data *****/
       Acc_ShowFormChangeMyAccount ();
