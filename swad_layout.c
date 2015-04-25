@@ -1624,7 +1624,7 @@ void Lay_AdvertisementMobile (void)
                Gbl.Prefs.IconsURL);
 
       /***** End table *****/
-      Lay_EndRoundFrameWithButton (Lay_NO_BUTTON,NULL);
+      Lay_EndRoundFrameTable ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
