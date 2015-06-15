@@ -95,7 +95,14 @@ void Acc_ShowFormAccount (void)
    if (Gbl.Usrs.Me.Logged)
       Acc_ShowFormChangeMyAccount ();
    else
+     {
       Acc_ShowFormRequestNewAccountWithParams ("","");
+
+      /***** Form to send students to be enrolled / removed *****/
+      Act_FormStart (ActEdiPrf);
+      Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,"Change language");
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/

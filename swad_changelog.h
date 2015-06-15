@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.113.4 (2015/04/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.114 (2015/06/15)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.114:   Jun 15, 2015	Fixed bug in tests query (some questions were repeated in exams). (184550 lines)
+        Version 14.113.5: Jun 01, 2015	Changes in sign up form. (184541 lines)
         Version 14.113.4: Apr 25, 2015	Fixed bug in layout. (184537 lines)
         Version 14.113.3: Apr 15, 2015	New welcome message after creating an account. (184536 lines)
         Version 14.113.2: Apr 14, 2015	Fixed bug when compressing users' works. (184486 lines)

@@ -2247,12 +2247,17 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    /* Start query */
    // Reject questions with any tag hidden
    // Select only questions with tags
-   sprintf (Query,"SELECT tst_questions.QstCod,DATE_FORMAT(tst_questions.EditTime,'%%Y%%m%%d%%H%%i%%S'),"
-		  "tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback,"
-		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,tst_questions.Score"
+   sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
+	          "DATE_FORMAT(tst_questions.EditTime,'%%Y%%m%%d%%H%%i%%S'),"
+		  "tst_questions.AnsType,tst_questions.Shuffle,"
+		  "tst_questions.Stem,tst_questions.Feedback,"
+		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
+		  "tst_questions.Score"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-		  " WHERE tst_questions.CrsCod='%ld' AND tst_questions.QstCod NOT IN"
-		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
+		  " WHERE tst_questions.CrsCod='%ld'"
+		  " AND tst_questions.QstCod NOT IN"
+		  " (SELECT tst_question_tags.QstCod"
+		  " FROM tst_tags,tst_question_tags"
 		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
@@ -2311,10 +2316,10 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    strcat (Query," ORDER BY RAND(NOW()) LIMIT ");
    sprintf (StrNumQsts,"%u",Gbl.Test.NumQsts);
    strcat (Query,StrNumQsts);
-   /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+/*
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
-   */
+*/
    /* Make the query */
    return DB_QuerySELECT (Query,mysql_res,"can not get questions");
   }
