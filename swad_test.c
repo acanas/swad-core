@@ -2247,6 +2247,7 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    /* Start query */
    // Reject questions with any tag hidden
    // Select only questions with tags
+   // DISTINCTROW is necessary to not repeat questions
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
 	          "DATE_FORMAT(tst_questions.EditTime,'%%Y%%m%%d%%H%%i%%S'),"
 		  "tst_questions.AnsType,tst_questions.Shuffle,"

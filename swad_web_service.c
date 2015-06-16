@@ -94,6 +94,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include <dirent.h>		// For dirent
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <locale.h>		// For setlocale, LC_NUMERIC...
 #include <sys/stat.h>		// For lstat
 #include <string.h>
 #include <stdsoap2.h>
@@ -3318,12 +3319,15 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumRow;
+   unsigned NumRows;
    Tst_AnswerType_t AnswerType;
 
    /***** Get recent test questions from database *****/
    // DISTINCTROW is necessary to not repeat questions
-   sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback"
+   sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
+ 	          "tst_questions.AnsType,tst_questions.Shuffle,"
+ 	          "tst_questions.Stem,tst_questions.Feedback"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
                   " WHERE tst_questions.CrsCod='%ld'"
                   " AND tst_questions.QstCod NOT IN"
@@ -3373,7 +3377,7 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
          strncpy (getTestsOut->questionsArray.__ptr[NumRow].stem,row[3],Cns_MAX_BYTES_TEXT);
          getTestsOut->questionsArray.__ptr[NumRow].stem[Cns_MAX_BYTES_TEXT] = '\0';
 
-         /* Get question stem (row[4]) */
+         /* Get question feedback (row[4]) */
          getTestsOut->questionsArray.__ptr[NumRow].feedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT+1);
          strncpy (getTestsOut->questionsArray.__ptr[NumRow].feedback,row[4],Cns_MAX_BYTES_TEXT);
          getTestsOut->questionsArray.__ptr[NumRow].feedback[Cns_MAX_BYTES_TEXT] = '\0';
@@ -3529,6 +3533,224 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return SOAP_OK;
+  }
+
+
+/*****************************************************************************/
+/***************** Return one test question for Trivial game *****************/
+/*****************************************************************************/
+
+int swad__getTrivialQuestion (struct soap *soap,
+                              char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
+                              struct swad__getTrivialQuestionOutput *getTrivialQuestionOut)	// output
+  {
+   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   int ReturnCode;
+   char DegreesStr[1024];
+   const char *Ptr;
+   char LongStr[1+10+1];
+   long DegCod;
+   bool FirstDegree = true;
+   char Query[4096];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRow;
+   unsigned NumRows;
+   long QstCod = -1L;
+   Tst_AnswerType_t AnswerType;
+   unsigned Index;
+
+   Gbl.soap = soap;
+   Gbl.WebService.Function = Svc_getTrivialQuestion;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = Svc_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /***** Get some of my data *****/
+   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
+      return ReturnCode;
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
+
+   /***** Loop over recipients' nicknames building query *****/
+   DegreesStr[0] = '\0';
+   Ptr = degrees;
+   while (*Ptr)
+     {
+      /* Find next string in text until comma (leading and trailing spaces are removed) */
+      Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+
+      /* Check if degree code from string is a valid code */
+      if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
+	 if (DegCod > 0)
+	   {
+	    sprintf (LongStr,"%ld",DegCod);
+
+	    /* Add this degree to query */
+	    if (FirstDegree)
+	      {
+	       strcat (Query,"'");
+	       FirstDegree = false;
+	      }
+	    else
+	       strcat (Query,",'");
+	    strcat (Query,LongStr);
+	    strcat (Query,"'");
+	   }
+     }
+
+   if (!DegreesStr[0])	// Degrees not found
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad list of degrees codes",
+	                        "Degrees codes must be integers greater than 0 separated by commas");
+
+   /***** Check lowerScore and upperScore *****/
+   if (lowerScore < -1.0 || lowerScore > 1.0 ||
+       upperScore < -1.0 || upperScore > 1.0 ||
+       upperScore < lowerScore)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad score interval",
+	                        "lowerScore or upperScore values not valid");
+
+   /***** Start query *****/
+   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+   sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
+ 	          "tst_questions.AnsType,tst_questions.Shuffle,"
+ 	          "tst_questions.Stem,tst_questions.Feedback,"
+ 	          "tst_questions.Score/tst_questions.NumHits AS S"
+		  " FROM courses,tst_questions"
+                  " WHERE courses.DegCod IN (%s)"
+		  " AND courses.CrsCod=tst_questions.CrsCod"
+                  " AND tst_questions.AnsType='unique_choice'"
+                  " AND tst_questions.NumHits>'0'"
+                  " AND tst_questions.QstCod NOT IN"
+		  " (SELECT tst_question_tags.QstCod"
+		  " FROM courses,tst_tags,tst_question_tags"
+                  " WHERE courses.DegCod IN (%s)"
+		  " AND courses.CrsCod=tst_tags.CrsCod"
+		  " AND tst_tags.TagHidden='Y'"
+		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+                  " HAVING S>='%f' AND S<='%f'"
+                  " ORDER BY RAND(NOW()) LIMIT 1",
+            DegreesStr,DegreesStr,
+            lowerScore,upperScore);
+   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+
+   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test questions");
+
+   if (NumRows == 1)	// Question found
+     {
+      /* Get next question */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get question code (row[0]) */
+      QstCod = Str_ConvertStrCodToLongCod (row[0]);
+      getTrivialQuestionOut->question.questionCode = (int) QstCod;
+
+      /* Get answer type (row[1]) */
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,256);
+      strncpy (getTrivialQuestionOut->question.answerType,Tst_StrAnswerTypesXML[AnswerType],255);
+      getTrivialQuestionOut->question.answerType[255] = '\0';
+
+      /* Get shuffle (row[2]) */
+      getTrivialQuestionOut->question.shuffle = (row[2][0] == 'Y') ? 1 :
+							             0;
+
+      /* Get question stem (row[3]) */
+      getTrivialQuestionOut->question.stem = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT+1);
+      strncpy (getTrivialQuestionOut->question.stem,row[3],Cns_MAX_BYTES_TEXT);
+      getTrivialQuestionOut->question.stem[Cns_MAX_BYTES_TEXT] = '\0';
+
+      /* Get question feedback (row[4]) */
+      getTrivialQuestionOut->question.feedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT+1);
+      strncpy (getTrivialQuestionOut->question.feedback,row[4],Cns_MAX_BYTES_TEXT);
+      getTrivialQuestionOut->question.feedback[Cns_MAX_BYTES_TEXT] = '\0';
+     }
+   else		// Empty question
+     {
+      /* Question code (row[0]) */
+      QstCod = -1L;
+      getTrivialQuestionOut->question.questionCode = -1;
+
+      /* Answer type (row[1]) */
+      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.answerType[0] = '\0';
+
+      /* Shuffle (row[2]) */
+      getTrivialQuestionOut->question.shuffle = 0;
+
+      /* Question stem (row[3]) */
+      getTrivialQuestionOut->question.stem = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.stem[0] = '\0';
+
+      /* Get question feedback (row[4]) */
+      getTrivialQuestionOut->question.feedback = (char *) soap_malloc (Gbl.soap,1);
+      getTrivialQuestionOut->question.feedback[0] = '\0';
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   if (QstCod > 0)
+     {
+      /***** Get answer from database *****/
+      sprintf (Query,"SELECT QstCod,AnsInd,Correct,Answer,Feedback"
+		     " FROM tst_answers WHERE QstCod='%ld'"
+		     " ORDER BY AnsInd",
+	       QstCod);
+      NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test answers");
+
+      getTrivialQuestionOut->answersArray.__size = (int) NumRows;
+
+      if (NumRows == 0)
+	 getTrivialQuestionOut->answersArray.__ptr = NULL;
+      else	// Answers found
+	{
+	 getTrivialQuestionOut->answersArray.__ptr = soap_malloc (Gbl.soap,(getTrivialQuestionOut->answersArray.__size) * sizeof (*(getTrivialQuestionOut->answersArray.__ptr)));
+
+	 for (NumRow = 0;
+	      NumRow < NumRows;
+	      NumRow++)
+	   {
+	    /* Get next question */
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get question code (row[0]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+
+	    /* Get answer index (row[1]) */
+	    if (sscanf (row[1],"%u",&Index) == 1)
+	       getTrivialQuestionOut->answersArray.__ptr[NumRow].answerIndex = (int) Index;
+	    else
+	       getTrivialQuestionOut->answersArray.__ptr[NumRow].answerIndex = 0;	// error
+
+	    /* Get correct (row[2]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].correct = (row[2][0] == 'Y') ? 1 :
+										             0;
+
+	    /* Get answer (row[3]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT+1);
+	    strncpy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText,row[3],Cns_MAX_BYTES_TEXT);
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText[Cns_MAX_BYTES_TEXT] = '\0';
+
+	    /* Get feedback (row[4]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_TEXT+1);
+	    strncpy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback,row[4],Cns_MAX_BYTES_TEXT);
+	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback[Cns_MAX_BYTES_TEXT] = '\0';
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return SOAP_OK;
   }

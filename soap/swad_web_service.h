@@ -236,6 +236,11 @@ struct swad__getTestsOutput
    struct swad__answersArray answersArray;
    struct swad__questionTagsArray questionTagsArray;
   };
+struct swad__getTrivialQuestionOutput
+  {
+   struct swad__question question;
+   struct swad__answersArray answersArray;
+  };
 
 /* structs used in getUsers and sendMessage */
 struct swad__user
@@ -402,6 +407,8 @@ int swad__getTestConfig (char *wsKey,int courseCode,
                          struct swad__getTestConfigOutput *getTestConfigOut);
 int swad__getTests (char *wsKey,int courseCode,long beginTime,
                     struct swad__getTestsOutput *getTestsOut);
+int swad__getTrivialQuestion (char *wsKey,char *degrees,float lowerScore,float upperScore,
+                              struct swad__getTrivialQuestionOutput *getTrivialQuestionOut);
 
 /* List of users of a course / group */
 int swad__getUsers (char *wsKey,int courseCode,int groupCode,int userRole,

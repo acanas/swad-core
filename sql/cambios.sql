@@ -10579,3 +10579,11 @@ UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000);
 CREATE TABLE IF NOT EXISTS usr_banned (
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(UsrCod));
+	
+	
+	
+SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback FROM courses,tst_questions WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_questions.CrsCod AND tst_questions.AnsType='unique_choice' AND tst_questions.QstCod NOT IN (SELECT tst_question_tags.QstCod FROM courses,tst_tags,tst_question_tags WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_tags.CrsCod AND tst_tags.TagHidden='Y' AND tst_tags.TagCod=tst_question_tags.TagCod) ORDER BY RAND(NOW()) LIMIT 1;
+
+
+
+SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuffle, tst_questions.Stem,tst_questions.Feedback,tst_questions.NumHits/tst_questions.Score AS S FROM courses,tst_questions WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_questions.CrsCod AND tst_questions.AnsType='unique_choice' AND tst_questions.NumHits>'0' AND tst_questions.QstCod NOT IN (SELECT tst_question_tags.QstCod FROM courses,tst_tags,tst_question_tags WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_tags.CrsCod AND tst_tags.TagHidden='Y' AND tst_tags.TagCod=tst_question_tags.TagCod) HAVING S>='0.0' AND S<='1.0' ORDER BY RAND(NOW()) LIMIT 1;

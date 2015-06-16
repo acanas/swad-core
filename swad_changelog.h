@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.114 (2015/06/15)"
+#define Log_PLATFORM_VERSION	"SWAD 14.115 (2015/06/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.115:   Jun 16, 2015	New function getTrivialQuestion in web service. (184747 lines)
         Version 14.114:   Jun 15, 2015	Fixed bug in tests query (some questions were repeated in exams). (184550 lines)
         Version 14.113.5: Jun 01, 2015	Changes in sign up form. (184541 lines)
         Version 14.113.4: Apr 25, 2015	Fixed bug in layout. (184537 lines)
