@@ -792,7 +792,6 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       /***** Generate a key used in subsequents calls to other web services *****/
       if ((ReturnCode = Svc_GenerateNewWSKey ((long) loginByUserPasswordKeyOut->userCode,loginByUserPasswordKeyOut->wsKey)) != SOAP_OK)
          return ReturnCode;
-
       return SOAP_OK;
      }
    else
@@ -3548,9 +3547,11 @@ int swad__getTrivialQuestion (struct soap *soap,
   {
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    int ReturnCode;
-   char DegreesStr[1024];
    const char *Ptr;
    char LongStr[1+10+1];
+   char DegreesStr[1024];
+   char DegStr[ 1+1+1+  10  +1+ 1];
+   //   DegStr=", ' - number ' \0"
    long DegCod;
    bool FirstDegree = true;
    char Query[4096];
@@ -3582,6 +3583,15 @@ int swad__getTrivialQuestion (struct soap *soap,
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
    Ptr = degrees;
+
+      if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
+	{
+	 char QueryDebug[512*1024];
+
+	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
+	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
+	}
+
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
@@ -3591,18 +3601,17 @@ int swad__getTrivialQuestion (struct soap *soap,
       if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
 	 if (DegCod > 0)
 	   {
-	    sprintf (LongStr,"%ld",DegCod);
-
 	    /* Add this degree to query */
 	    if (FirstDegree)
 	      {
-	       strcat (Query,"'");
+	       sprintf (DegreesStr,"'%ld'",DegCod);
 	       FirstDegree = false;
 	      }
 	    else
-	       strcat (Query,",'");
-	    strcat (Query,LongStr);
-	    strcat (Query,"'");
+	      {
+	       sprintf (DegStr,",'%ld'",DegCod);
+	       strcat (DegreesStr,DegStr);
+	      }
 	   }
      }
 
@@ -3647,6 +3656,14 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    if (NumRows == 1)	// Question found
      {
+      if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
+	{
+	 char QueryDebug[512*1024];
+
+	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
+	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
+	}
+
       /* Get next question */
       row = mysql_fetch_row (mysql_res);
 
@@ -3676,6 +3693,14 @@ int swad__getTrivialQuestion (struct soap *soap,
      }
    else		// Empty question
      {
+      if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
+	{
+	 char QueryDebug[512*1024];
+
+	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Ninguna pregunta devuelta')");
+	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
+	}
+
       /* Question code (row[0]) */
       QstCod = -1L;
       getTrivialQuestionOut->question.questionCode = -1;
