@@ -11,7 +11,7 @@
 struct swad__createAccountOutput
   {
    int userCode;
-   char *string;
+   char *wsKey;		// key used in subsequent calls to other web services
   };
 
 /* loginBySessionKey */
@@ -371,7 +371,7 @@ struct swad__sendMessageOutput
 /*****************************************************************************/
 
 /* Login */
-int swad__createAccount (char *userNickname,char *userEmail,char *userID,char *userPassword,char *appKey,
+int swad__createAccount (char *userNickname,char *userEmail,char *userPassword,char *appKey,
                          struct swad__createAccountOutput *createAccountOut);
 int swad__loginByUserPasswordKey (char *userID,char *userPassword,char *appKey,
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut);

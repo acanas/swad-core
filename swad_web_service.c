@@ -102,6 +102,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "soap/soapH.h"		// gSOAP header
 #include "soap/swad.nsmap"	// Namespaces map used
 
+#include "swad_account.h"
 #include "swad_database.h"
 #include "swad_file_browser.h"
 #include "swad_global.h"
@@ -172,6 +173,13 @@ static int Svc_RemoveOldWSKeys (void);
 static int Svc_GetCurrentDegCodFromCurrentCrsCod (void);
 static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 static int Svc_GetRoleFromInternalRole (Rol_Role_t Role);
+
+static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
+                                      char *NewNicknameWithoutArroba,	// Output
+                                      char *NewEmail,			// Input-output
+                                      char *NewPlainPassword,		// Input
+                                      char *NewEncryptedPassword);	// Output
+
 static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible);
 
 static void Svc_GetListGrpsInAttendanceEvent (long AttCod,char **ListGroups);
@@ -608,39 +616,128 @@ static int Svc_GetRoleFromInternalRole (Rol_Role_t Role)
 /**************************** Get info of my marks ***************************/
 /*****************************************************************************/
 
+#define Svc_CHECK_NEW_ACCOUNT_OK					 0
+#define Svc_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID			-1
+#define Svc_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER	-2
+#define Svc_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID				-3
+#define Svc_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER		-4
+#define Svc_CHECK_NEW_ACCOUNT_PASSWORD_NOT_VALID			-5
+
 int swad__createAccount (struct soap *soap,
-                         char *userNickname,char *userEmail,char *userID,char *userPassword,char *appKey,	// input
+                         char *userNickname,char *userEmail,char *userPassword,char *appKey,	// input
                          struct swad__createAccountOutput *createAccountOut)					// output
   {
+   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   int Result;
    int ReturnCode;
 
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_createAccount;
 
+   /***** Allocate space for strings *****/
+   createAccountOut->wsKey = (char *) soap_malloc (Gbl.soap,256);
+
+   /***** Default values returned on error *****/
+   createAccountOut->userCode = 0;	// Undefined error
+   createAccountOut->wsKey[0] = '\0';
+
    /***** Get plugin code *****/
    if ((ReturnCode = Svc_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
-   // TODO: Implement this function
+   /***** Check parameters used to create the new account *****/
+   Result = Svc_CheckParamsNewAccount (userNickname,		// Input
+                                       NewNicknameWithoutArroba,// Output
+                                       userEmail,		// Input-output
+                                       userPassword,		// Input
+                                       NewEncryptedPassword);	// Output
+   if (Result < 0)
+     {
+      createAccountOut->userCode = Result;
+      return SOAP_OK;
+     }
 
-   strncpy (Gbl.Usrs.Me.UsrDat.Nickname,userNickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-   Gbl.Usrs.Me.UsrDat.Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+   /***** User's has no ID *****/
+   Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
+   Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
 
-   strncpy (Gbl.Usrs.Me.UsrDat.Email,userEmail,Usr_MAX_BYTES_USR_EMAIL);
-   Gbl.Usrs.Me.UsrDat.Email[Usr_MAX_BYTES_USR_EMAIL] = '\0';
+   /***** Set password to the password typed by the user *****/
+   strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
 
-   ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
-   Gbl.Usrs.Me.UsrDat.IDs.List[0].Confirmed = false;
-   strncpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,userID,ID_MAX_LENGTH_USR_ID);
-   Gbl.Usrs.Me.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+   /***** User does not exist in the platform, so create him/her! *****/
+   Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat);
 
-   strncpy (Gbl.Usrs.Me.UsrDat.Password,userPassword,Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
-   Gbl.Usrs.Me.UsrDat.Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64] = '\0';
+   /***** Save nickname *****/
+   Nck_UpdateMyNick (NewNicknameWithoutArroba);
+   strcpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba);
 
-   createAccountOut->userCode = -1;
-   createAccountOut->string = NULL;
+   /***** Save e-mail *****/
+   if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,userEmail))
+     {
+      /* E-mail updated sucessfully */
+      strcpy (Gbl.Usrs.Me.UsrDat.Email,userEmail);
+      Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
+     }
 
-   return SOAP_OK;
+   /***** Copy new user's code *****/
+   createAccountOut->userCode = Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   /***** Generate a key used in subsequents calls to other web services *****/
+   return Svc_GenerateNewWSKey ((long) createAccountOut->userCode,
+				createAccountOut->wsKey);
+  }
+
+/*****************************************************************************/
+/************* Get parameters for the creation of a new account **************/
+/*****************************************************************************/
+// Return false on error
+//char *userNickname,char *userEmail,char *userID,char *userPassword
+static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
+                                      char *NewNicknameWithoutArroba,	// Output
+                                      char *NewEmail,			// Input-output
+                                      char *NewPlainPassword,		// Input
+                                      char *NewEncryptedPassword)	// Output
+  {
+   char Query[1024];
+
+   /***** Step 1/3: Check new nickname *****/
+   /* Make a copy without possible starting arrobas */
+   strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+   if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
+     {
+      /***** Remove arrobas at the beginning *****/
+      Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
+
+      /***** Check if the new nickname matches any of the nicknames of other users *****/
+      sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames WHERE Nickname='%s'",
+	       NewNicknameWithoutArroba);
+      if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
+	 return Svc_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
+     }
+   else        // New nickname is not valid
+      return Svc_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
+
+   /***** Step 2/3: Check new e-mail *****/
+   if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
+     {
+      /***** Check if the new e-mail matches any of the confirmed e-mails of other users *****/
+      sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
+		     " WHERE E_mail='%s' AND Confirmed='Y'",
+	       NewEmail);
+      if (DB_QueryCOUNT (Query,"can not check if e-mail already existed"))	// An e-mail of another user is the same that my e-mail
+	 return Svc_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
+     }
+   else	// New e-mail is not valid
+      return Svc_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID;
+
+   /***** Step 3/3: Check new password *****/
+   Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
+   if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
+      return Svc_CHECK_NEW_ACCOUNT_PASSWORD_NOT_VALID;
+
+   return Svc_CHECK_NEW_ACCOUNT_OK;
   }
 
 /*****************************************************************************/
@@ -788,12 +885,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumRows == 1)
-     {
       /***** Generate a key used in subsequents calls to other web services *****/
-      if ((ReturnCode = Svc_GenerateNewWSKey ((long) loginByUserPasswordKeyOut->userCode,loginByUserPasswordKeyOut->wsKey)) != SOAP_OK)
-         return ReturnCode;
-      return SOAP_OK;
-     }
+      return Svc_GenerateNewWSKey ((long) loginByUserPasswordKeyOut->userCode,
+                                   loginByUserPasswordKeyOut->wsKey);
    else
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad log in",
@@ -937,13 +1031,9 @@ int swad__loginBySessionKey (struct soap *soap,
      return ReturnCode;
 
    if (NumRows == 1)
-     {
       /***** Generate a key used in subsequents calls to other web services *****/
-      if ((ReturnCode = Svc_GenerateNewWSKey ((long) loginBySessionKeyOut->userCode,loginBySessionKeyOut->wsKey)) != SOAP_OK)
-         return ReturnCode;
-
-      return SOAP_OK;
-     }
+      return Svc_GenerateNewWSKey ((long) loginBySessionKeyOut->userCode,
+                                   loginBySessionKeyOut->wsKey);
    else
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad session identifier",

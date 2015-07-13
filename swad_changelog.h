@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.115.1 (2015/06/23)"
+#define Log_PLATFORM_VERSION	"SWAD 14.116 (2015/07/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.116:   Jul 13, 2015	New function createAccount in web service. (184849 lines)
+        Version 14.115.2: Jul 07, 2015	Fixed bug in search of open documents, reported by Javier Sánchez Lirola. (184769 lines)
         Version 14.115.1: Jun 23, 2015	Fixed bugs in web service function getTrivialQuestion. (184768 lines)
         Version 14.115:   Jun 16, 2015	New function getTrivialQuestion in web service. (184747 lines)
         Version 14.114:   Jun 15, 2015	Fixed bug in tests query (some questions were repeated in exams). (184550 lines)

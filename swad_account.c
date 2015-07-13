@@ -392,7 +392,7 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
-   /***** Step 3/3: Get new user's ID from form *****/
+   /***** Step 3/3: Get new password from form *****/
    Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
    Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
    if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
