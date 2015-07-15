@@ -4406,11 +4406,10 @@ void Act_AdjustCurrentAction (void)
          return;
         }
 
-   /***** If I have no nickname, e-mail or ID in database,
+   /***** If I have no nickname or e-mail in database,
           the only action possible is show a form to change my account *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0] ||
-       !Gbl.Usrs.Me.UsrDat.Email[0] ||
-       !Gbl.Usrs.Me.UsrDat.IDs.Num)
+       !Gbl.Usrs.Me.UsrDat.Email[0])
      {
       switch (Gbl.CurrentAct)
         {

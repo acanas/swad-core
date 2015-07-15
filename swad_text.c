@@ -4635,64 +4635,64 @@ const char *Txt_Confirm_my_enrollment =
 const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
 #if   L==0
 	"Enhorabona! Ha creat el seu compte @%s."
-	" Ara %s li demanar&agrave; algunes dades per completar el seu perfil"
-	" i despr&eacute;s podr&agrave; sol·licitar la seva inscripci&oacute; en assignatures."
+	" Ara %s li demanar&agrave; algunes dades per completar el seu perfil."
+	" Despr&eacute;s podr&agrave; sol·licitar la seva inscripci&oacute; en assignatures."
 	" Si no hi ha una assignatura,"
 	" vost&egrave; pot crear abans de sol·licitar la seva inscripci&oacute; en ella"
 	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
 #elif L==1
 	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Konto @%s erstellt."
-	" Jetzt %s finden Sie einige Daten in Ihrem Profil"
-	" vervollst&auml;ndigen anfordern und dann werden Sie in der Lage,"
+	" Jetzt %s finden Sie einige Daten in Ihrem Profil."
+	" Vervollst&auml;ndigen anfordern und dann werden Sie in der Lage,"
 	" f&uuml;r die Einschreibung in Kurse an."
 	" Wenn ein Kurs nicht vorhanden ist,"
 	" k&ouml;nnen Sie es vor der Anwendung f&uuml;r die Immatrikulation in es zu erstellen"
 	" (das gleiche gilt f&uuml;r Einrichtungen, Zentren und Grad).";
 #elif L==2
 	"Congratulations! You have created your account @%s."
-	" Now %s will request you some data to complete your profile"
-	" and then you will be able to apply for enrollment in courses."
+	" Now %s will request you some data to complete your profile."
+	" Then you will be able to apply for enrollment in courses."
 	" If a course does not exist,"
 	" you can create it before applying for enrollment in it"
 	" (the same applies to institutions, centres and degrees).";
 #elif L==3
 	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
-	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil"
-	" y despu&eacute;s podr&aacute; solicitar su inscripci&oacute;n en asignaturas."
+	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
+	" Usted podr&aacute; despu&eacute;s solicitar su inscripci&oacute;n en asignaturas."
 	" Si una asignatura no existe,"
-	" usted puede crearla antes de solicitar su inscripci&oacute;n en ella"
+	" puede crearla antes de solicitar su inscripci&oacute;n en ella"
 	" (lo mismo es aplicable a instituciones, centros y titulaciones).";
 #elif L==4
 	"F&eacute;licitations! Vous avez cr&eacute;&eacute; votre compte @%s."
-	" Maintenant %s vous demander&aacute; certaines donn&eacute;es pour compl&eacute;ter votre profil"
-	" et vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
+	" Maintenant %s vous demander&aacute; certaines donn&eacute;es pour compl&eacute;ter votre profil."
+	" Vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
 	" Si une mati&egrave;re ne existe pas,"
 	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
 	" (la m&ecirc;me chose se applique aux institutions, centres et degr&eacute;s).";
 #elif L==5
 	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
-	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil"
-	" y despu&eacute;s usted podr&aacute; solicitar su inscripci&oacute;n en asignaturas."
+	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
+	" Usted podr&aacute; despu&eacute;s solicitar su inscripci&oacute;n en asignaturas."
 	" Si una asignatura no existe,"
-	" usted puede crearla antes de solicitar su inscripci&oacute;n en ella"
+	" puede crearla antes de solicitar su inscripci&oacute;n en ella"
 	" (lo mismo es aplicable a instituciones, centros y titulaciones).";	// Okoteve traducción
 #elif L==6
 	"Congratulazioni! Avete creato il vostro account %s."
-	" Ora %s chieder&agrave; alcuni dati per completare il tuo profilo"
-	" e allora si sar&agrave; in grado di applicare per l'iscrizione ai corsi."
+	" Ora %s chieder&agrave; alcuni dati per completare il tuo profilo."
+	" Allora si sar&agrave; in grado di applicare per l'iscrizione ai corsi."
 	" Se un corso non esiste, &egrave; possibile crearlo prima di applicare per l'iscrizione in esso"
 	" (lo stesso vale per le istituzioni, centri e gradi).";
 #elif L==7
 	"Gratulujemy! Utworzeniu konta @%s."
-	" Teraz %s zwr&oacute;ci Ci kilka danych, aby zako&nacute;czy&cacute; sw&oacute;j profil,"
-	" a nast&eogon;pnie b&eogon;dzie mo&zdot;na ubiega&cacute; si&eogon; o przyj&eogon;cie na kursy."
+	" Teraz %s zwr&oacute;ci Ci kilka danych, aby zako&nacute;czy&cacute; sw&oacute;j profil."
+	" Nast&eogon;pnie b&eogon;dzie mo&zdot;na ubiega&cacute; si&eogon; o przyj&eogon;cie na kursy."
 	" Je&sacute;li kurs nie istnieje,"
 	" mo&zdot;na go utworzy&cacute; przed ubieganiem si&egrave; o przyj&eogon;cie w nim"
 	" (to samo odnosi si&eogon; do instytucji, plac&oacute;wek i stopni).";
 #elif L==8
 	"Parab&eaacute;ns! Voc&ecirc; criou seu ACC conta."
-	" Agora %s vai pedir-lhe alguns dados para completar o seu perfil"
-	" e, em seguida, voc&ecirc; ser&aacute; capaz de aplicar para a matrícula em cursos."
+	" Agora %s vai pedir-lhe alguns dados para completar o seu perfil."
+	" Em seguida, voc&ecirc; ser&aacute; capaz de aplicar para a matrícula em cursos."
 	" Se um curso n&atilde;o existir,"
 	" voc&ecirc; pode cri&aacute;-lo antes de solicitar a inscri&ccedil;&atilde;o do mesmo"
 	" (o mesmo se aplica &agrave;s institui&ccedil;&otilde;es, centros e graus).";
@@ -26795,23 +26795,58 @@ const char *Txt_Please_fill_in_your_email_address =
 
 const char *Txt_Please_fill_in_your_ID =
 #if   L==0
-	"Si us plau, ompli el seu ID (DNI/c&egrave;dula).";
+	"Si us plau, ompli el seu ID (DNI/c&egrave;dula)."
+	" &Eacute;s una dada opcional,"
+	" per&ograve; &eacute;s recomanable que l'ompli"
+        " perqu&egrave; facilita el proc&eacute;s d'inscripci&oacute;"
+        " dels usuaris en les assignatures.";
 #elif L==1
-	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder.";
+	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder."
+	" Es ist eine optionale Daten,"
+	" aber es wird empfohlen, sie zu f&uuml;llen,"
+	" weil sie die Registrierung"
+	" der Benutzer in den Kursen erleichtert.";
 #elif L==2
-	"Please fill in your ID.";
+	"Please fill in your ID."
+	" It is an optional data,"
+	" but it is recommended that you fill it"
+	" because it facilitates the registration process"
+	" of users in the courses.";
 #elif L==3
-	"Por favor, rellene su ID (DNI/c&eacute;dula).";
+	"Por favor, rellene su ID (DNI/c&eacute;dula)."
+	" Es un dato opcional,"
+	" pero es recomendable que lo rellene"
+	" porque facilita el proceso de inscripci&oacute;n"
+	" de los usuarios en las asignaturas.";
 #elif L==4
-	"S'il vous pla&iacute;t, indiquez votre ID.";
+	"S'il vous pla&iacute;t, indiquez votre ID."
+	" C'est une donn&eacute;e facultative,"
+	" mais il est recommand&eacute; que vous la remplissez"
+	" parce qu'il facilite le processus d'enregistrement"
+	" des utilisateurs dans les mati&egrave;res.";
 #elif L==5
-	"Por favor, rellene su ID (DNI/c&eacute;dula).";	// Okoteve traducción
+	"Por favor, rellene su ID (DNI/c&eacute;dula)."
+	" Es un dato opcional,"
+	" pero es recomendable que lo rellene"
+	" porque facilita el proceso de inscripci&oacute;n"
+	" de los usuarios en las asignaturas.";		// Okoteve traducción
 #elif L==6
-	"Per favore, inserisci il tuo ID.";
+	"Per favore, inserisci il tuo ID."
+	" Si tratta di un dato facoltativo,"
+	" ma si raccomanda che si riempie"
+	" perch&eacute; facilita il processo di registrazione"
+	" degli utenti ai corsi.";
 #elif L==7
-	"Prosz&eogon;, wpisz swoje zmie&nacute; identyfikatory.";
+	"Prosz&eogon;, wpisz swoje zmie&nacute; identyfikatory."
+	" Jest to opcja danych, ale zaleca si&eogon;,"
+	" aby wype&lstrok;ni&cacute; go, poniewa&zdot; u&lstrok;atwia proces rejestracji"
+	" u&zdot;ytkownik&oacute;w w kursach.";
 #elif L==8
-	"Por favor, preencha seu n&ordm;. identif.";
+	"Por favor, preencha seu n&ordm;. identif."
+	" &Eacute; uma dada opcional,"
+	" mas &eacute; recomend&aacute;vel que voc&ecirc; preench&ecirc;-lo,"
+	" pois facilita o processo de registro"
+	" de usu&aacute;rios nas disciplinas.";
 #endif
 
 const char *Txt_Please_fill_in_your_institution =
@@ -45412,44 +45447,44 @@ const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
 	   "",
 	   // Tst_PLUGGABLE_NO
 #if   L==0
-	   "Tests no visibles des de m&ograve;bils"
+	   "Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
 #elif L==1
-	   "Tests nicht zum Download aus Handys"
+	   "Tests nicht zum Download aus Handys (SWADroid, TriSWADos)"
 #elif L==2
-	   "Tests not downloadable from mobile phones"
+	   "Tests not downloadable from mobile phones (SWADroid, TriSWADos)"
 #elif L==3
-	   "Tests no visibles desde m&oacute;viles"
+	   "Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"
 #elif L==4
-	   "Tests non t&eacute;l&eacute;chargeables &agrave; partir de mobiles"
+	   "Tests non t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos)"
 #elif L==5
-	   "Tests no visibles desde m&oacute;viles"	// Okoteve traducción
+	   "Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"	// Okoteve traducción
 #elif L==6
-	   "Test non scaricabili da cellulari"
+	   "Test non scaricabili da cellulari (SWADroid, TriSWADos)"
 #elif L==7
-	   "Nie Testy pobrania z kom&oacute;rkowych"
+	   "Nie Testy pobrania z kom&oacute;rkowych (SWADroid, TriSWADos)"
 #elif L==8
-	   "Testes n&atilde;o para download de celulares"
+	   "Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
 #endif
 	   ,
 	   // Tst_PLUGGABLE_YES
 #if   L==0
-	   "Tests visibles des de m&ograve;bils (opci&oacute; recomanada)"
+	   "Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
 #elif L==1
-	   "Tests zum Download aus Handys (empfohlene Option)"
+	   "Tests zum Download aus Handys (SWADroid, TriSWADos), empfohlene Option"
 #elif L==2
-	   "Tests downloadable from mobile phones (recommended option)"
+	   "Tests downloadable from mobile phones (SWADroid, TriSWADos), recommended option"
 #elif L==3
-	   "Tests visibles desde m&oacute;viles (opci&oacute;n recomendada)"
+	   "Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"
 #elif L==4
-	   "Tests t&eacute;l&eacute;chargeables &agrave; partir de mobiles (option recommand&eacute;e)"
+	   "Tests t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos), option recommand&eacute;e"
 #elif L==5
-	   "Tests visibles desde m&oacute;viles (opci&oacute;n recomendada)"// Okoteve traducción
+	   "Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"// Okoteve traducción
 #elif L==6
-	   "Test scaricabili da cellulari (opzione consigliata)"
+	   "Test scaricabili da cellulari (SWADroid, TriSWADos), opzione consigliata"
 #elif L==7
-	   "Testy do pobrania z kom&oacute;rkowych (zalecana opcja)"
+	   "Testy do pobrania z kom&oacute;rkowych (SWADroid, TriSWADos), zalecana opcja"
 #elif L==8
-	   "Testes para download de celulares (op&ccedil;&atilde;o recomendada)"
+	   "Testes para download de celulares (SWADroid, TriSWADos), op&ccedil;&atilde;o recomendada"
 #endif
 	};
 
