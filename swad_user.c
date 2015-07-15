@@ -426,9 +426,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 	                           Rol_VISITOR;	// User belongs to some courses
 
    /* Get name */
-   strncpy (UsrDat->Surname1 ,row[2],sizeof (UsrDat->Surname1 )-1);
-   strncpy (UsrDat->Surname2 ,row[3],sizeof (UsrDat->Surname2 )-1);
-   strncpy (UsrDat->FirstName,row[4],sizeof (UsrDat->FirstName)-1);
+   strncpy (UsrDat->Surname1 ,row[2],sizeof (UsrDat->Surname1 ) - 1);
+   UsrDat->Surname1 [sizeof (UsrDat->Surname1 ) - 1] = '\0';
+   strncpy (UsrDat->Surname2 ,row[3],sizeof (UsrDat->Surname2 ) - 1);
+   UsrDat->Surname2 [sizeof (UsrDat->Surname2 ) - 1] = '\0';
+   strncpy (UsrDat->FirstName,row[4],sizeof (UsrDat->FirstName) - 1);
+   UsrDat->FirstName[sizeof (UsrDat->FirstName) - 1] = '\0';
 
    /* Get sex */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
@@ -473,7 +476,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
         }
 
    /* Get rest of data */
-   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo)-1);
+   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
+   UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
    UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
@@ -482,14 +486,21 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
-   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     )-1);
-   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone)-1);
+   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     ) - 1);
+   UsrDat->Tch.Office     [sizeof (UsrDat->Tch.Office     ) - 1] = '\0';
+   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone) - 1);
+   UsrDat->Tch.OfficePhone[sizeof (UsrDat->Tch.OfficePhone) - 1] = '\0';
 
-   strncpy (UsrDat->LocalAddress   ,row[20],sizeof (UsrDat->LocalAddress   )-1);
-   strncpy (UsrDat->LocalPhone     ,row[21],sizeof (UsrDat->LocalPhone     )-1);
-   strncpy (UsrDat->FamilyAddress  ,row[22],sizeof (UsrDat->FamilyAddress  )-1);
-   strncpy (UsrDat->FamilyPhone    ,row[23],sizeof (UsrDat->FamilyPhone    )-1);
-   strncpy (UsrDat->OriginPlace    ,row[24],sizeof (UsrDat->OriginPlace    )-1);
+   strncpy (UsrDat->LocalAddress ,row[20],sizeof (UsrDat->LocalAddress ) - 1);
+   UsrDat->LocalAddress [sizeof (UsrDat->LocalAddress ) - 1] = '\0';
+   strncpy (UsrDat->LocalPhone   ,row[21],sizeof (UsrDat->LocalPhone   ) - 1);
+   UsrDat->LocalPhone   [sizeof (UsrDat->LocalPhone   ) - 1] = '\0';
+   strncpy (UsrDat->FamilyAddress,row[22],sizeof (UsrDat->FamilyAddress) - 1);
+   UsrDat->FamilyAddress[sizeof (UsrDat->FamilyAddress) - 1] = '\0';
+   strncpy (UsrDat->FamilyPhone  ,row[23],sizeof (UsrDat->FamilyPhone  ) - 1);
+   UsrDat->FamilyPhone  [sizeof (UsrDat->FamilyPhone  ) - 1] = '\0';
+   strncpy (UsrDat->OriginPlace  ,row[24],sizeof (UsrDat->OriginPlace  ) - 1);
+   UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  ) - 1] = '\0';
    strcpy (StrBirthday,
            row[25] ? row[25] :
 	             "0000-00-00");
@@ -522,31 +533,18 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
 
-   UsrDat->Surname1[sizeof (UsrDat->Surname1)-1] = '\0';
-   UsrDat->Surname2[sizeof (UsrDat->Surname2)-1] = '\0';
-   UsrDat->FirstName[sizeof (UsrDat->FirstName)-1] = '\0';
    Str_ConvertToTitleType (UsrDat->Surname1 );
    Str_ConvertToTitleType (UsrDat->Surname2 );
    Str_ConvertToTitleType (UsrDat->FirstName);
    /* Create full name using FirstName, Surname1 and Surname2 */
    Usr_BuildFullName (UsrDat);
 
-   UsrDat->Photo[sizeof (UsrDat->Photo)-1] = '\0';
-
-   UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  )-1] = '\0';
    if (sscanf (StrBirthday,"%u-%u-%u",
 	       &(UsrDat->Birthday.Year),
 	       &(UsrDat->Birthday.Month),
 	       &(UsrDat->Birthday.Day)) != 3)
       Lay_ShowErrorAndExit ("Wrong date.");
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
-   UsrDat->LocalAddress [sizeof (UsrDat->LocalAddress )-1] = '\0';
-   UsrDat->LocalPhone   [sizeof (UsrDat->LocalPhone   )-1] = '\0';
-   UsrDat->FamilyAddress[sizeof (UsrDat->FamilyAddress)-1] = '\0';
-   UsrDat->FamilyPhone  [sizeof (UsrDat->FamilyPhone  )-1] = '\0';
-
-   UsrDat->Tch.Office     [sizeof (UsrDat->Tch.Office     )-1] = '\0';
-   UsrDat->Tch.OfficePhone[sizeof (UsrDat->Tch.OfficePhone)-1] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

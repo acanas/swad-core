@@ -277,6 +277,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    /***** Show current photo and help message *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\">");
+   // if (PhotoExists)
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO150x200",Pho_NO_ZOOM);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
    fprintf (Gbl.F.Out,"</td>"
@@ -989,6 +990,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
+   bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.InsideForm &&						// Only if not inside another form
                                  Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
    bool PutZoomCode = PhotoURL &&							// Photo exists
@@ -1011,7 +1013,11 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 
    /***** Start image *****/
    fprintf (Gbl.F.Out,"<img src=\"");
+   PhotoExists = false;
    if (PhotoURL)
+      if (PhotoURL[0])
+	 PhotoExists = true;
+   if (PhotoExists)
       fprintf (Gbl.F.Out,"%s",PhotoURL);
    else
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);

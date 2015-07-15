@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.117 (2015/07/15)"
+#define Log_PLATFORM_VERSION	"SWAD 14.117.1 (2015/07/15)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.117.1: Jul 15, 2015	Fixed minor bug when showing user's photo. (184892 lines)
         Version 14.117:   Jul 15, 2015	User's ID is no longer mandatory. (184885 lines)
         Version 14.116.1: Jul 14, 2015	Changes in some messages. (184850 lines)
         Version 14.116:   Jul 13, 2015	New function createAccount in web service. (184849 lines)
