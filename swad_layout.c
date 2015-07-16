@@ -130,9 +130,7 @@ void Lay_WriteStartOfPage (void)
        Gbl.CurrentAct == ActRefLstClk)
      // Don't generate a full HTML page, only refresh connected users
      {
-      fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n");
-      // fprintf (Gbl.F.Out,"Cache-Control: max-age=0, no-cache, must-revalidate\r\n\r\n");
-
+      fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
       Gbl.Layout.WritingHTMLStart = false;
       Gbl.Layout.HTMLStartWritten = Gbl.Layout.TablEndWritten = true;
       return;
