@@ -973,6 +973,8 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 
 static void Rec_ShowRecordOneStdCrs (void)
   {
+   bool ItsMe;
+
    /***** Get if student has accepted enrollment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -1005,9 +1007,13 @@ static void Rec_ShowRecordOneStdCrs (void)
       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	 Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-      else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
-	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
-	 Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD,&Gbl.Usrs.Other.UsrDat);
+      else
+	{
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod ==
+	          Gbl.Usrs.Other.UsrDat.UsrCod);	// It's me
+	 if (ItsMe && Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+	    Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Other.UsrDat);
+	}
      }
 
    /* Free list of fields of records */
@@ -1023,6 +1029,7 @@ void Rec_ListRecordsStdsCrs (void)
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumUsrs = 0;
    const char *Ptr;
+   bool ItsMe;
    Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevStd) ? Rec_RECORD_LIST :
                                                                            Rec_RECORD_PRINT;
    struct UsrData UsrDat;
@@ -1090,10 +1097,14 @@ void Rec_ListRecordsStdsCrs (void)
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
 
             /* Record of the student in the course */
-            if (Gbl.CurrentCrs.Records.LstFields.Num &&		// There are fields in the record
-        	(Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// I am teacher in this course
-        	 UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// I am student in this course and it's me
-               Rec_ShowCrsRecord (TypeOfView,&UsrDat);
+            if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+	      {
+               ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);	// It's me
+	       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+		   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && ItsMe))	// I am student in this course and it's me
+		  Rec_ShowCrsRecord (TypeOfView,&UsrDat);
+	      }
 
             fprintf (Gbl.F.Out,"</div>");
 
@@ -1434,6 +1445,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
    unsigned RecordWidth = Rec_RECORD_WIDTH_WIDE;
@@ -1443,19 +1455,46 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    unsigned Col2Width;
    char *ClassHead;
    char *ClassData;
+   bool ItsMe;
    bool DataForm = false;
    unsigned NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row = NULL; // Initialized to avoid warning
+   bool ShowField;
    bool ThisFieldHasText;
    bool ICanEdit;
    char Text[Cns_MAX_BYTES_TEXT+1];
 
    ClassHead = "HEAD_REC";
    ClassData = "DAT_REC";
+
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
+     {
+      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
+      if (ItsMe)	// It's me
+	 switch (TypeOfView)
+	   {
+	    case Rec_RECORD_LIST:
+	       // When listing several records,
+	       // only my record in course in allowed
+	       // ==> show form to edit my record as student
+ 	       TypeOfView = Rec_FORM_MY_COURSE_RECORD_AS_STUDENT;
+ 	       break;
+	    case Rec_FORM_MY_COURSE_RECORD_AS_STUDENT:
+	    case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
+	    case Rec_RECORD_PRINT:
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+	       break;
+	  }
+      else	// It's not me ==> i am a student trying to do something forbidden
+	 Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+     }
+
    switch (TypeOfView)
      {
-      case Rec_FORM_MY_COURSE_RECORD:
+      case Rec_FORM_MY_COURSE_RECORD_AS_STUDENT:
          for (NumField = 0;
               NumField < Gbl.CurrentCrs.Records.LstFields.Num;
               NumField++)
@@ -1465,14 +1504,12 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   	       Act_FormStart (ActRcvRecCrs);
                break;
               }
-	 //RecordWidth = Rec_WIDTH_COURSE_RECORD;
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassData = "DAT_REC";
 	 break;
-      case Rec_MY_COURSE_RECORD_CHECK:
-      case Rec_OTHER_USR_COURSE_RECORD_CHECK:
-	 //RecordWidth = Rec_WIDTH_COURSE_RECORD;
+      case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
+      case Rec_CHECK_OTHER_USR_COURSE_RECORD:
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -1481,13 +1518,11 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          DataForm = true;
 	 Act_FormStart (ActRcvRecOthUsr);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 //RecordWidth = Rec_WIDTH_COURSE_RECORD;
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
 	 break;
       case Rec_RECORD_PRINT:
-	 //RecordWidth = Rec_WIDTH_COURSE_RECORD_PRINT;
 	 FrameWidth = 1;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
@@ -1496,7 +1531,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          break;
     }
 
-   Col2Width = RecordWidth - FrameWidth*2 - Col1Width;
+   Col2Width = RecordWidth - FrameWidth * 2 - Col1Width;
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",RecordWidth);
@@ -1528,13 +1563,15 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    for (NumField = 0, Gbl.RowEvenOdd = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-      // If debe mostrarse the field...
-      if (!(TypeOfView == Rec_FORM_MY_COURSE_RECORD ||
-	    TypeOfView == Rec_MY_COURSE_RECORD_CHECK) ||
-          Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD)
+     {
+      ShowField = !(TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT ||
+	            TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT) ||
+                  Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
+      // If the field must be shown...
+      if (ShowField)
         {
          ICanEdit = TypeOfView == Rec_RECORD_LIST ||
-                     (TypeOfView == Rec_FORM_MY_COURSE_RECORD &&
+                     (TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT &&
                       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
 
          /* Name of the field */
@@ -1594,6 +1631,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          /***** Free structure that stores the query result *****/
          DB_FreeMySQLResult (&mysql_res);
         }
+     }
 
    /***** Button to save changes and end frame *****/
    if (DataForm)
@@ -1750,7 +1788,7 @@ static void Rec_ShowMyCrsRecordUpdated (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
 
    /***** Show updated user's record *****/
-   Rec_ShowCrsRecord (Rec_MY_COURSE_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowCrsRecord (Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Me.UsrDat);
   }
 
 /*****************************************************************************/
@@ -1768,7 +1806,7 @@ static void Rec_ShowOtherCrsRecordUpdated (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /***** Show updated user's record *****/
-   Rec_ShowCrsRecord (Rec_OTHER_USR_COURSE_RECORD_CHECK,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowCrsRecord (Rec_CHECK_OTHER_USR_COURSE_RECORD,&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/
@@ -1896,7 +1934,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
-   Rec_ShowSharedUsrRecord (Rec_OTHER_USR_COMMON_RECORD_CHECK,UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_CHECK_OTHER_USR_COMMON_RECORD,UsrDat);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1979,10 +2017,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	             DataForm ||
 	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-		     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
-		     TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
+		     TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+		     TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
                      (UsrDat->Accepted &&
-		      (TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK ||
+		      (TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD ||
 		       ((TypeOfView == Rec_RECORD_LIST ||
 			 TypeOfView == Rec_RECORD_PRINT) &&
 		        (IAmLoggedAsTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
@@ -1991,10 +2029,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	          DataForm ||
 	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-		  TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
-		  TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
+		  TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+		  TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
                   (UsrDat->Accepted &&
-		   ((TypeOfView == Rec_OTHER_USR_COMMON_RECORD_CHECK &&
+		   ((TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD &&
                      !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)) ||	// A teacher can not see another teacher's ID
 		    ((TypeOfView == Rec_RECORD_LIST ||
 	              TypeOfView == Rec_RECORD_PRINT) &&
@@ -2005,16 +2043,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool ShowIDRows = (TypeOfView != Rec_RECORD_PUBLIC);
    bool ShowAddressRows = (TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
                            TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-			   TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
-			   TypeOfView == Rec_MY_COURSE_RECORD_CHECK ||
+			   TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+			   TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
 			   ((TypeOfView == Rec_RECORD_LIST          ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
    bool ShowTeacherRows = (((TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
 			     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-			     TypeOfView == Rec_FORM_MY_COURSE_RECORD  ||
-			     TypeOfView == Rec_MY_COURSE_RECORD_CHECK) &&
+			     TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+			     TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT) &&
 			    (UsrDat->Roles & (1 << Rol_TEACHER))) ||	// He/she (me, really) is a teacher in any course
 			   ((TypeOfView == Rec_RECORD_LIST ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
@@ -2036,7 +2074,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      {
       case Rec_FORM_SIGN_UP:
       case Rec_FORM_MY_COMMON_RECORD:
-      case Rec_FORM_MY_COURSE_RECORD:
+      case Rec_FORM_MY_COURSE_RECORD_AS_STUDENT:
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
 	 ClassHead = "HEAD_REC";
@@ -2044,9 +2082,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 ClassData = "DAT_REC";
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
-      case Rec_MY_COURSE_RECORD_CHECK:
-      case Rec_OTHER_USR_COMMON_RECORD_CHECK:
-      case Rec_OTHER_USR_COURSE_RECORD_CHECK:
+      case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
+      case Rec_CHECK_OTHER_USR_COMMON_RECORD:
+      case Rec_CHECK_OTHER_USR_COURSE_RECORD:
       case Rec_RECORD_LIST:
       case Rec_RECORD_PUBLIC:
       case Rec_RECORD_PRINT:
