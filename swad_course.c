@@ -424,7 +424,8 @@ static void Crs_Configuration (bool PrintView)
                          " style=\"text-align:left; vertical-align:middle;\">"
                          "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\" class=\"DAT\">"
                          "%u %s %u "
-                         "<img src=\"%s/%s16x16.gif\" alt=\"\""
+                         "<img src=\"%s/%s16x16.gif\""
+                         " alt=\"%u %s %u\" title=\"%u %s %u\""
                          " class=\"ICON16x16\" style=\"vertical-align:top;\"/>"
                          "</a>"
                          "</td>"
@@ -434,7 +435,9 @@ static void Crs_Configuration (bool PrintView)
                Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
                Gbl.Prefs.IconsURL,
                (Indicators.CountIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
-        	                                                    "warning");
+        	                                                    "warning",
+               Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
+               Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
      }
 
    /***** Send button and end frame *****/
@@ -591,7 +594,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
 		       The_ClassFormul[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 		      " style=\"width:16px; height:16px;"
 		      " vertical-align:middle;\" />",
 	    Gbl.Prefs.IconsURL,
@@ -630,7 +634,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
 			  The_ClassFormul[Gbl.Prefs.Theme]);
       /* Country map */
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" alt=\"%s\" title=\"%s\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " style=\"width:16px; height:16px;"
 	                 " vertical-align:middle;\" />",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
@@ -787,10 +792,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      The_ClassFormul[Gbl.Prefs.Theme]);
-		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\" alt=\"%s\""
+		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
+			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON16x16\""
 			             " style=\"vertical-align:middle;\" />",
-		           Gbl.Prefs.IconsURL,Crs.ShortName);
+		           Gbl.Prefs.IconsURL,
+		           Crs.ShortName,
+		           Crs.FullName);
 		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
 		  if (Highlight)
 		     fprintf (Gbl.F.Out,"<strong>");
@@ -810,7 +818,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  fprintf (Gbl.F.Out," <a href=\"");
 		  RSS_WriteRSSLink (Gbl.F.Out,Crs.CrsCod);
 		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-				     "<img src=\"%s/rss16x16.gif\" alt=\"RSS\""
+				     "<img src=\"%s/rss16x16.gif\""
+				     " alt=\"RSS\" title=\"RSS\""
 				     " class=\"ICON16x16\""
 				     " style=\"vertical-align:middle;\" />"
 				     "</a>",
@@ -1243,13 +1252,15 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"<tr>"
                                "<td style=\"text-align:center;"
                                " background-color:%s;\">"
-                               "<img src=\"%s/%s16x16.gif\" alt=\"\""
-                               " title=\"%s\" class=\"ICON16x16\" />"
+                               "<img src=\"%s/%s16x16.gif\""
+                               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                                "</td>",
                      BgColor,
                      Gbl.Prefs.IconsURL,
                      Crs->NumUsrs ? "ok_green" :
                 	            "tr",
+                     Crs->NumUsrs ? Txt_COURSE_With_users :
+                                    Txt_COURSE_Without_users,
                      Crs->NumUsrs ? Txt_COURSE_With_users :
                                     Txt_COURSE_Without_users);
 
@@ -1328,6 +1339,7 @@ static void Crs_ListCoursesForSeeing (void)
 static void Crs_ListCoursesForEdition (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_course;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
@@ -1370,8 +1382,10 @@ static void Crs_ListCoursesForEdition (void)
             if (Crs->NumUsrs ||	// Course has users ==> deletion forbidden
                 !ICanEdit)
                fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-        	                  " alt=\"\" class=\"ICON16x16\" />",
-                        Gbl.Prefs.IconsURL);
+        	                  " alt=\"%s\" title=\"%s\""
+        	                  " class=\"ICON16x16\" />",
+                        Gbl.Prefs.IconsURL,
+                        Txt_Removal_not_allowed,Txt_Removal_not_allowed);
             else	// Crs->NumUsrs == 0 && ICanEdit
               {
                Act_FormStart (ActRemCrs);
@@ -1644,6 +1658,7 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
 static void Crs_PutFormToCreateCourse (void)
   {
    extern const char *Txt_New_course_of_DEGREE_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
@@ -1673,9 +1688,10 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                       "</td>",
-	    Gbl.Prefs.IconsURL);
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,Txt_Removal_not_allowed);
 
    /***** Course code *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\""
@@ -3287,12 +3303,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Accepted = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
       fprintf (Gbl.F.Out,"<td class=\"BT\" style=\"background-color:%s;\">"
 	                 "<img src=\"%s/%s16x16.gif\""
-	                 " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 	                 "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
                Accepted ? "ok_on" :
         	          "tr",
+               Accepted ? Txt_Enrollment_confirmed :
+        	          Txt_Enrollment_not_confirmed,
                Accepted ? Txt_Enrollment_confirmed :
         	          Txt_Enrollment_not_confirmed);
      }
