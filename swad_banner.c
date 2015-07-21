@@ -100,7 +100,8 @@ void Ban_SeeBanners (void)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT\" style=\"text-align:left;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s\" alt=\"%s\""
+                         "<img src=\"%s/%s/%s\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:120px; height:40px;\"/>"
                          "</a>"
                          "</td>"
@@ -109,7 +110,8 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].FullName,
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShortName);
+               Gbl.Banners.Lst[NumBan].ShortName,
+               Gbl.Banners.Lst[NumBan].FullName);
 
    /***** Table end *****/
    Lay_EndRoundFrameTable ();
@@ -380,7 +382,8 @@ static void Ban_ListBannersForEdition (void)
 	                 " vertical-align:middle;\">");
       Act_FormStart (ActChgBanImg);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\" size=\"12\" maxlength=\"%u\" value=\"%s\""
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
+	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_IMAGE,Ban->Img,Gbl.FormId);
       Act_FormEnd ();
@@ -763,7 +766,8 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Banner image *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
-                      "<input type=\"text\" name=\"Img\" size=\"12\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Img\""
+                      " size=\"12\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ban_MAX_LENGTH_IMAGE,Ban->Img);
 
@@ -917,14 +921,16 @@ void Ban_WriteMenuWithBanners (void)
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
 			 " title=\"%s\">"
-                         "<img src=\"%s/%s/%s\" alt=\"%s\""
+                         "<img src=\"%s/%s/%s\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:120px; height:40px;\" />"
                          "</a>",
 	       Gbl.FormId,
 	       Gbl.Banners.Lst[NumBan].FullName,
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShortName);
+               Gbl.Banners.Lst[NumBan].ShortName,
+               Gbl.Banners.Lst[NumBan].FullName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");

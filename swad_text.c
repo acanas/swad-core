@@ -28438,6 +28438,27 @@ const char *Txt_Reject =
 	"Rejeitar";
 #endif
 
+const char *Txt_Removal_not_allowed =
+#if   L==0
+	"Eliminaci&oacute; no perm&egrave;s";
+#elif L==1
+	"Entfernen nicht erlaubt";
+#elif L==2
+	"Removal not allowed";
+#elif L==3
+	"Eliminaci&oacute;n no permitida";
+#elif L==4
+	"Suppression pas autoris&eacute;";
+#elif L==5
+	"Eliminaci&oacute;n no permitida";	// Okoteve traducción
+#elif L==6
+	"Rimozione non ammessi";
+#elif L==7
+	"Usuwanie nie wolno";
+#elif L==8
+	"Remo&ccedil;&atilde;o n&atilde;o permitida";
+#endif
+
 const char *Txt_Remove =
 #if   L==0
 	"Eliminar";

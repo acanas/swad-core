@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.117.5 (2015/07/21)"
+#define Log_PLATFORM_VERSION	"SWAD 14.117.7 (2015/07/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.117.7: Jul 21, 2015	Checking "alt" and "title" in all images. (185008 lines)
         Version 14.117.6: Jul 21, 2015	Checking "alt" and "title" in all images.
                                         Changes in most frequent actions. (184948 lines)
         Version 14.117.5: Jul 21, 2015	Fixed HTML bug in account form. (184930 lines)

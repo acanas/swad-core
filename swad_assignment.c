@@ -406,6 +406,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
+   extern const char *Txt_Folder;
 
    if (Asg->SendWork == Asg_SEND_WORK)
      {
@@ -422,8 +423,8 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
          sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
                   Asg->Folder);
          fprintf (Gbl.F.Out,"<input type=\"image\""
-                            " src=\"%s/folder-open-plus16x16.gif\" alt=\"%s\""
-                            " title=\"%s\" class=\"ICON16x16\" />",
+                            " src=\"%s/folder-open-plus16x16.gif\""
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -431,8 +432,9 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
         }
       else			// I can't send files to this assignment folder
          fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL);
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Gbl.Prefs.IconsURL,
+                  Txt_Folder,Txt_Folder);
 
       /***** Folder name *****/
       fprintf (Gbl.F.Out,"</td>"

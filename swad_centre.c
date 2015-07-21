@@ -317,11 +317,15 @@ static void Ctr_Configuration (bool PrintView)
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 		     Gbl.CurrentCtr.Ctr.WWW);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%02u/%u/%u.jpg\" class=\"%s\" />",
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%02u/%u/%u.jpg\""
+	                    " alt=\"%s\" title=\"%s\""
+	                    " class=\"%s\" />",
 		  Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
+		  Gbl.CurrentCtr.Ctr.ShortName,
+		  Gbl.CurrentCtr.Ctr.FullName,
 		  PrintView ? "CENTRE_PHOTO_PRINT" :
 			      "CENTRE_PHOTO_SHOW");
 	 if (PutLink)
@@ -1134,6 +1138,7 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
 static void Ctr_ListCentresForEdition (void)
   {
    extern const char *Txt_Centres_of_INSTITUTION_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -1175,8 +1180,10 @@ static void Ctr_ListCentresForEdition (void)
       if (Ctr->NumDegs || Ctr->NumTchs ||	// Centre has degrees or teachers ==> deletion forbidden
           !ICanEdit)
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL);
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Gbl.Prefs.IconsURL,
+                  Txt_Removal_not_allowed,
+                  Txt_Removal_not_allowed);
       else
         {
          Act_FormStart (ActRemCtr);
@@ -1967,6 +1974,7 @@ static void Ctr_PutFormToCreateCentre (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_centre_of_INSTITUTION_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    extern const char *Txt_Create_centre;
@@ -1995,9 +2003,11 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
-	    Gbl.Prefs.IconsURL);
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
 
    /***** Centre code *****/
    fprintf (Gbl.F.Out,"<td></td>");

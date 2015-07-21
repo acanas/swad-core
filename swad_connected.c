@@ -649,10 +649,10 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
       Sco_PutParamScope (Sco_SCOPE_CRS);
       Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" class=\"ICON32x32\" />"
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32\" />"
 	                 "</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Connected_users);
+	       Txt_Connected_users,Txt_Connected_users);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

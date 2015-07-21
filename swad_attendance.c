@@ -2042,11 +2042,13 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	              "<td class=\"BT%d",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             Present ? "check" :
         	      "check-empty",
+            Present ? Txt_Present :
+        	      Txt_Absent,
             Present ? Txt_Present :
         	      Txt_Absent);
 
@@ -3240,12 +3242,14 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 
 	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-	                    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+	                    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Gbl.Prefs.IconsURL,
 		  Present ? "check" :
 			    "check-empty",
+		  Present ? Txt_Present :
+			    Txt_Absent,
 		  Present ? Txt_Present :
 			    Txt_Absent);
 
@@ -3392,7 +3396,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    "<td class=\"DAT\""
 			    " style=\"text-align:left; background-color:%s;\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 	                    " %02u/%02u/%04u %02u:%02u h %s</td>"
 			    "</tr>",
 	          BgColor,
@@ -3402,6 +3406,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 		  Gbl.Prefs.IconsURL,
 		  Present ? "check" :
 			    "check-empty",
+		  Present ? Txt_Present :
+			    Txt_Absent,
 		  Present ? Txt_Present :
 			    Txt_Absent,
 	          Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,

@@ -129,10 +129,13 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Title of top level *****/
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">"
                       "<img src=\"%s/chat16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
                       " %s"
                       "</li>",
-            Gbl.Prefs.IconsURL,Txt_Chat_rooms);
+            Gbl.Prefs.IconsURL,
+            Txt_Chat_rooms,Txt_Chat_rooms,
+            Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
    IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_STUDENT &&
@@ -141,8 +144,10 @@ void Cht_ShowListOfAvailableChatRooms (void)
    sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
    fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
-	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-            Gbl.Prefs.IconsURL);
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+	              " style=\"vertical-align:middle;\" />",
+            Gbl.Prefs.IconsURL,
+            ThisRoomFullName,ThisRoomFullName);
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
 
@@ -153,16 +158,20 @@ void Cht_ShowListOfAvailableChatRooms (void)
          sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
-			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-		  Gbl.Prefs.IconsURL);
+			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+			    " style=\"vertical-align:middle;\" />",
+		  Gbl.Prefs.IconsURL,
+		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
       case Rol_TEACHER:
          sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
-			    " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-		  Gbl.Prefs.IconsURL);
+			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+			    " style=\"vertical-align:middle;\" />",
+		  Gbl.Prefs.IconsURL,
+		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
          break;
       default:
@@ -210,8 +219,10 @@ void Cht_ShowListOfAvailableChatRooms (void)
                sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShortName);
                Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,2,IsLastItemInLevel);
                fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
-        	                  " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
-                        Gbl.Prefs.IconsURL);
+        	                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
+        	                  " style=\"vertical-align:middle;\" />",
+                        Gbl.Prefs.IconsURL,
+                        ThisRoomFullName,ThisRoomFullName);
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }
 	   }

@@ -247,10 +247,11 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       Ann_PutHiddenParamAnnCod (AnnCod);
       Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
-			 " alt=\"%s\" class=\"ICON16x16\" />"
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON16x16\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Remove,
+	       Txt_Remove,Txt_Remove,
 	       Txt_Remove);
       Act_FormEnd ();
      }
@@ -261,10 +262,11 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       Ann_PutHiddenParamAnnCod (AnnCod);
       Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
-			 " alt=\"%s\" class=\"ICON16x16\" />"
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON16x16\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Do_not_show_again,
+	       Txt_Do_not_show_again,Txt_Do_not_show_again,
 	       Txt_Do_not_show_again);
       Act_FormEnd ();
      }

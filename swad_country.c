@@ -728,7 +728,8 @@ bool Cty_CheckIfCountryMapExists (struct Country *Cty)
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
   {
    /***** Draw country map *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
+	              " alt=\"%s\" title=\"%s\""
 		      " class=\"%s\" />",
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	    Cty->Alpha2,
@@ -1272,9 +1273,9 @@ void Cty_FreeListCountries (void)
 static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Txt_Countries;
-   extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_country;
+   extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
    Txt_Language_t Lan;
@@ -1298,8 +1299,9 @@ static void Cty_ListCountriesForEdition (void)
       if (Cty->NumInss ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL);
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Gbl.Prefs.IconsURL,
+                  Txt_Removal_not_allowed,Txt_Removal_not_allowed);
       else
         {
          Act_FormStart (ActRemCty);
