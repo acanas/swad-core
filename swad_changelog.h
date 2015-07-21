@@ -108,6 +108,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.117.6: Jul 21, 2015	Checking "alt" and "title" in all images.
+                                        Changes in most frequent actions. (184948 lines)
         Version 14.117.5: Jul 21, 2015	Fixed HTML bug in account form. (184930 lines)
         Version 14.117.4: Jul 17, 2015	Fixed bug in course record, reported by Antonio Peña Freire. (184929 lines)
         Version 14.117.3: Jul 17, 2015	Fixed recent bug in cache control. (184893 lines)

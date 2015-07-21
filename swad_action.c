@@ -4701,7 +4701,9 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
-   char ActionStr[128];
+   char TabStr[128+1];
+   char MenuStr[128+1];
+   char TabMenuStr[128+6+128+1];
 
    /***** Table head *****/
    Lay_StartRoundFrameTable (NULL,0,Txt_Frequent_actions);
@@ -4715,21 +4717,25 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
+	 /* Action string */
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],128);
+	 TabStr[128] = '\0';
+	 strncpy (MenuStr,Title,128);
+	 MenuStr[128] = '\0';
+         sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
+
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"text-align:left; vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
-         Act_LinkFormSubmit (Title,The_ClassFormulNB[Gbl.Prefs.Theme]);
-
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" alt=\"%s\""
+         Act_LinkFormSubmit (TabMenuStr,The_ClassFormulNB[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
+	                    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON32x32\" style=\"margin:4px;\" />",
 		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-		  Act_Actions[Action].Icon,Title);
-         sprintf (ActionStr,"%s &gt; %s",
-                  Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],
-                  Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
-         Str_LimitLengthHTMLStr (ActionStr,40);
-         fprintf (Gbl.F.Out," %s</a>",ActionStr);
+		  Act_Actions[Action].Icon,
+		  MenuStr,TabMenuStr);
+         fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -4747,11 +4753,14 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *Txt_Frequent_actions;
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
-   char ActionStr[128];
+   char TabStr[128+1];
+   char MenuStr[128+1];
+   char TabMenuStr[128+6+128+1];
 
    /***** Start table *****/
    Act_FormStart (ActMFUAct);
@@ -4780,21 +4789,28 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
                             "</td>",
                   Gbl.Prefs.IconsURL);
 
+	 /* Action string */
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],128);
+	 TabStr[128] = '\0';
+	 strncpy (MenuStr,Title,128);
+	 MenuStr[128] = '\0';
+         sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
+
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"width:110px; text-align:left;"
                             " vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,"MFU_ACT");
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\" vspace=\"1\" alt=\"%s\""
-                            " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+         fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" style=\"margin:1px; vertical-align:middle;\" />",
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-                  Act_Actions[Action].Icon,Title);
-
-         strcpy (ActionStr,Txt_MENU_TITLE[Act_Actions[Action].Tab][Act_Actions[Action].IndexInMenu]);
-         Str_LimitLengthHTMLStr (ActionStr,12);
-         fprintf (Gbl.F.Out," %s</a>",
-                  ActionStr);
+                  Act_Actions[Action].Icon,
+                  MenuStr,TabMenuStr);
+	 Str_LimitLengthHTMLStr (MenuStr,12);
+	 fprintf (Gbl.F.Out," %s</a>",
+                  MenuStr);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
