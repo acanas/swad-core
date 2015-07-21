@@ -46980,28 +46980,7 @@ const char *Txt_Upload_photo =
 #elif L==8
 	"Fazer upload de foto";
 #endif
-/*
-const char *Txt_Upload_not_allowed =
-#if   L==0
-	"C&ograve;pia no perm&egrave;s";
-#elif L==1
-	"Upload nicht erlaubt";
-#elif L==2
-	"Upload not allowed";
-#elif L==3
-	"Subida no permitida";
-#elif L==4
-	"T&eacute;l&eacute;charge pas autoris&eacute;";
-#elif L==5
-	"Subida no permitida";	// Okoteve traducción
-#elif L==6
-	"Carica non ammessi";
-#elif L==7
-	"Dodaj nie wolno";
-#elif L==8
-	"Upload n&atilde;o permitida";
-#endif
-*/
+
 const char *Txt_Uploaded_by =
 #if   L==0
 	"Penjat per";
