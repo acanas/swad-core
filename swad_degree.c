@@ -1095,12 +1095,14 @@ static void Deg_ListDegreeTypesForSeeing (void)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"background-color:%s;\">"
                          "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                         " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? "ok_green" :
         	                                          "tr",
+               Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? Txt_TYPES_OF_DEGREE_With_degrees :
+                                                          Txt_TYPES_OF_DEGREE_Without_degrees,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? Txt_TYPES_OF_DEGREE_With_degrees :
                                                           Txt_TYPES_OF_DEGREE_Without_degrees);
 
@@ -1115,12 +1117,14 @@ static void Deg_ListDegreeTypesForSeeing (void)
       fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
 	                 " background-color:%s;\">"
                          "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                         " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? "ok_green" :
         	                                                   "tr",
+               Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
+                                                                   Txt_Direct_authentication_not_allowed,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
                                                                    Txt_Direct_authentication_not_allowed);
 
@@ -1145,6 +1149,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
 static void Deg_ListDegreeTypesForEdition (void)
   {
    extern const char *Txt_Types_of_degree;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_type_of_degree;
    unsigned NumDegTyp;
 
@@ -1162,7 +1167,9 @@ static void Deg_ListDegreeTypesForEdition (void)
 	                 "<td class=\"BM\">");
       if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees ==> deletion forbidden
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Txt_Removal_not_allowed,
+                  Txt_Removal_not_allowed,
                   Gbl.Prefs.IconsURL);
       else
         {
@@ -1278,12 +1285,14 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td style=\"text-align:center; background-color:%s;\">"
 		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
 	    Deg->NumCourses ? "ok_green" :
 		              "tr",
+	    Deg->NumCourses ? Txt_DEGREE_With_courses :
+			      Txt_DEGREE_Without_courses,
 	    Deg->NumCourses ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
 
@@ -1342,12 +1351,14 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    /* Degree optional year */
    fprintf (Gbl.F.Out,"<td style=\"text-align:center; background-color:%s;\">"
 		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
 	    Deg->OptYear ? "ok_on" :
 		           "tr",
+	    Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
+			   Txt_DEGREE_Without_year_for_optional_courses,
 	    Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
 			   Txt_DEGREE_Without_year_for_optional_courses);
 
@@ -1379,6 +1390,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 static void Deg_ListDegreesForEdition (void)
   {
    extern const char *Txt_Degrees_of_CENTRE_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_degree;
    extern const char *Txt_DEGREE_With_year_for_optional_courses;
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
@@ -1418,8 +1430,10 @@ static void Deg_ListDegreesForEdition (void)
       if (Deg->NumCourses ||	// Degree has courses ==>  deletion forbidden
 	  !ICanEdit)
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL);
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Gbl.Prefs.IconsURL,
+                  Txt_Removal_not_allowed,
+                  Txt_Removal_not_allowed);
       else
         {
          Act_FormStart (ActRemDeg);
@@ -1604,10 +1618,12 @@ static void Deg_ListDegreesForEdition (void)
       else
 	 /* Degree optional year */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-			    " alt=\"\" title=\"%s\" class=\"ICON16x16\" />",
+			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
 		  Gbl.Prefs.IconsURL,
 		  Deg->OptYear ? "ok_on" :
 			         "tr",
+		  Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
+				 Txt_DEGREE_Without_year_for_optional_courses,
 		  Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
 				 Txt_DEGREE_Without_year_for_optional_courses);
       fprintf (Gbl.F.Out,"</td>");
@@ -1802,6 +1818,7 @@ static void Deg_PutFormToCreateDegType (void)
 static void Deg_PutFormToCreateDegree (void)
   {
    extern const char *Txt_New_degree_of_CENTRE_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
@@ -1832,9 +1849,11 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
-	    Gbl.Prefs.IconsURL);
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
 
    /***** Degree code *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\""
@@ -3969,7 +3988,8 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"text-align:right;"
                             " background-color:%s;\">"
-                            "<img src=\"%s/%s20x20.gif\" alt=\"\""
+                            "<img src=\"%s/%s20x20.gif\""
+                            " alt=\"\" title=\"\""
                             " style=\"width:20px; height:20px;"
                             " vertical-align:top;\" />"
                             "</td>",
@@ -4000,10 +4020,12 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             Act_FormEnd ();
            }
          else
-            fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\" alt=\"%s\""
+            fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
+        	               " alt=\"%s\" title=\"%s\""
                                " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
                                " %s",
                      Gbl.Prefs.IconsURL,
+                     Txt_all_degrees,
                      Txt_all_degrees,
                      Txt_all_degrees);
 

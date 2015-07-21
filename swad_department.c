@@ -483,6 +483,7 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
 static void Dpt_ListDepartmentsForEdition (void)
   {
    extern const char *Txt_Departments;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_department;
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
@@ -511,7 +512,9 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 "<td class=\"BM\">");
       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                  Txt_Removal_not_allowed,
+                  Txt_Removal_not_allowed,
                   Gbl.Prefs.IconsURL);
       else
         {

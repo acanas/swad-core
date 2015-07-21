@@ -868,6 +868,27 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	"This new password has been sent only to the email address %s, which is on your record card.\n\n";	// Necessita de tradução
 #endif
 
+const char *Txt_Unknown_or_without_photo =
+#if   L==0
+	"Desconocido/a o sin fotograf&iacute;a";	// Necessita traduccio
+#elif L==1
+	"Unknown or without photo";			// Need Übersetzung
+#elif L==2
+	"Unknown or without photo";
+#elif L==3
+	"Desconocido/a o sin fotograf&iacute;a";
+#elif L==4
+	"Unknown or without photo";			// Besoin de traduction
+#elif L==5
+	"Desconocido/a o sin fotograf&iacute;a";	// Okoteve traducción
+#elif L==6
+	"Sconosciuto/a o senza foto";
+#elif L==7
+	"Unknown or without photo";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Unknown or without photo";			// Necessita de tradução
+#endif
+
 const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"%s: no s'ha pogut crear el fitxer.";
@@ -4864,6 +4885,27 @@ const char *Txt_Copy_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to
 	"Kopia %s";
 #elif L==8
 	"Copiar %s";
+#endif
+
+const char *Txt_Copy_not_allowed =
+#if   L==0
+	"C&ograve;pia no perm&egrave;s";
+#elif L==1
+	"Kopier nicht erlaubt";
+#elif L==2
+	"Copy not allowed";
+#elif L==3
+	"Copia no permitida";
+#elif L==4
+	"Copie pas autoris&eacute;e";
+#elif L==5
+	"Copia no permitida";	// Okoteve traducción
+#elif L==6
+	"Copia non ammessi";
+#elif L==7
+	"Kopiowanie nie wolno";
+#elif L==8
+	"Copia n&atilde;o permitida";
 #endif
 
 const char *Txt_Copy_source =
@@ -46938,7 +46980,28 @@ const char *Txt_Upload_photo =
 #elif L==8
 	"Fazer upload de foto";
 #endif
-
+/*
+const char *Txt_Upload_not_allowed =
+#if   L==0
+	"C&ograve;pia no perm&egrave;s";
+#elif L==1
+	"Upload nicht erlaubt";
+#elif L==2
+	"Upload not allowed";
+#elif L==3
+	"Subida no permitida";
+#elif L==4
+	"T&eacute;l&eacute;charge pas autoris&eacute;";
+#elif L==5
+	"Subida no permitida";	// Okoteve traducción
+#elif L==6
+	"Carica non ammessi";
+#elif L==7
+	"Dodaj nie wolno";
+#elif L==8
+	"Upload n&atilde;o permitida";
+#endif
+*/
 const char *Txt_Uploaded_by =
 #if   L==0
 	"Penjat per";

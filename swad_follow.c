@@ -386,11 +386,12 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/unfollow16x16.gif\""
-			    " style=\"width:16px; height:16px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_Unfollow);
+		  Txt_Unfollow,Txt_Unfollow);
 	 Act_FormEnd ();
 	}
       else
@@ -400,11 +401,13 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 	 Act_LinkFormSubmit (Txt_Follow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/follow16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_Follow);
+		  Txt_Follow,Txt_Follow);
 	 Act_FormEnd ();
 	}
      }

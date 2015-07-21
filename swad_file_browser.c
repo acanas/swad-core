@@ -3085,7 +3085,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
          /* Select this group */
          fprintf (Gbl.F.Out,"<li class=\"%s\">"
                             "<img src=\"%s/%s20x20.gif\""
-                            " style=\"width:20px; height:20px; vertical-align:top; margin-left:5px;\" />"
+                            " alt=\"\" title=\"\""
+                            " style=\"width:20px; height:20px;"
+                            " vertical-align:top; margin-left:5px;\" />"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
@@ -4996,6 +4998,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
                                    const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Remove_FILE_OR_LINK_X;
+   extern const char *Txt_Removal_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
@@ -5028,9 +5031,12 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
       Act_FormEnd ();
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.IconsURL,
+	       Txt_Removal_not_allowed,
+	       Txt_Removal_not_allowed);
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5041,6 +5047,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
 static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Remove_folder_X;
+   extern const char *Txt_Removal_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
@@ -5073,9 +5080,12 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
       Act_FormEnd ();
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.IconsURL,
+	       Txt_Removal_not_allowed,
+	       Txt_Removal_not_allowed);
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5087,6 +5097,7 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
                              const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Copy_FOLDER_FILE_OR_LINK_X;
+   extern const char *Txt_Copy_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
@@ -5119,9 +5130,12 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
       Act_FormEnd ();
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/copy_off16x16.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/copy_off16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.IconsURL,
+               Txt_Copy_not_allowed,
+               Txt_Copy_not_allowed);
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5169,11 +5183,15 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
 
 static void Brw_PutIconPasteOff (void)
   {
+   extern const char *Txt_Copy_not_allowed;
+
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
 	              "<img src=\"%s/paste_off16x16.gif\""
-	              " alt=\"\" class=\"ICON16x16B\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
 	              "</td>",
-            Gbl.RowEvenOdd,Gbl.Prefs.IconsURL);
+            Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
+            Txt_Copy_not_allowed,
+            Txt_Copy_not_allowed);
   }
 
 /*****************************************************************************/
@@ -5195,7 +5213,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
    switch (ExpandTree)
      {
       case Brw_EXPAND_TREE_NOTHING:
-         fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\" alt=\"\""
+         fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
+                            " alt=\"\" title=\"\""
                             " class=\"ICON16x16B\" />",
                   Gbl.Prefs.IconsURL);
          break;
@@ -5277,7 +5296,8 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i < Level;
 	i++)
       fprintf (Gbl.F.Out,"<td style=\"width:16px;\">"
-	                 "<img src=\"%s/tr16x16.gif\" alt=\"\""
+	                 "<img src=\"%s/tr16x16.gif\""
+	                 " alt=\"\" title=\"\""
 	                 " class=\"ICON16x16B\" />"
 	                 "</td>",
                Gbl.Prefs.IconsURL);
@@ -5374,6 +5394,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
+   extern const char *Txt_Folder;
    bool ICanCreate;
 
    /***** Start cell *****/
@@ -5413,11 +5434,14 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
       Act_FormEnd ();
      }
    else	// I can't create a new file or folder
-      fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
-        	                                      "open");
+        	                                      "open",
+               Txt_Folder,
+               Txt_Folder);
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
@@ -5437,7 +5461,8 @@ static void Brw_PutIconNewFileOrFolder (void)
 	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
-            Txt_New_FILE_OR_FOLDER,Txt_New_FILE_OR_FOLDER);
+            Txt_New_FILE_OR_FOLDER,
+            Txt_New_FILE_OR_FOLDER);
   }
 
 /*****************************************************************************/
@@ -5504,8 +5529,9 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
             Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_FILEXT,
             Size,Size);
    if (FileType == Brw_IS_LINK)
-      fprintf (Gbl.F.Out,"url%ux%u.gif\" alt=\"%s\"",
-	       Size,Size,Txt_Link);
+      fprintf (Gbl.F.Out,"url%ux%u.gif\" alt=\"%s\" title=\"%s\"",
+	       Size,Size,
+	       Txt_Link,Txt_Link);
    else	// FileType == Brw_IS_FILE
      {
       for (DocType = 0, NotFound = true;
@@ -5649,7 +5675,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       /* Put icon to make public/private file */
       if (IsPublic)
          fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/open_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Public_open_educational_resource_OER_for_everyone,
                   Txt_Public_open_educational_resource_OER_for_everyone);
@@ -5754,7 +5781,8 @@ static void Brw_WriteDatesAssignment (void)
       /***** Arrow *****/
       fprintf (Gbl.F.Out,"<td style=\"width:16px;"
 	                 " text-align:right; vertical-align:middle;\">"
-                         "<img src=\"%s/arrow%s16x12.gif\" alt=\"\""
+                         "<img src=\"%s/arrow%s16x12.gif\""
+                         " alt=\"\" title=\"\""
                          " class=\"ICON16x16B\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,
@@ -5817,6 +5845,7 @@ static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadat
 
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
   {
+   extern const char *Txt_Unknown_or_without_photo;
    bool ShowUsr = false;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
@@ -5842,9 +5871,13 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
                         "PHOTO12x16B",Pho_ZOOM);
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO12x16B\" />",
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.IconsURL,
+               Txt_Unknown_or_without_photo,
+               Txt_Unknown_or_without_photo);
+
    fprintf (Gbl.F.Out,"</td>");
 
    if (Level && UsrCod > 0)
@@ -9378,10 +9411,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,Brw_FileType_t FileT
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/grades32x32.gif\" alt=\"%s\" title=\"%s\""
+			 "<img src=\"%s/grades32x32.gif\""
+			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON32x32\" />"
 			 "</a>",
-	       FileNameToShow,Gbl.Prefs.IconsURL,Gbl.Title,Gbl.Title);
+	       FileNameToShow,Gbl.Prefs.IconsURL,
+	       Gbl.Title,Gbl.Title);
       Act_FormEnd ();
      }
    else
@@ -10552,7 +10587,11 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
    if (Gbl.Usrs.Me.MaxRole < Rol_STUDENT)
       return false;
 
-   /***** Have I premission to create/paste a new file or folder into the folder? *****/
+   /***** If maximum level is reached, I can not create/paste *****/
+   if (Level >= Brw_MAX_DIR_LEVELS)
+      return false;
+
+   /***** Have I permission to create/paste a new file or folder into the folder? *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_ASSIG_USR:
@@ -10930,6 +10969,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Marks_area;
    extern const char *Txt_Private_storage_area;
    extern const char *Txt_Go_to_X;
+   extern const char *Txt_Folder;
    struct FileMetadata FileMetadata;
    long InsCod;
    long CtrCod;
@@ -11131,8 +11171,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       if (FileMetadata.FileType == Brw_IS_FOLDER)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
-			    " alt=\"\" class=\"ICON16x16B\" />",
-		  Gbl.Prefs.IconsURL);
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON16x16B\" />",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Folder,Txt_Folder);
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FileType,FileName);
