@@ -10587,3 +10587,19 @@ SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuf
 
 
 SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuffle, tst_questions.Stem,tst_questions.Feedback,tst_questions.NumHits/tst_questions.Score AS S FROM courses,tst_questions WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_questions.CrsCod AND tst_questions.AnsType='unique_choice' AND tst_questions.NumHits>'0' AND tst_questions.QstCod NOT IN (SELECT tst_question_tags.QstCod FROM courses,tst_tags,tst_question_tags WHERE courses.DegCod IN ('252') AND courses.CrsCod=tst_tags.CrsCod AND tst_tags.TagHidden='Y' AND tst_tags.TagCod=tst_question_tags.TagCod) HAVING S>='0.0' AND S<='1.0' ORDER BY RAND(NOW()) LIMIT 1;
+
+
+
+<form method="post" action="https://openswad.org/en" id="form_16">
+	<input type="hidden" name="act" value="1163" />
+	<div style="text-align:center;">
+		<div class="FRAME10">
+			<div class="TIT_TBL_10" style="text-align:center;">
+				New on OpenSWAD? Sign up
+			</div>
+			<div style="text-align:center;">
+				<button type="submit" class="BT_SUBMIT BT_CREATE">Create account</button>
+			</div>
+		</div>
+	</div>
+</form>

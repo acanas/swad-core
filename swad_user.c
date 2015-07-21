@@ -1380,7 +1380,7 @@ void Usr_WriteFormLogin (void)
    /***** User's ID/nickname and password *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/user16x16.gif\" title=\"%s\""
+                      "<img src=\"%s/user16x16.gif\" alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
@@ -1391,7 +1391,7 @@ void Usr_WriteFormLogin (void)
 		      "</tr>"
 		      "<tr>"
 		      "<td class=\"BM\">"
-                      "<img src=\"%s/key16x16.gif\" title=\"%s\""
+                      "<img src=\"%s/key16x16.gif\" alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
 		      "</td>"
 		      "<td style=\"text-align:left; vertical-align:middle;\">"
@@ -1401,10 +1401,12 @@ void Usr_WriteFormLogin (void)
 		      "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_User,
+            Txt_User,
             Usr_MAX_LENGTH_USR_LOGIN,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin,
             Gbl.Prefs.IconsURL,
+            Txt_Password,
             Txt_Password,
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             Txt_password);

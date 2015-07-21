@@ -100,7 +100,7 @@ void Acc_ShowFormAccount (void)
 
       /***** Form to send students to be enrolled / removed *****/
       Act_FormStart (ActEdiPrf);
-      Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,"Change language");
+      Lay_PutConfirmButton ("Change language");
       Act_FormEnd ();
      }
   }
@@ -128,7 +128,6 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActCreUsrAcc);
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
@@ -177,7 +176,6 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Send button and form end *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
