@@ -109,12 +109,15 @@ static void QR_ImageQRCode (const char *QRString)
   {
    fprintf (Gbl.F.Out,"<div style=\"width:%upx; text-align:center;\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;"
-                      " border:1px dashed silver;\" /><br />"
+                      " alt=\"%s\" title=\"%s\""
+                      " style=\"width:%upx; height:%upx;"
+                      " border:1px dashed silver;\" />"
+                      "<br />"
                       "<span class=\"DAT\">%s</span>"
                       "</div>",
             QR_CODE_SIZE,
             QR_CODE_SIZE,QR_CODE_SIZE,
+            QRString,
             QRString,
             QRString,
             QR_CODE_SIZE,QR_CODE_SIZE,
@@ -132,9 +135,11 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
 
    /***** Show QR code with direct link to the current centre *****/
    fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""
-                      " alt=\"%s\" style=\"width:%upx; height:%upx;\" />",
+                      " alt=\"%s\" title=\"%s\""
+                      " style=\"width:%upx; height:%upx;\" />",
             Size,Size,
             Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
+            Txt_Shortcut,
             Txt_Shortcut,
             Size,Size);
   }
@@ -150,9 +155,11 @@ void QR_ExamAnnnouncement (void)
    /***** Show QR code with direct link to the exam announcement *****/
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
-                      " alt=\"%s\" style=\"width:200px; height:200px;\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " style=\"width:200px; height:200px;\" />"
                       "</div>",
             200,200,
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeExaAnn].ActCod,
+            Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);
   }

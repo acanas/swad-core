@@ -268,6 +268,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Txt_New_record_field;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
@@ -285,9 +286,12 @@ void Rec_ShowFormCreateRecordField (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
-            Gbl.Prefs.IconsURL);
+            Gbl.Prefs.IconsURL,
+            Txt_Removal_not_allowed,
+            Txt_Removal_not_allowed);
 
    /***** Field name *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
@@ -1352,11 +1356,13 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
    fprintf (Gbl.F.Out," style=\"vertical-align:middle;\""
 	              " onclick=\"javascript:document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "<span class=\"%s\">&nbsp;%s</span>"
                       "</div>",
             Gbl.FormId,
             Gbl.Prefs.IconsURL,
+            Txt_Show_office_hours,
             Txt_Show_office_hours,
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Show_office_hours);
@@ -2191,12 +2197,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
         {
 	 Act_FormStart (ActReqEdiRecCom);
 	 Act_LinkFormSubmit (Txt_Edit_my_personal_data,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/edit16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
+		  Txt_Edit,
 		  Txt_Edit);
 	 Act_FormEnd ();
         }
@@ -2213,12 +2223,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 									   ActSeeRecOneTch);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/card16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
+		  Txt_View_record_for_this_course,
 		  Txt_View_record_for_this_course);
 	 Act_FormEnd ();
 	}
@@ -2234,12 +2248,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_FormStart (ActReqMdfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/config16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
+		  Txt_Admin_user,
 		  Txt_Admin_user);
 	 Act_FormEnd ();
 	}
@@ -2259,12 +2277,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Grp_PutParamAllGroups ();
 	 Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
 	 Act_LinkFormSubmit (Txt_View_works,ClassData);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/folder16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
+		  Txt_View_works,
 		  Txt_View_works);
 	 Act_FormEnd ();
 
@@ -2278,12 +2300,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   }
 	 Grp_PutParamAllGroups ();
 	 Act_LinkFormSubmit (Txt_See_exams,ClassData);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/file16x16.gif\""
-			    " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " padding:0 2px;\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
+		  Txt_See_exams,
 		  Txt_See_exams);
 	 Act_FormEnd ();
 
@@ -2295,12 +2321,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
 	    Grp_PutParamAllGroups ();
 	    Act_LinkFormSubmit (Txt_Attendance,ClassData);
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/rollcall16x16.gif\""
-			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			       " alt=\"%s\" title=\"%s\""
+			       " style=\"width:16px; height:16px;"
+			       " padding:0 2px;\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
+		     Txt_Attendance,
 		     Txt_Attendance);
 	    Act_FormEnd ();
 	   }
@@ -2314,12 +2344,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       else
 	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
       Act_LinkFormSubmit (Txt_Write_a_message,ClassData);
-      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	                 " style=\"display:inline;\" >"
 			 "<img src=\"%s/msg16x16.gif\""
-			 " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			 " alt=\"%s\" title=\"%s\""
+			 " style=\"width:16px; height:16px;"
+			 " padding:0 2px;\" />"
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
+	       Txt_Write_a_message,
 	       Txt_Write_a_message);
       Act_FormEnd ();
 
@@ -2332,12 +2366,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_FormStart (ActUnfUsr);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    Act_LinkFormSubmit (Txt_Unfollow,ClassData);
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/unfollow16x16.gif\""
-			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			       " alt=\"%s\" title=\"%s\""
+			       " style=\"width:16px; height:16px;"
+			       " padding:0 2px;\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
+		     Txt_Unfollow,
 		     Txt_Unfollow);
 	    Act_FormEnd ();
 	   }
@@ -2346,12 +2384,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_FormStart (ActFolUsr);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    Act_LinkFormSubmit (Txt_Follow,ClassData);
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\" style=\"display:inline;\" >"
+	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/follow16x16.gif\""
-			       " style=\"width:16px; height:16px; padding:0 2px;\" alt=\"%s\" />"
+			       " alt=\"%s\" title=\"%s\""
+			       " style=\"width:16px; height:16px;"
+			       " padding:0 2px;\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
+		     Txt_Follow,
 		     Txt_Follow);
 	    Act_FormEnd ();
 	   }
@@ -2617,10 +2659,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	       if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
 		  fprintf (Gbl.F.Out," checked=\"checked\"");
 	       fprintf (Gbl.F.Out," />"
-				  "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+				  "<img src=\"%s/%s16x16.gif\""
+				  " alt=\"%s\" title=\"%s\""
 				  " class=\"ICON16x16\""
 				  " style=\"vertical-align:bottom;\" />%s",
 			Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
+			Txt_SEX_SINGULAR_Abc[Sex],
 			Txt_SEX_SINGULAR_Abc[Sex],
 			Txt_SEX_SINGULAR_Abc[Sex]);
 	      }
