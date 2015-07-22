@@ -4998,7 +4998,6 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
                                    const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Remove_FILE_OR_LINK_X;
-   extern const char *Txt_Removal_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
@@ -5024,19 +5023,15 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
       Act_FormEnd ();
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON16x16B\" />",
-               Gbl.Prefs.IconsURL,
-	       Txt_Removal_not_allowed,
-	       Txt_Removal_not_allowed);
+      Lay_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5047,7 +5042,6 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
 static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Remove_folder_X;
-   extern const char *Txt_Removal_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
@@ -5073,19 +5067,15 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
       Act_FormEnd ();
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON16x16B\" />",
-               Gbl.Prefs.IconsURL,
-	       Txt_Removal_not_allowed,
-	       Txt_Removal_not_allowed);
+      Lay_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 

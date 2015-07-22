@@ -1339,7 +1339,6 @@ static void Crs_ListCoursesForSeeing (void)
 static void Crs_ListCoursesForEdition (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_course;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
@@ -1381,11 +1380,7 @@ static void Crs_ListCoursesForEdition (void)
                                "<td class=\"BM\">");
             if (Crs->NumUsrs ||	// Course has users ==> deletion forbidden
                 !ICanEdit)
-               fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-        	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />",
-                        Gbl.Prefs.IconsURL,
-                        Txt_Removal_not_allowed,Txt_Removal_not_allowed);
+               Lay_PutIconRemovalNotAllowed ();
             else	// Crs->NumUsrs == 0 && ICanEdit
               {
                Act_FormStart (ActRemCrs);
@@ -1658,7 +1653,6 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
 static void Crs_PutFormToCreateCourse (void)
   {
    extern const char *Txt_New_course_of_DEGREE_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
@@ -1686,12 +1680,9 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Disabled icon to remove course *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-                      "</td>",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Removal_not_allowed,Txt_Removal_not_allowed);
+		      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Course code *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\""

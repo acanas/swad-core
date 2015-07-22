@@ -1138,7 +1138,6 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
 static void Ctr_ListCentresForEdition (void)
   {
    extern const char *Txt_Centres_of_INSTITUTION_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -1177,13 +1176,10 @@ static void Ctr_ListCentresForEdition (void)
       /* Put icon to remove centre */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Ctr->NumDegs || Ctr->NumTchs ||	// Centre has degrees or teachers ==> deletion forbidden
+      if (Ctr->NumDegs ||
+	  Ctr->NumTchs ||	// Centre has degrees or teachers ==> deletion forbidden
           !ICanEdit)
-         fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Removal_not_allowed,
-                  Txt_Removal_not_allowed);
+	 Lay_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemCtr);
@@ -1974,7 +1970,6 @@ static void Ctr_PutFormToCreateCentre (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_centre_of_INSTITUTION_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    extern const char *Txt_Create_centre;
@@ -2001,13 +1996,9 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Put disabled icon to remove centre *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-		      "</td>",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Removal_not_allowed,
-	    Txt_Removal_not_allowed);
+		      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre code *****/
    fprintf (Gbl.F.Out,"<td></td>");

@@ -268,7 +268,6 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Txt_New_record_field;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
@@ -284,14 +283,9 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Write disabled icon to remove the field *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
-                      "</td>",
-            Gbl.Prefs.IconsURL,
-            Txt_Removal_not_allowed,
-            Txt_Removal_not_allowed);
+                      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Field name *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"

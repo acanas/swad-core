@@ -417,7 +417,6 @@ void ID_ShowFormOthIDs (void)
 void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_ID;
    extern const char *Txt_Remove_ID_X;
    extern const char *Txt_ID_X_confirmed;
@@ -448,11 +447,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	{
 	 if (ItsMe && UsrDat->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
             /* Put disabled icon to remove user's ID */
-            fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
-	             Gbl.Prefs.IconsURL,
-	             Txt_Removal_not_allowed,Txt_Removal_not_allowed);
+            Lay_PutIconRemovalNotAllowed ();
 	 else							// I can remove
 	   {
 	    /* Form to remove user's ID */

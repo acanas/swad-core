@@ -2051,7 +2051,6 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 static void Grp_PutFormToCreateGroupType (void)
   {
    extern const char *Txt_New_type_of_group;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -2071,13 +2070,9 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Put disabled icon to remove group type *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
-                      "</td>",
-            Gbl.Prefs.IconsURL,
-            Txt_Removal_not_allowed,Txt_Removal_not_allowed);
+                      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
@@ -2167,7 +2162,6 @@ static void Grp_PutFormToCreateGroupType (void)
 static void Grp_PutFormToCreateGroup (void)
   {
    extern const char *Txt_New_group;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
    extern const char *Txt_Create_group;
@@ -2184,11 +2178,9 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Put disabled icons to remove group, open group and archive zone *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
-                      "</td>"
+                      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/closed_off16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -2200,11 +2192,11 @@ static void Grp_PutFormToCreateGroup (void)
                       " class=\"ICON16x16\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
-            Txt_Removal_not_allowed,Txt_Removal_not_allowed,
+            Txt_Group_closed,
+            Txt_Group_closed,
             Gbl.Prefs.IconsURL,
-            Txt_Group_closed,Txt_Group_closed,
-            Gbl.Prefs.IconsURL,
-            Txt_File_zones_disabled,Txt_File_zones_disabled);
+            Txt_File_zones_disabled,
+            Txt_File_zones_disabled);
 
    /***** Group type *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"

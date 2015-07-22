@@ -1273,7 +1273,6 @@ void Cty_FreeListCountries (void)
 static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Txt_Countries;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_country;
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    unsigned NumCty;
@@ -1298,10 +1297,7 @@ static void Cty_ListCountriesForEdition (void)
 	       1 + Txt_NUM_LANGUAGES);
       if (Cty->NumInss ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
-         fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Removal_not_allowed,Txt_Removal_not_allowed);
+	 Lay_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemCty);

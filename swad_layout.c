@@ -1031,6 +1031,22 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   }
 
 /*****************************************************************************/
+/************ Put a icon indicating that removal is not allowed **************/
+/*****************************************************************************/
+
+void Lay_PutIconRemovalNotAllowed (void)
+  {
+   extern const char *Txt_Removal_not_allowed;
+
+   fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
+  }
+
+/*****************************************************************************/
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 

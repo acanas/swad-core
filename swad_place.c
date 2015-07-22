@@ -408,7 +408,6 @@ void Plc_FreeListPlaces (void)
 static void Plc_ListPlacesForEdition (void)
   {
    extern const char *Txt_Places;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_place;
    unsigned NumPlc;
    struct Place *Plc;
@@ -429,11 +428,7 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
-         fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" />",
-                  Txt_Removal_not_allowed,Txt_Removal_not_allowed,
-                  Gbl.Prefs.IconsURL);
+         Lay_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemPlc);

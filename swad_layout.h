@@ -99,6 +99,8 @@ void Lay_PutFormToEdit (Act_Action_t Action);
 void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
 
+void Lay_PutIconRemovalNotAllowed (void);
+
 void Lay_PutCreateButton (const char *Text);
 void Lay_PutCreateButtonInline (const char *Text);
 void Lay_PutConfirmButton (const char *Text);

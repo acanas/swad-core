@@ -514,7 +514,6 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
 
 static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem)
   {
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove;
    extern const char *Txt_Move_up_X_and_its_subsections;
    extern const char *Txt_Move_up_X;
@@ -548,12 +547,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	 /***** Icon to remove the row *****/
          fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 	 if (LstItemsSyllabus.Lst[NumItem].HasChildren)
-            fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Removal_not_allowed,
-                     Txt_Removal_not_allowed);
+            Lay_PutIconRemovalNotAllowed ();
 	 else
 	   {
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActDelItmSylLec :

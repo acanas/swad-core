@@ -1149,7 +1149,6 @@ static void Deg_ListDegreeTypesForSeeing (void)
 static void Deg_ListDegreeTypesForEdition (void)
   {
    extern const char *Txt_Types_of_degree;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_type_of_degree;
    unsigned NumDegTyp;
 
@@ -1166,11 +1165,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees ==> deletion forbidden
-         fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Txt_Removal_not_allowed,
-                  Txt_Removal_not_allowed,
-                  Gbl.Prefs.IconsURL);
+         Lay_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemDegTyp);
@@ -1390,7 +1385,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 static void Deg_ListDegreesForEdition (void)
   {
    extern const char *Txt_Degrees_of_CENTRE_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_degree;
    extern const char *Txt_DEGREE_With_year_for_optional_courses;
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
@@ -1429,11 +1423,7 @@ static void Deg_ListDegreesForEdition (void)
 	                 "<td class=\"BM\">");
       if (Deg->NumCourses ||	// Degree has courses ==>  deletion forbidden
 	  !ICanEdit)
-         fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Removal_not_allowed,
-                  Txt_Removal_not_allowed);
+         Lay_PutIconRemovalNotAllowed ();
       else
         {
          Act_FormStart (ActRemDeg);
@@ -1818,7 +1808,6 @@ static void Deg_PutFormToCreateDegType (void)
 static void Deg_PutFormToCreateDegree (void)
   {
    extern const char *Txt_New_degree_of_CENTRE_X;
-   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
@@ -1847,13 +1836,9 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Put disabled icon to remove degree *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">"
-                      "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-		      "</td>",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Removal_not_allowed,
-	    Txt_Removal_not_allowed);
+		      "<td class=\"BM\">");
+   Lay_PutIconRemovalNotAllowed ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Degree code *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\""

@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.117.17 (2015/07/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.118 (2015/07/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.118:   Jul 22, 2015	Function to put a disabled icon indicating that removal is not allowed. (185361 lines)
         Version 14.117.17:Jul 22, 2015	Checking "alt" and "title" in all images. (185437 lines)
         Version 14.117.16:Jul 22, 2015	Checking "alt" and "title" in all images. (185368 lines)
         Version 14.117.15:Jul 22, 2015	Checking "alt" and "title" in all images. (185279 lines)
