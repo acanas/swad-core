@@ -1339,7 +1339,6 @@ static void Crs_ListCoursesForSeeing (void)
 static void Crs_ListCoursesForEdition (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
-   extern const char *Txt_Remove_course;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
@@ -1385,12 +1384,7 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActRemCrs);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\""
-        	                  " src=\"%s/delon16x16.gif\" alt=\"%s\""
-        	                  " title=\"%s\" class=\"ICON16x16\" />",
-                        Gbl.Prefs.IconsURL,
-                        Txt_Remove_course,
-                        Txt_Remove_course);
+               Lay_PutIconRemove ();
                Act_FormEnd ();
               }
             fprintf (Gbl.F.Out,"</td>");

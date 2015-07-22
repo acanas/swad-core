@@ -408,7 +408,6 @@ void Plc_FreeListPlaces (void)
 static void Plc_ListPlacesForEdition (void)
   {
    extern const char *Txt_Places;
-   extern const char *Txt_Remove_place;
    unsigned NumPlc;
    struct Place *Plc;
 
@@ -433,11 +432,7 @@ static void Plc_ListPlacesForEdition (void)
         {
          Act_FormStart (ActRemPlc);
          Plc_PutParamPlcCod (Plc->PlcCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_place,
-                  Txt_Remove_place);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

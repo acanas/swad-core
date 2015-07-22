@@ -251,7 +251,8 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
 			 " class=\"ICON16x16\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Remove,Txt_Remove,
+	       Txt_Remove,
+	       Txt_Remove,
 	       Txt_Remove);
       Act_FormEnd ();
      }
@@ -266,7 +267,8 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
 			 " class=\"ICON16x16\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Do_not_show_again,Txt_Do_not_show_again,
+	       Txt_Do_not_show_again,
+	       Txt_Do_not_show_again,
 	       Txt_Do_not_show_again);
       Act_FormEnd ();
      }

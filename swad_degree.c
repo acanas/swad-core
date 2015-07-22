@@ -1149,7 +1149,6 @@ static void Deg_ListDegreeTypesForSeeing (void)
 static void Deg_ListDegreeTypesForEdition (void)
   {
    extern const char *Txt_Types_of_degree;
-   extern const char *Txt_Remove_type_of_degree;
    unsigned NumDegTyp;
 
    /***** Write heading *****/
@@ -1170,11 +1169,7 @@ static void Deg_ListDegreeTypesForEdition (void)
         {
          Act_FormStart (ActRemDegTyp);
          Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_type_of_degree,
-                  Txt_Remove_type_of_degree);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
 
@@ -1385,7 +1380,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 static void Deg_ListDegreesForEdition (void)
   {
    extern const char *Txt_Degrees_of_CENTRE_X;
-   extern const char *Txt_Remove_degree;
    extern const char *Txt_DEGREE_With_year_for_optional_courses;
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
@@ -1428,11 +1422,7 @@ static void Deg_ListDegreesForEdition (void)
         {
          Act_FormStart (ActRemDeg);
          Deg_PutParamOtherDegCod (Deg->DegCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_degree,
-                  Txt_Remove_degree);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

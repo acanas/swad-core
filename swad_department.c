@@ -483,7 +483,6 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
 static void Dpt_ListDepartmentsForEdition (void)
   {
    extern const char *Txt_Departments;
-   extern const char *Txt_Remove_department;
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Department *Dpt;
@@ -515,11 +514,7 @@ static void Dpt_ListDepartmentsForEdition (void)
         {
          Act_FormStart (ActRemDpt);
          Dpt_PutParamDptCod (Dpt->DptCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_department,
-                  Txt_Remove_department);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

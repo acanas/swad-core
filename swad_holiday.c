@@ -465,7 +465,6 @@ void Hld_FreeListHolidays (void)
 static void Hld_ListHolidaysForEdition (void)
   {
    extern const char *Txt_Holidays;
-   extern const char *Txt_Remove_holiday;
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    unsigned NumHld;
@@ -490,11 +489,7 @@ static void Hld_ListHolidaysForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_holiday,
-               Txt_Remove_holiday);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

@@ -1082,7 +1082,6 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_Institutions_of_COUNTRY_X;
-   extern const char *Txt_Remove_institution;
    extern const char *Txt_Another_country;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
@@ -1125,11 +1124,7 @@ static void Ins_ListInstitutionsForEdition (void)
         {
          Act_FormStart (ActRemIns);
          Ins_PutParamOtherInsCod (Ins->InsCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_institution,
-                  Txt_Remove_institution);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

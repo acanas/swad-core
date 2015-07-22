@@ -386,7 +386,6 @@ void Mai_FreeListMailDomains (void)
 static void Mai_ListMailDomainsForEdition (void)
   {
    extern const char *Txt_Mail_domains_allowed_for_notifications;
-   extern const char *Txt_Remove_mail_domain;
    unsigned NumMai;
    struct Mail *Mai;
 
@@ -407,11 +406,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_mail_domain,
-               Txt_Remove_mail_domain);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -921,7 +916,6 @@ void Mai_ShowFormChangeUsrEmail (void)
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
    extern const char *Txt_Email_X_confirmed;
-   extern const char *Txt_Remove_email_X;
    extern const char *Txt_Confirm_email;
    extern const char *Txt_Use_this_email;
    extern const char *Txt_New_email;
@@ -983,16 +977,9 @@ void Mai_ShowFormChangeUsrEmail (void)
 
 	 /* Form to remove old e-mail */
 	 Act_FormStart (ActRemOldMai);
-	 sprintf (Gbl.Title,Txt_Remove_email_X,
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />",
 		  row[0]);
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />"
-			    "<input type=\"image\" src=\"%s/delon16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			    " style=\"margin-right:2px;\" />",
-		  row[0],
-		  Gbl.Prefs.IconsURL,
-		  Gbl.Title,
-		  Gbl.Title);
+	 Lay_PutIconRemove ();
 	 Act_FormEnd ();
 	}
 

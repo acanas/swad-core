@@ -1273,7 +1273,6 @@ void Cty_FreeListCountries (void)
 static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Txt_Countries;
-   extern const char *Txt_Remove_country;
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
@@ -1302,11 +1301,7 @@ static void Cty_ListCountriesForEdition (void)
         {
          Act_FormStart (ActRemCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_country,
-                  Txt_Remove_country);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

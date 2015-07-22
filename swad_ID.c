@@ -418,7 +418,6 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_ID;
-   extern const char *Txt_Remove_ID_X;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
@@ -458,16 +457,9 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       Act_FormStart (ActRemIDOth);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
-	    sprintf (Gbl.Title,Txt_Remove_ID_X,
+	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 		     UsrDat->IDs.List[NumID].ID);
-	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />"
-			       "<input type=\"image\" src=\"%s/delon16x16.gif\""
-			       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			       " style=\"margin-right:2px;\" />",
-		     UsrDat->IDs.List[NumID].ID,
-		     Gbl.Prefs.IconsURL,
-		     Gbl.Title,
-		     Gbl.Title);
+	    Lay_PutIconRemove ();
 	    Act_FormEnd ();
 	   }
 	}

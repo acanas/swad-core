@@ -181,7 +181,6 @@ void Nck_ShowFormChangeUsrNickname (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
-   extern const char *Txt_Remove_nickname_X;
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
    extern const char *Txt_Nickname;
@@ -235,16 +234,9 @@ void Nck_ShowFormChangeUsrNickname (void)
 
 	 /* Form to remove old nickname */
 	 Act_FormStart (ActRemOldNic);
-	 sprintf (Gbl.Title,Txt_Remove_nickname_X,
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\" value=\"%s\" />",
 		  row[0]);
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\" value=\"%s\" />"
-			    "<input type=\"image\" src=\"%s/delon16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-			    " style=\"margin-right:2px;\" />",
-		  row[0],
-		  Gbl.Prefs.IconsURL,
-		  Gbl.Title,
-		  Gbl.Title);
+	 Lay_PutIconRemove ();
 	 Act_FormEnd ();
 	}
 

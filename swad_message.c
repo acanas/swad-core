@@ -3263,8 +3263,6 @@ void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
 
 static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *Txt_Delete_message;
-
    fprintf (Gbl.F.Out,"<td style=\"width:18px; padding:0;"
 	              " text-align:center; vertical-align:top;\">");
    Act_FormStart (TypeOfMessages == Msg_MESSAGES_RECEIVED ? ActDelRcvMsg :
@@ -3272,11 +3270,7 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
-            Gbl.Prefs.IconsURL,
-            Txt_Delete_message,
-            Txt_Delete_message);
+   Lay_PutIconBRemove ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
   }

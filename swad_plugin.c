@@ -351,7 +351,6 @@ void Plg_FreeListPlugins (void)
 static void Plg_ListPluginsForEdition (void)
   {
    extern const char *Txt_Plugins;
-   extern const char *Txt_Remove_plugin;
    unsigned NumPlg;
    struct Plugin *Plg;
 
@@ -372,11 +371,7 @@ static void Plg_ListPluginsForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_plugin,
-               Txt_Remove_plugin);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

@@ -2402,7 +2402,6 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
    extern const char *Txt_Edit_question;
-   extern const char *Txt_Remove_question;
    Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
    MYSQL_ROW row;
@@ -2505,11 +2504,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Par_PutHiddenParamChar ("OnlyThisQst",
                               NumRows == 1 ? 'Y' :
                         	             'N'); // If there are only one row, don't list again after removing
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_question,
-               Txt_Remove_question);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

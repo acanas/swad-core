@@ -478,7 +478,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
    extern const char *Txt_Remove;
-   extern const char *Txt_Remove_notice;
    struct UsrData UsrDat;
 
    /***** Start yellow note *****/
@@ -601,14 +600,15 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to delete notice */
       Act_FormStart (ActRemNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_Remove_notice,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />"
                          " %s</a>",
                Gbl.Prefs.IconsURL,
-               Txt_Remove_notice,
-               Txt_Remove,Txt_Remove_notice);
+               Txt_Remove,
+               Txt_Remove,
+               Txt_Remove);
       Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</div>");

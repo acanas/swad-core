@@ -1138,7 +1138,6 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
 static void Ctr_ListCentresForEdition (void)
   {
    extern const char *Txt_Centres_of_INSTITUTION_X;
-   extern const char *Txt_Remove_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    unsigned NumCtr;
@@ -1184,11 +1183,7 @@ static void Ctr_ListCentresForEdition (void)
         {
          Act_FormStart (ActRemCtr);
          Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_centre,
-                  Txt_Remove_centre);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");

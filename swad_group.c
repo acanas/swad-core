@@ -1117,7 +1117,6 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
 static void Grp_ListGroupTypesForEdition (void)
   {
    extern const char *Txt_Types_of_group;
-   extern const char *Txt_Remove_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -1140,11 +1139,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActReqRemGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_type_of_group,
-               Txt_Remove_type_of_group);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1299,7 +1294,6 @@ static void Grp_WriteHeadingGroupTypes (void)
 static void Grp_ListGroupsForEdition (void)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_Remove_group;
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
@@ -1332,11 +1326,7 @@ static void Grp_ListGroupsForEdition (void)
                             "<td class=\"BM\">");
          Act_FormStart (ActReqRemGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_group,
-                  Txt_Remove_group);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 

@@ -7480,27 +7480,6 @@ const char *Txt_Degrees_with_pending_courses =
 	"Titula&ccedil;&atilde;os com disciplinas pendentes";
 #endif
 
-const char *Txt_Delete_message =
-#if   L==0
-	"Eliminar mensaje";	// Necessita traduccio
-#elif L==1
-	"Entfernen Nachricht";
-#elif L==2
-	"Delete message";
-#elif L==3
-	"Eliminar mensaje";
-#elif L==4
-	"Supprimer message";
-#elif L==5
-	"Eliminar mensaje";	// Okoteve traducción
-#elif L==6
-	"Rimuovere messaggio";
-#elif L==7
-	"Usu&nacute; wiadomosc";
-#elif L==8
-	"Remover mensagem";
-#endif
-
 const char *Txt_Delete_messages_received =
 #if   L==0
 	"Eliminar missatges rebuts";
@@ -28648,153 +28627,6 @@ const char *Txt_Remove_assignment =
 	"Remover atividade";
 #endif
 
-const char *Txt_Remove_banner =
-#if   L==0
-	"Eliminar enlace";	// Necessita traduccio
-#elif L==1
-	"Entfernen Werbebanner";
-#elif L==2
-	"Remove banner";
-#elif L==3
-	"Eliminar banner";
-#elif L==4
-	"Supprimer banni&eacute;re";
-#elif L==5
-	"Eliminar banner";	// Okoteve traducción
-#elif L==6
-	"Rimuovere banner";
-#elif L==7
-	"Usu&nacute; banner";
-#elif L==8
-	"Remover banner";
-#endif
-
-const char *Txt_Remove_centre =
-#if   L==0
-	"Eliminar centro";	// Necessita traduccio
-#elif L==1
-	"Lehrinstitut entfernen";
-#elif L==2
-	"Remove centre";
-#elif L==3
-	"Eliminar centro";
-#elif L==4
-	"Supprimer centre";
-#elif L==5
-	"Eliminar centro";	// Okoteve traducción
-#elif L==6
-	"Rimuovere centro";
-#elif L==7
-	"Usu&nacute; centrum";
-#elif L==8
-	"Remover centro";
-#endif
-
-const char *Txt_Remove_country =
-#if   L==0
-	"Eliminar pa&iacute;s";	// Necessita traduccio
-#elif L==1
-	"Land entfernen";
-#elif L==2
-	"Remove country";
-#elif L==3
-	"Eliminar pa&iacute;s";
-#elif L==4
-	"Supprimer pays";
-#elif L==5
-	"Eliminar pa&iacute;s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere paese";
-#elif L==7
-	"Usu&nacute; kraj";
-#elif L==8
-	"Remover pa&iacute;s";
-#endif
-
-const char *Txt_Remove_course =
-#if   L==0
-	"Eliminar asignatura";	// Necessita traduccio
-#elif L==1
-	"Kurs entfernen";
-#elif L==2
-	"Remove course";
-#elif L==3
-	"Eliminar asignatura";
-#elif L==4
-	"Supprimer mati&egrave;re";
-#elif L==5
-	"Eliminar asignatura";	// Okoteve traducción
-#elif L==6
-	"Rimuovere corso";
-#elif L==7
-	"Usu&nacute; kurs";
-#elif L==8
-	"Remover disciplina";
-#endif
-
-const char *Txt_Remove_degree =
-#if   L==0
-	"Eliminar titulaci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Studiengang Entfernen";
-#elif L==2
-	"Remove degree";
-#elif L==3
-	"Eliminar titulaci&oacute;n";
-#elif L==4
-	"Supprimer &eacute;tude";
-#elif L==5
-	"Eliminar titulaci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Rimuovere laurea";
-#elif L==7
-	"Usu&nacute; stopnia";
-#elif L==8
-	"Remover titula&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Remove_department =
-#if   L==0
-	"Eliminar departamento";	// Necessita traduccio
-#elif L==1
-	"Abteilung entfernen";
-#elif L==2
-	"Remove department";
-#elif L==3
-	"Eliminar departamento";
-#elif L==4
-	"Supprimer d&eacute;partement";
-#elif L==5
-	"Eliminar departamento";	// Okoteve traducción
-#elif L==6
-	"Rimuovere dipartimento";
-#elif L==7
-	"Usu&nacute; dzia&lstrok;";
-#elif L==8
-	"Remover departamento";
-#endif
-
-const char *Txt_Remove_email_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Eliminar correu %s";
-#elif L==1
-	"Entfernen E-Mail %s";
-#elif L==2
-	"Remove e-mail %s";
-#elif L==3
-	"Eliminar correo %s";
-#elif L==4
-	"Supprimer courrier %s";
-#elif L==5
-	"Eliminar correo %s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere e-mail %s";
-#elif L==7
-	"Usu&nacute; e-mail %s";
-#elif L==8
-	"Remover e-mail %s";
-#endif
-
 const char *Txt_Remove_event =
 #if   L==0
 	"Eliminar evento";	// Necessita traduccio
@@ -28835,48 +28667,6 @@ const char *Txt_Remove_file =
 	"Usu&nacute; plik";
 #elif L==8
 	"Remover arquivo";
-#endif
-
-const char *Txt_Remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Eliminar %s";
-#elif L==1
-	"Datei %s";
-#elif L==2
-	"Remove %s";
-#elif L==3
-	"Eliminar %s";
-#elif L==4
-	"Supprimer %s";
-#elif L==5
-	"Eliminar %s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere %s";
-#elif L==7
-	"Usu&nacute; %s";
-#elif L==8
-	"Remover %s";
-#endif
-
-const char *Txt_Remove_folder_X = // Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Eliminar carpeta %s";
-#elif L==1
-	"Verzeichnis entfernen %s";
-#elif L==2
-	"Remove folder %s";
-#elif L==3
-	"Eliminar carpeta %s";
-#elif L==4
-	"Supprimer r&eacute;pertoire %s";
-#elif L==5
-	"Eliminar carpeta %s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere cartella %s";
-#elif L==7
-	"Usu&nacute; folder %s";
-#elif L==8
-	"Remover diret&oacute;rio %s";
 #endif
 
 const char *Txt_Remove_folder =
@@ -28921,69 +28711,6 @@ const char *Txt_Remove_group =
 	"Remover grupo";
 #endif
 
-const char *Txt_Remove_holiday =
-#if   L==0
-	"Eliminar festividad";	// Necessita traduccio
-#elif L==1
-	"Entfernen Feiertag";
-#elif L==2
-	"Remove holiday";
-#elif L==3
-	"Eliminar festividad";
-#elif L==4
-	"Supprimer f&ecirc;te";
-#elif L==5
-	"Eliminar festividad";	// Okoteve traducción
-#elif L==6
-	"Rimuovere festivit&agrave;";
-#elif L==7
-	"Usu&nacute; wakacje";
-#elif L==8
-	"Remover f&eacute;ria";
-#endif
-
-const char *Txt_Remove_ID_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Eliminar ID (DNI/c&egrave;dula/passaport) %s";
-#elif L==1
-	"Entfernen Ausweis-Nr. %s";
-#elif L==2
-	"Remove ID %s";
-#elif L==3
-	"Eliminar ID (DNI/c&eacute;dula) %s";
-#elif L==4
-	"Supprimer num&eacute;ro d'identit&eacute; %s";
-#elif L==5
-	"Eliminar ID (DNI/c&eacute;dula) %s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere carta d'identit&agrave; %s";
-#elif L==7
-	"Remove ID %s";				// Potrzebujesz tlumaczenie
-#elif L==8
-	"Remover n&ordm; de identif. %s";
-#endif
-
-const char *Txt_Remove_institution =
-#if   L==0
-	"Eliminar instituci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Hochschule entfernen";
-#elif L==2
-	"Remove institution";
-#elif L==3
-	"Eliminar instituci&oacute;n";
-#elif L==4
-	"Supprimer &eacute;tablissement";
-#elif L==5
-	"Eliminar instituci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Rimuovere istituzione";
-#elif L==7
-	"Usu&nacute; instytucje";
-#elif L==8
-	"Remover institui&ccedil;&atilde;o";
-#endif
-
 const char *Txt_Remove_link =
 #if   L==0
 	"Eliminar enlla&ccedil;";
@@ -29024,48 +28751,6 @@ const char *Txt_Remove_logo =
 	"Usu&nacute; logo";
 #elif L==8
 	"Remover logotipo";
-#endif
-
-const char *Txt_Remove_mail_domain =
-#if   L==0
-	"Eliminar dominio de correo";	// Necessita traduccio
-#elif L==1
-	"Entfernen Mail-Dom&auml;ne";
-#elif L==2
-	"Remove mail domain";
-#elif L==3
-	"Eliminar dominio de correo";
-#elif L==4
-	"Supprimer domaine de messagerie";
-#elif L==5
-	"Eliminar dominio de correo";	// Okoteve traducción
-#elif L==6
-	"Rimuovere campo mail";
-#elif L==7
-	"Usu&nacute; domene mail";
-#elif L==8
-	"Remover dom&iacute;nio de email";
-#endif
-
-const char *Txt_Remove_nickname_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Eliminar sobrenom @%s";
-#elif L==1
-	"Entfernen Benutzername @%s";
-#elif L==2
-	"Remove nickname @%s";
-#elif L==3
-	"Eliminar apodo @%s";
-#elif L==4
-	"Supprimer surnom @%s";
-#elif L==5
-	"Eliminar apodo @%s";	// Okoteve traducción
-#elif L==6
-	"Rimuovere nome utente @%s";
-#elif L==7
-	"Usu&nacute; pseudonim @%s";
-#elif L==8
-	"Remover alcunha @%s";
 #endif
 
 const char *Txt_Remove_me_as_an_administrator =
@@ -29221,27 +28906,6 @@ const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important t
 	"Tirar me da disciplina <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_notice =
-#if   L==0
-	"Eliminar aviso";	// Necessita traduccio
-#elif L==1
-	"Entfernen Ank&uuml;ndigung";
-#elif L==2
-	"Remove notice";
-#elif L==3
-	"Eliminar aviso";
-#elif L==4
-	"Supprimer avis";
-#elif L==5
-	"Eliminar aviso";	// Okoteve traducción
-#elif L==6
-	"Rimuovere avviso";
-#elif L==7
-	"Usu&nacute; ogloszenie";
-#elif L==8
-	"Remover aviso";
-#endif
-
 const char *Txt_Remove_old_users =
 #if   L==0
 	"Eliminar usuaris antics";
@@ -29282,90 +28946,6 @@ const char *Txt_Remove_photo =
 	"Usu&nacute; zdjecie";
 #elif L==8
 	"Remover foto";
-#endif
-
-const char *Txt_Remove_place =
-#if   L==0
-	"Eliminar lugar";	// Necessita traduccio
-#elif L==1
-	"Entfernen Standort";
-#elif L==2
-	"Remove place";
-#elif L==3
-	"Eliminar lugar";
-#elif L==4
-	"Supprimer emplacement";
-#elif L==5
-	"Eliminar lugar";	// Okoteve traducción
-#elif L==6
-	"Rimuovere localit&grave;";
-#elif L==7
-	"Usu&nacute; miejsce";
-#elif L==8
-	"Remover localiza&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Remove_plugin =
-#if   L==0
-	"Eliminar complemento";	// Necessita traduccio
-#elif L==1
-	"Entfernen Plugin";
-#elif L==2
-	"Remove plugin";
-#elif L==3
-	"Eliminar complemento";
-#elif L==4
-	"Supprimer plugin";
-#elif L==5
-	"Eliminar complemento";	// Okoteve traducción
-#elif L==6
-	"Rimuovere plugin";
-#elif L==7
-	"Usu&nacute; plugin";
-#elif L==8
-	"Remover plugin";
-#endif
-
-const char *Txt_Remove_post =
-#if   L==0
-	"Eliminar mensaje";	// Necessita traduccio
-#elif L==1
-	"Entfernen Beitr&auml;g";
-#elif L==2
-	"Remove post";
-#elif L==3
-	"Eliminar mensaje";
-#elif L==4
-	"Supprimer message";
-#elif L==5
-	"Eliminar mensaje";	// Okoteve traducción
-#elif L==6
-	"Rimuovere post";
-#elif L==7
-	"Usu&nacute; post";
-#elif L==8
-	"Remover post";
-#endif
-
-const char *Txt_Remove_question =
-#if   L==0
-	"Eliminar pregunta";	// Necessita traduccio
-#elif L==1
-	"Entfernen Frage";
-#elif L==2
-	"Remove question";
-#elif L==3
-	"Eliminar pregunta";
-#elif L==4
-	"Supprimer question";
-#elif L==5
-	"Eliminar pregunta";	// Okoteve traducción
-#elif L==6
-	"Rimuovere domanda";
-#elif L==7
-	"Usu&nacute; pytanie";
-#elif L==8
-	"Remover quest&atilde;o";
 #endif
 
 const char *Txt_Remove_record_field =
@@ -29471,27 +29051,6 @@ const char *Txt_Remove_thread =
 	"Usu&nacute; watkek";
 #elif L==8
 	"Remover thread";
-#endif
-
-const char *Txt_Remove_type_of_degree =
-#if   L==0
-	"Eliminar tipo de titulaci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Entfernen Abschlussart";
-#elif L==2
-	"Remove type of degree";
-#elif L==3
-	"Eliminar tipo de titulaci&oacute;n";
-#elif L==4
-	"Supprimer type d'&eacute;tude";
-#elif L==5
-	"Eliminar tipo de titulaci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Rimuovere tipo di laurea";
-#elif L==7
-	"Usu&nacute; typu stopien";
-#elif L==8
-	"Remover tipo de titula&ccedil;&atilde;";
 #endif
 
 const char *Txt_Remove_type_of_group =

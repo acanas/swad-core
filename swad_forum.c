@@ -1051,7 +1051,6 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
   {
    extern const char *Txt_unread_MESSAGE;
    extern const char *Txt_MSG_Open;
-   extern const char *Txt_Remove_post;
    extern const char *Txt_no_subject;
    extern const char *Txt_Post_X_allowed;
    extern const char *Txt_Post_banned;
@@ -1134,11 +1133,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       For_PutHiddenParamPstCod (PstCod);
       For_PutAllHiddenParamsForum ();
       For_PutHiddenParamThrCod (Thr->ThrCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_post,
-               Txt_Remove_post);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
      }
 
@@ -3228,7 +3223,6 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
-   extern const char *Txt_Remove_thread;
    extern const char *Txt_Move_thread;
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
@@ -3314,11 +3308,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          Act_FormStart (For_ActionsReqDelThr[Gbl.Forum.ForumType]);
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr.ThrCod);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Remove_thread,
-                  Txt_Remove_thread);
+         Lay_PutIconRemove ();
          Act_FormEnd ();
         }
 

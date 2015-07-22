@@ -1031,7 +1031,7 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   }
 
 /*****************************************************************************/
-/************ Put a icon indicating that removal is not allowed **************/
+/******** Put a disabled icon indicating that removal is not allowed *********/
 /*****************************************************************************/
 
 void Lay_PutIconRemovalNotAllowed (void)
@@ -1044,6 +1044,46 @@ void Lay_PutIconRemovalNotAllowed (void)
 	    Gbl.Prefs.IconsURL,
 	    Txt_Removal_not_allowed,
 	    Txt_Removal_not_allowed);
+  }
+
+void Lay_PutIconBRemovalNotAllowed (void)
+  {
+   extern const char *Txt_Removal_not_allowed;
+
+   fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16B\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,
+	    Txt_Removal_not_allowed);
+  }
+
+/*****************************************************************************/
+/******** Put a disabled icon indicating that removal is not allowed *********/
+/*****************************************************************************/
+
+void Lay_PutIconRemove (void)
+  {
+   extern const char *Txt_Remove;
+
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Remove,
+	    Txt_Remove);
+  }
+
+void Lay_PutIconBRemove (void)
+  {
+   extern const char *Txt_Remove;
+
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16B\" />",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Remove,
+	    Txt_Remove);
   }
 
 /*****************************************************************************/

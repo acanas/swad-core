@@ -299,7 +299,6 @@ void Ban_FreeListBanners (void)
 static void Ban_ListBannersForEdition (void)
   {
    extern const char *Txt_Banners;
-   extern const char *Txt_Remove_banner;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
    unsigned NumBan;
@@ -322,11 +321,7 @@ static void Ban_ListBannersForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemBan);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_banner,
-               Txt_Remove_banner);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

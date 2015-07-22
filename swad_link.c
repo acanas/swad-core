@@ -278,7 +278,6 @@ void Lnk_FreeListLinks (void)
 static void Lnk_ListLinksForEdition (void)
   {
    extern const char *Txt_Links;
-   extern const char *Txt_Remove_link;
    unsigned NumLnk;
    struct Link *Lnk;
 
@@ -299,11 +298,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 "<td class=\"BM\">");
       Act_FormStart (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_link,
-               Txt_Remove_link);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

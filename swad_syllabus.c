@@ -514,7 +514,6 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
 
 static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem)
   {
-   extern const char *Txt_Remove;
    extern const char *Txt_Move_up_X_and_its_subsections;
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Movement_not_allowed;
@@ -553,13 +552,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActDelItmSylLec :
 		                                      ActDelItmSylPra);
 	    Syl_PutParamNumItem (NumItem);
-	    sprintf (Gbl.Title,"%s %s",
-                     Txt_Remove,StrItemCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL,
-                     Gbl.Title,
-                     Gbl.Title);
+            Lay_PutIconRemove ();
             Act_FormEnd ();
 	   }
          fprintf (Gbl.F.Out,"</td>");

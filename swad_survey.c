@@ -2928,7 +2928,6 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_This_survey_has_no_questions;
    extern const char *Txt_Send_survey;
-   extern const char *Txt_Remove_question;
    extern const char *Txt_Edit_question;
    extern const char *Txt_New_question;
    char Query[512];
@@ -3005,11 +3004,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy_PutParamQstCod (SvyQst->QstCod);
             Sta_WriteParamsDatesSeeAccesses ();
             Svy_WriteParamEditQst (SvyQst);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL,
-                     Txt_Remove_question,
-                     Txt_Remove_question);
+            Lay_PutIconRemove ();
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 

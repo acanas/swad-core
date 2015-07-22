@@ -182,7 +182,6 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
 void Rec_ListFieldsRecordsForEdition (void)
   {
-   extern const char *Txt_Remove_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
@@ -201,11 +200,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
       Act_FormStart (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove_record_field,
-               Txt_Remove_record_field);
+      Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
