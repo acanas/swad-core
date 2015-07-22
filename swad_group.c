@@ -1213,7 +1213,8 @@ static void Grp_ListGroupTypesForEdition (void)
                          "<tr>"
                          "<td style=\"width:16px;"
                          " text-align:left; vertical-align:middle;\">"
-                         "<img src=\"%s/%s16x16.gif\" title=\"%s\""
+                         "<img src=\"%s/%s16x16.gif\""
+                         " alt=\"%s\" title=\"%s\""
                          " class=\"ICON16x16\" />"
                          "</td>"
 	                 "<td style=\"text-align:left;"
@@ -1221,6 +1222,8 @@ static void Grp_ListGroupTypesForEdition (void)
                Gbl.Prefs.IconsURL,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "time" :
         	                                                                  "time-off",
+               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
+        	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open);
       Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year+1,
@@ -1978,21 +1981,22 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    int Vacant;
 
    /***** Write icon to show if group is open or closed *****/
+   sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
+	                          Txt_Group_X_closed,
+            Grp->GrpName);
    fprintf (Gbl.F.Out,"<td style=\"width:12px;"
 	              " text-align:left; vertical-align:middle;");
    if (Highlight)
       fprintf (Gbl.F.Out," background-color:%s",VERY_LIGHT_BLUE);
    fprintf (Gbl.F.Out,"\">"
-	              "<img src=\"%s/%s_off16x16.gif\" alt=\"",
+	              "<img src=\"%s/%s_off16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />"
+	              "</td>",
             Gbl.Prefs.IconsURL,
             Grp->Open ? "open" :
-        	        "closed");
-   fprintf (Gbl.F.Out,
-            Grp->Open ? Txt_Group_X_open :
-	                Txt_Group_X_closed,
-            Grp->GrpName);
-   fprintf (Gbl.F.Out,"\" class=\"ICON16x16\" />"
-	              "</td>");
+        	        "closed",
+	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\""
@@ -2047,6 +2051,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 static void Grp_PutFormToCreateGroupType (void)
   {
    extern const char *Txt_New_type_of_group;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -2068,9 +2073,11 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
-            Gbl.Prefs.IconsURL);
+            Gbl.Prefs.IconsURL,
+            Txt_Removal_not_allowed,Txt_Removal_not_allowed);
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
@@ -2115,7 +2122,8 @@ static void Grp_PutFormToCreateGroupType (void)
 	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
-                      "<img src=\"%s/%s16x16.gif\" alt=\"\" title=\"%s\""
+                      "<img src=\"%s/%s16x16.gif\""
+                      " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "</td>"
 	              "<td style=\"width:16px;"
@@ -2123,6 +2131,8 @@ static void Grp_PutFormToCreateGroupType (void)
             Gbl.Prefs.IconsURL,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
         	                                      "time-off",
+            Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
+        	                                      Txt_The_groups_will_not_automatically_open,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open);
    Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year+1,
@@ -2157,6 +2167,9 @@ static void Grp_PutFormToCreateGroupType (void)
 static void Grp_PutFormToCreateGroup (void)
   {
    extern const char *Txt_New_group;
+   extern const char *Txt_Removal_not_allowed;
+   extern const char *Txt_Group_closed;
+   extern const char *Txt_File_zones_disabled;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
 
@@ -2173,19 +2186,25 @@ static void Grp_PutFormToCreateGroup (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-                      " alt=\"\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/closed_off16x16.gif\""
-                      " alt=\"\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/folder-no_off16x16.gif\""
-                      " alt=\"\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
+            Txt_Removal_not_allowed,Txt_Removal_not_allowed,
             Gbl.Prefs.IconsURL,
-            Gbl.Prefs.IconsURL);
+            Txt_Group_closed,Txt_Group_closed,
+            Gbl.Prefs.IconsURL,
+            Txt_File_zones_disabled,Txt_File_zones_disabled);
 
    /***** Group type *****/
    fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
