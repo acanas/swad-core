@@ -103,11 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.117.12 (2015/07/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.117.13 (2015/07/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.117.13:Jul 22, 2015	Checking "alt" and "title" in all images.
+                                        Removed unused function about mail domains. (185153 lines)
         Version 14.117.12:Jul 22, 2015	Checking "alt" and "title" in all images. (185213 lines)
         Version 14.117.11:Jul 22, 2015	Checking "alt" and "title" in all images. (185187 lines)
         Version 14.117.10:Jul 21, 2015	Checking "alt" and "title" in all images. (185157 lines)

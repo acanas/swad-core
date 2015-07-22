@@ -2573,6 +2573,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Message;
    struct UsrData UsrDat;
+   const char *Title;
    bool FromThisCrs = false;		// Initialized to avoid warning
    char CreatTime[4+2+2+2+2+2+1];	// Creation time of a message in YYYYMMDDHHMMSS format
    long CrsCod;
@@ -2601,6 +2602,10 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
      }
 
    /***** Put an icon with message status *****/
+   Title = TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? Txt_MSG_Replied :
+                                                                         Txt_MSG_Not_replied) :
+                                                              Txt_MSG_Unopened) :
+                                                      Txt_MSG_Sent;
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s\" style=\"width:16px;"
 	              " text-align:center; vertical-align:top;\">"
@@ -2609,7 +2614,8 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                       "<td style=\"width:16px; padding:0;"
                       " text-align:center; vertical-align:top;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
-                      " alt=\"\" title=\"%s\" class=\"ICON16x16B\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16B\" />"
                       "</td>"
                       "</tr>",
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
@@ -2621,10 +2627,8 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
         	                                                         "open") :
                                                               "unread") :
                                                       "fwd",
-            TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? Txt_MSG_Replied :
-                                                                         Txt_MSG_Not_replied) :
-                                                              Txt_MSG_Unopened) :
-                                                      Txt_MSG_Sent);
+            Title,Title);
+
    /***** Form to delete message *****/
    fprintf (Gbl.F.Out,"<tr>");
    Msg_PutFormToDeleteMessage (MsgCod,TypeOfMessages);
@@ -2836,6 +2840,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsigned MaxCharsInName,
                          const char *Style,bool Enabled,const char *BgColor)
   {
+   extern const char *Txt_Unknown_or_without_photo;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
    bool WriteAuthor = false;
@@ -2875,10 +2880,15 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
      }
    else
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" class=\"PHOTO24x32\" />"
+      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"PHOTO24x32\" />"
 	                 "</td>"
-                         "<td class=\"%s\" style=\"width:%upx; text-align:left;",
-               Gbl.Prefs.IconsURL,Style,WidthOfNameColumn);
+                         "<td class=\"%s\""
+                         " style=\"width:%upx; text-align:left;",
+               Gbl.Prefs.IconsURL,
+               Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo,
+               Style,WidthOfNameColumn);
       if (BgColor)
          fprintf (Gbl.F.Out," background-color:%s;",BgColor);
       fprintf (Gbl.F.Out,"\">&nbsp;");
@@ -3003,11 +3013,13 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       "<td style=\"width:16px; text-align:left;"
                       " vertical-align:middle;\">"
                       "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Deleted ? "msg-fwd-del" :
         	      "msg-fwd",
+            Deleted ? Txt_MSG_Sent_and_deleted :
+                      Txt_MSG_Sent,
             Deleted ? Txt_MSG_Sent_and_deleted :
                       Txt_MSG_Sent);
 
@@ -3076,6 +3088,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
    bool OpenByDst;
    bool UsrValid;
    bool ShowPhoto;
+   const char *Title;
    char PhotoURL[PATH_MAX+1];
 
    /***** Get number of recipients of a message from database *****/
@@ -3139,21 +3152,23 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
          /* Put an icon to show if user has read the message */
+	 Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
+                                        Txt_MSG_Open) :
+                             (Deleted ? Txt_MSG_Deleted_without_opening :
+                                        Txt_MSG_Unopened);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td style=\"width:16px; text-align:left;"
                             " vertical-align:middle;\">"
                             "<img src=\"%s/%s16x16.gif\""
-                            " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />"
                             "</td>",
                   Gbl.Prefs.IconsURL,
                   OpenByDst ? (Deleted ? "msg-open-del"   :
                 	                 "msg-open") :
                               (Deleted ? "msg-unread-del" :
                         	         "msg-unread"),
-                  OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
-                                         Txt_MSG_Open) :
-                              (Deleted ? Txt_MSG_Deleted_without_opening :
-                                         Txt_MSG_Unopened));
+                  Title,Title);
 
          /* Put user's photo */
          fprintf (Gbl.F.Out,"<td style=\"width:24px; text-align:center;"

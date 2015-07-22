@@ -65,7 +65,6 @@ void Mai_RemoveMailDomain (void);
 void Mai_RenameMailDomainShort (void);
 void Mai_RenameMailDomainFull (void);
 void Mai_RecFormNewMailDomain (void);
-void Mai_WriteMenuWithMailDomains (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (long UsrCod,char *Email,bool *Confirmed);

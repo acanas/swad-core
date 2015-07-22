@@ -782,90 +782,6 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
   }
 
 /*****************************************************************************/
-/********************** Write menu with some mail domains ********************/
-/*****************************************************************************/
-
-void Mai_WriteMenuWithMailDomains (void)
-  {
-   extern const char *Txt_Mail_domains_allowed_for_notifications;
-   unsigned NumMai;
-
-   /***** Get list of mail domains *****/
-   Mai_GetListMailDomainsAllowedForNotif ();
-
-   /***** Header *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT\" style=\"width:120px;"
-	              " text-align:center;\">"
-	              "%s<br />",
-            Txt_Mail_domains_allowed_for_notifications);
-
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:120px;\">"
-                      "<tr>"
-                      "<td style=\"width:4px; text-align:left;\">"
-                      "<img src=\"%s/ewbw1_4x4.gif\" alt=\"\""
-                      " style=\"width:4px; height:4px;\" />"
-                      "</td>"
-                      "<td style=\"text-align:left;"
-                      " background-image:url('%s/mbw1_1x4.gif');"
-                      " background-repeat:repeat-x;\">"
-                      "</td>"
-                      "<td style=\"width:4px; text-align:left;\">"
-                      "<img src=\"%s/ewbw2_4x4.gif\" alt=\"\""
-                      " style=\"width:4px; height:4px;\" />"
-                      "</td>"
-                      "</tr>",
-            Gbl.Prefs.IconsURL,Gbl.Prefs.IconsURL,Gbl.Prefs.IconsURL);
-
-   /***** Write all the mail domains *****/
-   for (NumMai = 0;
-	NumMai < Gbl.Mails.Num;
-	NumMai++)
-      /* Write data of this mail domain */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"width:4px; text-align:left;"
-                         " background-image:url('%s/mbw2_4x1.gif');"
-                         " background-repeat:repeat-y;\">"
-                         "</td>"
-                         "<td class=\"DAT\" title=\"%s\" style=\"width:112px;"
-                         " text-align:left;\">"
-                         "%s"
-                         "</td>"
-                         "<td style=\"width:4px; text-align:left;"
-                         " background-image:url('%s/mbw3_4x1.gif');"
-                         " background-repeat:repeat-y;\">"
-                         "</td>"
-                         "</tr>",
-               Gbl.Prefs.IconsURL,
-               Gbl.Mails.Lst[NumMai].Info,
-               Gbl.Mails.Lst[NumMai].Domain,
-               Gbl.Prefs.IconsURL);
-
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"width:4px; text-align:left;\">"
-	              "<img src=\"%s/ewbw3_4x4.gif\" alt=\"\""
-	              " style=\"width:4px; height:4px;\" />"
-	              "</td>"
-                      "<td style=\"background-image:url('%s/mbw4_1x4.gif');"
-                      " background-repeat:repeat-x;\">"
-                      "</td>"
-                      "<td style=\"width:4px; text-align:left;\">"
-                      "<img src=\"%s/ewbw4_4x4.gif\" alt=\"\""
-                      " style=\"width:4px; height:4px;\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>"
-                      "</td>"
-	              "</tr>",
-           Gbl.Prefs.IconsURL,Gbl.Prefs.IconsURL,Gbl.Prefs.IconsURL);
-
-   /***** Free list of mail domains *****/
-   Mai_FreeListMailDomains ();
-  }
-
-/*****************************************************************************/
 /**************** Check whether an e-mail address if valid *******************/
 /*****************************************************************************/
 
@@ -1091,10 +1007,10 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 sprintf (Gbl.Title,Txt_Email_X_confirmed,row[0]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
-			    " alt=\"\" title=\"%s\""
+			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICON16x16\" />",
 		  Gbl.Prefs.IconsURL,
-		  Gbl.Title);
+		  Gbl.Title,Gbl.Title);
 	}
 
       /* Link to QR code */

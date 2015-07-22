@@ -208,12 +208,13 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
          Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
                                                          The_ClassMenuOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
-	                    " alt=\"%s\" class=\"ICON28x28\""
-	                    " style=\"margin:0;\" />"
+	                    " alt=\"%s\" title=\"%s\""
+	                    " class=\"ICON28x28\" />"
 			    "<div>%s</div>"
                             "</a>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	          Act_Actions[NumAct].Icon,
+	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
 	          Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu],
                   Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 	 Act_FormEnd ();
