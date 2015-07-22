@@ -422,6 +422,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    extern const char *Txt_X_faces_marked_in_red_have_been_detected_;
    extern const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_;
    extern const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_;
+   extern const char *Txt_Faces_detected;
    char PathPhotosPriv[PATH_MAX+1];
    char PathPhotosPubl[PATH_MAX+1];
    char PathPhotosTmpPubl[PATH_MAX+1];
@@ -634,9 +635,13 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    sprintf (FileNamePhotoMap,"%s/%s/%s/%s_map.jpg",
             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
    fprintf (Gbl.F.Out,"<div class=\"TIT\" style=\"text-align:center;\">"
-                      "<img src=\"%s/%s/%s/%s_map.jpg\" usemap=\"#faces_map\" />"
+                      "<img src=\"%s/%s/%s/%s_map.jpg\""
+                      " usemap=\"#faces_map\""
+                      " alt=\"%s\" title=\"%s\" />"
                       "</div>",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
+            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+            Gbl.UniqueNameEncrypted,
+            Txt_Faces_detected,Txt_Faces_detected);
   }
 
 /*****************************************************************************/
@@ -726,11 +731,14 @@ static void Pho_UpdatePhoto2 (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:33%%;"
 	                 " text-align:center; vertical-align:top;\">"
                          "<img src=\"%s/%s/%s/%s_paso%u.jpg\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:%upx; height:%upx;\" />"
                          "<br />%s"
                          "</td>",
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
+               Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
+               Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
    fprintf (Gbl.F.Out,"</tr>"
@@ -1021,10 +1029,10 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       fprintf (Gbl.F.Out,"%s",PhotoURL);
    else
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
-   fprintf (Gbl.F.Out,"\" class=\"%s\"",ClassPhoto);
-   if (SpecialFullName[0] &&
-       Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)	// Only in main window
-      fprintf (Gbl.F.Out," title=\"%s\"",SpecialFullName);
+   fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
+	              " class=\"%s\"",
+            SpecialFullName,SpecialFullName,
+	    ClassPhoto);
 
    /***** Image zoom *****/
    if (PutZoomCode)
@@ -2216,7 +2224,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
 	                 " style=\"width:%upx; height:%upx;\"",
 	       Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
-   fprintf (Gbl.F.Out," alt=\"%s\" />",Deg->FullName);
+   fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" />",
+            Deg->ShortName,
+            Deg->FullName);
    if (SeeOrPrint == Pho_DEGREES_PRINT)
       fprintf (Gbl.F.Out,"<span class=\"CLASSPHOTO\">");
    fprintf (Gbl.F.Out,"<br />%s<br />%d&nbsp;%s<br />%d&nbsp;%s<br />(%d%%)",

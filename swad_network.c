@@ -202,11 +202,13 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      " style=\"display:inline;\">"
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s16x16.gif\""
-		      " style=\"width:16px;height:16px;margin:0 1px;\" alt=\"%s\" />"
+		      " alt=\"%s\" title=\"%s\""
+		      " style=\"width:16px; height:16px; margin:0 1px;\" />"
 		      "</a>"
 		      "</div>",
 	    URL,Title,
-	    Gbl.Prefs.IconsURL,Icon,Title);
+	    Gbl.Prefs.IconsURL,Icon,
+	    Title,Title);
   }
 
 /*****************************************************************************/
@@ -259,12 +261,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\" style=\"text-align:left;\">"
 			 "<img src=\"%s/%s16x16.gif\""
-			 " style=\"width:16px;height:16px;margin-right:10px;vertical-align:middle;\""
-			 " alt=\"\" title=\"%s\" />"
+			 " alt=\"%s\" title=\"%s\""
+			 " style=\"width:16px; height:16px;"
+			 " margin-right:10px; vertical-align:middle;\" />"
 			 "%s:</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
 	       ClassForm,
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
+	       Net_TitleWebsAndSocialNetworks[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
 	       Net_COL2_WIDTH);
@@ -475,8 +479,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"DAT\" style=\"text-align:left;\">"
 			    "<img src=\"%s/%s16x16.gif\""
-			    " style=\"width:16px;height:16px;margin:0 2px;vertical-align:middle;\""
-			    " alt=\"\" title=\"%s\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " style=\"width:16px; height:16px;"
+			    " margin:0 2px; vertical-align:middle;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT\" style=\"text-align:right;\">"
 			    "%u"
@@ -486,6 +491,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "</td>"
 			    "</tr>",
 		  Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[Web],
+		  Net_TitleWebsAndSocialNetworks[Web],
 		  Net_TitleWebsAndSocialNetworks[Web],
 		  Net_TitleWebsAndSocialNetworks[Web],
 		  NumUsrs,

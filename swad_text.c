@@ -10794,6 +10794,27 @@ const char *Txt_X_faces_marked_in_red_have_been_detected_ =	// Warning: it is ve
 	" but the background behind the heads is too dark.";			// Necessita de tradução
 #endif
 
+const char *Txt_Faces_detected =
+#if   L==0
+	"Rostros detectados";		// Necessita traduccio
+#elif L==1
+	"Faces detected";		// Need Übersetzung
+#elif L==2
+	"Faces detected";
+#elif L==3
+	"Rostros detectados";
+#elif L==4
+	"Faces detected";		// Besoin de traduction
+#elif L==5
+	"Rostros detectados";		// Okoteve traducción
+#elif L==6
+	"Faces detected";		// Bisogno di traduzione
+#elif L==7
+	"Faces detected";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Faces detected";		// Necessita de tradução
+#endif
+
 const char *Txt_Failed_email_confirmation_key =
 #if   L==0
 	"Error en la clave de confirmaci&oacute;n de correo.";	// Necessita traduccio

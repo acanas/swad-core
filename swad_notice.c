@@ -404,7 +404,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 			    "<img src=\"%s/rss16x16.gif\""
-			    " alt=\"RSS\" title=\"RSS\" class=\"ICON16x16\" />"
+			    " alt=\"RSS\" title=\"RSS\""
+			    " class=\"ICON16x16\" />"
 			    "</a>"
 			    "</div>",
 	          Gbl.Prefs.IconsURL);
@@ -520,19 +521,22 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_ACTIVE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/visible_off16x16.gif\""
-                                  " alt=\"%s\" class=\"ICON16x16\" />"
+                                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
                         Gbl.Prefs.IconsURL,
+                        Txt_NOTICE_Active_SINGULAR,
                         Txt_NOTICE_Active_SINGULAR);
                break;
             case Not_OBSOLETE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/hidden_off16x16.gif\""
-                                  " alt=\"%s\" class=\"ICON16x16\" />"
+                                  " alt=\"%s\" title=\"%s\""
+                                  " class=\"ICON16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Gbl.Prefs.IconsURL,
+                        Txt_NOTICE_Obsolete_SINGULAR,
                         Txt_NOTICE_Obsolete_SINGULAR);
                break;
            }
@@ -568,9 +572,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" class=\"ICON32x32\" />"
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON32x32\" />"
 	                 "</a>",
 	       Gbl.Prefs.IconsURL,
+	       Txt_See_full_notice,
 	       Txt_See_full_notice);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -597,11 +603,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_Remove_notice,The_ClassFormul[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" class=\"ICON16x16\" />"
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16\" />"
                          " %s</a>",
                Gbl.Prefs.IconsURL,
                Txt_Remove_notice,
-               Txt_Remove);
+               Txt_Remove,Txt_Remove_notice);
       Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</div>");

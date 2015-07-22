@@ -441,10 +441,12 @@ void Ntf_ShowMyNotifications (void)
             Act_FormEnd ();
            }
          else
-            fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+            fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+        	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
+                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1803,6 +1805,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    extern const char *Txt_See_notifications;
    extern const char *Txt_notification;
    extern const char *Txt_notifications;
+   extern const char *Txt_Notifications;
    extern const char *Txt_NOTIF_new_SINGULAR;
    extern const char *Txt_NOTIF_new_PLURAL;
    unsigned NumUnseenNtfs;
@@ -1831,14 +1834,17 @@ void Ntf_WriteNumberOfNewNtfs (void)
       /***** Icon *****/
       fprintf (Gbl.F.Out,"<br />"
 	                 "<img src=\"%s/bell16x16.png\""
+	                 " alt=\"%s\" title=\"%s\""
 	                 " style=\"width:16px; height:16px;"
 	                 " vertical-align:middle;\" /> ",
-               Gbl.Prefs.PathTheme);
+               Gbl.Prefs.PathTheme,
+               Txt_Notifications,
+               Txt_Notifications);
 
       /***** Number of new notifications *****/
       if (NumNewNtfs == 1)
          fprintf (Gbl.F.Out,"1 %s",
-               Txt_NOTIF_new_SINGULAR);
+                  Txt_NOTIF_new_SINGULAR);
       else
          fprintf (Gbl.F.Out,"%u %s",
                   NumNewNtfs,
