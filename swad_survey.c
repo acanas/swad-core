@@ -3233,6 +3233,16 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned BarWidth = 0;
 
+   /***** String with the number of users *****/
+   if (MaxUsrs)
+      sprintf (Gbl.Title,"%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+               NumUsrs,
+               (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
+               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+   else
+      sprintf (Gbl.Title,"0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
+               Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+
    /***** Draw bar with a with proportional to the number of clicks *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:%upx;"
 	              " text-align:left; vertical-align:top;\">",
@@ -3242,21 +3252,20 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	                       (float) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
-   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\" alt=\"\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 	              " style=\"width:%upx; height:16px;"
 	              " vertical-align:top;\" />"
 	              "&nbsp;",
-      Gbl.Prefs.IconsURL,BarWidth);
+      Gbl.Prefs.IconsURL,
+      Gbl.Title,
+      Gbl.Title,
+      BarWidth);
 
    /***** Write the number of users *****/
-   if (MaxUsrs)
-      fprintf (Gbl.F.Out,"%u&nbsp;(%u",
-               NumUsrs,(unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5));
-   else
-      fprintf (Gbl.F.Out,"0&nbsp;(0");
-   fprintf (Gbl.F.Out,"%%&nbsp;%s&nbsp;%u)</td>"
+   fprintf (Gbl.F.Out,"%s</td>"
 	              "</tr>",
-            Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+            Gbl.Title);
   }
 
 /*****************************************************************************/

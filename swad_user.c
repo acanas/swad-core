@@ -1380,7 +1380,8 @@ void Usr_WriteFormLogin (void)
    /***** User's ID/nickname and password *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/user16x16.gif\" alt=\"%s\" title=\"%s\""
+                      "<img src=\"%s/user16x16.gif\""
+                      " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
@@ -1391,7 +1392,8 @@ void Usr_WriteFormLogin (void)
 		      "</tr>"
 		      "<tr>"
 		      "<td class=\"BM\">"
-                      "<img src=\"%s/key16x16.gif\" alt=\"%s\" title=\"%s\""
+                      "<img src=\"%s/key16x16.gif\""
+                      " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
 		      "</td>"
 		      "<td style=\"text-align:left; vertical-align:middle;\">"
@@ -1433,6 +1435,7 @@ void Usr_WriteFormLogin (void)
 void Usr_WelcomeUsr (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const char *Txt_Happy_birthday;
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
@@ -1455,9 +1458,12 @@ void Usr_WelcomeUsr (void)
                if ((CongratulateMyBirthday = Usr_CheckIfMyBirthdayHasNotBeenCongratulated ()))
                  {
                   Usr_InsertMyBirthday ();
-                  fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\" alt=\"\""
+                  fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
+                	             " alt=\"%s\" title=\"%s\""
                 	             " style=\"width:128px; height:128px;\" />",
-                           Gbl.Prefs.PathIconSet,Cfg_ICON_128x128);
+                           Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
+                           Txt_Happy_birthday,
+                           Txt_Happy_birthday);
                   sprintf (Gbl.Message,Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
                            Gbl.Usrs.Me.UsrDat.FirstName);
                  }
@@ -1533,9 +1539,13 @@ void Usr_PutFormLogIn (void)
    Act_FormStart (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/login16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       " %s</a>",
-            Gbl.Prefs.PathTheme,Txt_Log_in,Txt_Log_in);
+            Gbl.Prefs.PathTheme,
+            Txt_Log_in,
+            Txt_Log_in,
+            Txt_Log_in);
    Act_FormEnd ();
   }
 
@@ -1601,10 +1611,14 @@ void Usr_PutFormLogOut (void)
 
    Act_FormStart (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/logout16x16.gif\" alt=\"%s\""
-                      " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
+   fprintf (Gbl.F.Out,"<img src=\"%s/logout16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       " %s</a>",
-            Gbl.Prefs.PathTheme,Txt_Log_out,Txt_Log_out);
+            Gbl.Prefs.PathTheme,
+            Txt_Log_out,
+            Txt_Log_out,
+            Txt_Log_out);
    Act_FormEnd ();
   }
 
@@ -2605,7 +2619,8 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Student has accepted enrollment in current course? *****/
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
-	              "<img src=\"%s/tr16x16.gif\" alt=\"\""
+	              "<img src=\"%s/tr16x16.gif\""
+	              " alt=\"\" title=\"\""
 	              " class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.RowEvenOdd,
@@ -2701,12 +2716,15 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    else
       fprintf (Gbl.F.Out,"BM%d",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-	              "<img src=\"%s/%s16x16.gif\" alt=\"\" title=\"%s\""
+	              "<img src=\"%s/%s16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
         	               "tr",
+            UsrDat->Accepted ? Txt_Enrollment_confirmed :
+                               Txt_Enrollment_not_confirmed,
             UsrDat->Accepted ? Txt_Enrollment_confirmed :
                                Txt_Enrollment_not_confirmed);
 
@@ -3022,11 +3040,14 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       fprintf (Gbl.F.Out,"BM%d",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
         	               "tr",
+            UsrDat->Accepted ? Txt_Enrollment_confirmed :
+                               Txt_Enrollment_not_confirmed,
             UsrDat->Accepted ? Txt_Enrollment_confirmed :
                                Txt_Enrollment_not_confirmed);
 
@@ -4778,10 +4799,12 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Usr_PutExtraParamsUsrList (NextAction);
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormulNB[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       " %s</a>",
             Gbl.Prefs.IconsURL,
             Usr_IconsClassPhotoOrList[ListType],
+            Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType]);
    Act_FormEnd ();

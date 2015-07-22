@@ -1025,12 +1025,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%d\" style=\"text-align:center;\">"
                       "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"\" title=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
             QuestionExists ? "tr" :
         	             "ok_green",
+            QuestionExists ? Txt_Existing_question :
+        	             Txt_New_question,
             QuestionExists ? Txt_Existing_question :
         	             Txt_New_question);
 
@@ -1090,10 +1093,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Gbl.Test.Shuffle)
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-                            " alt=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   QuestionExists ? "ok_off" :
                 	           "ok_on",
+                  Txt_TEST_Correct_answer,
                   Txt_TEST_Correct_answer);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1157,10 +1162,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	               "<td class=\"BT%d\">",Gbl.RowEvenOdd);
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
                fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-        	                  " alt=\"%s\" class=\"ICON16x16\" />",
+        	                  " alt=\"%s\" title=\"%s\""
+        	                  " class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         QuestionExists ? "ok_off" :
                                          "ok_on",
+                        Txt_TEST_Correct_answer,
                         Txt_TEST_Correct_answer);
             fprintf (Gbl.F.Out,"</td>");
 

@@ -514,9 +514,11 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
 
 static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem)
   {
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove;
    extern const char *Txt_Move_up_X_and_its_subsections;
    extern const char *Txt_Move_up_X;
+   extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_Move_down_X_and_its_subsections;
    extern const char *Txt_Move_down_X;
    extern const char *Txt_Increase_level_of_X;
@@ -547,8 +549,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
          fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 	 if (LstItemsSyllabus.Lst[NumItem].HasChildren)
             fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-        	               " alt=\"\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL);
+        	               " alt=\"%s\" title=\"%s\""
+        	               " class=\"ICON16x16\" />",
+                     Gbl.Prefs.IconsURL,
+                     Txt_Removal_not_allowed,
+                     Txt_Removal_not_allowed);
 	 else
 	   {
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActDelItmSylLec :
@@ -586,8 +591,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/up_off16x16.gif\""
-		               " alt=\"\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL);
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
+                     Gbl.Prefs.IconsURL,
+                     Txt_Movement_not_allowed,
+                     Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to get down item *****/
@@ -612,8 +620,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/down_off16x16.gif\""
-		               " alt=\"\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL);
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
+                     Gbl.Prefs.IconsURL,
+                     Txt_Movement_not_allowed,
+                     Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to increase the level of an item *****/
@@ -635,8 +646,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/left_off16x16.gif\""
-		               " alt=\"\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL);
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
+                     Gbl.Prefs.IconsURL,
+                     Txt_Movement_not_allowed,
+                     Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to decrease level item *****/
@@ -659,8 +673,11 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/right_off16x16.gif\""
-		               " alt=\"\" class=\"ICON16x16\" />",
-                     Gbl.Prefs.IconsURL);
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
+                     Gbl.Prefs.IconsURL,
+                     Txt_Movement_not_allowed,
+                     Txt_Movement_not_allowed);
          fprintf (Gbl.F.Out,"</td>");
 
 	 LastLevel = Level;

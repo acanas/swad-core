@@ -1421,10 +1421,14 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
                             "<img src=\"%s/",
                   Gbl.Prefs.IconsURL);
          if (TagHidden)
-            fprintf (Gbl.F.Out,"hidden_off16x16.gif\" alt=\"%s",
+            fprintf (Gbl.F.Out,"hidden_off16x16.gif\""
+        	               " alt=\"%s\" title=\"%s",
+                     Txt_Tag_not_allowed,
                      Txt_Tag_not_allowed);
          else
-            fprintf (Gbl.F.Out,"visible_off16x16.gif\" alt=\"%s",
+            fprintf (Gbl.F.Out,"visible_off16x16.gif\""
+        	               " alt=\"%s\" title=\"%s",
+                     Txt_Tag_allowed,
                      Txt_Tag_allowed);
          fprintf (Gbl.F.Out,"\" class=\"ICON16x16\" />"
                             "</td>");
@@ -2781,8 +2785,11 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               "<td class=\"BT%d\">",Gbl.RowEvenOdd);
             if (Str_ConvertToUpperLetter (row[2][0]) == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
-        	                  " alt=\"%s\" class=\"ICON16x16\" />",
-                        Gbl.Prefs.IconsURL,Txt_TEST_Correct_answer);
+        	                  " alt=\"%s\" title=\"%s\""
+        	                  " class=\"ICON16x16\" />",
+                        Gbl.Prefs.IconsURL,
+                        Txt_TEST_Correct_answer,
+                        Txt_TEST_Correct_answer);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
@@ -3215,14 +3222,16 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	                 " vertical-align:top;\">");
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct ? "ok_green" :
                 	                                               "ok_red") :
                    "ok_on",
-                  Txt_TEST_User_answer,Txt_TEST_User_answer);
+                  Txt_TEST_User_answer,
+                  Txt_TEST_User_answer);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Draw icon that indicates whether the answer is correct */
@@ -3233,9 +3242,11 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
             fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+        	               " alt=\"%s\" title=\"%s\""
+        	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
-                     Txt_TEST_Correct_answer,Txt_TEST_Correct_answer);
+                     Txt_TEST_Correct_answer,
+                     Txt_TEST_Correct_answer);
         }
       else
          fprintf (Gbl.F.Out,"?");

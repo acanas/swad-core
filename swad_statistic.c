@@ -1845,7 +1845,8 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	                 " vertical-align:top; background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (BarWidth)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" alt=\"\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
+	                    " alt=\"\" title=\"\""
 	                    " style=\"width:%upx; height:14px;"
 	                    " vertical-align:top;\" />"
 	                    "&nbsp;",
@@ -2356,7 +2357,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td style=\"width:1px; text-align:left;"
 	                 " background-color:#%02X%02X%02X;\">"
-	                 "<img src=\"%s/tr1x14.gif\" alt=\"\" />"
+	                 "<img src=\"%s/tr1x14.gif\""
+	                 " alt=\"\" title=\"\" />"
 	                 "</td>",
                R,G,B,Gbl.Prefs.IconsURL);
      }
@@ -2769,7 +2771,8 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
       AltoBarra = (unsigned) (((NumPagesGenerated * 400.0) / MaxPagesGenerated) + 0.5);
       if (AltoBarra == 0)
          AltoBarra = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\""
+	                 " alt=\"\" title=\"\""
 	                 " style=\"width:8px; height:%upx;\" /><br />",
 	       Gbl.Prefs.IconsURL,AltoBarra);
      }
@@ -2862,7 +2865,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       /* First division (left) */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td style=\"width:%upx;text-align:left;\">"
-	                 "<img src=\"%s/ejexizq24x1.gif\" alt=\"\""
+	                 "<img src=\"%s/ejexizq24x1.gif\""
+	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
 	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
@@ -2872,7 +2876,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	   i < NUM_DIVISIONS_X*2;
 	   i++)
 	 fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
-	                    "<img src=\"%s/ejex24x1.gif\" alt=\"\""
+	                    "<img src=\"%s/ejex24x1.gif\""
+	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
@@ -2880,7 +2885,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 		  WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
-	                 "<img src=\"%s/tr24x1.gif\" alt=\"\""
+	                 "<img src=\"%s/tr24x1.gif\""
+	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
@@ -2971,7 +2977,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    /***** Draw bar with anchura proporcional al number of clicks *****/
    if (NumPagesGenerated != 0.0)
       if ((BarWidth = (unsigned) (((NumPagesGenerated * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\" alt=\"\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\""
+	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />",
                   Gbl.Prefs.IconsURL,
@@ -3254,7 +3261,8 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
                          "<td class=\"LOG\""
                          " style=\"text-align:left; vertical-align:top;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s\" alt=\"%s\""
+                         "<img src=\"%s/%s/%s\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:60px; height:20px;"
                          " margin:0 8px 4px 0;\" />"
                          "</a>",
@@ -3262,7 +3270,8 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
                Ban.FullName,
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Ban.Img,
-               Ban.ShortName);
+               Ban.ShortName,
+               Ban.FullName);
 
       /* Draw bar proportional to number of clicks */
       NumClicks = Str_GetFloatNumFromStr (row[1]);
@@ -3521,7 +3530,8 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
       BarWidth = (unsigned) (((NumPagesGenerated * (float) MaxBarWidth) / MaxPagesGenerated) + 0.5);
       if (BarWidth == 0)
          BarWidth = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
+	                 " alt=\"\" title=\"\""
 	                 " style=\"width:%upx; height:14px;"
 	                 " vertical-align:top;\" />"
                          "&nbsp;",
@@ -4030,7 +4040,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "<img src=\"%s/cty16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -4056,6 +4067,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Countries,
             Txt_Countries,
             Txt_Countries,
             NumCtysTotal,
@@ -4153,7 +4165,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "<img src=\"%s/ins16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -4177,6 +4190,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Institutions,
             Txt_Institutions,
             Txt_Institutions,
             NumInssTotal,
@@ -4266,7 +4280,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "<img src=\"%s/ctr16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -4288,6 +4303,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Centres,
             Txt_Centres,
             Txt_Centres,
             NumCtrsTotal,
@@ -4369,7 +4385,8 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "<img src=\"%s/deg16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -4389,6 +4406,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Degrees,
             Txt_Degrees,
             Txt_Degrees,
             NumDegsTotal,
@@ -4462,7 +4480,8 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
                       "<img src=\"%s/crs16x16.gif\""
-                      " alt=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -4480,6 +4499,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Courses,
             Txt_Courses,
             Txt_Courses,
             NumCrssTotal,
@@ -6775,6 +6795,7 @@ static void Sta_GetAndShowMsgsStats (void)
 static void Sta_GetAndShowForumStats (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_Scope;
    extern const char *Txt_Forums;
    extern const char *Txt_No_of_forums;
    extern const char *Txt_No_of_threads;
@@ -6799,6 +6820,7 @@ static void Sta_GetAndShowForumStats (void)
                       "<th style=\"width:16px;"
                       " text-align:left; vertical-align:top;\">"
                       "<img src=\"%s/forum16x16.gif\""
+                      " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
                       "</th>"
                       "<th class=\"TIT_TBL\""
@@ -6835,6 +6857,8 @@ static void Sta_GetAndShowForumStats (void)
                       "</th>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
+            Txt_Scope,
+            Txt_Scope,
             Txt_Forums,
             Txt_No_of_forums,
             Txt_No_of_threads,
@@ -7030,7 +7054,9 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"width:16px;"
                       " text-align:left; vertical-align:top;\">"
-                      "<img src=\"%s/%s\" alt=\"\" class=\"ICON16x16\" />"
+                      "<img src=\"%s/%s\""
+                      " alt=\"%s%s\" title=\"%s%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:top;\">"
@@ -7066,6 +7092,8 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,Icon,
+            ForumName1,ForumName2,
+            ForumName1,ForumName2,
             ForumName1,ForumName2,
             NumForums,NumThreads,NumPosts,NumUsrsToBeNotifiedByEMail,
             NumThrsPerForum,NumPostsPerThread,NumPostsPerForum);
@@ -7622,7 +7650,9 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 	Layout++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:center;\">"
-                         "<img src=\"%s/%s32x32.gif\" alt=\"%s\" class=\"ICON32x32\" />"
+                         "<img src=\"%s/%s32x32.gif\""
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"ICON32x32\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
                          "%u"
@@ -7631,7 +7661,9 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,Lay_LayoutIcons[Layout],Txt_LAYOUT_NAMES[Layout],
+               Gbl.Prefs.IconsURL,Lay_LayoutIcons[Layout],
+               Txt_LAYOUT_NAMES[Layout],
+               Txt_LAYOUT_NAMES[Layout],
                NumUsrs[Layout],
                NumUsrsTotal ? (float) NumUsrs[Layout] * 100.0 /
         	              (float) NumUsrsTotal :
@@ -7754,7 +7786,8 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 	Theme++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:center;\">"
-                         "<img src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
+                         "<img src=\"%s/%s/%s/theme_32x20.gif\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:32px; height:20px;\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -7764,7 +7797,9 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],The_ThemeNames[Theme],
+               Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],
+               The_ThemeNames[Theme],
+               The_ThemeNames[Theme],
                NumUsrs[Theme],
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
         	              (float) NumUsrsTotal :
@@ -7886,7 +7921,8 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:left;\">"
-                         "<img src=\"%s/%s/%s/%s/heart64x64.gif\" alt=\"%s\""
+                         "<img src=\"%s/%s/%s/%s/heart64x64.gif\""
+                         " alt=\"%s\" title=\"%s\""
                          " class=\"ICON32x32\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -7900,6 +7936,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
                Cfg_ICON_ACTION,
+               Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet],
                NumUsrs[IconSet],
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
@@ -8023,7 +8060,9 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 	Menu++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:center;\">"
-                         "<img src=\"%s/%s32x32.gif\" alt=\"%s\" class=\"ICON32x32\" />"
+                         "<img src=\"%s/%s32x32.gif\""
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"ICON32x32\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
                          "%u"
@@ -8032,7 +8071,9 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.IconsURL,Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],
+               Gbl.Prefs.IconsURL,Mnu_MenuIcons[Menu],
+               Txt_MENU_NAMES[Menu],
+               Txt_MENU_NAMES[Menu],
                NumUsrs[Menu],
                NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
         	              (float) NumUsrsTotal :
@@ -8153,7 +8194,8 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 	SideCols++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td style=\"text-align:center;\">"
-                         "<img src=\"%s/layout%u%u_32x20.gif\" alt=\"%s\""
+                         "<img src=\"%s/layout%u%u_32x20.gif\""
+                         " alt=\"%s\" title=\"%s\""
                          " style=\"width:32px; height:20px;\" />"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:right;\">"
@@ -8164,6 +8206,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                          "</td>"
                          "</tr>",
                Gbl.Prefs.IconsURL,SideCols >> 1,SideCols & 1,
+               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                NumUsrs[SideCols],
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /

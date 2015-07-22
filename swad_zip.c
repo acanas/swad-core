@@ -330,10 +330,13 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormul[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\" alt=\"%s\""
-	              " title=\"%s\" class=\"ICON16x16B\" />"
+   fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />"
 		      "</a>",
-	 Gbl.Prefs.IconsURL,Txt_Create_ZIP_file,Txt_Create_ZIP_file);
+	 Gbl.Prefs.IconsURL,
+	 Txt_Create_ZIP_file,
+	 Txt_Create_ZIP_file);
    Act_FormEnd ();
   }
 
@@ -572,7 +575,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<td colspan=\"2\"class=\"FILENAME\""
 		      " style=\"text-align:center; vertical-align:middle;\">"
                       "<a href=\"%s\" class=\"FILENAME\" title=\"%s\" target=\"_blank\">"
-                      "<img src=\"%s/%s32x32/zip32x32.gif\" alt=\"%s\""
+                      "<img src=\"%s/%s32x32/zip32x32.gif\""
+                      " alt=\"%s\" title=\"%s\""
                       " class=\"ICON32x32\" />"
                       "&nbsp;%s&nbsp;"
 		      "<img src=\"%s/down32x32.gif\""
@@ -584,9 +588,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
             URL,FileName,
             Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_FILEXT,
             Txt_ZIP_file,
+            Txt_ZIP_file,
 	    FileNameShort,
 	    Gbl.Prefs.IconsURL,
-	    Txt_Download,Txt_Download);
+	    Txt_Download,
+	    Txt_Download);
 
    /***** Filename *****/
    fprintf (Gbl.F.Out,"<tr>"

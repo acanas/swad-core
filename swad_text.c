@@ -12795,6 +12795,27 @@ const char *Txt_Guided_academic_assignments =
 	"Atividades acad&eacute;micas guided";
 #endif
 
+const char *Txt_Happy_birthday =
+#if   L==0
+	   "Feli&ccedil; aniversari!";
+#elif L==1
+	   "Gute zum Geburtstag!";
+#elif L==2
+	   "Happy birthday!";
+#elif L==3
+	   "&iexcl;Feliz cumplea&ntilde;os!";
+#elif L==4
+	   "Joyeux anniversaire!";
+#elif L==5
+	   "&iexcl;Feliz cumplea&ntilde;os!";	// Okoteve traducción
+#elif L==6
+	   "Buon compleanno!";
+#elif L==7
+	   "Wszystkiego najlepszego!";
+#elif L==8
+	   "Feliz anivers&aacute;rio!";
+#endif
+
 const char *Txt_HELP_email =
 #if   L==0
 	"Exemple: garcia@exemplemail.com";
@@ -21631,6 +21652,27 @@ const char *Txt_Move_thread =
 	"Przenies watku";
 #elif L==8
 	"Mover thread";
+#endif
+
+const char *Txt_Movement_not_allowed =
+#if   L==0
+	"Moviment no perm&egrave;s";
+#elif L==1
+	"Bewegung nicht erlaubt";
+#elif L==2
+	"Move up not allowed";
+#elif L==3
+	"Movimiento no permitido";
+#elif L==4
+	"Mouvement pas autoris&eacute;";
+#elif L==5
+	"Movimiento no permitido";	// Okoteve traducción
+#elif L==6
+	"Movimento non consentito";
+#elif L==7
+	"Ruch nie jest dozwolone";
+#elif L==8
+	"Movimento n&atilde;o permitido";
 #endif
 
 const char *Txt_MSG_containing_the_text =
