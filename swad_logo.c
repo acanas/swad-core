@@ -156,8 +156,11 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	 else if (Icon[Scope])
 	    fprintf (Gbl.F.Out,"%s/%s64x64.gif",
 		     Gbl.Prefs.IconsURL,Icon[Scope]);
-	 fprintf (Gbl.F.Out,"\" alt=\"%s\" class=\"ICON%ux%u\"",
-		  AltText,Size,Size);
+	 fprintf (Gbl.F.Out,"\""
+	                    " alt=\"%s\" title=\"%s\""
+	                    " class=\"ICON%ux%u\"",
+		  AltText,AltText,
+		  Size,Size);
 	 if (Style)
 	    if (Style[0])
 	       fprintf (Gbl.F.Out," style=\"%s\"",Style);

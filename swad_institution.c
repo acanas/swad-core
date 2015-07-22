@@ -1082,6 +1082,7 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_Institutions_of_COUNTRY_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_Remove_institution;
    extern const char *Txt_Another_country;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
@@ -1118,10 +1119,13 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Put icon to remove institution */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Ins->NumCtrs || Ins->NumUsrs)	// Institution has centres or users ==> deletion forbidden
+      if (Ins->NumCtrs ||
+	  Ins->NumUsrs)	// Institution has centres or users ==> deletion forbidden
          fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
-                            " alt=\"\" class=\"ICON16x16\" />",
-                  Gbl.Prefs.IconsURL);
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
+                  Gbl.Prefs.IconsURL,
+                  Txt_Removal_not_allowed,Txt_Removal_not_allowed);
       else
         {
          Act_FormStart (ActRemIns);
@@ -1747,6 +1751,7 @@ void Ins_RemoveLogo (void)
 static void Ins_PutFormToCreateInstitution (void)
   {
    extern const char *Txt_New_institution_of_COUNTRY_X;
+   extern const char *Txt_Removal_not_allowed;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    extern const char *Txt_Create_institution;
    struct Institution *Ins;
@@ -1777,9 +1782,10 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"BM\">"
                       "<img src=\"%s/deloff16x16.gif\""
-		      " alt=\"\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
-	    Gbl.Prefs.IconsURL);
+	    Gbl.Prefs.IconsURL,
+	    Txt_Removal_not_allowed,Txt_Removal_not_allowed);
 
    /***** Institution code *****/
    fprintf (Gbl.F.Out,"<td></td>");

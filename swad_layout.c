@@ -247,7 +247,9 @@ void Lay_WriteStartOfPage (void)
 
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">"
-                         "<img id=\"zoomImg\" src=\"%s/_.gif\" alt=\"\" class=\"IMG_USR\" />"
+                         "<img id=\"zoomImg\" src=\"%s/_.gif\""
+                         " alt=\"\" title=\"\""
+                         " class=\"IMG_USR\" />"
                          "<div id=\"zoomTxt\" style=\"text-align:center;\">"
                          "</div>"
                          "</div>",
@@ -640,13 +642,14 @@ static void Lay_WritePageTopHeading (void)
 
    /* Left logo */
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\" alt=\"%s\""
+	              "<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\""
 	              " style=\"width:%upx; height:%upx;"
 	              " margin:0 auto; vertical-align:middle;\" />"
                       "</a>",
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
-            Cfg_PLATFORM_FULL_NAME,
+            Cfg_PLATFORM_FULL_NAME,Cfg_PLATFORM_FULL_NAME,
             LogoLayout[Gbl.Prefs.Layout].Width,
             LogoLayout[Gbl.Prefs.Layout].Height);
    fprintf (Gbl.F.Out,"</td>");
@@ -939,7 +942,8 @@ static void Lay_ShowRightColumn (void)
 			 "<td style=\"text-align:center;\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
-			 "<img src=\"%s/SWADroid120x200.png\" alt=\"SWADroid\""
+			 "<img src=\"%s/SWADroid120x200.png\""
+			 " alt=\"SWADroid\" title=\"SWADroid\""
 			 " style=\"width:120px; height:200px;\" />"
 			 "</a>"
 			 "</td>"
@@ -990,9 +994,11 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
   {
    // margin is used because this form link may be placed after another one
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
-	              "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+	              "<img src=\"%s/%s16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />",
-            Gbl.Prefs.IconsURL,Icon,Alt);
+            Gbl.Prefs.IconsURL,Icon,
+            Alt,Text ? Text : Alt);
    if (Text)
       if (Text[0])
 	 fprintf (Gbl.F.Out,"&nbsp;%s",
@@ -1010,15 +1016,17 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	              " style=\"margin:0 5px; display:inline;\">"
-	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\" alt=\"%s\""
+	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
+	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" />"
-		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\" alt=\"%s\""
+		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" style=\"display:none;\" />"	// Animated icon hidden
 		      "&nbsp;%s"
 		      "</div>"
 		      "</a>",
-	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,
-	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,
+	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,Text,
+	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,Text,
 	    Text);
   }
 
@@ -1360,13 +1368,14 @@ void Lay_WritePageFooter (void)
 
          /***** Institution and centre hosting the platform *****/
          fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
-                            "<img src=\"%s/%s\" alt=\"%s\""
+                            "<img src=\"%s/%s\""
+                            " alt=\"%s\" title=\"%s\""
                             " style=\"width:%upx; height:%upx;\" />"
                             "<div>%s</div>"
                             "</a>",
                   Cfg_ABOUT_URL,
                   Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
-                  Cfg_ABOUT_NAME,
+                  Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
                   Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
                   Cfg_ABOUT_NAME);
 
@@ -1613,13 +1622,15 @@ void Lay_AdvertisementMobile (void)
 	                 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"
-                         "<img src=\"%s/SWADroid200x300.png\" alt=\"SWADroid\""
+                         "<img src=\"%s/SWADroid200x300.png\""
+                         " alt=\"SWADroid\" title=\"%s\""
                          " style=\"width:200px; height:300px;\" />"
                          "</a>"
 	                 "</td>"
 	                 "</tr>",
                Txt_Stay_connected_with_SWADroid,
-               Gbl.Prefs.IconsURL);
+               Gbl.Prefs.IconsURL,
+               Txt_Stay_connected_with_SWADroid);
 
       /***** End table *****/
       Lay_EndRoundFrameTable ();
@@ -1641,7 +1652,8 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
    for (i = 1;
 	i < Level;
 	i++)
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\" alt=\"\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
+	                 " alt=\"\" title=\"\""
 			 " style=\"width:20px; height:20px;"
 			 " vertical-align:middle;\" />",
 		  Gbl.Prefs.IconsURL,
@@ -1649,7 +1661,8 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 		                         "subleft");
 
    /***** Level *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\" alt=\"\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
+	              " alt=\"\" title=\"\""
 		      " style=\"width:20px; height:20px;"
 		      " vertical-align:middle;\" />",
 	    Gbl.Prefs.IconsURL,
