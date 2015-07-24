@@ -4188,8 +4188,8 @@ void Grp_ShowSelectorWhichGrps (void)
    extern const char *Txt_Show_WHICH_groups[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-                      " padding:0; margin:0 auto 10px auto;\">");
+   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+                      "<ul class=\"LIST_CENTER\">");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
@@ -4205,7 +4205,8 @@ void Grp_ShowSelectorWhichGrps (void)
                          "</li>",
                Gbl.FormId,Txt_Show_WHICH_groups[WhichGrps]);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
   }
 
 /*****************************************************************************/

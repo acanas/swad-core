@@ -127,7 +127,7 @@ static void Tab_DrawTabsDeskTop (void)
    bool ICanViewTab;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none; padding:0; margin:0;\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_CENTER\">");
 
    /***** Draw the tabs *****/
    for (NumTab = (Act_Tab_t) 1;

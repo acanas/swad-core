@@ -58,6 +58,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Lnk_WriteListOfLinks (void);
+
 static void Lnk_PutFormToEditLinks (void);
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
@@ -74,7 +76,6 @@ static void Lnk_CreateLink (struct Link *Lnk);
 void Lnk_SeeLinks (void)
   {
    extern const char *Txt_Links;
-   unsigned NumLnk;
 
    /***** Get list of links *****/
    Lnk_GetListLinks ();
@@ -83,33 +84,73 @@ void Lnk_SeeLinks (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lnk_PutFormToEditLinks ();
 
-   /***** Table head *****/
+   /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      Lay_StartRoundFrameTable (NULL,2,Txt_Links);
-
-      /***** Write all the links *****/
-      for (NumLnk = 0;
-	   NumLnk < Gbl.Links.Num;
-	   NumLnk++)
-	 /* Write data of this link */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"INS_LNK\" style=\"text-align:left;\">"
-			    "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\">"
-			    "%s"
-			    "</a>"
-			    "</td>"
-			    "</tr>",
-		  Gbl.Links.Lst[NumLnk].WWW,
-		  Gbl.Links.Lst[NumLnk].FullName,
-		  Gbl.Links.Lst[NumLnk].ShortName);
-
-      /***** Table end *****/
-      Lay_EndRoundFrameTable ();
+      Lay_StartRoundFrame (NULL,Txt_Links);
+      Lnk_WriteListOfLinks ();
+      Lay_EndRoundFrame ();
      }
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
+  }
+
+
+/*****************************************************************************/
+/***************** Write menu with some institutional links ******************/
+/*****************************************************************************/
+
+void Lnk_WriteMenuWithInstitutionalLinks (void)
+  {
+   /***** Get list of links *****/
+   Lnk_GetListLinks ();
+
+   /***** Write all the links *****/
+   if (Gbl.Links.Num)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"INS_LNK\" style=\"width:120px;"
+			 " text-align:center;\">"
+			 "<div id=\"institutional_links\">");
+      Lnk_WriteListOfLinks ();
+      fprintf (Gbl.F.Out,"</div>"
+			 "</td>"
+			 "</tr>");
+     }
+
+   /***** Free list of links *****/
+   Lnk_FreeListLinks ();
+  }
+
+/*****************************************************************************/
+/*************************** Write list of links *****************************/
+/*****************************************************************************/
+
+static void Lnk_WriteListOfLinks (void)
+  {
+   unsigned NumLnk;
+
+   /***** List start *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+
+   /***** Write all links *****/
+   for (NumLnk = 0;
+	NumLnk < Gbl.Links.Num;
+	NumLnk++)
+      /* Write data of this link */
+      fprintf (Gbl.F.Out,"<li class=\"INS_LNK\">"
+			 "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\""
+			 " target=\"_blank\">"
+			 "%s"
+			 "</a>"
+			 "</li>",
+	       Gbl.Links.Lst[NumLnk].WWW,
+	       Gbl.Links.Lst[NumLnk].FullName,
+	       Gbl.Links.Lst[NumLnk].ShortName);
+
+   /***** List end *****/
+   fprintf (Gbl.F.Out,"</ul>");
   }
 
 /*****************************************************************************/
@@ -720,51 +761,4 @@ static void Lnk_CreateLink (struct Link *Lnk)
    sprintf (Gbl.Message,Txt_Created_new_link_X,
             Lnk->ShortName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-  }
-
-/*****************************************************************************/
-/***************** Write menu with some institutional links ******************/
-/*****************************************************************************/
-
-void Lnk_WriteMenuWithInstitutionalLinks (void)
-  {
-   unsigned NumLnk;
-
-   /***** Get list of links *****/
-   Lnk_GetListLinks ();
-
-   if (Gbl.Links.Num)
-     {
-      /***** Header *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"INS_LNK\" style=\"width:120px;"
-			 " text-align:center;\">"
-			 "<div id=\"institutional_links\">"
-			 "<table style=\"width:110px;\">");
-
-      /***** Write all the links *****/
-      for (NumLnk = 0;
-	   NumLnk < Gbl.Links.Num;
-	   NumLnk++)
-	 /* Write data of this link */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td style=\"width:110px; text-align:left;\">"
-			    "<a href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\">"
-			    "%s"
-			    "</a>"
-			    "</td>"
-			    "</tr>",
-		  Gbl.Links.Lst[NumLnk].WWW,
-		  Gbl.Links.Lst[NumLnk].FullName,
-		  Gbl.Links.Lst[NumLnk].ShortName);
-
-      /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>"
-			 "</div>"
-			 "</td>"
-			 "</tr>");
-     }
-
-   /***** Free list of links *****/
-   Lnk_FreeListLinks ();
   }

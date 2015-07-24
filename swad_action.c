@@ -4772,9 +4772,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
-	              "<ul style=\"list-style-type:none;"
-                      " padding:0 0 2px 0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">");
+	              "<ul class=\"LIST_LEFT\">");
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;

@@ -3055,8 +3055,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    Act_FormStart (Brw_ActChgZone[Gbl.FileBrowser.Type]);
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-	              " padding-top:0; margin-top:0; text-align:left;\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Select the complete course, not a group *****/
    fprintf (Gbl.F.Out,"<li class=\"%s\">"

@@ -399,8 +399,8 @@ void Rol_PutAllRolesRegRemUsrsCrs (void)
    extern const char *The_ClassFormul[The_NUM_THEMES];
 
    /***** Students or teachers *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul style=\"list-style-type:none; text-align:left;\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:10px auto;\">"
+                      "<ul class=\"LIST_LEFT %s\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
    Rol_PutOneRoleRegRemUsrsCrs (Rol_STUDENT,true);
    Rol_PutOneRoleRegRemUsrsCrs (Rol_TEACHER,false);

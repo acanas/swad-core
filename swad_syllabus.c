@@ -135,10 +135,9 @@ void Syl_PutFormWhichSyllabus (void)
 
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center\">");
    Act_FormStart (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-                      " padding:0; margin:10px auto;\">");
+   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+                      "<ul class=\"LIST_CENTER\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
 	WhichSyllabus < For_NUM_WHICH_FORUMS;
@@ -155,9 +154,9 @@ void Syl_PutFormWhichSyllabus (void)
                          "</li>",
                Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

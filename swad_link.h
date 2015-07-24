@@ -47,6 +47,8 @@ struct Link
 /*****************************************************************************/
 
 void Lnk_SeeLinks (void);
+void Lnk_WriteMenuWithInstitutionalLinks (void);
+
 void Lnk_EditLinks (void);
 void Lnk_GetListLinks (void);
 void Lnk_FreeListLinks (void);
@@ -57,6 +59,5 @@ void Lnk_RenameLinkShort (void);
 void Lnk_RenameLinkFull (void);
 void Lnk_ChangeLinkWWW (void);
 void Lnk_RecFormNewLink (void);
-void Lnk_WriteMenuWithInstitutionalLinks (void);
 
 #endif

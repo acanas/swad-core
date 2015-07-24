@@ -1760,8 +1760,8 @@ static void For_PutFormWhichForums (void)
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
-   fprintf (Gbl.F.Out,"<ul style=\"list-style-type:none;"
-                      " padding:0; margin:10px auto;\">");
+   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+	              "<ul class=\"LIST_CENTER\">");
 
    for (WhichForums = (For_WhichForums_t) 0;
 	WhichForums < For_NUM_WHICH_FORUMS;
@@ -1778,7 +1778,8 @@ static void For_PutFormWhichForums (void)
                          "</li>",
                Gbl.FormId,Txt_FORUM_WHICH_FORUM[WhichForums]);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
    Act_FormEnd ();
   }
 

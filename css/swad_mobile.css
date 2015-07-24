@@ -213,6 +213,7 @@ form			{margin:0; display:inline;}
 	}
 .INS_LNK
 	{
+	padding:1px;
 	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:9pt;
 	color:#4D88A1;
@@ -586,6 +587,24 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	color:#808080;
 	font-size:10pt;
+	}
+
+/*********************************** Lists ***********************************/
+.LIST_LEFT
+	{
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
+.LIST_CENTER
+	{
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:center;
+	vertical-align:middle;
 	}
 
 /*****************************************************************************/
