@@ -1416,6 +1416,6 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
                              "%s\n"
                              "%s\n",
             Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[Language],
-            Cfg_PLATFORM_FULL_NAME,
+            Cfg_PLATFORM_SHORT_NAME,
             Cfg_HTTPS_URL_SWAD_CGI);
   }

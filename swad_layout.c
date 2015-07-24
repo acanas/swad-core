@@ -157,19 +157,15 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
-                      "<meta name=\"description\" content=\"SWAD is a free-software platform for learning and educational management\" />\n"
+                      "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
                       "<meta name=\"keywords\" content=\""
                       "%s,"
-                      "SWAD platform,shared workspace at a distance,sistema web de apoyo a la docencia,"
+                      "SWAD,"
+                      "shared workspace at a distance,"
+                      "sistema web de apoyo a la docencia,"
                       "SWADroid,"
-                      "LMS,Learning Management System,"
-                      "VLE,Virtual Learning Environment,"
-                      "e-learning,b-learning,m-learning,"
-                      "platform,plataforma,"
-                      "teaching,docencia,"
-                      "learning,aprendizaje,"
-                      "open source,free software,software libre,"
-                      "virtual\" />\n",
+                      "LMS,"
+                      "Learning Management System\" />\n",
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Cfg_PLATFORM_SHORT_NAME);
 
@@ -649,7 +645,7 @@ static void Lay_WritePageTopHeading (void)
                       "</a>",
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
-            Cfg_PLATFORM_FULL_NAME,Cfg_PLATFORM_FULL_NAME,
+            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             LogoLayout[Gbl.Prefs.Layout].Width,
             LogoLayout[Gbl.Prefs.Layout].Height);
    fprintf (Gbl.F.Out,"</td>");

@@ -4726,7 +4726,8 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"text-align:left; vertical-align:middle; padding-left:2px;\">");
+                            "<td style=\"text-align:left;"
+                            " vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (TabMenuStr,The_ClassFormulNB[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
@@ -4771,7 +4772,9 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
-	              "<table style=\"width:120px;\">");
+	              "<ul style=\"list-style-type:none;"
+                      " padding:0 0 2px 0; margin:0;"
+                      " text-align:left; vertical-align:middle;\">");
 
    /***** Write list of frequently used actions *****/
    for (NumAct = 0;
@@ -4782,13 +4785,6 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
 
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"width:4px; text-align:left;"
-                            " background-image:url('%s/mbw2_4x1.gif');"
-                            " background-repeat:repeat-y;\">"
-                            "</td>",
-                  Gbl.Prefs.IconsURL);
-
 	 /* Action string */
 	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],128);
 	 TabStr[128] = '\0';
@@ -4797,9 +4793,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
          sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"width:110px; text-align:left;"
-                            " vertical-align:middle; padding-left:2px;\">");
+         fprintf (Gbl.F.Out,"<li>");
          Act_FormStart (Action);
          Act_LinkFormSubmit (Title,"MFU_ACT");
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
@@ -4812,13 +4806,12 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
 	 fprintf (Gbl.F.Out," %s</a>",
                   MenuStr);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</li>");
         }
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>"
+   fprintf (Gbl.F.Out,"</ul>"
                       "</div>");
   }
 

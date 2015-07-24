@@ -95,8 +95,8 @@
 #elif defined OPENSWAD_ORG			// openswad.org ************************
 
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
-#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD"				// This title will appear on browser top
+#define Cfg_PLATFORM_FULL_NAME			"OpenSWAD (Open Shared Workspace At a Distance)"
+#define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD (free platform for learning & educational management)"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://openswad.org/swad"		// Without ending slash

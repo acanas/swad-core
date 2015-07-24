@@ -1352,8 +1352,8 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,Brw_FileType_t FileType,
                                          const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static bool Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
-                                   const char *PathInTree,const char *FileName);
-static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName);
+                                   const char *PathInTree,const char *FileName,const char *FileNameToShow);
+static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_PutIconCopy (Brw_FileType_t FileType,
                              const char *PathInTree,const char *FileName,const char *FileNameShow);
 static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,const char *FileNameToShow);
@@ -4934,10 +4934,10 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,Brw_FileType_t FileType,
    /***** Icon to remove folder, file or link *****/
    if (FileType == Brw_IS_FOLDER)
       /* Icon to remove a folder */
-      Brw_PutIconRemoveDir (PathInTree,FileName);
+      Brw_PutIconRemoveDir (PathInTree,FileName,FileNameToShow);
    else	// File or link
       /* Icon to remove a file or link */
-      Brw_PutIconRemoveFile (FileType,PathInTree,FileName);
+      Brw_PutIconRemoveFile (FileType,PathInTree,FileName,FileNameToShow);
 
    /***** Icon to copy *****/
    Brw_PutIconCopy (FileType,PathInTree,FileName,FileNameToShow);
@@ -4995,8 +4995,10 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
 // FileType can be Brw_IS_FILE or Brw_IS_LINK
 
 static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
-                                   const char *PathInTree,const char *FileName)
+                                   const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
+   extern const char *Txt_Remove_FILE_OR_LINK_X;
+
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this file?
@@ -5019,11 +5021,17 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
             break;
         }
       Brw_ParamListFiles (FileType,PathInTree,FileName);
-      Lay_PutIconBRemove ();
+      sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16B\" />",
+               Gbl.Prefs.IconsURL,
+               Gbl.Title,
+               Gbl.Title);
       Act_FormEnd ();
      }
    else
-      Lay_PutIconBRemovalNotAllowed ();
+      Lay_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5031,8 +5039,10 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
 /****************** Write link and icon to remove a folder *******************/
 /*****************************************************************************/
 
-static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName)
+static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
+   extern const char *Txt_Remove_folder_X;
+
    fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this folder?
@@ -5055,11 +5065,17 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName)
             break;
         }
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
-      Lay_PutIconBRemove ();
+      sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16B\" />",
+               Gbl.Prefs.IconsURL,
+               Gbl.Title,
+               Gbl.Title);
       Act_FormEnd ();
      }
    else
-      Lay_PutIconBRemovalNotAllowed ();
+      Lay_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 

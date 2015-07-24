@@ -28669,6 +28669,27 @@ const char *Txt_Remove_file =
 	"Remover arquivo";
 #endif
 
+const char *Txt_Remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Eliminar %s";
+#elif L==1
+	"Datei %s";
+#elif L==2
+	"Remove %s";
+#elif L==3
+	"Eliminar %s";
+#elif L==4
+	"Supprimer %s";
+#elif L==5
+	"Eliminar %s";	// Okoteve traducción
+#elif L==6
+	"Rimuovere %s";
+#elif L==7
+	"Usu&nacute; %s";
+#elif L==8
+	"Remover %s";
+#endif
+
 const char *Txt_Remove_folder =
 #if   L==0
 	"Eliminar carpeta";
@@ -28688,6 +28709,27 @@ const char *Txt_Remove_folder =
 	"Usu&nacute; folder";
 #elif L==8
 	"Remover diret&oacute;rio";
+#endif
+
+const char *Txt_Remove_folder_X = // Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Eliminar carpeta %s";
+#elif L==1
+	"Verzeichnis entfernen %s";
+#elif L==2
+	"Remove folder %s";
+#elif L==3
+	"Eliminar carpeta %s";
+#elif L==4
+	"Supprimer r&eacute;pertoire %s";
+#elif L==5
+	"Eliminar carpeta %s";	// Okoteve traducción
+#elif L==6
+	"Rimuovere cartella %s";
+#elif L==7
+	"Usu&nacute; folder %s";
+#elif L==8
+	"Remover diret&oacute;rio %s";
 #endif
 
 const char *Txt_Remove_group =

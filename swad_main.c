@@ -86,7 +86,7 @@ int main (int argc, char *argv[])
 		      "<h2 style=\"text-align:center;\">Intente acceder m&aacute;s tarde, por favor.</h2>"
 		      "</body>"
 		      "</html>",
-	       Cfg_PLATFORM_FULL_NAME,
+	       Cfg_PLATFORM_PAGE_TITLE,
 	       Cfg_PLATFORM_SHORT_NAME);
       exit (0);
      }

@@ -103,11 +103,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.119 (2015/07/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.119.3 (2015/07/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.119.3: Jul 24, 2015	New layout of MFU actions as a list. (184875 lines)
+        Version 14.119.2: Jul 22, 2015	Changes in page title and platform name. (184880 lines)
+        Version 14.119.1: Jul 22, 2015	Undo some changes in file browsers. (184883 lines)
         Version 14.119:   Jul 22, 2015	Function to put an icon to remove. (184828 lines)
         Version 14.118:   Jul 22, 2015	Function to put a disabled icon indicating that removal is not allowed. (185361 lines)
         Version 14.117.17:Jul 22, 2015	Checking "alt" and "title" in all images. (185437 lines)

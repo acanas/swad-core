@@ -136,7 +136,7 @@ void Sco_PutSelectorScope (bool SendOnChange)
 	      {
 	       case Sco_SCOPE_SYS:
 		  fprintf (Gbl.F.Out,"%s: %s",
-			   Txt_System,Cfg_PLATFORM_PAGE_TITLE);
+			   Txt_System,Cfg_PLATFORM_SHORT_NAME);
 		  break;
 	       case Sco_SCOPE_CTY:
 		  fprintf (Gbl.F.Out,"%s: %s",
