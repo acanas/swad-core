@@ -226,8 +226,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT_N\""
@@ -241,8 +240,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -256,8 +254,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course year *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -285,8 +282,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course semester *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -315,8 +311,7 @@ static void Crs_Configuration (bool PrintView)
      {
       /***** Institutional code of the course *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\""
-                         " style=\"text-align:right; vertical-align:middle;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td class=\"DAT\""
@@ -335,22 +330,21 @@ static void Crs_Configuration (bool PrintView)
 
       /***** Internal code of the course *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\""
-                         " style=\"text-align:right; vertical-align:middle;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td class=\"DAT\" style=\"text-align:left; vertical-align:middle;\">"
                          "%ld"
                          "</td>"
                          "</tr>",
-              The_ClassFormul[Gbl.Prefs.Theme],Txt_Internal_code,
+              The_ClassFormul[Gbl.Prefs.Theme],
+              Txt_Internal_code,
               Gbl.CurrentCrs.Crs.CrsCod);
      }
 
    /***** Link to the course *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -368,8 +362,7 @@ static void Crs_Configuration (bool PrintView)
      {
       /***** QR code with link to the course *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -388,8 +381,7 @@ static void Crs_Configuration (bool PrintView)
 
       /***** Number of teachers *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\""
-                         " style=\"text-align:right; vertical-align:middle;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td class=\"DAT\""
@@ -402,8 +394,7 @@ static void Crs_Configuration (bool PrintView)
 
       /***** Number of students *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\""
-                         " style=\"text-align:right; vertical-align:middle;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td class=\"DAT\""
@@ -416,8 +407,7 @@ static void Crs_Configuration (bool PrintView)
 
       /***** Indicators *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\""
-                         " style=\"text-align:right; vertical-align:middle;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td class=\"DAT\""
@@ -430,7 +420,8 @@ static void Crs_Configuration (bool PrintView)
                          "</a>"
                          "</td>"
                          "</tr>",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_Indicators,
+               The_ClassFormul[Gbl.Prefs.Theme],
+               Txt_Indicators,
                Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActReqStaCrs].ActCod,
                Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
                Gbl.Prefs.IconsURL,
@@ -464,12 +455,12 @@ static void Crs_PutFormToConfigLogIn (bool IsForm)
 
    /***** Can students enter directly? *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\""
-		      " style=\"text-align:right; vertical-align:middle;\">"
+		      "<td class=\"%s\">"
 		      "%s:"
 		      "</td>"
 		      "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Students_authentication);
+	    The_ClassFormul[Gbl.Prefs.Theme],
+	    Txt_Students_authentication);
 
    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AllowDirectLogIn\" value=\"N\"");
    if (!Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn &&
@@ -582,11 +573,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses);
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " padding:0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
@@ -963,7 +951,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
       Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
       /***** Write menu to select country, institution, centre and degree *****/
-      Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActSeeDeg,ActSeeCrs);
+      Deg_WriteMenuAllCourses ();
 
       /***** Put link (form) to edit courses in current degree *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
@@ -1210,7 +1198,6 @@ static void Crs_EditCourses (void)
 
 static void Crs_ListCoursesForSeeing (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
@@ -2940,8 +2927,7 @@ static void Crs_PutLinkToGoToCrs (struct Course *Crs)
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Go_to_X;
 
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (Crs->CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);

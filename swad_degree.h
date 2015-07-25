@@ -101,10 +101,7 @@ void Deg_SeeDegWithPendingCrss (void);
 void Deg_ShowConfiguration (void);
 void Deg_PrintConfiguration (void);
 
-void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
-                              Act_Action_t NextActionIns,
-                              Act_Action_t NextActionCtr,
-                              Act_Action_t NextActionDeg);
+void Deg_WriteMenuAllCourses (void);
 void Deg_WriteCtyInsCtrDeg (void);
 void Deg_WriteBigNameCtyInsCtrDegCrs (void);
 void Deg_InitCurrentCourse (void);

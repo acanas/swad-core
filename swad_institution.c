@@ -486,7 +486,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
       /***** Write menu to select country *****/
-      Deg_WriteMenuAllCourses (ActSeeIns,ActUnk,ActUnk,ActUnk);
+      Deg_WriteMenuAllCourses ();
 
       /***** Put link (form) to edit institutions *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
@@ -1024,7 +1024,7 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
 
    /***** Start form *****/
    Act_FormGoToStart (NextAction);
-   fprintf (Gbl.F.Out,"<select name=\"InsCod\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:140px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);

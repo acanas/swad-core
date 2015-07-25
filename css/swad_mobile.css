@@ -542,10 +542,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .YELLOW_MENU_ON		{color:#FF4301; font-size:20pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
-.WHITE_FORM		{color:#4D88A1; font-size:16pt; text-align:right;}
-.GREY_FORM		{color:#4D88A1; font-size:16pt; text-align:right;}
-.BLUE_FORM		{color:#4D88A1; font-size:16pt; text-align:right;}
-.YELLOW_FORM		{color:#FF4301; font-size:16pt; text-align:right;}
+.WHITE_FORM		{color:#4D88A1; font-size:16pt; text-align:right; vertical-align:middle;}
+.GREY_FORM		{color:#4D88A1; font-size:16pt; text-align:right; vertical-align:middle;}
+.BLUE_FORM		{color:#4D88A1; font-size:16pt; text-align:right; vertical-align:middle;}
+.YELLOW_FORM		{color:#FF4301; font-size:16pt; text-align:right; vertical-align:middle;}
 
 .WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:16pt; white-space:nowrap;}
 .GREY_FORM_NOWRAP	{color:#4D88A1; font-size:16pt; white-space:nowrap;}

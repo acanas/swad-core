@@ -95,7 +95,9 @@ void Con_ShowConnectedUsrs (void)
    Gbl.Scope.Current = Sco_SCOPE_CRS;
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	                 "%s:&nbsp;"
+	                 "</label>",
 	       The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
       Sco_SetScopesForListingStudents ();
       Sco_GetScope ();

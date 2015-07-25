@@ -229,7 +229,7 @@ void Dat_WriteFormIniEndDates (void)
    extern const char *Txt_Today;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],
@@ -242,7 +242,7 @@ void Dat_WriteFormIniEndDates (void)
                       "</tr>");
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],

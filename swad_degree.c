@@ -343,8 +343,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\""
@@ -365,8 +364,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -382,8 +380,7 @@ static void Deg_Configuration (bool PrintView)
       if (Gbl.CurrentDeg.Deg.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"text-align:right; vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
@@ -402,8 +399,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Shortcut to the degree *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
@@ -422,8 +418,7 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the degree *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -438,8 +433,7 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -452,8 +446,7 @@ static void Deg_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -467,8 +460,7 @@ static void Deg_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -490,10 +482,7 @@ static void Deg_Configuration (bool PrintView)
 /*** Write menu to select country, institution, centre, degree and course ****/
 /*****************************************************************************/
 
-void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
-                              Act_Action_t NextActionIns,
-                              Act_Action_t NextActionCtr,
-                              Act_Action_t NextActionDeg)
+void Deg_WriteMenuAllCourses (void)
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Country;
@@ -508,57 +497,54 @@ void Deg_WriteMenuAllCourses (Act_Action_t NextActionCty,
    /***** Write a 1st selector
           with all the countries *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Country);
-   Cty_WriteSelectorOfCountry (NextActionCty);
+   Cty_WriteSelectorOfCountry (ActSeeIns);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   if (NextActionIns != ActUnk &&
-       Gbl.CurrentCty.Cty.CtyCod > 0)
+   if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Write a 2nd selector
              with the institutions of selected country *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\" style=\"text-align:right;\">"
+                         "<td class=\"%s\">"
                          "%s:"
                          "</td>"
                          "<td style=\"text-align:left;\">",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_Institution);
-      Ins_WriteSelectorOfInstitution (NextActionIns);
+      Ins_WriteSelectorOfInstitution (ActSeeCtr);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
-      if (NextActionCtr != ActUnk &&
-	  Gbl.CurrentIns.Ins.InsCod > 0)
+      if (Gbl.CurrentIns.Ins.InsCod > 0)
         {
          /***** Write a 3rd selector
                 with all the centres of selected institution *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"text-align:right;\">"
+                            "<td class=\"%s\">"
                             "%s:"
                             "</td>"
                             "<td style=\"text-align:left;\">",
                   The_ClassFormul[Gbl.Prefs.Theme],Txt_Centre);
-         Ctr_WriteSelectorOfCentre (NextActionCtr);
+         Ctr_WriteSelectorOfCentre (ActSeeDeg);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
-         if (NextActionDeg != ActUnk &&
-             Gbl.CurrentCtr.Ctr.CtrCod > 0)
+         if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
            {
             /***** Write a 4th selector
                    with all the degrees of selected centre *****/
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"%s\" style=\"text-align:right;\">"
+                               "<td class=\"%s\">"
                                "%s:"
                                "</td>"
                                "<td style=\"text-align:left;\">",
                      The_ClassFormul[Gbl.Prefs.Theme],Txt_Degree);
-            Deg_WriteSelectorOfDegree (NextActionDeg);
+            Deg_WriteSelectorOfDegree (ActSeeCrs);
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");
            }
@@ -585,7 +571,7 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
 
    /***** Start form *****/
    Act_FormGoToStart (NextAction);
-   fprintf (Gbl.F.Out,"<select name=\"DegCod\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:140px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -1012,7 +998,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       Deg_GetListDegsOfCurrentCtr ();
 
       /***** Write menu to select country, institution and centre *****/
-      Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActSeeDeg,ActUnk);
+      Deg_WriteMenuAllCourses ();
 
       /***** Put link (form) to edit degrees of the current centre *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)

@@ -314,8 +314,7 @@ static void Cty_Configuration (bool PrintView)
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT_N\""
@@ -333,8 +332,7 @@ static void Cty_Configuration (bool PrintView)
 
       /***** Link to the country inside platform *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -352,8 +350,7 @@ static void Cty_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -368,8 +365,7 @@ static void Cty_Configuration (bool PrintView)
 	{
 	 /***** Number of institutions *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -383,8 +379,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -398,8 +393,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -413,8 +407,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -428,8 +421,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -443,8 +435,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -1005,7 +996,7 @@ void Cty_WriteSelectorOfCountry (Act_Action_t NextAction)
 
    /***** Start form *****/
    Act_FormGoToStart (NextAction);
-   fprintf (Gbl.F.Out,"<select name=\"CtyCod\" style=\"width:140px;\""
+   fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:140px;\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.FormId);

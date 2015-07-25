@@ -365,8 +365,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\""
@@ -384,7 +383,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -400,7 +399,7 @@ static void Ctr_Configuration (bool PrintView)
       if (Gbl.CurrentCtr.Ctr.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
@@ -419,7 +418,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Shortcut to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -438,7 +437,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -453,7 +452,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -467,7 +466,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -481,7 +480,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -495,7 +494,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -528,7 +527,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Write menu to select country and institution *****/
-      Deg_WriteMenuAllCourses (ActSeeIns,ActSeeCtr,ActUnk,ActUnk);
+      Deg_WriteMenuAllCourses ();
 
       /***** Put link (form) to edit centres in current institution *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
@@ -1070,7 +1069,7 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
 
    /***** Start form *****/
    Act_FormGoToStart (NextAction);
-   fprintf (Gbl.F.Out,"<select name=\"CtrCod\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:140px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
