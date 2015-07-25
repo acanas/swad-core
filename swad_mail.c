@@ -949,8 +949,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 /* The first mail is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td",
@@ -965,8 +964,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 	 fprintf (Gbl.F.Out,"<tr>");
 	 if (NumEmail == 2)
 	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s\""
-		               " style=\"text-align:right;"
-			       " vertical-align:top;\">"
+		               " style=\"vertical-align:top;\">"
 			       "%s:",
 		     NumEmails - 1,
 		     The_ClassFormul[Gbl.Prefs.Theme],
@@ -1025,8 +1023,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 
    /***** Form to enter new e-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;"
-                      " vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",

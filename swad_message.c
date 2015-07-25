@@ -319,8 +319,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Draw lists of users with the recipients *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td style=\"text-align:left;\">"
@@ -439,8 +438,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
    /***** Subject of new message *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
@@ -471,8 +469,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
       /***** Content of new message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
@@ -498,8 +495,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
       /***** Content of new message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
@@ -2323,7 +2319,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:&nbsp;"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -2337,7 +2333,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:&nbsp;"
                       "</td>"
                       "<td style=\"text-align:left;\">"

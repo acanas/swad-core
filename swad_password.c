@@ -687,7 +687,7 @@ void Pwd_ShowFormChgPwd (void)
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"text-align:right;\">"
+	                 "<td class=\"%s\">"
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
@@ -770,7 +770,6 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
 void Pwd_ShowFormOthPwd (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Changing_the_password_for_the_following_user;
    extern const char *Txt_Save;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;

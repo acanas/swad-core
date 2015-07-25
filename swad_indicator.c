@@ -101,8 +101,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
@@ -121,8 +120,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for a type of degree */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -137,8 +135,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">",
@@ -150,7 +147,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Show only courses with a numer of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"

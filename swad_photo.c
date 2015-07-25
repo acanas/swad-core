@@ -285,7 +285,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -1517,8 +1517,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
@@ -1587,8 +1586,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_HowComputePhotoSize_t PhoSi;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
@@ -1657,8 +1655,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_HowOrderDegrees_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",

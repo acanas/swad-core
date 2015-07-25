@@ -101,8 +101,7 @@ void Not_ShowFormNotice (void)
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;"
-                      " vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"

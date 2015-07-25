@@ -251,8 +251,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" class=\"%s\""
-	              " style=\"text-align:center; vertical-align:middle;\">"
+	              "<td colspan=\"7\" class=\"%s\">"
                       "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.ClassPhoto.AllGroups)

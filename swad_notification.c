@@ -594,8 +594,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    extern const char *Txt_Show_all_notifications;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:middle;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (ActSeeNtf);
 
@@ -1712,7 +1711,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"text-align:right;\">"
+	                 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td style=\"text-align:center;\">"

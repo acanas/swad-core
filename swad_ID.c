@@ -432,8 +432,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       if (NumID == 0)
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:top;\">"
+			    "<td class=\"%s\" style=\"vertical-align:top;\">"
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" style=\"text-align:left;"
@@ -479,10 +478,6 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 		  Gbl.Title,Gbl.Title);
 	}
 
-      /* Link to QR code */
-      // if (NumID == 0)
-      //   QR_PutLinkToPrintMyQRCode (QR_ID);
-
       if (NumID == UsrDat->IDs.Num - 1)
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -492,8 +487,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:right;"
-			 " vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td style=\"text-align:left;"

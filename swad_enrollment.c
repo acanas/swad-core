@@ -782,6 +782,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_the_course_X;
@@ -834,7 +835,8 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"LIST_LEFT\">");
+                      "<ul class=\"LIST_LEFT %s\">",
+	    The_ClassFormul[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&

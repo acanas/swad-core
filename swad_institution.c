@@ -282,8 +282,7 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Institution full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:middle; \">"
+			 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\" style=\"text-align:left;"
@@ -304,8 +303,7 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Institution short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
@@ -321,8 +319,7 @@ static void Ins_Configuration (bool PrintView)
       if (Gbl.CurrentIns.Ins.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"text-align:right; vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
@@ -341,8 +338,7 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Shortcut to the institution *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:middle;\">"
+			 "<td class=\"%s\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
@@ -361,8 +357,7 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -377,8 +372,7 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -392,8 +386,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -407,8 +400,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -422,8 +414,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /***** Number of departments *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -437,8 +428,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -452,8 +442,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"

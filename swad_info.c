@@ -428,8 +428,7 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
    extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Force_students_to_read_this_information;
 
-   fprintf (Gbl.F.Out,"<div class=\"%s\""
-	              " style=\"text-align:center; vertical-align:middle;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (Inf_ActionsChangeForceReadInfo[InfoType]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
@@ -1057,7 +1056,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    /***** File *****/
    fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
 	              "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -1092,7 +1091,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    /***** Link *****/
    fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
                       "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
