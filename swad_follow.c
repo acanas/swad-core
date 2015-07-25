@@ -155,7 +155,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"</div>");
 
    /* Text */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
             (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
         	                         The_ClassFormul[Gbl.Prefs.Theme]);
    if (NumUsrs)

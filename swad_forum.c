@@ -266,6 +266,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
+static void For_WriteThrSubject (long ThrCod);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
@@ -864,7 +865,6 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Thread;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
@@ -907,10 +907,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    /* Write a link to top level of forums */
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " padding:0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+                      "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -918,7 +915,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteLinkToAForum (Gbl.Forum.ForumType,true,1,IsLastItemInLevel);
 
    /* Write thread title */
-   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
+   fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:20px;\">");
    IsLastItemInLevel[2] = true;
    Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 
@@ -1592,7 +1589,6 @@ void For_SetForumTypeAndRestrictAccess (void)
 
 void For_ShowForumList (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Forums;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
@@ -1626,10 +1622,7 @@ void For_ShowForumList (void)
 
    /***** Write a link to top level of forums *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " padding:0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+                      "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /***** Links to global forums *****/
@@ -2362,7 +2355,6 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
 void For_ShowForumThrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Forum;
    extern const char *Txt_Threads;
    extern const char *Txt_MSG_Subject;
@@ -2474,10 +2466,7 @@ void For_ShowForumThrs (void)
 
    /* Write a link to top level of forums */
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " padding:0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+                      "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -3516,7 +3505,7 @@ void For_GetThrData (struct ForumThread *Thr)
 /************* Write the subject of the first message of a thread ************/
 /*****************************************************************************/
 
-void For_WriteThrSubject (long ThrCod)
+static void For_WriteThrSubject (long ThrCod)
   {
    extern const char *Txt_no_subject;
    extern const char *Txt_first_message_not_allowed;
@@ -3719,8 +3708,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_StartRoundFrameTable (NULL,2,IsReply ? Txt_New_message :
         	                              Txt_New_thread);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
@@ -3733,8 +3721,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "</td>"
 	              "</tr>"
 	              "<tr>"
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
