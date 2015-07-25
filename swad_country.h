@@ -85,7 +85,7 @@ void Cty_PutHiddenParamCtyOrderType (void);
 void Cty_EditCountries (void);
 void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData);
 void Cty_FreeListCountries (void);
-void Cty_WriteSelectorOfCountry (Act_Action_t NextAction);
+void Cty_WriteSelectorOfCountry (void);
 bool Cty_GetDataOfCountryByCod (struct Country *Cty);
 void Cty_GetCountryName (long CtyCod,char *CtyName);
 void Cty_PutParamCtyCod (long CtyCod);

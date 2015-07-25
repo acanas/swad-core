@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.120.2 (2015/07/25)"
+#define Log_PLATFORM_VERSION	"SWAD 14.120.3 (2015/07/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.120.3: Jul 25, 2015	Changes in selectors of country, institution, centre, degree and course. (184893 lines)
         Version 14.120.2: Jul 25, 2015	Changes in CSS of forms.
                                         Fixed bug in selectors of country, institution, centre and degree. (184819 lines)
         Version 14.120.1: Jul 25, 2015	Changes in CSS of forms.

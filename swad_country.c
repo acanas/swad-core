@@ -983,7 +983,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 /************************** Write selector of country ************************/
 /*****************************************************************************/
 
-void Cty_WriteSelectorOfCountry (Act_Action_t NextAction)
+void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
@@ -995,7 +995,7 @@ void Cty_WriteSelectorOfCountry (Act_Action_t NextAction)
    long CtyCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (NextAction);
+   Act_FormGoToStart (ActSeeIns);
    fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:140px;\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"\"",

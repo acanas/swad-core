@@ -101,7 +101,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
 bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
                                     Ins_GetExtraData_t GetExtraData);
 void Ins_FreeListInstitutions (void);
-void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction);
+void Ins_WriteSelectorOfInstitution (void);
 void Ins_PutParamInsCod (long InsCod);
 long Ins_GetParamOtherInsCod (void);
 void Ins_RemoveInstitution (void);

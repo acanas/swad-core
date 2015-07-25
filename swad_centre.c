@@ -1057,7 +1057,7 @@ void Ctr_FreeListCentres (void)
 /************************** Write selector of centre *************************/
 /*****************************************************************************/
 
-void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
+void Ctr_WriteSelectorOfCentre (void)
   {
    extern const char *Txt_Centre;
    char Query[128];
@@ -1068,7 +1068,7 @@ void Ctr_WriteSelectorOfCentre (Act_Action_t NextAction)
    long CtrCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (NextAction);
+   Act_FormGoToStart (ActSeeDeg);
    fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:140px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",

@@ -1012,7 +1012,7 @@ void Ins_FreeListInstitutions (void)
 /************************ Write selector of institution **********************/
 /*****************************************************************************/
 
-void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
+void Ins_WriteSelectorOfInstitution (void)
   {
    extern const char *Txt_Institution;
    char Query[512];
@@ -1023,7 +1023,7 @@ void Ins_WriteSelectorOfInstitution (Act_Action_t NextAction)
    long InsCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (NextAction);
+   Act_FormGoToStart (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:140px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",

@@ -940,6 +940,72 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
   }
 
 /*****************************************************************************/
+/*************************** Write selector of course ************************/
+/*****************************************************************************/
+
+void Crs_WriteSelectorOfCourse (void)
+  {
+   extern const char *Txt_Course;
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+   long CrsCod;
+
+   /***** Start form *****/
+   Act_FormGoToStart (ActSeeCrsInf);
+   fprintf (Gbl.F.Out,"<select name=\"crs\" style=\"width:140px;\"");
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+               Gbl.FormId);
+   else
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"\"");
+   if (Gbl.CurrentCrs.Crs.CrsCod < 0)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
+            Txt_Course);
+
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+     {
+      /***** Get courses belonging to the current degree from database *****/
+      sprintf (Query,"SELECT CrsCod,ShortName FROM courses"
+                     " WHERE DegCod='%ld'"
+                     " ORDER BY ShortName",
+               Gbl.CurrentDeg.Deg.DegCod);
+      NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a degree");
+
+      /***** Get courses of this degree *****/
+      for (NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++)
+        {
+         /* Get next course */
+         row = mysql_fetch_row (mysql_res);
+
+         /* Get course code (row[0]) */
+         if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+            Lay_ShowErrorAndExit ("Wrong course.");
+
+         /* Write option */
+         fprintf (Gbl.F.Out,"<option value=\"%ld\"",CrsCod);
+         if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+             (CrsCod == Gbl.CurrentCrs.Crs.CrsCod))
+	    fprintf (Gbl.F.Out," selected=\"selected\"");
+         fprintf (Gbl.F.Out,">%s</option>",row[1]);
+        }
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   /***** End form *****/
+   fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /************************** Show courses of a degree *************************/
 /*****************************************************************************/
 

@@ -86,7 +86,7 @@ typedef enum
 static void Deg_Configuration (bool PrintView);
 
 static void Deg_ListDegreeTypes (void);
-static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction);
+static void Deg_WriteSelectorOfDegree (void);
 static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
 static void Deg_ListDegreeTypesForEdition (void);
@@ -489,6 +489,7 @@ void Deg_WriteMenuAllCourses (void)
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
+   extern const char *Txt_Course;
 
    /***** Start of table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
@@ -502,7 +503,7 @@ void Deg_WriteMenuAllCourses (void)
                       "</td>"
                       "<td style=\"text-align:left;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Country);
-   Cty_WriteSelectorOfCountry (ActSeeIns);
+   Cty_WriteSelectorOfCountry ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -516,7 +517,7 @@ void Deg_WriteMenuAllCourses (void)
                          "</td>"
                          "<td style=\"text-align:left;\">",
                The_ClassFormul[Gbl.Prefs.Theme],Txt_Institution);
-      Ins_WriteSelectorOfInstitution (ActSeeCtr);
+      Ins_WriteSelectorOfInstitution ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -530,7 +531,7 @@ void Deg_WriteMenuAllCourses (void)
                             "</td>"
                             "<td style=\"text-align:left;\">",
                   The_ClassFormul[Gbl.Prefs.Theme],Txt_Centre);
-         Ctr_WriteSelectorOfCentre (ActSeeDeg);
+         Ctr_WriteSelectorOfCentre ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -544,9 +545,24 @@ void Deg_WriteMenuAllCourses (void)
                                "</td>"
                                "<td style=\"text-align:left;\">",
                      The_ClassFormul[Gbl.Prefs.Theme],Txt_Degree);
-            Deg_WriteSelectorOfDegree (ActSeeCrs);
+            Deg_WriteSelectorOfDegree ();
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");
+
+	    if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	      {
+	       /***** Write a 5th selector
+		      with all the courses of selected degree *****/
+	       fprintf (Gbl.F.Out,"<tr>"
+				  "<td class=\"%s\">"
+				  "%s:"
+				  "</td>"
+				  "<td style=\"text-align:left;\">",
+			The_ClassFormul[Gbl.Prefs.Theme],Txt_Course);
+	       Crs_WriteSelectorOfCourse ();
+	       fprintf (Gbl.F.Out,"</td>"
+				  "</tr>");
+	      }
            }
         }
      }
@@ -559,7 +575,7 @@ void Deg_WriteMenuAllCourses (void)
 /*************************** Write selector of degree ************************/
 /*****************************************************************************/
 
-static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
+static void Deg_WriteSelectorOfDegree (void)
   {
    extern const char *Txt_Degree;
    char Query[512];
@@ -570,7 +586,7 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
    long DegCod;
 
    /***** Start form *****/
-   Act_FormGoToStart (NextAction);
+   Act_FormGoToStart (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:140px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
@@ -602,7 +618,7 @@ static void Deg_WriteSelectorOfDegree (Act_Action_t NextAction)
 
          /* Get degree code (row[0]) */
          if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Wrong type of degree.");
+            Lay_ShowErrorAndExit ("Wrong degree.");
 
          /* Write option */
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",DegCod);
