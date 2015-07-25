@@ -594,8 +594,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write form to delete this notice *****/
    if (ICanEditNotices)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-               The_ClassFormul[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
 
       /* Form to delete notice */
       Act_FormStart (ActRemNot);

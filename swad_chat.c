@@ -91,7 +91,6 @@ void Cht_ShowChatRooms (void)
 
 void Cht_ShowListOfAvailableChatRooms (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Chat_rooms;
    extern const char *Txt_General;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -117,24 +116,20 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_Chat_rooms);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td>"
-                      "<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"%s\" style=\"list-style-type:none;"
-                      " padding:0; margin:0;"
-                      " text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+   Lay_StartRoundFrame (NULL,Txt_Chat_rooms);
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+                      "<ul class=\"LIST_LEFT\">");
 
    /***** Title of top level *****/
-   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">"
+   fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:20px;\">"
                       "<img src=\"%s/chat16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
                       " %s"
                       "</li>",
             Gbl.Prefs.IconsURL,
-            Txt_Chat_rooms,Txt_Chat_rooms,
+            Txt_Chat_rooms,
+            Txt_Chat_rooms,
             Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
@@ -147,9 +142,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
 	              " style=\"vertical-align:middle;\" />",
             Gbl.Prefs.IconsURL,
-            ThisRoomFullName,ThisRoomFullName);
+            ThisRoomFullName,
+            ThisRoomFullName);
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
-
 
    IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegrees.Num;
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -233,10 +228,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>"
-	              "</td>"
-                      "</tr>");
-   Lay_EndRoundFrameTable ();
+	              "</div>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -310,8 +303,6 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName
   {
    extern const char *The_ClassFormul[The_NUM_THEMES];
 
-   // sprintf (Gbl.Chat.WindowName,"%s_%s",RoomCode,Gbl.UniqueNameEncrypted);
-
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
@@ -321,14 +312,13 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_connected_PLURAL;
    extern const char *Txt_connected_SINGULAR;
    unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
 
    if (NumUsrsInRoom)
       fprintf (Gbl.F.Out,"<strong>");
-   fprintf (Gbl.F.Out,"%s",RoomFullName);
+   fprintf (Gbl.F.Out," %s",RoomFullName);
    if (NumUsrsInRoom > 1)
       fprintf (Gbl.F.Out," [%d %s]",
                NumUsrsInRoom,Txt_connected_PLURAL);

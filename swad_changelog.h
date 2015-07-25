@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.119.5 (2015/07/24)"
+#define Log_PLATFORM_VERSION	"SWAD 14.120 (2015/07/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.120:   Jul 25, 2015	Changes in CSS of forms. (184879 lines)
         Version 14.119.5: Jul 24, 2015	Changes in CSS of lists. (184902 lines)
         Version 14.119.4: Jul 24, 2015	New layout of institutional links as a list. (184872 lines)
         Version 14.119.3: Jul 24, 2015	New layout of MFU actions as a list. (184875 lines)

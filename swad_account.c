@@ -138,7 +138,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    else
       NewNicknameWithArroba[0] = '\0';
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\">"
                       "%s: "
                       "</td>"
 	              "<td style=\"text-align:left;\">"
@@ -155,7 +155,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** E-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\">"
                       "%s: "
                       "</td>"
 	              "<td style=\"text-align:left;\">"

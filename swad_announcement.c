@@ -220,9 +220,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
             Content);
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\""
-	              " style=\"text-align:center; margin:10px;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin:10px;\">");
 
    if (ShowAllAnnouncements)
      {
@@ -326,7 +324,7 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -335,7 +333,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"

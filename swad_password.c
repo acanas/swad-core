@@ -735,7 +735,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
@@ -744,7 +744,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"

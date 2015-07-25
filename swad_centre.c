@@ -366,7 +366,7 @@ static void Ctr_Configuration (bool PrintView)
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 " style=\"vertical-align:middle;\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\""
@@ -384,8 +384,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -401,8 +400,7 @@ static void Ctr_Configuration (bool PrintView)
       if (Gbl.CurrentCtr.Ctr.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"text-align:right; vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
@@ -421,8 +419,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Shortcut to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"text-align:right; vertical-align:middle;\">"
+			 "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -441,8 +438,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -457,8 +453,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -472,8 +467,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -487,8 +481,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -502,8 +495,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\" style=\"vertical-align:middle;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -1963,7 +1955,6 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 
 static void Ctr_PutFormToCreateCentre (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_centre_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];

@@ -588,10 +588,6 @@ struct Globals
      {
       unsigned CurrentPage;
      } Pag;
-   // struct
-   //   {
-   //    char WindowName[256];
-   //   } Chat;
    struct
      {
       unsigned Day,Hour,Column;
