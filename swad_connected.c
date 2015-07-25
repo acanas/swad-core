@@ -97,12 +97,11 @@ void Con_ShowConnectedUsrs (void)
    Gbl.Scope.Current = Sco_SCOPE_CRS;
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
 	       The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
       Sco_SetScopesForListingStudents ();
       Sco_GetScope ();
       Sco_PutSelectorScope (false);
-      fprintf (Gbl.F.Out,"</div>");
      }
    Act_LinkFormSubmitAnimated (Txt_Update_connected_users,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_connected_users,Txt_Update_connected_users);
