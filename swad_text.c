@@ -46351,27 +46351,6 @@ const char *Txt_Update_attendance_according_to_selected_events =
 	"Atualizar presen&ccedil;a de acordo com eventos selecionados";
 #endif
 
-const char *Txt_Update_connected_users =
-#if   L==0
-	"Actualitzar usuaris connectats";
-#elif L==1
-	"Update angemeldet Benutzer";
-#elif L==2
-	"Update connected users";
-#elif L==3
-	"Actualizar usuarios conectados";
-#elif L==4
-	"Mise &agrave; jour des utilisateurs connect&eacute;s";
-#elif L==5
-	"Actualizar usuarios conectados";	// Okoteve traducción
-#elif L==6
-	"Aggiornamento utenti connessi";
-#elif L==7
-	"Update connected users";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Atualizar os utilizadores conectados";
-#endif
-
 const char *Txt_Update_indicators =
 #if   L==0
 	"Actualitzar indicadors";
