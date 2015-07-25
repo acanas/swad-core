@@ -855,8 +855,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Name of the course *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -876,8 +875,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Year (optional, 1º, 2º, 3º, 4º, 5º...) *****/
    fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>" \
                       "<td class=\"%s\""
@@ -905,8 +903,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Exam session *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -924,8 +921,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Date of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Exam_date);
@@ -953,8 +949,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Start time *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1000,8 +995,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Approximate duration of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1064,8 +1058,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Place where the exam will be made *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1086,8 +1079,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Exam mode *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1108,8 +1100,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Structure of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1130,8 +1121,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Documentation required *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1152,8 +1142,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Material required *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1174,7 +1163,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Material allowed *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
@@ -1195,8 +1184,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Other information to students *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""

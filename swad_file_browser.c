@@ -4312,8 +4312,7 @@ static void Brw_WriteFormFullTree (void)
    extern const char *Txt_Show_all_files;
 
    /***** Start form depending on type of tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\""
-	              " style=\"text-align:center; vertical-align:middle;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
 	    The_ClassFormul[Gbl.Prefs.Theme]);
    Act_FormStart (Brw_ActSeeAdm[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
@@ -7672,7 +7671,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /***** Folder *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s: "
+	              "%s:&nbsp;"
 	              "</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"32\" maxlength=\"40\" value=\"\" />",
@@ -7830,7 +7829,6 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
 static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Paste;
    extern const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X;
 
@@ -7912,7 +7910,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td style=\"text-align:right;\">"
-	              "<label class=\"%s\">%s:</label>"
+	              "<label class=\"%s\">%s:&nbsp;</label>"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewLinkURL\""
@@ -7925,7 +7923,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /***** Link name *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td style=\"text-align:right;\">"
-	              "<label class=\"%s\">%s (%s):</label>"
+	              "<label class=\"%s\">%s&nbsp;(%s):&nbsp;</label>"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewLinkName\""
@@ -8905,8 +8903,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Filename *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -8918,8 +8915,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Publisher's data *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -8949,8 +8945,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write the file size *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -8962,8 +8957,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write the date *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -8976,8 +8970,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Private or public? *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -9008,8 +9001,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** License *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -9038,8 +9030,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write my number of views *****/
 	 if (Gbl.Usrs.Me.Logged)
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\" style=\"text-align:right;"
-			       " vertical-align:middle;\">"
+			       "<td class=\"%s\">"
 			       "%s:"
 			       "</td>"
 			       "<td class=\"DAT\" style=\"text-align:left;"
@@ -9052,8 +9043,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write number of identificated views *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -9069,8 +9059,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write number of public views *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"text-align:right;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"%s\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"

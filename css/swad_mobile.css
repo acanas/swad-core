@@ -736,12 +736,49 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BM0			{width:16px; text-align:left; vertical-align:middle; background-color:#F4F2EA;}
 .BM1			{width:16px; text-align:left; vertical-align:middle; background-color:#FBFAF7;}
 
-.CONV_TIT		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-weight:bold; font-size:14pt;}
-.CONV_TIT_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-weight:bold; font-size:14pt;}
-.CONV_NEG		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-weight:bold; font-size:11pt; white-space:nowrap;}
-.CONV_NEG_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-weight:bold; font-size:11pt; white-space:nowrap;}
-.CONV			{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#404040; font-size:11pt;}
-.CONV_IMPR		{font-Family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#202020; font-size:11pt;}
+/***************************** Calls for exams *******************************/
+.CONV_TIT
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+ 	color:#404040;
+ 	font-weight:bold;
+ 	font-size:14pt;
+ 	}
+.CONV_TIT_IMPR
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+	color:#202020;
+	font-weight:bold;
+	font-size:14pt;
+	}
+.CONV_NEG
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+	color:#404040;
+	font-weight:bold;
+	font-size:11pt;
+	white-space:nowrap;
+	}
+.CONV_NEG_IMPR
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+	color:#202020;
+	font-weight:bold;
+	font-size:11pt;
+	white-space:nowrap;
+	}
+.CONV
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+	color:#404040;
+	font-size:11pt;
+	}
+.CONV_IMPR
+	{
+	font-family:Garamond, "DejaVu LGC Serif", "Bitstream Vera Serif", serif;
+	color:#202020;
+	font-size:11pt;
+	}
 
 /***************************** Public user's profile *************************/
 .FOLLOW
