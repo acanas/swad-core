@@ -459,8 +459,7 @@ void Sta_AskSeeCrsAccesses (void)
 
          /***** Type of statistic *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"%s\" style=\"vertical-align:top;\">"
                             "%s:"
                             "</td>"
                             "<td class=\"DAT\""
@@ -486,8 +485,7 @@ void Sta_AskSeeCrsAccesses (void)
 
          /* Listing of clicks to this course  */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"2\" class=\"%s\""
-                            " style=\"text-align:center; vertical-align:middle;\">"
+                            "<td colspan=\"2\" class=\"%s\">"
                             "<input type=\"radio\" name=\"ClickStatType\" value=\"%u\"",
                   The_ClassFormul[Gbl.Prefs.Theme],(unsigned) Sta_ACC_CRS_LISTING);
          if (Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING)
@@ -572,8 +570,7 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
@@ -597,8 +594,7 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:middle;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
@@ -620,8 +616,7 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
@@ -665,8 +660,7 @@ static void Sta_WriteSelectorCountType (void)
 
    /**** Count type *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
@@ -699,8 +693,7 @@ static void Sta_WriteSelectorAction (void)
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
@@ -3614,14 +3607,14 @@ void Sta_ReqUseOfPlatform (void)
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
 	               1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR      |
-		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();
@@ -4535,7 +4528,6 @@ static void Sta_GetAndShowInstitutionsStats (void)
 
 static void Sta_GetAndShowInssOrderedByNumCtrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_by_number_of_centres;
    extern const char *Txt_Centres;
    char Query[1024];
@@ -4587,7 +4579,6 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
 
 static void Sta_GetAndShowInssOrderedByNumDegs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_by_number_of_degrees;
    extern const char *Txt_Degrees;
    char Query[1024];
@@ -4642,7 +4633,6 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
 
 static void Sta_GetAndShowInssOrderedByNumCrss (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_by_number_of_courses;
    extern const char *Txt_Courses;
    char Query[1024];
@@ -4700,7 +4690,6 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
 
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_by_number_of_users_in_courses;
    extern const char *Txt_Users;
    char Query[1024];
@@ -4762,7 +4751,6 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
 
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
    extern const char *Txt_Users;
    char Query[1024];

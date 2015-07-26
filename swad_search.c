@@ -238,11 +238,11 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR      |
-		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ();
