@@ -1047,6 +1047,7 @@ static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Va
 
 void Asg_RequestCreatOrEditAsg (void)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Start_date;
@@ -1126,14 +1127,14 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
-                      "<td style=\"text-align:left; vertical-align:top;\">"
+                      "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
+            The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Title,
             Asg_MAX_LENGTH_ASSIGNMENT_TITLE,Asg.Title);
 
@@ -1143,14 +1144,14 @@ void Asg_RequestCreatOrEditAsg (void)
 	StartOrEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
-                         "<td style=\"text-align:left; vertical-align:top;\">"
+                         "<td style=\"text-align:left;\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td style=\"text-align:left; vertical-align:top;\">",
+                         "<td style=\"text-align:left;\">",
+               The_ClassFormul[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
 
       /* Date */
@@ -1179,28 +1180,28 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Send work? *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\""
-	              " style=\"text-align:right; vertical-align:middle;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"%s\" style=\"text-align:left;\">"
                       "%s: "
                       "<input type=\"text\" name=\"Folder\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
+            The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Upload_files_QUESTION,
+            The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Folder,
             Asg_MAX_LENGTH_FOLDER,Asg_MAX_LENGTH_FOLDER,Asg.Folder);
 
    /***** Assignment text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
+            The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewAssignment)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1228,6 +1229,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
+   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1239,11 +1241,11 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
 	                 "%s:"
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
+               The_ClassFormul[Gbl.Prefs.Theme],
                Txt_Groups);
       Lay_StartRoundFrameTable ("100%",0,NULL);
 

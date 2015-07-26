@@ -1125,7 +1125,6 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt)
       Lay_ShowErrorAndExit ("Error when getting survey text.");
   }
 
-
 /*****************************************************************************/
 /******************** Get summary and content of a survey  *******************/
 /*****************************************************************************/
@@ -1622,10 +1621,10 @@ void Svy_RequestCreatOrEditSvy (void)
 	                 "<td class=\"%s\">"
 	                 "%s:"
 	                 "</td>"
-                         "<td style=\"text-align:left; vertical-align:top;\">"
+                         "<td style=\"text-align:left;\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td style=\"text-align:left; vertical-align:top;\">",
+                         "<td style=\"text-align:left;\">",
                The_ClassFormul[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,
@@ -2462,7 +2461,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	              "</td>",
             The_ClassFormul[Gbl.Prefs.Theme],
             Txt_Type);
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"vertical-align:top;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
+	              " vertical-align:top;\">",
             The_ClassFormul[Gbl.Prefs.Theme]);
    for (AnsType = (Svy_AnswerType_t) 0;
 	AnsType < Svy_NUM_ANS_TYPES;
