@@ -141,7 +141,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
-	              "<td style=\"text-align:left;\">"
+	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewNick\""
                       " size=\"25\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\" />"
@@ -158,7 +158,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
-	              "<td style=\"text-align:left;\">"
+	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewEmail\""
                       " size=\"25\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\" />"
@@ -260,8 +260,7 @@ static void Acc_PrintAccountSeparator (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\""
-		      " style=\"text-align:center; vertical-align:middle;\">"
+		      "<td colspan=\"3\" class=\"CENTER_MIDDLE\">"
 		      "<hr class=\"%s\" />"
 		      "</td>"
 		      "</tr>",

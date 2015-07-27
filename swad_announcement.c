@@ -327,7 +327,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Subject\" cols=\"75\" rows=\"2\">"
                       "</textarea>"
 	              "</td>"
@@ -336,7 +336,7 @@ void Ann_ShowFormAnnouncement (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Content\" cols=\"75\" rows=\"20\">"
                       "</textarea>"
                       "</td>"
@@ -351,8 +351,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"DAT LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |

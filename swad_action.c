@@ -4726,8 +4726,8 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"text-align:left;"
-                            " vertical-align:middle; padding-left:2px;\">");
+                            "<td class=\"LEFT_MIDDLE\""
+                            " style=\"padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
@@ -4796,7 +4796,8 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
          Act_LinkFormSubmit (Title,"MFU_ACT");
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" style=\"margin:1px; vertical-align:middle;\" />",
+                            " class=\"ICON16x16\""
+                            " style=\"margin:1px; vertical-align:middle;\" />",
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[Action].Icon,
                   MenuStr,TabMenuStr);
