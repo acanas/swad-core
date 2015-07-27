@@ -1285,7 +1285,7 @@ void Rec_ListRecordsTchsCrs (void)
 void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
@@ -1294,7 +1294,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
    Lay_PutIconWithText ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+	    The_ClassForm[Gbl.Prefs.Theme]);
 
    for (i = 1;
         i <= 10;
@@ -1307,7 +1307,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "<span class=\"%s\"> %s)</span>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_record_cards_per_page);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_record_cards_per_page);
   }
 
 /*****************************************************************************/
@@ -1329,7 +1329,7 @@ static void Rec_GetParamRecordsPerPage (void)
 
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_office_hours;
 
    /***** Start form *****/
@@ -1353,7 +1353,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
             Gbl.Prefs.IconsURL,
             Txt_Show_office_hours,
             Txt_Show_office_hours,
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Show_office_hours);
    Act_FormEnd ();
   }
@@ -1439,7 +1439,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
 void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
@@ -1571,11 +1571,10 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"width:%upx;"
-                            " text-align:left; vertical-align:top;"
-                            " background-color:%s;\">"
+                            "<td class=\"%s LEFT_TOP\""
+                            " style=\"width:%upx; background-color:%s;\">"
                             "%s:",
-                  ICanEdit ? The_ClassFormRightMiddle[Gbl.Prefs.Theme] :
+                  ICanEdit ? The_ClassForm[Gbl.Prefs.Theme] :
                 	     "DAT_REC_SMALL",
                   Col1Width,Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
@@ -1942,7 +1941,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_Edit;
    extern const char *Txt_View_record_for_this_course;
@@ -2063,7 +2062,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    struct Department Dpt;
 
    ClassHead = "HEAD_REC";
-   ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
+   ClassForm = The_ClassForm[Gbl.Prefs.Theme];
    ClassData = "DAT_REC";
    switch (TypeOfView)
      {
@@ -2073,7 +2072,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
 	 ClassHead = "HEAD_REC";
-         ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
+         ClassForm = The_ClassForm[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
@@ -2482,8 +2481,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 /***** User's e-mail *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2508,12 +2507,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /***** User's ID *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_TOP\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:left;\">",
+			    "<td class=\"%s LEFT_TOP\""
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_ID,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 ID_WriteUsrIDs (UsrDat,ShowID);
@@ -2524,8 +2523,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 if (RoleForm)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\""
-			       " style=\"width:%upx; text-align:right;\">"
+			       "<td class=\"%s RIGHT_MIDDLE\""
+			       " style=\"width:%upx;\">"
 			       "%s:</td>"
 			       "<td class=\"%s\""
 			       " style=\"width:%upx; text-align:left;\">",
@@ -2632,8 +2631,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 else if (SexForm)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\""
-			       " style=\"width:%upx; text-align:right;\">"
+			       "<td class=\"%s RIGHT_MIDDLE\""
+			       " style=\"width:%upx;\">"
 			       "%s*:</td>"
 			       "<td class=\"%s\""
 			       " style=\"width:%upx; text-align:left;\">",
@@ -2662,8 +2661,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   }
 	 else	// RoleForm == false, SexForm == false
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\""
-			       " style=\"width:%upx; text-align:right;\">"
+			       "<td class=\"%s RIGHT_MIDDLE\""
+			       " style=\"width:%upx;\">"
 			       "%s:"
 			       "</td>"
 			       "<td class=\"%s\""
@@ -2681,8 +2680,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Name *****/
 	 /* Surname 1 */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Surname_1);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2704,8 +2703,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Surname 2 */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2727,8 +2726,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* First name */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_First_name);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2759,8 +2758,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	      }
 
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\""
-			       " style=\"width:%upx; text-align:right;\">"
+			       "<td class=\"%s RIGHT_MIDDLE\""
+			       " style=\"width:%upx;\">"
 			       "%s",
 		     ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Country);
 	    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
@@ -2801,8 +2800,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 /* Origin place */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2825,8 +2824,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Date of birth */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2849,8 +2848,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Local address */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2873,8 +2872,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Local phone */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2897,8 +2896,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Family address */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2921,8 +2920,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Family phone */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -2945,8 +2944,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Common comments for all the courses */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"width:%upx;"
-			    " text-align:right; vertical-align:top;\">"
+			    "<td class=\"%s RIGHT_TOP\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\" style=\"width:%upx;"
@@ -2976,8 +2975,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	{
 	 /* Institution */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -3001,8 +3000,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Centre */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -3028,8 +3027,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Department */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -3055,8 +3054,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Office */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -3070,8 +3069,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	 /* Phone */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\""
-			    " style=\"width:%upx; text-align:right;\">"
+			    "<td class=\"%s RIGHT_MIDDLE\""
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s\""
@@ -3303,7 +3302,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
 
 void Rec_ShowFormMyInsCtrDpt (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_institution;
    extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
@@ -3316,7 +3315,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Another_department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   const char *ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
+   const char *ClassForm = The_ClassForm[Gbl.Prefs.Theme];
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;
@@ -3339,7 +3338,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\">%s:</td>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
 		      "<td style=\"width:%upx; text-align:left;\">",
             ClassForm,Txt_Country_of_institution,
             COL2_WIDTH);
@@ -3378,7 +3379,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\">%s:</td>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
 		      "<td style=\"width:%upx; text-align:left;\">",
             ClassForm,Txt_Institution,
 	    COL2_WIDTH);
@@ -3422,7 +3425,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">%s:</td>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
 	       ClassForm,Txt_Centre,
 	       COL2_WIDTH);
@@ -3464,7 +3469,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">%s:</td>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
 	       ClassForm,Txt_Department,
 	       COL2_WIDTH);
@@ -3506,7 +3513,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Office *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\">%s:</td>"
+	                 "<td class=\"%s RIGHT_MIDDLE\">"
+	                 "%s:"
+	                 "</td>"
                          "<td style=\"width:%upx; text-align:left;\">",
                ClassForm,Txt_Office,
                COL2_WIDTH);
@@ -3523,7 +3532,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\">%s:</td>"
+	                 "<td class=\"%s RIGHT_MIDDLE\">"
+	                 "%s:"
+	                 "</td>"
 	                 "<td style=\"width:%upx; text-align:left;\">",
                ClassForm,Txt_Phone,
                COL2_WIDTH);

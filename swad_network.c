@@ -219,12 +219,11 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   const char *ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_URL+1];
 
@@ -259,14 +258,14 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\" style=\"text-align:left;\">"
+			 "<td class=\"%s LEFT_MIDDLE\">"
 			 "<img src=\"%s/%s16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
 			 " style=\"width:16px; height:16px;"
 			 " margin-right:10px; vertical-align:middle;\" />"
 			 "%s:</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
-	       ClassForm,
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],

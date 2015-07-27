@@ -257,7 +257,7 @@ void Msg_FormMsgUsrs (void)
 
 static void Msg_PutFormMsgUsrs (const char *Content)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
@@ -319,12 +319,12 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Draw lists of users with the recipients *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td style=\"text-align:left;\">"
                          "<table>",
-               The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_MSG_To);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
 
       /* Teachers */
       Usr_ListUsersToSelect (Rol_TEACHER);
@@ -424,7 +424,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Original_message;
@@ -438,12 +438,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
    /***** Subject of new message *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
    /***** If message is a reply ==> get original message *****/
@@ -469,12 +469,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
       /***** Content of new message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">",
-               The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_MSG_Message);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
                Txt_Original_message);
@@ -495,12 +495,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 
       /***** Content of new message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s: "
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">%s",
-               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+               The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message,
                Content);
      }
@@ -2271,7 +2271,7 @@ void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
 void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
@@ -2282,7 +2282,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received_from_A_COURSE :
                                                       Txt_Messages_sent_from_A_COURSE);
    if (Gbl.Msg.FilterCrsCod < 0)
@@ -2309,7 +2309,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
 void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Message;
@@ -2319,28 +2319,28 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"FilterFromTo\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_MSG_From :
                                                       Txt_MSG_To,
             Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3,Gbl.Msg.FilterFromTo);
 
    /***** Authors/recipients of the message *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message,
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
@@ -2354,13 +2354,13 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\" value=\"Y\"",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+            The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," /> %s</div>",

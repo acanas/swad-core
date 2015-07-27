@@ -425,11 +425,11 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
 
 static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustBeRead)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Force_students_to_read_this_information;
 
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+	    The_ClassForm[Gbl.Prefs.Theme]);
    Act_FormStart (Inf_ActionsChangeForceReadInfo[InfoType]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
    if (MustBeRead)
@@ -449,12 +449,12 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
 
 static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_I_have_read_this_information;
    bool IHaveRead = Inf_CheckIfIHaveReadInfo (InfoType);
 
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme]);
    Act_FormStart (Inf_ActionsIHaveReadInfo[InfoType]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
    if (IHaveRead)
@@ -536,7 +536,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 
 void Inf_WriteMsgYouMustReadInfo (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_should_read_the_following_information_on_the_course_X;
    Inf_InfoType_t InfoType;
 
@@ -557,7 +557,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
         {
          fprintf (Gbl.F.Out,"<li>");
          Act_FormStart (Inf_ActionsSeeInfo[InfoType]);
-         Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+         Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
+                             The_ClassForm[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
@@ -1046,7 +1047,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTyp
 
 void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
@@ -1056,7 +1057,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    /***** File *****/
    fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
 	              "<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -1064,7 +1065,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_File,
+            The_ClassForm[Gbl.Prefs.Theme],Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Send button *****/
@@ -1080,7 +1081,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
 
 void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
    FILE *FileURL;
@@ -1091,12 +1092,12 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    /***** Link *****/
    fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
                       "<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"InfoSrcURL\" size=\"50\" maxlength=\"256\" value=\"",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_URL);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
    if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else

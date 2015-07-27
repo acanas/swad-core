@@ -126,7 +126,7 @@ void TsI_PutFormToImportQuestions (void)
 
 void TsI_ShowFormImportQstsFromXML (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import;
    extern const char *Txt_Upload_file;
    extern const char *Txt_XML_file;
@@ -140,7 +140,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Act_FormStart (ActImpTstQst);
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -149,7 +149,7 @@ void TsI_ShowFormImportQstsFromXML (void)
                       "</tr>"
                       "<tr>"
 	              "<td colspan=\"2\" style=\"text-align:center;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
    Lay_PutCreateButton (Txt_Upload_file);

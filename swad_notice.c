@@ -83,7 +83,7 @@ static long Not_GetParamNotCod (void);
 
 void Not_ShowFormNotice (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
    extern const char *Txt_MSG_Message;
@@ -101,14 +101,14 @@ void Not_ShowFormNotice (void)
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"Content\" cols=\"30\" rows=\"10\"></textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
    /***** Button to create notice and end frame *****/
@@ -470,7 +470,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t NoticeStatus)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_NOTICE_Active_SINGULAR;
    extern const char *Txt_NOTICE_Active_Mark_as_obsolete;
    extern const char *Txt_NOTICE_Obsolete_SINGULAR;
@@ -568,7 +568,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to view full notice */
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON32x32\" />"
@@ -598,7 +598,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to delete notice */
       Act_FormStart (ActRemNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_Remove,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Remove,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />"

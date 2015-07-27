@@ -240,7 +240,7 @@ void Pho_ReqUsrPhoto (struct UsrData *UsrDat)
 
 void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *PhotoURL)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_;
    extern const char *Txt_File_with_the_photo;
@@ -285,7 +285,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -293,7 +293,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
                       " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             UsrDat->UsrCod);
@@ -1511,17 +1511,17 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 static void Pho_PutSelectorForTypeOfAvg (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Average_type);
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Average_type);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1580,17 +1580,17 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 
 static void Pho_PutSelectorForHowComputePhotoSize (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Size_of_photos);
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1649,17 +1649,17 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 
 static void Pho_PutSelectorForHowOrderDegrees (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();

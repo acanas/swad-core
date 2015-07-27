@@ -135,7 +135,7 @@ void Prf_RequestUserProfile (void)
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
   {
    extern const char *Txt_View_public_profile;
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
@@ -151,7 +151,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
                       "</label>"
                       "<input type=\"text\" name=\"usr\""
                       " size=\"20\" maxlength=\"%u\" value=\"@%s\" />",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
             DefaultNickname);
@@ -754,7 +754,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -765,7 +765,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Act_FormStart (ActSeeUseGbl);
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USERS_RANKING);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
   }

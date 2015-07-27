@@ -207,20 +207,7 @@ const char *The_ClassForm[The_NUM_THEMES] =
    "BLUE_FORM",
    "YELLOW_FORM",
   };
-const char *The_ClassFormRightMiddle[The_NUM_THEMES] =
-  {
-   "WHITE_FORM RIGHT_MIDDLE",
-   "GREY_FORM RIGHT_MIDDLE",
-   "BLUE_FORM RIGHT_MIDDLE",
-   "YELLOW_FORM RIGHT_MIDDLE",
-  };
-const char *The_ClassFormRightTop[The_NUM_THEMES] =
-  {
-   "WHITE_FORM RIGHT_TOP",
-   "GREY_FORM RIGHT_TOP",
-   "BLUE_FORM RIGHT_TOP",
-   "YELLOW_FORM RIGHT_TOP",
-  };
+
 const char *The_ClassFormNoWrap[The_NUM_THEMES] =
   {
    "WHITE_FORM_NOWRAP",
@@ -228,6 +215,7 @@ const char *The_ClassFormNoWrap[The_NUM_THEMES] =
    "BLUE_FORM_NOWRAP",
    "YELLOW_FORM_NOWRAP",
   };
+
 const char *The_ClassFormBold[The_NUM_THEMES] =
   {
    "WHITE_FORM_BOLD",

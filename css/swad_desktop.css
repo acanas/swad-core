@@ -736,10 +736,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BLUE_FORM		{color:#4D88A1; font-size:11pt;}
 .YELLOW_FORM		{color:#7C4D2A; font-size:11pt;}
 
-.CENTER_MIDDLE		{text-align:center; vertical-align:middle;}
-.RIGHT_MIDDLE		{text-align:right; vertical-align:middle;}
-.RIGHT_TOP		{text-align:right; vertical-align:top;}
-
 .WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
 .GREY_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
 .BLUE_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
@@ -749,6 +745,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GREY_FORM_BOLD		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 .BLUE_FORM_BOLD		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 .YELLOW_FORM_BOLD	{color:#7C4D2A; font-size:11pt; font-weight:bold;}
+
+/****************************** Placing of objects ***************************/
+.LEFT_TOP		{text-align:left; vertical-align:top;}
+.LEFT_MIDDLE		{text-align:left; vertical-align:middle;}
+.LEFT_BOTTOM		{text-align:left; vertical-align:bottom;}
+.CENTER_TOP		{text-align:center; vertical-align:top;}
+.CENTER_MIDDLE		{text-align:center; vertical-align:middle;}
+.CENTER_BOTTOM		{text-align:center; vertical-align:bottom;}
+.RIGHT_TOP		{text-align:right; vertical-align:top;}
+.RIGHT_MIDDLE		{text-align:right; vertical-align:middle;}
+.RIGHT_BOTTOM		{text-align:right; vertical-align:bottom;}
 
 /********************************* Course info *******************************/
 #crs_info

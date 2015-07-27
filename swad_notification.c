@@ -590,12 +590,12 @@ void Ntf_ShowMyNotifications (void)
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_all_notifications;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+	    The_ClassForm[Gbl.Prefs.Theme]);
    Act_FormStart (ActSeeNtf);
 
    /***** End form *****/
@@ -1680,7 +1680,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
@@ -1711,12 +1711,12 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\">"
+	                 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td style=\"text-align:center;\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+               The_ClassForm[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent)))

@@ -307,7 +307,7 @@ void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 
 void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
    Act_FormStart (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
@@ -329,7 +329,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
 	 break;
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
-   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16B\" />"
@@ -553,7 +553,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ZIP_file;
    extern const char *Txt_Download;
    extern const char *Txt_Filename;
@@ -595,7 +595,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Filename *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\">"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\" style=\"text-align:left;"
@@ -603,17 +603,17 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
 		      "</td>"
 		      "</tr>",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Filename,
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Filename,
 	    URL,FileName,FileName);
 
    /***** Write the file size *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\">"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\" style=\"text-align:left;"
 		      " vertical-align:middle;\">",
-	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_File_size);
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
    Str_WriteSizeInBytesFull ((double) FileSize);
    if (UncompressedSize)
      {

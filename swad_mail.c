@@ -912,7 +912,7 @@ long Mai_GetUsrCodFromEmail (const char *Email)
 
 void Mai_ShowFormChangeUsrEmail (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
    extern const char *Txt_Email_X_confirmed;
@@ -949,11 +949,11 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 /* The first mail is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td",
-		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Current_email);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_email);
 	 if (Confirmed)
 	    fprintf (Gbl.F.Out," colspan=\"2\"");
 	 fprintf (Gbl.F.Out," style=\"text-align:left;"
@@ -963,11 +963,10 @@ void Mai_ShowFormChangeUsrEmail (void)
 	{
 	 fprintf (Gbl.F.Out,"<tr>");
 	 if (NumEmail == 2)
-	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s\""
-		               " style=\"vertical-align:top;\">"
+	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"%s RIGHT_TOP\">"
 			       "%s:",
 		     NumEmails - 1,
-		     The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "<td style=\"text-align:left;"
@@ -1023,11 +1022,11 @@ void Mai_ShowFormChangeUsrEmail (void)
 
    /***** Form to enter new e-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);

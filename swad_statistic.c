@@ -394,7 +394,7 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 
 void Sta_AskSeeCrsAccesses (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
    extern const char *Txt_results_per_page;
@@ -459,12 +459,12 @@ void Sta_AskSeeCrsAccesses (void)
 
          /***** Type of statistic *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"vertical-align:top;\">"
+                            "<td class=\"%s RIGHT_TOP\">"
                             "%s:"
                             "</td>"
                             "<td class=\"DAT\""
                             " style=\"text-align:left; vertical-align:top;\">",
-                  The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_distributed_by);
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
          if ((Gbl.Stat.ClicksStatType < Sta_ACC_CRS_PER_USR ||
               Gbl.Stat.ClicksStatType > Sta_ACC_CRS_PER_ACTION) &&
               Gbl.Stat.ClicksStatType != Sta_ACC_CRS_LISTING)
@@ -485,9 +485,9 @@ void Sta_AskSeeCrsAccesses (void)
 
          /* Listing of clicks to this course  */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"2\" class=\"%s\">"
+                            "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
                             "<input type=\"radio\" name=\"ClickStatType\" value=\"%u\"",
-                  The_ClassFormRightMiddle[Gbl.Prefs.Theme],(unsigned) Sta_ACC_CRS_LISTING);
+                  The_ClassForm[Gbl.Prefs.Theme],(unsigned) Sta_ACC_CRS_LISTING);
          if (Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING)
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," onclick=\"enableRowsPage()\" />%s",
@@ -541,7 +541,7 @@ void Sta_AskSeeCrsAccesses (void)
 
 void Sta_AskSeeGblAccesses (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
    extern const char *Txt_Scope;
@@ -570,12 +570,12 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">"
                       "<select name=\"Role\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Users);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
 	RoleStat++)
@@ -594,11 +594,11 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
 	               1 << Sco_SCOPE_CTY     |
 		       1 << Sco_SCOPE_INS |
@@ -616,12 +616,12 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_distributed_by);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
    if (Gbl.Stat.ClicksStatType < Sta_ACC_GBL_PER_DAYS ||
        Gbl.Stat.ClicksStatType > Sta_ACC_GBL_PER_COURSE)
       Gbl.Stat.ClicksStatType = Sta_ACC_GBL_PER_DAYS;
@@ -653,19 +653,19 @@ void Sta_AskSeeGblAccesses (void)
 
 static void Sta_WriteSelectorCountType (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show;
    extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES];
    Sta_CountType_t StatCountType;
 
    /**** Count type *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
                       "<select name=\"CountType\" id=\"CountType\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Show);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
    for (StatCountType = (Sta_CountType_t) 0;
 	StatCountType < Sta_NUM_STAT_COUNT_TYPES;
 	StatCountType++)
@@ -686,19 +686,19 @@ static void Sta_WriteSelectorCountType (void)
 
 static void Sta_WriteSelectorAction (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
    Act_Action_t NumAction;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
                       "<select name=\"StatAct\" id=\"StatAct\" style=\"width:300px;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Action);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
    for (NumAction = (Act_Action_t) 0;
 	NumAction < Act_NUM_ACTIONS;
 	NumAction++)
@@ -2011,7 +2011,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 
 static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
@@ -2032,9 +2032,8 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Put a selector for the type of color *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"26\" class=\"%s\""
-	              " style=\"text-align:center;\">",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+	              "<td colspan=\"26\" class=\"%s CENTER_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme]);
 
    Act_FormStart (Gbl.CurrentAct);
    Sta_WriteParamsDatesSeeAccesses ();
@@ -3594,7 +3593,7 @@ static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
 
 void Sta_ReqUseOfPlatform (void)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
@@ -3607,9 +3606,9 @@ void Sta_ReqUseOfPlatform (void)
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	              "%s: ",
-            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 	               1 << Sco_SCOPE_INS |
@@ -4803,7 +4802,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 
 static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
   {
-   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institution;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4855,13 +4854,13 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	          NumOrder);
 
 	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
-                  The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
+                  The_ClassForm[Gbl.Prefs.Theme]);
 
 	 /* Icon and name of this institution */
 	 Act_FormStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins.InsCod);
-	 Act_LinkFormSubmit (Ins.ShortName,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmit (Ins.ShortName,The_ClassForm[Gbl.Prefs.Theme]);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
 		       32,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
