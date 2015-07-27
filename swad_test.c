@@ -279,8 +279,10 @@ void Tst_ShowFormAskTst (void)
          Tst_ShowFormAnswerTypes ();
 
          /***** Number of questions to generate ****/
-         fprintf (Gbl.F.Out,"<div class=\"%s\">"
-                            "%s: "
+         fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+                            "<label class=\"%s\">"
+                            "%s:&nbsp;"
+                            "</label>"
                             "<input type=\"text\" name=\"NumQst\" size=\"3\" maxlength=\"3\" value=\"%u\"",
                   The_ClassFormul[Gbl.Prefs.Theme],Txt_No_of_questions,
                   Gbl.Test.Config.Def);
@@ -393,8 +395,7 @@ void Tst_ShowNewTestExam (void)
             Tst_WriteTestFoot ();
 
 	    /* Exam will be saved? */
-	    fprintf (Gbl.F.Out,"<div class=\"%s\""
-		               " style=\"text-align:center;\">"
+	    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 			       "<input type=\"checkbox\" name=\"Save\" value=\"Y\"",
 		     The_ClassFormul[Gbl.Prefs.Theme]);
 	    if (Gbl.Test.AllowTeachers)
@@ -1395,8 +1396,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
    fprintf (Gbl.F.Out,"<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllTags)
@@ -1464,7 +1464,6 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
 
 static void Tst_ShowFormEditTags (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_No_test_questions_in_X;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -1594,11 +1593,12 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Tests are visible from plugins? *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
-	              "<td style=\"text-align:left; vertical-align:top;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Plugins);
+	              "<td style=\"text-align:left;\">",
+            The_ClassFormul[Gbl.Prefs.Theme],
+            Txt_Plugins);
    for (Pluggable = Tst_PLUGGABLE_NO;
 	Pluggable <= Tst_PLUGGABLE_YES;
 	Pluggable++)
@@ -1615,7 +1615,7 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Number of questions *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left;\">"
@@ -1661,10 +1661,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Minimum time between test exams per question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\">"
 	              "%s:"
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td style=\"text-align:left; vertical-align:bottom;\">"
                       "<input type=\"text\" name=\"MinTimeNxtTstPerQst\" size=\"7\" maxlength=\"7\" value=\"%lu\" />"
                       "</td>"
                       "</tr>",
@@ -1674,10 +1674,10 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** Feedback to students *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
-	              "<td style=\"text-align:left; vertical-align:top;\">",
+	              "<td style=\"text-align:left;\">",
             The_ClassFormul[Gbl.Prefs.Theme],Txt_Feedback_to_students);
    for (FeedbTyp = (Tst_Feedback_t) 0;
 	FeedbTyp < Tst_NUM_TYPES_FEEDBACK;
@@ -2001,8 +2001,7 @@ static void Tst_ShowFormAnswerTypes (void)
 
    /***** Select all types of answers *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:middle;\">"
+	              "<td class=\"%s\" style=\"text-align:left;\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllAnsTypes)
@@ -2047,7 +2046,6 @@ static void Tst_ShowFormAnswerTypes (void)
 
 void Tst_ListQuestionsToEdit (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
@@ -4240,8 +4238,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Write the tags *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
@@ -4302,8 +4299,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
@@ -4318,8 +4314,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
@@ -4335,8 +4330,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Type of answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"%s\" style=\"text-align:left;"
@@ -4361,8 +4355,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Answers *****/
    /* Integer answer */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top;\">"
+                      "<td class=\"%s\" style=\"vertical-align:top;\">"
                       "%s:"
                       "</td>"
                       "<td class=\"%s\" style=\"text-align:left;"

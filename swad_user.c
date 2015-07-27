@@ -5022,7 +5022,6 @@ static void Usr_SetUsrDatMainFieldNames (void)
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -5091,7 +5090,6 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    unsigned NumCol;
    unsigned NumUsr;
    char *GroupNames;
@@ -5180,7 +5178,6 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
 static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumColumns;
    unsigned NumCol;
@@ -5893,10 +5890,10 @@ void Usr_ListDataAdms (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
                        1 << Sco_SCOPE_INS |
-                       1 << Sco_SCOPE_CTR      |
+                       1 << Sco_SCOPE_CTR |
                        1 << Sco_SCOPE_DEG;
    Gbl.Scope.Default = Sco_SCOPE_DEG;
    Sco_GetScope ();

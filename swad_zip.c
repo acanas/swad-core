@@ -363,7 +363,6 @@ void ZIP_CompressFileTree (void)
 
 static void ZIP_CompressFolderIntoZIP (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
    extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_folder_is_empty;
    extern const char *Txt_The_contents_of_the_folder_are_too_big;
@@ -596,8 +595,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Filename *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"text-align:right;"
-		      " vertical-align:middle;\">"
+		      "<td class=\"%s\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\" style=\"text-align:left;"
@@ -610,8 +608,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Write the file size *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"text-align:right;"
-		      " vertical-align:middle;\">"
+		      "<td class=\"%s\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT\" style=\"text-align:left;"

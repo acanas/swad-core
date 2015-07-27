@@ -3299,7 +3299,6 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
 /********* Show form to edit my institution, centre and department ***********/
 /*****************************************************************************/
 
-#define COL1_WIDTH 140
 #define COL2_WIDTH 400
 
 void Rec_ShowFormMyInsCtrDpt (void)
@@ -3340,10 +3339,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-		      "%s:</td>"
+		      "<td class=\"%s\">%s:</td>"
 		      "<td style=\"width:%upx; text-align:left;\">",
-            ClassForm,COL1_WIDTH,Txt_Country_of_institution,
+            ClassForm,Txt_Country_of_institution,
             COL2_WIDTH);
 
    /* If list of countries is empty, try to get it */
@@ -3380,11 +3378,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-		      "%s:"
-		      "</td>"
+		      "<td class=\"%s\">%s:</td>"
 		      "<td style=\"width:%upx; text-align:left;\">",
-            ClassForm,COL1_WIDTH,Txt_Institution,
+            ClassForm,Txt_Institution,
 	    COL2_WIDTH);
 
    /* Get list of institutions in this country */
@@ -3426,12 +3422,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">"
-			 "%s:"
-			 "</td>"
+			 "<td class=\"%s\">%s:</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
-	       ClassForm,COL1_WIDTH,Txt_Centre,
+	       ClassForm,Txt_Centre,
 	       COL2_WIDTH);
 
       /* Get list of centres in this institution */
@@ -3471,12 +3464,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\""
-			 " style=\"width:%upx; text-align:left;\">"
-			 "%s:"
-			 "</td>"
+			 "<td class=\"%s\">%s:</td>"
 			 "<td style=\"width:%upx; text-align:left;\">",
-	       ClassForm,COL1_WIDTH,Txt_Department,
+	       ClassForm,Txt_Department,
 	       COL2_WIDTH);
 
       /* Get list of departments in this institution */
@@ -3516,12 +3506,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Office *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"width:%upx; text-align:left;\">"
-	                 "%s:"
-	                 "</td>"
+	                 "<td class=\"%s\">%s:</td>"
                          "<td style=\"width:%upx; text-align:left;\">",
-               ClassForm,COL1_WIDTH,Txt_Office,
+               ClassForm,Txt_Office,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOff);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
@@ -3536,11 +3523,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\" style=\"width:%upx; text-align:left;\">"
-	                 "%s:"
-	                 "</td>"
+	                 "<td class=\"%s\">%s:</td>"
 	                 "<td style=\"width:%upx; text-align:left;\">",
-               ClassForm,COL1_WIDTH,Txt_Phone,
+               ClassForm,Txt_Phone,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""

@@ -140,7 +140,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Act_FormStart (ActImpTstQst);
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s\" style=\"text-align:right;\">"
+                      "<td class=\"%s\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">"

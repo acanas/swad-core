@@ -251,7 +251,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" class=\"%s\">"
+	              "<td colspan=\"6\" class=\"%s\""
+	              " style=\"text-align:center;\">"
                       "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
             The_ClassFormul[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.ClassPhoto.AllGroups)
@@ -277,7 +278,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"padding-top:10px;"
+	              "<td colspan=\"6\" style=\"padding-top:10px;"
 	              " text-align:center;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormulB[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
