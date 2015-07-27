@@ -127,8 +127,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   Act_Action_t Action,
                                                   const char *Title)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
 
 
    fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
@@ -155,17 +155,17 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"</div>");
 
    /* Text */
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-            (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
-        	                         The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+            (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
+        	                         The_ClassForm[Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
       /* Form to list followed users */
       Act_FormStart (Action);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
-                          (Gbl.CurrentAct == Action) ? The_ClassFormulB[Gbl.Prefs.Theme] :
-        	                                       The_ClassFormul[Gbl.Prefs.Theme]);
+                          (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
+        	                                       The_ClassForm[Gbl.Prefs.Theme]);
      }
    fprintf (Gbl.F.Out,"%s",Title);
    if (NumUsrs)

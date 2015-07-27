@@ -226,8 +226,8 @@ static void Grp_EditGroups (void)
 
 static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_All_groups;
    extern const char *Txt_Update_students;
@@ -251,10 +251,9 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" class=\"%s\""
-	              " style=\"text-align:center;\">"
+	              "<td colspan=\"6\" class=\"%s CENTER_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.ClassPhoto.AllGroups)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
@@ -280,7 +279,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"6\" style=\"padding-top:10px;"
 	              " text-align:center;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

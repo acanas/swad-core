@@ -236,7 +236,7 @@ void Ctr_PrintConfiguration (void)
 
 static void Ctr_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Print;
    extern const char *Txt_Centre;
@@ -365,12 +365,12 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\""
 			 " style=\"text-align:left; vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
@@ -383,7 +383,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -391,7 +391,7 @@ static void Ctr_Configuration (bool PrintView)
 			 "%s"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name,
 	       Gbl.CurrentCtr.Ctr.ShortName);
 
@@ -399,13 +399,13 @@ static void Ctr_Configuration (bool PrintView)
       if (Gbl.CurrentCtr.Ctr.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
 			    " style=\"text-align:left; vertical-align:middle;\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Web,
 		  Gbl.CurrentCtr.Ctr.WWW);
 	 Str_LimitLengthHTMLStr (Gbl.CurrentCtr.Ctr.WWW,20);
@@ -418,7 +418,7 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Shortcut to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -428,7 +428,7 @@ static void Ctr_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod);
@@ -437,12 +437,12 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -452,7 +452,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -460,13 +460,13 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Degrees,
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -474,13 +474,13 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -488,13 +488,13 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -502,7 +502,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
@@ -1827,7 +1827,7 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
 
 void Ctr_RequestPhoto (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y;
    extern const char *Txt_File_with_the_photo;
@@ -1854,7 +1854,7 @@ void Ctr_RequestPhoto (void)
                       "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 

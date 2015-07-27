@@ -2935,7 +2935,7 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3024,7 +3024,7 @@ static void Att_ListEventsToSelect (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" style=\"text-align:center;\">");
-      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormulB[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

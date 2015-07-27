@@ -240,7 +240,7 @@ void Pho_ReqUsrPhoto (struct UsrData *UsrDat)
 
 void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *PhotoURL)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_;
    extern const char *Txt_File_with_the_photo;
@@ -293,7 +293,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
                       " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             UsrDat->UsrCod);
@@ -1511,7 +1511,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 static void Pho_PutSelectorForTypeOfAvg (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
@@ -1521,7 +1521,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Average_type);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Average_type);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1580,7 +1580,7 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 
 static void Pho_PutSelectorForHowComputePhotoSize (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
@@ -1590,7 +1590,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Size_of_photos);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1649,7 +1649,7 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 
 static void Pho_PutSelectorForHowOrderDegrees (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
@@ -1659,7 +1659,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 	              "%s:"
 	              "</td>"
 	              "<td style=\"text-align:left; vertical-align:middle;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1742,7 +1742,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_a_degree;
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
@@ -1771,7 +1771,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
-      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormulB[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees *****/

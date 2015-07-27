@@ -219,12 +219,12 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   const char *ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+   const char *ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_URL+1];
 

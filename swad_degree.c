@@ -287,7 +287,7 @@ void Deg_PrintConfiguration (void)
 
 static void Deg_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Print;
    extern const char *Txt_Degree;
@@ -343,12 +343,12 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT_N\""
 			 " style=\"text-align:left; vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Degree);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
@@ -364,7 +364,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -372,7 +372,7 @@ static void Deg_Configuration (bool PrintView)
 			 "%s"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name,
 	       Gbl.CurrentDeg.Deg.ShortName);
 
@@ -380,13 +380,13 @@ static void Deg_Configuration (bool PrintView)
       if (Gbl.CurrentDeg.Deg.WWW[0])
 	{
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\""
 			    " style=\"text-align:left; vertical-align:middle;\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Web,
 		  Gbl.CurrentDeg.Deg.WWW);
 	 Str_LimitLengthHTMLStr (Gbl.CurrentDeg.Deg.WWW,20);
@@ -399,7 +399,7 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Shortcut to the degree *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
 			 "<td class=\"DAT\" style=\"text-align:left;"
@@ -409,7 +409,7 @@ static void Deg_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod);
@@ -418,12 +418,12 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the degree *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 	                    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"deg",Gbl.CurrentDeg.Deg.DegCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -433,7 +433,7 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -441,12 +441,12 @@ static void Deg_Configuration (bool PrintView)
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Courses,Gbl.CurrentDeg.Deg.NumCourses);
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -454,13 +454,13 @@ static void Deg_Configuration (bool PrintView)
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfDeg (Rol_TEACHER,Gbl.CurrentDeg.Deg.DegCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -468,7 +468,7 @@ static void Deg_Configuration (bool PrintView)
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,Gbl.CurrentDeg.Deg.DegCod));
 	}
@@ -484,7 +484,7 @@ static void Deg_Configuration (bool PrintView)
 
 void Deg_WriteMenuAllCourses (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
@@ -498,11 +498,11 @@ void Deg_WriteMenuAllCourses (void)
    /***** Write a 1st selector
           with all the countries *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Country);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Country);
    Cty_WriteSelectorOfCountry ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -512,11 +512,11 @@ void Deg_WriteMenuAllCourses (void)
       /***** Write a 2nd selector
              with the institutions of selected country *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\">"
+                         "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
                          "<td style=\"text-align:left;\">",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_Institution);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_Institution);
       Ins_WriteSelectorOfInstitution ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -526,11 +526,11 @@ void Deg_WriteMenuAllCourses (void)
          /***** Write a 3rd selector
                 with all the centres of selected institution *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\">"
+                            "<td class=\"%s RIGHT_MIDDLE\">"
                             "%s:"
                             "</td>"
                             "<td style=\"text-align:left;\">",
-                  The_ClassFormul[Gbl.Prefs.Theme],Txt_Centre);
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Centre);
          Ctr_WriteSelectorOfCentre ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -540,11 +540,11 @@ void Deg_WriteMenuAllCourses (void)
             /***** Write a 4th selector
                    with all the degrees of selected centre *****/
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"%s\">"
+                               "<td class=\"%s RIGHT_MIDDLE\">"
                                "%s:"
                                "</td>"
                                "<td style=\"text-align:left;\">",
-                     The_ClassFormul[Gbl.Prefs.Theme],Txt_Degree);
+                     The_ClassForm[Gbl.Prefs.Theme],Txt_Degree);
             Deg_WriteSelectorOfDegree ();
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");
@@ -554,11 +554,11 @@ void Deg_WriteMenuAllCourses (void)
 	       /***** Write a 5th selector
 		      with all the courses of selected degree *****/
 	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td class=\"%s\">"
+				  "<td class=\"%s RIGHT_MIDDLE\">"
 				  "%s:"
 				  "</td>"
 				  "<td style=\"text-align:left;\">",
-			The_ClassFormul[Gbl.Prefs.Theme],Txt_Course);
+			The_ClassForm[Gbl.Prefs.Theme],Txt_Course);
 	       Crs_WriteSelectorOfCourse ();
 	       fprintf (Gbl.F.Out,"</td>"
 				  "</tr>");

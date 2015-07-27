@@ -1492,7 +1492,7 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
 
 void Svy_RequestCreatOrEditSvy (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1590,7 +1590,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Scope);
    if (!Svy_SetDefaultAndAllowedForEdition ())
       Lay_ShowErrorAndExit ("You don't have permission to edit surveys here.");
@@ -1608,7 +1608,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Title,
             Svy_MAX_LENGTH_SURVEY_TITLE,Svy.Title);
 
@@ -1625,7 +1625,7 @@ void Svy_RequestCreatOrEditSvy (void)
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td style=\"text-align:left;\">",
-               The_ClassFormul[Gbl.Prefs.Theme],
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,
 	                 Gbl.Now.Date.Year+1,
@@ -1654,7 +1654,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "</td>"
                       "<td style=\"text-align:left; vertical-align:top;\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewSurvey)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1669,7 +1669,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (Svy.Roles);
    fprintf (Gbl.F.Out,"</td>"
@@ -1740,7 +1740,7 @@ static bool Svy_SetDefaultAndAllowedForEdition (void)
 
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1756,7 +1756,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	                 "%s:"
 	                 "</td>"
                          "<td style=\"text-align:left; vertical-align:top;\">",
-               The_ClassFormul[Gbl.Prefs.Theme],
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
                Txt_Groups);
       Lay_StartRoundFrameTable ("95%",0,NULL);
 
@@ -2362,7 +2362,7 @@ void Svy_RequestEditQuestion (void)
 
 static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,char *Txt)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
    extern const char *Txt_Stem;
@@ -2451,7 +2451,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Stem,
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Stem,
 	    Txt);
 
    /***** Type of answer *****/
@@ -2459,11 +2459,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	              "<td class=\"%s\" style=\"vertical-align:top;\">"
 	              "%s:"
 	              "</td>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Type);
    fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
 	              " vertical-align:top;\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    for (AnsType = (Svy_AnswerType_t) 0;
 	AnsType < Svy_NUM_ANS_TYPES;
 	AnsType++)
@@ -2493,7 +2493,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	                 "<td class=\"%s\" style=\"vertical-align:top;\">"
 	                 "%u)"
 	                 "</td>",
-               The_ClassFormul[Gbl.Prefs.Theme],NumAns+1);
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],NumAns+1);
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<td style=\"text-align:right; vertical-align:top;\">"
@@ -2918,7 +2918,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -3077,7 +3077,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Svy_PutHiddenParamSvyOrderType ();
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-      Act_LinkFormSubmit (Txt_New_question,The_ClassFormulB[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutIconWithText ("new",Txt_New_question,Txt_New_question);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"

@@ -106,7 +106,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                                             const char *PathInTree,
                                             const char *FileName)
   {
-   extern const char *The_ClassFormulNB[The_NUM_THEMES];
+   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct MarksProperties Marks;
@@ -124,7 +124,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       /***** Write the number of rows of header *****/
       fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
 	                 " vertical-align:top; background-color:%s;\">",
-               The_ClassFormulNB[Gbl.Prefs.Theme],
+               The_ClassFormNoWrap[Gbl.Prefs.Theme],
                Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
@@ -151,7 +151,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       /***** Write the number of rows of footer *****/
       fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
 	                 " vertical-align:top; background-color:%s;\">",
-               The_ClassFormulNB[Gbl.Prefs.Theme],
+               The_ClassFormNoWrap[Gbl.Prefs.Theme],
                Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone

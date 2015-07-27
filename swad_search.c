@@ -201,7 +201,7 @@ void Sch_ReqCrsSearch (void)
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_All;
    extern const char *Txt_Institutions;
@@ -237,7 +237,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Scope (whole platform, current centre, current degree or current course) *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |

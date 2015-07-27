@@ -301,13 +301,13 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS])
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
-   Act_LinkFormSubmit (RoomFullName,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme]);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

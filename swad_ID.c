@@ -416,7 +416,7 @@ void ID_ShowFormOthIDs (void)
 
 void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_Another_ID;
@@ -432,12 +432,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      {
       if (NumID == 0)
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\" style=\"vertical-align:top;\">"
+			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" style=\"text-align:left;"
 			    " vertical-align:top;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_ID);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
 
@@ -487,12 +487,12 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td style=\"text-align:left;"
 			 " vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
       if (ItsMe)

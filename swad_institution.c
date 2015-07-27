@@ -225,7 +225,7 @@ void Ins_PrintConfiguration (void)
 
 static void Ins_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Centres;
    extern const char *Txt_Print;
    extern const char *Txt_Institution;
@@ -287,7 +287,7 @@ static void Ins_Configuration (bool PrintView)
 	                 "</td>"
 			 "<td class=\"DAT_N\" style=\"text-align:left;"
 	                 " vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 	       Txt_Institution);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
@@ -311,7 +311,7 @@ static void Ins_Configuration (bool PrintView)
 			 "%s"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 	       Txt_Short_name,
 	       Gbl.CurrentIns.Ins.ShortName);
 
@@ -325,7 +325,7 @@ static void Ins_Configuration (bool PrintView)
 			    "<td class=\"DAT\""
 			    " style=\"text-align:left; vertical-align:middle;\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_Web,
 		  Gbl.CurrentIns.Ins.WWW);
 	 Str_LimitLengthHTMLStr (Gbl.CurrentIns.Ins.WWW,20);
@@ -348,7 +348,7 @@ static void Ins_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod);
@@ -362,7 +362,7 @@ static void Ins_Configuration (bool PrintView)
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 	                    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"ins",Gbl.CurrentIns.Ins.InsCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -380,7 +380,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_Centres,
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -394,7 +394,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_Degrees,
 		  Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -408,7 +408,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -422,7 +422,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_Departments,
 		  Dpt_GetNumDepartmentsInInstitution (Gbl.CurrentIns.Ins.InsCod));
 
@@ -436,7 +436,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Gbl.CurrentIns.Ins.InsCod));
 
@@ -450,7 +450,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Gbl.CurrentIns.Ins.InsCod));
 	}

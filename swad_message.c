@@ -126,7 +126,7 @@ static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 
 void Msg_ListEMails (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Students_who_have_accepted_and_who_have_e_mail;
    extern const char *Txt_X_students_who_have_e_mail;
    extern const char *Txt_X_students_who_have_accepted_and_who_have_e_mail;
@@ -224,7 +224,7 @@ void Msg_ListEMails (void)
                   Gbl.Usrs.Me.UsrDat.Email,
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
                   Txt_Create_e_mail_message,
-                  The_ClassFormulB[Gbl.Prefs.Theme]);
+                  The_ClassFormBold[Gbl.Prefs.Theme]);
          Lay_PutIconWithText ("editnewmsg",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
          fprintf (Gbl.F.Out,"</div>");
         }
@@ -257,7 +257,7 @@ void Msg_FormMsgUsrs (void)
 
 static void Msg_PutFormMsgUsrs (const char *Content)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
@@ -324,7 +324,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                 "</td>"
 	                 "<td style=\"text-align:left;\">"
                          "<table>",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_MSG_To);
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_MSG_To);
 
       /* Teachers */
       Usr_ListUsersToSelect (Rol_TEACHER);
@@ -424,7 +424,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Original_message;
@@ -443,7 +443,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	              "</td>"
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
    /***** If message is a reply ==> get original message *****/
@@ -474,7 +474,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_MSG_Message);
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
                Txt_Original_message);
@@ -500,7 +500,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "</td>"
                          "<td style=\"text-align:left;\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">%s",
-               The_ClassFormul[Gbl.Prefs.Theme],
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
                Txt_MSG_Message,
                Content);
      }
@@ -1523,7 +1523,7 @@ void Msg_ShowRecMsgs (void)
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update_messages;
    extern const char *Txt_Messages_received;
    extern const char *Txt_Messages_sent;
@@ -1561,7 +1561,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
      }
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_messages,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_messages,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2271,7 +2271,7 @@ void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
 void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
@@ -2282,7 +2282,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received_from_A_COURSE :
                                                       Txt_Messages_sent_from_A_COURSE);
    if (Gbl.Msg.FilterCrsCod < 0)
@@ -2309,7 +2309,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
 void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Message;
@@ -2326,7 +2326,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "<input type=\"text\" name=\"FilterFromTo\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_MSG_From :
                                                       Txt_MSG_To,
             Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3,Gbl.Msg.FilterFromTo);
@@ -2340,7 +2340,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "<input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_MSG_Message,
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
@@ -2354,13 +2354,13 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Show_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
                       "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\" value=\"Y\"",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," /> %s</div>",
@@ -2955,7 +2955,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
                                   bool FromThisCrs,bool Replied,
                                   const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Reply;
    extern const char *Txt_Reply_again;
    extern const char *Txt_Go_to_course_and_reply;
@@ -2983,7 +2983,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 						Txt_Reply) :
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
-		       The_ClassFormulB[Gbl.Prefs.Theme]);
+		       The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("reply",Replied ? Txt_Reply_again :
 				      Txt_Reply,
 			    Replied ? Txt_Reply_again :

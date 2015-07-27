@@ -396,12 +396,12 @@ void Rol_GetSelectedRoles (unsigned *Roles)
 
 void Rol_PutAllRolesRegRemUsrsCrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
 
    /***** Students or teachers *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:10px auto;\">"
                       "<ul class=\"LIST_LEFT %s\">",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    Rol_PutOneRoleRegRemUsrsCrs (Rol_STUDENT,true);
    Rol_PutOneRoleRegRemUsrsCrs (Rol_TEACHER,false);
    fprintf (Gbl.F.Out,"</ul>"

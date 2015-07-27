@@ -178,7 +178,7 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 void Nck_ShowFormChangeUsrNickname (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
    extern const char *Txt_Use_this_nickname;
@@ -215,7 +215,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 			    "</td>"
 			    "<td colspan=\"2\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_nickname);
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Current_nickname);
       else	// NumNick >= 2
 	{
 	 fprintf (Gbl.F.Out,"<tr>");
@@ -224,7 +224,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 		               " style=\"vertical-align:top;\">"
 			       "%s:",
 		     NumNicks - 1,
-		     The_ClassFormul[Gbl.Prefs.Theme],
+		     The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "<td style=\"text-align:left;"
@@ -271,7 +271,7 @@ void Nck_ShowFormChangeUsrNickname (void)
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);

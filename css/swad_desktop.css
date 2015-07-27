@@ -731,10 +731,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .YELLOW_MENU_ON		{color:#BD4815; font-size:10pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
-.WHITE_FORM		{color:#4D88A1; font-size:11pt; text-align:right; vertical-align:middle;}
-.GREY_FORM		{color:#4D88A1; font-size:11pt; text-align:right; vertical-align:middle;}
-.BLUE_FORM		{color:#4D88A1; font-size:11pt; text-align:right; vertical-align:middle;}
-.YELLOW_FORM		{color:#7C4D2A; font-size:11pt; text-align:right; vertical-align:middle;}
+.WHITE_FORM		{color:#4D88A1; font-size:11pt;}
+.GREY_FORM		{color:#4D88A1; font-size:11pt;}
+.BLUE_FORM		{color:#4D88A1; font-size:11pt;}
+.YELLOW_FORM		{color:#7C4D2A; font-size:11pt;}
+
+.CENTER_MIDDLE		{text-align:center; vertical-align:middle;}
+.RIGHT_MIDDLE		{text-align:right; vertical-align:middle;}
+.RIGHT_TOP		{text-align:right; vertical-align:top;}
 
 .WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}
 .GREY_FORM_NOWRAP	{color:#4D88A1; font-size:11pt; white-space:nowrap;}

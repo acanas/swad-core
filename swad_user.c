@@ -1339,7 +1339,7 @@ void Usr_Logout (void)
 
 void Usr_WriteFormLogin (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Enter_from_X;
    extern const char *Txt_Log_in;
@@ -1361,7 +1361,7 @@ void Usr_WriteFormLogin (void)
      {
       fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\">",
                Cfg_EXTERNAL_LOGIN_URL,
-               The_ClassFormulB[Gbl.Prefs.Theme]);
+               The_ClassFormBold[Gbl.Prefs.Theme]);
       sprintf (Gbl.Title,Txt_Enter_from_X,
                Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
       Lay_PutIconWithText ("login",Gbl.Title,Gbl.Title);
@@ -2468,7 +2468,7 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
 
 void Usr_ShowFormsLogoutAndRole (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Log_out;
    extern const char *Txt_You_are_LOGGED_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
@@ -2491,7 +2491,7 @@ void Usr_ShowFormsLogoutAndRole (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	                 "%s: ",
-               The_ClassFormul[Gbl.Prefs.Theme],Txt_Role);
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Role);
       Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -4789,7 +4789,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
 
 static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType)
   {
-   extern const char *The_ClassFormulNB[The_NUM_THEMES];
+   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    Act_FormStart (NextAction);
@@ -4797,7 +4797,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Usr_PutParamListWithPhotos ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutExtraParamsUsrList (NextAction);
-   Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormulNB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormNoWrap[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -4974,7 +4974,7 @@ void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,const char *EncryptedUsrCod,bo
 
 void Usr_PutCheckboxListWithPhotos (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Display_photos;
 
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
@@ -4986,7 +4986,7 @@ void Usr_PutCheckboxListWithPhotos (void)
    fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
                       "<span class=\"%s\">%s</span>",
 	    Gbl.FormId,
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Display_photos);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Display_photos);
   }
 
 /*****************************************************************************/
@@ -5856,7 +5856,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
 void Usr_ListDataAdms (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Photo;
@@ -5901,7 +5901,7 @@ void Usr_ListDataAdms (void)
    /***** Form to select range of administrators *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">"
 	              "%s: ",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Scope);
    Act_FormStart (ActLstAdm);
    Sco_PutSelectorScope (true);
    Usr_PutParamListWithPhotos ();
@@ -6307,7 +6307,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 
 void Usr_SeeGuests (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
@@ -6330,7 +6330,7 @@ void Usr_SeeGuests (void)
       case Rol_SYS_ADM:
          /***** Form to select range of guests *****/
          fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-                  The_ClassFormul[Gbl.Prefs.Theme]);
+                  The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
          Act_FormStart (ActLstInv);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
@@ -6444,7 +6444,7 @@ static void Usr_PutLinkToShowTchsAllDataParams (void)
 
 void Usr_SeeStudents (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
@@ -6487,7 +6487,7 @@ void Usr_SeeStudents (void)
       case Rol_SYS_ADM:
          /***** Form to select range of students *****/
          fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-                  The_ClassFormul[Gbl.Prefs.Theme]);
+                  The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
          Act_FormStart (ActLstStd);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
@@ -6606,7 +6606,7 @@ void Usr_SeeStudents (void)
 
 void Usr_SeeTeachers (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Print;
    extern const char *Txt_Show_all_data;
@@ -6633,7 +6633,7 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select scope *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    Act_FormStart (ActLstTch);
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
@@ -7063,7 +7063,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
@@ -7086,7 +7086,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    /***** End selector *****/
    fprintf (Gbl.F.Out,"</select>"
 	              "<span class=\"%s\">%s</span>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_columns);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_columns);
   }
 
 /*****************************************************************************/

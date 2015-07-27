@@ -1284,17 +1284,17 @@ void Rec_ListRecordsTchsCrs (void)
 
 void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("print",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
 
    for (i = 1;
         i <= 10;
@@ -1307,7 +1307,7 @@ void Rec_ShowLinkToPrintPreviewOfRecords (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "<span class=\"%s\"> %s)</span>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_record_cards_per_page);
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_record_cards_per_page);
   }
 
 /*****************************************************************************/
@@ -1329,7 +1329,7 @@ static void Rec_GetParamRecordsPerPage (void)
 
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Show_office_hours;
 
    /***** Start form *****/
@@ -1353,7 +1353,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
             Gbl.Prefs.IconsURL,
             Txt_Show_office_hours,
             Txt_Show_office_hours,
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Show_office_hours);
    Act_FormEnd ();
   }
@@ -1439,7 +1439,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
 void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
@@ -1575,7 +1575,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
                             " text-align:left; vertical-align:top;"
                             " background-color:%s;\">"
                             "%s:",
-                  ICanEdit ? The_ClassFormul[Gbl.Prefs.Theme] :
+                  ICanEdit ? The_ClassFormRightMiddle[Gbl.Prefs.Theme] :
                 	     "DAT_REC_SMALL",
                   Col1Width,Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
@@ -1942,7 +1942,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_Edit;
    extern const char *Txt_View_record_for_this_course;
@@ -2063,7 +2063,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    struct Department Dpt;
 
    ClassHead = "HEAD_REC";
-   ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+   ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
    ClassData = "DAT_REC";
    switch (TypeOfView)
      {
@@ -2073,7 +2073,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
 	 ClassHead = "HEAD_REC";
-         ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+         ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
 	 ClassData = "DAT_REC";
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
@@ -3303,7 +3303,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
 
 void Rec_ShowFormMyInsCtrDpt (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_institution;
    extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
@@ -3316,7 +3316,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Another_department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   const char *ClassForm = The_ClassFormul[Gbl.Prefs.Theme];
+   const char *ClassForm = The_ClassFormRightMiddle[Gbl.Prefs.Theme];
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;

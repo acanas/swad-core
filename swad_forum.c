@@ -1782,13 +1782,13 @@ static void For_PutFormWhichForums (void)
 
 static void For_WriteLinkToTopLevelOfForums (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Forums;
 
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
-   Act_LinkFormSubmit (Txt_Forums,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
@@ -2108,8 +2108,8 @@ void For_SetForumName (For_ForumType_t ForumType,
 static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct,const char *Icon,const char *ForumName,bool ShowNumOfPosts,
                                   unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    extern const char *Txt_Paste_thread;
    unsigned NumThrs;
@@ -2121,8 +2121,8 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (ForumType);
    NumThrsWithNewPosts = For_GetNumThrsWithNewPstsInForum (ForumType,NumThrs);
-   Style = (NumThrsWithNewPosts ? The_ClassFormulB[Gbl.Prefs.Theme] :
-	                          The_ClassFormul[Gbl.Prefs.Theme]);
+   Style = (NumThrsWithNewPosts ? The_ClassFormBold[Gbl.Prefs.Theme] :
+	                          The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
@@ -3206,8 +3206,8 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
 
 void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *PaginationThrs)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_You_have_written_1_post_in_this_thread;
    extern const char *Txt_You_have_written_X_posts_in_this_thread;
    extern const char *Txt_Thread_with_posts_from_you;
@@ -3332,8 +3332,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,Thr.ThrCod,&PaginationPsts,
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,
-                             Thr.NumUnreadPosts ? The_ClassFormulB[Gbl.Prefs.Theme] :
-                        	                  The_ClassFormul[Gbl.Prefs.Theme],
+                             Thr.NumUnreadPosts ? The_ClassFormBold[Gbl.Prefs.Theme] :
+                        	                  The_ClassForm[Gbl.Prefs.Theme],
                              true);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3687,7 +3687,7 @@ void For_ShowForumLevel2 (long ThrCod)
 
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_message;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
@@ -3708,12 +3708,12 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_StartRoundFrameTable (NULL,2,IsReply ? Txt_New_message :
         	                              Txt_New_thread);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
    if (IsReply)	// If writing a reply to a message of an existing thread
       fprintf (Gbl.F.Out,"%s",Subject);
@@ -3721,7 +3721,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "</td>"
 	              "</tr>"
 	              "<tr>"
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
                       "<td style=\"text-align:left;\">"
@@ -3729,7 +3729,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
    /***** Help for text editor *****/

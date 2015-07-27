@@ -4308,12 +4308,12 @@ static void Brw_PutFormToShowOrAdminParams (void)
 
 static void Brw_WriteFormFullTree (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_all_files;
 
    /***** Start form depending on type of tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:center;\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+	    The_ClassForm[Gbl.Prefs.Theme]);
    Act_FormStart (Brw_ActSeeAdm[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -5029,7 +5029,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
       Act_FormEnd ();
      }
    else
-      Lay_PutIconRemovalNotAllowed ();
+      Lay_PutIconBRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5073,7 +5073,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
       Act_FormEnd ();
      }
    else
-      Lay_PutIconRemovalNotAllowed ();
+      Lay_PutIconBRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -7639,7 +7639,7 @@ void Brw_ShowFormFileBrowser (void)
 
 static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_folder;
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
@@ -7675,7 +7675,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 	              "</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"32\" maxlength=\"40\" value=\"\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Folder);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Folder);
 
    /* Button to send and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_folder);
@@ -7872,7 +7872,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
 static void Brw_PutFormToCreateALink (const char *FileNameToShow)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_link;
    extern const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X;
    extern const char *Txt_URL;
@@ -7917,7 +7917,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       " size=\"40\" maxlength=\"%u\" value=\"\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_URL,
+            The_ClassForm[Gbl.Prefs.Theme],Txt_URL,
             PATH_MAX);
 
    /***** Link name *****/
@@ -7931,7 +7931,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
@@ -8726,7 +8726,7 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
 
 void Brw_ShowFileMetadata (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
@@ -8903,24 +8903,24 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Filename *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Filename);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Filename);
 	 Brw_WriteSmallLinkToDownloadFile (URL,FileMetadata.FileType,FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
 	 /***** Publisher's data *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Uploaded_by);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Uploaded_by);
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
@@ -8945,24 +8945,24 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write the file size *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_File_size);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
 	 Str_WriteSizeInBytesFull ((double) FileMetadata.Size);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
 	 /***** Write the date *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Date_of_creation);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
 	 Dat_GetLocalTimeFromClock (&(FileMetadata.Time));
 	 Dat_WriteDateTimeFromtblock ();
 	 fprintf (Gbl.F.Out,"</td>"
@@ -8970,12 +8970,12 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Private or public? *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Availability);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Availability);
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    fprintf (Gbl.F.Out,"<select name=\"PublicFile\">");
@@ -9001,12 +9001,12 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** License *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_License);
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_License);
 	 if (ICanChangeLicense)	// I can edit file properties
 	   {
 	    fprintf (Gbl.F.Out,"<select name=\"License\">");
@@ -9030,7 +9030,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write my number of views *****/
 	 if (Gbl.Usrs.Me.Logged)
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s\">"
+			       "<td class=\"%s RIGHT_MIDDLE\">"
 			       "%s:"
 			       "</td>"
 			       "<td class=\"DAT\" style=\"text-align:left;"
@@ -9038,12 +9038,12 @@ void Brw_ShowFileMetadata (void)
 			       "%u"
 			       "</td>"
 			       "</tr>",
-		     The_ClassFormul[Gbl.Prefs.Theme],Txt_My_views,
+		     The_ClassForm[Gbl.Prefs.Theme],Txt_My_views,
 		     FileMetadata.NumMyViews);
 
 	 /***** Write number of identificated views *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -9051,7 +9051,7 @@ void Brw_ShowFileMetadata (void)
 			    "%u (%u %s)"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Identified_views,
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Identified_views,
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
 		  (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
@@ -9059,7 +9059,7 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write number of public views *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -9067,7 +9067,7 @@ void Brw_ShowFileMetadata (void)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Public_views,
+		  The_ClassForm[Gbl.Prefs.Theme],Txt_Public_views,
 		  FileMetadata.NumPublicViews);
 
 	 /***** End frame *****/

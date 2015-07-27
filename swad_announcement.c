@@ -199,7 +199,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Content,
                                   unsigned Roles,bool ShowAllAnnouncements)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Remove;
@@ -243,7 +243,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       /* Form to remove announcement */
       Act_FormStart (ActRemAnn);
       Ann_PutHiddenParamAnnCod (AnnCod);
-      Act_LinkFormSubmit (Txt_Remove,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Remove,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON16x16\" />"
@@ -259,7 +259,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
       /* Form to mark announcement as seen */
       Act_FormStart (ActAnnSee);
       Ann_PutHiddenParamAnnCod (AnnCod);
-      Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassFormul[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON16x16\" />"
@@ -309,7 +309,7 @@ static long Ann_GetParamAnnCod (void)
 
 void Ann_ShowFormAnnouncement (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
@@ -324,7 +324,7 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -333,7 +333,7 @@ void Ann_ShowFormAnnouncement (void)
 	              "</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
                       "<td style=\"text-align:left;\">"
@@ -341,19 +341,19 @@ void Ann_ShowFormAnnouncement (void)
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject,
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
    /***** Users' roles who can view the announcement *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">",
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER);

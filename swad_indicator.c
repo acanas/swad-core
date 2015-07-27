@@ -74,8 +74,8 @@ static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileB
 
 void Ind_ReqIndicatorsCourses (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -101,11 +101,11 @@ void Ind_ReqIndicatorsCourses (void)
 
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
@@ -120,12 +120,12 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for a type of degree */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:top;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Types_of_degree);
+                      " style=\"text-align:left; vertical-align:middle;\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_degree);
    Deg_WriteSelectorDegTypes ();
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
@@ -135,11 +135,11 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:top;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Department);
+                      "<td style=\"text-align:left; vertical-align:middle;\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (-1L);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -147,12 +147,12 @@ void Ind_ReqIndicatorsCourses (void)
    /* Show only courses with a numer of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:top;\">"
+                      "<td style=\"text-align:left; vertical-align:middle;\">"
                       "<select name=\"Indicators\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_No_of_indicators);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_indicators);
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Stat.NumIndicators < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -173,7 +173,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Send button */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\" style=\"text-align:center;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_indicators,Txt_Update_indicators);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"

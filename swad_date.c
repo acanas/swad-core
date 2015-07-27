@@ -222,17 +222,17 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr)
 
 void Dat_WriteFormIniEndDates (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Start_date;
    extern const char *Txt_End_date;
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Start_date);
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"StartDay","StartMonth","StartYear",
@@ -242,10 +242,10 @@ void Dat_WriteFormIniEndDates (void)
                       "</tr>");
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_End_date);
    fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",

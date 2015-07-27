@@ -135,7 +135,7 @@ void Prf_RequestUserProfile (void)
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
   {
    extern const char *Txt_View_public_profile;
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
@@ -151,7 +151,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
                       "</label>"
                       "<input type=\"text\" name=\"usr\""
                       " size=\"20\" maxlength=\"%u\" value=\"@%s\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
             DefaultNickname);
@@ -293,7 +293,7 @@ void Prf_ChangeProfileVisibility (void)
 
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -444,7 +444,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       /***** Button to fetch and store first click time *****/
       Act_FormStart (ActCal1stClkTim);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
       Act_FormEnd ();
      }
@@ -488,7 +488,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of clicks *****/
 	 Act_FormStart (ActCalNumClk);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormBold[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -527,7 +527,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of file views *****/
 	 Act_FormStart (ActCalNumFilVie);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormBold[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -566,7 +566,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of forum posts *****/
 	 Act_FormStart (ActCalNumForPst);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormBold[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -605,7 +605,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 /***** Button to fetch and store number of messages sent *****/
 	 Act_FormStart (ActCalNumMsgSnt);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormulB[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassFormBold[Gbl.Prefs.Theme]);
 	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
 	 Act_FormEnd ();
 	}
@@ -754,7 +754,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -765,7 +765,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Act_FormStart (ActSeeUseGbl);
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("UseStatType",(unsigned) Sta_USERS_RANKING);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassFormul[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
   }

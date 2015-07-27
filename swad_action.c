@@ -4322,12 +4322,12 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
 void Act_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
                             const char *Icon,const char *Title)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
 
    Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();
-   Act_LinkFormSubmit (Title,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Title,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText (Icon,Title,Title);
    Act_FormEnd ();
   }
@@ -4694,7 +4694,7 @@ void Act_ShowMyMFUActions (void)
 
 void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
-   extern const char *The_ClassFormulNB[The_NUM_THEMES];
+   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_Frequent_actions;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
@@ -4729,7 +4729,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
                             "<td style=\"text-align:left;"
                             " vertical-align:middle; padding-left:2px;\">");
          Act_FormStart (Action);
-         Act_LinkFormSubmit (TabMenuStr,The_ClassFormulNB[Gbl.Prefs.Theme]);
+         Act_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 	                    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON32x32\" style=\"margin:4px;\" />",

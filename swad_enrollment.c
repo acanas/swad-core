@@ -248,18 +248,18 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
    /***** Form to request user's ID, @nickname or e-mail address *****/
    Act_FormStart (NextAction);
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+   fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "</label>"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
                       " size=\"20\" maxlength=\"%u\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
             Usr_MAX_BYTES_USR_LOGIN);
 
@@ -632,7 +632,7 @@ static void Enr_PutLinkToRemOldUsrs (void)
 
 void Enr_AskRemoveOldUsrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2;
    extern const char *Txt_Eliminate;
@@ -643,7 +643,7 @@ void Enr_AskRemoveOldUsrs (void)
    fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
    Act_FormStart (ActRemOldUsr);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -657,7 +657,7 @@ void Enr_AskRemoveOldUsrs (void)
      }
    fprintf (Gbl.F.Out,"</select>"
                       "<span class=\"%s\"> ",
-            The_ClassFormul[Gbl.Prefs.Theme]);
+            The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</span>");
@@ -754,18 +754,18 @@ void Enr_RemoveOldUsrs (void)
 
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Start of text area *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:&nbsp;"
                       "</td>"
                       "<td style=\"text-align:left;\">"
                       "<textarea name=\"UsrsIDs\" cols=\"72\" rows=\"10\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
 
    /***** End of text area *****/
@@ -782,7 +782,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_the_course_X;
@@ -836,7 +836,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul class=\"LIST_LEFT %s\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+	    The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
@@ -1043,6 +1043,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Register_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
@@ -1050,8 +1051,9 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:10px auto;\">"
+                      "<ul class=\"LIST_LEFT %s\">",
+            The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -2074,8 +2076,8 @@ void Enr_RejectSignUp (void)
 
 void Enr_ShowEnrollmentRequests (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Update;
@@ -2112,11 +2114,12 @@ void Enr_ShowEnrollmentRequests (void)
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
                        1 << Sco_SCOPE_INS |
@@ -2131,12 +2134,13 @@ void Enr_ShowEnrollmentRequests (void)
 
    /* Users' roles in listing */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
                       "<td class=\"DAT\""
                       " style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_Users);
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Users);
    Rol_GetSelectedRoles (&Roles);
    if (!Roles)
       /* Set default roles */
@@ -2160,7 +2164,7 @@ void Enr_ShowEnrollmentRequests (void)
 
    /* Send button */
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");

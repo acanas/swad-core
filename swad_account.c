@@ -112,7 +112,7 @@ void Acc_ShowFormAccount (void)
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
@@ -138,16 +138,16 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    else
       NewNicknameWithArroba[0] = '\0';
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">"
-                      "%s: "
-                      "</td>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
 	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewNick\""
                       " size=\"25\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
             1+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
@@ -155,16 +155,16 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** E-mail *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\">"
-                      "%s: "
-                      "</td>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
 	              "<td style=\"text-align:left;\">"
                       "<input type=\"text\" name=\"NewEmail\""
                       " size=\"25\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Email,
             Usr_MAX_BYTES_USR_EMAIL,
             Txt_HELP_email,

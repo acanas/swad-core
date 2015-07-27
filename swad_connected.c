@@ -70,7 +70,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 void Con_ShowConnectedUsrs (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Connected_users;
@@ -98,7 +98,7 @@ void Con_ShowConnectedUsrs (void)
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "%s:&nbsp;"
 	                 "</label>",
-	       The_ClassFormul[Gbl.Prefs.Theme],Txt_Scope);
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
       Sco_SetScopesForListingStudents ();
       Sco_GetScope ();
       Sco_PutSelectorScope (true);

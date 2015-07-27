@@ -232,7 +232,7 @@ static void Pwd_PutLinkToSendNewPasswdParams (void)
 
 void Pwd_ShowFormSendNewPwd (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Password;
    extern const char *Txt_nick_email_or_ID;
@@ -253,7 +253,7 @@ void Pwd_ShowFormSendNewPwd (void)
                       "</label>"
                       "<input type=\"text\" name=\"UsrId\""
                       " size=\"8\" maxlength=\"%u\" value=\"%s\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end table *****/
@@ -659,7 +659,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
 
 void Pwd_ShowFormChgPwd (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Your_password_is_not_secure_enough;
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
@@ -695,7 +695,7 @@ void Pwd_ShowFormChgPwd (void)
                          " size=\"25\" maxlength=\"%u\" autocomplete=\"off\" />"
                          "</td>"
                          "</tr>",
-               The_ClassFormul[Gbl.Prefs.Theme],
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
                Txt_Current_password,
                Pwd_MAX_LENGTH_PLAIN_PASSWORD);
 
@@ -726,7 +726,7 @@ void Pwd_ShowFormChgPwd (void)
 
 void Pwd_PutFormToGetNewPasswordTwice (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_New_password;
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
@@ -752,12 +752,12 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
                       "</td>"
                       "</tr>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Gbl.Usrs.Me.Logged? Txt_New_password :		// Changing my password
         	                Txt_Password,			// Creating new account
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             Gbl.Message,
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Gbl.Usrs.Me.Logged ? Txt_Retype_new_password :	// Changing my password
         	                 Txt_Retype_password,		// Creating new account
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
@@ -867,7 +867,7 @@ bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod)
 
 void Pwd_AskForConfirmationOnDangerousAction (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
@@ -878,9 +878,9 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 		      "<input type=\"password\" name=\"OthUsrPwd\""
 		      " size=\"16\" maxlength=\"%u\" autocomplete=\"off\" />"
 		      "</div>",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 	    Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone,
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 	    Txt_For_security_enter_your_password,
 	    Pwd_MAX_LENGTH_PLAIN_PASSWORD);
   }

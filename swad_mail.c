@@ -912,7 +912,7 @@ long Mai_GetUsrCodFromEmail (const char *Email)
 
 void Mai_ShowFormChangeUsrEmail (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Current_email;
    extern const char *Txt_Other_emails;
    extern const char *Txt_Email_X_confirmed;
@@ -953,7 +953,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 			    "%s:"
 			    "</td>"
 			    "<td",
-		  The_ClassFormul[Gbl.Prefs.Theme],Txt_Current_email);
+		  The_ClassFormRightMiddle[Gbl.Prefs.Theme],Txt_Current_email);
 	 if (Confirmed)
 	    fprintf (Gbl.F.Out," colspan=\"2\"");
 	 fprintf (Gbl.F.Out," style=\"text-align:left;"
@@ -967,7 +967,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 		               " style=\"vertical-align:top;\">"
 			       "%s:",
 		     NumEmails - 1,
-		     The_ClassFormul[Gbl.Prefs.Theme],
+		     The_ClassFormRightMiddle[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "<td style=\"text-align:left;"
@@ -1027,7 +1027,7 @@ void Mai_ShowFormChangeUsrEmail (void)
                       "%s:"
                       "</td>"
                       "<td style=\"text-align:left; vertical-align:middle;\">",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);

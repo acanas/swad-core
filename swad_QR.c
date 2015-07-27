@@ -72,7 +72,7 @@ static void QR_ImageQRCode (const char *QRString);
 
 void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_QR_code;
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
@@ -80,7 +80,7 @@ void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
    Act_FormStart (ActPrnUsrQR);
    sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString ("QRString",NicknameWithArroba);
-   Act_LinkFormSubmit (Txt_QR_code,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_QR_code,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("qr",Txt_QR_code,PrintText ? Txt_QR_code :
 	                                         NULL);
    Act_FormEnd ();

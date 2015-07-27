@@ -590,12 +590,12 @@ void Ntf_ShowMyNotifications (void)
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Show_all_notifications;
 
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    The_ClassFormul[Gbl.Prefs.Theme]);
+	    The_ClassFormRightMiddle[Gbl.Prefs.Theme]);
    Act_FormStart (ActSeeNtf);
 
    /***** End form *****/
@@ -1646,11 +1646,11 @@ static void Ntf_PutLinkToChangePrefs (void)
 
 static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Mark_all_notifications_as_read;
 
    Act_FormStart (ActMrkNtfSee);
-   Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
    Act_FormEnd ();
   }
@@ -1680,7 +1680,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
@@ -1716,7 +1716,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</td>"
 	                 "<td style=\"text-align:center;\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-               The_ClassFormul[Gbl.Prefs.Theme],
+               The_ClassFormRightMiddle[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent)))

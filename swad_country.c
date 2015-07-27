@@ -216,7 +216,7 @@ void Cty_PrintConfiguration (void)
 
 static void Cty_Configuration (bool PrintView)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institutions;
    extern const char *Txt_Print;
    extern const char *Txt_Country;
@@ -314,12 +314,12 @@ static void Cty_Configuration (bool PrintView)
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT_N\""
 			 " style=\"text-align:left; vertical-align:middle;\">",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Country);
       if (!PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0])
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
@@ -332,7 +332,7 @@ static void Cty_Configuration (bool PrintView)
 
       /***** Link to the country inside platform *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s\">"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT\""
@@ -341,7 +341,7 @@ static void Cty_Configuration (bool PrintView)
 			 "%s/%s?cty=%ld</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassFormul[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod,
 	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod);
@@ -350,12 +350,12 @@ static void Cty_Configuration (bool PrintView)
 	{
 	 /***** QR code with link to the country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
 			    " vertical-align:middle;\">",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"cty",Gbl.CurrentCty.Cty.CtyCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -365,7 +365,7 @@ static void Cty_Configuration (bool PrintView)
 	{
 	 /***** Number of institutions *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -373,13 +373,13 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Institutions,
 		  Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -387,13 +387,13 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Centres,
 		  Ctr_GetNumCtrsInCty (Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -401,13 +401,13 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Degrees,
 		  Deg_GetNumDegsInCty (Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -415,13 +415,13 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -429,13 +429,13 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s\">"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT\" style=\"text-align:left;"
@@ -443,7 +443,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassFormul[Gbl.Prefs.Theme],
+		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
 	}

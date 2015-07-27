@@ -712,7 +712,7 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod)
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Remove;
    extern const char *Txt_Edit;
    extern const char *Txt_Print;
@@ -757,7 +757,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
          StyleNormal = "CONV_IMPR";
          break;
       case Exa_FORM_VIEW:
-         StyleForm = The_ClassFormul[Gbl.Prefs.Theme];
+         StyleForm = The_ClassForm[Gbl.Prefs.Theme];
          break;
      }
 
@@ -855,12 +855,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Name of the course *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Course,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Course,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -875,12 +876,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Year (optional, 1º, 2º, 3º, 4º, 5º...) *****/
    fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"%s\" style=\"vertical-align:top;\">"
+                      "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Year,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Year,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -903,12 +905,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Exam session *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Session,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Session,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ExamSession\""
@@ -921,10 +924,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Date of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Exam_date);
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Exam_date);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
@@ -949,12 +953,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Start time *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Start_time,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Start_time,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -995,12 +1000,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Approximate duration of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Approximate_duration,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Approximate_duration,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1058,12 +1064,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Place where the exam will be made *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Place_of_exam,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Place_of_exam,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"Place\" cols=\"40\" rows=\"4\">%s</textarea>",
@@ -1079,12 +1086,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Exam mode *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Mode,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Mode,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"ExamMode\" cols=\"40\" rows=\"2\">%s</textarea>",
@@ -1100,12 +1108,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Structure of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"Structure\" cols=\"40\" rows=\"8\">%s</textarea>",
@@ -1121,12 +1130,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Documentation required *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Documentation_required,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Documentation_required,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"DocRequired\" cols=\"40\" rows=\"2\">%s</textarea>",
@@ -1142,12 +1152,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Material required *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Material_required,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Material_required,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"MatRequired\" cols=\"40\" rows=\"4\">%s</textarea>",
@@ -1163,12 +1174,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Material allowed *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""
                       " style=\"text-align:left; vertical-align:top;\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Material_allowed,
+            StyleForm,
+            Txt_EXAM_ANNOUNCEMENT_Material_allowed,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"MatAllowed\" cols=\"40\" rows=\"4\">%s</textarea>",
@@ -1184,7 +1196,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    /***** Other information to students *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s\" style=\"vertical-align:top;\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>" \
                       "<td class=\"%s\""

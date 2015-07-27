@@ -229,7 +229,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 
 void Log_RequestLogo (Sco_Scope_t Scope)
   {
-   extern const char *The_ClassFormul[The_NUM_THEMES];
+   extern const char *The_ClassFormRightMiddle[The_NUM_THEMES];
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
@@ -296,7 +296,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"\" />",
-            The_ClassFormul[Gbl.Prefs.Theme],
+            The_ClassFormRightMiddle[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
@@ -313,12 +313,12 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
 static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
   {
-   extern const char *The_ClassFormulB[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
 
    /***** Link for removing the photo *****/
    Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormulB[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("delon",Txt_Remove_logo,Txt_Remove_logo);
    Act_FormEnd ();
   }
