@@ -160,7 +160,7 @@ void Dat_ShowCurrentDateTime (void)
    extern const char *The_ClassCurrentTime[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
 
-   fprintf (Gbl.F.Out,"<div id=\"hm\" style=\"padding-top:8px;\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\" style=\"padding-top:8px;\">"
                       "%u %s, %u:%02u"
                       "</div>",
             The_ClassCurrentTime[Gbl.Prefs.Theme],
@@ -234,7 +234,7 @@ void Dat_WriteFormIniEndDates (void)
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Start_date);
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"StartDay","StartMonth","StartYear",
                       &(Gbl.DateRange.DateIni),
                       false,false);
@@ -247,7 +247,7 @@ void Dat_WriteFormIniEndDates (void)
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_End_date);
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",
                       &(Gbl.DateRange.DateEnd),
                       false,false);
@@ -256,7 +256,7 @@ void Dat_WriteFormIniEndDates (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
                       " onclick=\"setDateTo(this,%u,%u,%u)\" />"
                       "<input type=\"button\" name=\"Today\" value=\"%s\""
@@ -295,7 +295,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Day *****/
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\"",
             NameSelectDay,NameSelectDay);
    if (SubmitFormOnChange)
@@ -320,7 +320,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Month *****/
    fprintf (Gbl.F.Out,"</select>"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\""
                       " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
@@ -344,7 +344,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    /***** Year *****/
    fprintf (Gbl.F.Out,"</select>"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
@@ -382,7 +382,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<table>"
                       "<tr>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"%s\"",
             NameSelectHour);
    if (SubmitFormOnChange)
@@ -404,7 +404,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
    /***** Minute *****/
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"%s\"",
 	    NameSelectMinute);
    if (SubmitFormOnChange)

@@ -112,7 +112,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin-bottom:20px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"margin-bottom:20px;\">");
    Crs_Configuration (false);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -228,8 +229,7 @@ static void Crs_Configuration (bool PrintView)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT_N\""
-                      " style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"DAT_N LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -242,8 +242,7 @@ static void Crs_Configuration (bool PrintView)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -256,8 +255,7 @@ static void Crs_Configuration (bool PrintView)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"DAT LEFT_MIDDLE\">",
            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
    if (IsForm)
@@ -284,8 +282,7 @@ static void Crs_Configuration (bool PrintView)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Semester);
    if (IsForm)
@@ -313,8 +310,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:left; vertical-align:middle;\">",
+                         "<td class=\"DAT LEFT_MIDDLE\">",
               The_ClassForm[Gbl.Prefs.Theme],
               Txt_Institutional_code);
       if (IsForm)
@@ -332,7 +328,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:left; vertical-align:middle;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%ld"
                          "</td>"
                          "</tr>",
@@ -346,8 +342,7 @@ static void Crs_Configuration (bool PrintView)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">"
                       "%s/%s?crs=%ld</a>"
                       "</td>"
@@ -364,8 +359,7 @@ static void Crs_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:middle;\">",
+			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_QR_code);
       QR_LinkTo (200,"crs",Gbl.CurrentCrs.Crs.CrsCod);
@@ -383,8 +377,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:left; vertical-align:middle;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%u"
                          "</td>"
                          "</tr>",
@@ -396,8 +389,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:left; vertical-align:middle;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%u"
                          "</td>"
                          "</tr>",
@@ -409,8 +401,7 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:left; vertical-align:middle;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\" class=\"DAT\">"
                          "%u %s %u "
                          "<img src=\"%s/%s16x16.gif\""
@@ -457,7 +448,7 @@ static void Crs_PutFormToConfigLogIn (bool IsForm)
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td style=\"text-align:left; vertical-align:middle;\">",
+		      "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_Students_authentication);
 
@@ -1302,8 +1293,8 @@ static void Crs_ListCoursesForSeeing (void)
 
             /* Put green tip if course has users */
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td style=\"text-align:center;"
-                               " background-color:%s;\">"
+                               "<td class=\"CENTER_MIDDLE\""
+                               " style=\"background-color:%s;\">"
                                "<img src=\"%s/%s16x16.gif\""
                                " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                                "</td>",
@@ -1317,32 +1308,32 @@ static void Crs_ListCoursesForSeeing (void)
                                     Txt_COURSE_Without_users);
 
             /* Institutional code of the course */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Crs->InstitutionalCrsCod);
 
             /* Course year */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Txt_YEAR_OF_DEGREE[Crs->Year]);
 
             /* Course semester */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Txt_SEMESTER_OF_YEAR[Crs->Semester]);
 
             /* Course full name */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-        	               " vertical-align:middle; background-color:%s;\">",
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+        	               " style=\"background-color:%s;\">",
                      TxtClass,BgColor);
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs->CrsCod);
@@ -1354,23 +1345,23 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%u"
         	               "</td>",
                      TxtClass,BgColor,Crs->NumStds);
 
             /* Current number of teachers in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%u"
         	               "</td>",
                      TxtClass,BgColor,Crs->NumTchs);
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-        	               " vertical-align:middle; background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+        	               " style=\"background-color:%s;\">"
         	               "%s"
         	               "</td>"
                                "</tr>",
@@ -1442,15 +1433,13 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course code */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-        	               " vertical-align:middle;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
         	               "%ld"
         	               "</td>",
                      Crs->CrsCod);
 
             /* Institutional code of the course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
             if (ICanEdit)
               {
                Act_FormStart (ActChgInsCrsCod);
@@ -1468,8 +1457,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Degree */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
             if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
               {
                Act_FormStart (ActChgCrsDeg);
@@ -1493,8 +1481,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course year */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
             if (ICanEdit)
               {
                Act_FormStart (ActChgCrsYea);
@@ -1518,8 +1505,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course semester */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
             if (ICanEdit)
               {
                Act_FormStart (ActChgCrsSem);
@@ -1545,8 +1531,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course short name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
             if (ICanEdit)
               {
                Act_FormStart (ActRenCrsSho);
@@ -1562,8 +1547,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course full name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
             if (ICanEdit)
               {
                Act_FormStart (ActRenCrsFul);
@@ -1579,23 +1563,20 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-        	               " vertical-align:middle;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
         	               "%u"
         	               "</td>",
                      Crs->NumStds);
 
             /* Current number of teachers in this course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-        	               " vertical-align:middle;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
         	               "%u"
         	               "</td>",
                      Crs->NumTchs);
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
             if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
         	StatusTxt == Crs_STATUS_PENDING)
               {
@@ -1620,8 +1601,7 @@ static void Crs_ListCoursesForEdition (void)
             /* Course requester */
             UsrDat.UsrCod = Crs->RequesterUsrCod;
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            fprintf (Gbl.F.Out,"<td style=\"width:100px; text-align:left;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
                                "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
                                "<tr>");
             Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
@@ -1731,12 +1711,11 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Course code *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	              "</td>");
 
    /***** Institutional code of the course *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"InsCrsCod\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
@@ -1744,8 +1723,9 @@ static void Crs_PutFormToCreateCourse (void)
             Crs->InstitutionalCrsCod);
 
    /***** Degree *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
-                      "<select name=\"OthDegCod\" style=\"width:80px;\" disabled=\"disabled\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select name=\"OthDegCod\""
+                      " style=\"width:80px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\">%s</option>"
                       "</select>"
                       "</td>",
@@ -1753,7 +1733,7 @@ static void Crs_PutFormToCreateCourse (void)
             Gbl.CurrentDeg.Deg.ShortName);
 
    /***** Year *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"OthCrsYear\" style=\"width:40px;\">");
    for (Year = 0;
 	Year <= Gbl.CurrentDeg.Deg.LastYear;
@@ -1768,7 +1748,7 @@ static void Crs_PutFormToCreateCourse (void)
 	              "</td>");
 
    /***** Semester *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"OthCrsSem\">");
    for (Semester = 0;
 	Semester <= 2;
@@ -1782,39 +1762,35 @@ static void Crs_PutFormToCreateCourse (void)
                       "</td>");
 
    /***** Course short name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName);
 
    /***** Course full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
 
    /***** Current number of students in this course *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:right; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
    /***** Current number of teachers in this course *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:right; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
    /***** Course status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	              "%s"
 	              "</td>",
             Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
 
    /***** Course requester *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:100px;"
-	              " text-align:left; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
 		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
@@ -1846,25 +1822,25 @@ static void Crs_PutHeadCoursesForSeeing (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1897,37 +1873,37 @@ static void Crs_PutHeadCoursesForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2992,7 +2968,7 @@ static void Crs_PutLinkToGoToCrs (struct Course *Crs)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Go_to_X;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (Crs->CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
@@ -3138,22 +3114,22 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"BM\"></th>"
                          "<th class=\"BM\"></th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -3213,8 +3189,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 
       /* Number of courses found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL\""
-			 " style=\"text-align:center;\">");
+			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumCrss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_course);
       else
@@ -3225,22 +3200,22 @@ unsigned Crs_ListCrssFound (const char *Query)
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+			 "<th class=\"TIT_TBL CENTER_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+			 "<th class=\"TIT_TBL CENTER_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+			 "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+			 "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -3352,15 +3327,15 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
      }
 
    /***** Write number of course in this search *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>",
             StyleNoBR,BgColor,NumCrs);
 
    /***** Write degree logo, degree short name (row[2]) and centre short name (row[7]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:top; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
+	              " style=\"background-color:%s;\">",
             StyleNoBR,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
@@ -3375,22 +3350,22 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write year (row[4]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%s"
 	              "</td>",
             Style,BgColor,Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
 
    /***** Write semester (row[5]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%s"
 	              "</td>",
             Style,BgColor,Txt_SEMESTER_OF_YEAR[Deg_ConvStrToSemester (row[5])]);
 
    /***** Write course full name (row[6]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:top; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
+	              " style=\"background-color:%s;\">",
             Style,BgColor);
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
@@ -3401,15 +3376,15 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write number of students in course *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>",
             Style,BgColor,NumStds);
 
    /***** Write number of teachers in course *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>"
 	              "</tr>",
@@ -3451,7 +3426,7 @@ void Crs_AskRemoveOldCrss (void)
    unsigned i;
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActRemOldCrs);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassForm[Gbl.Prefs.Theme],
