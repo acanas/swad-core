@@ -141,7 +141,7 @@ void Cal_DrawCalendar (void)
 
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">"
+	              "<td class=\"CENTER_TOP\">"
 	              "<table style=\"margin:0 auto; border-spacing:5px;\">");
    for (Row = 0;
 	Row < 4;
@@ -152,8 +152,7 @@ void Cal_DrawCalendar (void)
 	   Col < 4;
 	   Col++)
 	{
-	 fprintf (Gbl.F.Out,"<td style=\"width:120px;"
-	                    " text-align:center; vertical-align:top;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:120px;\">");
 	 Cal_DrawMonth (Year,Month,true,!PrintView,(Gbl.CurrentAct == ActPrnCal));
 	 fprintf (Gbl.F.Out,"</td>");
 	 if (++Month == 13)
@@ -256,7 +255,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
    for (DayOfWeek = 0;
 	DayOfWeek < 7;
 	DayOfWeek++)
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s\">"
 	                 "%c"
 	                 "</td>",
                (DayOfWeek == 6) ? "DAY_NO_WRK_HEAD" :
@@ -351,7 +350,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
                  }
 
          /***** Write the box with the day *****/
-	 fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;\">",
+	 fprintf (Gbl.F.Out,"<td class=\"%s\">",
                   IsToday ? (ThisDayHasEvent ? "TODAY_EVENT" :
                 	                       "TODAY") :
                             (ThisDayHasEvent ? "DAY_EVENT" :
@@ -363,7 +362,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
             Act_FormStart (ActSeeExaAnn);
             fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                                "<tr>"
-                               "<td class=\"%s\" style=\"text-align:center;\">",
+                               "<td class=\"%s\">",
                      ClassForDay);
             Act_LinkFormSubmit (Gbl.Title,ClassForDay);
            }

@@ -89,19 +89,86 @@ form			{margin:0; display:inline;}
 	border-width:1px 0 0 0;
 	border-color:#DDECF1;
 	}
-.MONTH			{color:#4D88A1; font-size:8pt; white-space:nowrap;}
-.DAY_WRK_HEAD		{color:#4D88A1; font-size:8pt;}
-.DAY_NO_WRK_HEAD	{color:#FF0000; font-size:8pt;}
-.DAY_WRK		{color:#202020; font-size:8pt;}
-.DAY_NO_WORK		{color:#C04080; font-size:8pt;}
-.DAY_HLD		{color:#FF0000; font-size:8pt;}
-.DAY_WRK_LIGHT		{color:#E0E0E0; font-size:8pt;}
-.DAY_NO_WORK_LIGHT	{color:#FFE0FF; font-size:8pt;}
-.DAY_HLD_LIGHT		{color:#FFE0E0; font-size:8pt;}
-.DAY			{border:solid 1px; border-color:white;}
-.TODAY			{border:solid 1px; border-color:#50B800;}
-.DAY_EVENT		{border:solid 1px; border-color:white; background-color:#FFF080;}
-.TODAY_EVENT		{border:solid 1px; border-color:#50B800; background-color:#FFF080;}
+.MONTH
+	{
+	color:#4D88A1;
+	font-size:8pt;
+	white-space:nowrap;
+	}
+.DAY_WRK_HEAD
+	{
+	color:#4D88A1;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_NO_WRK_HEAD
+	{
+	color:#FF0000;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_WRK
+	{
+	color:#202020;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_NO_WORK
+	{
+	color:#C04080;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_HLD
+	{
+	color:#FF0000;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_WRK_LIGHT
+	{
+	color:#E0E0E0;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_NO_WORK_LIGHT
+	{
+	color:#FFE0FF;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY_HLD_LIGHT
+	{
+	color:#FFE0E0;
+	font-size:8pt;
+	text-align:center;
+	}
+.DAY
+	{
+	border:solid 1px;
+	border-color:white;
+	text-align:center;
+	}
+.TODAY
+	{
+	border:solid 1px;
+	border-color:#50B800;
+	text-align:center;
+	}
+.DAY_EVENT
+	{
+	border:solid 1px;
+	border-color:white;
+	background-color:#FFF080;
+	text-align:center;
+	}
+.TODAY_EVENT
+	{
+	border:solid 1px;
+	border-color:#50B800;
+	background-color:#FFF080;
+	text-align:center;
+	}
 
 /********************************* Buttons ***********************************/
 .BT_CREATE
@@ -354,6 +421,7 @@ form			{margin:0; display:inline;}
 	font-size:20pt;
 	font-weight:bold;
 	color:#808080;
+	text-align:center;
 	}
 
 /******************************* Map of country ******************************/
@@ -405,6 +473,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#A0A0A0;
 	font-size:7pt;
 	max-width:400px;
+	text-align:center;
 	}
 
 /******************************* User's photo ********************************/

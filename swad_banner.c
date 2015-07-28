@@ -98,7 +98,7 @@ void Ban_SeeBanners (void)
 	NumBan++)
       /* Write data of this banner */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
@@ -343,7 +343,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner code */
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
                Ban->IsHidden ? "DAT_LIGHT" :
@@ -351,8 +351,7 @@ static void Ban_ListBannersForEdition (void)
                Ban->BanCod);
 
       /* Banner short name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenBanSho);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"12\" maxlength=\"%u\" value=\"%s\""
@@ -362,8 +361,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner full name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenBanFul);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"24\" maxlength=\"%u\" value=\"%s\""
@@ -373,8 +371,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner image */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgBanImg);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
@@ -385,8 +382,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner WWW */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgBanWWW);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"24\" maxlength=\"%u\" value=\"%s\""
@@ -748,26 +744,26 @@ static void Ban_PutFormToCreateBanner (void)
                       "<td></td>");
 
    /***** Banner short name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"12\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName);
 
    /***** Banner full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\" size=\"24\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ban_MAX_LENGTH_FULL_NAME,Ban->FullName);
 
    /***** Banner image *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Img\""
                       " size=\"12\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ban_MAX_LENGTH_IMAGE,Ban->Img);
 
    /***** Banner WWW *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\" size=\"24\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -795,11 +791,11 @@ static void Ban_PutHeadBanners (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
                       "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">%s</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">%s</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">%s</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">%s</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">%s</td>"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">%s</td>"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
                       "</tr>",
             Txt_Code,
             Txt_Short_name,
@@ -910,7 +906,7 @@ void Ban_WriteMenuWithBanners (void)
      {
       /* Write data of this banner */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"width:120px; vertical-align:middle;\">");
+                         "<td class=\"LEFT_MIDDLE\" style=\"width:120px;\">");
       Act_FormStart (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);

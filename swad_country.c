@@ -249,8 +249,7 @@ static void Cty_Configuration (bool PrintView)
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\""
-	                 " style=\"text-align:center;\">");
+	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -301,8 +300,7 @@ static void Cty_Configuration (bool PrintView)
            }
 	 else if (MapAttribution)
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"ATTRIBUTION\""
-			       " style=\"text-align:center;\">"
+			       "<td colspan=\"2\" class=\"ATTRIBUTION\">"
 			       "%s"
                                "</td>"
 			       "</tr>",

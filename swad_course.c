@@ -208,8 +208,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"TITLE_LOCATION\""
-		      " style=\"text-align:center;\">");
+		      "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
