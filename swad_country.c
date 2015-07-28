@@ -119,10 +119,10 @@ void Cty_SeeCtyWithPendingInss (void)
       Lay_StartRoundFrameTable (NULL,2,Txt_Countries_with_pending_institutions);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -147,8 +147,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Country map */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td style=\"text-align:center;"
-	                    " vertical-align:middle; background-color:%s;\">",
+	                    "<td class=\"CENTER_MIDDLE\""
+	                    " style=\"background-color:%s;\">",
                   BgColor);
          if (Cty_CheckIfCountryMapExists (&Cty))
            {
@@ -160,8 +160,8 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Country name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                    " vertical-align:middle; background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
+                            " style=\"background-color:%s;\">",
                   BgColor);
          Act_FormGoToStart (ActSeeIns);
          Cty_PutParamCtyCod (Cty.CtyCod);
@@ -173,8 +173,8 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-	                    " vertical-align:middle; background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
+                            " style=\"background-color:%s;\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
@@ -269,8 +269,8 @@ static void Cty_Configuration (bool PrintView)
 
 	 /* Map image */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"DAT_SMALL\""
-			    " style=\"text-align:center;\">");
+			    "<td colspan=\"2\""
+			    " class=\"DAT_SMALL CENTER_MIDDLE\">");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
 		     Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language]);
@@ -285,8 +285,7 @@ static void Cty_Configuration (bool PrintView)
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\""
-			       " style=\"text-align:center;\">");
+			       "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"javascript:document.getElementById('%s').submit();\">",
@@ -315,8 +314,7 @@ static void Cty_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT_N\""
-			 " style=\"text-align:left; vertical-align:middle;\">",
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Country);
       if (!PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0])
@@ -333,8 +331,7 @@ static void Cty_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
 			 "%s/%s?cty=%ld</a>"
 			 "</td>"
@@ -351,8 +348,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"cty",Gbl.CurrentCty.Cty.CtyCod);
@@ -366,8 +362,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -380,8 +375,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -394,8 +388,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -408,8 +401,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -422,8 +414,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -436,8 +427,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -510,7 +500,7 @@ void Cty_ListCountries2 (void)
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:left;\">");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
       Act_FormStart (ActSeeCty);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL");
@@ -523,13 +513,13 @@ void Cty_ListCountries2 (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -548,8 +538,8 @@ void Cty_ListCountries2 (void)
 
       /***** Country map (and link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"COUNTRY_MAP_SMALL\""
-			 " style=\"text-align:center; background-color:%s;\">",
+			 "<td class=\"COUNTRY_MAP_SMALL CENTER_MIDDLE\""
+			 " style=\"background-color:%s;\">",
 	       BgColor);
       if (Cty_CheckIfCountryMapExists (&Gbl.Ctys.Lst[NumCty]))
 	{
@@ -566,8 +556,8 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Name and link to go to this country */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
       Act_FormGoToStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
@@ -583,20 +573,20 @@ void Cty_ListCountries2 (void)
       /* Write stats of this country */
       NumStds = Usr_GetNumUsrsInCountry (Rol_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod);
       NumTchs = Usr_GetNumUsrsInCountry (Rol_TEACHER,Gbl.Ctys.Lst[NumCty].CtyCod);
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:right; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u"
 	                 "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:right; background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\""
+                         " style=\"background-color:%s;\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:right; background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\""
+                         " style=\"background-color:%s;\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\""
-                         " style=\"text-align:right; background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\""
+                         " style=\"background-color:%s;\">"
                          "%u"
                          "</td>"
 			 "</tr>",
@@ -614,8 +604,7 @@ void Cty_ListCountries2 (void)
 
    /***** Separation row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"6\" class=\"DAT\""
-                      " style=\"text-align:center;\">"
+                      "<td colspan=\"6\" class=\"DAT CENTER_MIDDLE\">"
                       "&nbsp;"
                       "</td>"
                       "</tr>");
@@ -627,19 +616,19 @@ void Cty_ListCountries2 (void)
    NumInssInOtherCtys = Ins_GetNumInssInCty (0);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -656,19 +645,19 @@ void Cty_ListCountries2 (void)
    NumUsrs = Sta_GetTotalNumberOfUsers (Sco_SCOPE_SYS,Rol_UNKNOWN);	// NumUsrs >= NumStds + NumTchs
    fprintf (Gbl.F.Out,"<tr>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -1296,15 +1285,13 @@ static void Cty_ListCountriesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Numerical country code (ISO 3166-1) */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%03ld"
 	                 "</td>",
                1 + Txt_NUM_LANGUAGES,Cty->CtyCod);
 
       /* Alphabetic country code with 2 letters (ISO 3166-1) */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%s"
 	                 "</td>",
                1 + Txt_NUM_LANGUAGES,Cty->Alpha2);
@@ -1314,15 +1301,13 @@ static void Cty_ListCountriesForEdition (void)
 	                 "<td></td>");
 
       /* Number of users */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%u"
 	                 "</td>",
                1 + Txt_NUM_LANGUAGES,Cty->NumUsrs);
 
       /* Number of institutions */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
@@ -1335,15 +1320,13 @@ static void Cty_ListCountriesForEdition (void)
         {
 	 /* Language */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT\" style=\"text-align:right;"
-                            " vertical-align:middle;\">"
+                            "<td class=\"DAT RIGHT_MIDDLE\">"
                             "%s:"
                             "</td>",
                   Txt_STR_LANG_NAME[Lan]);
 
          /* Name */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-                            " vertical-align:top;\">");
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
          Act_FormStart (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
@@ -1355,8 +1338,7 @@ static void Cty_ListCountriesForEdition (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* WWW */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-                            " vertical-align:top;\">");
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
          Act_FormStart (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
@@ -1660,8 +1642,7 @@ static void Cty_PutFormToCreateCountry (void)
             1 + Txt_NUM_LANGUAGES);
 
    /***** Numerical country code (ISO 3166-1) *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
                       "<input type=\"text\" name=\"OthCtyCod\" size=\"3\" maxlength=\"10\" value=\"",
             1 + Txt_NUM_LANGUAGES);
    if (Cty->CtyCod > 0)
@@ -1669,8 +1650,7 @@ static void Cty_PutFormToCreateCountry (void)
    fprintf (Gbl.F.Out,"\" /></td>");
 
    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
                       "<input type=\"text\" name=\"Alpha2\" size=\"2\" maxlength=\"2\" value=\"%s\" />"
                       "</td>",
             1 + Txt_NUM_LANGUAGES,Cty->Alpha2);
@@ -1680,15 +1660,13 @@ static void Cty_PutFormToCreateCountry (void)
 		      "<td></td>");
 
    /* Number of users */
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>",
 	    1 + Txt_NUM_LANGUAGES);
 
    /* Number of institutions */
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT\""
-	              " style=\"text-align:right; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>"
 		      "</tr>",
@@ -1701,22 +1679,19 @@ static void Cty_PutFormToCreateCountry (void)
      {
       /* Language */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"DAT RIGHT_TOP\">"
 	                 "%s"
 	                 "</td>",
                Txt_STR_LANG_NAME[Lan]);
 
       /* Name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"text\" name=\"Name_%s\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                          "</td>",
                Txt_STR_LANG_ID[Lan],Cty_MAX_LENGTH_COUNTRY_NAME,Cty->Name[Lan]);
 
       /* WWW */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"text\" name=\"WWW_%s\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
 			 "</td>"
 			 "</tr>",
@@ -1745,23 +1720,23 @@ static void Cty_PutHeadCountries (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

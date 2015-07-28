@@ -90,7 +90,8 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Put form to update connected users *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"padding-bottom:10px; text-align:center;\">");
+                      "<td class=\"CENTER_MIDDLE\""
+                      " style=\"padding-bottom:10px;\">");
    Act_FormStart (ActLstCon);
    Gbl.Scope.Current = Sco_SCOPE_CRS;
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -108,7 +109,7 @@ void Con_ShowConnectedUsrs (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
                       "<tr>"
-                      "<td style=\"text-align:center;\">");
+                      "<td class=\"CENTER_MIDDLE\">");
 
    /* Number of connected users in the whole platform */
    Con_ShowGlobalConnectedUsrs ();
@@ -134,7 +135,7 @@ void Con_ShowLastClicks (void)
    Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time);
 
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
-	              " style=\"text-align:center;\">");
+	              " class=\"CENTER_MIDDLE\">");
    Con_GetAndShowLastClicks ();
    fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
@@ -177,24 +178,24 @@ void Con_GetAndShowLastClicks (void)
    /***** Write list of connected users *****/
    fprintf (Gbl.F.Out,"<table class=\"TABLE10\">"
                       "<tr>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"width:70px; text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                      " style=\"width:70px;\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"width:60px; text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                      " style=\"width:60px;\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"width:100px; text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                      " style=\"width:100px;\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"width:150px; text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                      " style=\"width:150px;\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"width:220px; text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                      " style=\"width:220px;\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -272,7 +273,6 @@ void Con_ShowGlobalConnectedUsrs (void)
    unsigned WithoutCoursesTotal = Con_GetConnectedGuestsTotal ();
    unsigned UsrsTotal = StdsTotal + TchsTotal + WithoutCoursesTotal;
 
-
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
 	              " style=\"width:110px;"
@@ -281,8 +281,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Write total number of sessions *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:110px;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td class=\"CENTER_TOP\" style=\"width:110px;\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -292,8 +291,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Write total number of users *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:110px;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td class=\"CENTER_TOP\" style=\"width:110px;\">"
                       "%u %s:"
                       "</td>"
                       "</tr>",
@@ -303,8 +301,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Write total number of students *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:110px;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td class=\"CENTER_TOP\" style=\"width:110px;\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -314,8 +311,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Write total number of teachers *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:110px;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td class=\"CENTER_TOP\" style=\"width:110px;\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -326,8 +322,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Write total number of users who do not belong to any course *****/
    if (WithoutCoursesTotal)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"width:110px;"
-                         " text-align:center; vertical-align:top;\">"
+                         "<td class=\"CENTER_TOP\" style=\"width:110px;\">"
                          "%u %s"
                          "</td>"
                          "</tr>",
@@ -511,8 +506,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    /***** Write number of connected users who belong to current course *****/
    NumUsrsThisRole = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&UsrSex);
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td colspan=\"3\" class=\"CENTER_TOP\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -589,8 +583,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
       Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\" style=\"width:110px;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td colspan=\"3\" class=\"CENTER_TOP\""
+                      " style=\"width:110px;\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -641,7 +635,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
      {
       sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" style=\"text-align:center;\">");
+			 "<td colspan=\"3\" class=\"CENTER_TOP\">");
       Act_FormStartId (ActLstCon,Gbl.FormId);
       Sco_PutParamScope (Sco_SCOPE_CRS);
       Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
@@ -1008,8 +1002,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    /***** Show photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"width:18px; text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">",
+	              "<td class=\"LEFT_MIDDLE\""
+	              " style=\"width:18px; background-color:%s;\">",
 	    Color);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
    Act_FormStartId (ActSeePubPrf,Gbl.FormId);
@@ -1024,8 +1018,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:54px; text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+	              " style=\"width:54px; background-color:%s;\">",
 	    Font,Color);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
    Act_FormStartId ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
@@ -1039,8 +1033,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write time from last access *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:38px; text-align:right;"
-	              " vertical-align:middle; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+	              " style=\"width:38px; background-color:%s;\">",
             Font,Color);
 
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
@@ -1205,8 +1199,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
          /***** Show photo *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"width:18px; text-align:left;"
-	                    " vertical-align:middle; background-color:%s;\">",
+                            "<td class=\"LEFT_MIDDLE\""
+                            " style=\"width:18px; background-color:%s;\">",
                   Gbl.ColorRows[Gbl.RowEvenOdd]);
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -1215,9 +1209,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write full name and link *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s\""
-                            " style=\"width:256px; text-align:left;"
-	                    " vertical-align:middle; background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+                            " style=\"width:256px; background-color:%s;\">",
                   Font,Gbl.ColorRows[Gbl.RowEvenOdd]);
          if (PutLinkToRecord)
            {
@@ -1235,9 +1228,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write time from last access *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s\""
-                            " style=\"width:38px; text-align:right;"
-	                    " vertical-align:middle; background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+                            " style=\"width:38px; background-color:%s;\">",
                   Font,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Hours   = Seconds / (60 * 60);
 	 Minutes = (Seconds / 60) % 60;

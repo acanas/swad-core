@@ -256,12 +256,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       /***** Table start *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Rooms_with_users);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL\""
-	                 " style=\"text-align:center; background-color:%s;\">"
+	                 "<td class=\"TIT_TBL CENTER_MIDDLE\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s"
 	                 "</td>"
-                         "<td class=\"TIT_TBL\""
-                         " style=\"text-align:left; background-color:%s;\">"
+                         "<td class=\"TIT_TBL LEFT_MIDDLE\""
+                         " style=\"background-color:%s;\">"
                          "%s"
                          "</td>"
                          "</tr>",
@@ -276,10 +276,10 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT\" style=\"text-align:left;\">"
+                            "<td class=\"DAT LEFT_MIDDLE\">"
                             "%s"
                             "</td>"
-                            "<td class=\"DAT\" style=\"text-align:right;\">"
+                            "<td class=\"DAT RIGHT_MIDDLE\">"
                             "%s"
                             "</td>"
                             "</tr>",
