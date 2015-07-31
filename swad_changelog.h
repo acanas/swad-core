@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.123.4 (2015/07/31)"
+#define Log_PLATFORM_VERSION	"SWAD 14.123.5 (2015/07/31)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.123.5: Jul 31, 2015	Changes in CSS of forms. (184902 lines)
         Version 14.123.4: Jul 31, 2015	Changes in CSS of forms. (184905 lines)
         Version 14.123.3: Jul 28, 2015	Changes in CSS of forms. (184929 lines)
         Version 14.123.2: Jul 28, 2015	Changes in CSS of forms. (184953 lines)

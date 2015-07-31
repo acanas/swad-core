@@ -106,8 +106,7 @@ void Dpt_SeeDepts (void)
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
-	                    " style=\"text-align:left;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeeDpt);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL");
@@ -129,12 +128,12 @@ void Dpt_SeeDepts (void)
 	{
 	 /* Write data of this department */
 	 fprintf (Gbl.F.Out,"<tr>"
-	                    "<td style=\"text-align:left;\">"
+	                    "<td class=\"LEFT_MIDDLE\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			    "%s"
 			    "</a>"
 			    "</td>"
-	                    "<td class=\"DAT\" style=\"text-align:right;\">"
+	                    "<td class=\"DAT RIGHT_MIDDLE\">"
 	                    "&nbsp;%u&nbsp;"
 	                    "</td>"
 	                    "</tr>",
@@ -149,8 +148,7 @@ void Dpt_SeeDepts (void)
 
       /***** Separation row *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"DAT\""
-			 " style=\"text-align:left;\">"
+			 "<td colspan=\"3\" class=\"DAT\">"
 			 "&nbsp;"
 			 "</td>"
 			 "</tr>");
@@ -158,10 +156,10 @@ void Dpt_SeeDepts (void)
       /***** Write teachers with other department *****/
       NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
-			 "<td class=\"DAT\" style=\"text-align:right;\">"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "&nbsp;%u&nbsp;"
 			 "</td>"
 			 "</tr>",
@@ -170,10 +168,10 @@ void Dpt_SeeDepts (void)
 
       /***** Write teachers with no department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
-			 "<td class=\"DAT\" style=\"text-align:right;\">"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "&nbsp;%u&nbsp;"
 			 "</td>"
 			 "</tr>",
@@ -520,14 +518,13 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
                Dpt->DptCod);
 
       /* Institution */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:50px;\""
@@ -550,8 +547,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department short name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -561,7 +557,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department full name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -571,7 +567,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Department WWW */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"20\" maxlength=\"%u\" value=\"%s\""
@@ -581,7 +577,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of teachers */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "&nbsp;%u&nbsp;"
 	                 "</td>"
 	                 "</tr>",
@@ -878,16 +874,16 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -898,7 +894,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:center; vertical-align:middle;\">"
+                      "<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthInsCod\" style=\"width:50px;\">"
                       "<option value=\"0\"");
    if (Dpt->InsCod == 0)
@@ -916,19 +912,19 @@ static void Dpt_PutFormToCreateDepartment (void)
 	              "</td>");
 
    /***** Department short name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName);
 
    /***** Department full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
 
    /***** Department WWW *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -955,24 +951,24 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_Teachers_ABBREVIATION;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
