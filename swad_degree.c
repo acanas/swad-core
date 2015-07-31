@@ -191,10 +191,10 @@ void Deg_SeeDegWithPendingCrss (void)
       Lay_StartRoundFrameTable (NULL,2,Txt_Degrees_with_pending_courses);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -219,8 +219,8 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Degree logo */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT\" style=\"text-align:center;"
-	                    " vertical-align:middle; background-color:%s;\">"
+	                    "<td class=\"DAT CENTER_MIDDLE\""
+	                    " style=\"background-color:%s;\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
@@ -230,8 +230,8 @@ void Deg_SeeDegWithPendingCrss (void)
                             "</td>");
 
          /* Degree full name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT\"style=\"text-align:left;"
-	                    " vertical-align:middle; background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
+                            " style=\"background-color:%s;\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCrs);
          Deg_PutParamDegCod (Deg.DegCod);
@@ -244,8 +244,8 @@ void Deg_SeeDegWithPendingCrss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending courses (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-	                    " vertical-align:middle; background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
+                            " style=\"background-color:%s;\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
@@ -345,8 +345,7 @@ static void Deg_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
-			 "<td class=\"DAT_N\""
-			 " style=\"text-align:left; vertical-align:middle;\">",
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Degree);
       if (PutLink)
@@ -366,8 +365,7 @@ static void Deg_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT\""
-			 " style=\"text-align:left; vertical-align:middle;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
 			 "</tr>",
@@ -382,8 +380,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\""
-			    " style=\"text-align:left; vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_Web,
@@ -401,8 +398,7 @@ static void Deg_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
-			 "<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:middle;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
 			 "%s/%s?deg=%ld"
 			 "</a>"
@@ -420,8 +416,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-	                    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"deg",Gbl.CurrentDeg.Deg.DegCod);
@@ -435,8 +430,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
@@ -448,8 +442,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
@@ -462,8 +455,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-	                    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
@@ -500,7 +492,7 @@ void Deg_WriteMenuAllCourses (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left;\">",
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Country);
    Cty_WriteSelectorOfCountry ();
    fprintf (Gbl.F.Out,"</td>"
@@ -514,7 +506,7 @@ void Deg_WriteMenuAllCourses (void)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td style=\"text-align:left;\">",
+                         "<td class=\"LEFT_MIDDLE\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Institution);
       Ins_WriteSelectorOfInstitution ();
       fprintf (Gbl.F.Out,"</td>"
@@ -528,7 +520,7 @@ void Deg_WriteMenuAllCourses (void)
                             "<td class=\"%s RIGHT_MIDDLE\">"
                             "%s:"
                             "</td>"
-                            "<td style=\"text-align:left;\">",
+                            "<td class=\"LEFT_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Centre);
          Ctr_WriteSelectorOfCentre ();
          fprintf (Gbl.F.Out,"</td>"
@@ -542,7 +534,7 @@ void Deg_WriteMenuAllCourses (void)
                                "<td class=\"%s RIGHT_MIDDLE\">"
                                "%s:"
                                "</td>"
-                               "<td style=\"text-align:left;\">",
+                               "<td class=\"LEFT_MIDDLE\">",
                      The_ClassForm[Gbl.Prefs.Theme],Txt_Degree);
             Deg_WriteSelectorOfDegree ();
             fprintf (Gbl.F.Out,"</td>"
@@ -556,7 +548,7 @@ void Deg_WriteMenuAllCourses (void)
 				  "<td class=\"%s RIGHT_MIDDLE\">"
 				  "%s:"
 				  "</td>"
-				  "<td style=\"text-align:left;\">",
+				  "<td class=\"LEFT_MIDDLE\">",
 			The_ClassForm[Gbl.Prefs.Theme],Txt_Course);
 	       Crs_WriteSelectorOfCourse ();
 	       fprintf (Gbl.F.Out,"</td>"
@@ -1108,15 +1100,15 @@ static void Deg_ListDegreeTypesForSeeing (void)
                                                           Txt_TYPES_OF_DEGREE_Without_degrees);
 
       /* Name of degree type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:middle; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Direct log in is allowed for this degree type? */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
+	                 " style=\"background-color:%s;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                          "</td>",
@@ -1130,8 +1122,8 @@ static void Deg_ListDegreeTypesForSeeing (void)
                                                                    Txt_Direct_authentication_not_allowed);
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-	                 " vertical-align:middle; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -1176,15 +1168,13 @@ static void Deg_ListDegreeTypesForEdition (void)
 
       /* Degree type code */
       fprintf (Gbl.F.Out,"</td>"
-	                 "<td class=\"DAT\" style=\"text-align:center;"
-	                 " vertical-align:middle;\">"
+	                 "<td class=\"DAT CENTER_MIDDLE\">"
 	                 "%ld"
 	                 "</td>",
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
 
       /* Name of degree type */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActRenDegTyp);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\" size=\"25\" maxlength=\"%u\" value=\"%s\""
@@ -1196,8 +1186,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Direct log in is allowed for this degree type? */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDegTypLog);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s"
@@ -1209,8 +1198,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-	                 " vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -1274,7 +1262,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Put green tip if degree has courses *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td style=\"text-align:center; background-color:%s;\">"
+		      "<td class=\"CENTER_MIDDLE\""
+		      " style=\"background-color:%s;\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
@@ -1288,18 +1277,18 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 			      Txt_DEGREE_Without_courses);
 
    /***** Number of degree in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
                       "%u"
                       "</td>",
 	    TxtClass,BgColor,
             NumDeg);
 
    /***** Degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:middle; background-color:%s;\">"
-		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-	    TxtClass,BgColor,
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
+	              " style=\"background-color:%s;\">"
+		      "<a href=\"%s\" title=\"%s\" target=\"_blank\">",
+	    BgColor,
 	    Deg->WWW,Deg->FullName);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
                  16,"vertical-align:top;",true);
@@ -1307,8 +1296,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "</td>");
 
    /* Degree full name */
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+	              " style=\"background-color:%s;\">",
 	    TxtClass,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg->DegCod);
@@ -1319,28 +1308,29 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"</td>");
 
    /* Type of degree */
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "%s"
 	              "</td>",
 	    TxtClass,BgColor,DegTyp.DegTypName);
 
    /* Degree first year */
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->FirstYear);
 
    /* Degree last year */
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->LastYear);
 
    /* Degree optional year */
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
@@ -1354,16 +1344,16 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 			   Txt_DEGREE_Without_year_for_optional_courses);
 
    /* Current number of courses in this degree */
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->NumCourses);
 
    /* Degree status */
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "%s"
 	              "</td>"
 		      "</tr>",
@@ -1429,22 +1419,20 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 "style=\"text-align:right; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%ld"
 	                 "</td>",
                Deg->DegCod);
 
       /* Degree logo */
-      fprintf (Gbl.F.Out,"<td title=\"%s\""
-	                 " style=\"width:20px; text-align:left;\">",
+      fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\""
+	                 " style=\"width:20px;>",
                Deg->FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// I can select centre
 	{
 	 Act_FormStart (ActChgDegCtr);
@@ -1468,8 +1456,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree short name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActRenDegSho);
@@ -1484,8 +1471,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree full name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActRenDegFul);
@@ -1500,8 +1486,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegTyp);
@@ -1532,8 +1517,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree first year */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegFstYea);
@@ -1557,8 +1541,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree last year */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegLstYea);
@@ -1582,8 +1565,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree optional year */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegOptYea);
@@ -1610,8 +1592,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree WWW */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegWWW);
@@ -1634,16 +1615,14 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Current number of courses in this degree */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-	                 " vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
                Deg->NumCourses);
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
@@ -1668,8 +1647,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td style=\"width:100px;"
-	                 " text-align:left; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
 			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 			 "<tr>");
       Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
@@ -1758,10 +1736,10 @@ static void Deg_PutFormToCreateDegType (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1770,13 +1748,13 @@ static void Deg_PutFormToCreateDegType (void)
 
    /***** Degree type name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"DegTypName\" size=\"25\" maxlength=\"%u\" value=\"%s\" />"
                      "</td>",
             Deg_MAX_LENGTH_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
 
    /***** Direct log in is allowed for this degree type? *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s />"
                       "</td>"
                       "<td></td>"
@@ -1832,17 +1810,16 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Degree code *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:right; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "</td>");
 
    /***** Degree logo *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:20px; text-align:left;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"OthCtrCod\" style=\"width:50px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
@@ -1853,19 +1830,19 @@ static void Deg_PutFormToCreateDegree (void)
 	    Gbl.CurrentCtr.Ctr.ShortName);
 
    /***** Degree short name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName);
 
    /***** Degree full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName);
 
    /***** Degree type *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"OthDegTypCod\" style=\"width:50px;\">");
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.Degs.DegTypes.Num;
@@ -1882,7 +1859,7 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>");
 
    /***** First year *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"FirstYear\">");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1896,7 +1873,7 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>");
 
    /***** Last year *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"LastYear\">");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1910,32 +1887,30 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>");
 
    /***** Degree optional year *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"OptYear\" value=\"Y\"%s /></td>",
             Deg->OptYear ? " checked=\"checked\"" :
         	           "");
 
    /***** Degree WWW *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\" size=\"5\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Deg->WWW);
 
    /***** Current number of courses in this degree *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-	              " vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
    /***** Degree status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	              " vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 	              "%s"
 	              "</td>",
             Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
 
    /***** Degree requester *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:100px; text-align:left; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
 		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
 		      "<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
@@ -1963,13 +1938,13 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1991,16 +1966,16 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2028,25 +2003,25 @@ static void Deg_PutHeadDegreesForSeeing (void)
                       "<th class=\"BM\"></th>"
                       "<th></th>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2080,41 +2055,41 @@ static void Deg_PutHeadDegreesForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th style=\"width:20px;\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -3962,8 +3937,8 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
 	{
          /***** Indent *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"text-align:right;"
-                            " background-color:%s;\">"
+                            "<td class=\"RIGHT_TOP\""
+                            " style=\"background-color:%s;\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " style=\"width:20px; height:20px;"
@@ -3974,9 +3949,9 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
                 	              "submid");
 
          /***** Write degree *****/
-         fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"DAT_SMALL_NOBR\""
-                            " style=\"text-align:left; vertical-align:top;"
-                            " background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td colspan=\"%u\""
+                            " class=\"DAT_SMALL_NOBR LEFT_TOP\""
+                            " style=\"background-color:%s;\">",
                   ColSpan - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
          /* Get next degree */
@@ -4037,8 +4012,8 @@ unsigned Deg_ListDegsFound (const char *Query)
 
       /* Number of degrees found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"10\" class=\"TIT_TBL\""
-			 " style=\"text-align:center;\">");
+			 "<td colspan=\"10\""
+			 " class=\"TIT_TBL CENTER_MIDDLE\"\">");
       if (NumDegs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_degree);
       else

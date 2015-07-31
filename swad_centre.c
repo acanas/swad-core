@@ -600,7 +600,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
             NumCtr);
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
 	              " style=\"background-color:%s;\">"
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
