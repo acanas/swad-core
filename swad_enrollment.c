@@ -532,7 +532,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Lay_StartRoundFrame (NULL,Txt_Admin_several_users);
 
    /***** Step 1: List of students to be enrolled / removed *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
@@ -541,7 +541,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    if (ExternalUsrsServiceAvailable)
      {
       /* Option a: get students from official lists */
-      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+      fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
 			 "%s"
 			 "</div>",
 	       The_ClassTitle[Gbl.Prefs.Theme],
@@ -550,7 +550,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
       Imp_ListMyImpGrpsAndStdsForm ();
 
       /* Option b: get students' IDs from pasted text */
-      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+      fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
 			 "%s"
 			 "</div>",
 	       The_ClassTitle[Gbl.Prefs.Theme],
@@ -561,7 +561,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Enr_PutAreaToEnterUsrsIDs ();
 
    /***** Step 2: Select type of user to register/remove to/from current course *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
@@ -570,7 +570,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
       Rol_PutAllRolesRegRemUsrsCrs ();
 
    /***** Step 3: Put different actions to register/remove students to/from current course *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
@@ -578,7 +578,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
    Enr_PutActionsRegRemSeveralUsrs ();
 
    /***** Step 4: Select groups in which register / remove students *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
@@ -600,7 +600,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
      }
 
    /***** Step 5: Confirm register / remove students *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
@@ -640,7 +640,7 @@ void Enr_AskRemoveOldUsrs (void)
    unsigned Months;
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActRemOldUsr);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -763,7 +763,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:&nbsp;"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"UsrsIDs\" cols=\"72\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
@@ -2117,7 +2117,7 @@ void Enr_ShowEnrollmentRequests (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
@@ -2137,8 +2137,7 @@ void Enr_ShowEnrollmentRequests (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_GetSelectedRoles (&Roles);
@@ -2371,24 +2370,19 @@ void Enr_ShowEnrollmentRequests (void)
       Lay_StartRoundFrameTable (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL\""
-                         " style=\"text-align:left; vertical-align:top;\">"
+                         "<th class=\"TIT_TBL LEFT_TOP\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\""
-                         " style=\"text-align:right; vertical-align:top;\">"
+                         "<th class=\"TIT_TBL RIGHT_TOP\">"
                          "%s"
                          "</th>"
-                         "<th colspan=\"2\" class=\"TIT_TBL\""
-                         " style=\"text-align:left; vertical-align:top;\">"
+                         "<th colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\""
-                         " style=\"text-align:left; vertical-align:top;\">"
+                         "<th class=\"TIT_TBL LEFT_TOP\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\""
-                         " style=\"text-align:center; vertical-align:top;\">"
+                         "<th class=\"TIT_TBL CENTER_TOP\">"
                          "%s"
                          "</th>"
                          "<th></th>"
@@ -2427,8 +2421,7 @@ void Enr_ShowEnrollmentRequests (void)
            {
             /***** Number *****/
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"DAT\" style=\"text-align:right;"
-                               " vertical-align:top;\">"
+                               "<td class=\"DAT RIGHT_TOP\">"
                                "%u"
                                "</td>",
                      NumRequests - NumReq);
@@ -2437,8 +2430,7 @@ void Enr_ShowEnrollmentRequests (void)
             Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:top;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
@@ -2450,15 +2442,14 @@ void Enr_ShowEnrollmentRequests (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /***** Number of teachers in the course *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
                                "%u"
                                "</td>",
                      Crs.NumTchs);
 
             /***** User photo *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"width:18px;"
-        	               " text-align:center; vertical-align:top;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
+        	               " style=\"width:18px;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
@@ -2466,14 +2457,12 @@ void Enr_ShowEnrollmentRequests (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /***** User name *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:top;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Usr_RestrictLengthAndWriteName (&UsrDat,20);
 
             /***** Requested role (row[3]) *****/
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
         	               "%s"
         	               "</td>",
                      Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
@@ -2482,8 +2471,7 @@ void Enr_ShowEnrollmentRequests (void)
             Msg_WriteMsgDate (row[4],"DAT");
 
             /***** Button to confirm the request *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:top;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Act_FormStart (ActReqMdfUsr);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
@@ -2492,8 +2480,7 @@ void Enr_ShowEnrollmentRequests (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /***** Button to reject the request *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-        	               " vertical-align:top;\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
@@ -3409,7 +3396,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
 
       Rec_ShowCommonRecordUnmodifiable (UsrDat);
 
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRemUsrCrs);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
