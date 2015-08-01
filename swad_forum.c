@@ -1079,8 +1079,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"width:24px;"
-	              " text-align:center; vertical-align:top;\">"
+	              "<td class=\"%s CENTER_TOP\" style=\"width:24px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                       "</td>",
@@ -1102,8 +1101,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 	                                "MSG_TIT_BG");
 
    /***** Write subject *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\""
-	              " style=\"text-align:left; vertical-align:top;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             NewPst ? "MSG_TIT_BG_NEW" :
         	     "MSG_TIT_BG");
    if (Enabled)
@@ -1120,8 +1118,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    /***** Form to remove post *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"width:18px;"
-	              " text-align:center; vertical-align:top;\">");
+	              "<td class=\"CENTER_TOP\" style=\"width:18px;\">");
    if (LastPst && Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)
       // Post can be removed if post is the last (without answers) and it's mine
      {
@@ -1179,8 +1176,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    /***** Write author or destinatary, and form to reply (in case of received post) *****/
    fprintf (Gbl.F.Out,"</td>"
-	              "<td colspan=\"2\" style=\"width:120px;"
-	              " text-align:left; vertical-align:top;\">"
+	              "<td colspan=\"2\" class=\"LEFT_TOP\""
+	              " style=\"width:120px;\">"
                       "<table class=\"CELLS_PAD_2\" style=\"width:120px;\">");
 
    /* Write author */
@@ -1199,8 +1196,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Write post content *****/
    fprintf (Gbl.F.Out,"</table>"
 	              "</td>"
-	              "<td class=\"MSG_TXT\""
-	              " style=\"text-align:left; vertical-align:top;\">"
+	              "<td class=\"MSG_TXT LEFT_TOP\">"
 	              "<tt>");
    if (Enabled)
      {
@@ -1313,9 +1309,8 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
    unsigned NumPsts;
 
    /***** Star table cell *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_AUT\""
-	              " style=\"width:120px;"
-	              " text-align:center; vertical-align:top;\">");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_AUT CENTER_TOP\""
+	              " style=\"width:120px;\">");
 
    /***** Get number of posts from database *****/
    switch (ForumType)
@@ -1760,8 +1755,8 @@ static void For_PutFormWhichForums (void)
 	WhichForums < For_NUM_WHICH_FORUMS;
 	WhichForums++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT\""
-	                 " style=\"display:inline; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"display:inline;\">"
                          "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
                (unsigned) WhichForums);
       if (WhichForums == Gbl.Forum.WhichForums)
@@ -2490,15 +2485,15 @@ void For_ShowForumThrs (void)
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL\""
-	                 " style=\"width:14px; text-align:left;\">"
+	                 "<td class=\"TIT_TBL LEFT_MIDDLE\""
+	                 " style=\"width:14px;\">"
 	                 "&nbsp;"
 	                 "</td>"
-                         "<td class=\"TIT_TBL\""
-                         " style=\"width:18px; text-align:left;\">"
+                         "<td class=\"TIT_TBL LEFT_MIDDLE\""
+                         " style=\"width:18px;\">"
                          "&nbsp;"
                          "</td>"
-                         "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</td>",
                Txt_MSG_Subject);
@@ -2506,7 +2501,7 @@ void For_ShowForumThrs (void)
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" style=\"text-align:center;\">");
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\">");
          Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
          Pag_PutHiddenParamPagNum (PaginationThrs.CurrentPage);
          For_PutParamWhichForum ();
@@ -2522,16 +2517,16 @@ void For_ShowForumThrs (void)
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 	}
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL RIGHT_MIDDLE\">"
 	                 "%s"
 	                 "</td>"
-                         "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "</tr>",
@@ -3247,8 +3242,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"width:14px; text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">",
+	                 "<td class=\"RIGHT_TOP\""
+	                 " style=\"width:14px; background-color:%s;\">",
                ThisThreadIsInMyClipboard ? LIGHT_GREEN :
                                            Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Thr.NumMyPosts)
@@ -3276,8 +3271,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Put an icon with thread status *****/
-      fprintf (Gbl.F.Out,"<td style=\"width:24px; text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
+	                 " style=\"width:24px; background-color:%s;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />",
@@ -3321,8 +3316,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write subject and links to thread pages *****/
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
-	                 " background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
                ThisThreadIsInMyClipboard ? LIGHT_GREEN :
         	                           Gbl.ColorRows[Gbl.RowEvenOdd]);
       PaginationPsts.NumItems = Thr.NumPosts;
@@ -3352,8 +3347,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                                                             Gbl.ColorRows[Gbl.RowEvenOdd]);
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-        	               " vertical-align:top; background-color:%s;\">",
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
+        	               " style=\"background-color:%s;\">",
                      Style,
                      ThisThreadIsInMyClipboard ? LIGHT_GREEN :
                 	                         Gbl.ColorRows[Gbl.RowEvenOdd]);
@@ -3367,8 +3362,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             for (Column = 1;
         	 Column <= 3;
         	 Column++)
-               fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-        	                  " vertical-align:top; background-color:%s;\">"
+               fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
+        	                  " style=\"background-color:%s;\">"
         	                  "</td>",
                         Style,
                         ThisThreadIsInMyClipboard ? LIGHT_GREEN :
@@ -3376,8 +3371,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
         }
 
       /***** Write number of posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u&nbsp;"
 	                 "</td>",
                Style,
@@ -3386,8 +3381,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                Thr.NumPosts);
 
       /***** Write number of new posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u&nbsp;"
 	                 "</td>",
                Style,
@@ -3396,8 +3391,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                Thr.NumUnreadPosts);
 
       /***** Write number of users who have write posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u&nbsp;"
 	                 "</td>",
                Style,
@@ -3406,8 +3401,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                Thr.NumWriters);
 
       /***** Write number of users who have read this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"background-color:%s;\">"
 	                 "%u&nbsp;"
 	                 "</td>"
 	                 "</tr>",
@@ -3711,7 +3705,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
@@ -3724,7 +3718,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Content\" cols=\"72\" rows=\"15\">"
                       "</textarea>"
                       "</td>"

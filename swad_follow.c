@@ -131,8 +131,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
 
-   fprintf (Gbl.F.Out,"<td style=\"min-width:100px;"
-	              " text-align:center; vertical-align:top;\">");
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+	              " style=\"min-width:100px;\">");
    /* Number */
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
             (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
@@ -373,8 +373,8 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
    /***** Put form to follow / unfollow *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:20px; height:50px;"
-	              " text-align:right;\">");
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\""
+	              " style=\"width:20px; height:50px;\">");
    if (Visible &&
        Gbl.Usrs.Me.Logged &&
        Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat->UsrCod)
@@ -414,8 +414,8 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Check if I can see the public profile *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:40px; height:50px;"
-	              " text-align:center;\">");
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
+	              " style=\"width:40px; height:50px;\">");
    if (Visible)
      {
       /***** User's photo *****/
@@ -427,8 +427,8 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to go to public profile *****/
-   fprintf (Gbl.F.Out,"<td style=\"min-width:70px; height:50px;"
-	              " text-align:left;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
+	              " style=\"min-width:70px; height:50px;\">");
    if (Visible &&
        UsrDat->Nickname[0])
      {

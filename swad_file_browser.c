@@ -2973,8 +2973,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	       fprintf (Gbl.F.Out,"<tr>");
 	       Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-	       fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-		                  " vertical-align:top;\">");
+	       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
 
 	       /***** Show the tree with the assignments *****/
 	       Gbl.FileBrowser.Type = Brw_ADMI_ASSIG_CRS;
@@ -3152,8 +3151,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX+1];
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:80px;"
-	              " text-align:left; vertical-align:top;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:80px;\">");
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -3161,8 +3159,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
-   fprintf (Gbl.F.Out,"<td class=\"MSG_AUT\" style=\"width:160px;"
-	              " text-align:left; vertical-align:top;\">");
+   fprintf (Gbl.F.Out,"<td class=\"MSG_AUT LEFT_TOP\" style=\"width:160px;\">");
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3307,7 +3304,7 @@ static void Brw_ShowFileBrowser (void)
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"%u\" style=\"text-align:center;\">",
+                      "<td class=\"CENTER_MIDDLE\" colspan=\"%u\">",
             Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type]);
    Brw_WriteSubtitleOfFileBrowser ();
    fprintf (Gbl.F.Out,"</td>"
@@ -3675,8 +3672,7 @@ static void Brw_ShowSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"%u\" class=\"DAT\""
-                      " style=\"text-align:center;\">"
+                      "<td colspan=\"%u\" class=\"DAT CENTER_MIDDLE\">"
                       "%u %s; %lu %s; %lu %s; ",
             Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type],
             Gbl.FileBrowser.Size.NumLevls,
@@ -4816,9 +4812,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start of the column */
-   fprintf (Gbl.F.Out,"<td class=\"NO_BR\" style=\"width:99%%;"
-	              " text-align:left; vertical-align:top;"
-	              " background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP\""
+	              " style=\"width:99%%; background-color:%s;\">"
                       "<table>"
                       "<tr>",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
@@ -5192,7 +5187,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
    extern const char *Txt_Expand_FOLDER_X;
    extern const char *Txt_Contract_FOLDER_X;
 
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
 	              "<tr>");
    Brw_IndentDependingOnLevel (Level);
@@ -5386,7 +5381,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
    bool ICanCreate;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">",
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Level * 16);
 
    /***** Put icon *****/
@@ -5557,8 +5552,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
    if (FileType == Brw_IS_FOLDER)
      {
       /***** Start of cell *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:99%%;"
-	                 " text-align:left; vertical-align:middle;",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\" style=\"width:99%%;",
                Gbl.FileBrowser.TxtStyle);
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
          fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
@@ -5619,8 +5613,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
      }
    else	// File or link
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:99%%;"
-	                 " text-align:left; vertical-align:middle;",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\" style=\"width:99%%;",
                Gbl.FileBrowser.TxtStyle);
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
          fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
@@ -5743,9 +5736,9 @@ static void Brw_WriteDatesAssignment (void)
   {
    extern const char *Txt_unknown_assignment;
 
-   fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"ASG_LST_DATE_GREEN\""
-	              " style=\"text-align:right; vertical-align:middle;"
-	              " background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"4\""
+	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE\""
+	              " style=\"background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    if (Gbl.FileBrowser.Asg.AsgCod > 0)
@@ -5754,8 +5747,7 @@ static void Brw_WriteDatesAssignment (void)
 	                 "<tr>");
 
       /***** Write start date *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\""
-	                 " style=\"text-align:right; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
                          "&nbsp;%02u/%02u/%02u&nbsp;%02u:%02u"
                          "</td>",
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
@@ -5767,8 +5759,7 @@ static void Brw_WriteDatesAssignment (void)
 	       Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Time.Minute);
 
       /***** Arrow *****/
-      fprintf (Gbl.F.Out,"<td style=\"width:16px;"
-	                 " text-align:right; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/arrow%s16x12.gif\""
                          " alt=\"\" title=\"\""
                          " class=\"ICON16x16B\" />"
@@ -5778,7 +5769,7 @@ static void Brw_WriteDatesAssignment (void)
         	                          "red");
 
       /***** Write start date *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
                          "%02u/%02u/%02u&nbsp;%02u:%02u"
                          "</td>",
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
@@ -5805,8 +5796,8 @@ static void Brw_WriteDatesAssignment (void)
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata)
   {
    /***** Write the file size *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\""
-	              " style=\"text-align:right; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "&nbsp;",
             Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (FileType == Brw_IS_FILE)
@@ -5814,8 +5805,8 @@ static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadat
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the date *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\""
-	              " style=\"text-align:right; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
+	              " style=\"background-color:%s;\">"
 	              "&nbsp;",
             Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (FileType == Brw_IS_FILE ||
@@ -6270,7 +6261,7 @@ static void Brw_WriteCurrentClipboard (void)
    const char *Ptr;
    char FileNameToShow[NAME_MAX+1];
 
-   fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
 	              "%s: ",
             Txt_Copy_source);
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
@@ -7909,10 +7900,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /***** URL *****/
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
-	              "<td style=\"text-align:right;\">"
+	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label class=\"%s\">%s:&nbsp;</label>"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewLinkURL\""
                       " size=\"40\" maxlength=\"%u\" value=\"\" />"
                       "</td>"
@@ -7922,10 +7913,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Link name *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:right;\">"
+	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label class=\"%s\">%s&nbsp;(%s):&nbsp;</label>"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewLinkName\""
                       " size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
@@ -8893,9 +8884,8 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"FILENAME\""
-			    " style=\"text-align:center;"
-			    " vertical-align:middle;\">");
+			    "<td colspan=\"2\""
+			    " class=\"FILENAME CENTER_MIDDLE\">");
 	 Brw_WriteBigLinkToDownloadFile (URL,FileMetadata.FileType,
 	                                 FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -8906,8 +8896,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Filename);
 	 Brw_WriteSmallLinkToDownloadFile (URL,FileMetadata.FileType,FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -8918,8 +8907,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Uploaded_by);
 	 if (FileHasPublisher)
 	   {
@@ -8948,8 +8936,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
 	 Str_WriteSizeInBytesFull ((double) FileMetadata.Size);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -8960,8 +8947,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
 	 Dat_GetLocalTimeFromClock (&(FileMetadata.Time));
 	 Dat_WriteDateTimeFromtblock ();
@@ -8973,8 +8959,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Availability);
 	 if (ICanChangePublic)	// I can change file to public
 	   {
@@ -9004,8 +8989,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_License);
 	 if (ICanChangeLicense)	// I can edit file properties
 	   {
@@ -9033,8 +9017,7 @@ void Brw_ShowFileMetadata (void)
 			       "<td class=\"%s RIGHT_MIDDLE\">"
 			       "%s:"
 			       "</td>"
-			       "<td class=\"DAT\" style=\"text-align:left;"
-			       " vertical-align:middle;\">"
+			       "<td class=\"DAT LEFT_MIDDLE\">"
 			       "%u"
 			       "</td>"
 			       "</tr>",
@@ -9046,8 +9029,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u (%u %s)"
 			    "</td>"
 			    "</tr>",
@@ -9062,8 +9044,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:left;"
-			    " vertical-align:middle;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
@@ -10859,8 +10840,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 
       /* Write header with number of documents found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL\""
-			 " style=\"text-align:center;\">");
+			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumDocs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_document);
       else
@@ -10871,22 +10851,22 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -10912,8 +10892,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /***** Write footer *****/
       /* Number of documents not hidden found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL\""
-			 " style=\"text-align:center;\">"
+			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">"
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -11008,15 +10987,15 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Write number of document in this search *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+	                 "<td class=\"DAT RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u"
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));
 
       /***** Write institution logo, institution short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
       if (InsCod > 0)
 	{
@@ -11032,8 +11011,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write centre logo, centre short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
       if (CtrCod > 0)
 	{
@@ -11049,8 +11028,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write degree logo, degree short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
       if (DegCod > 0)
 	{
@@ -11066,8 +11045,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write course short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
       if (CrsCod > 0)
 	{
@@ -11114,8 +11093,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    Title = "";
 	    break;
 	}
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Title);
@@ -11127,8 +11106,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       Brw_LimitLengthFileNameToShow (FileMetadata.FileType,FileName,FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       BgColor);
 
       /* Start form */
