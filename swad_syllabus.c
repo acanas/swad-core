@@ -178,6 +178,8 @@ void Syl_GetParamItemNumber (void)
 
 void Syl_EditSyllabus (void)
   {
+   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_View;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Enter_a_new_item_here;
    extern const char *Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_;
@@ -194,6 +196,15 @@ void Syl_EditSyllabus (void)
 
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
+      if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
+	{
+	 /***** Put link to view *****/
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
+				"visible_on",Txt_View);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+
       /***** Start of table *****/
       Lay_StartRoundFrameTable (NULL,1,Txt_INFO_TITLE[InfoType]);
 

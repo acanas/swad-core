@@ -548,7 +548,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    /***** Write every information I must read *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	              "<tr>"
-	              "<td style=\"text-align:left;\">"
+	              "<td class=\"LEFT_MIDDLE\">"
 	              "<ul>");
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
@@ -909,6 +909,7 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
+   extern const char *Txt_View;
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
@@ -916,75 +917,58 @@ void Inf_FormsToSelSendInfo (void)
    Inf_InfoSrc_t InfoSrc,InfoSrcSelected;
    bool MustBeRead;
 
+   /***** Put link to view *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
+			  "visible_on",Txt_View);
+   fprintf (Gbl.F.Out,"</div>");
+
    /***** Get info source from database *****/
    Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,&InfoSrcSelected,&MustBeRead);
 
-   /***** Forms for the different edition alternatives *****/
-   /* Start of table */
-   Lay_StartRoundFrameTable (NULL,0,NULL);
-
-   /* Forms */
-   for (InfoSrc = (Inf_InfoSrc_t) 1;
-	InfoSrc < Inf_NUM_INFO_SOURCES;
-	InfoSrc++)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT\" style=\"text-align:center;");
-      if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
-	                 "&nbsp;<br />%s",
-               Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
-      if (Txt_INFO_SRC_HELP[InfoSrc])
-         fprintf (Gbl.F.Out,"<br />(%s)",
-                  Txt_INFO_SRC_HELP[InfoSrc]);
-      Inf_FormsForEditionTypes[InfoSrc] (InfoSrc,InfoType);
-      fprintf (Gbl.F.Out,"<br />"
-	                 "</td>"
-	                 "</tr>");
-     }
-
-   /* End of table */
-   Lay_EndRoundFrameTable ();
-
    /***** Form to choice between alternatives *****/
-   /* Start of form and table */
-   Act_FormStart (Inf_ActionsSelecInfoSrc[InfoType]);
-   Lay_StartRoundFrameTable (NULL,0,NULL);
-
-   /* Title */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT\" style=\"text-align:center;\">"
-	              "%s"
-	              "</td>"
-	              "</tr>",
-            Txt_Source_of_information);
+   /* Start of table */
+   Lay_StartRoundFrameTable (NULL,4,Txt_Source_of_information);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;
 	InfoSrc < Inf_NUM_INFO_SOURCES;
 	InfoSrc++)
      {
+      /* Select info source */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT\""
-	                 " style=\"text-align:left; vertical-align:middle;");
+	                 "<td class=\"DAT LEFT_TOP\"");
       if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"radio\" name=\"InfoSrc\" value=\"%u\"",
+         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">");
+      Act_FormStart (Inf_ActionsSelecInfoSrc[InfoType]);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"InfoSrc\" value=\"%u\"",
 	       (unsigned) InfoSrc);
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
-	                 "%s"
-	                 "</td>"
-	                 "</tr>",
-               Gbl.FormId,Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />",
+               Gbl.FormId);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Form for this info source */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\"");
+      if (InfoSrc == InfoSrcSelected)
+         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">"
+	                 "<span class=\"TIT\">%s<br /></span>",
+               Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+      if (Txt_INFO_SRC_HELP[InfoSrc])
+         fprintf (Gbl.F.Out,"<span class=\"DAT\">(%s)</span>",
+                  Txt_INFO_SRC_HELP[InfoSrc]);
+      if (Inf_FormsForEditionTypes[InfoSrc])
+         Inf_FormsForEditionTypes[InfoSrc] (InfoSrc,InfoType);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
      }
 
-   /* End of table and form */
+   /* End of table */
    Lay_EndRoundFrameTable ();
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1060,7 +1044,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"file\" name=\"%s\" size=\"50\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
@@ -1095,7 +1079,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"InfoSrcURL\" size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
    if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"rb")) == NULL)
@@ -1593,7 +1577,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<p class=\"DAT\" style=\"text-align:justify;\">");
 
       /***** Convert to respectful HTML and insert links *****/
@@ -1648,7 +1632,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<div id=\"crs_info\">");
 
       /***** Store text into a temporary .md file in HTML output directory *****/
@@ -1763,7 +1747,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 
       /***** Write plain text into text buffer *****/
       fprintf (FileHTMLTmp,"<tr>"
-		            "<td style=\"text-align:left;\">"
+		            "<td class=\"LEFT_MIDDLE\">"
 		            "<p class=\"DAT\" style=\"text-align:justify;\">");
 
       /* Convert to respectful HTML and insert links */
@@ -1836,7 +1820,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">");
+	              "<td class=\"CENTER_MIDDLE\">");
    Lay_HelpPlainEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
@@ -1874,7 +1858,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:center;\">");
+	              "<td class=\"CENTER_MIDDLE\">");
    Lay_HelpRichEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
