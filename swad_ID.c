@@ -392,7 +392,7 @@ void ID_ShowFormOthIDs (void)
 	 /* Show user's record */
 	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
 			    "<tr>"
-			    "<td colspan=\"3\" style=\"text-align:center;\">");
+			    "<td colspan=\"3\" class=\"CENTER_MIDDLE\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -435,8 +435,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
-			    "<td colspan=\"2\" style=\"text-align:left;"
-			    " vertical-align:top;\">",
+			    "<td colspan=\"2\" class=\"LEFT_TOP\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -490,8 +489,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td style=\"text-align:left;"
-			 " vertical-align:middle;\">",
+			 "<td class=\"LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
@@ -508,8 +506,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
       fprintf (Gbl.F.Out,"</td>"
-	                 "<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">");
+	                 "<td class=\"LEFT_MIDDLE\">");
       Lay_PutCreateButtonInline (Txt_Add_this_ID);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -518,8 +515,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
 
    /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\""
-	              " style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT CENTER_MIDDLE\">");
    if (ItsMe)
       fprintf (Gbl.F.Out,"%s ",
                Txt_The_ID_is_used_in_order_to_facilitate_);

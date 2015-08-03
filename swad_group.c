@@ -234,7 +234,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    extern const char *Txt_Update_students_according_to_selected_groups;
    unsigned NumGrpTyp;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Start form to update the students listed
           depending on the groups selected *****/
@@ -277,8 +277,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" style=\"padding-top:10px;"
-	              " text-align:center;\">");
+	              "<td colspan=\"6\" class=\"CENTER_MIDDLE\""
+	              " style=\"padding-top:10px;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"
@@ -1143,7 +1143,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Name of group type */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActRenGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\" size=\"20\" maxlength=\"%u\" value=\"%s\""
@@ -1155,8 +1155,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Is it mandatory to register in any group? */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMdtGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\" style=\"width:120px;\""
@@ -1177,8 +1176,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Is it possible to register in multiple groups? */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMulGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\" style=\"width:120px;\""
@@ -1199,20 +1197,17 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Open time */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActChgTimGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td style=\"width:16px;"
-                         " text-align:left; vertical-align:middle;\">"
+                         "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON16x16\" />"
                          "</td>"
-	                 "<td style=\"text-align:left;"
-	                 " vertical-align:middle;\">",
+	                 "<td class=\"LEFT_MIDDLE\">",
                Gbl.Prefs.IconsURL,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "time" :
         	                                                                  "time-off",
@@ -1225,8 +1220,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          &(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTime.Date),
                          true,false);
       fprintf (Gbl.F.Out,"</td>"
-                         "<td style=\"text-align:left;"
-                         " vertical-align:middle;\">");
+                         "<td class=\"LEFT_MIDDLE\">");
       Dat_WriteFormHourMinute ("OpenHour","OpenMinute",
 		               &(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTime.Time),
                                true,false);
@@ -1237,8 +1231,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of groups of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	                 " style=\"text-align:center; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
@@ -1263,19 +1256,19 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s<br />(%s)"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1368,8 +1361,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Group type */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-                            " vertical-align:middle;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActChgGrpTyp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\""
@@ -1390,8 +1382,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Group name */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-                            " vertical-align:middle;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActRenGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -1401,8 +1392,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Maximum number of students of the group (row[3]) */
-         fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-                            " vertical-align:middle;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActChgMaxStdGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\" size=\"3\" maxlength=\"10\" value=\"");
@@ -1413,8 +1403,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Current number of students in this group */
-         fprintf (Gbl.F.Out,"<td class=\"DAT\""
-                            " style=\"text-align:center; vertical-align:middle;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
                             "%d"
                             "</td>"
                             "</tr>",
@@ -1441,16 +1430,16 @@ static void Grp_WriteHeadingGroups (void)
                       "<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s<br />(%s)"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1489,10 +1478,10 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left; vertical-align:middle;");
+	                 "<td class=\"LEFT_MIDDLE\"");
       if (IBelongToThisGroup)
-	 fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
+	 fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">"
 	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
                Grp->GrpCod);
       if (Cod > 0)	// Cod == -1L means new assignment or survey
@@ -1675,10 +1664,10 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
       /* Put icon to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left; vertical-align:middle;");
+	                 "<td class=\"LEFT_MIDDLE\"");
       if (IBelongToThisGroup)
-         fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
+         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">"
 	                 "<input type=\"");
 
       // If user is a student and the enrollment is single
@@ -1785,10 +1774,10 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left; vertical-align:middle;");
+	                 "<td class=\"LEFT_MIDDLE\"");
       if (UsrBelongsToThisGroup)
-	 fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
+	 fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">"
 	                 "<input type=\"checkbox\" name=\"GrpCod%ld\" value=\"%ld\"",
                GrpTyp->GrpTypCod,Grp->GrpCod);
       if (UsrBelongsToThisGroup)
@@ -1839,10 +1828,10 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left; vertical-align:middle;");
+	                 "<td class=\"LEFT_MIDDLE\"");
       if (IBelongToThisGroup)
-         fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,"\">"
+         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+      fprintf (Gbl.F.Out,">"
 	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
                Grp->GrpCod);
       if (Gbl.Usrs.ClassPhoto.AllGroups)
@@ -1870,7 +1859,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td style=\"text-align:left; vertical-align:middle;\">"
+	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
             -(GrpTyp->GrpTypCod));
    if (Gbl.Usrs.ClassPhoto.AllGroups)
@@ -1887,19 +1876,17 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" /></td>");
 
    /* Column closed/open */
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "</td>");
 
    /* Group name = students with no group */
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\""
-	              " style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT LEFT_MIDDLE\">"
 	              "%s&nbsp;"
 	              "</td>",
             Txt_students_with_no_group);
 
    /* Number of students who don't belong to any group of this type */
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	              "%u"
 	              "</td>",
             Grp_CountNumStdsInNoGrpsOfType (GrpTyp->GrpTypCod));
@@ -1923,8 +1910,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" class=\"GRP_TITLE\""
-	              " style=\"text-align:left;\">"
+	              "<td colspan=\"6\" class=\"GRP_TITLE LEFT_MIDDLE\">"
 	              "<br />%s",
 	    GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
@@ -1940,16 +1926,16 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    /***** Head row with title of each column *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\"></td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -1973,8 +1959,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
 	                          Txt_Group_X_closed,
             Grp->GrpName);
-   fprintf (Gbl.F.Out,"<td style=\"width:12px;"
-	              " text-align:left; vertical-align:middle;");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:12px;");
    if (Highlight)
       fprintf (Gbl.F.Out," background-color:%s",VERY_LIGHT_BLUE);
    fprintf (Gbl.F.Out,"\">"
@@ -1988,39 +1973,37 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:left; vertical-align:middle;");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,"\">"
+      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+   fprintf (Gbl.F.Out,">"
 	              "%s&nbsp;"
 	              "</td>",
 	    Grp->GrpName);
 
    /***** Max. number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\""
-	              " style=\"text-align:center; vertical-align:middle;");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,"\">");
+      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+   fprintf (Gbl.F.Out,">");
    Grp_WriteMaxStdsGrp (Grp->MaxStudents);
    fprintf (Gbl.F.Out,"&nbsp;"
 	              "</td>");
 
    /***** Current number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center; vertical-align:middle;");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,"\">"
+      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+   fprintf (Gbl.F.Out,">"
 	              "%d"
 	              "</td>",
 	    Grp->NumStudents);
 
    /***** Vacants in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:center; vertical-align:middle;");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," background-color:%s;",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,"\">");
+      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
+   fprintf (Gbl.F.Out,">");
    if (Grp->MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP)
       fprintf (Gbl.F.Out,"-");
    else
@@ -2064,13 +2047,13 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Name of group type *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpTypName\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_GROUP_TYPE_NAME,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 
    /***** Is it mandatory to register in any groups of this type? *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"MandatoryEnrollment\" style=\"width:120px;\">"
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment)
@@ -2086,7 +2069,7 @@ static void Grp_PutFormToCreateGroupType (void)
             Txt_It_is_mandatory_to_choose_a_group);
 
    /***** Is it possible to register in multiple groups of this type? *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"MultipleEnrollment\" style=\"width:120px;\">"
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment)
@@ -2102,16 +2085,15 @@ static void Grp_PutFormToCreateGroupType (void)
             Txt_A_student_can_belong_to_several_groups);
 
    /***** Open time *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "</td>"
-	              "<td style=\"width:16px;"
-	              " text-align:left; vertical-align:bottom;\">",
+	              "<td class=\"LEFT_BOTTOM\" style=\"width:16px;\">",
             Gbl.Prefs.IconsURL,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
         	                                      "time-off",
@@ -2124,7 +2106,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date),
                       false,false);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">");
+                      "<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormHourMinute ("OpenHour","OpenMinute",
                             &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time),
                             false,false);
@@ -2188,7 +2170,7 @@ static void Grp_PutFormToCreateGroup (void)
             Txt_File_zones_disabled);
 
    /***** Group type *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"GrpTypCod\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
@@ -2205,12 +2187,12 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</td>");
 
    /***** Group name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpName\" size=\"40\" maxlength=\"%u\" value=\"%s\" /></td>",
             MAX_LENGTH_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
 
    /***** Maximum number of students *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"MaxStudents\" size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStdsGrp (Gbl.CurrentCrs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" /></td>");
@@ -3287,7 +3269,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActRemGrpTyp);
    Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    Lay_PutRemoveButton (Txt_Remove_type_of_group);
@@ -3326,7 +3308,7 @@ static void Grp_AskConfirmRemGrp (void)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActRemGrp);
    Grp_PutParamGrpCod (GrpDat.GrpCod);
    Lay_PutRemoveButton (Txt_Remove_group);
@@ -4193,8 +4175,8 @@ void Grp_ShowSelectorWhichGrps (void)
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT\""
-	                 " style=\"display:inline; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"display:inline;\">"
                          "<input type=\"radio\" name=\"WhichGrps\" value=\"%u\"",
                (unsigned) WhichGrps);
       if (WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps)

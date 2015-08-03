@@ -511,8 +511,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
       /***** Start table with groups *****/
       Lay_StartRoundFrameTable (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<th colspan=\"%u\" class=\"TIT_TBL\""
-	                 " style=\"text-align:center; vertical-align:top;\">",
+	                 "<th colspan=\"%u\" class=\"TIT_TBL CENTER_TOP\">",
 	       ItsAFormToRegRemStds ? 3 :
 		                      2);
       Lay_WriteTitle (Txt_Official_students);
@@ -540,15 +539,13 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
          fprintf (Gbl.F.Out,"<tr>");
          if (ItsAFormToRegRemStds)
             /* Put checkbox to select the group */
-            fprintf (Gbl.F.Out,"<td rowspan=\"2\" style=\"text-align:left;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP\">"
                                "<input type=\"checkbox\" name=\"ImpGrpCod\" value=\"%ld_%s\" />"
                                "</td>",
                      GrpCod,ExternalCrsCod);
 
          /* Write degree, course and group */
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"TIT_TBL\""
-                            " style=\"text-align:left; vertical-align:top;\">"
+         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
                             "%s<br />%s %s<br />%s %s (%s)"
                             "</td>" \
                             "</tr>",
@@ -558,12 +555,10 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
 
          /* Write students */
          fprintf (Gbl.F.Out,"<tr>" \
-                            "<td class=\"DAT\""
-                            " style=\"text-align:left; vertical-align:top;\">"
+                            "<td class=\"DAT LEFT_TOP\">"
                             "%u %s%s"
                             "</td>" \
-                            "<td class=\"DAT\""
-                            " style=\"text-align:left; vertical-align:top;\">",
+                            "<td class=\"DAT LEFT_TOP\">",
                   NumStds,Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
                   NumStds ? ":" :
                 	    "");
