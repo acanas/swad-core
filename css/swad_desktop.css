@@ -617,11 +617,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .ICON_SCALING:hover
 	{
+	display:inline-block;
 	opacity:1;
 	transform:scale(1.15,1.15);
 	}
 .ICON_SCALED
 	{
+	display:inline-block;
 	opacity:1;
 	transform:scale(1.15,1.15);
 	}

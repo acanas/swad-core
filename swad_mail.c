@@ -107,7 +107,7 @@ void Mai_SeeMailDomains (void)
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"text-align:left;\">");
+      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\">");
       Act_FormStart (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_MAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL");
@@ -128,16 +128,13 @@ void Mai_SeeMailDomains (void)
 	NumMai++)
       /* Write data of this mail domain */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;"
-                         " vertical-align:top;\">"
+                         "<td class=\"DAT LEFT_TOP\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:left;"
-                         " vertical-align:top;\">"
+                         "<td class=\"DAT LEFT_TOP\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;"
-                         " vertical-align:top;\">"
+                         "<td class=\"DAT RIGHT_TOP\">"
                          "%u"
                          "</td>"
                          "</tr>",
@@ -411,14 +408,13 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Mail code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                 "%ld&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%ld"
 	                 "</td>",
                Mai->MaiCod);
 
       /* Mail domain */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -429,8 +425,7 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Mail domain info */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -441,8 +436,7 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of users */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;"
-	                 " vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
@@ -648,10 +642,10 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -660,14 +654,13 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Mail domain *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:center;"
-                      " vertical-align:middle;\">"
+                      "<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Domain\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain);
 
    /***** Mail domain info *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Info\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
@@ -693,16 +686,16 @@ static void Mai_PutHeadMailDomains (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -956,8 +949,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_email);
 	 if (Confirmed)
 	    fprintf (Gbl.F.Out," colspan=\"2\"");
-	 fprintf (Gbl.F.Out," style=\"text-align:left;"
-	                    " vertical-align:middle;\">");
+	 fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">");
 	}
       else	// NumEmail >= 2
 	{
@@ -969,8 +961,7 @@ void Mai_ShowFormChangeUsrEmail (void)
 		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td style=\"text-align:left;"
-			    " vertical-align:top;\">");
+			    "<td class=\"LEFT_TOP\">");
 
 	 /* Form to remove old e-mail */
 	 Act_FormStart (ActRemOldMai);
@@ -1005,8 +996,7 @@ void Mai_ShowFormChangeUsrEmail (void)
       if (NumEmail > 1 || !Confirmed)
 	{
 	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td style=\"text-align:left;"
-                            " vertical-align:middle;\">");
+	                    "<td class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActChgMai);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
 		  row[0]);	// E-mail
@@ -1025,7 +1015,7 @@ void Mai_ShowFormChangeUsrEmail (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
@@ -1035,7 +1025,7 @@ void Mai_ShowFormChangeUsrEmail (void)
             Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
    fprintf (Gbl.F.Out,"</td>"
-	              "<td style=\"text-align:left; vertical-align:middle;\">");
+	              "<td class=\"LEFT_MIDDLE\">");
    Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// I already have an e-mail address
         	                          Txt_Save);		// I have no e-mail address yet);
    Act_FormEnd ();

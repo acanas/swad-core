@@ -82,8 +82,12 @@ int main (int argc, char *argv[])
 		      "<html lang=\"es\">"
 		      "<head><title>%s</title></head>"
 		      "<body><br /><br /><br /><br />"
-		      "<h1 style=\"text-align:center;\">%s est&aacute; parado por mantenimiento durante pocos minutos</h1>"
-		      "<h2 style=\"text-align:center;\">Intente acceder m&aacute;s tarde, por favor.</h2>"
+		      "<h1 class=\"CENTER_MIDDLE\">"
+		      "%s est&aacute; parado por mantenimiento durante pocos minutos"
+		      "</h1>"
+		      "<h2 class=\"CENTER_MIDDLE\">"
+		      "Intente acceder m&aacute;s tarde, por favor."
+		      "</h2>"
 		      "</body>"
 		      "</html>",
 	       Cfg_PLATFORM_PAGE_TITLE,

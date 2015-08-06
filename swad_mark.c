@@ -122,8 +122,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">",
                The_ClassFormNoWrap[Gbl.Prefs.Theme],
                Gbl.ColorRows[Gbl.RowEvenOdd]);
 
@@ -136,7 +136,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
          Act_FormStart (ActChgNumRowHeaCrs);
 
       fprintf (Gbl.F.Out,"&nbsp;%s: "
-                         "<input type=\"text\" name=\"%s\" size=\"1\" maxlength=\"5\" value=\"%u\""
+                         "<input type=\"text\" name=\"%s\""
+                         " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"%s\" style=\"background-color:%s\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Txt_TABLE_Header,
@@ -149,8 +150,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write the number of rows of footer *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">",
                The_ClassFormNoWrap[Gbl.Prefs.Theme],
                Gbl.ColorRows[Gbl.RowEvenOdd]);
 
@@ -163,7 +164,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
          Act_FormStart (ActChgNumRowFooCrs);
 
       fprintf (Gbl.F.Out,"&nbsp;%s: "
-                         "<input type=\"text\" name=\"%s\" size=\"1\" maxlength=\"5\" value=\"%u\""
+                         "<input type=\"text\" name=\"%s\""
+                         " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"%s\" style=\"background-color:%s\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Txt_TABLE_Footer,

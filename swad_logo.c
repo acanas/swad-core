@@ -158,13 +158,13 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 		     Gbl.Prefs.IconsURL,Icon[Scope]);
 	 fprintf (Gbl.F.Out,"\""
 	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON%ux%u\"",
+	                    " class=\"ICON%ux%u",
 		  AltText,AltText,
 		  Size,Size);
 	 if (Class)
 	    if (Class[0])
-	       fprintf (Gbl.F.Out," class=\"%s\"",Class);
-	 fprintf (Gbl.F.Out," />");
+	       fprintf (Gbl.F.Out," %s",Class);
+	 fprintf (Gbl.F.Out,"\" />");
 	}
      }
   }
@@ -274,7 +274,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    if (Fil_CheckIfPathExists (PathLogo))
      {
       /***** Form to remove photo *****/
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Log_PutLinkToRemoveLogo (ActionRem);
       fprintf (Gbl.F.Out,"</div>");
      }

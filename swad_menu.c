@@ -199,9 +199,9 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
 
          /***** Start of container used to highlight this option *****/
          if (IsTheSelectedAction)
-            fprintf (Gbl.F.Out,"<div class=\"ICON_SCALED\" style=\"display:inline-block;\">");
+            fprintf (Gbl.F.Out,"<div class=\"ICON_SCALED\">");
          else
-            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT ICON_SCALING\" style=\"display:inline-block;\">");
+            fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT ICON_SCALING\">");
 
          /***** Start of form and link *****/
          Act_FormStart (NumAct);
@@ -265,8 +265,7 @@ void Mnu_WriteMenuThisTabMobile (void)
             fprintf (Gbl.F.Out,"<tr>");
 
          /* Icon at top and text at bottom */
-	 fprintf (Gbl.F.Out,"<td style=\"width:25%%; text-align:center;"
-	                    " vertical-align:top;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:25%%;\">"
 	                    "<div class=\"ICON_HIGHLIGHT\">");
 
          Act_FormStart (NumAct);
