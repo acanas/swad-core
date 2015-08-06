@@ -57,6 +57,14 @@ hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
+/************* Institution / Centre / Degree logo in top title ***************/
+.TOP_LOGO
+	{
+	margin-right:8px;
+	text-align:left;
+	vertical-align:top;
+	}
+
 /****************** Title of current action in main block ********************/
 #action_title
 	{

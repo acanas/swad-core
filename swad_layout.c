@@ -1546,7 +1546,8 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    if (DegCod > 0)
      {
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+                            " class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,Size,NULL,true);
       if (!PrintView)

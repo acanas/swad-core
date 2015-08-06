@@ -3495,7 +3495,7 @@ static void Sta_WriteDegree (long DegCod)
                          "<a href=\"%s\" class=\"LOG\" target=\"_blank\">",
                Deg.FullName,Deg.WWW);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                    16,"vertical-align:top;",true);
+                    16,"CENTER_TOP",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
                Deg.ShortName);
      }

@@ -110,8 +110,8 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    if (Gbl.Links.Num)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"INS_LNK\" style=\"width:120px;"
-			 " text-align:center;\">"
+			 "<td class=\"INS_LNK CENTER_MIDDLE\""
+			 " style=\"width:120px;\">"
 			 "<div id=\"institutional_links\">");
       Lnk_WriteListOfLinks ();
       fprintf (Gbl.F.Out,"</div>"
@@ -344,14 +344,13 @@ static void Lnk_ListLinksForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                 "%ld&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%ld"
 	                 "</td>",
                Lnk->LnkCod);
 
       /* Link short name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -362,8 +361,7 @@ static void Lnk_ListLinksForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link full name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -374,8 +372,7 @@ static void Lnk_ListLinksForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Link WWW */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -635,20 +632,23 @@ static void Lnk_PutFormToCreateLink (void)
                       "<td></td>");
 
    /***** Link short name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName);
 
    /***** Link full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName);
 
    /***** Link WWW *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
-                      "<input type=\"text\" name=\"WWW\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<input type=\"text\" name=\"WWW\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Lnk->WWW);
@@ -673,16 +673,16 @@ static void Lnk_PutHeadLinks (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",

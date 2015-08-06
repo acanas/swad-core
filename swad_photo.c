@@ -2016,7 +2016,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   Deg.WWW,Deg.FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                    16,"vertical-align:top;",true);
+                    16,"CENTER_TOP",true);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
                Deg.ShortName);
       if (SeeOrPrint == Pho_DEGREES_SEE)

@@ -52,6 +52,14 @@ table td
 img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
 
+/************* Institution / Centre / Degree logo in top title ***************/
+.TOP_LOGO
+	{
+	margin-right:8px;
+	text-align:left;
+	vertical-align:top;
+	}
+
 /************************* Users connected globally **************************/
 .CONNECTED
 	{

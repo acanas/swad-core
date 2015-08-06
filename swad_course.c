@@ -3342,7 +3342,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                 16,"vertical-align:top;",true);
+                 16,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
             row[2],row[7]);

@@ -225,7 +225,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
          Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                       16,"vertical-align:top;",true);
+                       16,"CENTER_TOP",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -754,16 +754,13 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-	                  Gbl.CurrentDeg.Deg.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;",false);
+	                  Gbl.CurrentDeg.Deg.ShortName,32,"TOP_LOGO",false);
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-	                  Gbl.CurrentCtr.Ctr.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;",false);
+	                  Gbl.CurrentCtr.Ctr.ShortName,32,"TOP_LOGO",false);
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-	                  Gbl.CurrentIns.Ins.ShortName,32,
-	                  "vertical-align:top; margin-right:8px;",false);
+	                  Gbl.CurrentIns.Ins.ShortName,32,"TOP_LOGO",false);
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
 	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
@@ -1291,7 +1288,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	    BgColor,
 	    Deg->WWW,Deg->FullName);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
-                 16,"vertical-align:top;",true);
+                 16,"CENTER_TOP",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -3966,7 +3963,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
             Log_DrawLogo (Sco_SCOPE_DEG,DegCod,row[1],
-                          16,"vertical-align:top;",true);
+                          16,"CENTER_TOP",true);
             fprintf (Gbl.F.Out,"&nbsp;%s</a>",row[2]);
             Act_FormEnd ();
            }

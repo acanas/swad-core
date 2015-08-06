@@ -65,7 +65,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action);
 /*****************************************************************************/
 
 void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Style,bool PutIconIfNotExists)
+                   unsigned Size,const char *Class,bool PutIconIfNotExists)
   {
    static const char *Icon[Sco_NUM_SCOPES] =
      {
@@ -161,9 +161,9 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	                    " class=\"ICON%ux%u\"",
 		  AltText,AltText,
 		  Size,Size);
-	 if (Style)
-	    if (Style[0])
-	       fprintf (Gbl.F.Out," style=\"%s\"",Style);
+	 if (Class)
+	    if (Class[0])
+	       fprintf (Gbl.F.Out," class=\"%s\"",Class);
 	 fprintf (Gbl.F.Out," />");
 	}
      }
