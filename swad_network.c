@@ -264,7 +264,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 " style=\"width:16px; height:16px;"
 			 " margin-right:10px; vertical-align:middle;\" />"
 			 "%s:</td>"
-			 "<td style=\"width:%upx; text-align:left;\">",
+			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
@@ -439,13 +439,13 @@ void Net_ShowWebAndSocialNetworksStats (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS]);
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -476,16 +476,16 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    Lay_ShowErrorAndExit ("Error when getting number of files.");
 
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT\" style=\"text-align:left;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " style=\"width:16px; height:16px;"
 			    " margin:0 2px; vertical-align:middle;\" />"
 			    "%s</td>"
-			    "<td class=\"DAT\" style=\"text-align:right;\">"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
 			    "</td>"
-			    "<td class=\"DAT\" style=\"text-align:right;\">"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%.2f%%"
 			    "</td>"
 			    "</tr>",

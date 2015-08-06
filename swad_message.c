@@ -149,8 +149,7 @@ void Msg_ListEMails (void)
          /***** Start of the frame used to list the e-mails *****/
          Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT_SMALL\""
-                            " style=\"text-align:left;\">");
+                            "<td class=\"DAT_SMALL LEFT_MIDDLE\">");
 
          /***** Initialize structure with user's data *****/
          Usr_UsrDataConstructor (&UsrDat);
@@ -200,7 +199,7 @@ void Msg_ListEMails (void)
 
          /***** Show a message with the number of students with e-mail ****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT\" style=\"text-align:center;\">");
+                            "<td class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_e_mail,
                   NumStdsWithEmail,
                   ((float) NumStdsWithEmail / (float) Gbl.Usrs.LstStds.NumUsrs) * 100.0,Gbl.Usrs.LstStds.NumUsrs);
@@ -209,7 +208,7 @@ void Msg_ListEMails (void)
 
          /***** Show a message with the number of students who have accepted and have e-mail ****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT\" style=\"text-align:center;\">");
+                            "<td class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_e_mail,
                   NumAcceptedStdsWithEmail,((float) NumAcceptedStdsWithEmail / (float) Gbl.Usrs.LstStds.NumUsrs) * 100.0,Gbl.Usrs.LstStds.NumUsrs);
          fprintf (Gbl.F.Out,"</td>"
@@ -322,7 +321,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
-	                 "<td style=\"text-align:left;\">"
+	                 "<td class=\"LEFT_MIDDLE\">"
                          "<table>",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
 
@@ -385,8 +384,8 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 
    /***** Textarea with users' @nicknames, e-mails or IDs *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL\" style=\"text-align:left;"
-	              " background-color:%s;\"",
+	              "<td class=\"TIT_TBL LEFT_MIDDLE\""
+	              " style=\"background-color:%s;\"",
             VERY_LIGHT_BLUE);
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -404,7 +403,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
-   fprintf (Gbl.F.Out," style=\"text-align:left;\">"
+   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
@@ -441,7 +440,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
@@ -472,7 +471,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s: "
 	                 "</td>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
@@ -498,7 +497,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s: "
 	                 "</td>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<textarea name=\"Content\" cols=\"72\" rows=\"20\">%s",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message,
@@ -1577,7 +1576,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
    NumMsgs = (unsigned) NumRows;
 
    /* Write number of messages and number of new messages */
-   fprintf (Gbl.F.Out,"<div class=\"TIT\" style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">");
    Msg_WriteNumMsgs (NumMsgs,NumUnreadMsgs);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2278,7 +2277,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
    unsigned NumOriginCrs;
 
    /***** Course selection *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
@@ -2322,7 +2321,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FilterFromTo\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -2336,7 +2335,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:&nbsp;"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -2603,12 +2602,11 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                                                               Txt_MSG_Unopened) :
                                                       Txt_MSG_Sent;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s\" style=\"width:16px;"
-	              " text-align:center; vertical-align:top;\">"
+	              "<td class=\"%s CENTER_TOP\" style=\"width:16px;\">"
                       "<table style=\"width:16px;\">"
                       "<tr>"
-                      "<td style=\"width:16px; padding:0;"
-                      " text-align:center; vertical-align:top;\">"
+                      "<td class=\"CENTER_TOP\""
+                      " style=\"width:16px; padding:0;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16B\" />"
@@ -2654,20 +2652,19 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    if (Expanded)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td rowspan=\"3\" colspan=\"3\""
-	                 " style=\"text-align:left; vertical-align:top;\">"
+	                 "<td rowspan=\"3\" colspan=\"3\" class=\"LEFT_TOP\">"
                          "<table class=\"CELLS_PAD_2\">");
 
       /***** Write course origin of message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left;\">");
+	                 "<td class=\"LEFT_MIDDLE\">");
       FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
       /***** Form to reply message *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"text-align:left;\">");
+	                 "<td class=\"LEFT_MIDDLE\">");
       if (TypeOfMessages == Msg_MESSAGES_RECEIVED &&
 	  Gbl.Usrs.Me.LoggedRole >= Rol_VISITOR)
 	 // Guests (users without courses) can read messages but not reply them
@@ -2679,12 +2676,10 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 	                 "</td>");
 
       /***** Write "From:" *****/
-      fprintf (Gbl.F.Out,"<td class=\"MSG_TIT\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"MSG_TIT RIGHT_TOP\">"
 	                 "%s:&nbsp;"
 	                 "</td>"
-                         "<td colspan=\"2\" style=\"text-align:left;"
-	                 " vertical-align:top;\">",
+                         "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_From);
       Msg_WriteMsgFrom (&UsrDat,Deleted);
       fprintf (Gbl.F.Out,"</td>"
@@ -2692,12 +2687,10 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 
       /***** Write "To:" *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"MSG_TIT\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+	                 "<td class=\"MSG_TIT RIGHT_TOP\">"
 	                 "%s:&nbsp;"
 	                 "</td>"
-                         "<td colspan=\"2\" style=\"text-align:left;"
-	                 " vertical-align:top;\">",
+                         "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_To);
       Msg_WriteMsgTo (TypeOfMessages,MsgCod);
       fprintf (Gbl.F.Out,"</td>"
@@ -2705,12 +2698,10 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 
       /***** Write "Message:" *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"MSG_TIT\" style=\"text-align:right;"
-	                 " vertical-align:top;\">"
+	                 "<td class=\"MSG_TIT RIGHT_TOP\">"
 	                 "%s:&nbsp;"
 	                 "</td>"
-                         "<td colspan=\"2\" class=\"MSG_TXT\""
-                         " style=\"text-align:left; vertical-align:top;\">",
+                         "<td colspan=\"2\" class=\"MSG_TXT LEFT_TOP\">",
                Txt_MSG_Message);
       Msg_GetMsgContent (MsgCod,Content);
       if (Content[0])
@@ -2776,8 +2767,7 @@ void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,unsigne
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:36px;"
-	              " text-align:center; vertical-align:top;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:36px;\">"
                       "%lu:"
                       "</td>",
 	    NewMsg ? "MSG_TIT_BG_NEW" :
@@ -2796,8 +2786,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
    extern const char *Txt_no_subject;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	              " vertical-align:top;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             Open ? "MSG_TIT_BG" :
         	   "MSG_TIT_BG_NEW");
 
@@ -2842,8 +2831,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
    bool WriteAuthor = false;
 
    /***** Start first column *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:24px;"
-	              " text-align:center; vertical-align:top;",
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:24px;",
             Style);
    if (BgColor)
       fprintf (Gbl.F.Out," background-color:%s;",BgColor);
@@ -2864,8 +2852,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%upx;"
-	                 " text-align:left; vertical-align:top;",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\" style=\"width:%upx;",
                Style,WidthOfNameColumn);
       if (BgColor)
          fprintf (Gbl.F.Out," background-color:%s;",BgColor);
@@ -2880,8 +2867,8 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO24x32\" />"
 	                 "</td>"
-                         "<td class=\"%s\""
-                         " style=\"width:%upx; text-align:left;",
+                         "<td class=\"%s LEFT_MIDDLE\""
+                         " style=\"width:%upx;",
                Gbl.Prefs.IconsURL,
                Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo,
                Style,WidthOfNameColumn);
@@ -3006,8 +2993,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    /***** Put an icon to show if user has read the message *****/
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
-                      "<td style=\"width:16px; text-align:left;"
-                      " vertical-align:middle;\">"
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                       "</td>",
@@ -3020,8 +3006,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       Txt_MSG_Sent);
 
    /***** Put user's photo *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:24px; text-align:center;"
-                      " vertical-align:middle;\">");
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:24px;\">");
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -3029,7 +3014,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
-	              "<td class=\"MSG_AUT\" style=\"text-align:left;\">");
+	              "<td class=\"MSG_AUT LEFT_MIDDLE\">");
    if (UsrDat->UsrCod > 0)
      {
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
@@ -3153,8 +3138,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                              (Deleted ? Txt_MSG_Deleted_without_opening :
                                         Txt_MSG_Unopened);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td style=\"width:16px; text-align:left;"
-                            " vertical-align:middle;\">"
+                            "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                             "<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON16x16\" />"
@@ -3167,8 +3151,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                   Title,Title);
 
          /* Put user's photo */
-         fprintf (Gbl.F.Out,"<td style=\"width:24px; text-align:center;"
-                            " vertical-align:top;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:24px;\">");
          ShowPhoto = (UsrValid ? Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -3177,7 +3160,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
-                            "<td class=\"%s\" style=\"text-align:left;\">",
+                            "<td class=\"%s LEFT_MIDDLE\">",
                   OpenByDst ? "MSG_AUT" :
                 	      "MSG_AUT_NEW");
          if (UsrValid)
@@ -3192,8 +3175,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
       if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
          /***** Start form to show all the users *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"3\" class=\"MSG_AUT\""
-                            " style=\"text-align:left;\">"
+                            "<td colspan=\"3\" class=\"MSG_AUT LEFT_MIDDLE\">"
                             "[%u %s]"
                             "</td>"
                             "</tr>",
@@ -3207,8 +3189,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
         {
          /***** Start form to show all the users *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"3\" class=\"MSG_AUT\""
-                            " style=\"text-align:left;\">");
+                            "<td colspan=\"3\" class=\"MSG_AUT LEFT_MIDDLE\">");
          Act_FormStart (TypeOfMessages == Msg_MESSAGES_RECEIVED ? ActSeeRcvMsg :
                                                                   ActSeeSntMsg);
          Msg_PutHiddenParamsMsgsFilters ();
@@ -3242,8 +3223,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
   {
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:85px;"
-	              " text-align:right; vertical-align:top;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"width:85px;\">",
             ClassBackground);
 
    /***** Write date and time (DateTime holds date and time in YYYYMMDDHHMMSS format) *****/
@@ -3259,8 +3239,7 @@ void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
 
 static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfMessages)
   {
-   fprintf (Gbl.F.Out,"<td style=\"width:18px; padding:0;"
-	              " text-align:center; vertical-align:top;\">");
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:18px; padding:0;\">");
    Act_FormStart (TypeOfMessages == Msg_MESSAGES_RECEIVED ? ActDelRcvMsg :
 	                                                    ActDelSntMsg);
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -3549,8 +3528,8 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Show photo */
-            fprintf (Gbl.F.Out,"<td style=\"width:24px;"
-        	               " text-align:left; vertical-align:middle;\">");
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
+        	               " style=\"width:24px;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
@@ -3558,7 +3537,7 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write user's full name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:left;\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
         	               "%s"
         	               "</td>"
                                "</tr>",

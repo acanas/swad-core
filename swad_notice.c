@@ -104,8 +104,9 @@ void Not_ShowFormNotice (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
-                      "<td style=\"text-align:left;\">"
-                      "<textarea name=\"Content\" cols=\"30\" rows=\"10\"></textarea>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea name=\"Content\" cols=\"30\" rows=\"10\">"
+                      "</textarea>"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -382,7 +383,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 40);
             Lay_StartRoundFrameTable (StrWidth,2,Txt_All_notices);
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td style=\"text-align:center;\">");
+        	               "<td class=\"CENTER_TOP\">");
 	   }
 	 else
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
@@ -398,7 +399,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
 
 	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 			    "<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
@@ -564,7 +565,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             Content);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       /* Form to view full notice */
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
@@ -593,7 +594,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write form to delete this notice *****/
    if (ICanEditNotices)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
       /* Form to delete notice */
       Act_FormStart (ActRemNot);

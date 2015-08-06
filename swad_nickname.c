@@ -213,8 +213,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td colspan=\"2\" style=\"text-align:left;"
-			    " vertical-align:middle;\">",
+			    "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_nickname);
       else	// NumNick >= 2
 	{
@@ -226,8 +225,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td style=\"text-align:left;"
-			    " vertical-align:top;\">");
+			    "<td class=\"LEFT_TOP\">");
 
 	 /* Form to remove old nickname */
 	 Act_FormStart (ActRemOldNic);
@@ -251,8 +249,7 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick > 1)
 	{
 	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td style=\"text-align:left;"
-	                    " vertical-align:top;\">");
+	                    "<td class=\"LEFT_TOP\">");
 	 Act_FormStart (ActChgNic);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />",
 		  row[0]);	// Nickname
@@ -269,16 +266,17 @@ void Nck_ShowFormChangeUsrNickname (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\" size=\"16\" maxlength=\"%u\" value=\"@%s\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\""
+	              " size=\"16\" maxlength=\"%u\" value=\"@%s\" />",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
    fprintf (Gbl.F.Out,"</td>"
-	              "<td style=\"text-align:left; vertical-align:middle;\">");
+	              "<td class=\"LEFT_MIDDLE\">");
    Lay_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);			// I have no nickname yet);
    Act_FormEnd ();
