@@ -436,7 +436,7 @@ void Sta_AskSeeCrsAccesses (void)
          /* Start the table */
          fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:4px;\">"
                             "<tr>"
-                            "<td colspan=\"2\" style=\"text-align:left;\">");
+                            "<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
          Lay_StartRoundFrameTable (NULL,0,NULL);
 
          /* Put list of users to select some users */
@@ -462,8 +462,7 @@ void Sta_AskSeeCrsAccesses (void)
                             "<td class=\"%s RIGHT_TOP\">"
                             "%s:"
                             "</td>"
-                            "<td class=\"DAT\""
-                            " style=\"text-align:left; vertical-align:top;\">",
+                            "<td class=\"DAT LEFT_TOP\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
          if ((Gbl.Stat.ClicksStatType < Sta_ACC_CRS_PER_USR ||
               Gbl.Stat.ClicksStatType > Sta_ACC_CRS_PER_ACTION) &&
@@ -556,7 +555,8 @@ void Sta_AskSeeGblAccesses (void)
        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
      {
-      fprintf (Gbl.F.Out,"<div style=\"padding-bottom:10px; text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	                 " style=\"padding-bottom:10px;\">");
       Sta_PutFormToRequestAccessesCrs ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -573,7 +573,7 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"Role\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    for (RoleStat = (Sta_Role_t) 0;
@@ -597,13 +597,13 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:middle;\">",
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR      |
-		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();
@@ -619,8 +619,7 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:top;\">",
+                      "<td class=\"DAT LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
    if (Gbl.Stat.ClicksStatType < Sta_ACC_GBL_PER_DAYS ||
        Gbl.Stat.ClicksStatType > Sta_ACC_GBL_PER_COURSE)
@@ -663,7 +662,7 @@ static void Sta_WriteSelectorCountType (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<select name=\"CountType\" id=\"CountType\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
    for (StatCountType = (Sta_CountType_t) 0;
@@ -696,7 +695,7 @@ static void Sta_WriteSelectorAction (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"LEFT_TOP\">"
                       "<select name=\"StatAct\" id=\"StatAct\" style=\"width:300px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
    for (NumAction = (Act_Action_t) 0;
@@ -1323,7 +1322,7 @@ static bool Sta_SeeAccesses (void)
                  }
                Lay_WriteTitle (Gbl.Message);
                Sta_WriteSelectedRangeOfDates (NumDays);
-               fprintf (Gbl.F.Out,"<p class=\"DAT\" style=\"text-align:center;\">");
+               fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">");
                if (Gbl.Stat.Role == Sta_ME)
                   fprintf (Gbl.F.Out,"%s: %s",
                            Txt_User,
@@ -1336,7 +1335,7 @@ static bool Sta_SeeAccesses (void)
                break;
            }
 
-         fprintf (Gbl.F.Out,"<p class=\"DAT\"style=\"text-align:center;\">%s: %s</p>",
+         fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">%s: %s</p>",
                   Txt_Action,
                   Act_GetActionTextFromDB (Act_Actions[Gbl.Stat.NumAction].ActCod,ActTxt));
 
@@ -1492,7 +1491,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" style=\"text-align:left;\">"
+	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">"
                       "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">"
                       "<tr>");
 
@@ -1508,7 +1507,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
      }
-   fprintf (Gbl.F.Out,"<td style=\"width:20%%; text-align:left;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20%%;\">");
    if (FirstRow > 1)
      {
       sprintf (Gbl.Title,Txt_Show_previous_X_clicks,
@@ -1522,7 +1521,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormEnd ();
 
    /* Write number of current page */
-   fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\" style=\"width:60%%; text-align:center;\">"
+   fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_MIDDLE\" style=\"width:60%%;\">"
                       "<strong>"
                       "%s %lu-%lu %s %lu (%s %ld %s %lu)"
                       "</strong>"
@@ -1543,7 +1542,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned ("RowsPage",(unsigned) Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
      }
-   fprintf (Gbl.F.Out,"<td style=\"width:20%%; text-align:right;\">");
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
    if (LastRow < NumRows)
      {
       sprintf (Gbl.Title,Txt_Show_next_X_clicks,
@@ -1563,32 +1562,25 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"width:10%%;"
-                      " text-align:left; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\" style=\"width:10%%;\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1621,29 +1613,29 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+	                 "<td class=\"LOG RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],NumRow);
 
       /* Write the user's ID if user is a student */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       ID_WriteUsrIDs (&UsrDat,(RoleFromLog == Rol_STUDENT));
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the first name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],UsrDat.FullName);
 
       /* Write the user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -1651,8 +1643,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 		                             "?");
 
       /* Write the date (in row[3] is the date in YYYYMMDDHHMMSS format) */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       Dat_WriteDate (row[3]);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -1664,21 +1656,21 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       if (sscanf (row[4],"%ld",&ActCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong action code.");
       if (ActCod >= 0)
-         fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                    " vertical-align:top; background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+                            " style=\"background-color:%s;\">"
                             "%s&nbsp;"
                             "</td>",
 	          Gbl.ColorRows[Gbl.RowEvenOdd],
 	          Act_GetActionTextFromDB (ActCod,ActTxt));
       else
-         fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                    " vertical-align:top; background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+                            " style=\"background-color:%s;\">"
                             "?&nbsp;"
                             "</td>",
 	          Gbl.ColorRows[Gbl.RowEvenOdd]);
       /* Write the comments of the access */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
                Gbl.ColorRows[Gbl.RowEvenOdd]);
       Sta_WriteLogComments (LogCod);
       fprintf (Gbl.F.Out,"</td>"
@@ -1739,28 +1731,22 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td colspan=\"2\" class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -1784,15 +1770,15 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\" style=\"text-align:right;"
-	                 " vertical-align:top; background-color:%s;\">"
+	                 "<td class=\"LOG RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],NumRow);
 
       /* Show the photo */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -1801,22 +1787,22 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       ID_WriteUsrIDs (&UsrDat,(UsrDat.RoleInCurrentCrsDB == Rol_STUDENT));
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],UsrDat.FullName);
 
       /* Write user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:center;"
-	                 " vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%s&nbsp;"
 	                 "</td>",
 	       Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -1834,8 +1820,8 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
         }
       else
          BarWidth = 0;
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"text-align:left;"
-	                 " vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
+	                 " style=\"background-color:%s;\">",
 	       Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (BarWidth)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
@@ -1877,16 +1863,13 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -1935,8 +1918,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 
          /* Write the date */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"%s RIGHT_TOP\">"
                             "%02u/%02u/%02u&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
@@ -1944,8 +1926,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 	          Date.Day,Date.Month,Date.Year % 100);
 
          /* Write the day of the week */
-         fprintf (Gbl.F.Out,"<td class=\"%s\""
-               " style=\"text-align:left; vertical-align:top;\">"
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
                             "%s&nbsp;"
                             "</td>",
                   NumDayWeek == 6 ? "LOG_R" :
@@ -1975,8 +1956,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%02u/%02u/%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -1984,8 +1964,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
                Date.Day,Date.Month,Date.Year % 100);
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s\""
-	                 " style=\"text-align:left; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2090,16 +2069,14 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td rowspan=\"3\" class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td rowspan=\"3\" class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td colspan=\"24\" class=\"TIT_TBL\" style=\"width:%upx;"
-                      " text-align:left; vertical-align:top;\">"
+                      "<td colspan=\"24\" class=\"TIT_TBL LEFT_TOP\""
+                      " style=\"width:%upx;\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -2107,8 +2084,8 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
             Txt_Day,
             GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"24\""
-	              " style=\"width:%upx; text-align:left;\">",
+	              "<td colspan=\"24\" class=\"LEFT_TOP\""
+	              " style=\"width:%upx;\">",
 	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,MaxPagesGenerated);
    fprintf (Gbl.F.Out,"</td>"
@@ -2117,8 +2094,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    for (Hour = 0;
 	Hour < 24;
 	Hour++)
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:center; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\" style=\"width:%upx;\">"
 	                 "%02uh"
 	                 "</td>",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,Hour);
@@ -2165,8 +2141,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
             /* Write the date */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"%s\" style=\"text-align:right;"
-        	               " vertical-align:top;\">"
+        	               "<td class=\"%s RIGHT_TOP\">"
         	               "%02u/%02u/%02u&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :
@@ -2174,8 +2149,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	             Date.Day,Date.Month,Date.Year % 100);
 
             /* Write the day of the week */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
         	               "%s&nbsp;"
         	               "</td>",
                      NumDayWeek == 6 ? "LOG_R" :
@@ -2217,8 +2191,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%02u/%02u/%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2226,8 +2199,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
                Date.Day,Date.Month,Date.Year % 100);
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s\""
-	                 " style=\"text-align:left; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2257,8 +2229,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s\""
-	                 " style=\"text-align:right; vertical-align:top;\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%02u/%02u/%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2266,8 +2237,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
                Date.Day,Date.Month,Date.Year % 100);
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s\""
-	                 " style=\"text-align:left; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2315,8 +2285,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
    /***** Write numbers from 0 to MaxPagesGenerated *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
-	              "<td colspan=\"%u\" class=\"LOG\" style=\"width:%upx;"
-	              " text-align:left; vertical-align:bottom;\">"
+	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
+	              " style=\"width:%upx;\">"
 	              "0"
 	              "</td>",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
@@ -2325,15 +2295,15 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
 	Interval <= 4;
 	Interval++)
      {
-      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:center; vertical-align:bottom;\">",
+      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG CENTER_BOTTOM\""
+	                 " style=\"width:%upx;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
       Str_WriteFloatNum ((float) Interval * MaxPagesGenerated / 5.0);
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG\" style=\"width:%upx;"
-	              " text-align:right; vertical-align:bottom;\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\""
+	              " style=\"width:%upx;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (MaxPagesGenerated);
@@ -2347,7 +2317,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
 	NumColor++)
      {
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td style=\"width:1px; text-align:left;"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:1px;"
 	                 " background-color:#%02X%02X%02X;\">"
 	                 "<img src=\"%s/tr1x14.gif\""
 	                 " alt=\"\" title=\"\" />"
@@ -2371,9 +2341,9 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumP
 	Hour++)
      {
       Sta_SetColor (ColorType,NumPagesGenerated[Hour],MaxPagesGenerated,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td class=\"LOG\" title=\"");
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
       Str_WriteFloatNum (NumPagesGenerated[Hour]);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx; text-align:left;"
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx;"
 	                 " background-color:#%02X%02X%02X;\">"
                          "</td>",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
@@ -2475,12 +2445,10 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -2524,8 +2492,7 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
         {
          /* Write week */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"LOG RIGHT_TOP\">"
                             "%02u/%02u&nbsp;"
                             "</td>",
 	          Date.Week,Date.Year % 100);
@@ -2551,8 +2518,7 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
     {
      /* Write week */
      fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG\""
-	                " style=\"text-align:right; vertical-align:top;\">"
+	                "<td class=\"LOG RIGHT_TOP\">"
 	                "%02u/%02u&nbsp;"
 	                "</td>",
               Date.Week,Date.Year % 100);
@@ -2584,12 +2550,10 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -2633,8 +2597,7 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
         {
          /* Write the month */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"LOG RIGHT_TOP\">"
                             "%02u/%02u&nbsp;"
                             "</td>",
 	          Date.Month,Date.Year % 100);
@@ -2659,8 +2622,7 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
     {
      /* Write the month */
      fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG\""
-	                " style=\"text-align:right; vertical-align:top;\">"
+	                "<td class=\"LOG RIGHT_TOP\">"
 	                "%02u/%02u&nbsp;"
 	                "</td>",
               Date.Month,Date.Year % 100);
@@ -2748,8 +2710,8 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
   {
    unsigned AltoBarra;
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL\" style=\"width:%upx;"
-	              " text-align:center; vertical-align:bottom;\">",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_BOTTOM\""
+	              " style=\"width:%upx;\">",
 	    ColumnWidth);
 
    /* Draw bar with a height porportional to the number of clicks */
@@ -2856,7 +2818,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       /***** X axis *****/
       /* First division (left) */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td style=\"width:%upx;text-align:left;\">"
+	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/ejexizq24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
@@ -2867,7 +2829,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       for (i = 0;
 	   i < NUM_DIVISIONS_X*2;
 	   i++)
-	 fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                    "<img src=\"%s/ejex24x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
@@ -2876,7 +2838,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
 		  WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
-      fprintf (Gbl.F.Out,"<td style=\"width:%upx; text-align:left;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/tr24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
@@ -2906,8 +2868,8 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 	i <= NUM_DIVISIONS_X;
 	i++, NumX += IncX)
      {
-      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:center; vertical-align:bottom;\">",
+      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LOG CENTER_BOTTOM\""
+	                 " style=\"width:%upx;\">",
                WIDTH_DIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,Format,NumX);
       fprintf (Gbl.F.Out,"</td>");
@@ -2931,8 +2893,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    /***** Labels of the Y axis, and Y axis *****/
    if (!Minute)
       // If minute 0
-      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:left; vertical-align:top;"
+      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_TOP\""
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-repeat:repeat;\">"
 	                 "00h"
@@ -2940,8 +2902,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
                WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
    else if (Minute == (NUM_MINUTES_PER_DAY - 30))
       // If 23:30
-      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:left; vertical-align:bottom;"
+      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-repeat:repeat;\">"
 	                 "24h"
@@ -2949,8 +2911,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
                WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
    else if (!(Minute % 30) && (Minute % 60))
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
-      fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG\" style=\"width:%upx;"
-	                 " text-align:left; vertical-align:middle;"
+      fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x60.gif');"
 	                 " background-repeat:repeat;\">"
 	                 "%02uh"
@@ -2958,8 +2920,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
                WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,(Minute + 30) / 60);
 
    /***** Start of cell for the graphic *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"width:%upx; height:1px;"
-	              " text-align:left; vertical-align:bottom;"
+   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
+	              " style=\"width:%upx; height:1px;"
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-repeat:repeat;\">",
 	    NUM_DIVISIONS_X*2,WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
@@ -3001,12 +2963,10 @@ static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL RIGHT_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3040,15 +3000,13 @@ static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_ShowErrorAndExit ("Wrong action code.");
       if (ActCod >= 0)
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"LOG RIGHT_TOP\">"
                             "%s&nbsp;"
                             "</td>",
                   Act_GetActionTextFromDB (ActCod,ActTxt));
       else
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG\""
-                            " style=\"text-align:right; vertical-align:top;\">"
+                            "<td class=\"LOG RIGHT_TOP\">"
                             "?&nbsp;"
                             "</td>");
 
@@ -3075,12 +3033,10 @@ static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL RIGHT_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3113,8 +3069,7 @@ static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql
       if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong plugin code.");
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\""
-	                 " style=\"text-align:right; vertical-align:top;\">");
+	                 "<td class=\"LOG RIGHT_TOP\">");
       if (Plg_GetDataOfPluginByCod (&Plg))
          fprintf (Gbl.F.Out,"%s",Plg.Name);
       else
@@ -3144,12 +3099,10 @@ static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *m
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3182,8 +3135,7 @@ static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *m
       if (sscanf (row[0],"%ld",&FunCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong function code.");
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\""
-	                 " style=\"text-align:left; vertical-align:top;\">"
+	                 "<td class=\"LOG LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                Svc_GetFunctionNameFromFunCod (FunCod));
@@ -3211,12 +3163,10 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3250,8 +3200,7 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_ShowErrorAndExit ("Wrong banner code.");
       Ban_GetDataOfBannerByCod (&Ban);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LOG\""
-                         " style=\"text-align:left; vertical-align:top;\">"
+                         "<td class=\"LOG LEFT_TOP\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
@@ -3289,16 +3238,13 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3335,8 +3281,7 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Write ranking of this degree */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\""
-	                 " style=\"text-align:right; vertical-align:top;\">");
+	                 "<td class=\"LOG RIGHT_TOP\">");
       if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -3375,24 +3320,19 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -3434,8 +3374,7 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Write ranking of this course */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG\""
-	                 " style=\"text-align:right; vertical-align:top;\">");
+	                 "<td class=\"LOG RIGHT_TOP\">");
       if (CrsOK)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;</td>");
@@ -3444,16 +3383,14 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
       Sta_WriteDegree (Crs.DegCod);
 
       /* Write degree year */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\""
-	                 " style=\"text-align:center; vertical-align:top;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                CrsOK ? Txt_YEAR_OF_DEGREE[Crs.Year] :
         	       "-");
 
       /* Write course, including link */
-      fprintf (Gbl.F.Out,"<td class=\"LOG\""
-	                 " style=\"text-align:left; vertical-align:top;\">");
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
       if (CrsOK)
         {
          Act_FormGoToStart (ActSeeCrsInf);
@@ -3484,8 +3421,7 @@ static void Sta_WriteDegree (long DegCod)
    extern const char *Txt_Clicks_without_degree_selected;
    struct Degree Deg;
 
-   fprintf (Gbl.F.Out,"<td class=\"LOG\""
-	              " style=\"text-align:left; vertical-align:middle;\""
+   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\""
 	              " title=\"");
    if (DegCod > 0)
      {
@@ -3514,8 +3450,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
   {
    unsigned BarWidth;
 
-   fprintf (Gbl.F.Out,"<td class=\"LOG\""
-	              " style=\"text-align:left; vertical-align:middle;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
    if (NumPagesGenerated != 0.0)
      {
       /* Draw bar with a with proportional to the number of clicks */
@@ -3574,7 +3509,7 @@ static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
    char StrDatesRange[1024];
 
    sprintf (StrDateIni,"%02u/%02u/%04u",Gbl.DateRange.DateIni.Day,Gbl.DateRange.DateIni.Month,Gbl.DateRange.DateIni.Year);
-   fprintf (Gbl.F.Out,"<p class=\"DAT\" style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">");
    if (NumDays == 1)
       fprintf (Gbl.F.Out,"%s: %s (%s)",Txt_Date,StrDateIni,Txt_one_day);
    else
@@ -3601,8 +3536,8 @@ void Sta_ReqUseOfPlatform (void)
    Sta_UseStatType_t UseStatType;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div style=\"padding-bottom:10px;"
-	              " text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"padding-bottom:10px;\">");
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
@@ -3774,16 +3709,16 @@ static void Sta_GetAndShowUsersStats (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS]);
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -3816,22 +3751,22 @@ static void Sta_GetAndShowUsersRanking (void)
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -3844,28 +3779,22 @@ static void Sta_GetAndShowUsersRanking (void)
 
    /***** Rankings *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingClicks ();
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingClicksPerDay ();
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingFileViews ();
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingForPst ();
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingMsgSnt ();
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT\" style=\"text-align:left;"
-                      " vertical-align:top;\">");
+                      "<td class=\"DAT LEFT_TOP\">");
    Fol_GetAndShowRankingFollowers ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -3908,25 +3837,25 @@ static void Sta_WriteHeadDegsCrssInSWAD (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -4030,31 +3959,31 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 
    /***** Write number of countries *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/cty16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -4155,29 +4084,29 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 
    /***** Write number of institutions *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/ins16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -4270,27 +4199,27 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 
    /***** Write number of centres *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/ctr16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td></td>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -4375,25 +4304,25 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 
    /***** Write number of degrees *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/deg16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td></td>"
                       "<td></td>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -4470,23 +4399,23 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 
    /***** Write number of courses *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/crs16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "&nbsp;%s:"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td></td>"
                       "<td></td>"
                       "<td></td>"
                       "<td></td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -4818,10 +4747,10 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th></th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+			 "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -4848,7 +4777,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	 if (NumberThisRow != NumberLastRow)
 	    NumOrder = NumIns;
 	 fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT\" style=\"text-align:right;\">"
+	                    "<td class=\"DAT RIGHT_MIDDLE\">"
 	                    "%u"
 	                    "</td>",
 	          NumOrder);
@@ -4869,7 +4798,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Write statistic *****/
-	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                    "%u"
 	                    "</td>"
 	                    "</tr>",
@@ -5057,46 +4986,46 @@ static void Sta_WriteStatsExpTreesTableHead (void)
    extern const char *Txt_usr;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s/<br />%s"
                       "</th>"
                       "</tr>",
@@ -5180,28 +5109,28 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
         	                         0.0);
      }
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\" style=\"text-align:left; %s\">"
+                      "<td class=\"%s LEFT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">",
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
             ClassData,StyleTableCell,NameOfFileZones,
             ClassData,StyleTableCell,StrNumCrss,
             ClassData,StyleTableCell,StrNumGrps,
@@ -5212,13 +5141,13 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
             ClassData,StyleTableCell);
    Str_WriteSizeInBytesFull ((double) SizeOfFileZones.Size);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"t%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">",
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
             ClassData,StyleTableCell,StrNumFoldersPerCrs,
             ClassData,StyleTableCell,StrNumFilesPerCrs,
             ClassData,StyleTableCell);
@@ -5229,13 +5158,13 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
 	                                                  (double) SizeOfFileZones.NumCrss :
 	                                                  0.0);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\" style=\"text-align:right; %s\">",
+                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
             ClassData,StyleTableCell,StrNumFoldersPerUsr,
             ClassData,StyleTableCell,StrNumFilesPerUsr,
             ClassData,StyleTableCell);
@@ -5860,13 +5789,13 @@ static void Sta_GetAndShowOERsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -5881,13 +5810,13 @@ static void Sta_GetAndShowOERsStats (void)
       Sta_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
 
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%lu"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%lu"
                          "</td>"
                          "</tr>",
@@ -6045,16 +5974,16 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -6065,16 +5994,16 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
    /***** Write number of assignments *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -6115,31 +6044,31 @@ static void Sta_GetAndShowTestsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -6163,31 +6092,31 @@ static void Sta_GetAndShowTestsStats (void)
 
       /***** Write number of assignments *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u (%.1f%%)"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%lu"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
                          "</td>"
                          "</tr>",
@@ -6211,31 +6140,31 @@ static void Sta_GetAndShowTestsStats (void)
 
    /***** Write number of assignments *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N\" style=\"text-align:left; %s\">"
+                      "<td class=\"DAT_N LEFT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u (%.1f%%)"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
@@ -6288,19 +6217,19 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -6532,19 +6461,19 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
                          "</tr>",
@@ -6558,19 +6487,19 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Write total number of users who want to be notified by e-mail on some event *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N\" style=\"text-align:left; %s\">"
+                      "<td class=\"DAT_N LEFT_MIDDLE\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%5.2f%%"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; %s\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -6623,19 +6552,19 @@ static void Sta_GetAndShowNoticesStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -6647,19 +6576,19 @@ static void Sta_GetAndShowNoticesStats (void)
 
    /***** Write number of notices *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -6704,19 +6633,19 @@ static void Sta_GetAndShowMsgsStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -6728,36 +6657,36 @@ static void Sta_GetAndShowMsgsStats (void)
 
    /***** Write number of messages *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "-"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td class=\"DAT\" style=\"text-align:left;\">"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right;\">"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -6804,42 +6733,33 @@ static void Sta_GetAndShowForumStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th style=\"width:16px;"
-                      " text-align:left; vertical-align:top;\">"
+                      "<th class=\"LEFT_TOP\" style=\"width:16px;\">"
                       "<img src=\"%s/forum16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7039,42 +6959,33 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:16px;"
-                      " text-align:left; vertical-align:top;\">"
+                      "<td class=\"LEFT_TOP\" style=\"width:16px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICON16x16\" />"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<td class=\"DAT LEFT_TOP\">"
                       "%s%s"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT\""
-                      " style=\"text-align:right; vertical-align:top;\">"
+                      "<td class=\"DAT RIGHT_TOP\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
@@ -7111,28 +7022,28 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"width:16px; %s\">"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:left; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N LEFT_TOP\" style=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N\" style=\"text-align:right; vertical-align:top; %s\">"
+                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
@@ -7179,19 +7090,19 @@ static void Sta_GetAndShowSurveysStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7203,19 +7114,19 @@ static void Sta_GetAndShowSurveysStats (void)
 
    /***** Write number of surveys *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT\" style=\"text-align:right;\">"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
@@ -7268,13 +7179,13 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7371,13 +7282,13 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -7408,13 +7319,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7505,13 +7416,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 	Lan < Txt_NUM_LANGUAGES;
 	Lan++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -7544,13 +7455,13 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7636,15 +7547,15 @@ static void Sta_GetAndShowNumUsrsPerLayout (void)
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:center;\">"
+                         "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s32x32.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON32x32\" />"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -7680,13 +7591,13 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7772,15 +7683,15 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:center;\">"
+                         "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:32px; height:20px;\" />"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -7816,13 +7727,13 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -7907,15 +7818,15 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<img src=\"%s/%s/%s/%s/heart64x64.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON32x32\" />"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -7954,13 +7865,13 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -8046,15 +7957,15 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:center;\">"
+                         "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s32x32.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON32x32\" />"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
@@ -8089,13 +8000,13 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -8180,15 +8091,15 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"text-align:center;\">"
+                         "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/layout%u%u_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:32px; height:20px;\" />"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:right;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
                          "</tr>",

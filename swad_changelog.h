@@ -103,12 +103,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.124.6 (2015/08/24)"
+#define Log_PLATFORM_VERSION	"SWAD 14.124.7 (2015/08/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.124.6: Aug 24, 2015	Changes in CSS of forms. (184735 lines)
+        Version 14.124.7: Aug 24, 2015	Changes in styles. (184648 lines)
+        Version 14.124.6: Aug 24, 2015	Changes in styles. (184735 lines)
         Version 14.124.5: Aug 06, 2015	Changes in CSS of forms. (184760 lines)
         Version 14.124.4: Aug 06, 2015	Fixed bug in function to draw institution / centre / degree logo.
 					Changes in CSS of forms. (184781 lines)

@@ -298,7 +298,8 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
    Act_FormStart (ActChgMyRol);
    fprintf (Gbl.F.Out,"<select name=\"UsrTyp\"");
    if (FormInHead)
-      fprintf (Gbl.F.Out," style=\"width:%upx;\"",SelectorWidth[Gbl.Prefs.Layout]);
+      fprintf (Gbl.F.Out," style=\"width:%upx;\"",
+               SelectorWidth[Gbl.Prefs.Layout]);
    fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (Role = Rol__GUEST_;

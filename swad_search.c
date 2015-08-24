@@ -230,7 +230,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sch_WhatToSearch_t WhatToSearch;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (Action);
    Lay_StartRoundFrame (NULL,Txt_Search);
 
@@ -320,7 +320,7 @@ void Sch_PutFormToSearch (const char *IconURL)
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/search16x16.gif\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\""
-	              " style=\"padding-top:3px;vertical-align:top;\" />",
+	              " style=\"padding-top:3px; vertical-align:top;\" />",
             IconURL,
             Txt_Search,
             Txt_Search);
