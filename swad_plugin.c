@@ -101,7 +101,7 @@ void Plg_ListPlugins (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td style=\"width:32px;\">"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -118,15 +118,14 @@ void Plg_ListPlugins (void)
 
       /* Plugin logo */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT\" style=\"width:32px;"
-                         " text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:32px;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:24px; height:24px;\" />"
                          "</a>"
                          "</td>"
-                         "<td class=\"DAT\" style=\"text-align:left;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "%s"
                          "</a>"
@@ -376,13 +375,13 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                 "%ld&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%ld"
 	                 "</td>",
                Plg->PlgCod);
 
       /* Plugin logo */
-      fprintf (Gbl.F.Out,"<td style=\"width:28px; text-align:center;\">"
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:28px;\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:24px; height:24px;\" />"
@@ -393,8 +392,7 @@ static void Plg_ListPluginsForEdition (void)
                Gbl.Plugins.Lst[NumPlg].Name);
 
       /* Plugin name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"10\" maxlength=\"%u\" value=\"%s\""
@@ -404,8 +402,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin description */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\" size=\"30\" maxlength=\"%u\" value=\"%s\""
@@ -415,8 +412,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin logo */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\""
@@ -426,8 +422,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin application key */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\" size=\"16\" maxlength=\"%u\" value=\"%s\""
@@ -437,8 +432,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin URL */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -448,8 +442,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Plugin IP */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\" size=\"10\" maxlength=\"%u\" value=\"%s\""
@@ -845,22 +838,22 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -872,37 +865,37 @@ static void Plg_PutFormToCreatePlugin (void)
             Txt_IP);
 
    /***** Plugin name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Name\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name);
 
    /***** Plugin description *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Description\" size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description);
 
    /***** Plugin logo *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo);
 
    /***** Plugin application key *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"AppKey\" size=\"16\" maxlength=\"%u\" value=\"%s\" />"
 		      "</td>",
 	    Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey);
 
    /***** Plugin URL *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"URL\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Plg->URL);
 
    /***** Plugin IP address *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"IP\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
@@ -931,26 +924,26 @@ static void Plg_PutHeadPlugins (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th style=\"width:28px;\"></th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

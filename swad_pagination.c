@@ -100,7 +100,7 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination)
   {
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Pag_WriteLinksToPages (WhatPaginate,ThrCod,Pagination,true,NULL,"TIT",false);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -190,10 +190,10 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       /***** Links to several pages start here *****/
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:5px;\">"
                          "<tr>"
-                         "<td class=\"%s\" style=\"text-align:left;\">"
+                         "<td class=\"%s LEFT_MIDDLE\">"
                          "["
                          "</td>"
-                         "<td class=\"%s\" style=\"text-align:left;\">"
+                         "<td class=\"%s LEFT_MIDDLE\">"
                          "%s"
                          "</td>",
                Font,Font,Txt_Page);
@@ -201,7 +201,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          switch (WhatPaginate)
            {
@@ -252,7 +252,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage > 2)
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "..."
         	               "</td>",
         	     Font);
@@ -261,7 +261,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       /***** Posible link to page left *****/
       if (Pagination->LeftPage > 1 && Pagination->LeftPage < Pagination->StartPage)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          switch (WhatPaginate)
            {
@@ -313,7 +313,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage < Pagination->StartPage-1)
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "..."
         	               "</td>",
                      Font);
@@ -324,7 +324,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 	   NumPage <= Pagination->EndPage;
 	   NumPage++)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
             fprintf (Gbl.F.Out,"<u>%u</u>",(unsigned) NumPage);
@@ -383,14 +383,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
         }
 
       /***** Posible link to page right *****/
-      if (Pagination->RightPage > Pagination->EndPage && Pagination->RightPage < Pagination->NumPags)
+      if (Pagination->RightPage > Pagination->EndPage &&
+	  Pagination->RightPage < Pagination->NumPags)
         {
          if (Pagination->RightPage > Pagination->EndPage+1)
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "..."
         	               "</td>",
                      Font);
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          switch (WhatPaginate)
            {
@@ -446,11 +447,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       if (Pagination->EndPage < Pagination->NumPags)
         {
          if (Pagination->NumPags > Pagination->RightPage+1)
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "..."
         	               "</td>",
                      Font);
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          switch (WhatPaginate)
            {
@@ -501,7 +502,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
         }
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
 	                 "]"
 	                 "</td>"
 	                 "</tr>"

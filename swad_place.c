@@ -97,14 +97,13 @@ void Plc_SeePlaces (void)
 	 Plc_PutFormToEditPlcs ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,0,Txt_Places);
+      Lay_StartRoundFrameTable (NULL,2,Txt_Places);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL\""
-	                    " style=\"text-align:left;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL");
@@ -126,12 +125,12 @@ void Plc_SeePlaces (void)
 	{
 	 /* Write data of this place */
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT\" style=\"text-align:left;\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
 			    "</td>",
 		  Gbl.Plcs.Lst[NumPlc].FullName);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                    "&nbsp;%u&nbsp;"
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                    "%u"
 	                    "</td>"
 			    "</tr>",
 		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
@@ -148,11 +147,11 @@ void Plc_SeePlaces (void)
       /***** Write centres with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
-			 "<td class=\"DAT\" style=\"text-align:right;\">"
-			 "&nbsp;%u&nbsp;"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       Txt_Other_places,NumCtrsInOtherPlcs);
@@ -160,11 +159,11 @@ void Plc_SeePlaces (void)
 
       /***** Write centres with no place *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT\" style=\"text-align:left;\">"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
-			 "<td class=\"DAT\" style=\"text-align:right;\">"
-			 "&nbsp;%u&nbsp;"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       Txt_Place_unspecified,
@@ -438,14 +437,13 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                 "%ld&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%ld"
 	                 "</td>",
                Plc->PlcCod);
 
       /* Place short name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -455,8 +453,7 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place full name */
-      fprintf (Gbl.F.Out,"<td style=\"text-align:center;"
-	                 " vertical-align:middle;\">");
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -466,8 +463,8 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of centres */
-      fprintf (Gbl.F.Out,"<td class=\"DAT\" style=\"text-align:right;\">"
-	                 "&nbsp;%u&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%u"
 	                 "</td>"
 	                 "</tr>",
                Plc->NumCtrs);
@@ -682,10 +679,10 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",
@@ -694,13 +691,13 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Place short name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"text-align:center; vertical-align:middle;\">"
+                      "<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName);
 
    /***** Place full name *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:middle;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
@@ -727,16 +724,16 @@ static void Plc_PutHeadPlaces (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:left;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"TIT_TBL\" style=\"text-align:right;\">"
+                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "</tr>",

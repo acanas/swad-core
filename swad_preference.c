@@ -230,7 +230,7 @@ void Pre_PutSelectorToSelectLanguage (void)
      };
 
    Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx;margin:0;\""
+   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
@@ -377,7 +377,7 @@ void Pre_PutLeftIconToHideShowCols (void)
       Act_FormStart (ActHidLftCol);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
+	                 " title=\"%s\" style=\"width:8px; height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Hide_left_column,
                Txt_Hide_left_column);
@@ -387,7 +387,7 @@ void Pre_PutLeftIconToHideShowCols (void)
       Act_FormStart (ActShoLftCol);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
+	                 " title=\"%s\" style=\"width:8px; height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Show_left_column,
                Txt_Show_left_column);
@@ -409,7 +409,7 @@ void Pre_PutRigthIconToHideShowCols (void)
       Act_FormStart (ActHidRgtCol);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
+	                 " title=\"%s\" style=\"width:8px; height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Hide_right_column,
                Txt_Hide_right_column);
@@ -419,7 +419,7 @@ void Pre_PutRigthIconToHideShowCols (void)
       Act_FormStart (ActShoRgtCol);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" style=\"width:8px;height:800px;\" />",
+	                 " title=\"%s\" style=\"width:8px; height:800px;\" />",
                Gbl.Prefs.IconsURL,
                Txt_Show_right_column,
                Txt_Show_right_column);

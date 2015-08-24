@@ -107,7 +107,7 @@ void QR_PrintQRCode (void)
 
 static void QR_ImageQRCode (const char *QRString)
   {
-   fprintf (Gbl.F.Out,"<div style=\"width:%upx; text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:%upx; height:%upx;"
@@ -153,7 +153,7 @@ void QR_ExamAnnnouncement (void)
    extern const char *Txt_Link_to_announcement_of_exam;
 
    /***** Show QR code with direct link to the exam announcement *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:200px; height:200px;\" />"

@@ -690,7 +690,7 @@ void Pwd_ShowFormChgPwd (void)
 	                 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s: "
 	                 "</td>"
-                         "<td style=\"text-align:left;\">"
+                         "<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"password\" name=\"UsrPwd\""
                          " size=\"25\" maxlength=\"%u\" autocomplete=\"off\" />"
                          "</td>"
@@ -738,7 +738,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s: "
 	              "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" name=\"Paswd1\""
                       " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
                       "</td>"
@@ -747,7 +747,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s: "
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" name=\"Paswd2\""
                       " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
                       "</td>"
@@ -785,7 +785,7 @@ void Pwd_ShowFormOthPwd (void)
 	 /***** Show user's record *****/
 	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			    "<tr>"
-			    "<td colspan=\"2\" style=\"text-align:center;\">");
+			    "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -871,7 +871,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin:10px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:10px;\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "<span class=\"%s\">%s</span><br />"
 		      "<span class=\"%s\">%s: </span>"

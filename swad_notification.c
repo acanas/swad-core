@@ -317,21 +317,19 @@ void Ntf_ShowMyNotifications (void)
       /***** Table start *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th colspan=\"2\" class=\"TIT_TBL\""
-                         " style=\"text-align:left;\">"
+                         "<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th colspan=\"2\" class=\"TIT_TBL\""
-                         " style=\"text-align:left;\">"
+                         "<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                         "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL\" style=\"text-align:left;\">"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -426,8 +424,7 @@ void Ntf_ShowMyNotifications (void)
          /***** Write row for this notification *****/
 	 /* Write event icon */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"width:20px;"
-                            " text-align:left; vertical-align:top;\">",
+                            "<td class=\"%s LEFT_TOP\" style=\"width:20px;\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -451,8 +448,7 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write event type */
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-                            " vertical-align:top;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -471,8 +467,7 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgAuthor (&UsrDat,80,11,ClassAuthorBg,true,NULL);
 
          /* Write location */
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-                            " vertical-align:top;\">",
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
                   ClassBackground);
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
@@ -535,8 +530,7 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgDate (DateTime,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
-         fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-                            " vertical-align:top;\">"
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
                             "%s"
                             "</td>"  \
                             "</tr>",
@@ -550,9 +544,8 @@ void Ntf_ShowMyNotifications (void)
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD,false);
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
-                               "<td colspan=\"5\" class=\"DAT\""
-                               " style=\"text-align:left; vertical-align:top;"
-                               " padding-bottom:10px;\">"
+                               "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
+                               " style=\"padding-bottom:10px;\">"
                                "%s"
                                "</td>"
                                "</tr>",
@@ -1695,10 +1688,10 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
-		      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+		      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
-                      "<th class=\"TIT_TBL\" style=\"text-align:center;\">"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
 	              "</tr>",
@@ -1714,7 +1707,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
-	                 "<td style=\"text-align:center;\">"
+	                 "<td class=\"CENTER_MIDDLE\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
@@ -1723,7 +1716,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
-	                 "<td style=\"text-align:center;\">"
+	                 "<td class=\"CENTER_MIDDLE\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent)))

@@ -228,15 +228,13 @@ bool Prf_ShowUserProfile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
 			 "<table style=\"margin:0 auto;\">"
 			 "<tr>"
-			 "<td rowspan=\"2\" style=\"text-align:center;"
-			 " vertical-align:top;\">");
+			 "<td rowspan=\"2\" class=\"CENTER_TOP\">");
 
       /***** Common record *****/
       Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
 
       fprintf (Gbl.F.Out,"</td>"
-			 "<td style=\"text-align:left;"
-			 " vertical-align:top;\">");
+			 "<td class=\"LEFT_TOP\">");
 
       /***** Show details of user's profile *****/
       Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
@@ -245,7 +243,7 @@ bool Prf_ShowUserProfile (void)
 			 "</tr>"
 			 "<tr>"
 			 "</td>"
-			 "<td style=\"vertical-align:bottom;\">");
+			 "<td class=\"CENTER_BOTTOM\">");
 
       /***** Show following and followers *****/
       Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
@@ -1320,7 +1318,7 @@ void Prf_ShowRankingFigure (const char *Query)
 	 /***** Show row *****/
 	 fprintf (Gbl.F.Out,"<tr>");
          Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td style=\"text-align:right; height:40px;"
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"height:40px;"
 	                    " background-color:%s;\">%ld</td>"
 			    "</tr>",
 		  Gbl.ColorRows[Gbl.RowEvenOdd],Figure);
@@ -1462,7 +1460,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 /***** Show row *****/
 	 fprintf (Gbl.F.Out,"<tr>");
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td style=\"text-align:right; height:40px;"
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"height:40px;"
 	                    " background-color:%s;\">",
 	          Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Str_WriteFloatNum (NumClicksPerDay);
@@ -1491,8 +1489,8 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX+1];
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<td class=\"RANK\" style=\"text-align:right;"
-		      " height:40px; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE\" style=\"height:40px;"
+	              " background-color:%s;\">"
 		      "#%u"
 		      "</td>"
                       "<td style=\"width:28px; height:40px;"
