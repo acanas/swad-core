@@ -571,8 +571,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Link to download the file *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\"class=\"FILENAME\""
-		      " style=\"text-align:center; vertical-align:middle;\">"
+		      "<td colspan=\"2\" class=\"FILENAME CENTER_MIDDLE\">"
                       "<a href=\"%s\" class=\"FILENAME\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -598,8 +597,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"DAT\" style=\"text-align:left;"
-		      " vertical-align:middle;\">"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
 		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
 		      "</td>"
 		      "</tr>",
@@ -611,8 +609,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"DAT\" style=\"text-align:left;"
-		      " vertical-align:middle;\">",
+		      "<td class=\"DAT LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
    Str_WriteSizeInBytesFull ((double) FileSize);
    if (UncompressedSize)
