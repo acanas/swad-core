@@ -143,8 +143,8 @@ void Syl_PutFormWhichSyllabus (void)
 	WhichSyllabus < For_NUM_WHICH_FORUMS;
 	WhichSyllabus++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT\""
-	                 " style=\"display:inline; vertical-align:middle;\">"
+      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"display:inline;\">"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.CurrentCrs.Syllabus.WhichSyllabus)
@@ -220,8 +220,7 @@ void Syl_EditSyllabus (void)
       Lay_EndRoundFrameTable ();
 
       if (!Gbl.CurrentCrs.Syllabus.EditionIsActive)
-         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\""
-                            " style=\"text-align:center;\">"
+         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">"
                             "<br />%s</div>",
                   Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_);
      }
@@ -692,7 +691,8 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                   Level - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Code of the item *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%dpx; text-align:right; vertical-align:top; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"width:%dpx; background-color:%s;\">",
                StyleSyllabus[Level],
                Level * Syl_WIDTH_NUM_SYLLABUS,Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Level == 1)
@@ -700,8 +700,8 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
       fprintf (Gbl.F.Out,"%s&nbsp;</td>",StrItemCod);
 
       /***** Text of the item *****/
-      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s\""
-	                 " style=\"text-align:left; vertical-align:top; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP\""
+	                 " style=\"background-color:%s;\">"
                          "%s"
                          "</td>",
                LstItemsSyllabus.NumLevels - Level + 1,
@@ -837,8 +837,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 		  LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td class=\"%s\" style=\"width:%dpx;"
-	                   " text-align:right; vertical-align:top;\">",
+      fprintf (FileHTMLTmp,"<td class=\"%s RIGHT_TOP\" style=\"width:%dpx;\">",
 	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level],
 	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
       if (LstItemsSyllabus.Lst[NumItem].Level == 1)
@@ -849,8 +848,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
       fprintf (FileHTMLTmp,"&nbsp;</td>");
 
       /***** Text of the item *****/
-      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s\""
-	                   " style=\"text-align:left; vertical-align:top;\">"
+      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s LEFT_TOP\">"
 			    "%s"
 			    "</td>",
 	       LstItemsSyllabus.NumLevels - LstItemsSyllabus.Lst[NumItem].Level + 1,
@@ -890,8 +888,8 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
                Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
    else
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"width:%dpx; text-align:left;"
-	                 " vertical-align:middle; background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
+	                 " style=\"width:%dpx; background-color:%s;\">",
                StyleSyllabus[Level],
                Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
       if (Level == 1)
@@ -901,8 +899,8 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
      }
 
    /***** Text of the item *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"text-align:left;"
-	              " vertical-align:middle; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"%d LEFT_MIDDLE\""
+	              " style=\"background-color:%s;\">",
             LstItemsSyllabus.NumLevels - Level + 1,BgColor);
    Act_FormStart (NewItem ? (InfoType == Inf_LECTURES ? ActInsIteSylLec :
 	                                                ActInsIteSylPra) :

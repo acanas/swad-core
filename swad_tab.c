@@ -90,8 +90,8 @@ void Tab_DrawTabs (void)
       else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
 	 ColspanCentralPart = 2;
      }
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" style=\"height:56px;"
-	              " text-align:center; vertical-align:top;"
+   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
+	              " style=\"height:56px;"
 		      " background-image:url('%s/head_base_background_1x56.gif');"
 		      " background-repeat:repeat-x;\">"
 		      "<div id=\"tabs_container\">",
@@ -224,8 +224,7 @@ void Tab_DrawTabsMobile (void)
 	    fprintf (Gbl.F.Out,"<tr>");
 
 	 /* Icon at top and text at bottom */
-	 fprintf (Gbl.F.Out,"<td style=\"width:25%%; text-align:center;"
-	                    " vertical-align:top;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:25%%;\">");
 	 if (ICanViewTab)
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">");
