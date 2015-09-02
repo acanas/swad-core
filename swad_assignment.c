@@ -239,8 +239,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /***** Write first row of data of this assignment *****/
    /* Start date/time */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s LEFT_TOP\""
-	              " style=\"background-color:%s;\">"
+	              "<td class=\"%s LEFT_TOP COLOR%u\">"
 	              "%02u/%02u/%02u<br />"
 	              "%02u:%02u h"
 	              "</td>",
@@ -248,7 +247,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
         	                     "DATE_RED_LIGHT") :
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             Asg.DateTimes[Asg_START_TIME].Date.Day,
             Asg.DateTimes[Asg_START_TIME].Date.Month,
 	    Asg.DateTimes[Asg_START_TIME].Date.Year % 100,
@@ -256,8 +255,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
 	    Asg.DateTimes[Asg_START_TIME].Time.Minute);
 
    /* End date/time */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\">"
 	              "%02u/%02u/%02u<br />"
 	              "%02u:%02u h"
 	              "</td>",
@@ -265,7 +263,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
         	                     "DATE_RED_LIGHT") :
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             Asg.DateTimes[Asg_END_TIME].Date.Day,
             Asg.DateTimes[Asg_END_TIME].Date.Month,
             Asg.DateTimes[Asg_END_TIME].Date.Year % 100,
@@ -273,24 +271,23 @@ static void Asg_ShowOneAssignment (long AsgCod)
 	    Asg.DateTimes[Asg_END_TIME].Time.Minute);
 
    /* Assignment title */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
                       "<div class=\"%s\">%s</div>",
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             Asg.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
             Asg.Title);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Send work? */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP COLOR%u\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                       "<br />%s"
                       "</td>",
             (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
         	                              "DAT",
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
             (Asg.SendWork == Asg_SEND_WORK) ? "file_on" :
         	                              "file_off",
@@ -300,18 +297,16 @@ static void Asg_ShowOneAssignment (long AsgCod)
         	                              Txt_No);
 
    /* Assignment folder */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
    Asg_WriteAssignmentFolder (&Asg);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Write second row of data of this assignment *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
 
    /* Author of the assignment */
    Asg_WriteAsgAuthor (&Asg);
@@ -333,8 +328,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);

@@ -197,7 +197,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<tr>");
 
       /* Write icon to remove the field */
-      fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       Lay_PutIconRemove ();

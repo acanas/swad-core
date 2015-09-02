@@ -2619,7 +2619,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Student has accepted enrollment in current course? *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/tr16x16.gif\""
 	              " alt=\"\" title=\"\""
 	              " class=\"ICON16x16\" />"
@@ -2716,7 +2716,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    if (UsrIsTheMsgSender)
       fprintf (Gbl.F.Out,"BM_SEL");
    else
-      fprintf (Gbl.F.Out,"BM%d",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
@@ -3042,7 +3042,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    if (UsrIsTheMsgSender)
       fprintf (Gbl.F.Out,"BM_SEL");
    else
-      fprintf (Gbl.F.Out,"BM%d",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""

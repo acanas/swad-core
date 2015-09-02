@@ -983,7 +983,6 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
    extern const char *Txt_View_record_for_this_course;
-   const char *Color = Gbl.ColorRows[Gbl.RowEvenOdd];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
@@ -1002,9 +1001,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    /***** Show photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"LEFT_MIDDLE\""
-	              " style=\"width:18px; background-color:%s;\">",
-	    Color);
+	              "<td class=\"LEFT_MIDDLE COLOR%u\""
+	              " style=\"width:18px;\">",
+	    Gbl.RowEvenOdd);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
    Act_FormStartId (ActSeePubPrf,Gbl.FormId);
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
@@ -1018,12 +1017,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"width:54px; background-color:%s;\">",
-	    Font,Color);
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
+	              " style=\"width:54px;\">",
+	    Font,Gbl.RowEvenOdd);
    sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
    Act_FormStartId ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
-	                                         ActSeeRecOneTch,
+	                                    ActSeeRecOneTch,
 	            Gbl.FormId);
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
    Act_LinkFormSubmitId (Txt_View_record_for_this_course,Font,Gbl.FormId);
@@ -1033,9 +1032,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write time from last access *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"width:38px; background-color:%s;\">",
-            Font,Color);
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
+	              " style=\"width:38px;\">",
+            Font,Gbl.RowEvenOdd);
 
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
@@ -1199,9 +1198,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
          /***** Show photo *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LEFT_MIDDLE\""
-                            " style=\"width:18px; background-color:%s;\">",
-                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+                            "<td class=\"LEFT_MIDDLE COLOR%u\""
+                            " style=\"width:18px;\">",
+                  Gbl.RowEvenOdd);
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
@@ -1209,9 +1208,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write full name and link *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-                            " style=\"width:256px; background-color:%s;\">",
-                  Font,Gbl.ColorRows[Gbl.RowEvenOdd]);
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
+                            " style=\"width:256px;\">",
+                  Font,Gbl.RowEvenOdd);
          if (PutLinkToRecord)
            {
 	    Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
@@ -1228,9 +1227,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write time from last access *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-                            " style=\"width:38px; background-color:%s;\">",
-                  Font,Gbl.ColorRows[Gbl.RowEvenOdd]);
+         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
+                            " style=\"width:38px;\">",
+                  Font,Gbl.RowEvenOdd);
 	 Hours   = Seconds / (60 * 60);
 	 Minutes = (Seconds / 60) % 60;
 	 Seconds %= 60;

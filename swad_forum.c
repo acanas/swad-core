@@ -3401,7 +3401,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                Thr.NumWriters);
 
       /***** Write number of users who have read this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
+	                 " style=\"background-color:%s;\">"
 	                 "%u&nbsp;"
 	                 "</td>"
 	                 "</tr>",

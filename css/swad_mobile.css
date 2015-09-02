@@ -645,6 +645,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .RIGHT_MIDDLE		{text-align:right; vertical-align:middle;}
 .RIGHT_BOTTOM		{text-align:right; vertical-align:bottom;}
 
+/************************** Lists with alternating colors ********************/
+.COLOR0		{background-color:#F4F2EA;}
+.COLOR1		{background-color:#FBFAF7;}
+
 /********************************* Course info *******************************/
 #crs_info
 	{

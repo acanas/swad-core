@@ -553,7 +553,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
       else
 	{
 	 /***** Icon to remove the row *****/
-         fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (LstItemsSyllabus.Lst[NumItem].HasChildren)
             Lay_PutIconRemovalNotAllowed ();
 	 else
@@ -568,7 +568,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 
 	 /***** Icon to get up an item *****/
 	 Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
-	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActUp_IteSylLec :
@@ -596,7 +596,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 
 	 /***** Icon to get down item *****/
 	 Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
-	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Subtree.MovAllowed)
 	   {
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActDwnIteSylLec :
@@ -624,7 +624,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to increase the level of an item *****/
-	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Level > 1)
 	   {
 	    Act_FormStart (InfoType == Inf_LECTURES ? ActRgtIteSylLec :
@@ -650,7 +650,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
          fprintf (Gbl.F.Out,"</td>");
 
 	 /***** Icon to decrease level item *****/
-	 fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 	 if (Level < LastLevel + 1 &&
 	     Level < Syl_MAX_LEVELS_SYLLABUS)
 	   {

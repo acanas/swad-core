@@ -3934,22 +3934,20 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
 	{
          /***** Indent *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"RIGHT_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " style=\"width:20px; height:20px;"
                             " vertical-align:top;\" />"
                             "</td>",
-                  Gbl.ColorRows[Gbl.RowEvenOdd],Gbl.Prefs.IconsURL,
+                  Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :
                 	              "submid");
 
          /***** Write degree *****/
          fprintf (Gbl.F.Out,"<td colspan=\"%u\""
-                            " class=\"DAT_SMALL_NOBR LEFT_TOP\""
-                            " style=\"background-color:%s;\">",
-                  ColSpan - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
+                            " class=\"DAT_SMALL_NOBR LEFT_TOP COLOR%u\">",
+                  ColSpan - 1,Gbl.RowEvenOdd);
 
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);

@@ -2987,7 +2987,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          if (Svy->Status.ICanEdit)
            {
             /* Write icon to remove the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%d\">",
+            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
                      Gbl.RowEvenOdd);
             Act_FormStart (ActRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
@@ -2999,7 +2999,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write icon to edit the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%d\">",
+            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
                      Gbl.RowEvenOdd);
             Act_FormStart (ActEdiOneSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);

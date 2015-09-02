@@ -163,7 +163,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Show the announcements *****/
    if (NumAnnouncements)
      {
-      fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
       for (NumAnn = 0;
 	   NumAnn < NumAnnouncements;
@@ -220,7 +220,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
             Content);
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center; margin:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:10px;\">");
 
    if (ShowAllAnnouncements)
      {

@@ -159,7 +159,7 @@ struct Globals
    struct Date Yesterday;
    char Message[Lay_MAX_BYTES_ALERT];	// String for alerts
    char Title[Lay_MAX_BYTES_TITLE];	// String for the help message in a link
-   int RowEvenOdd;	// To alternate row colors in listings
+   unsigned RowEvenOdd;	// To alternate row colors in listings
    char *ColorRows[2];
    const char *XMLPtr;
    struct

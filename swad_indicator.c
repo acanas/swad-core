@@ -902,131 +902,116 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
            {
             case Ind_INDICATORS_BRIEF:
                fprintf (Gbl.F.Out,"<tr>"
-                                  "<td class=\"%s LEFT_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"DAT_SMALL LEFT_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
                                   "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
                                   "%s/?crs=%ld&amp;act=%ld"
                                   "</a>"
                                   "</td>"
 
-                                  "<td class=\"%s RIGHT_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
                                   "%u"
                                   "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
-                                  "%s"
-                                  "</td>"
-
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
-                                  "%s"
-                                  "</td>"
-
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE\""
-                                  " style=\"background-color:%s;\">"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+                                  "%s"
+                                  "</td>"
+
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+                                  "%s"
+                                  "</td>"
+
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+                                  "%s"
+                                  "</td>"
+                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
                                   "%s"
                                   "</td>"
                                   "</tr>",
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Gbl.RowEvenOdd,
                         row[0],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Gbl.RowEvenOdd,
                         row[1],
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Gbl.RowEvenOdd,
                         row[3],
-                        Gbl.ColorRows[Gbl.RowEvenOdd],Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-                                                      Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+                        Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+                                       Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
                         Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
                         (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
                                                         "DAT_SMALL_RED"),
-                        Gbl.ColorRows[Gbl.RowEvenOdd],
+                        Gbl.RowEvenOdd,
                         Indicators.CountIndicators,
 
-                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereIsSyllabus ? Txt_YES :
                                                      "",
-                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereIsSyllabus ? "" :
                                                      Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereAreAssignments ? Txt_YES :
                                                          "",
-                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereAreAssignments ? "" :
                                                          Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereIsOnlineTutoring ? Txt_YES :
                                                            "",
-                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereIsOnlineTutoring ? "" :
                                                            Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereAreMaterials ? Txt_YES :
                                                        "",
-                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereAreMaterials ? "" :
                                                        Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereIsAssessment ? Txt_YES :
                                                        "",
-                        "DAT_SMALL_RED",Gbl.ColorRows[Gbl.RowEvenOdd],
+                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereIsAssessment ? "" :
                                                        Txt_NO);
                break;

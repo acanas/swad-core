@@ -1018,7 +1018,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Put icon to indicate that a question does not exist in database *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"BT%d CENTER_TOP\">"
+	              "<td class=\"BT%u CENTER_TOP\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -1152,7 +1152,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"BT%d\">",Gbl.RowEvenOdd);
+        	               "<td class=\"BT%u\">",Gbl.RowEvenOdd);
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
                fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""

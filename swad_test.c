@@ -2483,7 +2483,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 
       /* Write icon to remove the question */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"BT%d\">",
+                         "<td class=\"BT%u\">",
 	       Gbl.RowEvenOdd);
       Act_FormStart (ActRemTstQst);
       Sta_WriteParamsDatesSeeAccesses ();
@@ -2497,7 +2497,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write icon to edit the question */
-      fprintf (Gbl.F.Out,"<td class=\"BT%d\">",
+      fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
 	       Gbl.RowEvenOdd);
       Act_FormStart (ActEdiOneTstQst);
       Par_PutHiddenParamLong ("QstCod",QstCod);
@@ -2765,7 +2765,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"BT%d\">",Gbl.RowEvenOdd);
+        	               "<td class=\"BT%u\">",Gbl.RowEvenOdd);
             if (Str_ConvertToUpperLetter (row[2][0]) == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""

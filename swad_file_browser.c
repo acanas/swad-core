@@ -4812,11 +4812,11 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start of the column */
-   fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP\""
-	              " style=\"width:99%%; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP COLOR%u\""
+	              " style=\"width:99%%;\">"
                       "<table>"
                       "<tr>",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+            Gbl.RowEvenOdd);
 
    /* Indent depending on level */
    if (Level)
@@ -4842,7 +4842,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    else
      {
       /* Icon with file type or link */
-      fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
       Brw_PutIconFileWithLinkToViewMetadata (16,FileType,PathInTree,FileName,FileNameToShow);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -4865,7 +4865,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT &&	// Only ZIP folders if I am student, teacher...
        !SeeMarks)					// Do not ZIP folders when seeing marks
      {
-      fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
       if (FileType == Brw_IS_FOLDER &&	// If it is a folder
 	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	 ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
@@ -4946,7 +4946,7 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,Brw_FileType_t FileType,
          Brw_PutIconPasteOff ();
      }
    else	// File or link. Can't paste in a file or link.
-      fprintf (Gbl.F.Out,"<td class=\"BM%d\"></td>",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\"></td>",Gbl.RowEvenOdd);
   }
 
 /*****************************************************************************/
@@ -4992,7 +4992,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
   {
    extern const char *Txt_Remove_FILE_OR_LINK_X;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this file?
      {
@@ -5036,7 +5036,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
   {
    extern const char *Txt_Remove_folder_X;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this folder?
      {
@@ -5082,7 +5082,7 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
    extern const char *Txt_Copy_FOLDER_FILE_OR_LINK_X;
    extern const char *Txt_Copy_not_allowed;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanEditFileOrFolder)
      {
@@ -5130,7 +5130,7 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
   {
    extern const char *Txt_Paste_in_X;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    /***** Form to paste the content of the clipboard *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
@@ -5168,7 +5168,7 @@ static void Brw_PutIconPasteOff (void)
   {
    extern const char *Txt_Copy_not_allowed;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/paste_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
 	              "</td>",
@@ -5191,7 +5191,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
 	              "<table>"
 	              "<tr>");
    Brw_IndentDependingOnLevel (Level);
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    switch (ExpandTree)
      {
@@ -5295,7 +5295,7 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
   {
    extern const char *Txt_Show_FOLDER_FILE_OR_LINK_X;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActShow[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -5328,7 +5328,7 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
   {
    extern const char *Txt_Hide_FOLDER_FILE_OR_LINK_X;
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActHide[Gbl.FileBrowser.Type]);
    switch (Gbl.FileBrowser.Type)
      {
@@ -5439,7 +5439,7 @@ static void Brw_PutIconNewFileOrFolder (void)
    extern const char *Txt_New_FILE_OR_FOLDER;
 
    /***** Icon that indicates new file *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">"
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/star16x16.gif\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
 	              "</td>",
@@ -5737,9 +5737,8 @@ static void Brw_WriteDatesAssignment (void)
    extern const char *Txt_unknown_assignment;
 
    fprintf (Gbl.F.Out,"<td colspan=\"4\""
-	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE COLOR%u\">",
+            Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.Asg.AsgCod > 0)
      {
@@ -5796,19 +5795,17 @@ static void Brw_WriteDatesAssignment (void)
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata)
   {
    /***** Write the file size *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
 	              "&nbsp;",
-            Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
+            Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    if (FileType == Brw_IS_FILE)
       Str_WriteSizeInBytesBrief ((double) FileMetadata->Size);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the date *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
 	              "&nbsp;",
-            Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
+            Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    if (FileType == Brw_IS_FILE ||
        FileType == Brw_IS_LINK)
      {
@@ -5840,7 +5837,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);	// Get user's data from database
      }
 
-   fprintf (Gbl.F.Out,"<td class=\"BM%d\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    if (ShowUsr)
      {
       /***** Show photo *****/
