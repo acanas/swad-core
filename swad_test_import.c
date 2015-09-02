@@ -131,7 +131,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_Upload_file;
    extern const char *Txt_XML_file;
 
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Write help message *****/
    Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import);
@@ -143,12 +143,12 @@ void TsI_ShowFormImportQstsFromXML (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td style=\"text-align:left;\">"
+                      "<td class=\"LEFT_MIDDLE\">"
 	              "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
 	              "</td>"
                       "</tr>"
                       "<tr>"
-	              "<td colspan=\"2\" style=\"text-align:center;\">",
+	              "<td colspan=\"2\" class=\"CENTER_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
@@ -494,7 +494,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
    /***** Print XML tree *****/
    Lay_WriteTitle (Txt_XML_file_content);
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	              "<textarea cols=\"60\" rows=\"4\">");
    XML_PrintTree (RootElem);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -950,24 +950,19 @@ static void TsI_WriteHeadingListImportedQst (void)
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:center; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL\""
-                      " style=\"text-align:left; vertical-align:top;\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1023,7 +1018,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Put icon to indicate that a question does not exist in database *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"BT%d\" style=\"text-align:center;\">"
+	              "<td class=\"BT%d CENTER_TOP\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -1038,16 +1033,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	             Txt_New_question);
 
    /***** Write number of question *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:top; background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
+	              " style=\"background-color:%s;\">",
             ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (!QuestionExists)
       fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question tags *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
-	              " background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
+	              " style=\"background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (Gbl.Test.NumTags)
      {
@@ -1057,12 +1052,10 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	   NumTag < Gbl.Test.NumTags;
 	   NumTag++)
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s\" style=\"text-align:left;"
-	                    " vertical-align:top;\">"
+                            "<td class=\"%s LEFT_TOP\">"
                             "&nbsp;&#8226;&nbsp;"
                             "</td>"
-                            "<td class=\"%s\" style=\"text-align:left;"
-	                    " vertical-align:top;\">"
+                            "<td class=\"%s LEFT_TOP\">"
                             "%s"
                             "</td>"
                             "</tr>",
@@ -1077,16 +1070,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question type *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:center;"
-	              " vertical-align:top; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
+	              " style=\"background-color:%s;\">"
 	              "%s&nbsp;"
 	              "</td>",
 	    ClassData,Gbl.ColorRows[Gbl.RowEvenOdd],
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write if shuffle is enabled *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:center; vertical-align:top;"
-	              " background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+	              " style=\"background-color:%s;\">",
 	    Gbl.ColorRows[Gbl.RowEvenOdd]);
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
@@ -1103,8 +1096,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the stem and the answers *****/
-   fprintf (Gbl.F.Out,"<td style=\"text-align:left; vertical-align:top;"
-	              " background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
+	              " style=\"background-color:%s;\">",
             Gbl.ColorRows[Gbl.RowEvenOdd]);
    Tst_WriteQstStem (Stem,ClassStem);
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
@@ -1172,15 +1165,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write the number of option */
-            fprintf (Gbl.F.Out,"<td class=\"%s\" style=\"text-align:left;"
-	                       " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
         	               "%c)&nbsp;"
         	               "</td>",
                      ClassData,'a' + (char) NumOpt);
 
             /* Write the text and the feedback of the answer */
-            fprintf (Gbl.F.Out,"<td style=\"text-align:left;"
-        	               " vertical-align:top;\">"
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
         	               "<p class=\"%s\">"
         	               "<tt>%s</tt>"
         	               "</p>",
