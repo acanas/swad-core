@@ -1033,17 +1033,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	             Txt_New_question);
 
    /***** Write number of question *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">",
-            ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP COLOR%u\">",
+            ClassData,Gbl.RowEvenOdd);
    if (!QuestionExists)
       fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question tags *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
    if (Gbl.Test.NumTags)
      {
       /***** Write the tags *****/
@@ -1070,17 +1068,15 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the question type *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP COLOR%u\">"
 	              "%s&nbsp;"
 	              "</td>",
-	    ClassData,Gbl.ColorRows[Gbl.RowEvenOdd],
+	    ClassData,Gbl.RowEvenOdd,
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write if shuffle is enabled *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-	              " style=\"background-color:%s;\">",
-	    Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
@@ -1096,9 +1092,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write the stem and the answers *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
    Tst_WriteQstStem (Stem,ClassStem);
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
    switch (Gbl.Test.AnswerType)

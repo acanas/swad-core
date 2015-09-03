@@ -1567,12 +1567,12 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\""
-                            " style=\"width:%upx; background-color:%s;\">"
+                            "<td class=\"%s LEFT_TOP COLOR%u\""
+                            " style=\"width:%upx;\">"
                             "%s:",
                   ICanEdit ? The_ClassForm[Gbl.Prefs.Theme] :
                 	     "DAT_REC_SMALL",
-                  Col1Width,Gbl.ColorRows[Gbl.RowEvenOdd],
+                  Gbl.RowEvenOdd,Col1Width,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_RECORD_LIST)
             fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
@@ -1589,9 +1589,9 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
             ThisFieldHasText = false;
 
          /***** Write form, text, or nothing depending on the user's role and the visibility of the field... */
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\" style=\"width:%upx;"
-                            " background-color:%s;\">",
-                  ClassData,Col2Width,Gbl.ColorRows[Gbl.RowEvenOdd]);
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\""
+                            " style=\"width:%upx;\">",
+                  ClassData,Gbl.RowEvenOdd,Col2Width);
          if (ICanEdit)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""

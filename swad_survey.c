@@ -345,15 +345,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 
    /***** Start date/time *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_TOP\"",
+                      "<td class=\"%s LEFT_TOP",
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
                                  (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
                                                     "DATE_RED_LIGHT"));
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">"
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
 	              "%02u/%02u/%02u<br />"
 	              "%02u:%02u h"
 	              "</td>",
@@ -364,15 +363,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 	    Svy.DateTimes[Svy_START_TIME].Time.Minute);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\"",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
                                  (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
                                                     "DATE_RED_LIGHT"));
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">"
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
 	              "%02u/%02u/%02u<br />"
 	              "%02u:%02u h"
 	              "</td>",
@@ -383,11 +381,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 	    Svy.DateTimes[Svy_END_TIME  ].Time.Minute);
 
    /***** Survey title *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\"");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    /* Put form to view survey */
    Act_FormStart (ActSeeOneSvy);
@@ -413,22 +410,20 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
             Svy.NumUsrs);
 
    /***** Status of the survey *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP\"");
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
    Svy_WriteStatus (&Svy);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Write second row of data of this survey *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP\"");
+	              "<td colspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    /* Author of the survey */
    Svy_WriteAuthor (&Svy);
@@ -438,10 +433,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       Svy_PutFormsToRemEditOneSvy (Svy.SvyCod,Svy.Status.Visible);
 
    fprintf (Gbl.F.Out,"</td>"
-                      "<td style=\"text-align:left; vertical-align:top;");
+                      "<td class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," background-color:%s;",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
    /* Scope of the survey */
@@ -511,8 +505,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
      }
    else
      {
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\">",
-		  Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out," class=\"COLOR%u\">",Gbl.RowEvenOdd);
 
       /* Possible button to answer this survey */
       if (Svy.Status.ICanAnswer)
@@ -2987,8 +2980,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          if (Svy->Status.ICanEdit)
            {
             /* Write icon to remove the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
-                     Gbl.RowEvenOdd);
+            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
             Act_FormStart (ActRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
@@ -2999,8 +2991,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write icon to edit the question */
-            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
-                     Gbl.RowEvenOdd);
+            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
             Act_FormStart (ActEdiOneSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
@@ -3016,18 +3007,16 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          /* Write index of question inside survey (row[1]) */
          if (sscanf (row[1],"%u",&(SvyQst->QstInd)) != 1)
             Lay_ShowErrorAndExit ("Error: wrong question index.");
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                             "%u"
                             "</td>",
-                  Gbl.ColorRows[Gbl.RowEvenOdd],SvyQst->QstInd+1);
+                  Gbl.RowEvenOdd,SvyQst->QstInd+1);
 
          /* Write the question type (row[2]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                             "%s",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],
+	          Gbl.RowEvenOdd,
                   Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
 
          /* Write the stem (row[3]) */
@@ -3114,12 +3103,11 @@ static void Svy_WriteQstStem (const char *Stem,const char *TextStyle)
                      HeadingRigorousHTML,LengthHeading,false);
 
    /* Write the stem */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\">"
                       "<div style=\"text-align:justify;\">"
                       "<tt>%s</tt>"
                       "</div>",
-	    TextStyle,Gbl.ColorRows[Gbl.RowEvenOdd],HeadingRigorousHTML);
+	    TextStyle,Gbl.RowEvenOdd,HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */
    free ((void *) HeadingRigorousHTML);

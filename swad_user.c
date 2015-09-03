@@ -2600,7 +2600,6 @@ static void Usr_InsertMyLastData (void)
 
 static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
@@ -2611,10 +2610,8 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"background-color:%s;\">",
-            BgColor);
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
+            Gbl.RowEvenOdd);
    Usr_PutCheckboxToSelectUser (Rol__GUEST_,UsrDat->EncryptedUsrCod,false);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -2628,18 +2625,16 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL);
 
    /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL RIGHT_MIDDLE COLOR%u\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
-            BgColor,NumUsr);
+            Gbl.RowEvenOdd,NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2651,18 +2646,17 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_RestrictLengthMainData (true,UsrDat,MailLink);
 
    /****** Write user's IDs ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
-            BgColor);
+            Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,true,
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
                                     UsrDat->Email[0]  ? MailLink :
                                 	                NULL,
                                     Ins.ShortName,
@@ -2787,7 +2781,6 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    struct Institution Ins;
@@ -2795,15 +2788,13 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    struct Department Dpt;
 
    /***** Start row *****/
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
    fprintf (Gbl.F.Out,"<tr>");
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show guest's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LDEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2812,16 +2803,15 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
      }
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
-            BgColor);
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">",
+            Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,true);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,true,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the guest *****/
    if (UsrDat->Tch.CtrCod > 0)
@@ -2829,7 +2819,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
       Ctr_GetDataOfCentreByCod (&Ctr);
      }
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
 	                                      "&nbsp;",
 	             NULL,true,false);
@@ -2838,39 +2828,39 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       Dpt.DptCod = UsrDat->Tch.DptCod;
       Dpt_GetDataOfDepartmentByCod (&Dpt);
      }
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 	                                      "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 	                                     "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 	                                          "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->LocalAddress[0] ? UsrDat->LocalAddress :
 	                                       "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->LocalPhone[0] ? UsrDat->LocalPhone :
 	                                     "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->FamilyAddress[0] ? UsrDat->FamilyAddress :
 	                                        "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->FamilyPhone[0] ? UsrDat->FamilyPhone :
 	                                      "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->OriginPlace[0] ? UsrDat->OriginPlace :
 	                                      "&nbsp;",
 	             NULL,true,false);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
 	                                      "&nbsp;",
 	             NULL,true,false);
@@ -2887,7 +2877,6 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    unsigned NumGrpTyp,NumField;
@@ -2900,15 +2889,13 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Start row *****/
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
    fprintf (Gbl.F.Out,"<tr>");
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2917,46 +2904,45 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      }
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
-            BgColor);
+            Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowData,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the student *****/
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->LocalAddress[0] ? (ShowData ? UsrDat->LocalAddress  :
 	                                                   "********") :
 	                                       "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->LocalPhone[0] ? (ShowData ? UsrDat->LocalPhone    :
                 	                                 "********") :
                 	                     "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->FamilyAddress[0] ? (ShowData ? UsrDat->FamilyAddress :
                 	                                    "********") :
                 	                        "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->FamilyPhone[0] ? (ShowData ? UsrDat->FamilyPhone   :
                 	                                  "********") :
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->OriginPlace[0] ? (ShowData ? UsrDat->OriginPlace   :
                 	                                  "********") :
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday   :
                 	                                  "********") :
                 	                      "&nbsp;",
@@ -2971,7 +2957,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
          if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
            {
             Grp_GetNamesGrpsStdBelongsTo (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,UsrDat->UsrCod,GroupNames);
-            Usr_WriteUsrData (BgColor,GroupNames,NULL,true,UsrDat->Accepted);
+            Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],GroupNames,NULL,true,UsrDat->Accepted);
            }
 
       /***** Fields of the record dependientes of the course *****/
@@ -2989,7 +2975,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
            }
          else
             Text[0] = '\0';
-         Usr_WriteUsrData (BgColor,Text,NULL,false,UsrDat->Accepted);
+         Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],Text,NULL,false,UsrDat->Accepted);
 
          /* Free structure that stores the query result */
          DB_FreeMySQLResult (&mysql_res);
@@ -3109,7 +3095,6 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
 
 void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    struct Institution Ins;
@@ -3121,14 +3106,12 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    struct Department Dpt;
 
    /***** Start row *****/
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
    fprintf (Gbl.F.Out,"<tr>");
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3137,18 +3120,17 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
      }
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
-            BgColor);
+            Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,ID_ICanSeeTeacherID (UsrDat));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowData,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of teacher's data *****/
    if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -3156,7 +3138,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       Ctr.CtrCod = UsrDat->Tch.CtrCod;
       Ctr_GetDataOfCentreByCod (&Ctr);
      }
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
                 	                                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
@@ -3165,15 +3147,15 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       Dpt.DptCod = UsrDat->Tch.DptCod;
       Dpt_GetDataOfDepartmentByCod (&Dpt);
      }
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
                 	                                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
                 	                                   "&nbsp;",
                      NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
                      (ShowData && UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
                 	                                        "&nbsp;",
                      NULL,true,UsrDat->Accepted);
@@ -3189,29 +3171,25 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
 
    /***** Start row *****/
-   BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE COLOR%u\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
-            BgColor,NumUsr);
+            Gbl.RowEvenOdd,NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show administrator's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3223,18 +3201,17 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_RestrictLengthMainData (true,UsrDat,MailLink);
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
-            BgColor);
+            Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,true,
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
                                     UsrDat->Email[0] ? MailLink :
                                 	               NULL,
                                     Ins.ShortName,

@@ -112,20 +112,19 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
    struct MarksProperties Marks;
 
    if (FileType == Brw_IS_FOLDER)
-      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
-                         "<td style=\"background-color:%s;\"></td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
+                         "<td class=\"COLOR%u\"></td>",
+               Gbl.RowEvenOdd,
+               Gbl.RowEvenOdd);
    else	// File or link
      {
       /***** Get number of rows in header or footer *****/
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormNoWrap[Gbl.Prefs.Theme],
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+               Gbl.RowEvenOdd);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
@@ -138,22 +137,21 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"%s\" style=\"background-color:%s\""
+                         " class=\"%s COLOR%u\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Txt_TABLE_Header,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
                Gbl.FileBrowser.InputStyle,
-               Gbl.ColorRows[Gbl.RowEvenOdd],
+               Gbl.RowEvenOdd,
                Gbl.FormId);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write the number of rows of footer *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormNoWrap[Gbl.Prefs.Theme],
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+               Gbl.RowEvenOdd);
 
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
@@ -166,12 +164,12 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"%s\" style=\"background-color:%s\""
+                         " class=\"%s COLOR%u\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Txt_TABLE_Footer,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.FileBrowser.InputStyle,
-               Gbl.ColorRows[Gbl.RowEvenOdd],
+               Gbl.RowEvenOdd,
                Gbl.FormId);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       Act_FormEnd ();

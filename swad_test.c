@@ -894,20 +894,18 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT_LIGHT RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
 	                    "%u.&nbsp;"
 	                    "</td>"
-	                    "<td style=\"background-color:%s;\">"
+	                    "<td class=\"COLOR%u\">"
 	                    "</td>"
-	                    "<td class=\"DAT_LIGHT LEFT_TOP\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
-                  Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
-                  Gbl.ColorRows[Gbl.RowEvenOdd],
-                  Gbl.ColorRows[Gbl.RowEvenOdd],Txt_Question_removed);
+                  Gbl.RowEvenOdd,NumQst + 1,
+                  Gbl.RowEvenOdd,
+                  Gbl.RowEvenOdd,Txt_Question_removed);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -936,26 +934,23 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
 
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\""
-	              " style=\"background-color:%s;\">"
+	              "<td class=\"DAT_N RIGHT_TOP COLOR%u\">"
 	              "%u.&nbsp;"
 	              "</td>",
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             NumQst + 1);
 
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">"
 	              "%s&nbsp;"
 	              "</td>",
-            Gbl.ColorRows[Gbl.RowEvenOdd],
+            Gbl.RowEvenOdd,
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[5]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+            Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
    if (Gbl.CurrentAct == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
@@ -2483,8 +2478,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 
       /* Write icon to remove the question */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"BT%u\">",
-	       Gbl.RowEvenOdd);
+                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActRemTstQst);
       Sta_WriteParamsDatesSeeAccesses ();
       Tst_WriteParamEditQst ();
@@ -2497,8 +2491,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write icon to edit the question */
-      fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
-	       Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActEdiOneTstQst);
       Par_PutHiddenParamLong ("QstCod",QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
@@ -2510,48 +2503,42 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of question */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%lu&nbsp;"
 	                 "</td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],NumRow + 1);
+               Gbl.RowEvenOdd,NumRow + 1);
 
       /* Write question code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],QstCod);
+               Gbl.RowEvenOdd,QstCod);
 
       /* Write the date (row[1] has the date in format YYYYMMDDHHMMSS) */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
       Dat_WriteDate (row[1]);
       fprintf (Gbl.F.Out,"<br />");
       Dat_WriteHourMinute (&row[1][8]);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question tags */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
+	       Gbl.RowEvenOdd,
                Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
       /* Write if shuffle is enabled (row[3]) */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
         {
@@ -2573,9 +2560,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the stem (row[4]), the feedback (row[5]) and the answers */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
@@ -2596,16 +2582,14 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
       /* Write number of times this question has been answered */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%lu"
 	                 "</td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],NumHitsThisQst);
+               Gbl.RowEvenOdd,NumHitsThisQst);
 
       /* Write average score */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
       if (NumHitsThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
                                    (double) NumHitsThisQst);
@@ -2614,17 +2598,15 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write number of times this question has been answered (not blank) */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%lu"
 	                 "</td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],
+               Gbl.RowEvenOdd,
                NumHitsNotBlankThisQst);
 
       /* Write average score (not blank) */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
       if (NumHitsNotBlankThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
                                    (double) NumHitsNotBlankThisQst);
@@ -6231,9 +6213,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
             fprintf (Gbl.F.Out,"<tr>");
 
          /* Write date and time (row[2] holds date and time in YYYYMMDDHHMMSS format) */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 Dat_WriteDate (row[2]);
 	 fprintf (Gbl.F.Out,"&nbsp;");
 	 Dat_WriteHourMinute (&row[2][8]);
@@ -6269,33 +6250,29 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
          setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
          /* Write number of questions */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewExam)
 	    fprintf (Gbl.F.Out,"%u",NumQstsInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write number of questions not blank */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewExam)
 	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Write score */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisExam);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write average score per question */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisExam ? ScoreInThisExam / (double) NumQstsInThisExam :
@@ -6303,9 +6280,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write score over Tst_SCORE_MAX */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-	          ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisExam ? ScoreInThisExam * Tst_SCORE_MAX / (double) NumQstsInThisExam :
@@ -6313,9 +6289,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Link to show this exam */
-	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">",
-		  Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
+		  Gbl.RowEvenOdd);
 	 if (ICanViewExam)
 	   {
 	    Act_FormStart (Gbl.CurrentAct == ActSeeMyTstExa ? ActSeeOneTstExaMe :
@@ -6341,51 +6316,46 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	                                        Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\""
-			 " style=\"background-color:%s;"
-			 " border-style:solid none none none;"
+			 "<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+			 " style=\"border-style:solid none none none;"
 			 " border-width:1px;\">"
 			 "%s: %u"
 			 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
+	       Gbl.RowEvenOdd,
 	       Txt_Visible_exams,NumExamsVisibleByTchs);
 
       /* Write total number of questions */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\""
-	                 " style=\"background-color:%s;"
-	                 " border-style:solid none none none;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+	                 " style=\"border-style:solid none none none;"
 			 " border-width:1px;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQsts);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total number of questions not blank */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\""
-	                 " style=\"background-color:%s;"
-			 " border-style:solid none none none;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+	                 " style=\"order-style:solid none none none;"
 			 " border-width:1px;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total score */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\""
-	                 " style=\"background-color:%s;"
-			 " border-style:solid none none none;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+	                 " style=\"border-style:solid none none none;"
 			 " border-width:1px;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllExams);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write average score per question */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\""
-	                 " style=\"background-color:%s;"
-			 " border-style:solid none none none;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+	                 " style=\"border-style:solid none none none;"
 			 " border-width:1px;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
                   NumTotalQsts ? TotalScoreOfAllExams / (double) NumTotalQsts :
@@ -6393,11 +6363,10 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write score over Tst_SCORE_MAX */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\""
-	                 " style=\"background-color:%s;"
-			 " border-style:solid none none none;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
+	                 " style=\"border-style:solid none none none;"
 			 " border-width:1px;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
                   NumTotalQsts ? TotalScoreOfAllExams * Tst_SCORE_MAX / (double) NumTotalQsts :
@@ -6405,26 +6374,26 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Last cell */
-      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
 			 "</tr>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd);
      }
    else
-      fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
-	                 "<td style=\"background-color:%s;\"></td>"
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
 	                 "</tr>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -6445,9 +6414,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    fprintf (Gbl.F.Out,"<td ");
    if (NumExams)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-	    Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -6458,11 +6426,10 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    fprintf (Gbl.F.Out,"<td ");
    if (NumExams)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
-	    Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
-	                                                           ActSeeRecOneTch);
+	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT");
 
@@ -6707,19 +6674,17 @@ static void Tst_ShowExamTstResult (const char *TstTime)
 	 if (ThisQuestionHasBeenEdited)
 	    /***** Question has been edited *****/
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"DAT_LIGHT RIGHT_TOP\""
-			       " style=\"background-color:%s;\">"
+			       "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
 			       "%u.&nbsp;"
 			       "</td>"
-			       "<td style=\"background-color:%s;\"></td>"
-			       "<td class=\"DAT_LIGHT LEFT_TOP\""
-			       " style=\"background-color:%s;\">"
+			       "<td class=\"COLOR%u\"></td>"
+			       "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
 			       "%s"
 			       "</td>"
 			       "</tr>",
-		     Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
-		     Gbl.ColorRows[Gbl.RowEvenOdd],
-		     Gbl.ColorRows[Gbl.RowEvenOdd],Txt_Question_modified);
+		     Gbl.RowEvenOdd,NumQst + 1,
+		     Gbl.RowEvenOdd,
+		     Gbl.RowEvenOdd,Txt_Question_modified);
 	 else
 	   {
 	    /***** Get the code of question (row[0]) *****/
@@ -6735,19 +6700,17 @@ static void Tst_ShowExamTstResult (const char *TstTime)
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT_LIGHT RIGHT_TOP\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
 	                    "%u.&nbsp;"
 	                    "</td>"
-	                    "<td style=\"background-color:%s;\"></td>"
-	                    "<td class=\"DAT_LIGHT LEFT_TOP\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"COLOR%u\"></td>"
+	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
-                  Gbl.ColorRows[Gbl.RowEvenOdd],NumQst + 1,
-                  Gbl.ColorRows[Gbl.RowEvenOdd],
-                  Gbl.ColorRows[Gbl.RowEvenOdd],Txt_Question_removed);
+                  Gbl.RowEvenOdd,NumQst + 1,
+                  Gbl.RowEvenOdd,
+                  Gbl.RowEvenOdd,Txt_Question_removed);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

@@ -1318,10 +1318,13 @@ void Prf_ShowRankingFigure (const char *Query)
 	 /***** Show row *****/
 	 fprintf (Gbl.F.Out,"<tr>");
          Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"height:40px;"
-	                    " background-color:%s;\">%ld</td>"
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
+	                    " style=\"height:40px;\">"
+	                    "%ld"
+	                    "</td>"
 			    "</tr>",
-		  Gbl.ColorRows[Gbl.RowEvenOdd],Figure);
+		  Gbl.RowEvenOdd,
+		  Figure);
 	}
 
       fprintf (Gbl.F.Out,"</table>");
@@ -1460,9 +1463,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 /***** Show row *****/
 	 fprintf (Gbl.F.Out,"<tr>");
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"height:40px;"
-	                    " background-color:%s;\">",
-	          Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
+	                    " style=\"height:40px;\">",
+	          Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (NumClicksPerDay);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -1489,15 +1492,15 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX+1];
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE\" style=\"height:40px;"
-	              " background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
+	              " style=\"height:40px;\">"
 		      "#%u"
 		      "</td>"
-                      "<td style=\"width:28px; height:40px;"
-	              " background-color:%s;\">",
-	    Gbl.ColorRows[Gbl.RowEvenOdd],
+                      "<td class=\"COLOR%u\""
+                      " style=\"width:28px; height:40px;\">",
+	    Gbl.RowEvenOdd,
 	    Rank,
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+            Gbl.RowEvenOdd);
 
    /***** Check if I can see the public profile *****/
    if (Visible)
@@ -1510,8 +1513,8 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
      }
 
    fprintf (Gbl.F.Out,"</td>"
-		      "<td style=\"height:40px; background-color:%s;\">",
-            Gbl.ColorRows[Gbl.RowEvenOdd]);
+		      "<td class=\"COLOR%u\" style=\"height:40px;\">",
+            Gbl.RowEvenOdd);
 
    /***** Put form to go to public profile *****/
    if (Visible)

@@ -1999,16 +1999,14 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       /***** Show logo and name of this degree *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT RIGHT_MIDDLE\""
-                         " style=\"background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
                          "%u"
                          "</td>",
-               Gbl.ColorRows[Gbl.RowEvenOdd],++NumDegsNotEmpty);
+               Gbl.RowEvenOdd,++NumDegsNotEmpty);
 
       /***** Show logo and name of this degree *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE COLOR%u\">",
+               Gbl.RowEvenOdd);
       if (SeeOrPrint == Pho_DEGREES_SEE)
          fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   Deg.WWW,Deg.FullName);
@@ -2026,9 +2024,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
         {
          /***** Show average photo of students belonging to this degree *****/
          Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">",
-                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
+                  Gbl.RowEvenOdd);
          if (Gbl.Usrs.Listing.WithPhotos)
             Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
          else

@@ -1613,39 +1613,34 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+	                 "<td class=\"LOG RIGHT_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],NumRow);
+	       Gbl.RowEvenOdd,NumRow);
 
       /* Write the user's ID if user is a student */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,(RoleFromLog == Rol_STUDENT));
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the first name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],UsrDat.FullName);
+	       Gbl.RowEvenOdd,UsrDat.FullName);
 
       /* Write the user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
+	       Gbl.RowEvenOdd,
 	       RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 		                             "?");
 
       /* Write the date (in row[3] is the date in YYYYMMDDHHMMSS format) */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       Dat_WriteDate (row[3]);
       fprintf (Gbl.F.Out,"&nbsp;");
       Dat_WriteHourMinute (&row[3][8]);
@@ -1656,22 +1651,19 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       if (sscanf (row[4],"%ld",&ActCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong action code.");
       if (ActCod >= 0)
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">"
                             "%s&nbsp;"
                             "</td>",
-	          Gbl.ColorRows[Gbl.RowEvenOdd],
+	          Gbl.RowEvenOdd,
 	          Act_GetActionTextFromDB (ActCod,ActTxt));
       else
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">"
                             "?&nbsp;"
                             "</td>",
-	          Gbl.ColorRows[Gbl.RowEvenOdd]);
+	          Gbl.RowEvenOdd);
       /* Write the comments of the access */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
-               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
+               Gbl.RowEvenOdd);
       Sta_WriteLogComments (LogCod);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -1770,16 +1762,14 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+	                 "<td class=\"LOG RIGHT_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],NumRow);
+	       Gbl.RowEvenOdd,NumRow);
 
       /* Show the photo */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
@@ -1787,25 +1777,22 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,(UsrDat.RoleInCurrentCrsDB == Rol_STUDENT));
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],UsrDat.FullName);
+	       Gbl.RowEvenOdd,UsrDat.FullName);
 
       /* Write user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-	       Gbl.ColorRows[Gbl.RowEvenOdd],
+	       Gbl.RowEvenOdd,
 	       Txt_ROLES_SINGUL_Abc[UsrDat.RoleInCurrentCrsDB][UsrDat.Sex]);
 
       /* Write the number of clicks */
@@ -1820,9 +1807,8 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
         }
       else
          BarWidth = 0;
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
-	       Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
       if (BarWidth)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
 	                    " alt=\"\" title=\"\""

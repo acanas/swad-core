@@ -547,9 +547,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
      {
       if (NewItem)
-         fprintf (Gbl.F.Out,"<td colspan=\"5\" style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">"
                             "</td>",
-	          Gbl.ColorRows[Gbl.RowEvenOdd]);
+	          Gbl.RowEvenOdd);
       else
 	{
 	 /***** Icon to remove the row *****/
@@ -681,32 +681,32 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
      }
 
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
-      Syl_PutFormItemSyllabus (InfoType,NewItem,NumItem,Level,CodItem,Text,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Syl_PutFormItemSyllabus (InfoType,NewItem,NumItem,Level,CodItem,Text,
+                               Gbl.ColorRows[Gbl.RowEvenOdd]);
    else
      {
       /***** Indent depending on the level *****/
       if (Level > 1)
-	 fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"background-color:%s;\">"
+	 fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">"
 	                    "</td>",
-                  Level - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
+                  Level - 1,Gbl.RowEvenOdd);
 
       /***** Code of the item *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"width:%dpx; background-color:%s;\">",
-               StyleSyllabus[Level],
-               Level * Syl_WIDTH_NUM_SYLLABUS,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\""
+	                 " style=\"width:%dpx;\">",
+               StyleSyllabus[Level],Gbl.RowEvenOdd,
+               Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
       fprintf (Gbl.F.Out,"%s&nbsp;</td>",StrItemCod);
 
       /***** Text of the item *****/
-      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP COLOR%u\">"
                          "%s"
                          "</td>",
                LstItemsSyllabus.NumLevels - Level + 1,
                StyleSyllabus[Level],
-               Gbl.ColorRows[Gbl.RowEvenOdd],
+               Gbl.RowEvenOdd,
                Text);
      }
 
