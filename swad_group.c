@@ -1478,10 +1478,10 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\"");
+	                 "<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
-	 fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">"
+	 fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
                Grp->GrpCod);
       if (Cod > 0)	// Cod == -1L means new assignment or survey
@@ -1664,10 +1664,10 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
       /* Put icon to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\"");
+	                 "<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
-         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">"
+         fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"");
 
       // If user is a student and the enrollment is single
@@ -1774,10 +1774,10 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\"");
+	                 "<td class=\"LEFT_MIDDLE");
       if (UsrBelongsToThisGroup)
-	 fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">"
+	 fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"checkbox\" name=\"GrpCod%ld\" value=\"%ld\"",
                GrpTyp->GrpTypCod,Grp->GrpCod);
       if (UsrBelongsToThisGroup)
@@ -1828,10 +1828,10 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
       /* Put checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\"");
+	                 "<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
-         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">"
+         fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
                Grp->GrpCod);
       if (Gbl.Usrs.ClassPhoto.AllGroups)
@@ -1959,10 +1959,10 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
 	                          Txt_Group_X_closed,
             Grp->GrpName);
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:12px;");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," background-color:%s",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,"\">"
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\" style=\"width:12px;\">"
 	              "<img src=\"%s/%s_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
@@ -1973,10 +1973,10 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
    if (Highlight)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,">"
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\">"
 	              "%s&nbsp;"
 	              "</td>",
 	    Grp->GrpName);
@@ -1984,26 +1984,26 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    /***** Max. number of students in this group *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
    if (Highlight)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\">");
    Grp_WriteMaxStdsGrp (Grp->MaxStudents);
    fprintf (Gbl.F.Out,"&nbsp;"
 	              "</td>");
 
    /***** Current number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,">"
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\">"
 	              "%d"
 	              "</td>",
 	    Grp->NumStudents);
 
    /***** Vacants in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
-      fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," LIGHT_BLUE");
+   fprintf (Gbl.F.Out,"\">");
    if (Grp->MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP)
       fprintf (Gbl.F.Out,"-");
    else

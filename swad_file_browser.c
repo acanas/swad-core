@@ -5552,11 +5552,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
    if (FileType == Brw_IS_FOLDER)
      {
       /***** Start of cell *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\" style=\"width:99%%;",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE",
                Gbl.FileBrowser.TxtStyle);
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-         fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
-      fprintf (Gbl.F.Out,"\">");
+         fprintf (Gbl.F.Out," LIGHT_GREEN");
+      fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">");
 
       /***** Form to rename folder *****/
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
@@ -5613,11 +5613,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
      }
    else	// File or link
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\" style=\"width:99%%;",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE",
                Gbl.FileBrowser.TxtStyle);
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-         fprintf (Gbl.F.Out," background-color:%s;",LIGHT_GREEN);
-      fprintf (Gbl.F.Out,"\">&nbsp;");
+         fprintf (Gbl.F.Out," LIGHT_GREEN");
+      fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">&nbsp;");
 
       Act_FormStart (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       switch (Gbl.FileBrowser.Type)
@@ -10934,7 +10934,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    const char *CtrShortName;
    const char *DegShortName;
    const char *CrsShortName;
-   char BgColor[32];
+   const char *BgColor;
    const char *Title;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
@@ -10978,10 +10978,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       GrpCod = Str_ConvertStrCodToLongCod (row[10]);
 
       /***** Set row color *****/
-      if (CrsCod > 0 && CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-	 strcpy (BgColor,"VERY_LIGHT_BLUE");
-      else
-	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+      BgColor = (CrsCod > 0 &&
+	         CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
+                                                        Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /***** Write number of document in this search *****/
       fprintf (Gbl.F.Out,"<tr>"

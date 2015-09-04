@@ -98,7 +98,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    unsigned NumInss;
    unsigned NumIns;
    struct Institution Ins;
-   char BgColor[32];
+   const char *BgColor;
 
    /***** Get institutions with pending centres *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -151,10 +151,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
          /* Get institution code (row[0]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Ins.InsCod == Gbl.CurrentIns.Ins.InsCod)
-	    strcpy (BgColor,"VERY_LIGHT_BLUE");
-	 else
-	    sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+         BgColor = (Ins.InsCod == Gbl.CurrentIns.Ins.InsCod) ? "LIGHT_BLUE" :
+                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of institution */
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
@@ -510,15 +508,13 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    extern const char *Txt_Go_to_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClass;
-   char BgColor[32];
+   const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
    TxtClass = (Ins->Status & Ins_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)
-      strcpy (BgColor,"VERY_LIGHT_BLUE");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+   BgColor = (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod) ? "LIGHT_BLUE" :
+                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of institution in this list *****/
    fprintf (Gbl.F.Out,"<tr>"

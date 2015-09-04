@@ -1265,7 +1265,7 @@ static void Crs_ListCoursesForSeeing (void)
    unsigned Year;
    unsigned NumCrs;
    const char *TxtClass;
-   char BgColor[32];
+   const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
    /***** Write heading *****/
@@ -1288,10 +1288,8 @@ static void Crs_ListCoursesForSeeing (void)
            {
             TxtClass = (Crs->Status & Crs_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
         	                                                "DAT";
-            if (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-	       strcpy (BgColor,"VERY_LIGHT_BLUE");
-	    else
-	       sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+            BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
+                                                                   Gbl.ColorRows[Gbl.RowEvenOdd];
 
             /* Put green tip if course has users */
             fprintf (Gbl.F.Out,"<tr>"
@@ -3259,7 +3257,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    unsigned NumTchs;
    const char *Style;
    const char *StyleNoBR;
-   char BgColor[32];
+   const char *BgColor;
    bool Accepted;
 
    /*
@@ -3296,10 +3294,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Style = "DAT";
       StyleNoBR = "DAT_NOBR";
      }
-   if (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-      strcpy (BgColor,"VERY_LIGHT_BLUE");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+   BgColor = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
+                                                     Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");

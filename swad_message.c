@@ -384,9 +384,7 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 
    /***** Textarea with users' @nicknames, e-mails or IDs *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\"",
-            VERY_LIGHT_BLUE);
+	              "<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\"");
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out," colspan=\"%u\">%s:",

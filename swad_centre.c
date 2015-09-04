@@ -108,7 +108,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Centre Ctr;
-   char BgColor[32];
+   const char *BgColor;
 
    /***** Get centres with pending degrees *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -161,10 +161,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          /* Get centre code (row[0]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Ctr.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
-            strcpy (BgColor,"VERY_LIGHT_BLUE");
-         else
-            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+         BgColor = (Ctr.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? "LIGHT_BLUE" :
+                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of centre */
          Ctr_GetDataOfCentreByCod (&Ctr);
@@ -577,7 +575,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
    const char *TxtClass;
-   char BgColor[32];
+   const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
    /***** Get data of place of this centre *****/
@@ -586,10 +584,8 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    TxtClass = (Ctr->Status & Ctr_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
-      strcpy (BgColor,"VERY_LIGHT_BLUE");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+   BgColor = (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? "LIGHT_BLUE" :
+                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of centre in this list *****/
    fprintf (Gbl.F.Out,"<tr>"

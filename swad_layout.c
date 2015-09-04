@@ -274,8 +274,7 @@ void Lay_WriteStartOfPage (void)
      }
 
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\">"
-		      "<div id=\"CENTRAL_ZONE\""
-		      " style=\"background-color:%s;\">"
+		      "<div id=\"CENTRAL_ZONE\" class=\"%s\">"
 		      "<table class=\"CENTER_TOP\" style=\"width:100%%;\">"
 		      "<tr>",
 	    ColspanCentralPart,

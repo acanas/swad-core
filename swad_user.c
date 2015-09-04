@@ -2677,7 +2677,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   char BgColor[32];
+   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = false;
@@ -2694,10 +2694,8 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    if (PutCheckBoxToSelectUsr)
       UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    // Two colors are used alternatively to better distinguish the rows
-   if (UsrIsTheMsgSender)
-      strcpy (BgColor,"LIGHT_GREEN");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+   BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
+                                 Gbl.ColorRows[Gbl.RowEvenOdd];
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
@@ -2993,11 +2991,12 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   char BgColor[32];
+   const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   bool UsrIsTheMsgSender;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
+   bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
+	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
    struct Institution Ins;
    bool ShowEmail = UsrDat->Accepted ||
                     Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
@@ -3007,12 +3006,8 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
-   UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
-	               (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   if (UsrIsTheMsgSender)
-      strcpy (BgColor,"LIGHT_GREEN");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);	// Two colors are used alternatively to better distinguish the rows
+   BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
+                                 Gbl.ColorRows[Gbl.RowEvenOdd];	// Two colors are used alternatively to better distinguish the rows
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
@@ -4870,9 +4865,8 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
    Usr_Sex_t Sex;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"%u\" class=\"TIT_TBL LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
-            Usr_GetColumnsForSelectUsrs (),VERY_LIGHT_BLUE);
+	              "<td colspan=\"%u\" class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">",
+            Usr_GetColumnsForSelectUsrs ());
    if (Role == Rol_STUDENT)
      {
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_STDS\" value=\"\" onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
@@ -5012,22 +5006,19 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>",
-		  VERY_LIGHT_BLUE);
+	                    "</td>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
         	               "</td>",
-                     VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
+                     Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -5098,22 +5089,19 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>",
-		  VERY_LIGHT_BLUE);
+	                    "</td>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
         	               "</td>",
-                     VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
+                     Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -5172,22 +5160,19 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>",
-		  VERY_LIGHT_BLUE);
+	                    "</td>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
         	               "</td>",
-                     VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
+                     Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -5290,11 +5275,10 @@ void Usr_ListAllDataGsts (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
                             "</td>",
-                  VERY_LIGHT_BLUE,FieldNames[NumCol]);
+                  FieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -5437,11 +5421,10 @@ void Usr_ListAllDataStds (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
                             "</td>",
-                  VERY_LIGHT_BLUE,FieldNames[NumCol]);
+                  FieldNames[NumCol]);
 
       /* 2. Columns for the groups */
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -5451,11 +5434,10 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
                  NumGrpTyp++)
                if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
-                  fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                	             " style=\"background-color:%s;\">"
+                  fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                 	             "%s %s&nbsp;"
                 	             "</td>",
-                           VERY_LIGHT_BLUE,Txt_Group,
+                           Txt_Group,
                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 
          if (Gbl.CurrentCrs.Records.LstFields.Num)
@@ -5464,28 +5446,25 @@ void Usr_ListAllDataStds (void)
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	                  " style=\"background-color:%s;\">"
+               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	                  "%s&nbsp;"
         	                  "</td>",
-                        VERY_LIGHT_BLUE,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
+                        Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
+
             /* 4. Visibility type for the record fields that depend on the course, in other row */
             fprintf (Gbl.F.Out,"</tr><tr>");
             for (NumCol = 0;
                  NumCol < NumColumnsCardAndGroups;
                  NumCol++)
                if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want it in listing
-                  fprintf (Gbl.F.Out,"<td style=\"background-color:%s;\">"
-                	             "</td>",
-                           LIGHTEST_BLUE);
+                  fprintf (Gbl.F.Out,"<td class=\"VERY_LIGHT_BLUE\">"
+                	             "</td>");
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	                  " style=\"background-color:%s;\">"
+               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE VERY_LIGHT_BLUE\">"
         	                  "(%s)&nbsp;"
         	                  "</td>",
-                        LIGHTEST_BLUE,
                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
            }
         }
@@ -5548,21 +5527,20 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    /***** Heading row with column names *****/
    /* Start row and first column used for selection */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                      " style=\"background-color:%s;\">"
+                      "<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                       "&nbsp;"
-                      "</td>",
-            VERY_LIGHT_BLUE);
+                      "</td>");
+
    /* Columns for the data */
    for (NumCol = 0;
         NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
                             "</td>",
-                  VERY_LIGHT_BLUE,Usr_UsrDatMainFieldNames[NumCol]);
+                  Usr_UsrDatMainFieldNames[NumCol]);
+
    /* End row */
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -5672,11 +5650,10 @@ void Usr_ListAllDataTchs (void)
 	                                           1);
            NumCol < NumColumns;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
                             "</td>",
-                  VERY_LIGHT_BLUE,FieldNames[NumCol]);
+                  FieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -5763,12 +5740,11 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
                             "</td>",
-                  VERY_LIGHT_BLUE,
                   Usr_UsrDatMainFieldNames[NumCol]);
+
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
 
@@ -5904,11 +5880,10 @@ void Usr_ListDataAdms (void)
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
         	               "</td>",
-                     VERY_LIGHT_BLUE,FieldNames[NumCol]);
+                     FieldNames[NumCol]);
 
       /* End row */
       fprintf (Gbl.F.Out,"</tr>");
@@ -6939,16 +6914,16 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                      Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
          /***** Begin user's cell *****/
-         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM\"");
+         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM");
          if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
              UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
            {
             UsrIsTheMsgSender = true;
-            fprintf (Gbl.F.Out," style=\"background-color:%s;\"",LIGHT_GREEN);
+            fprintf (Gbl.F.Out," LIGHT_GREEN");
            }
          else
             UsrIsTheMsgSender = false;
-         fprintf (Gbl.F.Out,">");
+         fprintf (Gbl.F.Out,"\">");
 
          /***** Checkbox to select this user *****/
          if (PutCheckBoxToSelectUsr)

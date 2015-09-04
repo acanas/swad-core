@@ -542,9 +542,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
    /***** Table start *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\""
-	              " style=\"border-spacing:1px;"
-	              " margin-left:auto; margin-right:auto;"
-	              " background-color:#4D88A1;\">");
+	              " style=\"margin:0 auto; border-spacing:1px;\">");
 
    /***** Write table heading *****/
    switch (IndicatorsLayout)

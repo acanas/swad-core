@@ -146,7 +146,7 @@ static void Tab_DrawTabsDeskTop (void)
       if (ICanViewTab || NumTab > TabCrs)	// Don't show the first hidden tabs
 	{
 	 /* Form, icon (at top) and text (at bottom) of the tab */
-	 fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"background-color:%s;\">",
+	 fprintf (Gbl.F.Out,"<li class=\"%s %s\">",
 		  NumTab == Gbl.CurrentTab ? "TAB_ON" :
 					     "TAB_OFF",
 		  NumTab == Gbl.CurrentTab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
@@ -315,7 +315,7 @@ void Tab_DrawBreadcrumb (void)
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_ClassTabOn[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<div class=\"TAB_ON\" style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<div class=\"TAB_ON %s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
 
    /***** Home *****/

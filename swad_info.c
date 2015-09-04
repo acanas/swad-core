@@ -937,10 +937,10 @@ void Inf_FormsToSelSendInfo (void)
      {
       /* Select info source */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT LEFT_TOP\"");
+	                 "<td class=\"DAT LEFT_TOP");
       if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">");
+         fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">");
       Act_FormStart (Inf_ActionsSelecInfoSrc[InfoType]);
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"InfoSrc\" value=\"%u\"",
 	       (unsigned) InfoSrc);
@@ -952,10 +952,10 @@ void Inf_FormsToSelSendInfo (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Form for this info source */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\"");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
       if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," style=\"background-color:%s;\"",VERY_LIGHT_BLUE);
-      fprintf (Gbl.F.Out,">"
+         fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
 	                 "<span class=\"TIT\">%s<br /></span>",
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       if (Txt_INFO_SRC_HELP[InfoSrc])

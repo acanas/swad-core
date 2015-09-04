@@ -157,7 +157,7 @@ void Deg_SeeDegWithPendingCrss (void)
    unsigned NumDegs;
    unsigned NumDeg;
    struct Degree Deg;
-   char BgColor[32];
+   const char *BgColor;
 
    /***** Get degrees with pending courses *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -211,10 +211,8 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Get degree code (row[0]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Deg.DegCod == Gbl.CurrentDeg.Deg.DegCod)
-            strcpy (BgColor,"VERY_LIGHT_BLUE");
-         else
-            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+         BgColor = (Deg.DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
+                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of degree */
          Deg_GetDataOfDegreeByCod (&Deg);
@@ -1065,7 +1063,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
    extern const char *Txt_Direct_authentication_allowed;
    extern const char *Txt_Direct_authentication_not_allowed;
    unsigned NumDegTyp;
-   char BgColor[32];
+   const char *BgColor;
 
    Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
 
@@ -1077,10 +1075,9 @@ static void Deg_ListDegreeTypesForSeeing (void)
 	NumDegTyp < Gbl.Degs.DegTypes.Num;
 	NumDegTyp++)
      {
-      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod == Gbl.CurrentDegTyp.DegTyp.DegTypCod)
-	 strcpy (BgColor,"VERY_LIGHT_BLUE");
-      else
-	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+      BgColor = (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod ==
+	         Gbl.CurrentDegTyp.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
+                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Put green tip if degree type has degrees */
       fprintf (Gbl.F.Out,"<tr>"
@@ -1242,7 +1239,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    struct DegreeType DegTyp;
    const char *TxtClass;
-   char BgColor[32];
+   const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
    /***** Get data of type of degree of this degree *****/
@@ -1252,10 +1249,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    TxtClass = (Deg->Status & Deg_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)
-      strcpy (BgColor,"VERY_LIGHT_BLUE");
-   else
-      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+   BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
+                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Put green tip if degree has courses *****/
    fprintf (Gbl.F.Out,"<tr>"

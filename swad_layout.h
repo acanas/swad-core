@@ -33,17 +33,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-// Colors used in headers, backgrounds, etc.
-#define YELLOW_BACKGROUND_MSG	"#FFFDB9"
-#define DARK_GRAY		"#404040"
-#define DARK_BLUE		"#8CBCCE"
-#define MEDIUM_BLUE		"#AFD1DD"
-#define LIGHT_BLUE		"#C0DAE4"
-#define VERY_LIGHT_BLUE		"#DDECF1"
-#define LIGHTEST_BLUE		"#EAF3F6"
-#define LIGHT_GREEN		"#C0FF40"
-#define LIGHTEST_GREEN		"#F5FFD7"
-
 #define Lay_MAX_BYTES_ALERT (16*1024)		// Max. size for alert message
 // Important: the size of alert message must be enough large to store the longest message.
 

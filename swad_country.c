@@ -94,7 +94,7 @@ void Cty_SeeCtyWithPendingInss (void)
    unsigned NumCtys;
    unsigned NumCty;
    struct Country Cty;
-   char BgColor[32];
+   const char *BgColor;
 
    /***** Get countries with pending institutions *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -139,10 +139,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Get country code (row[0]) */
          Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Cty.CtyCod == Gbl.CurrentCty.Cty.CtyCod)
-            strcpy (BgColor,"VERY_LIGHT_BLUE");
-         else
-            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+         BgColor = (Cty.CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
+                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of country */
          Cty_GetDataOfCountryByCod (&Cty);
@@ -485,7 +483,7 @@ void Cty_ListCountries2 (void)
    unsigned NumInssWithCountry = 0;
    unsigned NumUsrsInOtherCtys;
    unsigned NumInssInOtherCtys;
-   char BgColor[32];
+   const char *BgColor;
 
    /***** Put link (form) to edit countries *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -531,10 +529,8 @@ void Cty_ListCountries2 (void)
 	NumCty < Gbl.Ctys.Num;
 	NumCty++)
      {
-      if (Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod)
-	 strcpy (BgColor,"VERY_LIGHT_BLUE");
-      else
-	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+      BgColor = (Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
+                                                                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /***** Country map (and link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -720,7 +716,6 @@ void Cty_WriteScriptGoogleGeochart (void)
    extern const char *Txt_Country_NO_HTML;
    extern const char *Txt_Users_NO_HTML;
    extern const char *Txt_Institutions_NO_HTML;
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
    unsigned NumCty;
    unsigned NumUsrsWithCountry = 0;
    unsigned NumCtysWithUsrs = 0;
@@ -760,15 +755,13 @@ void Cty_WriteScriptGoogleGeochart (void)
                       "	var options = {\n"
                       "		width:500,\n"
                       "		height:300,\n"
-                      "		backgroundColor:'%s',\n"
+                      "		backgroundColor:'white',\n"
                       "		datalessRegionColor:'white',\n"
-                      "		colorAxis:{colors:['%s','black'],minValue:0,maxValue:%u}};\n"
+                      "		colorAxis:{colors:['black','black'],minValue:0,maxValue:%u}};\n"
                       "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
                       "	chart.draw(data, options);\n"
                       "	};\n"
                       "</script>\n",
-            The_TabOnBgColors[Gbl.Prefs.Theme],
-            The_TabOnBgColors[Gbl.Prefs.Theme],
             NumCtysWithUsrs ? (unsigned) pow (10.0,ceil (log10 (2.0 * (double) NumUsrsWithCountry /
                                                                       (double) NumCtysWithUsrs))) :
         	              0);	// colorAxis.maxValue = 2*Average_number_of_users
