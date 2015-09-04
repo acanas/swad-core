@@ -551,324 +551,267 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
      {
       case Ind_INDICATORS_BRIEF:
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td colspan=\"11\" class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"11\" class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td rowspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(A) %s"
                             "</td>"
-                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(B) %s"
                             "</td>"
-                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(C) %s"
                             "</td>"
-                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(D) %s"
                             "</td>"
-                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(E) %s"
                             "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
-                            "%s"
-                            "</td>"
-
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
-                            "%s"
-                            "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
-                            "%s"
-                            "</td>"
-
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
-                            "%s"
-                            "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
+                            "%s"
+                            "</td>"
+
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
+                            "%s"
+                            "</td>"
+
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
+                            "%s"
+                            "</td>"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
                             "</tr>",
-                  Gbl.ColorRows[0],Txt_Degree,
-                  Gbl.ColorRows[0],Txt_Course,
-                  Gbl.ColorRows[0],Txt_Institutional_BR_code,
-                  Gbl.ColorRows[0],Txt_Web_page_of_the_course,
-                  Gbl.ColorRows[0],Txt_Indicators,
+                  Txt_Degree,
+                  Txt_Course,
+                  Txt_Institutional_BR_code,
+                  Txt_Web_page_of_the_course,
+                  Txt_Indicators,
 
-                  Gbl.ColorRows[0],Txt_No_INDEX,
-                  Gbl.ColorRows[0],Txt_Syllabus_of_the_course,
-                  Gbl.ColorRows[0],Txt_Guided_academic_assignments,
-                  Gbl.ColorRows[0],Txt_Online_tutoring,
-                  Gbl.ColorRows[0],Txt_Materials,
-                  Gbl.ColorRows[0],Txt_Assessment_criteria,
+                  Txt_No_INDEX,
+                  Txt_Syllabus_of_the_course,
+                  Txt_Guided_academic_assignments,
+                  Txt_Online_tutoring,
+                  Txt_Materials,
+                  Txt_Assessment_criteria,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
+                  Txt_YES,
+                  Txt_NO,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
+                  Txt_YES,
+                  Txt_NO,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
+                  Txt_YES,
+                  Txt_NO,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
+                  Txt_YES,
+                  Txt_NO,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO);
+                  Txt_YES,
+                  Txt_NO);
          break;
       case Ind_INDICATORS_FULL:
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"3\" class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td colspan=\"24\" class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"24\" class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td rowspan=\"2\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td rowspan=\"2\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(A) %s"
                             "</td>"
-                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(B) %s"
                             "</td>"
-                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"5\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(C) %s"
                             "</td>"
-                            "<td colspan=\"4\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"4\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(D) %s"
                             "</td>"
-                            "<td colspan=\"4\" class=\"TIT_TBL CENTER_TOP\""
-                            " style=\"background-color:%s;\">"
+                            "<td colspan=\"4\" class=\"TIT_TBL CENTER_TOP COLOR0\">"
                             "(E) %s"
                             "</td>"
                             "</tr>"
                             "<tr>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL RIGHT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
 
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL CENTER_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
-                            "<td class=\"TIT_TBL LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+                            "<td class=\"TIT_TBL LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</td>"
                             "</tr>",
-                  Gbl.ColorRows[0],Txt_Degree,
-                  Gbl.ColorRows[0],Txt_Course,
-                  Gbl.ColorRows[0],Txt_Institutional_BR_code,
-                  Gbl.ColorRows[0],Txt_Web_page_of_the_course,
-                  Gbl.ColorRows[0],Txt_Teachers_ABBREVIATION,
-                  Gbl.ColorRows[0],Txt_Students_ABBREVIATION,
-                  Gbl.ColorRows[0],Txt_Indicators,
+                  Txt_Degree,
+                  Txt_Course,
+                  Txt_Institutional_BR_code,
+                  Txt_Web_page_of_the_course,
+                  Txt_Teachers_ABBREVIATION,
+                  Txt_Students_ABBREVIATION,
+                  Txt_Indicators,
 
-                  Gbl.ColorRows[0],Txt_No_INDEX,
-                  Gbl.ColorRows[0],Txt_Syllabus_of_the_course,
-                  Gbl.ColorRows[0],Txt_Guided_academic_assignments,
-                  Gbl.ColorRows[0],Txt_Online_tutoring,
-                  Gbl.ColorRows[0],Txt_Materials,
-                  Gbl.ColorRows[0],Txt_Assessment_criteria,
+                  Txt_No_INDEX,
+                  Txt_Syllabus_of_the_course,
+                  Txt_Guided_academic_assignments,
+                  Txt_Online_tutoring,
+                  Txt_Materials,
+                  Txt_Assessment_criteria,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_INFO_TITLE[Inf_LECTURES],
-                  Gbl.ColorRows[0],Txt_INFO_TITLE[Inf_PRACTICALS],
-                  Gbl.ColorRows[0],Txt_INFO_TITLE[Inf_TEACHING_GUIDE],
+                  Txt_YES,
+                  Txt_NO,
+                  Txt_INFO_TITLE[Inf_LECTURES],
+                  Txt_INFO_TITLE[Inf_PRACTICALS],
+                  Txt_INFO_TITLE[Inf_TEACHING_GUIDE],
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_Assignments,
-                  Gbl.ColorRows[0],Txt_Files_assignments,
-                  Gbl.ColorRows[0],Txt_Files_works,
+                  Txt_YES,
+                  Txt_NO,
+                  Txt_Assignments,
+                  Txt_Files_assignments,
+                  Txt_Files_works,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_Forum_threads,
-                  Gbl.ColorRows[0],Txt_Forum_posts,
-                  Gbl.ColorRows[0],Txt_Messages_sent_by_teachers,
+                  Txt_YES,
+                  Txt_NO,
+                  Txt_Forum_threads,
+                  Txt_Forum_posts,
+                  Txt_Messages_sent_by_teachers,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_No_of_files_in_DOCUM_zones,
-                  Gbl.ColorRows[0],Txt_No_of_files_in_SHARE_zones,
+                  Txt_YES,
+                  Txt_NO,
+                  Txt_No_of_files_in_DOCUM_zones,
+                  Txt_No_of_files_in_SHARE_zones,
 
-                  Gbl.ColorRows[0],Txt_YES,
-                  Gbl.ColorRows[0],Txt_NO,
-                  Gbl.ColorRows[0],Txt_INFO_TITLE[Inf_ASSESSMENT],
-                  Gbl.ColorRows[0],Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+                  Txt_YES,
+                  Txt_NO,
+                  Txt_INFO_TITLE[Inf_ASSESSMENT],
+                  Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
       break;
      }
 

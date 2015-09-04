@@ -2807,7 +2807,8 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
+                                    NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the guest *****/
    if (UsrDat->Tch.CtrCod > 0)
@@ -2914,12 +2915,12 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalAddress[0] ? (ShowData ? UsrDat->LocalAddress  :
+                     UsrDat->LocalAddress[0] ? (ShowData ? UsrDat->LocalAddress :
 	                                                   "********") :
 	                                       "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->LocalPhone[0] ? (ShowData ? UsrDat->LocalPhone    :
+                     UsrDat->LocalPhone[0] ? (ShowData ? UsrDat->LocalPhone :
                 	                                 "********") :
                 	                     "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
@@ -2929,17 +2930,17 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
                 	                        "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->FamilyPhone[0] ? (ShowData ? UsrDat->FamilyPhone   :
+                     UsrDat->FamilyPhone[0] ? (ShowData ? UsrDat->FamilyPhone :
                 	                                  "********") :
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->OriginPlace[0] ? (ShowData ? UsrDat->OriginPlace   :
+                     UsrDat->OriginPlace[0] ? (ShowData ? UsrDat->OriginPlace :
                 	                                  "********") :
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday   :
+                     UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
                 	                                  "********") :
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);

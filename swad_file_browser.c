@@ -5586,10 +5586,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
 	{
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
       	                    " size=\"40\" maxlength=\"40\" value=\"%s\""
-                            " class=\"%s\" style=\"background-color:%s\""
+                            " class=\"%s %s\""
                             " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 		  FileName,Gbl.FileBrowser.InputStyle,
-                  Gbl.FileBrowser.Clipboard.IsThisFile ? LIGHT_GREEN :
+                  Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.FormId);
          Act_FormEnd ();

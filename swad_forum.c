@@ -3219,8 +3219,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    const char *Style;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
    long ThreadInMyClipboard = -1L;
-   bool ThisThreadIsInMyClipboard;
    unsigned Column;
+   const char *BgColor;
 
    /***** Get if there is a thread ready to be moved *****/
    if (ICanMoveThreads)
@@ -3238,14 +3238,13 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       For_GetThrData (&Thr);
       Style = (Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
 	                            "MSG_AUT");
-      ThisThreadIsInMyClipboard = (Thr.ThrCod == ThreadInMyClipboard);
+      BgColor = (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
+                                                      Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP\""
-	                 " style=\"width:14px; background-color:%s;\">",
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-                                           Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                 "<td class=\"RIGHT_TOP %s\" style=\"width:14px;>",
+               BgColor);
       if (Thr.NumMyPosts)
         {
          fprintf (Gbl.F.Out,"<span title=\"");
@@ -3271,13 +3270,11 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Put an icon with thread status *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	                 " style=\"width:24px; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\" style=\"width:24px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />",
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd],
+               BgColor,
 	       Gbl.Prefs.IconsURL,
                Thr.NumUnreadPosts ? "msg-unread" :
         	                    "msg-open",
@@ -3316,10 +3313,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write subject and links to thread pages *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd]);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\">",BgColor);
       PaginationPsts.NumItems = Thr.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
@@ -3342,16 +3336,11 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            Msg_WriteMsgAuthor (&UsrDat,55,9,Style,Thr.Enabled[Order],
-                                ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-                                                            Gbl.ColorRows[Gbl.RowEvenOdd]);
+            Msg_WriteMsgAuthor (&UsrDat,55,9,Style,Thr.Enabled[Order],BgColor);
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-        	               " style=\"background-color:%s;\">",
-                     Style,
-                     ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-                	                         Gbl.ColorRows[Gbl.RowEvenOdd]);
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
+                     Style,BgColor);
             DateTime = Thr.WriteTime[Order];
             Dat_WriteDate (DateTime);
             fprintf (Gbl.F.Out,"<br />");
@@ -3362,53 +3351,38 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             for (Column = 1;
         	 Column <= 3;
         	 Column++)
-               fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-        	                  " style=\"background-color:%s;\">"
+               fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">"
         	                  "</td>",
-                        Style,
-                        ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-                                                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                        Style,BgColor);
         }
 
       /***** Write number of posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	                 "%u&nbsp;"
 	                 "</td>",
-               Style,
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd],
+               Style,BgColor,
                Thr.NumPosts);
 
       /***** Write number of new posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	                 "%u&nbsp;"
 	                 "</td>",
-               Style,
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd],
+               Style,BgColor,
                Thr.NumUnreadPosts);
 
       /***** Write number of users who have write posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	                 "%u&nbsp;"
 	                 "</td>",
-               Style,
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd],
+               Style,BgColor,
                Thr.NumWriters);
 
       /***** Write number of users who have read this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	                 "%u&nbsp;"
 	                 "</td>"
 	                 "</tr>",
-               Style,
-               ThisThreadIsInMyClipboard ? LIGHT_GREEN :
-        	                           Gbl.ColorRows[Gbl.RowEvenOdd],
+               Style,BgColor,
                Thr.NumReaders);
      }
 
