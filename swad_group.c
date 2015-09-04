@@ -1959,7 +1959,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
 	                          Txt_Group_X_closed,
             Grp->GrpName);
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\" style=\"width:12px;\">"
@@ -1982,7 +1982,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Grp->GrpName);
 
    /***** Max. number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">");
