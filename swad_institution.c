@@ -98,7 +98,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    unsigned NumInss;
    unsigned NumIns;
    struct Institution Ins;
-   const char *BgColor;
+   char BgColor[32];
 
    /***** Get institutions with pending centres *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -151,16 +151,17 @@ void Ins_SeeInsWithPendingCtrs (void)
 
          /* Get institution code (row[0]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ins.InsCod == Gbl.CurrentIns.Ins.InsCod) ? VERY_LIGHT_BLUE :
-	                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
+         if (Ins.InsCod == Gbl.CurrentIns.Ins.InsCod)
+	    strcpy (BgColor,"VERY_LIGHT_BLUE");
+	 else
+	    sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
          /* Get data of institution */
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
 
          /* Institution logo */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"CENTER_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"CENTER_MIDDLE %s\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
          Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
@@ -169,8 +170,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                             "</td>");
 
          /* Institution full name */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCtr);
          Ins_PutParamInsCod (Ins.InsCod);
@@ -182,8 +182,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending centres (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
                             "%s"
                             "</td>"
 	                    "</tr>",
@@ -511,26 +510,27 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    extern const char *Txt_Go_to_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClass;
-   const char *BgColor;
+   char BgColor[32];
    Crs_StatusTxt_t StatusTxt;
 
    TxtClass = (Ins->Status & Ins_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   BgColor = (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod) ? VERY_LIGHT_BLUE :
-							  Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)
+      strcpy (BgColor,"VERY_LIGHT_BLUE");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
    /***** Number of institution in this list *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"background-color:%s;\">"
+		      "<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
 	    TxtClass,BgColor,
             NumIns);
 
    /***** Icon *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	              " style=\"width:20px; background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\""
+	              " style=\"width:20px;\">"
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
@@ -540,8 +540,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "</td>");
 
    /***** Name and link to go to this institution *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
 	    TxtClass,BgColor);
    Act_FormGoToStart (ActSeeInsInf);
    Ins_PutParamInsCod (Ins->InsCod);
@@ -553,41 +552,34 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Stats *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumUsrs);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumStds);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumTchs);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumCtrs);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumDegs);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Ins->NumDpts);
 
    /***** Institution status *****/
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 	              "%s"
 	              "</td>"
 		      "</tr>",

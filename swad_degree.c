@@ -157,7 +157,7 @@ void Deg_SeeDegWithPendingCrss (void)
    unsigned NumDegs;
    unsigned NumDeg;
    struct Degree Deg;
-   const char *BgColor;
+   char BgColor[32];
 
    /***** Get degrees with pending courses *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -211,16 +211,17 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Get degree code (row[0]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Deg.DegCod == Gbl.CurrentDeg.Deg.DegCod) ? VERY_LIGHT_BLUE :
-	                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
+         if (Deg.DegCod == Gbl.CurrentDeg.Deg.DegCod)
+            strcpy (BgColor,"VERY_LIGHT_BLUE");
+         else
+            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
          /* Get data of degree */
          Deg_GetDataOfDegreeByCod (&Deg);
 
          /* Degree logo */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT CENTER_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"DAT CENTER_MIDDLE %s\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\""
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
@@ -230,8 +231,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             "</td>");
 
          /* Degree full name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCrs);
          Deg_PutParamDegCod (Deg.DegCod);
@@ -244,8 +244,7 @@ void Deg_SeeDegWithPendingCrss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending courses (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
@@ -1066,7 +1065,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
    extern const char *Txt_Direct_authentication_allowed;
    extern const char *Txt_Direct_authentication_not_allowed;
    unsigned NumDegTyp;
-   const char *BgColor;
+   char BgColor[32];
 
    Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
 
@@ -1078,12 +1077,14 @@ static void Deg_ListDegreeTypesForSeeing (void)
 	NumDegTyp < Gbl.Degs.DegTypes.Num;
 	NumDegTyp++)
      {
-      BgColor = (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod == Gbl.CurrentDegTyp.DegTyp.DegTypCod) ? VERY_LIGHT_BLUE :
-                                                                                                     Gbl.ColorRows[Gbl.RowEvenOdd];
+      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod == Gbl.CurrentDegTyp.DegTyp.DegTypCod)
+	 strcpy (BgColor,"VERY_LIGHT_BLUE");
+      else
+	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
       /* Put green tip if degree type has degrees */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td style=\"background-color:%s;\">"
+                         "<td class=\"%s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                          "</td>",
@@ -1097,15 +1098,13 @@ static void Deg_ListDegreeTypesForSeeing (void)
                                                           Txt_TYPES_OF_DEGREE_Without_degrees);
 
       /* Name of degree type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Direct log in is allowed for this degree type? */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                          "</td>",
@@ -1119,8 +1118,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
                                                                    Txt_Direct_authentication_not_allowed);
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE %s\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -1244,7 +1242,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    struct DegreeType DegTyp;
    const char *TxtClass;
-   const char *BgColor;
+   char BgColor[32];
    Crs_StatusTxt_t StatusTxt;
 
    /***** Get data of type of degree of this degree *****/
@@ -1254,13 +1252,14 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    TxtClass = (Deg->Status & Deg_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? VERY_LIGHT_BLUE :
-							  Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)
+      strcpy (BgColor,"VERY_LIGHT_BLUE");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
    /***** Put green tip if degree has courses *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"CENTER_MIDDLE\""
-		      " style=\"background-color:%s;\">"
+		      "<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
@@ -1274,16 +1273,14 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 			      Txt_DEGREE_Without_courses);
 
    /***** Number of degree in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
 	    TxtClass,BgColor,
             NumDeg);
 
    /***** Degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
 		      "<a href=\"%s\" title=\"%s\" target=\"_blank\">",
 	    BgColor,
 	    Deg->WWW,Deg->FullName);
@@ -1293,8 +1290,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "</td>");
 
    /* Degree full name */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
 	    TxtClass,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg->DegCod);
@@ -1305,29 +1301,25 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"</td>");
 
    /* Type of degree */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 	              "%s"
 	              "</td>",
 	    TxtClass,BgColor,DegTyp.DegTypName);
 
    /* Degree first year */
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->FirstYear);
 
    /* Degree last year */
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->LastYear);
 
    /* Degree optional year */
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 		      "</td>",
@@ -1341,16 +1333,14 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 			   Txt_DEGREE_Without_year_for_optional_courses);
 
    /* Current number of courses in this degree */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClass,BgColor,Deg->NumCourses);
 
    /* Degree status */
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 	              "%s"
 	              "</td>"
 		      "</tr>",

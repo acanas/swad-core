@@ -94,7 +94,7 @@ void Cty_SeeCtyWithPendingInss (void)
    unsigned NumCtys;
    unsigned NumCty;
    struct Country Cty;
-   const char *BgColor;
+   char BgColor[32];
 
    /***** Get countries with pending institutions *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -139,16 +139,17 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Get country code (row[0]) */
          Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Cty.CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? VERY_LIGHT_BLUE :
-	                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
+         if (Cty.CtyCod == Gbl.CurrentCty.Cty.CtyCod)
+            strcpy (BgColor,"VERY_LIGHT_BLUE");
+         else
+            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
          /* Get data of country */
          Cty_GetDataOfCountryByCod (&Cty);
 
          /* Country map */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"CENTER_MIDDLE\""
-	                    " style=\"background-color:%s;\">",
+	                    "<td class=\"CENTER_MIDDLE %s\">",
                   BgColor);
          if (Cty_CheckIfCountryMapExists (&Cty))
            {
@@ -160,8 +161,7 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Country name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeIns);
          Cty_PutParamCtyCod (Cty.CtyCod);
@@ -173,8 +173,7 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
@@ -486,7 +485,7 @@ void Cty_ListCountries2 (void)
    unsigned NumInssWithCountry = 0;
    unsigned NumUsrsInOtherCtys;
    unsigned NumInssInOtherCtys;
-   const char *BgColor;
+   char BgColor[32];
 
    /***** Put link (form) to edit countries *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -532,14 +531,14 @@ void Cty_ListCountries2 (void)
 	NumCty < Gbl.Ctys.Num;
 	NumCty++)
      {
-      BgColor = (Gbl.Ctys.Lst[NumCty].CtyCod ==
-	         Gbl.CurrentCty.Cty.CtyCod) ? VERY_LIGHT_BLUE :
-                                              Gbl.ColorRows[Gbl.RowEvenOdd];
+      if (Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod)
+	 strcpy (BgColor,"VERY_LIGHT_BLUE");
+      else
+	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
       /***** Country map (and link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"COUNTRY_MAP_SMALL CENTER_MIDDLE\""
-			 " style=\"background-color:%s;\">",
+			 "<td class=\"COUNTRY_MAP_SMALL CENTER_MIDDLE %s\">",
 	       BgColor);
       if (Cty_CheckIfCountryMapExists (&Gbl.Ctys.Lst[NumCty]))
 	{
@@ -556,8 +555,7 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Name and link to go to this country */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
 	       BgColor);
       Act_FormGoToStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
@@ -573,20 +571,16 @@ void Cty_ListCountries2 (void)
       /* Write stats of this country */
       NumStds = Usr_GetNumUsrsInCountry (Rol_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod);
       NumTchs = Usr_GetNumUsrsInCountry (Rol_TEACHER,Gbl.Ctys.Lst[NumCty].CtyCod);
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
 	                 "%u"
 	                 "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\""
-                         " style=\"background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\""
-                         " style=\"background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\""
-                         " style=\"background-color:%s;\">"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
 			 "</tr>",

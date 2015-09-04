@@ -646,8 +646,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 .RIGHT_BOTTOM		{text-align:right; vertical-align:bottom;}
 
 /************************** Lists with alternating colors ********************/
-.COLOR0		{background-color:#F4F2EA;}
-.COLOR1		{background-color:#FBFAF7;}
+.COLOR0			{background-color:#F4F2EA;}
+.COLOR1			{background-color:#FBFAF7;}
+.VERY_LIGHT_BLUE	{background-color:#DDECF1;}
 
 /********************************* Course info *******************************/
 #crs_info

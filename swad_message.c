@@ -2831,11 +2831,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
    bool WriteAuthor = false;
 
    /***** Start first column *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:24px;",
-            Style);
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",Style);
    if (BgColor)
-      fprintf (Gbl.F.Out," background-color:%s;",BgColor);
-   fprintf (Gbl.F.Out,"\">");
+      fprintf (Gbl.F.Out," %s",BgColor);
+   fprintf (Gbl.F.Out,"\" style=\"width:24px;\">");
 
    /***** Write author name or don't write it? *****/
    if (Enabled)
@@ -2852,11 +2851,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\" style=\"width:%upx;",
-               Style,WidthOfNameColumn);
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",Style);
       if (BgColor)
-         fprintf (Gbl.F.Out," background-color:%s;",BgColor);
-      fprintf (Gbl.F.Out,"\">");
+         fprintf (Gbl.F.Out," %s",BgColor);
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">",WidthOfNameColumn);
 
       /* Restrict length of firstname and surnames */
       Usr_RestrictLengthAndWriteName (UsrDat,MaxCharsInName);
@@ -2867,14 +2865,15 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO24x32\" />"
 	                 "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\""
-                         " style=\"width:%upx;",
+                         "<td class=\"%s LEFT_MIDDLE",
                Gbl.Prefs.IconsURL,
                Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo,
-               Style,WidthOfNameColumn);
+               Style);
       if (BgColor)
-         fprintf (Gbl.F.Out," background-color:%s;",BgColor);
-      fprintf (Gbl.F.Out,"\">&nbsp;");
+         fprintf (Gbl.F.Out," %s",BgColor);
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">"
+	                 "&nbsp;",
+	       WidthOfNameColumn);
      }
 
    /***** End seconf column *****/

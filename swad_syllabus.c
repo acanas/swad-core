@@ -105,7 +105,7 @@ static void Syl_LoadToMemory (Inf_InfoType_t InfoType);
 static void Syl_ShowSyllabus (Inf_InfoType_t InfoType);
 static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileHTMLTmp);
-static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text,const char *Color);
+static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
 
 /*****************************************************************************/
 /******************** Get parameter to select a syllabus *********************/
@@ -681,8 +681,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
      }
 
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
-      Syl_PutFormItemSyllabus (InfoType,NewItem,NumItem,Level,CodItem,Text,
-                               Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Syl_PutFormItemSyllabus (InfoType,NewItem,NumItem,Level,CodItem,Text);
    else
      {
       /***** Indent depending on the level *****/
@@ -868,7 +867,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 /*************** Show a form to modify an item of the syllabus ***************/
 /*****************************************************************************/
 
-static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text,const char *BgColor)
+static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text)
   {
    extern const char *Txt_Enter_a_new_item_here;
 
@@ -877,21 +876,21 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
 
    /***** Indent depending on the level *****/
    if (Level > 1)
-      fprintf (Gbl.F.Out,"<td colspan=\"%d\" style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">"
 	                 "</td>",
-               Level - 1,BgColor);
+               Level - 1,Gbl.RowEvenOdd);
 
    /***** Write the code of the item *****/
    if (NewItem)	// If the item is new (not stored in the file) ==> it has not a number
-      fprintf (Gbl.F.Out,"<td style=\"width:%dpx; background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"width:%dpx;\">"
 	                 "</td>",
-               Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
+               Gbl.RowEvenOdd,Level * Syl_WIDTH_NUM_SYLLABUS);
    else
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	                 " style=\"width:%dpx; background-color:%s;\">",
-               StyleSyllabus[Level],
-               Level * Syl_WIDTH_NUM_SYLLABUS,BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
+	                 " style=\"width:%dpx;\">",
+               StyleSyllabus[Level],Gbl.RowEvenOdd,
+               Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
       Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
@@ -899,9 +898,8 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
      }
 
    /***** Text of the item *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"%d LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
-            LstItemsSyllabus.NumLevels - Level + 1,BgColor);
+   fprintf (Gbl.F.Out,"<td colspan=\"%d LEFT_MIDDLE COLOR%u\">",
+            LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
    Act_FormStart (NewItem ? (InfoType == Inf_LECTURES ? ActInsIteSylLec :
 	                                                ActInsIteSylPra) :
                             (InfoType == Inf_LECTURES ? ActModIteSylLec :

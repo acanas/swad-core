@@ -10934,7 +10934,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    const char *CtrShortName;
    const char *DegShortName;
    const char *CrsShortName;
-   const char *BgColor;
+   char BgColor[32];
    const char *Title;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
@@ -10978,21 +10978,20 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       GrpCod = Str_ConvertStrCodToLongCod (row[10]);
 
       /***** Set row color *****/
-      BgColor = Gbl.ColorRows[Gbl.RowEvenOdd];
       if (CrsCod > 0 && CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-	 BgColor = VERY_LIGHT_BLUE;
+	 strcpy (BgColor,"VERY_LIGHT_BLUE");
+      else
+	 sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
       /***** Write number of document in this search *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT RIGHT_TOP\""
-	                 " style=\"background-color:%s;\">"
+	                 "<td class=\"DAT RIGHT_TOP %s\">"
 	                 "%u"
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));
 
       /***** Write institution logo, institution short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
 	       BgColor);
       if (InsCod > 0)
 	{
@@ -11008,8 +11007,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write centre logo, centre short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
 	       BgColor);
       if (CtrCod > 0)
 	{
@@ -11025,8 +11023,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write degree logo, degree short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
 	       BgColor);
       if (DegCod > 0)
 	{
@@ -11042,8 +11039,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Write course short name *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
 	       BgColor);
       if (CrsCod > 0)
 	{
@@ -11090,8 +11086,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    Title = "";
 	    break;
 	}
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\""
-	                 " style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Title);
@@ -11103,8 +11098,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       Brw_LimitLengthFileNameToShow (FileMetadata.FileType,FileName,FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP\""
-	                 " style=\"background-color:%s;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP %s\">",
 	       BgColor);
 
       /* Start form */

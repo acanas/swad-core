@@ -108,7 +108,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Centre Ctr;
-   const char *BgColor;
+   char BgColor[32];
 
    /***** Get centres with pending degrees *****/
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -161,16 +161,17 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          /* Get centre code (row[0]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ctr.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? VERY_LIGHT_BLUE :
-	                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
+         if (Ctr.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
+            strcpy (BgColor,"VERY_LIGHT_BLUE");
+         else
+            sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
          /* Get data of centre */
          Ctr_GetDataOfCentreByCod (&Ctr);
 
          /* Centre logo */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT CENTER_MIDDLE\""
-	                    " style=\"background-color:%s;\">"
+	                    "<td class=\"DAT CENTER_MIDDLE %s\">"
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
          Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
@@ -179,8 +180,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                             "</td>");
 
          /* Centre full name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\""
-                            " style=\"background-color:%s;\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeDeg);
          Ctr_PutParamCtrCod (Ctr.CtrCod);
@@ -193,8 +193,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending degrees (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\""
-                            " style=\"background-color:%s;\">"
+         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
@@ -578,7 +577,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
    const char *TxtClass;
-   const char *BgColor;
+   char BgColor[32];
    Crs_StatusTxt_t StatusTxt;
 
    /***** Get data of place of this centre *****/
@@ -587,21 +586,21 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    TxtClass = (Ctr->Status & Ctr_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
 	                                               "DAT";
-   BgColor = (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? VERY_LIGHT_BLUE :
-							  Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
+      strcpy (BgColor,"VERY_LIGHT_BLUE");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
    /***** Number of centre in this list *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"background-color:%s;\">"
+		      "<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
 	    TxtClass,BgColor,
             NumCtr);
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP %s\">"
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
@@ -611,8 +610,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "</td>");
 
    /***** Place *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 		      "%s"
 		      "</td>",
 	    TxtClass,BgColor,
@@ -620,8 +618,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 			     Txt_Another_place);
 
    /***** Centre name *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
 	    TxtClass,BgColor);
    Act_FormGoToStart (ActSeeCtrInf);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
@@ -633,16 +630,14 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of teachers *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
 		      "</td>",
 	    TxtClass,BgColor,
 	    Ctr->NumTchs);
 
    /***** Number of degrees *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
 		      "</td>",
 	    TxtClass,BgColor,
@@ -650,8 +645,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 		      "%s"
 		      "</td>"
 		      "</tr>",

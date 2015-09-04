@@ -1265,7 +1265,7 @@ static void Crs_ListCoursesForSeeing (void)
    unsigned Year;
    unsigned NumCrs;
    const char *TxtClass;
-   const char *BgColor;
+   char BgColor[32];
    Crs_StatusTxt_t StatusTxt;
 
    /***** Write heading *****/
@@ -1288,13 +1288,14 @@ static void Crs_ListCoursesForSeeing (void)
            {
             TxtClass = (Crs->Status & Crs_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
         	                                                "DAT";
-            BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? VERY_LIGHT_BLUE :
-        	                                                   Gbl.ColorRows[Gbl.RowEvenOdd];
+            if (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
+	       strcpy (BgColor,"VERY_LIGHT_BLUE");
+	    else
+	       sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
             /* Put green tip if course has users */
             fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"CENTER_MIDDLE\""
-                               " style=\"background-color:%s;\">"
+                               "<td class=\"CENTER_MIDDLE %s\">"
                                "<img src=\"%s/%s16x16.gif\""
                                " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
                                "</td>",
@@ -1308,32 +1309,28 @@ static void Crs_ListCoursesForSeeing (void)
                                     Txt_COURSE_Without_users);
 
             /* Institutional code of the course */
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Crs->InstitutionalCrsCod);
 
             /* Course year */
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Txt_YEAR_OF_DEGREE[Crs->Year]);
 
             /* Course semester */
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
                      TxtClass,BgColor,
                      Txt_SEMESTER_OF_YEAR[Crs->Semester]);
 
             /* Course full name */
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">",
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
                      TxtClass,BgColor);
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs->CrsCod);
@@ -1345,23 +1342,20 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
         	               "%u"
         	               "</td>",
                      TxtClass,BgColor,Crs->NumStds);
 
             /* Current number of teachers in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
         	               "%u"
         	               "</td>",
                      TxtClass,BgColor,Crs->NumTchs);
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-        	               " style=\"background-color:%s;\">"
+            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
         	               "%s"
         	               "</td>"
                                "</tr>",
@@ -3265,7 +3259,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    unsigned NumTchs;
    const char *Style;
    const char *StyleNoBR;
-   const char *BgColor;
+   char BgColor[32];
    bool Accepted;
 
    /*
@@ -3302,8 +3296,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Style = "DAT";
       StyleNoBR = "DAT_NOBR";
      }
-   BgColor = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? VERY_LIGHT_BLUE :
-                                                     Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
+      strcpy (BgColor,"VERY_LIGHT_BLUE");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -3312,7 +3308,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    if (WriteColumnAccepted)
      {
       Accepted = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
-      fprintf (Gbl.F.Out,"<td class=\"BT\" style=\"background-color:%s;\">"
+      fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
 	                 "<img src=\"%s/%s16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
 	                 "</td>",
@@ -3327,15 +3323,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
      }
 
    /***** Write number of course in this search *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
 	              "</td>",
             StyleNoBR,BgColor,NumCrs);
 
-   /***** Write degree logo, degree short name (row[2]) and centre short name (row[7]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
+   /***** Write degree logo, degree short name (row[2])
+          and centre short name (row[7]) *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             StyleNoBR,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
@@ -3350,22 +3345,19 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write year (row[4]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP %s\">"
 	              "%s"
 	              "</td>",
             Style,BgColor,Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
 
    /***** Write semester (row[5]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP %s\">"
 	              "%s"
 	              "</td>",
             Style,BgColor,Txt_SEMESTER_OF_YEAR[Deg_ConvStrToSemester (row[5])]);
 
    /***** Write course full name (row[6]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             Style,BgColor);
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
@@ -3376,15 +3368,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write number of students in course *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
 	              "</td>",
             Style,BgColor,NumStds);
 
    /***** Write number of teachers in course *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
 	              "</td>"
 	              "</tr>",

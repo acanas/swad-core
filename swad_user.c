@@ -2677,7 +2677,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   const char *BgColor;
+   char BgColor[32];
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = false;
@@ -2694,13 +2694,13 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    if (PutCheckBoxToSelectUsr)
       UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    // Two colors are used alternatively to better distinguish the rows
-   BgColor = UsrIsTheMsgSender ? LIGHT_GREEN :
-	                         Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (UsrIsTheMsgSender)
+      strcpy (BgColor,"LIGHT_GREEN");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
    if (PutCheckBoxToSelectUsr)
      {
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
       Usr_PutCheckboxToSelectUser (Rol_STUDENT,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2725,8 +2725,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
                                Txt_Enrollment_not_confirmed);
 
    /***** Write number of student in the list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
             UsrDat->Accepted ? "DAT_SMALL_N" :
@@ -2737,9 +2736,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2751,8 +2748,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
 
    /****** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
@@ -2996,10 +2992,10 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   const char *BgColor;
+   char BgColor[32];
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   bool UsrIsTheMsgSender = false;
+   bool UsrIsTheMsgSender;
    char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
    bool ShowEmail = UsrDat->Accepted ||
@@ -3010,15 +3006,15 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
-   if (PutCheckBoxToSelectUsr)
-      UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   BgColor = UsrIsTheMsgSender ? LIGHT_GREEN :
-	                         Gbl.ColorRows[Gbl.RowEvenOdd];   // Two colors are used alternatively to better distinguish the rows
+   UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
+	               (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+   if (UsrIsTheMsgSender)
+      strcpy (BgColor,"LIGHT_GREEN");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);	// Two colors are used alternatively to better distinguish the rows
    if (PutCheckBoxToSelectUsr)
      {
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
       Usr_PutCheckboxToSelectUser (Rol_TEACHER,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -3043,8 +3039,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
                                Txt_Enrollment_not_confirmed);
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE\""
-	              " style=\"background-color:%s;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE %s\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
             BgColor,NumUsr);
@@ -3052,9 +3047,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	                 " style=\"background-color:%s;\">",
-               BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3066,8 +3059,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
 
    /****** Write the user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
@@ -3282,8 +3274,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *
 
 static void Usr_WriteUsrData (const char *BgColor,const char *Data,const char *Link,bool NonBreak,bool Accepted)
   {
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\""
-	              " style=\"background-color:%s;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
         	                   "DAT_SMALL_N") :
                        (NonBreak ? "DAT_SMALL_NOBR" :
