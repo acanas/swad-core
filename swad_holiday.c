@@ -102,7 +102,7 @@ void Hld_SeeHolidays (void)
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">");
 	 Act_FormStart (ActSeeHld);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL");
@@ -113,14 +113,14 @@ void Hld_SeeHolidays (void)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">"
 	                 "&nbsp;%s&nbsp;"
-	                 "</td>"
-			 "<td class=\"TIT_TBL CENTER_MIDDLE\">"
+	                 "</th>"
+			 "<th class=\"TIT_TBL CENTER_MIDDLE\">"
 			 "%s"
-			 "</td>"
+			 "</th>"
 			 "</tr>",
 	       Txt_End_date,
 	       Txt_Holiday);
@@ -912,21 +912,21 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Place,
             Txt_Type,
@@ -1014,25 +1014,25 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Holiday;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Place,

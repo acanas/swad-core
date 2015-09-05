@@ -344,14 +344,15 @@ static void Pre_PutIconsToSelectSideCols (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
                SideCols == Gbl.Prefs.SideCols ? "LAYOUT_ON" :
         	                                "LAYOUT_OFF");
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\" style=\"display:block;"
-	                 " width:32px; height:20px; margin:0 auto;\" />",
+	                 " alt=\"%s\" title=\"%s\""
+	                 " style=\"display:block;"
+	                 " width:32px; height:20px;\" />",
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],

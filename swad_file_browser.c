@@ -3084,9 +3084,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
          fprintf (Gbl.F.Out,"<li class=\"%s\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"LEFT_TOP\""
-                            " style=\"width:20px; height:20px;"
-                            " margin-left:5px;\" />"
+                            " class=\"ICON20x20\""
+                            " style=\"margin-left:5px;\" />"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
@@ -7705,7 +7704,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Form to upload files using the library Dropzone.js *****/
-   // Use min-height:100px; or other number to stablish the height
+   // Use min-height:100px; or other number to stablish the height?
    Gbl.NumForm++;
    fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\""
                       " class=\"dropzone\""
@@ -10847,12 +10846,12 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 
       /* Write header with number of documents found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumDocs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_document);
       else
 	 fprintf (Gbl.F.Out,"%u %s",NumDocs,Txt_documents);
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</th>"
 			 "</tr>");
 
       /* Heading row */
@@ -10899,7 +10898,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /***** Write footer *****/
       /* Number of documents not hidden found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">"
+			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">"
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -10907,7 +10906,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       else
 	 fprintf (Gbl.F.Out,"%u %s",NumDocsHidden,Txt_DOCUM_hidden);
       fprintf (Gbl.F.Out,")"
-	                 "</td>"
+	                 "</th>"
 			 "</tr>");
 
       /* Table end */

@@ -3178,12 +3178,12 @@ unsigned Crs_ListCrssFound (const char *Query)
 
       /* Number of courses found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumCrss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_course);
       else
 	 fprintf (Gbl.F.Out,"%u %s",NumCrss,Txt_courses);
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</th>"
 			 "</tr>");
 
       /* Heading row */

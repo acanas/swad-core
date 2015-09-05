@@ -99,11 +99,11 @@ void Plg_ListPlugins (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:32px;\">"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th style=\"width:32px;\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Plugin);
 
@@ -117,12 +117,13 @@ void Plg_ListPlugins (void)
       sprintf (URL,"%s%s",Plg->URL,Gbl.Session.Id);
 
       /* Plugin logo */
+      // TODO: Change plugin icons to 32x32
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:32px;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:36px;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:24px; height:24px;\" />"
+                         " class=\"ICON32x32\" />"
                          "</a>"
                          "</td>"
                          "<td class=\"DAT LEFT_MIDDLE\">"
@@ -381,10 +382,11 @@ static void Plg_ListPluginsForEdition (void)
                Plg->PlgCod);
 
       /* Plugin logo */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:28px;\">"
+      // TODO: Change plugin icons to 32x32
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:36px;\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:24px; height:24px;\" />"
+                         " class=\"ICON32x32\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,
                Gbl.Plugins.Lst[NumPlg].Logo,

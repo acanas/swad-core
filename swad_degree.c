@@ -3927,8 +3927,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
                             "<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"RIGHT_TOP\""
-                            " style=\"width:20px; height:20px;\" />"
+                            " class=\"ICON20x20\" />"
                             "</td>",
                   Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :

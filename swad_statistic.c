@@ -1723,24 +1723,24 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL RIGHT_TOP\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_Photo,
@@ -1849,15 +1849,15 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Date,
             Txt_Day,
@@ -2055,16 +2055,16 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
+                      "<th rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th rowspan=\"3\" class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td colspan=\"24\" class=\"TIT_TBL LEFT_TOP\""
+                      "</th>"
+                      "<th colspan=\"24\" class=\"TIT_TBL LEFT_TOP\""
                       " style=\"width:%upx;\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Date,
             Txt_Day,
@@ -2431,12 +2431,12 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Week,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -2536,12 +2536,12 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Month,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -2713,14 +2713,14 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
          AltoBarra = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " style=\"width:8px; height:%upx;\" /><br />",
+	                 " style=\"width:8px; height:%upx;\" />",
 	       Gbl.Prefs.IconsURL,AltoBarra);
      }
    else
-      fprintf (Gbl.F.Out,"0%%<br />0<br />");
+      fprintf (Gbl.F.Out,"0%%<br />0");
 
    /* Write the hour */
-   fprintf (Gbl.F.Out,"%uh</td>",Hour);
+   fprintf (Gbl.F.Out,"<br />%uh</td>",Hour);
   }
 
 /*****************************************************************************/
@@ -2949,12 +2949,12 @@ static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL RIGHT_TOP\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Action,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -3019,12 +3019,12 @@ static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL RIGHT_TOP\">"
+                      "<th class=\"TIT_TBL RIGHT_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Plugin,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -3085,12 +3085,12 @@ static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *m
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Function,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -3149,12 +3149,12 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s&nbsp;"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Banner,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
@@ -3190,8 +3190,8 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:60px; height:20px;"
-                         " margin:0 8px 4px 0;\" />"
+                         " class=\"BANNER_SMALL\""
+                         " style=\"margin:0 8px 4px 0;\" />"
                          "</a>",
                Ban.WWW,
                Ban.FullName,
@@ -3224,15 +3224,15 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_Degree,
@@ -3306,21 +3306,21 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_TOP\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_TOP\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_Degree,

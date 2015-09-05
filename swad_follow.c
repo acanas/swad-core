@@ -387,7 +387,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/unfollow16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -402,8 +402,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/follow16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,

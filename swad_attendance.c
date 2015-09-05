@@ -1007,6 +1007,7 @@ static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Valu
 
 void Att_RequestCreatOrEditAttEvent (void)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Teachers_comment;
@@ -1084,14 +1085,14 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
-            Txt_Title,
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
             Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE,Att.Title);
 
    /***** Attendance event start and end dates *****/
@@ -1100,14 +1101,14 @@ void Att_RequestCreatOrEditAttEvent (void)
 	StartOrEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL RIGHT_TOP\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td class=\"LEFT_TOP\">",
-               Dates[StartOrEndTime]);
+               The_ClassForm[Gbl.Prefs.Theme],Dates[StartOrEndTime]);
 
       /* Date */
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
@@ -1133,12 +1134,12 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Visibility of comments *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<select name=\"CommentTchVisible\">",
-            Txt_Teachers_comment);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Teachers_comment);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Att.CommentTchVisible)
@@ -1158,12 +1159,12 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event description *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_TBL RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"5\">",
-            Txt_Description);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAttEvent)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -1192,6 +1193,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1203,11 +1205,11 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL RIGHT_TOP\">"
+	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
-               Txt_Groups);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_Groups);
       Lay_StartRoundFrameTable ("100%",0,NULL);
 
       /***** First row: checkbox to select the whole course *****/

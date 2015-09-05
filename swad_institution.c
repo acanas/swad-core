@@ -2083,12 +2083,12 @@ unsigned Ins_ListInssFound (const char *Query)
 
       /* Number of institutions found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"10\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"10\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumInss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_institution);
       else
 	 fprintf (Gbl.F.Out,"%u %s",NumInss,Txt_institutions);
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</th>"
 			 "</tr>");
 
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

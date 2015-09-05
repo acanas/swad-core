@@ -1461,7 +1461,7 @@ void Usr_WelcomeUsr (void)
                   Usr_InsertMyBirthday ();
                   fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
                 	             " alt=\"%s\" title=\"%s\""
-                	             " style=\"width:128px; height:128px;\" />",
+                                     " class=\"ICON128x128\" />",
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
@@ -4865,7 +4865,7 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
    Usr_Sex_t Sex;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"%u\" class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">",
+	              "<th colspan=\"%u\" class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">",
             Usr_GetColumnsForSelectUsrs ());
    if (Role == Rol_STUDENT)
      {
@@ -4878,7 +4878,8 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
       LstUsrs = &Gbl.Usrs.LstTchs;
      }
    Sex = Usr_GetSexOfUsrsLst (LstUsrs);
-   fprintf (Gbl.F.Out,"%s:</td>"
+   fprintf (Gbl.F.Out,"%s:"
+	              "</th>"
 	              "</tr>",
 	    LstUsrs->NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                     Txt_ROLES_PLURAL_Abc  [Role][Sex]);
@@ -5006,18 +5007,18 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>");
+	                    "</th>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+            fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
-        	               "</td>",
+        	               "</th>",
                      Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -5089,18 +5090,18 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>");
+	                    "</th>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+            fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
-        	               "</td>",
+        	               "</th>",
                      Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -5160,18 +5161,18 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
 	                    "&nbsp;"
-	                    "</td>");
+	                    "</th>");
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+            fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
-        	               "</td>",
+        	               "</th>",
                      Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -5275,9 +5276,9 @@ void Usr_ListAllDataGsts (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
-                            "</td>",
+                            "</th>",
                   FieldNames[NumCol]);
 
       /* End row */
@@ -5421,9 +5422,9 @@ void Usr_ListAllDataStds (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
-                            "</td>",
+                            "</th>",
                   FieldNames[NumCol]);
 
       /* 2. Columns for the groups */
@@ -5434,9 +5435,9 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
                  NumGrpTyp++)
                if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
-                  fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+                  fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                 	             "%s %s&nbsp;"
-                	             "</td>",
+                	             "</th>",
                            Txt_Group,
                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 
@@ -5446,13 +5447,14 @@ void Usr_ListAllDataStds (void)
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+               fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	                  "%s&nbsp;"
-        	                  "</td>",
+        	                  "</th>",
                         Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
-            fprintf (Gbl.F.Out,"</tr><tr>");
+            fprintf (Gbl.F.Out,"</tr>"
+        	               "<tr>");
             for (NumCol = 0;
                  NumCol < NumColumnsCardAndGroups;
                  NumCol++)
@@ -5462,9 +5464,9 @@ void Usr_ListAllDataStds (void)
             for (NumField = 0;
                  NumField < Gbl.CurrentCrs.Records.LstFields.Num;
                  NumField++)
-               fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE VERY_LIGHT_BLUE\">"
+               fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE VERY_LIGHT_BLUE\">"
         	                  "(%s)&nbsp;"
-        	                  "</td>",
+        	                  "</th>",
                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
            }
         }
@@ -5527,18 +5529,18 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    /***** Heading row with column names *****/
    /* Start row and first column used for selection */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                       "&nbsp;"
-                      "</td>");
+                      "</th>");
 
    /* Columns for the data */
    for (NumCol = 0;
         NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
-                            "</td>",
+                            "</th>",
                   Usr_UsrDatMainFieldNames[NumCol]);
 
    /* End row */
@@ -5650,9 +5652,9 @@ void Usr_ListAllDataTchs (void)
 	                                           1);
            NumCol < NumColumns;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
-                            "</td>",
+                            "</th>",
                   FieldNames[NumCol]);
 
       /* End row */
@@ -5722,7 +5724,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
       /* Number of users found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"%u\" class=\"TIT_TBL CENTER_MIDDLE\">",
+			 "<th colspan=\"%u\" class=\"TIT_TBL CENTER_MIDDLE\">",
 	       Usr_NUM_MAIN_FIELDS_DATA_USR);
       if (NumUsrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",
@@ -5731,7 +5733,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 	 fprintf (Gbl.F.Out,"%u %s",
 		  NumUsrs,
 		  Txt_ROLES_PLURAL_abc[Role][Sex]);
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</th>"
 			 "</tr>");
 
       /***** Heading row with column names *****/
@@ -5740,9 +5742,9 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
-         fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+         fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                             "%s&nbsp;"
-                            "</td>",
+                            "</th>",
                   Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
@@ -5880,9 +5882,9 @@ void Usr_ListDataAdms (void)
            NumCol < NumColumns;
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+            fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
-        	               "</td>",
+        	               "</th>",
                      FieldNames[NumCol]);
 
       /* End row */

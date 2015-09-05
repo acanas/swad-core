@@ -2947,16 +2947,16 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       /***** Write the heading *****/
       fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
-         fprintf (Gbl.F.Out,"<td colspan=\"2\"></td>");
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_TOP\">"
+         fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_TOP\">"
 	                 "%s"
-	                 "</td>"
-                         "<td class=\"TIT_TBL CENTER_TOP\">"
+	                 "</th>"
+                         "<th class=\"TIT_TBL CENTER_TOP\">"
                          "%s"
-                         "</td>"
-                         "<td class=\"TIT_TBL LEFT_TOP\">"
+                         "</th>"
+                         "<th class=\"TIT_TBL LEFT_TOP\">"
                          "%s"
-                         "</td>"
+                         "</th>"
                          "</tr>",
                Txt_No_INDEX,
                Txt_Type,

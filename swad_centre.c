@@ -2416,12 +2416,12 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 
       /* Number of centres found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
       if (NumCtrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_centre);
       else
 	 fprintf (Gbl.F.Out,"%u %s",NumCtrs,Txt_centres);
-      fprintf (Gbl.F.Out,"</td>"
+      fprintf (Gbl.F.Out,"</th>"
 			 "</tr>");
 
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable

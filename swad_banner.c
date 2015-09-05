@@ -102,7 +102,7 @@ void Ban_SeeBanners (void)
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:120px; height:40px;\"/>"
+                         " class=\"BANNER\" />"
                          "</a>"
                          "</td>"
                          "</tr>",
@@ -789,13 +789,13 @@ static void Ban_PutHeadBanners (void)
    extern const char *Txt_WWW;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">%s</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">%s</td>"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">%s</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
                       "</tr>",
             Txt_Code,
             Txt_Short_name,
@@ -914,7 +914,7 @@ void Ban_WriteMenuWithBanners (void)
 			 " title=\"%s\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:120px; height:40px;\" />"
+                         " class=\"BANNER\" />"
                          "</a>",
 	       Gbl.FormId,
 	       Gbl.Banners.Lst[NumBan].FullName,

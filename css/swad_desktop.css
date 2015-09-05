@@ -384,11 +384,15 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /*********************************** Icons ***********************************/
 .ICON16x16	{width:16px; height:16px; vertical-align:middle;}
 .ICON16x16B	{width:16px; height:16px; vertical-align:middle; display:block;}
+.ICON20x20	{width:20px; height:20px; vertical-align:middle;}
 .ICON28x28	{width:28px; height:28px; vertical-align:middle;}
 .ICON32x32	{width:32px; height:32px; vertical-align:middle;}
 .ICON32x32B	{width:32px; height:32px; vertical-align:middle; display:block;}
 .ICON48x48	{width:48px; height:48px; vertical-align:middle;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
+.ICON128x128	{width:128px; height:128px; vertical-align:middle;}
+.BANNER		{width:120px; height:40px;}
+.BANNER_SMALL	{width:60px; height:20px;}
 
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
@@ -447,7 +451,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .CELLS_PAD_4 td {padding:4px;}
 .CELLS_PAD_8 th {padding:8px;}
 .CELLS_PAD_8 td {padding:8px;}
-
+	              
 /*********************************** Title ***********************************/
 .TIT
 	{
@@ -939,11 +943,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_SMALL_N		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#404040; font-size:10pt;}
 .DAT_SMALL_NOBR_N	{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#404040; font-size:10pt; white-space:nowrap;}
 
-.DAT_SMALL_GREY		{text-align:left; font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:10pt;}
-.DAT_SMALL_RED		{text-align:left; font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:10pt;}
-.DAT_SMALL_GREEN	{text-align:left; font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#008000; font-size:10pt;}
-.DAT_SMALL_BLUE		{text-align:left; font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#0080FF; font-size:10pt;}
-.DAT_SMALL_YELLOW	{text-align:left; font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#C0C000; font-size:10pt;}
+.DAT_SMALL_GREY		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:10pt;}
+.DAT_SMALL_RED		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#FF0000; font-size:10pt;}
+.DAT_SMALL_GREEN	{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#008000; font-size:10pt;}
+.DAT_SMALL_BLUE		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#0080FF; font-size:10pt;}
+.DAT_SMALL_YELLOW	{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#C0C000; font-size:10pt;}
 
 .HEAD_REC		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:10pt;}
 .HEAD_REC_SMALL		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#808080; font-size:9pt;}
@@ -953,7 +957,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_REC_SMALL		{color:#808080; font-size:9pt; line-height:110%;}
 .DAT_REC_SMALL_BOLD	{color:#202020; font-size:9pt; line-height:110%;}
 .MSJ_AVISO		{color:#632921; font-size:10pt;}
-.TIT_TBL		{color:#4D88A1; font-size:10pt;}
+.TIT_TBL		{color:#4D88A1; font-size:10pt; font-weight:bold;}
 .TIT_CLASSPHOTO		{font-family:Georgia, "DejaVu LGC Serif", "Bitstream Vera Serif", serif; color:#606060; font-size:11pt;}
 .CLASSPHOTO		{color:#606060; font-size:8pt; line-height:100%; white-space:nowrap;}
 
@@ -1109,6 +1113,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CON			{color:#B8D070; font-size:9pt; line-height:110%; white-space:nowrap;}
 .CON_CRS		{color:#398000; font-size:9pt; line-height:110%; white-space:nowrap;}
 
+/*************************** Indicators about courses ************************/
+.INDICATORS td,.INDICATORS th
+	{
+	border:1px solid silver;
+	border-collapse:collapse;
+	padding:1px;
+	}
+.INDICATORS th
+	{
+	color:#4D88A1;
+	font-size:10pt;
+	font-weight:bold;
+	}
+
+/********************************** Page foot ********************************/
 .FOOT_LIST_CONTAINER
 	{
 	position:relative;

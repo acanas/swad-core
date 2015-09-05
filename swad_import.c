@@ -545,7 +545,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
                      GrpCod,ExternalCrsCod);
 
          /* Write degree, course and group */
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"TIT_TBL LEFT_TOP\">"
+         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT LEFT_TOP\">"
                             "%s<br />%s %s<br />%s %s (%s)"
                             "</td>" \
                             "</tr>",

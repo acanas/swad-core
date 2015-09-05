@@ -804,7 +804,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
      }
 
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-                      " style=\"width:100%%; padding:20px;\">");
+                      " style=\"width:100%%;"
+                      " padding:20px 20px 100px 20px;\">");      // Bottom space used for signatures
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>" \
@@ -1200,17 +1201,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 	              "</tr>" \
                       "</table>");
 
-   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
-      /* Bottom space used for signatures */
-      fprintf (Gbl.F.Out,"<div style=\"height:100px;\"></div>");
-
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       Lay_EndRoundFrameTableWithButton ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
-	                                       Lay_CREATE_BUTTON,
-	                        Txt_Publish_announcement_OF_EXAM);
+	                                               Lay_CREATE_BUTTON,
+	                                Txt_Publish_announcement_OF_EXAM);
    else
       Lay_EndRoundFrameTable ();
 

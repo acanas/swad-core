@@ -1927,19 +1927,19 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
    /***** Head row with title of each column *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\"></td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th colspan=\"2\"></th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Group,
             Txt_Max_BR_students,

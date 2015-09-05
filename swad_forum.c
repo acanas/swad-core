@@ -2487,23 +2487,22 @@ void For_ShowForumThrs (void)
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL LEFT_MIDDLE\""
+	                 "<th class=\"TIT_TBL LEFT_MIDDLE\""
 	                 " style=\"width:14px;\">"
-	                 "&nbsp;"
-	                 "</td>"
-                         "<td class=\"TIT_TBL LEFT_MIDDLE\""
+	                 "</th>"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\""
                          " style=\"width:18px;\">"
                          "&nbsp;"
-                         "</td>"
-                         "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "</th>"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
-                         "</td>",
+                         "</th>",
                Txt_MSG_Subject);
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
          Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
          Pag_PutHiddenParamPagNum (PaginationThrs.CurrentPage);
          For_PutParamWhichForum ();
@@ -2517,20 +2516,20 @@ void For_ShowForumThrs (void)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
+         fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
 	                 "%s"
-	                 "</td>"
-                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+	                 "</th>"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
-                         "</td>"
-                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "</th>"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
-                         "</td>"
-                         "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "</th>"
+                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                          "%s"
-                         "</td>"
+                         "</th>"
                          "</tr>",
                Txt_No_BR_msgs,
                Txt_Unread_BR_msgs,

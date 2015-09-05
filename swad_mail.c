@@ -107,7 +107,7 @@ void Mai_SeeMailDomains (void)
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
       Act_FormStart (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_MAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL");
@@ -118,7 +118,7 @@ void Mai_SeeMailDomains (void)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -642,12 +642,12 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
             Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
@@ -685,19 +685,19 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_MAIL_DOMAIN_ORDER[3];
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],

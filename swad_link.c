@@ -672,19 +672,19 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_WWW;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Short_name,

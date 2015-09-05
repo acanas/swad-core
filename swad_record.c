@@ -2183,8 +2183,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/edit16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2209,8 +2208,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/card16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2234,8 +2232,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/config16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2263,8 +2260,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/folder16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2286,8 +2282,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/file16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " style=\"width:16px; height:16px;"
-			    " padding:0 2px;\" />"
+	                    " class=\"ICON16x16\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2307,8 +2302,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/rollcall16x16.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " style=\"width:16px; height:16px;"
-			       " padding:0 2px;\" />"
+	                       " class=\"ICON16x16\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2330,8 +2324,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 " style=\"display:inline;\" >"
 			 "<img src=\"%s/msg16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
-			 " style=\"width:16px; height:16px;"
-			 " padding:0 2px;\" />"
+	                 " class=\"ICON16x16\" />"
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
@@ -2352,8 +2345,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/unfollow16x16.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " style=\"width:16px; height:16px;"
-			       " padding:0 2px;\" />"
+	                       " class=\"ICON16x16\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2370,8 +2362,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/follow16x16.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " style=\"width:16px; height:16px;"
-			       " padding:0 2px;\" />"
+	                       " class=\"ICON16x16\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,

@@ -103,7 +103,7 @@ void Plc_SeePlaces (void)
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"TIT_TBL LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL");
@@ -114,7 +114,7 @@ void Plc_SeePlaces (void)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"</tr>");
 
@@ -679,12 +679,12 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Short_name,
             Txt_Full_name);
@@ -723,19 +723,19 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Centres;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"BM\"></th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                       "%s"
-                      "</td>"
-                      "<td class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "</th>"
+                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
+                      "</th>"
                       "</tr>",
             Txt_Code,
             Txt_Short_name,

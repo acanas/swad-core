@@ -256,12 +256,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       /***** Table start *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Rooms_with_users);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TIT_TBL CENTER_MIDDLE LIGHT_BLUE\">"
+	                 "<th class=\"TIT_TBL CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"
-	                 "</td>"
-                         "<td class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
+	                 "</th>"
+                         "<th class=\"TIT_TBL LEFT_MIDDLE LIGHT_BLUE\">"
                          "%s"
-                         "</td>"
+                         "</th>"
                          "</tr>",
                Txt_CHAT_Room_code,
                Txt_No_of_users);
