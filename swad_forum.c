@@ -921,7 +921,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16 LEFT_MIDDLE\" /> ",
+                      " class=\"ICON16x16\" /> ",
             Gbl.Prefs.IconsURL,
             Thr.NumUnreadPosts ? "msg-unread" :
         	                 "msg-open",
@@ -1080,7 +1080,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s CENTER_TOP\" style=\"width:24px;\">"
                       "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
             NewPst ? "MSG_TIT_BG_NEW" :
         	     "MSG_TIT_BG",
@@ -1146,7 +1147,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                                       Txt_Post_X_banned_Click_to_unban_it,
                   PstNum);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Enabled ? "visible" :
                 	    "hidden",
@@ -1785,7 +1787,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16 LEFT_MIDDLE\" />"
+	              " class=\"ICON16x16\" />"
                       "&nbsp;%s"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -1989,7 +1991,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_GLOBAL_TCHS:
          sprintf (Icon,"<img src=\"%s/forum16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
+                       " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -1997,7 +1999,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_SWAD_TCHS:
          sprintf (Icon,"<img src=\"%s/swad16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
+                       " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2012,7 +2014,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_COURSE_TCHS:
          sprintf (Icon,"<img src=\"%s/dot16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
+                       " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2129,7 +2131,8 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
       /* Check if thread to move is yet in current forum */
       if (For_CheckIfThrBelongsToForum (Gbl.Forum.ThreadToMove,ForumType))
          fprintf (Gbl.F.Out,"<img src=\"%s/paste_off16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Copy_not_allowed,Txt_Copy_not_allowed);
       else
@@ -2139,7 +2142,8 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Gbl.Forum.ThreadToMove);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Paste_thread,
                   Txt_Paste_thread);
@@ -3301,7 +3305,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr.ThrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Move_thread,
                   Txt_Move_thread);

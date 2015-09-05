@@ -2992,7 +2992,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 	              "<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                       "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON16x16\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Deleted ? "msg-fwd-del" :
@@ -3318,7 +3319,8 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/open_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
@@ -3339,7 +3341,8 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
@@ -3516,8 +3519,9 @@ void Msg_ListBannedUsrs (void)
             Act_FormStart (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
-        	               " src=\"%s/closed_on16x16.gif\" alt=\"%s\""
-        	               " title=\"%s\" class=\"ICON16x16\" />",
+        	               " src=\"%s/closed_on16x16.gif\""
+        	               " alt=\"%s\" title=\"%s\""
+        	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);

@@ -2996,7 +2996,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+        	               " alt=\"%s\" title=\"%s\""
+        	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Edit_question,
                      Txt_Edit_question);

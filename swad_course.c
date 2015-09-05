@@ -406,7 +406,7 @@ static void Crs_Configuration (bool PrintView)
                          "%u %s %u "
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%u %s %u\" title=\"%u %s %u\""
-                         " class=\"ICON16x16 LEFT_MIDDLE\" />"
+                         " class=\"ICON16x16\" />"
                          "</a>"
                          "</td>"
                          "</tr>",
@@ -574,8 +574,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                        The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"LEFT_MIDDLE\""
-		      " style=\"width:16px; height:16px;\" />",
+                      " class=\"ICON16x16\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_System,
 	    Txt_System);
@@ -614,8 +613,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"LEFT_MIDDLE\""
-	                 " style=\"width:16px; height:16px;\" />",
+                         " class=\"ICON16x16\" />",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -772,7 +770,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		                      The_ClassForm[Gbl.Prefs.Theme]);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICON16x16 LEFT_MIDDLE\" />",
+			             " class=\"ICON16x16\" />",
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShortName,
 		           Crs.FullName);
@@ -797,7 +795,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 				     "<img src=\"%s/rss16x16.gif\""
 				     " alt=\"RSS\" title=\"RSS\""
-				     " class=\"ICON16x16 LEFT_MIDDLE\" />"
+				     " class=\"ICON16x16\" />"
 				     "</a>",
 			   Gbl.Prefs.IconsURL);
 
@@ -1293,7 +1291,8 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"<tr>"
                                "<td class=\"CENTER_MIDDLE %s\">"
                                "<img src=\"%s/%s16x16.gif\""
-                               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                               " alt=\"%s\" title=\"%s\""
+                               " class=\"ICON16x16\" />"
                                "</td>",
                      BgColor,
                      Gbl.Prefs.IconsURL,
@@ -3304,7 +3303,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Accepted = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
       fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
 	                 "<img src=\"%s/%s16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16\" />"
 	                 "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,

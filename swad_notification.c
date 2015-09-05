@@ -430,7 +430,8 @@ void Ntf_ShowMyNotifications (void)
            {
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+        	               " alt=\"%s\" title=\"%s\""
+        	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],

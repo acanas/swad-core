@@ -1332,7 +1332,8 @@ static void Grp_ListGroupsForEdition (void)
                               Txt_Group_X_closed_click_to_open_it,
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->Open ? "open" :
                 	      "closed",
@@ -1351,7 +1352,8 @@ static void Grp_ListGroupsForEdition (void)
                                    Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->FileZones ? "folder-yes" :
                 	           "folder-no",

@@ -2642,7 +2642,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	       fprintf (Gbl.F.Out," />"
 				  "<img src=\"%s/%s16x16.gif\""
 				  " alt=\"%s\" title=\"%s\""
-				  " class=\"ICON16x16 LEFT_BOTTOM\" />"
+				  " class=\"ICON16x16\" />"
 				  "%s",
 			Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
 			Txt_SEX_SINGULAR_Abc[Sex],

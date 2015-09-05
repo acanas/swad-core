@@ -579,7 +579,8 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                                                                  Txt_Move_up_X,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/up_on16x16.gif\""
-		               " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -607,8 +608,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
                                                                  Txt_Move_down_X,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/down_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />",
+		               " src=\"%s/down_on16x16.gif\""
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -633,8 +635,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    sprintf (Gbl.Title,Txt_Increase_level_of_X,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/left_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />",
+		               " src=\"%s/left_on16x16.gif\""
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -660,8 +663,9 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 	    sprintf (Gbl.Title,Txt_Decrease_level_of_X,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
-		               " src=\"%s/right_on16x16.gif\" alt=\"%s\""
-		               " title=\"%s\" class=\"ICON16x16\" />",
+		               " src=\"%s/right_on16x16.gif\""
+		               " alt=\"%s\" title=\"%s\""
+		               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);

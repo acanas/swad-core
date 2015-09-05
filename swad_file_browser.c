@@ -5107,7 +5107,8 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5153,7 +5154,8 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -5171,7 +5173,8 @@ static void Brw_PutIconPasteOff (void)
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/paste_off16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
             Txt_Copy_not_allowed,
@@ -5225,7 +5228,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,Txt_Expand_FOLDER_X,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -5254,7 +5258,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,Txt_Contract_FOLDER_X,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+                            " alt=\"%s\" title=\"%s\""
+                            " class=\"ICON16x16B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -5310,7 +5315,8 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
@@ -5343,7 +5349,8 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
@@ -5408,8 +5415,9 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/folder-%s-plus16x16.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON16x16B\" />",
+	                 " src=\"%s/folder-%s-plus16x16.gif\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
         	                                      "open",
@@ -5442,7 +5450,8 @@ static void Brw_PutIconNewFileOrFolder (void)
    /***** Icon that indicates new file *****/
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/star16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16B\" />"
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16B\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
             Txt_New_FILE_OR_FOLDER,

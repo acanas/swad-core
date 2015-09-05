@@ -495,8 +495,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                Act_FormStart (ActHidNot);
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<input type=\"image\""
-        	                  " src=\"%s/visible_on16x16.gif\" alt=\"%s\""
-        	                  " title=\"%s\" class=\"ICON16x16\" />",
+        	                  " src=\"%s/visible_on16x16.gif\""
+        	                  " alt=%s\" title=\"%s\""
+        	                  " class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
                         Txt_NOTICE_Active_Mark_as_obsolete);
@@ -506,8 +507,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                Act_FormStart (ActRevNot);
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<input type=\"image\""
-        	                  " src=\"%s/hidden_on16x16.gif\" alt=\"%s\""
-        	                  " title=\"%s\" class=\"ICON16x16\" />",
+        	                  " src=\"%s/hidden_on16x16.gif\""
+        	                  " alt=\"%s\" title=\"%s\""
+        	                  " class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,
                         Txt_NOTICE_Obsolete_Mark_as_active);
@@ -520,7 +522,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_ACTIVE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/visible_off16x16.gif\""
-                                  " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                                  " alt=\"%s\" title=\"%s\""
+                                  " class=\"ICON16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
                         Gbl.Prefs.IconsURL,

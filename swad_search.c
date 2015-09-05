@@ -320,8 +320,7 @@ void Sch_PutFormToSearch (const char *IconURL)
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/search16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16 LEFT_TOP\""
-	              " style=\"padding-top:3px;\" />",
+	              " class=\"ICON16x16\" />",
             IconURL,
             Txt_Search,
             Txt_Search);

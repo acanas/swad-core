@@ -1083,7 +1083,8 @@ static void Deg_ListDegreeTypesForSeeing (void)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s\">"
                          "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"ICON16x16\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
@@ -1103,7 +1104,8 @@ static void Deg_ListDegreeTypesForSeeing (void)
       /* Direct log in is allowed for this degree type? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
                          "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"ICON16x16\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
@@ -1256,7 +1258,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
@@ -1316,7 +1319,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    /* Degree optional year */
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON16x16\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
@@ -1563,7 +1567,8 @@ static void Deg_ListDegreesForEdition (void)
       else
 	 /* Degree optional year */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON16x16\" />",
 		  Gbl.Prefs.IconsURL,
 		  Deg->OptYear ? "ok_on" :
 			         "tr",
@@ -3953,7 +3958,7 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-                               " class=\"ICON16x16 LEFT_TOP\" />"
+                               " class=\"ICON16x16\" />"
                                " %s",
                      Gbl.Prefs.IconsURL,
                      Txt_all_degrees,

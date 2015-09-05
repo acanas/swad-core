@@ -1527,7 +1527,8 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    Par_PutHiddenParamLong ("TagCod",TagCod);
    sprintf (Gbl.Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -1548,7 +1549,8 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    Par_PutHiddenParamLong ("TagCod",TagCod);
    sprintf (Gbl.Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_on16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -2495,7 +2497,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Act_FormStart (ActEdiOneTstQst);
       Par_PutHiddenParamLong ("QstCod",QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON16x16\" />",
                Gbl.Prefs.IconsURL,
                Txt_Edit_question,
                Txt_Edit_question);

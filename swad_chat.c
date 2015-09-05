@@ -124,7 +124,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:20px;\">"
                       "<img src=\"%s/chat16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16 LEFT_MIDDLE\" />"
+	              " class=\"ICON16x16\" />"
                       " %s"
                       "</li>",
             Gbl.Prefs.IconsURL,
@@ -140,7 +140,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
    fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16 LEFT_MIDDLE\" />",
+	              " class=\"ICON16x16\" />",
             Gbl.Prefs.IconsURL,
             ThisRoomFullName,
             ThisRoomFullName);
@@ -154,7 +154,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16 LEFT_MIDDLE\" />",
+			    " class=\"ICON16x16\" />",
 		  Gbl.Prefs.IconsURL,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
@@ -164,7 +164,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16 LEFT_MIDDLE\" />",
+			    " class=\"ICON16x16\" />",
 		  Gbl.Prefs.IconsURL,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
@@ -215,7 +215,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShortName,ThisRoomFullName,2,IsLastItemInLevel);
                fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON16x16 LEFT_MIDDLE\" />",
+        	                  " class=\"ICON16x16\" />",
                         Gbl.Prefs.IconsURL,
                         ThisRoomFullName,ThisRoomFullName);
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);

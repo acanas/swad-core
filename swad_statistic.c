@@ -6722,7 +6722,7 @@ static void Sta_GetAndShowForumStats (void)
                       "<th class=\"LEFT_TOP\" style=\"width:16px;\">"
                       "<img src=\"%s/forum16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16 LEFT_TOP\" />"
+                      " class=\"ICON16x16\" />"
                       "</th>"
                       "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"
