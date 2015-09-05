@@ -921,8 +921,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\""
-                      " style=\"vertical-align:middle;\" /> ",
+                      " class=\"ICON16x16 LEFT_MIDDLE\" /> ",
             Gbl.Prefs.IconsURL,
             Thr.NumUnreadPosts ? "msg-unread" :
         	                 "msg-open",
@@ -1786,7 +1785,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" style=\"vertical-align:middle;\" />"
+	              " class=\"ICON16x16 LEFT_MIDDLE\" />"
                       "&nbsp;%s"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -1990,7 +1989,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_GLOBAL_TCHS:
          sprintf (Icon,"<img src=\"%s/forum16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -1998,7 +1997,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_SWAD_TCHS:
          sprintf (Icon,"<img src=\"%s/swad16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16\" style=\"vertical-align:middle;\" />",
+                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2013,8 +2012,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_COURSE_TCHS:
          sprintf (Icon,"<img src=\"%s/dot16x16.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON16x16\""
-                       " style=\"vertical-align:middle;\" />",
+                       " class=\"ICON16x16 LEFT_MIDDLE\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;

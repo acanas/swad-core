@@ -634,8 +634,8 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
-	              " style=\"width:%upx; height:%upx;"
-	              " margin:0 auto; vertical-align:middle;\" />"
+                      " class=\"CENTER_MIDDLE\""
+	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
             LogoLayout[Gbl.Prefs.Layout].Icon,
@@ -698,8 +698,8 @@ static void Lay_WritePageTopHeading (void)
       case Lay_LAYOUT_DESKTOP:
          /***** 2nd. row, 1st. column *****/
          /* Clock with hour:minute (server hour is shown) */
-         fprintf (Gbl.F.Out,"<td style=\"width:128px; height:64px;"
-                            " text-align:center; vertical-align:top;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+                            " style=\"width:128px; height:64px;\">");
          Dat_ShowCurrentDateTime ();
          fprintf (Gbl.F.Out,"</td>");	// End of first column
 
@@ -1691,8 +1691,8 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 	i++)
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	                 " alt=\"\" title=\"\""
-			 " style=\"width:20px; height:20px;"
-			 " vertical-align:middle;\" />",
+                         " class=\"LEFT_MIDDLE\""
+			 " style=\"width:20px; height:20px;\" />",
 		  Gbl.Prefs.IconsURL,
 		  IsLastItemInLevel[i] ? "tr" :
 		                         "subleft");
@@ -1700,8 +1700,8 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
    /***** Level *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	              " alt=\"\" title=\"\""
-		      " style=\"width:20px; height:20px;"
-		      " vertical-align:middle;\" />",
+                      " class=\"LEFT_MIDDLE\""
+		      " style=\"width:20px; height:20px;\" />",
 	    Gbl.Prefs.IconsURL,
 	    IsLastItemInLevel[Level] ? "subend" :
 				       "submid");

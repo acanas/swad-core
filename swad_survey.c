@@ -3223,8 +3223,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
       BarWidth = 2;
    fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " style=\"width:%upx; height:16px;"
-	              " vertical-align:top;\" />"
+                      " class=\"LEFT_TOP\""
+	              " style=\"width:%upx; height:16px;\" />"
 	              "&nbsp;",
       Gbl.Prefs.IconsURL,
       Gbl.Title,

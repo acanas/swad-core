@@ -3922,8 +3922,8 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
                             "<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " style=\"width:20px; height:20px;"
-                            " vertical-align:top;\" />"
+                            " class=\"RIGHT_TOP\""
+                            " style=\"width:20px; height:20px;\" />"
                             "</td>",
                   Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :
@@ -3946,14 +3946,14 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
             sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
             Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
             Log_DrawLogo (Sco_SCOPE_DEG,DegCod,row[1],
-                          16,"CENTER_TOP",true);
+                          16,"LEFT_TOP",true);
             fprintf (Gbl.F.Out,"&nbsp;%s</a>",row[2]);
             Act_FormEnd ();
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-                               " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
+                               " class=\"ICON16x16 LEFT_TOP\" />"
                                " %s",
                      Gbl.Prefs.IconsURL,
                      Txt_all_degrees,

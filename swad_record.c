@@ -1339,7 +1339,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
                       "<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
    if (ShowOfficeHours)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," style=\"vertical-align:middle;\""
+   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\""
 	              " onclick=\"javascript:document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -2642,8 +2642,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	       fprintf (Gbl.F.Out," />"
 				  "<img src=\"%s/%s16x16.gif\""
 				  " alt=\"%s\" title=\"%s\""
-				  " class=\"ICON16x16\""
-				  " style=\"vertical-align:bottom;\" />"
+				  " class=\"ICON16x16 LEFT_BOTTOM\" />"
 				  "%s",
 			Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
 			Txt_SEX_SINGULAR_Abc[Sex],

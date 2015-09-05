@@ -3084,8 +3084,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
          fprintf (Gbl.F.Out,"<li class=\"%s\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
+                            " class=\"LEFT_TOP\""
                             " style=\"width:20px; height:20px;"
-                            " vertical-align:top; margin-left:5px;\" />"
+                            " margin-left:5px;\" />"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :

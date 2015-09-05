@@ -261,8 +261,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<td class=\"%s LEFT_MIDDLE\">"
 			 "<img src=\"%s/%s16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
+                         " class=\"LEFT_MIDDLE\""
 			 " style=\"width:16px; height:16px;"
-			 " margin-right:10px; vertical-align:middle;\" />"
+			 " margin-right:10px;\" />"
 			 "%s:</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -479,8 +480,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
+                            " class=\"LEFT_MIDDLE\""
 			    " style=\"width:16px; height:16px;"
-			    " margin:0 2px; vertical-align:middle;\" />"
+			    " margin:0 2px;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"

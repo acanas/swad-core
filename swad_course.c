@@ -406,7 +406,7 @@ static void Crs_Configuration (bool PrintView)
                          "%u %s %u "
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%u %s %u\" title=\"%u %s %u\""
-                         " class=\"ICON16x16\" style=\"vertical-align:top;\"/>"
+                         " class=\"ICON16x16 LEFT_MIDDLE\" />"
                          "</a>"
                          "</td>"
                          "</tr>",
@@ -574,8 +574,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                        The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-		      " style=\"width:16px; height:16px;"
-		      " vertical-align:middle;\" />",
+                      " class=\"LEFT_MIDDLE\""
+		      " style=\"width:16px; height:16px;\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_System,
 	    Txt_System);
@@ -614,8 +614,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " style=\"width:16px; height:16px;"
-	                 " vertical-align:middle;\" />",
+                         " class=\"LEFT_MIDDLE\""
+	                 " style=\"width:16px; height:16px;\" />",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -772,8 +772,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		                      The_ClassForm[Gbl.Prefs.Theme]);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICON16x16\""
-			             " style=\"vertical-align:middle;\" />",
+			             " class=\"ICON16x16 LEFT_MIDDLE\" />",
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShortName,
 		           Crs.FullName);
@@ -798,8 +797,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 				     "<img src=\"%s/rss16x16.gif\""
 				     " alt=\"RSS\" title=\"RSS\""
-				     " class=\"ICON16x16\""
-				     " style=\"vertical-align:middle;\" />"
+				     " class=\"ICON16x16 LEFT_MIDDLE\" />"
 				     "</a>",
 			   Gbl.Prefs.IconsURL);
 

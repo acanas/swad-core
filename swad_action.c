@@ -4796,8 +4796,8 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
          Act_LinkFormSubmit (Title,"MFU_ACT");
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\""
-                            " style=\"margin:1px; vertical-align:middle;\" />",
+                            " class=\"ICON16x16 LEFT_MIDDLE\""
+                            " style=\"margin:1px;\" />",
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[Action].Icon,
                   MenuStr,TabMenuStr);

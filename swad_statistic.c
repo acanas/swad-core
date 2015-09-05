@@ -1812,8 +1812,8 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
       if (BarWidth)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
 	                    " alt=\"\" title=\"\""
-	                    " style=\"width:%upx; height:14px;"
-	                    " vertical-align:top;\" />"
+                            " class=\"LEFT_TOP\""
+	                    " style=\"width:%upx; height:14px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
 		  UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? 'c' :
@@ -3445,8 +3445,8 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
          BarWidth = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " style=\"width:%upx; height:14px;"
-	                 " vertical-align:top;\" />"
+                         " class=\"LEFT_TOP\""
+	                 " style=\"width:%upx; height:14px;\" />"
                          "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
@@ -6722,7 +6722,7 @@ static void Sta_GetAndShowForumStats (void)
                       "<th class=\"LEFT_TOP\" style=\"width:16px;\">"
                       "<img src=\"%s/forum16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" style=\"vertical-align:top;\" />"
+                      " class=\"ICON16x16 LEFT_TOP\" />"
                       "</th>"
                       "<th class=\"TIT_TBL LEFT_TOP\">"
                       "%s"

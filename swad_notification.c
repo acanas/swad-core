@@ -1827,8 +1827,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
       fprintf (Gbl.F.Out,"<br />"
 	                 "<img src=\"%s/bell16x16.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " style=\"width:16px; height:16px;"
-	                 " vertical-align:middle;\" /> ",
+                         " class=\"LEFT_MIDDLE\""
+	                 " style=\"width:16px; height:16px;\" /> ",
                Gbl.Prefs.PathTheme,
                Txt_Notifications,
                Txt_Notifications);
