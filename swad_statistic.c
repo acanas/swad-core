@@ -1521,7 +1521,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormEnd ();
 
    /* Write number of current page */
-   fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_MIDDLE\" style=\"width:60%%;\">"
+   fprintf (Gbl.F.Out,"<td class=\"TIT_TBL CENTER_MIDDLE\""
+	              " style=\"width:60%%;\">"
                       "<strong>"
                       "%s %lu-%lu %s %lu (%s %ld %s %lu)"
                       "</strong>"

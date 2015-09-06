@@ -563,7 +563,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses);
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
@@ -1148,7 +1149,8 @@ void Crs_WriteSelectorMyCourses (void)
                                                   ActSysReqSch);
 
    /***** Start of selector of courses *****/
-   fprintf (Gbl.F.Out,"<select name=\"CrsCod\" style=\"width:%upx;margin:1px;\""
+   fprintf (Gbl.F.Out,"<select name=\"CrsCod\""
+	              " style=\"width:%upx; margin:1px;\""
                       " onchange=\"javascript:document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
 
@@ -1451,7 +1453,8 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActChgCrsDeg);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"OthDegCod\" style=\"width:80px;\""
+               fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
+        	                  " style=\"width:80px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
                         Gbl.FormId);
                for (NumDeg = 0;
@@ -1475,7 +1478,8 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActChgCrsYea);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" style=\"width:40px;\""
+               fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
+        	                  " style=\"width:40px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
                         Gbl.FormId);
                for (YearAux = 0;
@@ -1571,7 +1575,8 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActChgCrsSta);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:80px;\""
+               fprintf (Gbl.F.Out,"<select name=\"Status\""
+        	                  " style=\"width:80px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">"
                                   "<option value=\"%u\" selected=\"selected\">%s</option>"
                                   "<option value=\"%u\">%s</option>"
@@ -1590,8 +1595,10 @@ static void Crs_ListCoursesForEdition (void)
             /* Course requester */
             UsrDat.UsrCod = Crs->RequesterUsrCod;
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-                               "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
+        	               " style=\"width:100px;\">"
+                               "<table class=\"CELLS_PAD_2\""
+                               " style=\"width:100px;\">"
                                "<tr>");
             Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
             fprintf (Gbl.F.Out,"</tr>"

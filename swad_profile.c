@@ -225,8 +225,7 @@ bool Prf_ShowUserProfile (void)
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 	}
 
-      fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">"
-			 "<table style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 			 "<tr>"
 			 "<td rowspan=\"2\" class=\"CENTER_TOP\">");
 
@@ -250,8 +249,7 @@ bool Prf_ShowUserProfile (void)
 
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>"
-			 "</table>"
-			 "</div>");
+			 "</table>");
 
       return true;
      }

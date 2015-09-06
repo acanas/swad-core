@@ -158,7 +158,7 @@ void Hld_SeeHolidays (void)
 	       break;
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"DAT\" style=\"text-align:center;\">"
+			    "<td class=\"DAT CENTER_MIDDLE\">"
 			    "&nbsp;%s"
 			    "</td>"
 			    "</tr>",

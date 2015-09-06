@@ -757,7 +757,7 @@ void Cty_WriteScriptGoogleGeochart (void)
                       "		height:300,\n"
                       "		backgroundColor:'white',\n"
                       "		datalessRegionColor:'white',\n"
-                      "		colorAxis:{colors:['black','black'],minValue:0,maxValue:%u}};\n"
+                      "		colorAxis:{colors:['white','black'],minValue:0,maxValue:%u}};\n"
                       "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
                       "	chart.draw(data, options);\n"
                       "	};\n"

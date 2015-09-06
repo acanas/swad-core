@@ -2427,12 +2427,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's web and social networks *****/
-   fprintf (Gbl.F.Out,"<td style=\"width:%upx;\">"
-	              "<div class=\"CENTER_TOP\" style=\"margin:0 auto;\">",
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",
 	    TopC3Width);
    Net_ShowWebsAndSocialNets (UsrDat);
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
    if (ShowIDRows ||
@@ -2676,10 +2674,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
-			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		     Rec_C2_BOTTOM_WIDE - 60,
+			       " maxlength=\"%u\" value=\"%s\""
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		     UsrDat->Surname1);
+		     UsrDat->Surname1,
+		     Rec_C2_BOTTOM_WIDE - 60);
 	 else if (UsrDat->Surname1[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2698,10 +2697,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
-			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		     Rec_C2_BOTTOM_WIDE - 60,
+			       " maxlength=\"%u\" value=\"%s\""
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		     UsrDat->Surname2);
+		     UsrDat->Surname2,
+		     Rec_C2_BOTTOM_WIDE - 60);
 	 else if (UsrDat->Surname2[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",
 		     UsrDat->Surname2);
@@ -2722,10 +2722,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
-			       " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-		     Rec_C2_BOTTOM_WIDE - 60,
+			       " maxlength=\"%u\" value=\"%s\""
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		     UsrDat->FirstName);
+		     UsrDat->FirstName,
+		     Rec_C2_BOTTOM_WIDE - 60);
 	 else if (UsrDat->FirstName[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2754,7 +2755,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		     ClassData,Rec_C2_BOTTOM_WIDE);
 
 	    /* Selector of country */
-	    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:%upx;\">"
+	    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
+		               " style=\"width:%upx;\">"
 			       "<option value=\"-1\">%s</option>"
 			       "<option value=\"0\"",
 		     Rec_C2_BOTTOM_WIDE - 60,
@@ -2796,10 +2798,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
-				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-			Rec_C2_BOTTOM_WIDE - 60,
+				  " maxlength=\"%u\" value=\"%s\""
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
-			UsrDat->OriginPlace);
+			UsrDat->OriginPlace,
+			Rec_C2_BOTTOM_WIDE - 60);
 	    else if (UsrDat->OriginPlace[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
 	   }
@@ -2844,10 +2847,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
-				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-			Rec_C2_BOTTOM_WIDE - 60,
+				  " maxlength=\"%u\" value=\"%s\""
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
-			UsrDat->LocalAddress);
+			UsrDat->LocalAddress,
+			Rec_C2_BOTTOM_WIDE - 60);
 	    else if (UsrDat->LocalAddress[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
 	   }
@@ -2868,10 +2872,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
-				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-			Rec_C2_BOTTOM_WIDE - 60,
+				  " maxlength=\"%u\" value=\"%s\""
+				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
-			UsrDat->LocalPhone);
+			UsrDat->LocalPhone,
+			Rec_C2_BOTTOM_WIDE - 60);
 	    else if (UsrDat->LocalPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
 	   }
@@ -2892,10 +2897,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
-				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-			Rec_C2_BOTTOM_WIDE - 60,
+				  " maxlength=\"%u\" value=\"%s\""
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
-			UsrDat->FamilyAddress);
+			UsrDat->FamilyAddress,
+			Rec_C2_BOTTOM_WIDE - 60);
 	    else if (UsrDat->FamilyAddress[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
 	   }
@@ -2916,10 +2922,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
-				  " style=\"width:%upx;\" maxlength=\"%u\" value=\"%s\" />",
-			Rec_C2_BOTTOM_WIDE - 60,
+				  " maxlength=\"%u\" value=\"%s\""
+				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
-			UsrDat->FamilyPhone);
+			UsrDat->FamilyPhone,
+			Rec_C2_BOTTOM_WIDE - 60);
 	    else if (UsrDat->FamilyPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
 	   }
@@ -3525,7 +3532,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
-			 " style=\"width:400px;\" maxlength=\"%u\" value=\"%s\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " style=\"width:400px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,

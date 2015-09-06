@@ -275,8 +275,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
-	              " style=\"width:110px;"
-	              " margin-left:auto; margin-right:auto; \">"
+	              " style=\"width:110px; \">"
                       "<table style=\"width:110px;\">");
 
    /***** Write total number of sessions *****/

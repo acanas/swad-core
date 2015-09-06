@@ -1158,7 +1158,8 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMdtGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\" style=\"width:120px;\""
+      fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\""
+	                 " style=\"width:120px;\""
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
@@ -1179,7 +1180,8 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMulGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\" style=\"width:120px;\""
+      fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\""
+	                 " style=\"width:120px;\""
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
@@ -2056,7 +2058,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"MandatoryEnrollment\" style=\"width:120px;\">"
+                      "<select name=\"MandatoryEnrollment\""
+                      " style=\"width:120px;\">"
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2072,7 +2075,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it possible to register in multiple groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"MultipleEnrollment\" style=\"width:120px;\">"
+                      "<select name=\"MultipleEnrollment\""
+                      " style=\"width:120px;\">"
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment)
       fprintf (Gbl.F.Out," selected=\"selected\"");

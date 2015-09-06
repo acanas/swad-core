@@ -1743,7 +1743,8 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"OthCtyCod\" style=\"width:80px;\" disabled=\"disabled\">"
+                      "<select name=\"OthCtyCod\""
+                      " style=\"width:80px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"

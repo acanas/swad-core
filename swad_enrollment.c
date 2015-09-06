@@ -834,7 +834,8 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT %s\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
 
@@ -1051,7 +1052,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:10px auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT %s\">",
             The_ClassForm[Gbl.Prefs.Theme]);
 

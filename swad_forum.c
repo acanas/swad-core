@@ -906,7 +906,8 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
@@ -1617,7 +1618,8 @@ void For_ShowForumList (void)
    For_PutFormWhichForums ();
 
    /***** Write a link to top level of forums *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
@@ -2462,7 +2464,8 @@ void For_ShowForumThrs (void)
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 

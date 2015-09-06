@@ -1169,8 +1169,7 @@ void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding)
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<div class=\"FRAME10_SHADOW\"");
    if (Width)
-      fprintf (Gbl.F.Out," style=\"width:%s\"",
-               Width);
+      fprintf (Gbl.F.Out," style=\"width:%s\"",Width);
    fprintf (Gbl.F.Out,">"
                       "<table class=\"TABLE10");
    if (CellPadding)
@@ -1577,14 +1576,13 @@ void Lay_PutIconsToSelectLayout (void)
 	Layout < Lay_NUM_LAYOUTS;
 	Layout++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
                Layout == Gbl.Prefs.Layout ? "LAYOUT_ON" :
         	                            "LAYOUT_OFF");
       Act_FormStart (ActChgLay);
       Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
-	                 " style=\"margin:0 auto;\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\" />",
                Gbl.Prefs.IconsURL,
                Lay_LayoutIcons[Layout],
                Txt_LAYOUT_NAMES[Layout],

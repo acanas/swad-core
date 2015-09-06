@@ -1216,7 +1216,8 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	      {
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />%s"
-	                          "<select name=\"ModTTGrpCod\" style=\"width:88px;\""
+	                          "<select name=\"ModTTGrpCod\""
+	                          " style=\"width:88px;\""
 		                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		        Txt_Group,Gbl.FormId);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");

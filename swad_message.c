@@ -2861,8 +2861,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
                Style);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">"
-	                 "&nbsp;",
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">",
 	       WidthOfNameColumn);
      }
 

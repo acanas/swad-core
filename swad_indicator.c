@@ -99,7 +99,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Start form */
    Act_FormStart (ActReqStaCrs);
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                       "<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
@@ -1182,7 +1182,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
    /***** Write number of courses with each number of indicators valid *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"margin-left:auto; margin-right:auto;\">"
+	              " style=\"margin:0 auto;\">"
                       "<tr>"
                       "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
                       "%s"

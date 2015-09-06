@@ -1039,7 +1039,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** File *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	              "<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
@@ -1074,7 +1074,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
 
    /***** Link *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin-left:auto; margin-right:auto;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"

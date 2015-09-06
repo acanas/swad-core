@@ -1966,7 +1966,8 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthInsCod\" style=\"width:50px;\" disabled=\"disabled\">"
+                      "<select name=\"OthInsCod\" style=\"width:50px;\""
+                      " disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"

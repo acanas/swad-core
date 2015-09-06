@@ -1477,7 +1477,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" style=\"width:50px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
+	                    " style=\"width:50px;\""
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumDegTyp = 0;
@@ -1807,7 +1808,8 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Centre *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthCtrCod\" style=\"width:50px;\" disabled=\"disabled\">"
+                      "<select name=\"OthCtrCod\""
+                      " style=\"width:50px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"

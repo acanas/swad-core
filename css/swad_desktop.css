@@ -91,7 +91,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /************************* Users connected globally **************************/
 .CONNECTED
 	{
-	margin:0;
+	margin:0 auto;
 	border-style:solid;
 	border-width:1px;
 	border-color:#80C040;
@@ -391,6 +391,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .ICON48x48	{width:48px; height:48px; vertical-align:middle;}
 .ICON64x64	{width:64px; height:64px; vertical-align:middle;}
 .ICON128x128	{width:128px; height:128px; vertical-align:middle;}
+.ICON8x800	{width:8px; height:800px;}
 .BANNER		{width:120px; height:40px;}
 .BANNER_SMALL	{width:60px; height:20px;}
 
