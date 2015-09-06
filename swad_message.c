@@ -2601,15 +2601,9 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                                                       Txt_MSG_Sent;
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s CENTER_TOP\" style=\"width:16px;\">"
-                      "<table style=\"width:16px;\">"
-                      "<tr>"
-                      "<td class=\"CENTER_TOP\""
-                      " style=\"width:16px; padding:0;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16B\" />"
-                      "</td>"
-                      "</tr>",
+                      " class=\"ICON16x16\" />",
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
         	                                              "BG_MSG_GREEN") :
                                                       "BG_MSG_BLUE",
@@ -2622,11 +2616,9 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
             Title,Title);
 
    /***** Form to delete message *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<br />");
    Msg_PutFormToDeleteMessage (MsgCod,TypeOfMessages);
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Write message number *****/
    Msg_WriteMsgNumber (MsgNum,!Open);
@@ -3237,15 +3229,13 @@ void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
 
 static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfMessages)
   {
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:18px; padding:0;\">");
    Act_FormStart (TypeOfMessages == Msg_MESSAGES_RECEIVED ? ActDelRcvMsg :
 	                                                    ActDelSntMsg);
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   Lay_PutIconBRemove ();
+   Lay_PutIconRemove ();
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -3317,10 +3307,9 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
-	              "<input type=\"image\" src=\"%s/open_on16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/open_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />",
+	              " class=\"ICON16x16\" style=\"margin-left:10px;\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);

@@ -2492,7 +2492,6 @@ void For_ShowForumThrs (void)
 	                 "</th>"
                          "<th class=\"TIT_TBL LEFT_MIDDLE\""
                          " style=\"width:18px;\">"
-                         "&nbsp;"
                          "</th>"
                          "<th class=\"TIT_TBL LEFT_MIDDLE\">"
                          "%s"
@@ -3244,29 +3243,25 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP %s\" style=\"width:14px;>",
+	                 "<td class=\"RIGHT_TOP %s\" style=\"width:14px;\">",
                BgColor);
       if (Thr.NumMyPosts)
         {
-         fprintf (Gbl.F.Out,"<span title=\"");
-         if (Thr.NumMyPosts == 1)
-            fprintf (Gbl.F.Out,"%s",Txt_You_have_written_1_post_in_this_thread);
-         else
-            fprintf (Gbl.F.Out,Txt_You_have_written_X_posts_in_this_thread,
-                     Thr.NumMyPosts);
-         fprintf (Gbl.F.Out,"\">"
-                            "<img src=\"");
+         fprintf (Gbl.F.Out,"<img src=\"");
          if (Gbl.Usrs.Me.PhotoURL[0])	// If I have photo
             fprintf (Gbl.F.Out,"%s",
                      Gbl.Usrs.Me.PhotoURL);
          else
             fprintf (Gbl.F.Out,"%s/usr_bl.jpg",
                      Gbl.Prefs.IconsURL);
-         fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
-                            " class=\"PHOTO12x16\" />"
-                            "</span>",
-                  Txt_Thread_with_posts_from_you,
+         fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"",
                   Txt_Thread_with_posts_from_you);
+         if (Thr.NumMyPosts == 1)
+            fprintf (Gbl.F.Out,"%s",Txt_You_have_written_1_post_in_this_thread);
+         else
+            fprintf (Gbl.F.Out,Txt_You_have_written_X_posts_in_this_thread,
+                     Thr.NumMyPosts);
+         fprintf (Gbl.F.Out,"\" class=\"PHOTO12x16\" />");
         }
       fprintf (Gbl.F.Out,"</td>");
 

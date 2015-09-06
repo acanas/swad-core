@@ -2897,7 +2897,7 @@ static void Att_PutButtonToShowDetails (void)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
-   fprintf (Gbl.F.Out,"<div style=\"text-align:center;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActSeeLstAttStd);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();

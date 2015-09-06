@@ -1146,7 +1146,7 @@ void Asg_RequestCreatOrEditAsg (void)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td style=\"LEFT_TOP\">",
+                         "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
 
