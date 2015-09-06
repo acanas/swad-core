@@ -141,10 +141,10 @@ void Ctr_SeeCtrWithPendingDegs (void)
       Lay_StartRoundFrameTable (NULL,2,Txt_Centres_with_pending_degrees);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -2068,7 +2068,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>",
             Txt_Place);
@@ -2076,7 +2076,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeCtr);
@@ -2095,10 +2095,10 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
 	              "</tr>",
@@ -2125,35 +2125,35 @@ static void Ctr_PutHeadCentresForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th style=\"width:20px;\"></th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2417,7 +2417,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 
       /* Number of centres found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
       if (NumCtrs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_centre);
       else

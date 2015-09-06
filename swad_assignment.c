@@ -161,7 +161,7 @@ static void Asg_ShowAllAssignments (void)
 	Order <= Asg_ORDER_BY_END_DATE;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActSeeAsg);
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -176,13 +176,13 @@ static void Asg_ShowAllAssignments (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",

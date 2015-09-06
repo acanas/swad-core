@@ -119,10 +119,10 @@ void Cty_SeeCtyWithPendingInss (void)
       Lay_StartRoundFrameTable (NULL,2,Txt_Countries_with_pending_institutions);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -497,7 +497,7 @@ void Cty_ListCountries2 (void)
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActSeeCty);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL");
@@ -510,13 +510,13 @@ void Cty_ListCountries2 (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1707,23 +1707,23 @@ static void Cty_PutHeadCountries (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

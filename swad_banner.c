@@ -791,11 +791,11 @@ static void Ban_PutHeadBanners (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">%s</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"RIGHT_MIDDLE\">%s</th>"
+                      "<th class=\"LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"LEFT_MIDDLE\">%s</th>"
+                      "<th class=\"LEFT_MIDDLE\">%s</th>"
                       "</tr>",
             Txt_Code,
             Txt_Short_name,

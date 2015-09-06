@@ -106,7 +106,7 @@ void Dpt_SeeDepts (void)
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeeDpt);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL");
@@ -874,16 +874,16 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -951,24 +951,24 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_Teachers_ABBREVIATION;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

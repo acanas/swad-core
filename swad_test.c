@@ -2408,22 +2408,22 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"2\"></th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>",
             Txt_No_INDEX,
@@ -2440,7 +2440,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	Order < (Tst_QuestionsOrder_t) Tst_NUM_TYPES_ORDER_QST;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_TOP\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
       if (NumRows > 1)
         {
          Act_FormStart (ActLstTstQst);
@@ -6077,25 +6077,25 @@ static void Tst_ShowHeaderTestResults (void)
    extern const char *Txt_out_of_PART_OF_A_SCORE;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" class=\"TIT_TBL CENTER_TOP\">"
+		      "<th colspan=\"2\" class=\"CENTER_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_TOP\">"
+		      "<th class=\"RIGHT_TOP\">"
 		      "%s<br />%s<br />%u"
 		      "</th>"
 		      "<th></th>"

@@ -131,10 +131,10 @@ void Ins_SeeInsWithPendingCtrs (void)
       Lay_StartRoundFrameTable (NULL,2,Txt_Institutions_with_pending_centres);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -607,7 +607,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeIns);
@@ -626,22 +626,22 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1822,32 +1822,32 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th style=\"width:20px;\"></th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -2084,7 +2084,7 @@ unsigned Ins_ListInssFound (const char *Query)
 
       /* Number of institutions found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"10\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"10\" class=\"CENTER_MIDDLE\">");
       if (NumInss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_institution);
       else

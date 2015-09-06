@@ -329,13 +329,13 @@ static void Rec_WriteHeadingRecordFields (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

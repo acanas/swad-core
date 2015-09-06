@@ -195,7 +195,7 @@ static void Att_ShowAllAttEvents (void)
 	Order <= Att_ORDER_BY_END_DATE;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActSeeAtt);
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -210,10 +210,10 @@ static void Att_ShowAllAttEvents (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+		      "<th class=\"RIGHT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",
@@ -1891,10 +1891,10 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-		      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+		      "<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+		      "<th class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",
@@ -1959,13 +1959,13 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                          "<th></th>");
       if (Gbl.Usrs.Listing.WithPhotos)
          fprintf (Gbl.F.Out,"<th style=\"width:18px;\"></th>");
-      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
 	                 "%s"
 	                 "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -2937,10 +2937,10 @@ static void Att_ListEventsToSelect (void)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
+		      "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+		      "<th class=\"RIGHT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",
@@ -3099,7 +3099,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    unsigned NumAttEvent;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th colspan=\"%u\" class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th colspan=\"%u\" class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>",
             Gbl.Usrs.Listing.WithPhotos ? 4 :
@@ -3114,14 +3114,14 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 /***** Get data of this attendance event *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
 
-	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\" title=\"%s\">"
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\" title=\"%s\">"
 			    "%u"
 			    "</th>",
 		  Gbl.AttEvents.Lst[NumAttEvent].Title,
 		  NumAttEvent + 1);
 	}
 
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
                       "</tr>",

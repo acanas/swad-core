@@ -10846,7 +10846,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 
       /* Write header with number of documents found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">");
+			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
       if (NumDocs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_document);
       else
@@ -10857,22 +10857,22 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"BM\"></th>"
-			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -10898,7 +10898,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
       /***** Write footer *****/
       /* Number of documents not hidden found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"TIT_TBL CENTER_MIDDLE\">"
+			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">"
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)

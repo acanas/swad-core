@@ -317,19 +317,19 @@ void Ntf_ShowMyNotifications (void)
       /***** Table start *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                         "<th class=\"CENTER_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",
@@ -1689,10 +1689,10 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
-		      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
-                      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
 	              "</tr>",

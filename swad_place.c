@@ -103,7 +103,7 @@ void Plc_SeePlaces (void)
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL");
@@ -679,10 +679,10 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -724,16 +724,16 @@ static void Plc_PutHeadPlaces (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

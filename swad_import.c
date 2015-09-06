@@ -511,7 +511,7 @@ static unsigned Imp_GetAndListImpGrpsAndStdsFromDB (bool ItsAFormToRegRemStds)
       /***** Start table with groups *****/
       Lay_StartRoundFrameTable (NULL,2,NULL);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<th colspan=\"%u\" class=\"TIT_TBL CENTER_TOP\">",
+	                 "<th colspan=\"%u\" class=\"CENTER_TOP\">",
 	       ItsAFormToRegRemStds ? 3 :
 		                      2);
       Lay_WriteTitle (Txt_Official_students);

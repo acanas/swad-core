@@ -2490,13 +2490,13 @@ void For_ShowForumThrs (void)
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<th class=\"TIT_TBL LEFT_MIDDLE\""
+	                 "<th class=\"LEFT_MIDDLE\""
 	                 " style=\"width:14px;\">"
 	                 "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\""
+                         "<th class=\"LEFT_MIDDLE\""
                          " style=\"width:18px;\">"
                          "</th>"
-                         "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>",
                Txt_MSG_Subject);
@@ -2520,16 +2520,16 @@ void For_ShowForumThrs (void)
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	                 "%s"
 	                 "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                         "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "</tr>",

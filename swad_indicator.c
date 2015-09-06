@@ -1184,10 +1184,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
 	              " style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th colspan=\"2\" class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

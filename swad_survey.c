@@ -216,7 +216,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	Order <= Svy_ORDER_BY_END_DATE;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActSeeAllSvy);
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -231,10 +231,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "</tr>",
@@ -2948,13 +2948,13 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_TOP\">"
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
 	                 "%s"
 	                 "</th>"
-                         "<th class=\"TIT_TBL CENTER_TOP\">"
+                         "<th class=\"CENTER_TOP\">"
                          "%s"
                          "</th>"
-                         "<th class=\"TIT_TBL LEFT_TOP\">"
+                         "<th class=\"LEFT_TOP\">"
                          "%s"
                          "</th>"
                          "</tr>",

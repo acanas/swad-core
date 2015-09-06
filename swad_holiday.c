@@ -102,7 +102,7 @@ void Hld_SeeHolidays (void)
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
 	 Act_FormStart (ActSeeHld);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL");
@@ -115,10 +115,10 @@ void Hld_SeeHolidays (void)
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
 	                 "&nbsp;%s&nbsp;"
 	                 "</th>"
-			 "<th class=\"TIT_TBL CENTER_MIDDLE\">"
+			 "<th class=\"CENTER_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -912,19 +912,19 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -1015,22 +1015,22 @@ static void Hld_PutHeadHolidays (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",

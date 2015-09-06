@@ -1957,10 +1957,10 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL RIGHT_TOP\">"
+                      "<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL CENTER_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>",
             Txt_No_INDEX,
@@ -1968,7 +1968,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    for (Sex = (Usr_Sex_t) 0;
 	Sex < Usr_NUM_SEXS;
 	Sex++)
-      fprintf (Gbl.F.Out,"<th class=\"TIT_TBL CENTER_TOP\">"
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
 	                 "%s"
 	                 "</th>",
                Txt_SEX_PLURAL_Abc[Sex]);

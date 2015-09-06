@@ -439,13 +439,13 @@ void Net_ShowWebAndSocialNetworksStats (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS]);
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"TIT_TBL LEFT_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"TIT_TBL RIGHT_MIDDLE\">"
+                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
