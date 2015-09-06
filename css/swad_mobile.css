@@ -746,6 +746,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_N			{color:#404040; font-size:16pt;}
 .DAT_NOBR_N		{color:#404040; font-size:16pt; white-space:nowrap;}
 
+/*********************** Line in top part of a table row *********************/
+.LINE_TOP
+	{
+	color:#404040;
+	font-size:16pt;
+	border-style:solid none none none;
+	border-width:1px;
+	}
+
 .DAT_SMALL		{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:14pt;}
 .DAT_SMALL_LIGHT	{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#A0A0A0; font-size:14pt;}
 .DAT_SMALL_NOBR		{font-Family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:14pt; white-space:nowrap;}

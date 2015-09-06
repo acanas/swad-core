@@ -297,7 +297,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
         	                              Txt_No);
 
    /* Assignment folder */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"DAT LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Asg_WriteAssignmentFolder (&Asg);
    fprintf (Gbl.F.Out,"</td>"
@@ -407,9 +407,6 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
    if (Asg->SendWork == Asg_SEND_WORK)
      {
       /***** Folder icon *****/
-      fprintf (Gbl.F.Out,"<table style=\"border-spacing:2px;\">"
-	                 "<tr>"
-                         "<td class=\"BT\">");
       if (Asg->Open &&
 	  Asg->ICanDo)	// I can send files to this assignment folder
         {
@@ -433,11 +430,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
                   Txt_Folder,Txt_Folder);
 
       /***** Folder name *****/
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td class=\"DAT LEFT_TOP\">%s</td>"
-                         "</tr>"
-                         "</table>",
-               Asg->Folder);
+      fprintf (Gbl.F.Out,"%s",Asg->Folder);
      }
   }
 
@@ -499,7 +492,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div style=\"padding:5px 0;\">");
+   fprintf (Gbl.F.Out,"<div>");
 
    /***** Put form to remove assignment *****/
    Act_FormStart (ActReqRemAsg);

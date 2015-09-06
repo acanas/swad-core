@@ -403,7 +403,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .CONTEXT_OPT
 	{
 	display:inline;
-	margin:0 5px;
+	margin-right:10px;
 	}
 
 /********************************* Frame 10 **********************************/
@@ -451,7 +451,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .CELLS_PAD_4 td {padding:4px;}
 .CELLS_PAD_8 th {padding:8px;}
 .CELLS_PAD_8 td {padding:8px;}
-       
+
 /*********************************** Title ***********************************/
 .TIT
 	{
@@ -936,6 +936,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_NOBR		{color:#707070; font-size:11pt; white-space:nowrap;}
 .DAT_N			{color:#404040; font-size:11pt;}
 .DAT_NOBR_N		{color:#404040; font-size:11pt; white-space:nowrap;}
+
+/*********************** Line in top part of a table row *********************/
+.DAT_N_LINE_TOP
+	{
+	color:#404040;
+	font-size:11pt;
+	border-style:solid none none none;
+	border-width:1px;
+	}
 
 .DAT_SMALL		{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#707070; font-size:10pt;}
 .DAT_SMALL_LIGHT	{font-family:"Arial Narrow", "Nimbus Sans L", "DejaVu LGC Sans Condensed", sans-serif; color:#A0A0A0; font-size:10pt;}

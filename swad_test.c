@@ -6309,45 +6309,35 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	                                        Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-			 " style=\"border-style:solid none none none;"
-			 " border-width:1px;\">"
+			 "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
 			 "%s: %u"
 			 "</td>",
 	       Gbl.RowEvenOdd,
 	       Txt_Visible_exams,NumExamsVisibleByTchs);
 
       /* Write total number of questions */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-	                 " style=\"border-style:solid none none none;"
-			 " border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQsts);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total number of questions not blank */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-	                 " style=\"order-style:solid none none none;"
-			 " border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (NumExamsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total score */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-	                 " style=\"border-style:solid none none none;"
-			 " border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllExams);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write average score per question */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-	                 " style=\"border-style:solid none none none;"
-			 " border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
@@ -6356,9 +6346,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write score over Tst_SCORE_MAX */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP COLOR%u\""
-	                 " style=\"border-style:solid none none none;"
-			 " border-width:1px;\">",
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
@@ -6367,7 +6355,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Last cell */
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\"></td>"
 			 "</tr>",
 	       Gbl.RowEvenOdd);
      }

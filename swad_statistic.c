@@ -5045,11 +5045,8 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
    char StrNumFilesPerCrs[10+1];
    char StrNumFilesPerUsr[10+1];
    struct Sta_SizeOfFileZones SizeOfFileZones;
-   char *ClassData = (FileZone == Brw_UNKNOWN) ? "DAT_N" :
-	                                         "DAT";
-   char *StyleTableCell = (FileZone == Brw_UNKNOWN) ? " border-style:solid none none none;"
-	                                              " border-width:1px;" :
-	                                              "";
+   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
+	                                     "DAT";
 
    Sta_GetSizeOfFileZoneFromDB (Gbl.Scope.Current,FileZone,&SizeOfFileZones);
    if (SizeOfFileZones.NumCrss == -1)
@@ -5095,48 +5092,48 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
         	                         0.0);
      }
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
-            ClassData,StyleTableCell,NameOfFileZones,
-            ClassData,StyleTableCell,StrNumCrss,
-            ClassData,StyleTableCell,StrNumGrps,
-            ClassData,StyleTableCell,StrNumUsrs,
-            ClassData,StyleTableCell,SizeOfFileZones.MaxLevels,
-            ClassData,StyleTableCell,SizeOfFileZones.NumFolders,
-            ClassData,StyleTableCell,SizeOfFileZones.NumFiles,
-            ClassData,StyleTableCell);
+                      "<td class=\"%s RIGHT_MIDDLE\">",
+            Class,NameOfFileZones,
+            Class,StrNumCrss,
+            Class,StrNumGrps,
+            Class,StrNumUsrs,
+            Class,SizeOfFileZones.MaxLevels,
+            Class,SizeOfFileZones.NumFolders,
+            Class,SizeOfFileZones.NumFiles,
+            Class);
    Str_WriteSizeInBytesFull ((double) SizeOfFileZones.Size);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"t%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
-            ClassData,StyleTableCell,StrNumFoldersPerCrs,
-            ClassData,StyleTableCell,StrNumFilesPerCrs,
-            ClassData,StyleTableCell);
+                      "<td class=\"%s RIGHT_MIDDLE\">",
+            Class,StrNumFoldersPerCrs,
+            Class,StrNumFilesPerCrs,
+            Class);
    if (SizeOfFileZones.NumCrss == -1)
       fprintf (Gbl.F.Out,"-");
    else
@@ -5144,16 +5141,16 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
 	                                                  (double) SizeOfFileZones.NumCrss :
 	                                                  0.0);
    fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\" style=\"%s\">",
-            ClassData,StyleTableCell,StrNumFoldersPerUsr,
-            ClassData,StyleTableCell,StrNumFilesPerUsr,
-            ClassData,StyleTableCell);
+                      "<td class=\"%s RIGHT_MIDDLE\">",
+            Class,StrNumFoldersPerUsr,
+            Class,StrNumFilesPerUsr,
+            Class);
    if (SizeOfFileZones.NumUsrs == -1)
       fprintf (Gbl.F.Out,"-");
    else
@@ -6022,8 +6019,6 @@ static void Sta_GetAndShowTestsStats (void)
    extern const char *Txt_Total;
    Tst_AnswerType_t AnsType;
    struct Tst_Stats Stats;
-   char *StyleTableCell = " border-style:solid none none none;"
-	                  " border-width:1px;";
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_TESTS]);
@@ -6126,46 +6121,46 @@ static void Sta_GetAndShowTestsStats (void)
 
    /***** Write number of assignments *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N LEFT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u (%.1f%%)"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
-            StyleTableCell,Txt_Total,
-            StyleTableCell,Stats.NumCoursesWithQuestions,
-            StyleTableCell,Stats.NumCoursesWithPluggableQuestions,
+            Txt_Total,
+            Stats.NumCoursesWithQuestions,
+            Stats.NumCoursesWithPluggableQuestions,
             Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
         	                            (float) Stats.NumCoursesWithQuestions :
         	                            0.0,
-            StyleTableCell,Stats.NumQsts,
-            StyleTableCell,Stats.AvgQstsPerCourse,
-            StyleTableCell,Stats.NumHits,
-            StyleTableCell,Stats.AvgHitsPerCourse,
-            StyleTableCell,Stats.AvgHitsPerQuestion,
-            StyleTableCell,Stats.AvgScorePerQuestion);
+            Stats.NumQsts,
+            Stats.AvgQstsPerCourse,
+            Stats.NumHits,
+            Stats.AvgHitsPerCourse,
+            Stats.AvgHitsPerQuestion,
+            Stats.AvgScorePerQuestion);
 
    /***** End table *****/
    Lay_EndRoundFrameTable ();
@@ -6196,8 +6191,6 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    unsigned NumEvents[Ntf_NUM_NOTIFY_EVENTS];
    unsigned NumMailsTotal = 0;
    unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
-   char *StyleTableCell = " border-style:solid none none none;"
-	                  " border-width:1px;";
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS]);
 
@@ -6473,29 +6466,29 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Write total number of users who want to be notified by e-mail on some event *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N LEFT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%5.2f%%"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "</tr>",
-            StyleTableCell,Txt_Total,
-            StyleTableCell,NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
-            StyleTableCell,NumUsrsTotalInPlatform ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
-        	                                    (float) NumUsrsTotalInPlatform :
-        	                                    0.0,
-            StyleTableCell,NumEventsTotal,
-            StyleTableCell,NumMailsTotal);
+            Txt_Total,
+            NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
+            NumUsrsTotalInPlatform ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+        	                     (float) NumUsrsTotalInPlatform :
+        	                     0.0,
+            NumEventsTotal,
+            NumMailsTotal);
 
    Lay_EndRoundFrameTable ();
   }
@@ -6993,8 +6986,6 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
    float NumThrsPerForum;
    float NumPostsPerThread;
    float NumPostsPerForum;
-   char *StyleTableCell = " border-style:solid none none none;"
-	                  " border-width:1px;";
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
    NumThrsPerForum  = (StatsForum->NumForums ? (float) StatsForum->NumThreads / (float) StatsForum->NumForums :
@@ -7006,42 +6997,41 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td style=\"width:16px; %s\">"
+                      "<td class=\"DAT_N_LINE_TOP\" style=\"width:16px;\">"
                       "</td>"
-                      "<td class=\"DAT_N LEFT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT_N RIGHT_TOP\" style=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
-            StyleTableCell,
-            StyleTableCell,Txt_Total,
-            StyleTableCell,StatsForum->NumForums,
-            StyleTableCell,StatsForum->NumThreads,
-            StyleTableCell,StatsForum->NumPosts,
-            StyleTableCell,StatsForum->NumUsrsToBeNotifiedByEMail,
-            StyleTableCell,NumThrsPerForum,
-            StyleTableCell,NumPostsPerThread,
-            StyleTableCell,NumPostsPerForum);
+            Txt_Total,
+            StatsForum->NumForums,
+            StatsForum->NumThreads,
+            StatsForum->NumPosts,
+            StatsForum->NumUsrsToBeNotifiedByEMail,
+            NumThrsPerForum,
+            NumPostsPerThread,
+            NumPostsPerForum);
   }
 
 /*****************************************************************************/

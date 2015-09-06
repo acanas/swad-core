@@ -728,7 +728,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div style=\"padding:5px 0;\">");
+   fprintf (Gbl.F.Out,"<div>");
 
    /***** Put form to remove survey *****/
    Act_FormStart (ActReqRemSvy);

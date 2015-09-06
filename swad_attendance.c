@@ -489,7 +489,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    extern const char *Txt_Hide;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div style=\"padding:5px 0;\">");
+   fprintf (Gbl.F.Out,"<div>");
 
    /***** Put form to remove attendance event *****/
    Act_FormStart (ActReqRemAtt);
@@ -3047,9 +3047,7 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 
    /***** Last row with the total of students present in each event *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"%u\" class=\"DAT_N RIGHT_MIDDLE\""
-		      " style=\"border-style:solid none none none;"
-		      " border-width:1px;\">"
+		      "<td colspan=\"%u\" class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>",
 	    Gbl.Usrs.Listing.WithPhotos ? 4 :
@@ -3060,17 +3058,13 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
 	NumAttEvent++)
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\""
-			    " style=\"border-style:solid none none none;"
-			    " border-width:1px;\">"
+	 fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
 			    "%u"
 			    "</td>",
 		  Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList);
 	 Total += Gbl.AttEvents.Lst[NumAttEvent].NumStdsFromList;
 	}
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE\""
-		      " style=\"border-style:solid none none none;"
-		      " border-width:1px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
 		      "%u"
 		      "</td>"
 		      "</tr>",

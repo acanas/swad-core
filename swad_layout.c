@@ -985,7 +985,7 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
             Alt,Text ? Text : Alt);
    if (Text)
       if (Text[0])
-	 fprintf (Gbl.F.Out,"&nbsp;%s",
+	 fprintf (Gbl.F.Out," %s",
 		  Text);
    fprintf (Gbl.F.Out,"</div>"
 	              "</a>");
