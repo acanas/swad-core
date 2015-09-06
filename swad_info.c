@@ -1577,8 +1577,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<p class=\"DAT\" style=\"text-align:justify;\">");
+                         "<td class=\"DAT LEFT_MIDDLE\">");
 
       /***** Convert to respectful HTML and insert links *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1589,8 +1588,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
       fprintf (Gbl.F.Out,"%s",TxtHTML);
 
       /***** Finish table *****/
-      fprintf (Gbl.F.Out,"</p>"
-	                 "</td>"
+      fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
       Lay_EndRoundFrameTable ();
      }
@@ -1746,22 +1744,20 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 	       Txt_INFO_TITLE[InfoType]);		// Page title
 
       /***** Write plain text into text buffer *****/
-      fprintf (FileHTMLTmp,"<tr>"
-		            "<td class=\"LEFT_MIDDLE\">"
-		            "<p class=\"DAT\" style=\"text-align:justify;\">");
+      fprintf (FileHTMLTmp,"<div class=\"DAT LEFT_MIDDLE\">\n");
 
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
+                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML
       Str_InsertLinkInURLs (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /* Write text */
       fprintf (FileHTMLTmp,"%s",TxtHTML);
 
       /***** Write end of page into file *****/
-      fprintf (FileHTMLTmp,"</p>\n"
-			    "</html>\n"
-			    "</body>\n");
+      fprintf (FileHTMLTmp,"</div>\n"
+			   "</html>\n"
+			   "</body>\n");
 
       /***** Compute length of file *****/
       Length = (size_t) ftell (FileHTMLTmp);

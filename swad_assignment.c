@@ -334,8 +334,9 @@ static void Asg_ShowOneAssignment (long AsgCod)
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
-   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
-                      "%s</p>"
+   fprintf (Gbl.F.Out,"<p class=\"%s\">"
+                      "%s"
+                      "</p>"
                       "</td>"
                       "</tr>",
             Asg.Hidden ? "DAT_LIGHT" :

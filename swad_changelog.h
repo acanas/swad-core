@@ -103,11 +103,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.127 (2015/09/05)"
+#define Log_PLATFORM_VERSION	"SWAD 14.127.1 (2015/09/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.127.1: Sep 06, 2015	Justify alignment is no longer used. (184259 lines)
         Version 14.127:   Sep 05, 2015	Changes in styles. (184273 lines)
         Version 14.126.2: Sep 05, 2015	Changes in styles. (184250 lines)
         Version 14.126.1: Sep 05, 2015	Changes in styles. (184213 lines)

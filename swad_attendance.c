@@ -358,7 +358,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
 
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"text-align:justify;\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
             Att->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Txt);

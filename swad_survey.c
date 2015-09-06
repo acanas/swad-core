@@ -135,7 +135,7 @@ static unsigned Svy_GetQstIndFromQstCod (long QstCod);
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
 static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst);
-static void Svy_WriteQstStem (const char *Stem,const char *TextStyle);
+static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
@@ -484,7 +484,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<p class=\"%s\" style=\"text-align:justify;\">"
+   fprintf (Gbl.F.Out,"<p class=\"%s\">"
                       "%s"
                       "</p>"
                       "</td>"
@@ -3016,14 +3016,15 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          /* Write the question type (row[2]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
          fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-                            "%s",
+                            "%s"
+                            "</td>",
 	          Gbl.RowEvenOdd,
                   Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
 
-         /* Write the stem (row[3]) */
-         Svy_WriteQstStem (row[3],"TEST_EDI");
-
-         /* Write the answers of this question */
+         /* Write the stem (row[3]) and the answers of this question */
+         fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP COLOR%u\">",
+	          Gbl.RowEvenOdd);
+         Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -3090,7 +3091,7 @@ static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst)
 /****************** Write the heading of a survey question *******************/
 /*****************************************************************************/
 
-static void Svy_WriteQstStem (const char *Stem,const char *TextStyle)
+static void Svy_WriteQstStem (const char *Stem)
   {
    unsigned long LengthHeading;
    char *HeadingRigorousHTML;
@@ -3104,11 +3105,7 @@ static void Svy_WriteQstStem (const char *Stem,const char *TextStyle)
                      HeadingRigorousHTML,LengthHeading,false);
 
    /* Write the stem */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\">"
-                      "<div style=\"text-align:justify;\">"
-                      "<tt>%s</tt>"
-                      "</div>",
-	    TextStyle,Gbl.RowEvenOdd,HeadingRigorousHTML);
+   fprintf (Gbl.F.Out,"<tt>%s</tt>",HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */
    free ((void *) HeadingRigorousHTML);
