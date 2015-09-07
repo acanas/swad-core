@@ -217,10 +217,10 @@ void Con_GetAndShowLastClicks (void)
       /* Use a special color for this row depending on the action */
       ClassRow = (Act_Actions[Act_FromActCodToAction[ActCod]].BrowserWindow == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
 	         (ActCod == Act_Actions[ActAutUsrInt].ActCod ||
-                  ActCod == Act_Actions[ActAutUsrExt].ActCod) ? "DAT_SMALL_GREEN" :
-                 (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED" :
-                 (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE" :
-                                                                "DAT_SMALL_GREY";
+                  ActCod == Act_Actions[ActAutUsrExt].ActCod) ? "DAT_SMALL_GREEN LEFT_MIDDLE" :
+                 (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED LEFT_MIDDLE" :
+                 (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE LEFT_MIDDLE" :
+                                                                "DAT_SMALL_GREY LEFT_MIDDLE";
 
       /* Get degree code (row[4]) */
       Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);

@@ -99,7 +99,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Start form */
    Act_FormStart (ActReqStaCrs);
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"

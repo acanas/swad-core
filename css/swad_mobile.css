@@ -60,7 +60,7 @@ form			{margin:0; display:inline;}
 	{
 	margin-right:8px;
 	text-align:left;
-	vertical-align:top;
+	vertical-align:top !important;
 	}
 
 /************************* Users connected globally **************************/
