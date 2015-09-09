@@ -2316,6 +2316,7 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
   {
    char Query[128];
 
+
    /***** Get number of centres of an institution from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
 	          " WHERE InsCod='%ld'",

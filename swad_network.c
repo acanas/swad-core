@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 25
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 27
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -60,10 +60,12 @@ typedef enum
    Net_GOOGLE_SCHOLAR,
    Net_INSTAGRAM,
    Net_LINKEDIN,
+   Net_ORCID,
    Net_PAPERLI,
    Net_PINTEREST,
    Net_QUITTER,
    Net_RESEARCH_GATE,
+   Net_RESEARCHERID,
    Net_SCOOPIT,
    Net_SLIDESHARE,
    Net_STORIFY,
@@ -89,10 +91,12 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "googlescholar",	// Net_GOOGLE_SCHOLAR
    "instagram",		// Net_INSTAGRAM
    "linkedin",		// Net_LINKEDIN
+   "orcid",		// Net_ORCID
    "paperli",		// Net_PAPERLI
    "pinterest",		// Net_PINTEREST
    "quitter",		// Net_QUITTER
    "researchgate",	// Net_RESEARCH_GATE
+   "researcherid",	// Net_RESEARCHERID
    "scoopit",		// Net_SCOOPIT
    "slideshare",	// Net_SLIDESHARE
    "storify",		// Net_STORIFY
@@ -118,10 +122,12 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "Google Scholar",	// Net_GOOGLE_SCHOLAR
    "Instagram",		// Net_INSTAGRAM
    "LinkedIn",		// Net_LINKEDIN
+   "ORCID",		// Net_ORCID
    "Paper.li",		// Net_PAPERLI
    "Pinterest",		// Net_PINTEREST
    "quitter",		// Net_QUITTER
    "Research Gate",	// Net_RESEARCH_GATE
+   "ResearcherID",	// Net_RESEARCHERID
    "Scoop.it",		// Net_SCOOPIT
    "Slideshare",	// Net_SLIDESHARE
    "Storify",		// Net_STORIFY

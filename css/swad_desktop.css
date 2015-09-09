@@ -623,9 +623,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:1;
 	}
-.ICON_SCALING:hover
+.ICON_SCALING
 	{
 	display:inline-block;
+	}
+.ICON_SCALING:hover
+	{
 	opacity:1;
 	transform:scale(1.15,1.15);
 	}

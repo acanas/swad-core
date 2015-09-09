@@ -352,7 +352,7 @@ static void Ins_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"LEFT_MIDDLE\"",
+			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (200,"ins",Gbl.CurrentIns.Ins.InsCod);
