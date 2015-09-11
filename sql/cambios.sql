@@ -10608,3 +10608,7 @@ SELECT DISTINCTROW tst_questions.QstCod,tst_questions.AnsType,tst_questions.Shuf
 
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','googleplus','googlescholar','instagram','linkedin','orcid','paperli','pinterest','quitter','researchgate','researcherid','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
 
+----- 2015-09-10, swad14.128.1
+
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googleplus','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','quitter','researchgate','researcherid','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+

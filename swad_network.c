@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 27
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 29
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -56,8 +56,10 @@ typedef enum
    Net_FLICKR,
    Net_FOURSQUARE,
    Net_GITHUB,
+   Net_GNU_SOCIAL,
    Net_GOOGLE_PLUS,
    Net_GOOGLE_SCHOLAR,
+   Net_IDENTICA,
    Net_INSTAGRAM,
    Net_LINKEDIN,
    Net_ORCID,
@@ -87,8 +89,10 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "flickr",		// Net_FLICKR
    "foursquare",	// Net_FOURSQUAREhub
    "github",		// Net_GITHUB
+   "gnusocial",		// Net_GNU_SOCIAL
    "googleplus",	// Net_GOOGLE_PLUS
    "googlescholar",	// Net_GOOGLE_SCHOLAR
+   "identica",		// Net_IDENTICA
    "instagram",		// Net_INSTAGRAM
    "linkedin",		// Net_LINKEDIN
    "orcid",		// Net_ORCID
@@ -118,8 +122,10 @@ const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "Flickr",		// Net_FLICKR
    "Foursquare",	// Net_FOURSQUARE
    "GitHub",		// Net_GITHUB
+   "GNU Social",	// Net_GNU_SOCIAL
    "Google+",		// Net_GOOGLE_PLUS
    "Google Scholar",	// Net_GOOGLE_SCHOLAR
+   "identi.ca",		// Net_IDENTICA
    "Instagram",		// Net_INSTAGRAM
    "LinkedIn",		// Net_LINKEDIN
    "ORCID",		// Net_ORCID
