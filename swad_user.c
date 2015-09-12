@@ -5824,6 +5824,17 @@ void Usr_ListDataAdms (void)
    struct UsrData UsrDat;
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
+   /***** Put contextual links *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to go to admin one user */
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneAdm);
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
    /***** Initialize field names *****/
    FieldNames[0] = Txt_No_INDEX;
    FieldNames[1] = Txt_Photo;
@@ -6263,6 +6274,17 @@ void Usr_SeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
 
+   /***** Put contextual links *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to go to admin one user */
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneGst);
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
@@ -6401,17 +6423,33 @@ void Usr_SeeStudents (void)
    extern const char *Txt_Show_records;
    bool ICanViewRecords;
 
+   /***** Put contextual links *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// My role in current course is teacher...
-        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))	// ...or superuser
+        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))		// ...or system admin
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /***** Link to list official students *****/
+      /* Put link to go to admin one user */
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+
+      /* Put link to go to admin several users */
+      Enr_PutLinkToAdminSeveralUsrs ();
+
+      /* Put link to list official students */
       Usr_PutLinkToListOfficialStudents ();
 
-      /***** Link to edit record fields *****/
+      /* Put link to edit record fields */
       Rec_PutLinkToEditRecordFields ();
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to go to admin one user */
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -6563,6 +6601,22 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_Show_records;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    bool ICanViewRecords;
+
+   /***** Put contextual links *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
+       (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// My role in current course is teacher...
+        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))		// ...or system admin
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to go to admin one user */
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+
+      /* Put link to go to admin several users */
+      Enr_PutLinkToAdminSeveralUsrs ();
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Get and update type of list,
           number of columns in class photo

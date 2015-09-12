@@ -103,12 +103,31 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.128.1 (2015/09/10)"
+#define Log_PLATFORM_VERSION	"SWAD 14.129 (2015/09/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.128.1: Sep 10, 2015	Two new social networks. (184278 lines)
+        Version 14.129:   Sep 11, 2015	New links to admin a user in list of students.
+					Changes in user enrollment.
+					Fixed bug in user enrollment. (184411 lines)
+UPDATE actions SET Obsolete='Y' WHERE ActCod='177';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1414','es','N','Solicitar ID modif. invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1415','es','N','Solicitar ID modif. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1416','es','N','Solicitar ID modif. profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1417','es','N','Solicitar ID modif. administrador');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='161';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1418','es','N','Confirmar modif. invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1419','es','N','Confirmar modif. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1420','es','N','Confirmar modif. profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1421','es','N','Confirmar modif. administrador');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='439';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1422','es','N','Modificar datos invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1423','es','N','Modificar datos estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1424','es','N','Modificar datos profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1425','es','N','Modificar datos administrador');
+
+        Version 14.128.1: Sep 11, 2015	Two new social networks. (184278 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googleplus','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','quitter','researchgate','researcherid','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
 

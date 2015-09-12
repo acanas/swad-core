@@ -94,6 +94,9 @@ void Enr_RemoveOldUsrs (void);
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 
 void Enr_ReceiveFormUsrsCrs (void);
+void Enr_PutLinkToRemAllStdsThisCrs (void);
+void Enr_PutLinkToRemOldUsrs (void);
+void Enr_PutLinkToAdminSeveralUsrs (void);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Course *Crs);
@@ -105,8 +108,16 @@ void Enr_AskIfRejectSignUp (void);
 void Enr_RejectSignUp (void);
 void Enr_ShowEnrollmentRequests (void);
 
-void Enr_ReqRegRemUsr (void);
-void Enr_AskIfRegRemAnotherUsr (void);
+void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction);
+
+void Enr_ReqRegRemGst (void);
+void Enr_ReqRegRemStd (void);
+void Enr_ReqRegRemTch (void);
+void Enr_ReqRegRemAdm (void);
+void Enr_AskIfRegRemAnotherGst (void);
+void Enr_AskIfRegRemAnotherStd (void);
+void Enr_AskIfRegRemAnotherTch (void);
+void Enr_AskIfRegRemAnotherAdm (void);
 void Enr_AddAdmToIns (void);
 void Enr_AddAdmToCtr (void);
 void Enr_AddAdmToDeg (void);
@@ -119,8 +130,8 @@ void Enr_RemAdmCtr (void);
 void Enr_RemAdmDeg (void);
 
 void Enr_AcceptRegisterMeInCrs (void);
-void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void);
-void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void);
+void Enr_CreateNewUsr (void);
+void Enr_ModifyUsr (void);
 void Enr_AcceptUsrInCrs (long UsrCod);
 
 #endif

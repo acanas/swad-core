@@ -88,7 +88,6 @@ extern struct Globals Gbl;
 
 static void Enr_ShowFormRegRemSeveralUsrs (void);
 
-static void Enr_PutLinkToRemOldUsrs (void);
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
@@ -96,14 +95,13 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
 static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecifiedUsrs);
 
-static void Enr_PutLinkToRemAllStdsThisCrs (void);
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
-static void Enr_PutLinkToAdminOneUsr (void);
-static void Enr_PutLinkToAdminSeveralUsrs (void);
 
-static void Enr_ReqAnotherUsrIDToRegisterRemove (void);
-static void Enr_AskIfRegRemMe (void);
-static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods);
+static void Enr_ReqRegRemUsr (Rol_Role_t Role);
+static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
+static void Enr_AskIfRegRemMe (Rol_Role_t Role);
+static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
+static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
@@ -447,39 +445,28 @@ void Enr_ReqAdminUsrs (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol__GUEST_:
-      case Rol_VISITOR:
+	 Enr_AskIfRegRemMe (Rol__GUEST_);
+	 break;
       case Rol_STUDENT:
-	 Enr_AskIfRegRemMe ();
+	 Enr_AskIfRegRemMe (Rol_STUDENT);
 	 break;
       case Rol_TEACHER:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs ();
 	 else
-	    Enr_AskIfRegRemMe ();
+	    Enr_AskIfRegRemMe (Rol_TEACHER);
 	 break;
       case Rol_DEG_ADM:
-	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
-	 else
-	    Enr_AskIfRegRemMe ();
-	 break;
       case Rol_CTR_ADM:
-	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
-	 else
-	    Enr_AskIfRegRemMe ();
-	 break;
       case Rol_INS_ADM:
-	 if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
-	 else
-	    Enr_AskIfRegRemMe ();
+	 Enr_ReqRegRemUsr (Rol_DEG_ADM);
 	 break;
       case Rol_SYS_ADM:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs ();
 	 else
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Rol_TEACHER);	// TODO: Change this line to the following
+	    // Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
 	 Lay_ShowAlert (Lay_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
@@ -511,9 +498,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link to go to admin one user */
-   Enr_PutLinkToAdminOneUsr ();
 
    /* Put link to remove all the students in the current course */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -618,7 +602,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (void)
 /******************** Put a link (form) to remove old users ******************/
 /*****************************************************************************/
 
-static void Enr_PutLinkToRemOldUsrs (void)
+void Enr_PutLinkToRemOldUsrs (void)
   {
    extern const char *Txt_Remove_old_users;
 
@@ -1697,7 +1681,7 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 /**** Put a link (form) to remove all the students in the current course *****/
 /*****************************************************************************/
 
-static void Enr_PutLinkToRemAllStdsThisCrs (void)
+void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
    extern const char *Txt_Remove_all_students;
 
@@ -2411,15 +2395,20 @@ void Enr_ShowEnrollmentRequests (void)
 
          /* Get user code (row[2]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
          UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+
+	 /***** Get requested role (row[3]) *****/
+	 DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
          if (UsrExists)
             UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Crs.CrsCod);
          else
             UsrBelongsToCrs = false;
 
-         if (UsrExists & !UsrBelongsToCrs)
+         if (UsrExists &&
+             !UsrBelongsToCrs &&
+             (DesiredRole == Rol_STUDENT ||
+              DesiredRole == Rol_TEACHER))
            {
             /***** Number *****/
             fprintf (Gbl.F.Out,"<tr>"
@@ -2463,7 +2452,6 @@ void Enr_ShowEnrollmentRequests (void)
             Usr_RestrictLengthAndWriteName (&UsrDat,20);
 
             /***** Requested role (row[3]) *****/
-            DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
         	               "%s"
         	               "</td>",
@@ -2474,7 +2462,8 @@ void Enr_ShowEnrollmentRequests (void)
 
             /***** Button to confirm the request *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
-            Act_FormStart (ActReqMdfUsr);
+            Act_FormStart (DesiredRole == Rol_STUDENT ? ActReqMdfStd :
+        	                                        ActReqMdfTch);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutCreateButton (Txt_Register);
@@ -2550,11 +2539,11 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 /********************** Write a form to admin one user ***********************/
 /*****************************************************************************/
 
-static void Enr_PutLinkToAdminOneUsr (void)
+void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
    extern const char *Txt_Admin_one_user;
 
-   Act_PutContextualLink (ActReqMdfOneUsr,NULL,
+   Act_PutContextualLink (NextAction,NULL,
                           "configtest",Txt_Admin_one_user);
   }
 
@@ -2562,7 +2551,7 @@ static void Enr_PutLinkToAdminOneUsr (void)
 /******************* Write a form to admin several users *********************/
 /*****************************************************************************/
 
-static void Enr_PutLinkToAdminSeveralUsrs (void)
+void Enr_PutLinkToAdminSeveralUsrs (void)
   {
    extern const char *Txt_Admin_several_users;
 
@@ -2574,43 +2563,64 @@ static void Enr_PutLinkToAdminSeveralUsrs (void)
 /************** Form to request the user's ID of another user ****************/
 /*****************************************************************************/
 
-void Enr_ReqRegRemUsr (void)
+void Enr_ReqRegRemGst (void)
+  {
+   Enr_ReqRegRemUsr (Rol__GUEST_);
+  }
+
+void Enr_ReqRegRemStd (void)
+  {
+   Enr_ReqRegRemUsr (Rol_STUDENT);
+  }
+
+void Enr_ReqRegRemTch (void)
+  {
+   Enr_ReqRegRemUsr (Rol_TEACHER);
+  }
+
+void Enr_ReqRegRemAdm (void)
+  {
+   Enr_ReqRegRemUsr (Rol_DEG_ADM);
+  }
+
+static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol__GUEST_:
-      case Rol_VISITOR:
+	 Enr_AskIfRegRemMe (Rol__GUEST_);
+	 break;
       case Rol_STUDENT:
-	 Enr_AskIfRegRemMe ();
+	 Enr_AskIfRegRemMe (Rol_STUDENT);
 	 break;
       case Rol_TEACHER:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 else
-	    Enr_AskIfRegRemMe ();
+	    Enr_AskIfRegRemMe (Rol_TEACHER);
 	 break;
       case Rol_DEG_ADM:
 	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 else
-	    Enr_AskIfRegRemMe ();
+	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
 	 break;
       case Rol_CTR_ADM:
 	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 else
-	    Enr_AskIfRegRemMe ();
+	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
 	 break;
       case Rol_INS_ADM:
 	 if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove ();
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 else
-	    Enr_AskIfRegRemMe ();
+	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
 	 break;
       case Rol_SYS_ADM:
-	 Enr_ReqAnotherUsrIDToRegisterRemove ();
+	 Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
 	 Lay_ShowAlert (Lay_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
@@ -2622,7 +2632,7 @@ void Enr_ReqRegRemUsr (void)
 /****** Write a form to request another user's ID, @nickname or e-mail *******/
 /*****************************************************************************/
 
-static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
+static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
    extern const char *Txt_Admin_one_user;
 
@@ -2646,7 +2656,10 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
    Lay_StartRoundFrame (NULL,Txt_Admin_one_user);
 
    /***** Write form to request another user's ID *****/
-   Enr_WriteFormToReqAnotherUsrID (ActReqMdfUsr);
+   Enr_WriteFormToReqAnotherUsrID ( Role == Rol__GUEST_ ? ActReqMdfGst :
+	                           (Role == Rol_STUDENT ? ActReqMdfStd :
+	                           (Role == Rol_TEACHER ? ActReqMdfTch :
+	                        	                  ActReqMdfAdm)));
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -2656,7 +2669,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (void)
 /********************** Ask me for register/remove me ************************/
 /*****************************************************************************/
 
-static void Enr_AskIfRegRemMe (void)
+static void Enr_AskIfRegRemMe (Rol_Role_t Role)
   {
    struct ListUsrCods ListUsrCods;
 
@@ -2666,14 +2679,34 @@ static void Enr_AskIfRegRemMe (void)
    Usr_AllocateListUsrCods (&ListUsrCods);
    ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 
-   Enr_AskIfRegRemUsr (&ListUsrCods);
+   Enr_AskIfRegRemUsr (&ListUsrCods,Role);
   }
 
 /*****************************************************************************/
 /****************** Ask me for register/remove another user ******************/
 /*****************************************************************************/
 
-void Enr_AskIfRegRemAnotherUsr (void)
+void Enr_AskIfRegRemAnotherGst (void)
+  {
+   Enr_AskIfRegRemAnotherUsr (Rol__GUEST_);
+  }
+
+void Enr_AskIfRegRemAnotherStd (void)
+  {
+   Enr_AskIfRegRemAnotherUsr (Rol_STUDENT);
+  }
+
+void Enr_AskIfRegRemAnotherTch (void)
+  {
+   Enr_AskIfRegRemAnotherUsr (Rol_TEACHER);
+  }
+
+void Enr_AskIfRegRemAnotherAdm (void)
+  {
+   Enr_AskIfRegRemAnotherUsr (Rol_DEG_ADM);
+  }
+
+static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
   {
    struct ListUsrCods ListUsrCods;
 
@@ -2692,14 +2725,14 @@ void Enr_AskIfRegRemAnotherUsr (void)
 	     use user's ID to identify the user to be enrolled /removed *****/
       Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
 
-   Enr_AskIfRegRemUsr (&ListUsrCods);
+   Enr_AskIfRegRemUsr (&ListUsrCods,Role);
   }
 
 /*****************************************************************************/
 /********************** Ask me for register/remove user **********************/
 /*****************************************************************************/
 
-static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
+static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
   {
    extern const char *Txt_There_are_X_users_with_the_ID_Y;
    extern const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y;
@@ -2795,7 +2828,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods)
 	 sprintf (Gbl.Message,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
 		  Cfg_PLATFORM_SHORT_NAME);
 	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-	 Enr_ReqRegRemUsr ();
+	 Enr_ReqRegRemUsr (Role);
 	}
      }
   }
@@ -3172,7 +3205,7 @@ void Enr_AcceptRegisterMeInCrs (void)
 /******************* Create and show data from other user ********************/
 /*****************************************************************************/
 
-void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void)
+void Enr_CreateNewUsr (void)
   {
    extern const char *Txt_The_ID_X_is_not_valid;
    Rol_Role_t NewRole;
@@ -3227,15 +3260,12 @@ void Enr_CreatAndShowNewUsrRecordAndRegInCrs (void)
 /**** Modify other user's data and register her/him in course and groups *****/
 /*****************************************************************************/
 
-void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
+void Enr_ModifyUsr (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    bool ItsMe;
-   bool IAmTeacher;
-   bool HeIsTeacher;
-   bool ICanChangeUsrName;
    Enr_RegRemOneUsrAction_t RegRemAction;
    Rol_Role_t NewRole;
    bool Error = false;
@@ -3254,13 +3284,8 @@ void Enr_ModifAndShowUsrCardAndRegInCrsAndGrps (void)
 	       case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 		    {
-		     IAmTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);			// I am logged as teacher
-		     HeIsTeacher = (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER));	// He/she is already a teacher in any course
-		     ICanChangeUsrName = ItsMe ||
-			                 !(IAmTeacher && HeIsTeacher);	// A teacher can not change another teacher's name
-
 		     /***** Get user's name from record form *****/
-		     if (ICanChangeUsrName)
+		     if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// Only an admin can change another user's name
 			Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 		     /***** Update user's data in database *****/

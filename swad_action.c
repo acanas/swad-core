@@ -916,14 +916,23 @@ Users:
 	760. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
 	761. ActRejSignUp		Reject the enrollment of a user in a course
 
-	762. ActReqMdfOneUsr		Request the enrollment/removing of a user
-	763. ActReqMdfUsr		Register a user in this course
+	762b. ActReqMdfOneGst		Request a user's ID for enrollment/removing
+	762c. ActReqMdfOneStd		Request a user's ID for enrollment/removing
+	762d. ActReqMdfOneTch		Request a user's ID for enrollment/removing
+	762e. ActReqMdfOneAdm		Request a user's ID for enrollment/removing
+	763b. ActReqMdfGst		Request enrollment/removing of a user
+	763c. ActReqMdfStd		Request enrollment/removing of a user
+	763d. ActReqMdfTch		Request enrollment/removing of a user
+	763e. ActReqMdfAdm		Request enrollment/removing of a user
 	764. ActReqUsrPho		Show form to send the photo of another user
 	765. ActDetUsrPho		Receive other user's photo and detect faces on it
 	766. ActUpdUsrPho		Update other user's photo
 	767. ActRemUsrPho		Remove the photo of otro user
 	768. ActCreOthUsrDat		Insertar a new user in this course
-	769. ActUpdOthUsrDat		Actualizar the card of otro user
+	769b. ActUpdOthGst		Update another user's data and groups
+	769c. ActUpdOthStd		Update another user's data and groups
+	769d. ActUpdOthTch		Update another user's data and groups
+	769e. ActUpdOthAdm		Update another user's data and groups
 	770. ActReqAccEnrCrs		Confirm acceptation / refusion of enrollment in current course
 	771. ActAccEnrCrs		Accept enrollment in current course
 	772. ActRemMeCrs		Refuse enrollment in current course
@@ -2294,16 +2303,26 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRejSignUp	*/{1058,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRejectSignUp		,NULL},
    /* ActRejSignUp	*/{1059,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RejectSignUp		,NULL},
 
-   /* ActReqMdfOneUsr	*/{ 177,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemUsr		,NULL},
-   /* ActReqMdfUsr	*/{ 161,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherUsr	,NULL},
+   /* ActReqMdfOneGst	*/{1414,-1,TabUsr,ActLstInv		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemGst		,NULL},
+   /* ActReqMdfOneStd	*/{1415,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemStd		,NULL},
+   /* ActReqMdfOneTch	*/{1416,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemTch		,NULL},
+   /* ActReqMdfOneAdm	*/{1417,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemAdm		,NULL},
+
+   /* ActReqMdfUsr	*/{1418,-1,TabUsr,ActLstInv		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherGst	,NULL},
+   /* ActReqMdfUsr	*/{1419,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherStd	,NULL},
+   /* ActReqMdfUsr	*/{1420,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherTch	,NULL},
+   /* ActReqMdfUsr	*/{1421,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherAdm	,NULL},
 
    /* ActReqUsrPho	*/{ 375,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
    /* ActDetUsrPho	*/{ 695,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecUsrPhotoDetFaces	,NULL},
    /* ActUpdUsrPho	*/{ 374,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
    /* ActRemUsrPho	*/{ 429,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
 
-   /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreatAndShowNewUsrRecordAndRegInCrs,NULL},
-   /* ActUpdOthUsrDat	*/{ 439,-1,TabUsr,ActReqMdfSevUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifAndShowUsrCardAndRegInCrsAndGrps,NULL},
+   /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActReqMdfSevUsr	,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+   /* ActUpdOthGst	*/{1422,-1,TabUsr,ActLstInv		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
+   /* ActUpdOthStd	*/{1423,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
+   /* ActUpdOthTch	*/{1424,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
+   /* ActUpdOthAdm	*/{1425,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
 
    /* ActReqAccEnrCrs	*/{ 592,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActReqMdfSevUsr	,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
@@ -2833,7 +2852,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #158 (obsolete action)
 	-1,			// #159 (obsolete action)
 	-1,			// #160 (obsolete action)
-	ActReqMdfUsr,		// #161
+	-1,			// #161 (obsolete action)
 	-1,			// #162 (obsolete action)
 	-1,			// #163 (obsolete action)
 	ActRcvPagCrsLnk,	// #164
@@ -2849,7 +2868,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActNewGrpTyp,		// #174
 	ActRemGrp,		// #175
 	-1,			// #176 (obsolete action)
-	ActReqMdfOneUsr,	// #177
+	-1,			// #177 (obsolete action)
 	-1,			// #178 (obsolete action)
 	ActPrnExaAnn,		// #179
 	-1,			// #180 (obsolete action)
@@ -3111,7 +3130,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActDelAllRcvMsg,	// #436
 	-1,			// #437 (obsolete action)
 	-1,			// #438 (obsolete action)
-	ActUpdOthUsrDat,	// #439
+	-1,			// #439 (obsolete action)
 	ActCreOthUsrDat,	// #440
 	-1,			// #441 (obsolete action)
 	-1,			// #442 (obsolete action)
@@ -4089,6 +4108,18 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUnfUsr,		// #1411
 	ActSeeFlg,		// #1412
 	ActSeeFlr,		// #1413
+	ActReqMdfOneGst,	// #1414
+	ActReqMdfOneStd,	// #1415
+	ActReqMdfOneTch,	// #1416
+	ActReqMdfOneAdm,	// #1417
+	ActReqMdfGst,		// #1418
+	ActReqMdfStd,		// #1419
+	ActReqMdfTch,		// #1420
+	ActReqMdfAdm,		// #1421
+	ActUpdOthGst,		// #1422
+	ActUpdOthStd,		// #1423
+	ActUpdOthTch,		// #1424
+	ActUpdOthAdm,		// #1425
 	};
 
 /*****************************************************************************/
@@ -4484,7 +4515,7 @@ void Act_AdjustCurrentAction (void)
                case ActReqEdiRecCom:
                case ActReqEdiMyIns:
                case ActReqSelGrp:
-               case ActReqMdfOneUsr:	// A student use this action to remove him/herself from current course
+               case ActReqMdfOneStd:	// A student use this action to remove him/herself from current course
                case ActSeeCrsTimTbl:
                case ActPrnCrsTimTbl:
                case ActSeeMyTimTbl:

@@ -240,7 +240,8 @@ static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   Act_PutContextualLink (ActUpdOthUsrDat,Acc_PutLinkToRemoveMyAccountParams,
+   // TODO: Put this option in Profile > Account
+   Act_PutContextualLink (ActUpdOthGst,Acc_PutLinkToRemoveMyAccountParams,
                           "delon",Txt_Remove_account);
   }
 
