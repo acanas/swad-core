@@ -17678,27 +17678,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es"
 #endif
 	,
-	// ActReqMdfSevUsr
-#if   L==0
-	"Administrar"
-#elif L==1
-	"Verwalten"
-#elif L==2
-	"Administer"
-#elif L==3
-	"Administrar"
-#elif L==4
-	"G&eacute;rer"
-#elif L==5
-	"Administrar"	// Okoteve traducción
-#elif L==6
-	"Gestire"
-#elif L==7
-	"Zarz&aogon;dzaj"
-#elif L==8
-	"Gerenciar"
-#endif
-	,
 	// ActLstCon
 #if   L==0
 	"Connectats"
@@ -17741,6 +17720,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19657,27 +19637,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o"
 #endif
 	,
-	// ActReqMdfSevUsr
-#if   L==0
-	"Inscripci&oacute; / eliminaci&oacute;n de usuaris"
-#elif L==1
-	"Anmeldung / Entfernen von Benutzern"
-#elif L==2
-	"Enrollment / removing of users"
-#elif L==3
-	"Inscripci&oacute;n / eliminaci&oacute;n de usuarios"
-#elif L==4
-	"Inscription / suppression de utilisateurs"
-#elif L==5
-	"Inscripci&oacute;n / eliminaci&oacute;n de usuario"// Okoteve traducción
-#elif L==6
-	"Iscrizione / rimozione di utenti"
-#elif L==7
-	"Rekrutacja / usuni&eogon;cie u&zdot;ytkownik&oacute;w"
-#elif L==8
-	"Inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o de utilizadores"
-#endif
-	,
 	// ActLstCon
 #if   L==0
 	"Llista d'usuaris connectats en aquest moment"
@@ -19720,6 +19679,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

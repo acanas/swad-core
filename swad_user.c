@@ -6434,7 +6434,7 @@ void Usr_SeeStudents (void)
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
       /* Put link to go to admin several users */
-      Enr_PutLinkToAdminSeveralUsrs ();
+      Enr_PutLinkToAdminSeveralUsrs (Rol_STUDENT);
 
       /* Put link to list official students */
       Usr_PutLinkToListOfficialStudents ();
@@ -6613,7 +6613,7 @@ void Usr_SeeTeachers (void)
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
 
       /* Put link to go to admin several users */
-      Enr_PutLinkToAdminSeveralUsrs ();
+      Enr_PutLinkToAdminSeveralUsrs (Rol_TEACHER);
 
       fprintf (Gbl.F.Out,"</div>");
      }

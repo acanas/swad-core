@@ -96,7 +96,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 void Enr_ReceiveFormUsrsCrs (void);
 void Enr_PutLinkToRemAllStdsThisCrs (void);
 void Enr_PutLinkToRemOldUsrs (void);
-void Enr_PutLinkToAdminSeveralUsrs (void);
+void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Course *Crs);

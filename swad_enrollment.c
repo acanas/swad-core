@@ -86,7 +86,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Enr_ShowFormRegRemSeveralUsrs (void);
+static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
 
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
@@ -452,7 +452,7 @@ void Enr_ReqAdminUsrs (void)
 	 break;
       case Rol_TEACHER:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    Enr_ShowFormRegRemSeveralUsrs ();
+	    Enr_ShowFormRegRemSeveralUsrs (Role);
 	 else
 	    Enr_AskIfRegRemMe (Rol_TEACHER);
 	 break;
@@ -463,7 +463,7 @@ void Enr_ReqAdminUsrs (void)
 	 break;
       case Rol_SYS_ADM:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    Enr_ShowFormRegRemSeveralUsrs ();
+	    Enr_ShowFormRegRemSeveralUsrs (Role);
 	 else
 	    Enr_ReqAnotherUsrIDToRegisterRemove (Rol_TEACHER);	// TODO: Change this line to the following
 	    // Enr_ReqAnotherUsrIDToRegisterRemove (Role);
@@ -478,7 +478,7 @@ void Enr_ReqAdminUsrs (void)
 /***** Register/remove users (taken from a list) in/from current course ******/
 /*****************************************************************************/
 
-static void Enr_ShowFormRegRemSeveralUsrs (void)
+static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *The_ClassTitle[The_NUM_THEMES];
    extern const char *Txt_Admin_several_users;
@@ -1081,7 +1081,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 /******* Receive the list of users of the course to register/remove **********/
 /*****************************************************************************/
 
-void Enr_ReceiveFormUsrsCrs (void)
+void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
   {
    extern const char *Txt_You_must_specify_in_step_3_the_action_to_perform;
    extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
@@ -1208,7 +1208,7 @@ void Enr_ReceiveFormUsrsCrs (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_in_step_3_the_action_to_perform);
 
       /* Show form again */
-      Enr_ShowFormRegRemSeveralUsrs ();
+      Enr_ShowFormRegRemSeveralUsrs (Role);
       ErrorInForm = true;
      }
 
@@ -2551,12 +2551,13 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 /******************* Write a form to admin several users *********************/
 /*****************************************************************************/
 
-void Enr_PutLinkToAdminSeveralUsrs (void)
+void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_Admin_several_users;
 
-   Act_PutContextualLink (ActReqMdfSevUsr,NULL,
-                          "configtest",Txt_Admin_several_users);
+   Act_PutContextualLink (Role == Rol_STUDENT ? ActReqMdfSevStd :
+	                                        ActReqMdfSevTch,
+	                  NULL,"configtest",Txt_Admin_several_users);
   }
 
 /*****************************************************************************/
@@ -2644,7 +2645,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          /* Put link to go to admin several users */
-	 Enr_PutLinkToAdminSeveralUsrs ();
+	 Enr_PutLinkToAdminSeveralUsrs (Role);
       else if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
          /* Put link to remove old users */
 	 Enr_PutLinkToRemOldUsrs ();

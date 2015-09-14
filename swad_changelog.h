@@ -93,24 +93,26 @@
         ----------------Examen Tema 2
         ----------Otros
         ....Etc.....
-
-==========================================================
-7  @@ INSTALACIÓN DE EDITOR DE TEXTO ENRIQUECIDO
-==========================================================
-        # Completar el proyecto que empezó el antiguo alumno.
  */
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.129 (2015/09/11)"
+#define Log_PLATFORM_VERSION	"SWAD 14.130 (2015/09/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.129:   Sep 11, 2015	New links to admin a user in list of students.
+        Version 14.130:   Sep 13, 2015	Changes in user enrollment. (184379 lines)
+					15 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='797';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1426','es','N','Administrar varios estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1427','es','N','Administrar varios profesores');
+
+        Version 14.129:   Sep 12, 2015	New links to admin a user in list of students.
 					Changes in user enrollment.
 					Fixed bug in user enrollment. (184411 lines)
+					15 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='177';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1414','es','N','Solicitar ID modif. invitado');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1415','es','N','Solicitar ID modif. estudiante');
