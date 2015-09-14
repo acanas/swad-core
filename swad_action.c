@@ -896,8 +896,8 @@ Users:
 	743. ActChgVisFie		Request change in visibility of a record field
         744. ActRcvRecCrs		Receive and update fields of my record in this course
 
-	699b. ActReqMdfSevStd		Request the enrollment/removing of several users to / from current course
-	699c. ActReqMdfSevTch		Request the enrollment/removing of several users to / from current course
+	699b. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
+	699c. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
 
 	745. ActReqLstAttStd		Request listing of attendance of several students to several events
 	746. ActSeeLstAttStd		List attendance of several students to several events
@@ -2288,8 +2288,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgVisFie	*/{ 297,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeVisibilityField	,NULL},
    /* ActRcvRecCrs	*/{ 301,-1,TabUsr,ActLstStd		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
-   /* ActReqMdfSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminStds		,NULL},
-   /* ActReqMdfSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminTchs		,NULL},
+   /* ActReqEnrSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminStds		,NULL},
+   /* ActReqEnrSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminTchs		,NULL},
 
    /* ActReqLstAttStd	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListAttendanceStdsCrs	,NULL},
    /* ActSeeLstAttStd	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListAttendanceStdsCrs	,NULL},
@@ -4128,8 +4128,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUpdOthStd,		// #1423
 	ActUpdOthTch,		// #1424
 	ActUpdOthAdm,		// #1425
-	ActReqMdfSevStd,	// #1426
-	ActReqMdfSevTch,	// #1427
+	ActReqEnrSevStd,	// #1426
+	ActReqEnrSevTch,	// #1427
 	ActRcvFrmEnrSevStd,	// #1428
 	ActRcvFrmEnrSevTch,	// #1429
 	};

@@ -464,16 +464,15 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	 Enr_AskIfRegRemMe (Rol_STUDENT);
 	 break;
       case Rol_TEACHER:
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    Enr_ShowFormRegRemSeveralUsrs (Role);
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+	     Role == Rol_STUDENT)
+	    Enr_ShowFormRegRemSeveralUsrs (Rol_STUDENT);
 	 else
 	    Enr_AskIfRegRemMe (Rol_TEACHER);
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 Enr_ReqRegRemUsr (Rol_DEG_ADM);
-	 break;
       case Rol_SYS_ADM:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs (Role);
@@ -1105,7 +1104,7 @@ void Enr_ReceiveFormAdminTchs (void)
 
 static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
   {
-   extern const char *Txt_You_must_specify_in_step_3_the_action_to_perform;
+   extern const char *Txt_You_must_specify_in_step_2_the_action_to_perform;
    extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
    extern const char *Txt_No_user_has_been_eliminated;
    extern const char *Txt_One_user_has_been_eliminated;
@@ -1218,7 +1217,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 Lay_ShowErrorAndExit ("Wrong registering / removing specification.");
    else
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_in_step_3_the_action_to_perform);
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_in_step_2_the_action_to_perform);
 
       /* Show form again */
       Enr_ShowFormRegRemSeveralUsrs (Role);
@@ -2569,8 +2568,8 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Admin_several_students;
    extern const char *Txt_Admin_several_teachers;
 
-   Act_PutContextualLink (Role == Rol_STUDENT ? ActReqMdfSevStd :
-	                                        ActReqMdfSevTch,
+   Act_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
+	                                        ActReqEnrSevTch,
 	                  NULL,"configtest",
 	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
 	                	                Txt_Admin_several_teachers);

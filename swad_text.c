@@ -50728,25 +50728,25 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" allowed without photo.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_must_specify_in_step_3_the_action_to_perform =
+const char *Txt_You_must_specify_in_step_2_the_action_to_perform =
 #if   L==0
-	"S'ha d'especificar en el pas 3 l'acci&oacute; a realitzar.";
+	"S'ha d'especificar en el pas 2 l'acci&oacute; a realitzar.";
 #elif L==1
-	"Sie m&uuml;ssen in Schritt 3 die auszuf&uuml;hrende Aktion festzulegen.";
+	"Sie m&uuml;ssen in Schritt 2 die auszuf&uuml;hrende Aktion festzulegen.";
 #elif L==2
-	"You must specify in step 3 the action to perform.";
+	"You must specify in step 2 the action to perform.";
 #elif L==3
-	"Debe especificar en el paso 3 la acci&oacute;n a realizar.";
+	"Debe especificar en el paso 2 la acci&oacute;n a realizar.";
 #elif L==4
-	"Vous devez sp&eacute;cifier &agrave; l'&eacute;tape 3 l'action &agrave; effectuer.";
+	"Vous devez sp&eacute;cifier &agrave; l'&eacute;tape 2 l'action &agrave; effectuer.";
 #elif L==5
-	"Debe especificar en el paso 3 la acci&oacute;n a realizar.";	// Okoteve traducción
+	"Debe especificar en el paso 2 la acci&oacute;n a realizar.";	// Okoteve traducción
 #elif L==6
-	"&Egrave; necessario specificare al punto 3 l'azione da eseguire.";
+	"&Egrave; necessario specificare al punto 2 l'azione da eseguire.";
 #elif L==7
-	"You must specify in step 3 the action to perform.";		// Potrzebujesz tlumaczenie
+	"You must specify in step 2 the action to perform.";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"Voc&ecirc; deve especificar no passo 3 a a&ccedil;&atilde;o a ser executada.";
+	"Voc&ecirc; deve especificar no passo 2 a a&ccedil;&atilde;o a ser executada.";
 #endif
 
 const char *Txt_You_must_specify_the_image_of_the_new_banner =

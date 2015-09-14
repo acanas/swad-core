@@ -6424,9 +6424,8 @@ void Usr_SeeStudents (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// My role in current course is teacher...
-        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))		// ...or system admin
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+       Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)	// I am logged as teacher or admin
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -6604,8 +6603,7 @@ void Usr_SeeTeachers (void)
 
    /***** Put contextual links *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||	// My role in current course is teacher...
-        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))		// ...or system admin
+       Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)		// ...or I am logged as teacher or admin
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -6613,7 +6611,8 @@ void Usr_SeeTeachers (void)
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
 
       /* Put link to go to admin several users */
-      Enr_PutLinkToAdminSeveralUsrs (Rol_TEACHER);
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
+         Enr_PutLinkToAdminSeveralUsrs (Rol_TEACHER);
 
       fprintf (Gbl.F.Out,"</div>");
      }

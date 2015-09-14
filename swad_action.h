@@ -922,8 +922,8 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActChgVisFie		(ActChgNumRowFooGrp+ 52)
 #define ActRcvRecCrs		(ActChgNumRowFooGrp+ 53)
 
-#define ActReqMdfSevStd		(ActChgNumRowFooGrp+ 54)
-#define ActReqMdfSevTch		(ActChgNumRowFooGrp+ 55)
+#define ActReqEnrSevStd		(ActChgNumRowFooGrp+ 54)
+#define ActReqEnrSevTch		(ActChgNumRowFooGrp+ 55)
 
 #define ActReqLstAttStd		(ActChgNumRowFooGrp+ 56)
 #define ActSeeLstAttStd		(ActChgNumRowFooGrp+ 57)
