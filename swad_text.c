@@ -1906,25 +1906,46 @@ const char *Txt_Admin_user =
 	"Gerenciar utilizador";
 #endif
 
-const char *Txt_Admin_several_users =
+const char *Txt_Admin_several_students =
 #if   L==0
-	"Administrar diversos usuaris";
+	"Administrar diversos estudiants";
 #elif L==1
-	"Verwalten Sie mehrere Benutzer";
+	"Verwalten Sie mehrere Studenten";
 #elif L==2
-	"Admin several users";
+	"Admin several students";
 #elif L==3
-	"Administrar varios usuarios";
+	"Administrar varios estudiantes";
 #elif L==4
-	"G&eacute;rer plusieurs utilisateurs";
+	"G&eacute;rer plusieurs &eacute;tudiants";
 #elif L==5
-	"Administrar varios usuarios";	// Okoteve traducción
+	"Administrar varios estudiantes";	// Okoteve traducción
 #elif L==6
-	"Gestire pi&ugrave; utenti";
+	"Gestire pi&ugrave; studenti";
 #elif L==7
-	"Zarz&aogon;dzaj wielu u&zdot;ytkownik&oacute;w";
+	"Zarz&aogon;dzaj wielu studenci";
 #elif L==8
-	"Gerenciar v&aacute;rios utilizadores";
+	"Gerenciar v&aacute;rios estudantes";
+#endif
+
+const char *Txt_Admin_several_teachers =
+#if   L==0
+	"Administrar diversos professors";
+#elif L==1
+	"Verwalten Sie mehrere Lehrkr&auml;fte";
+#elif L==2
+	"Admin several teachers";
+#elif L==3
+	"Administrar varios profesores";
+#elif L==4
+	"G&eacute;rer plusieurs enseignants";
+#elif L==5
+	"Administrar varios profesores";	// Okoteve traducción
+#elif L==6
+	"Gestire pi&ugrave; professori";
+#elif L==7
+	"Zarz&aogon;dzaj wielu nauczycieli";
+#elif L==8
+	"Gerenciar v&aacute;rios professores";
 #endif
 
 const char *Txt_All =
@@ -36611,88 +36632,67 @@ const char *Txt_Step_1_Provide_a_list_of_users =
 	"Step 1: Provide a list of users";		// Necessita de tradução
 #endif
 
-const char *Txt_Step_2_Select_the_type_of_users_to_register_remove =
+const char *Txt_Step_2_Select_the_desired_action =
 #if   L==0
-	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";	// Necessita traduccio
+	"Paso 2: Seleccione la acci&oacute;n que desea realizar";	// Necessita traduccio
 #elif L==1
-	"Step 2: Select the type of users to register / remove";		// Need Übersetzung
+	"Step 2: Select the desired action";				// Need Übersetzung
 #elif L==2
-	"Step 2: Select the type of users to register / remove";
+	"Step 2: Select the desired action";
 #elif L==3
-	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";
+	"Paso 2: Seleccione la acci&oacute;n que desea realizar";
 #elif L==4
-	"Step 2: Select the type of users to register / remove";		// Besoin de traduction
+	"Step 2: Select the desired action";				// Besoin de traduction
 #elif L==5
-	"Paso 2: Seleccione el tipo de usuarios a inscribir / eliminar";	// Okoteve traducción
+	"Paso 2: Seleccione la acci&oacute;n que desea realizar";	// Okoteve traducción
 #elif L==6
-	"Passo 2: Seleziona il tipo di utenti da registrare / rimuovere";
+	"Passo 2: Seleziona l'azione desiderata";
 #elif L==7
-	"Step 2: Select the type of users to register / remove";		// Potrzebujesz tlumaczenie
+	"Step 2: Select the desired action";				// Potrzebujesz tlumaczenie
 #elif L==8
-	"Step 2: Select the type of users to register / remove";		// Necessita de tradução
+	"Step 2: Select the desired action";				// Necessita de tradução
 #endif
 
-const char *Txt_Step_3_Select_the_desired_action =
+const char *Txt_Step_3_Optionally_select_groups =
 #if   L==0
-	"Paso 3: Seleccione la acci&oacute;n que desea realizar";	// Necessita traduccio
+	"Paso 3: Opcionalmente, seleccione grupos";	// Necessita traduccio
 #elif L==1
-	"Step 3: Select the desired action";				// Need Übersetzung
+	"Step 3: Optionally, select groups";		// Need Übersetzung
 #elif L==2
-	"Step 3: Select the desired action";
+	"Step 3: Optionally, select groups";
 #elif L==3
-	"Paso 3: Seleccione la acci&oacute;n que desea realizar";
+	"Paso 3: Opcionalmente, seleccione grupos";
 #elif L==4
-	"Step 3: Select the desired action";				// Besoin de traduction
+	"Step 3: Optionally, select groups";		// Besoin de traduction
 #elif L==5
-	"Paso 3: Seleccione la acci&oacute;n que desea realizar";	// Okoteve traducción
+	"Paso 3: Opcionalmente, seleccione grupos";	// Okoteve traducción
 #elif L==6
-	"Passo 3: Seleziona l'azione desiderata";
+	"Passo 3: A scelta, seleziona i gruppi";
 #elif L==7
-	"Step 3: Select the desired action";				// Potrzebujesz tlumaczenie
+	"Step 3: Optionally, select groups";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"Step 3: Select the desired action";				// Necessita de tradução
+	"Step 3: Optionally, select groups";		// Necessita de tradução
 #endif
 
-const char *Txt_Step_4_Optionally_select_groups =
+const char *Txt_Step_4_Confirm_the_enrollment_removing =
 #if   L==0
-	"Paso 4: Opcionalmente, seleccione grupos";	// Necessita traduccio
+	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Necessita traduccio
 #elif L==1
-	"Step 4: Optionally, select groups";		// Need Übersetzung
+	"Step 4: Confirm the enrollment / removing";			// Need Übersetzung
 #elif L==2
-	"Step 4: Optionally, select groups";
+	"Step 4: Confirm the enrollment / removing";
 #elif L==3
-	"Paso 4: Opcionalmente, seleccione grupos";
+	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";
 #elif L==4
-	"Step 4: Optionally, select groups";		// Besoin de traduction
+	"Step 4: Confirm the enrollment / removing";			// Besoin de traduction
 #elif L==5
-	"Paso 4: Opcionalmente, seleccione grupos";	// Okoteve traducción
+	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Okoteve traducción
 #elif L==6
-	"Passo 4: A scelta, seleziona i gruppi";
+	"Passo 4: Conferma la registrazione / rimozione";
 #elif L==7
-	"Step 4: Optionally, select groups";		// Potrzebujesz tlumaczenie
+	"Step 4: Confirm the enrollment / removing";			// Potrzebujesz tlumaczenie
 #elif L==8
-	"Step 4: Optionally, select groups";		// Necessita de tradução
-#endif
-
-const char *Txt_Step_5_Confirm_the_enrollment_removing =
-#if   L==0
-	"Paso 5: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Necessita traduccio
-#elif L==1
-	"Step 5: Confirm the enrollment / removing";			// Need Übersetzung
-#elif L==2
-	"Step 5: Confirm the enrollment / removing";
-#elif L==3
-	"Paso 5: Confirme la inscripci&oacute;n / eliminaci&oacute;n";
-#elif L==4
-	"Step 5: Confirm the enrollment / removing";			// Besoin de traduction
-#elif L==5
-	"Paso 5: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Passo 5: Conferma la registrazione / rimozione";
-#elif L==7
-	"Step 5: Confirm the enrollment / removing";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"Step 5: Confirm the enrollment / removing";			// Necessita de tradução
+	"Step 4: Confirm the enrollment / removing";			// Necessita de tradução
 #endif
 
 const char *Txt_Student_comment =

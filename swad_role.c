@@ -56,8 +56,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked);
-
 /*****************************************************************************/
 /****************** Get number of available roles for me *********************/
 /*****************************************************************************/
@@ -389,50 +387,6 @@ void Rol_GetSelectedRoles (unsigned *Roles)
          Lay_ShowErrorAndExit ("can not get user's role");
       *Roles |= (1 << Role);
      }
-  }
-
-/*****************************************************************************/
-/*** Select types of user to register/remove users to/from current course ****/
-/*****************************************************************************/
-
-void Rol_PutAllRolesRegRemUsrsCrs (void)
-  {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-
-   /***** Students or teachers *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:10px auto;\">"
-                      "<ul class=\"LIST_LEFT %s\">",
-            The_ClassForm[Gbl.Prefs.Theme]);
-   Rol_PutOneRoleRegRemUsrsCrs (Rol_STUDENT,true);
-   Rol_PutOneRoleRegRemUsrsCrs (Rol_TEACHER,false);
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
-  }
-
-/*****************************************************************************/
-/*** Select types of user to register/remove users to/from current course ****/
-/*****************************************************************************/
-
-static void Rol_PutOneRoleRegRemUsrsCrs (Rol_Role_t Role,bool Checked)
-  {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-
-   fprintf (Gbl.F.Out,"<li>"
-	              "<input type=\"radio\" name=\"RegRemRole\" value=\"%u\"",
-            (unsigned) Role);
-   if (Checked)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   switch (Gbl.Usrs.Me.LoggedRole)      // Can I select type of user?
-     {
-      case Rol_DEG_ADM:
-      case Rol_SYS_ADM:                // Yes, I can
-         break;
-      default:                                // No, I can not
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-         break;
-     }
-   fprintf (Gbl.F.Out," />%s</li>",
-            Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/

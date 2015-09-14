@@ -81,8 +81,6 @@ void Rol_ChangeMyRole (void);
 void Rol_WriteSelectorRoles (unsigned Roles);
 void Rol_GetSelectedRoles (unsigned *Roles);
 
-void Rol_PutAllRolesRegRemUsrsCrs (void);
-
 Rol_Role_t Rol_GetRequestedRole (long UsrCod);
 
 #endif

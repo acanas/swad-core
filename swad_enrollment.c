@@ -493,18 +493,18 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *The_ClassTitle[The_NUM_THEMES];
-   extern const char *Txt_Admin_several_users;
+   extern const char *Txt_Admin_several_students;
+   extern const char *Txt_Admin_several_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Option_a_Import_students_from_the_official_lists;
    extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
    extern const char *Txt_Option_b_Type_or_paste_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
-   extern const char *Txt_Step_2_Select_the_type_of_users_to_register_remove;
-   extern const char *Txt_Step_3_Select_the_desired_action;
-   extern const char *Txt_Step_4_Optionally_select_groups;
+   extern const char *Txt_Step_2_Select_the_desired_action;
+   extern const char *Txt_Step_3_Optionally_select_groups;
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
-   extern const char *Txt_Step_5_Confirm_the_enrollment_removing;
+   extern const char *Txt_Step_4_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
    bool PutFormRemAllStdsThisCrs = (Role == Rol_STUDENT &&
                                     Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
@@ -533,7 +533,8 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	                                ActRcvFrmEnrSevTch);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Admin_several_users);
+   Lay_StartRoundFrame (NULL,Role == Rol_STUDENT ? Txt_Admin_several_students :
+	                                           Txt_Admin_several_teachers);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -564,29 +565,20 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Lay_ShowAlert (Lay_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
 
-   /***** Step 2: Select type of user to register/remove to/from current course *****/
+   /***** Step 2: Put different actions to register/remove users to/from current course *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_2_Select_the_type_of_users_to_register_remove);
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-      Rol_PutAllRolesRegRemUsrsCrs ();
-
-   /***** Step 3: Put different actions to register/remove students to/from current course *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
-                      "%s"
-                      "</div>",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_3_Select_the_desired_action);
+            Txt_Step_2_Select_the_desired_action);
    Enr_PutActionsRegRemSeveralUsrs ();
 
-   /***** Step 4: Select groups in which register / remove students *****/
+   /***** Step 3: Select groups in which register / remove users *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_4_Optionally_select_groups);
+            Txt_Step_3_Optionally_select_groups);
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
      {
       if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -603,12 +595,12 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	}
      }
 
-   /***** Step 5: Confirm register / remove students *****/
+   /***** Step 4: Confirm register / remove students *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_5_Confirm_the_enrollment_removing);
+            Txt_Step_4_Confirm_the_enrollment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end frame *****/
@@ -1130,7 +1122,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    long LongNum;
-   Rol_Role_t RegRemRole = Rol_STUDENT;
    struct
      {
       bool RemoveUsrs;
@@ -1154,32 +1145,24 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    Enr_RegRemUsrsAction_t RegRemUsrsAction;
    bool ErrorInForm = false;
 
+   /***** Check the role of users to register / remove *****/
+   switch (Role)
+     {
+      case Rol_STUDENT:
+	 break;
+      case Rol_TEACHER:
+	 if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)        // Can I register/remove teachers?
+	    // No, I can not (TODO: teachers should be able to register/remove existing teachers)
+	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+
    /***** Get confirmation *****/
    if (!Pwd_GetConfirmationOnDangerousAction ())
       return;
-
-   /***** Get the type of user to register / remove *****/
-   Par_GetParToText ("RegRemRole",UnsignedStr,1);
-   if (UnsignedStr[0])
-      switch ((RegRemRole = Rol_ConvertUnsignedStrToRole (UnsignedStr)))
-        {
-         case Rol_STUDENT:
-            break;
-         case Rol_TEACHER:
-            switch (Gbl.Usrs.Me.LoggedRole)        // Can I register/remove teachers?
-              {
-               case Rol_DEG_ADM:
-               case Rol_SYS_ADM:                // Yes, I can
-                  break;
-               default:                                // No, I can not (TODO: teachers should be able to register/remove existing teachers)
-                  Lay_ShowErrorAndExit ("You are not allowed to perform this action.");	// If user manipulated the form
-                  break;
-              }
-            break;
-         default:
-            Lay_ShowErrorAndExit ("Wrong role.");				// If user manipulated the form
-            break;
-        }
 
    /***** Get the action to do *****/
    WhatToDo.RemoveUsrs = false;
@@ -1259,7 +1242,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	 /***** A student can't belong to more than one group when the type of group only allows to register in one group *****/
 	 if (WhatToDo.RegisterUsrs &&
-	     RegRemRole == Rol_STUDENT &&
+	     Role == Rol_STUDENT &&
 	     LstGrps.NumGrps >= 2)
 	    /* Check if I have selected more than one group of single enrollment */
 	    if (!Grp_CheckIfSelectionGrpsIsValid (&LstGrps))
@@ -1286,7 +1269,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       if (WhatToDo.RemoveUsrs)
 	{
 	 /***** Get list of users in current course *****/
-	 switch (RegRemRole)
+	 switch (Role)
 	   {
 	    case Rol_STUDENT:
 	       Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
@@ -1312,7 +1295,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	    /***** Loop 1: go through form list setting if a student must be removed *****/
 	    /* Step a: Get students from a list of official groups */
-	    if (RegRemRole == Rol_STUDENT)
+	    if (Role == Rol_STUDENT)
 	      {
 	       Ptr = ListExternalGrpCods;
 	       while (*Ptr)
@@ -1450,7 +1433,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
 	{
 	 /***** Step a: Get users from a list of official groups *****/
-	 if (RegRemRole == Rol_STUDENT)
+	 if (Role == Rol_STUDENT)
 	   {
 	    Ptr = ListExternalGrpCods;
 	    while (*Ptr)
@@ -1527,10 +1510,10 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		    NumUsrFound++)
 		 {
 		  UsrDat.UsrCod = ListUsrCods.Lst[NumUsrFound];
-		  Enr_RegisterUsr (&UsrDat,RegRemRole,&LstGrps,&NumUsrsRegistered);
+		  Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
 		 }
 	    else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
-	       Enr_RegisterUsr (&UsrDat,RegRemRole,&LstGrps,&NumUsrsRegistered);
+	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
 
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
@@ -2583,11 +2566,14 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
-   extern const char *Txt_Admin_several_users;
+   extern const char *Txt_Admin_several_students;
+   extern const char *Txt_Admin_several_teachers;
 
    Act_PutContextualLink (Role == Rol_STUDENT ? ActReqMdfSevStd :
 	                                        ActReqMdfSevTch,
-	                  NULL,"configtest",Txt_Admin_several_users);
+	                  NULL,"configtest",
+	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
+	                	                Txt_Admin_several_teachers);
   }
 
 /*****************************************************************************/
@@ -2668,17 +2654,12 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    extern const char *Txt_Admin_one_user;
 
    /***** Put contextual links *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-         /* Put link to go to admin several users */
-	 Enr_PutLinkToAdminSeveralUsrs (Role);
-      else if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-         /* Put link to remove old users */
-	 Enr_PutLinkToRemOldUsrs ();
+      /* Put link to remove old users */
+      Enr_PutLinkToRemOldUsrs ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
