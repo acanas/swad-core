@@ -944,7 +944,10 @@ Users:
 	776. ActRemAdmCtr		Remove an administrador of this centre
 	777. ActNewAdmDeg		Register an administrador in this degree
 	778. ActRemAdmDeg		Remove an administrador of this degree
-	779. ActRcvFrmMdfUsrCrs		Receive a form with IDs of users to be registeres/removed to/from current course
+
+	779b. ActRcvFrmEnrSevStd	Receive a form with IDs of users to be registeres/removed to/from current course
+	779c. ActRcvFrmEnrSevTch	Receive a form with IDs of users to be registeres/removed to/from current course
+
 	780. ActFrmIDOthUsr		Show form to the change of the IDs of another user
 	781. ActRemIDOth		Remove one of the IDs of another user
 	782. ActNewIDOth		Create a new user's ID for another user
@@ -2285,8 +2288,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgVisFie	*/{ 297,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeVisibilityField	,NULL},
    /* ActRcvRecCrs	*/{ 301,-1,TabUsr,ActLstStd		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
-   /* ActReqMdfSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminUsrs		,NULL},
-   /* ActReqMdfSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminUsrs		,NULL},
+   /* ActReqMdfSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminStds		,NULL},
+   /* ActReqMdfSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminTchs		,NULL},
 
    /* ActReqLstAttStd	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListAttendanceStdsCrs	,NULL},
    /* ActSeeLstAttStd	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListAttendanceStdsCrs	,NULL},
@@ -2341,7 +2344,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewAdmDeg	*/{ 586,-1,TabUsr,ActLstAdm		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
    /* ActRemAdmDeg	*/{ 584,-1,TabUsr,ActLstAdm		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmDeg			,NULL},
 
-   /* ActRcvFrmMdfUsrCrs*/{ 799,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormUsrsCrs		,NULL},
+   /* ActRcvFrmEnrSevStd*/{1427,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
+   /* ActRcvFrmEnrSevTch*/{1428,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
 
    /* ActFrmIDsOthUsr	*/{1239,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActRemIDOth	*/{1240,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
@@ -3494,7 +3498,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActGetExtLstStd,	// #796
 	-1,			// #797 (obsolete action)
 	-1,			// #798 (obsolete action)
-	ActRcvFrmMdfUsrCrs,	// #799
+	-1,			// #799 (obsolete action)
 	-1,			// #800 (obsolete action)
 	ActSeeAsg,		// #801
 	-1,			// #802 (obsolete action)
@@ -4126,6 +4130,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUpdOthAdm,		// #1425
 	ActReqMdfSevStd,	// #1426
 	ActReqMdfSevTch,	// #1427
+	ActRcvFrmEnrSevStd,	// #1428
+	ActRcvFrmEnrSevTch,	// #1429
 	};
 
 /*****************************************************************************/

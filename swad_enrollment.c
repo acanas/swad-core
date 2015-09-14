@@ -86,10 +86,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
 
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
+
+static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
@@ -438,7 +441,17 @@ void Enr_UpdateInstitutionCentreDepartment (void)
 /************** Form to request the user's ID of another user ****************/
 /*****************************************************************************/
 
-void Enr_ReqAdminUsrs (void)
+void Enr_ReqAdminStds (void)
+  {
+   Enr_ReqAdminUsrs (Rol_STUDENT);
+  }
+
+void Enr_ReqAdminTchs (void)
+  {
+   Enr_ReqAdminUsrs (Rol_TEACHER);
+  }
+
+static void Enr_ReqAdminUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
@@ -465,8 +478,7 @@ void Enr_ReqAdminUsrs (void)
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    Enr_ShowFormRegRemSeveralUsrs (Role);
 	 else
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Rol_TEACHER);	// TODO: Change this line to the following
-	    // Enr_ReqAnotherUsrIDToRegisterRemove (Role);
+	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
 	 Lay_ShowAlert (Lay_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
@@ -494,23 +506,31 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_5_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
+   bool PutFormRemAllStdsThisCrs = (Role == Rol_STUDENT &&
+                                    Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
+   bool PutFormRemOldUsrs = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   if (PutFormRemAllStdsThisCrs ||
+       PutFormRemOldUsrs)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /* Put link to remove all the students in the current course */
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-      Enr_PutLinkToRemAllStdsThisCrs ();
+      /* Put link to remove all the students in the current course */
+      if (PutFormRemAllStdsThisCrs)
+	 Enr_PutLinkToRemAllStdsThisCrs ();
 
-   /* Put link to remove old users */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Enr_PutLinkToRemOldUsrs ();
+      /* Put link to remove old users */
+      if (PutFormRemOldUsrs)
+	 Enr_PutLinkToRemOldUsrs ();
 
-   fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Form to send students to be enrolled / removed *****/
-   Act_FormStart (ActRcvFrmMdfUsrCrs);
+   Act_FormStart (Role == Rol_STUDENT ? ActRcvFrmEnrSevStd :
+	                                ActRcvFrmEnrSevTch);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Admin_several_users);
@@ -1081,7 +1101,17 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 /******* Receive the list of users of the course to register/remove **********/
 /*****************************************************************************/
 
-void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
+void Enr_ReceiveFormAdminStds (void)
+  {
+   Enr_ReceiveFormUsrsCrs (Rol_STUDENT);
+  }
+
+void Enr_ReceiveFormAdminTchs (void)
+  {
+   Enr_ReceiveFormUsrsCrs (Rol_TEACHER);
+  }
+
+static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
   {
    extern const char *Txt_You_must_specify_in_step_3_the_action_to_perform;
    extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
