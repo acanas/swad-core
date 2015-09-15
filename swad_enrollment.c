@@ -101,6 +101,7 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
+static bool Enr_CheckIfICanAdminOtherUsrs (void);
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
 static void Enr_AskIfRegRemMe (Rol_Role_t Role);
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
@@ -2553,10 +2554,12 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
+   extern const char *Txt_Admin_me;
    extern const char *Txt_Admin_one_user;
 
-   Act_PutContextualLink (NextAction,NULL,
-                          "configtest",Txt_Admin_one_user);
+   Act_PutContextualLink (NextAction,NULL,"configtest",
+                          Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
+                        	                             Txt_Admin_me);
   }
 
 /*****************************************************************************/
@@ -2601,47 +2604,37 @@ void Enr_ReqRegRemAdm (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+   if (Enr_CheckIfICanAdminOtherUsrs ())
+      Enr_ReqAnotherUsrIDToRegisterRemove (Role);
+   else
+      Enr_AskIfRegRemMe (Role);
+  }
 
+/*****************************************************************************/
+/*********** Check If I can admin other users (distinct to me) ***************/
+/*****************************************************************************/
+
+static bool Enr_CheckIfICanAdminOtherUsrs (void)
+  {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
+      case Rol_UNKNOWN:
       case Rol__GUEST_:
-	 Enr_AskIfRegRemMe (Rol__GUEST_);
-	 break;
+      case Rol_VISITOR:
       case Rol_STUDENT:
-	 Enr_AskIfRegRemMe (Rol_STUDENT);
-	 break;
+	 return false;
       case Rol_TEACHER:
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-	 else
-	    Enr_AskIfRegRemMe (Rol_TEACHER);
-	 break;
+	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
       case Rol_DEG_ADM:
-	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-	 else
-	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
-	 break;
+	 return (Gbl.CurrentDeg.Deg.DegCod > 0);
       case Rol_CTR_ADM:
-	 if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-	 else
-	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
-	 break;
+	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0);
       case Rol_INS_ADM:
-	 if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-	 else
-	    Enr_AskIfRegRemMe (Rol_DEG_ADM);
-	 break;
+	 return (Gbl.CurrentIns.Ins.InsCod > 0);
       case Rol_SYS_ADM:
-	 Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-	 break;
-      default:
-	 Lay_ShowAlert (Lay_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
-	 break;
+	 return true;
      }
+   return false;
   }
 
 /*****************************************************************************/

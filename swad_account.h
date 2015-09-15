@@ -53,7 +53,8 @@ void Acc_ReqRemUsrGbl (void);
 void Acc_RemUsrGbl (void);
 
 bool Acc_CheckIfICanEliminateAccount (bool ItsMe);
-void Acc_AskIfCompletelyEliminateAccount (bool ItsMe);
+void Acc_AskIfRemoveMyAccount (void);
+void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose);
 

@@ -1885,6 +1885,27 @@ const char *Txt_Admin_one_user =
 	"Gerenciar um utilizador";
 #endif
 
+const char *Txt_Admin_me =
+#if   L==0
+	"Administrarme";
+#elif L==1
+	"Verwalten Sie mich";
+#elif L==2
+	"Admin me";
+#elif L==3
+	"Administrarme";
+#elif L==4
+	"G&eacute;rer moi";
+#elif L==5
+	"Administrarme";	// Okoteve traducción
+#elif L==6
+	"Gestire mi";
+#elif L==7
+	"Zarz&aogon;dzaj mnie";
+#elif L==8
+	"Gerenciar me";
+#endif
+
 const char *Txt_Admin_user =
 #if   L==0
 	"Administrar usuari";
@@ -9886,7 +9907,7 @@ const char *Txt_Enroll_in_groups =
 #elif L==5
 	"Inscribirme en grupos";	// Okoteve traducción
 #elif L==6
-	"Iscriver in gruppi";
+	"Iscriver mi in gruppi";
 #elif L==7
 	"Zarejestruj mnie w grupach";
 #elif L==8

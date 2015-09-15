@@ -1201,6 +1201,9 @@ Profile:
        1020. ActCnfMai			Confirm e-mail address
        1021. ActFrmChgMyPwd		Show form to the change of the password
        1022. ActChgPwd			Change the password
+       1022b. ActReqRemMyAcc		Request the removal of my account
+       1022c. ActRemMyAcc		Remove my account
+
        1023. ActChgMyData		Update my personal data
 
        1024. ActReqMyPho		Show form to send my photo
@@ -2635,6 +2638,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
    /* ActChgPwd		*/{  35,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
+
+   /* ActReqRemMyAcc	*/{1430,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AskIfRemoveMyAccount	,NULL},
+   /* ActRemMyAcc	*/{1431,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemoveMyAccount		,NULL},
 
    /* ActChgMyData	*/{ 298,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
 
@@ -4132,6 +4138,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqEnrSevTch,	// #1427
 	ActRcvFrmEnrSevStd,	// #1428
 	ActRcvFrmEnrSevTch,	// #1429
+	ActReqRemMyAcc,		// #1430
+	ActRemMyAcc,		// #1431
 	};
 
 /*****************************************************************************/

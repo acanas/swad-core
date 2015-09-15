@@ -98,11 +98,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.130.3 (2015/09/14)"
+#define Log_PLATFORM_VERSION	"SWAD 14.131 (2015/09/15)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.131:   Sep 15, 2015	Changes in user enrollment. (184408 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1430','es','N','Preguntar si eliminar mi cuenta');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1431','es','N','Eliminar mi cuenta');
+
         Version 14.130.3: Sep 14, 2015	Changes in user enrollment. (184358 lines)
         Version 14.130.2: Sep 14, 2015	Changes in user enrollment. (184359 lines)
         Version 14.130.1: Sep 14, 2015	Changes and bug fixing in user enrollment. (184416 lines)

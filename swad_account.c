@@ -53,7 +53,7 @@ typedef enum
   {
    Acc_REQUEST_REMOVE_USR,
    Acc_REMOVE_USR,
-  } Acc_ReqDelOrDelUsr_t;
+  } Acc_ReqOrRemUsr_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -81,7 +81,9 @@ static void Acc_PutLinkToRemoveMyAccountParams (void);
 
 static void Acc_PrintAccountSeparator (void);
 
-static void Acc_ReqDelOrDelUsrGbl (Acc_ReqDelOrDelUsr_t ReqDelOrDelUsr);
+static void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
+static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
+static void Acc_AskIfRemoveOtherUsrAccount (void);
 
 static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat);
 static void Acc_RemoveUsr (struct UsrData *UsrDat);
@@ -240,8 +242,7 @@ static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   // TODO: Put this option in Profile > Account
-   Act_PutContextualLink (ActUpdOthGst,Acc_PutLinkToRemoveMyAccountParams,
+   Act_PutContextualLink (ActReqRemMyAcc,Acc_PutLinkToRemoveMyAccountParams,
                           "delon",Txt_Remove_account);
   }
 
@@ -549,7 +550,7 @@ void Acc_AfterCreationNewAccount (void)
 
 void Acc_ReqRemUsrGbl (void)
   {
-   Acc_ReqDelOrDelUsrGbl (Acc_REQUEST_REMOVE_USR);
+   Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
   }
 
 /*****************************************************************************/
@@ -558,14 +559,14 @@ void Acc_ReqRemUsrGbl (void)
 
 void Acc_RemUsrGbl (void)
   {
-   Acc_ReqDelOrDelUsrGbl (Acc_REMOVE_USR);
+   Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
   }
 
 /*****************************************************************************/
 /**************************** Removing of a user *****************************/
 /*****************************************************************************/
 
-static void Acc_ReqDelOrDelUsrGbl (Acc_ReqDelOrDelUsr_t ReqDelOrDelUsr)
+static void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
@@ -575,10 +576,10 @@ static void Acc_ReqDelOrDelUsrGbl (Acc_ReqDelOrDelUsr_t ReqDelOrDelUsr)
      {
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
       if (Acc_CheckIfICanEliminateAccount (ItsMe))
-         switch (ReqDelOrDelUsr)
+         switch (RequestOrRemove)
            {
             case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
-               Acc_AskIfCompletelyEliminateAccount (ItsMe);
+               Acc_AskIfRemoveUsrAccount (ItsMe);
                break;
             case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
                if (Pwd_GetConfirmationOnDangerousAction ())
@@ -616,18 +617,42 @@ bool Acc_CheckIfICanEliminateAccount (bool ItsMe)
 /*********** Ask if really wanted to eliminate completely a user *************/
 /*****************************************************************************/
 
-void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
+static void Acc_AskIfRemoveUsrAccount (bool ItsMe)
+  {
+   if (ItsMe)
+      Acc_AskIfRemoveMyAccount ();
+   else
+      Acc_AskIfRemoveOtherUsrAccount ();
+  }
+
+void Acc_AskIfRemoveMyAccount (void)
   {
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account;
-   extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
    extern const char *Txt_Eliminate_my_user_account;
+
+   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
+
+   Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
+
+   Act_FormStart (ActRemMyAcc);
+
+   /* Ask for consent on dangerous actions */
+   Pwd_AskForConfirmationOnDangerousAction ();
+
+   Lay_PutRemoveButton (Txt_Eliminate_my_user_account);
+
+   Act_FormEnd ();
+  }
+
+static void Acc_AskIfRemoveOtherUsrAccount (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
    extern const char *Txt_Eliminate_user_account;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      Lay_ShowAlert (Lay_WARNING,ItsMe ? Txt_Do_you_really_want_to_completely_eliminate_your_user_account :
-				         Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
       Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
@@ -637,8 +662,7 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
       /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();
 
-      Lay_PutRemoveButton (ItsMe ? Txt_Eliminate_my_user_account :
-                                   Txt_Eliminate_user_account);
+      Lay_PutRemoveButton (Txt_Eliminate_user_account);
 
       Act_FormEnd ();
      }
@@ -649,6 +673,17 @@ void Acc_AskIfCompletelyEliminateAccount (bool ItsMe)
 /*****************************************************************************/
 /************* Remove completely a user from the whole platform **************/
 /*****************************************************************************/
+
+void Acc_RemoveMyAccount (void)
+  {
+   if (Pwd_GetConfirmationOnDangerousAction ())
+     {
+      Acc_CompletelyEliminateAccount (&Gbl.Usrs.Me.UsrDat,Cns_VERBOSE);
+
+      /***** Move unused contents of messages to table of deleted contents of messages *****/
+      Msg_MoveUnusedMsgsContentToDeleted ();
+     }
+  }
 
 void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose)
