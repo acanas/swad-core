@@ -6282,6 +6282,9 @@ void Usr_SeeGuests (void)
       /* Put link to go to admin one user */
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneGst);
 
+      /* Put link to remove old users */
+      Enr_PutLinkToRemOldUsrs ();
+
       fprintf (Gbl.F.Out,"</div>");
      }
 

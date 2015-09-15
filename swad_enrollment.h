@@ -89,6 +89,7 @@ void Enr_UpdateInstitutionCentreDepartment (void);
 void Enr_ReqAdminStds (void);
 void Enr_ReqAdminTchs (void);
 
+void Enr_PutLinkToRemOldUsrs (void);
 void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
@@ -98,7 +99,6 @@ void Enr_ReceiveFormAdminStds (void);
 void Enr_ReceiveFormAdminTchs (void);
 
 void Enr_PutLinkToRemAllStdsThisCrs (void);
-void Enr_PutLinkToRemOldUsrs (void);
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);

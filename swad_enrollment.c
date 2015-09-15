@@ -2645,17 +2645,6 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
    extern const char *Txt_Admin_one_user;
 
-   /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Put link to remove old users */
-      Enr_PutLinkToRemOldUsrs ();
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Admin_one_user);
 
