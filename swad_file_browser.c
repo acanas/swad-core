@@ -2938,7 +2938,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	                                       Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
-	       if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+	       if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
 		  ZIP_CreateDirCompressionUsr (&UsrDat);
 	   }
 
@@ -2967,7 +2967,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	                                    Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
-	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
 	      {
 	       /***** Show a row with the data of the owner of the works *****/
 	       fprintf (Gbl.F.Out,"<tr>");

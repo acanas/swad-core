@@ -1010,42 +1010,79 @@ void Usr_GetMyCourses (void)
   }
 
 /*****************************************************************************/
+/**************** Check if a user belongs to an institution ******************/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod,bool CountOnlyAcceptedCourses)
+  {
+   char Query[512];
+   const char *SubQuery;
+
+   /***** Get is a user belongs to an institution from database *****/
+   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
+	                                  "");
+   sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
+		  " FROM crs_usr,courses,degrees,centres"
+		  " WHERE crs_usr.UsrCod='%ld'%s"
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod=degrees.DegCod"
+		  " AND degrees.CtrCod=institutions.CtrCod"
+		  " AND centres.InsCod='%ld'",
+	    UsrCod,SubQuery,InsCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+  }
+
+/*****************************************************************************/
+/******************* Check if a user belongs to a centre *********************/
+/*****************************************************************************/
+
+bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod,bool CountOnlyAcceptedCourses)
+  {
+   char Query[512];
+   const char *SubQuery;
+
+   /***** Get is a user belongs to a centre from database *****/
+   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
+	                                  "");
+   sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
+		  " FROM crs_usr,courses,degrees"
+		  " WHERE crs_usr.UsrCod='%ld'%s"
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod=degrees.DegCod"
+		  " AND degrees.CtrCod='%ld'",
+	    UsrCod,SubQuery,CtrCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+  }
+
+/*****************************************************************************/
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
+bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod,bool CountOnlyAcceptedCourses)
   {
    char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
+   const char *SubQuery;
 
    /***** Get is a user belongs to a degree from database *****/
+   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
+	                                  "");
    sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
-	          " FROM crs_usr,courses"
-                  " WHERE crs_usr.UsrCod='%ld' AND courses.DegCod='%ld'"
-                  " AND crs_usr.CrsCod=courses.CrsCod",
-            UsrCod,DegCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not check if a user belongs to a degree");
-
-   /***** Get number of rows *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumRows) != 1)
-      Lay_ShowErrorAndExit ("Error when checking if a user belongs to a degree.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return (NumRows > 0);
+		  " FROM crs_usr,courses"
+		  " WHERE crs_usr.UsrCod='%ld'%s"
+		  " AND crs_usr.CrsCod=courses.CrsCod"
+		  " AND courses.DegCod='%ld'",
+	    UsrCod,SubQuery,DegCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
   }
 
 /*****************************************************************************/
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod)
+bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,bool CountOnlyAcceptedCourses)
   {
-   char Query[256];
+   char Query[512];
+   const char *SubQuery;
 
    /***** If user code or course code not valid... *****/
    if (UsrCod <= 0 ||
@@ -1053,9 +1090,11 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod)
       return false;
 
    /***** Get if a user belongs to a course from database *****/
+   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
+	                                  "");
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-            CrsCod,UsrCod);
+	          " WHERE CrsCod='%ld' AND UsrCod='%ld'%s",
+            CrsCod,UsrCod,SubQuery);
    return (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
   }
 

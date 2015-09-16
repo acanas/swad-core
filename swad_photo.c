@@ -128,24 +128,26 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   /* Check if I have permission to change user's photo */
+   /* Check if I have permission to change user's photo
+      Only users who have accepted registration in courses are counted */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
 	 /* If I am a teacher in current course,
-	    I only can change the photo of confirmed students or teachers from current course */
+	    I only can change the photo of users from current course */
 	 return UsrDat->Accepted;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-	 // TODO: Only confirmed users?
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
       case Rol_CTR_ADM:
-	 // TODO: Implement
-	 return false;
+	 /* If I am an administrator of current centre,
+	    I only can change the photo of users from current centre */
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
       case Rol_INS_ADM:
-	 // TODO: Implement
-	 return false;
+	 /* If I am an administrator of current institution,
+	    I only can change the photo of users from current institution */
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
       case Rol_SYS_ADM:
 	 return true;
       default:

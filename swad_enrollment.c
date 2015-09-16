@@ -797,7 +797,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Check if the other user belongs to the current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-      UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
+      UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false);
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
@@ -1609,7 +1609,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
    /***** Register user in current course in database *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
      {
-      if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
+      if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))      // User does belong to current course, modify his/her role
 	 Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET);
       else
 	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET,
@@ -1982,7 +1982,7 @@ void Enr_AskIfRejectSignUp (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
      {
-      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
         {
          /* User already belongs to this course */
          sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
@@ -2037,7 +2037,7 @@ void Enr_RejectSignUp (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
      {
-      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+      if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
         {
          /* User already belongs to this course */
          sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
@@ -2406,7 +2406,7 @@ void Enr_ShowEnrollmentRequests (void)
 	 DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
          if (UsrExists)
-            UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Crs.CrsCod);
+            UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Crs.CrsCod,false);
          else
             UsrBelongsToCrs = false;
 
@@ -2751,7 +2751,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	   {
 	    /* Check if this user belongs to the current course */
-	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
 	       if (Gbl.Usrs.Other.UsrDat.Accepted)
@@ -3218,7 +3218,7 @@ void Enr_CreateNewUsr (void)
       /***** Register user in current course in database *****/
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
-	 if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
+	 if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))      // User does belong to current course, modify his/her role
 	    Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 	 else
 	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
@@ -3282,7 +3282,7 @@ void Enr_ModifyUsr (void)
 			NewRole = Rec_GetRoleFromRecordForm ();
 
 			/***** Register user in current course in database *****/
-			if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod))      // User does belong to current course, modify his/her role
+			if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))      // User does belong to current course, modify his/her role
 			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 			else
 			   Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
@@ -3398,7 +3398,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_Remove_user_from_this_course;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod))
+   if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
      {
       sprintf (Gbl.Message,
                ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
@@ -3432,7 +3432,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[1024];
 
-   if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Crs->CrsCod))        // User belongs to the course
+   if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,Crs->CrsCod,false))        // User belongs to the course
      {
       /***** Remove user from all the attendance events in course *****/
       Att_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
