@@ -935,7 +935,9 @@ Users:
 	766b. ActUpdGstPho		Update other user's photo
 	766c. ActUpdStdPho		Update other user's photo
 	766d. ActUpdTchPho		Update other user's photo
-	767. ActRemUsrPho		Remove the photo of otro user
+	767b. ActRemGstPho		Remove other user's photo
+	767c. ActRemStdPho		Remove other user's photo
+	767d. ActRemTchPho		Remove other user's photo
 	768. ActCreOthUsrDat		Insertar a new user in this course
 	769b. ActUpdOthGst		Update another user's data and groups
 	769c. ActUpdOthStd		Update another user's data and groups
@@ -2341,7 +2343,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUpdStdPho	*/{1439,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
    /* ActUpdTchPho	*/{1440,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
 
-   /* ActRemUsrPho	*/{ 429,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemGstPho	*/{1441,-1,TabUsr,ActLstGst		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemStdPho	*/{1442,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemTchPho	*/{1443,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
 
    /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
    /* ActUpdOthGst	*/{1422,-1,TabUsr,ActLstGst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
@@ -3149,7 +3153,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActConComGrp,		// #426
 	ActExpComGrp,		// #427
 	ActRemMyPho,		// #428
-	ActRemUsrPho,		// #429
+	-1,			// #429 (obsolete action)
 	ActSeeForCtrTch,	// #430
 	ActSeeForCrsTch,	// #431
 	-1,			// #432 (obsolete action)
@@ -4164,6 +4168,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUpdGstPho,		// #1438
 	ActUpdStdPho,		// #1439
 	ActUpdTchPho,		// #1440
+	ActRemGstPho,		// #1441
+	ActRemStdPho,		// #1442
+	ActRemTchPho,		// #1443
 	};
 
 /*****************************************************************************/

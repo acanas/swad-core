@@ -86,7 +86,7 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /*****************************************************************************/
 
 static void Pho_PutLinkToRemoveMyPhoto (void);
-static void Pho_PutLinkToRemoveOtherUsrPhoto (void);
+static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat);
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
@@ -213,12 +213,15 @@ static void Pho_PutLinkToRemoveMyPhoto (void)
 /********************* Put a link to remove user's photo *********************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToRemoveOtherUsrPhoto (void)
+static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
   {
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Act_PutContextualLink (ActRemUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+   Act_PutContextualLink ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
+	                                                               ActRemGstPho),	// Guest, visitor or admin
+                          Usr_PutParamOtherUsrCodEncrypted,
                           "delon",Txt_Remove_photo);
   }
 
@@ -272,7 +275,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
          Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
 	}
       else
-         Pho_PutLinkToRemoveOtherUsrPhoto ();
+         Pho_PutLinkToRemoveOtherUsrPhoto (UsrDat);
       fprintf (Gbl.F.Out,"</div>");
      }
 

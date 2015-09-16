@@ -98,27 +98,34 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.132.3 (2015/09/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.132.4 (2015/09/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.132.3: Sep 16, 2015	Changes in user enrollment. (184518 lines)
+        Version 14.132.4: Sep 16, 2015	Changes in users' photos. (184536 lines)
+					4 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='429';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1441','es','N','Eliminar foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1442','es','N','Eliminar foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1443','es','N','Eliminar foto profesor');
+
+        Version 14.132.3: Sep 16, 2015	Changes in users' photos. (184518 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='374';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1438','es','N','Cambiar foto otro usr.');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1439','es','N','Cambiar foto estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1440','es','N','Cambiar foto profesor');
 
-        Version 14.132.2: Sep 16, 2015	Changes in user enrollment. (184501 lines)
+        Version 14.132.2: Sep 16, 2015	Changes in users' photos. (184501 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='695';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1435','es','N','Detectar rostros foto otro usr.');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1436','es','N','Detectar rostros foto estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1437','es','N','Detectar rostros foto profesor');
 
-        Version 14.132.1: Sep 16, 2015	Changes in user enrollment. (184458 lines)
-        Version 14.132:   Sep 16, 2015	Changes in user enrollment. (184416 lines)
+        Version 14.132.1: Sep 16, 2015	Changes in users' photos. (184458 lines)
+        Version 14.132:   Sep 16, 2015	Changes in users' photos. (184416 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='375';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1432','es','N','Solicitar cambio foto otro usr.');
