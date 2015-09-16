@@ -847,13 +847,22 @@ bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod)
    if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   /* Check if I have permission to change user's password */
+   /* Check if I have permission to change another user's password.
+      Only users who have accepted registration in courses are counted */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the password of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod);
+	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+      case Rol_CTR_ADM:
+	 /* If I am an administrator of current centre,
+	    I only can change the password of users from current centre */
+	 return Usr_CheckIfUsrBelongsToCtr (UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+      case Rol_INS_ADM:
+	 /* If I am an administrator of current institution,
+	    I only can change the password of users from current institution */
+	 return Usr_CheckIfUsrBelongsToIns (UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
       case Rol_SYS_ADM:
 	 return true;
       default:

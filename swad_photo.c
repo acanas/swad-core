@@ -281,7 +281,9 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
       Act_FormStart (ActDetMyPho);
    else
      {
-      Act_FormStart (ActDetUsrPho);
+      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActDetStdPho :
+	             (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActDetTchPho :
+	                                                          ActDetGstPho));	// Guest, visitor or admin
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 

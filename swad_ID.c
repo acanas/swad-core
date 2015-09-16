@@ -805,8 +805,25 @@ void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
 
 bool ID_ICanSeeTeacherID (struct UsrData *UsrDat)
   {
-   if (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM)
-      // If I am an administrator of current degree, I only can see the users' IDs from current degree
-      return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
-   return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   /* Check if I have permission to see the user's ID of a teacher
+      Only teachers who have accepted registration in courses are counted */
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_DEG_ADM:
+	 /* If I am an administrator of current degree,
+	    I only can see the user's ID of users from current degree */
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+      case Rol_CTR_ADM:
+	 /* If I am an administrator of current centre,
+	    I only can see the user's ID of users from current centre */
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+      case Rol_INS_ADM:
+	 /* If I am an administrator of current institution,
+	    I only can see the user's ID of users from current institution */
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
