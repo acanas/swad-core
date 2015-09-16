@@ -17573,7 +17573,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstInv
+	// ActLstGst
 #if   L==0
 	"Convidats"
 #elif L==1
@@ -19522,7 +19522,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstInv
+	// ActLstGst
 #if   L==0
 	"Llistat i fitxes dels convidats"
 #elif L==1

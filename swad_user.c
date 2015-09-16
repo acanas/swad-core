@@ -4788,7 +4788,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
   {
    switch (Gbl.CurrentAct)
      {
-      case ActLstInv:
+      case ActLstGst:
       case ActLstStd:
       case ActLstTch:
          Sco_PutParamScope (Gbl.Scope.Current);
@@ -6305,7 +6305,7 @@ void Usr_SeeGuests (void)
          /***** Form to select range of guests *****/
          fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Act_FormStart (ActLstInv);
+         Act_FormStart (ActLstGst);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();
@@ -6319,7 +6319,7 @@ void Usr_SeeGuests (void)
      }
 
    /***** Form to select type of list of users *****/
-   Usr_ShowFormsToSelectUsrListType (ActLstInv);
+   Usr_ShowFormsToSelectUsrListType (ActLstGst);
 
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -6341,7 +6341,7 @@ void Usr_SeeGuests (void)
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
-               Act_PutContextualLink (ActLstInvAll,Usr_PutLinkToShowGuestsAllDataParams,
+               Act_PutContextualLink (ActLstGstAll,Usr_PutLinkToShowGuestsAllDataParams,
                                       "table",Txt_Show_all_data);
 	       break;
            }
@@ -6395,7 +6395,7 @@ void Usr_SeeGuests (void)
 static void Usr_PutLinkToShowGuestsAllDataParams (void)
   {
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstInvAll);
+   Usr_PutExtraParamsUsrList (ActLstGstAll);
   }
 
 static void Usr_PutLinkToShowStdsAllDataParams (void)

@@ -123,20 +123,29 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
 /************** Check if I can change the photo of another user **************/
 /*****************************************************************************/
 
-bool Pho_CheckIfICanChangeOtherUsrPhoto (long UsrCod)
+bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
   {
-   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
    /* Check if I have permission to change user's photo */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 return Usr_CheckIfUsrBelongsToCrs (UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
+	 /* If I am a teacher in current course,
+	    I only can change the photo of confirmed students or teachers from current course */
+	 return UsrDat->Accepted;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod);
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod);
+	 // TODO: Only confirmed users?
+      case Rol_CTR_ADM:
+	 // TODO: Implement
+	 return false;
+      case Rol_INS_ADM:
+	 // TODO: Implement
+	 return false;
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -173,11 +182,14 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    /***** Link for changing / uploading the photo *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pho_PutLinkToChangeMyPhoto ();
-   else								// Not me
-      if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))
+   else									// Not me
+      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
-	 Act_PutContextualLink (ActReqUsrPho,Usr_PutParamOtherUsrCodEncrypted,
+	 Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
+	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
+	                                                                                   ActReqGstPho),	// Guest, visitor or admin
+	                        Usr_PutParamOtherUsrCodEncrypted,
 				"photo",PhotoExists ? Txt_Change_photo :
 						      Txt_Upload_photo);
 	}
@@ -316,16 +328,10 @@ void Pho_SendPhotoUsr (void)
    /***** Get user whose photo must be sent or removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pho_CheckIfICanChangeOtherUsrPhoto (Gbl.Usrs.Other.UsrDat.UsrCod))	// If I have permission to change user's photo...
+      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
-	 /* Check if uploading the other user's photo is allowed */
-	 if (Gbl.Usrs.Me.LoggedRole > Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
-	   {
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Pho_ReqUsrPhoto (&Gbl.Usrs.Other.UsrDat);        // Request user's photograph
-	   }
-	 else
-	    Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Pho_ReqUsrPhoto (&Gbl.Usrs.Other.UsrDat);        // Request user's photograph
 	}
       else
          Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -427,16 +433,16 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    char PathPhotosPubl[PATH_MAX+1];
    char PathPhotosTmpPubl[PATH_MAX+1];
    char FileNamePhotoSrc[PATH_MAX+1];
-   char FileNamePhotoTmp[PATH_MAX+1];        // Full name (including path and .jpg) of the destination temporary file
-   char FileNamePhotoMap[PATH_MAX+1];        // Full name (including path) of the temporary file with the original image with faces
-   char FileNameTxtMap[PATH_MAX+1];        // Full name (including path) of the temporary file with the text neccesary to make the image map
+   char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNamePhotoMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the original image with faces
+   char FileNameTxtMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
    char PathRelPhoto[PATH_MAX+1];
-   FILE *FileTxtMap = NULL;        // Temporary file with the text neccesary to make the image map. Initialized to avoid warning
+   FILE *FileTxtMap = NULL;	// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    bool WrongType = false;
-   char Command[256+PATH_MAX]; // Command to call the program of preprocessing of photos
+   char Command[256+PATH_MAX];	// Command to call the program of preprocessing of photos
    int ReturnCode;
-   int NumLastForm = 0;        // Initialized to avoid warning
+   int NumLastForm = 0;	// Initialized to avoid warning
    char FormId[32];
    unsigned NumFacesTotal = 0;
    unsigned NumFacesGreen = 0;

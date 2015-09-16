@@ -506,24 +506,16 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
-   bool PutFormRemAllStdsThisCrs = (Role == Rol_STUDENT &&
-                                    Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
-   bool PutFormRemOldUsrs = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
-   if (PutFormRemAllStdsThisCrs ||
-       PutFormRemOldUsrs)
+   if (Role == Rol_STUDENT &&
+       Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Put link to remove all the students in the current course */
-      if (PutFormRemAllStdsThisCrs)
-	 Enr_PutLinkToRemAllStdsThisCrs ();
-
-      /* Put link to remove old users */
-      if (PutFormRemOldUsrs)
-	 Enr_PutLinkToRemOldUsrs ();
+      Enr_PutLinkToRemAllStdsThisCrs ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -2839,7 +2831,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
      }
-   Pho_PutLinkToChangeOtherUsrPhoto ();		// Put link (form) to change user's photo
+   Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
