@@ -1026,7 +1026,7 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod,bool CountOnlyAcceptedC
 		  " WHERE crs_usr.UsrCod='%ld'%s"
 		  " AND crs_usr.CrsCod=courses.CrsCod"
 		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod=institutions.CtrCod"
+		  " AND degrees.CtrCod=centres.CtrCod"
 		  " AND centres.InsCod='%ld'",
 	    UsrCod,SubQuery,InsCod);
    return (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);

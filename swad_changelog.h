@@ -98,11 +98,26 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.132.5 (2015/09/16)"
+#define Log_PLATFORM_VERSION	"SWAD 14.132.6 (2015/09/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.132.6: Sep 17, 2015	Changes in users' IDs. (184640 lines)
+					12 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1239';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1447','es','N','Solicitar edici&oacute;n ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1448','es','N','Solicitar edici&oacute;n ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1449','es','N','Solicitar edici&oacute;n ID profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1240';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1450','es','N','Eliminar ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1451','es','N','Eliminar ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1452','es','N','Eliminar ID profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1241';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1453','es','N','Crear ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1454','es','N','Crear ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1455','es','N','Crear ID profesor');
+
         Version 14.132.5: Sep 16, 2015	Changes in user enrollment. (184592 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='440';

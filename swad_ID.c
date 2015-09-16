@@ -367,7 +367,10 @@ void ID_PutLinkToChangeUsrIDs (void)
       Act_PutContextualLink (ActFrmUsrAcc,NULL,
 			     "arroba",Txt_Change_IDs);
    else									// Not me
-      Act_PutContextualLink (ActFrmIDsOthUsr,Usr_PutParamOtherUsrCodEncrypted,
+      Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmIDsOthStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmIDsOthTch :
+	                	                                                        ActFrmIDsOthGst),	// Guest, visitor or admin
+                             Usr_PutParamOtherUsrCodEncrypted,
 			     "arroba",Txt_Change_IDs);
   }
 
@@ -452,7 +455,9 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       Act_FormStart (ActRemIDMe);
 	    else
 	      {
-	       Act_FormStart (ActRemIDOth);
+	       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemIDOthStd :
+	                      (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemIDOthTch :
+	                	                                           ActRemIDOthGst));	// Guest, visitor or admin
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
@@ -497,7 +502,9 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActNewIDMe);
       else
 	{
-	 Act_FormStart (ActNewIDOth);
+	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewIDOthStd :
+	                (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewIDOthTch :
+	                	                                     ActNewIDOthGst));	// Guest, visitor or admin
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\""

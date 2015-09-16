@@ -69,9 +69,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+131+168+28+79)
+#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+137+168+28+79)
 
-#define Act_MAX_ACTION_COD 1446
+#define Act_MAX_ACTION_COD 1455
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -988,31 +988,37 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActRcvFrmEnrSevStd	(ActChgNumRowFooGrp+109)
 #define ActRcvFrmEnrSevTch	(ActChgNumRowFooGrp+110)
 
-#define ActFrmIDsOthUsr		(ActChgNumRowFooGrp+111)
-#define ActRemIDOth		(ActChgNumRowFooGrp+112)
-#define ActNewIDOth		(ActChgNumRowFooGrp+113)
-#define ActFrmPwdOthUsr		(ActChgNumRowFooGrp+114)
-#define ActChgPwdOthUsr		(ActChgNumRowFooGrp+115)
-#define ActRemUsrCrs		(ActChgNumRowFooGrp+116)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp+117)
+#define ActFrmIDsOthGst		(ActChgNumRowFooGrp+111)
+#define ActFrmIDsOthStd		(ActChgNumRowFooGrp+112)
+#define ActFrmIDsOthTch		(ActChgNumRowFooGrp+113)
+#define ActRemIDOthGst		(ActChgNumRowFooGrp+114)
+#define ActRemIDOthStd		(ActChgNumRowFooGrp+115)
+#define ActRemIDOthTch		(ActChgNumRowFooGrp+116)
+#define ActNewIDOthGst		(ActChgNumRowFooGrp+117)
+#define ActNewIDOthStd		(ActChgNumRowFooGrp+118)
+#define ActNewIDOthTch		(ActChgNumRowFooGrp+119)
+#define ActFrmPwdOthUsr		(ActChgNumRowFooGrp+120)
+#define ActChgPwdOthUsr		(ActChgNumRowFooGrp+121)
+#define ActRemUsrCrs		(ActChgNumRowFooGrp+122)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp+123)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+118)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp+119)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+124)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp+125)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp+120)
-#define ActRemOldUsr		(ActChgNumRowFooGrp+121)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp+126)
+#define ActRemOldUsr		(ActChgNumRowFooGrp+127)
 
-#define ActSeePubPrf		(ActChgNumRowFooGrp+122)
-#define ActCal1stClkTim		(ActChgNumRowFooGrp+123)
-#define ActCalNumClk		(ActChgNumRowFooGrp+124)
-#define ActCalNumFilVie		(ActChgNumRowFooGrp+125)
-#define ActCalNumForPst		(ActChgNumRowFooGrp+126)
-#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+127)
+#define ActSeePubPrf		(ActChgNumRowFooGrp+128)
+#define ActCal1stClkTim		(ActChgNumRowFooGrp+129)
+#define ActCalNumClk		(ActChgNumRowFooGrp+130)
+#define ActCalNumFilVie		(ActChgNumRowFooGrp+131)
+#define ActCalNumForPst		(ActChgNumRowFooGrp+132)
+#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+133)
 
-#define ActFolUsr		(ActChgNumRowFooGrp+128)
-#define ActUnfUsr		(ActChgNumRowFooGrp+129)
-#define ActSeeFlg		(ActChgNumRowFooGrp+130)
-#define ActSeeFlr		(ActChgNumRowFooGrp+131)
+#define ActFolUsr		(ActChgNumRowFooGrp+134)
+#define ActUnfUsr		(ActChgNumRowFooGrp+135)
+#define ActSeeFlg		(ActChgNumRowFooGrp+136)
+#define ActSeeFlr		(ActChgNumRowFooGrp+137)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/

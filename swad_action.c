@@ -958,9 +958,16 @@ Users:
 	779b. ActRcvFrmEnrSevStd	Receive a form with IDs of users to be registeres/removed to/from current course
 	779c. ActRcvFrmEnrSevTch	Receive a form with IDs of users to be registeres/removed to/from current course
 
-	780. ActFrmIDOthUsr		Show form to the change of the IDs of another user
-	781. ActRemIDOth		Remove one of the IDs of another user
-	782. ActNewIDOth		Create a new user's ID for another user
+	780b. ActFrmIDsOthGst		Show form to the change of the IDs of another user
+	780c. ActFrmIDsOthStd		Show form to the change of the IDs of another user
+	780d. ActFrmIDsOthTch		Show form to the change of the IDs of another user
+	781b. ActRemIDOthGst		Remove one of the IDs of another user
+	781c. ActRemIDOthStd		Remove one of the IDs of another user
+	781d. ActRemIDOthTch		Remove one of the IDs of another user
+	782b. ActNewIDOthGst		Create a new user's ID for another user
+	782c. ActNewIDOthStd		Create a new user's ID for another user
+	782d. ActNewIDOthTch		Create a new user's ID for another user
+
 	783. ActFrmPwdOthUsr		Show form to the change of the password of another user
 	784. ActChgPwdOthUsr		Change the password of another user
 	785. ActRemUsrCrs		Remove a user from the current course
@@ -2374,9 +2381,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvFrmEnrSevStd*/{1427,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
    /* ActRcvFrmEnrSevTch*/{1428,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
 
-   /* ActFrmIDsOthUsr	*/{1239,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-   /* ActRemIDOth	*/{1240,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-   /* ActNewIDOth	*/{1241,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+   /* ActFrmIDsOthGst	*/{1447,-1,TabUsr,ActLstGst		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
+   /* ActFrmIDsOthStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
+   /* ActFrmIDsOthTch	*/{1449,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
+   /* ActRemIDOthGst	*/{1450,-1,TabUsr,ActLstGst		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
+   /* ActRemIDOthStd	*/{1451,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
+   /* ActRemIDOthTch	*/{1452,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
+   /* ActNewIDOthGst	*/{1453,-1,TabUsr,ActLstGst		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+   /* ActNewIDOthStd	*/{1454,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+   /* ActNewIDOthTch	*/{1455,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+
    /* ActFrmPwdOthUsr	*/{ 598,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
    /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
@@ -3968,9 +3982,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemAnn,		// #1236
 	ActWriAnn,		// #1237
 	ActRcvAnn,		// #1238
-	ActFrmIDsOthUsr,	// #1239
-	ActRemIDOth,		// #1240
-	ActNewIDOth,		// #1241
+	-1,			// #1239 (obsolete action)
+	-1,			// #1240 (obsolete action)
+	-1,			// #1241 (obsolete action)
 	ActSeeSyl,		// #1242
 	ActChgMnu,		// #1243
 	ActReqCtrLog,		// #1244
@@ -4179,6 +4193,15 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCreGst,		// #1444
 	ActCreStd,		// #1445
 	ActCreTch,		// #1446
+	ActFrmIDsOthGst,	// #1447
+	ActFrmIDsOthStd,	// #1448
+	ActFrmIDsOthTch,	// #1449
+	ActRemIDOthGst,		// #1450
+	ActRemIDOthStd,		// #1451
+	ActRemIDOthTch,		// #1452
+	ActNewIDOthGst,		// #1453
+	ActNewIDOthStd,		// #1454
+	ActNewIDOthTch,		// #1455
 	};
 
 /*****************************************************************************/
