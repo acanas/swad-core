@@ -938,7 +938,9 @@ Users:
 	767b. ActRemGstPho		Remove other user's photo
 	767c. ActRemStdPho		Remove other user's photo
 	767d. ActRemTchPho		Remove other user's photo
-	768. ActCreOthUsrDat		Insertar a new user in this course
+	768b. ActCreGst			Create a new user
+	768c. ActCreStd			Create a new user
+	768d. ActCreTch			Create a new user
 	769b. ActUpdOthGst		Update another user's data and groups
 	769c. ActUpdOthStd		Update another user's data and groups
 	769d. ActUpdOthTch		Update another user's data and groups
@@ -2326,10 +2328,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqMdfOneTch	*/{1416,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemTch		,NULL},
    /* ActReqMdfOneAdm	*/{1417,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemAdm		,NULL},
 
-   /* ActReqMdfUsr	*/{1418,-1,TabUsr,ActLstGst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherGst	,NULL},
-   /* ActReqMdfUsr	*/{1419,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherStd	,NULL},
-   /* ActReqMdfUsr	*/{1420,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherTch	,NULL},
-   /* ActReqMdfUsr	*/{1421,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherAdm	,NULL},
+   /* ActReqMdfGst	*/{1418,-1,TabUsr,ActLstGst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherGst	,NULL},
+   /* ActReqMdfStd	*/{1419,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherStd	,NULL},
+   /* ActReqMdfTch	*/{1420,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherTch	,NULL},
+   /* ActReqMdfAdm	*/{1421,-1,TabUsr,ActLstAdm		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherAdm	,NULL},
 
    /* ActReqGstPho	*/{1432,-1,TabUsr,ActLstGst		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
    /* ActReqStdPho	*/{1433,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
@@ -2347,7 +2349,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemStdPho	*/{1442,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
    /* ActRemTchPho	*/{1443,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
 
-   /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+   /* ActCreGst		*/{1444,-1,TabUsr,ActLstGst		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+   /* ActCreStd		*/{1445,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+   /* ActCreTch		*/{1446,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+
    /* ActUpdOthGst	*/{1422,-1,TabUsr,ActLstGst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
    /* ActUpdOthStd	*/{1423,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
    /* ActUpdOthTch	*/{1424,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
@@ -3164,7 +3169,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #437 (obsolete action)
 	-1,			// #438 (obsolete action)
 	-1,			// #439 (obsolete action)
-	ActCreOthUsrDat,	// #440
+	-1,			// #440 (obsolete action)
 	-1,			// #441 (obsolete action)
 	-1,			// #442 (obsolete action)
 	ActPrnTchPho,		// #443
@@ -4171,6 +4176,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemGstPho,		// #1441
 	ActRemStdPho,		// #1442
 	ActRemTchPho,		// #1443
+	ActCreGst,		// #1444
+	ActCreStd,		// #1445
+	ActCreTch,		// #1446
 	};
 
 /*****************************************************************************/
