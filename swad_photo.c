@@ -540,7 +540,9 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
               {
                NumFacesGreen++;
                Act_FormStart (ItsMe ? ActUpdMyPho :
-        	                      ActUpdUsrPho);
+        	                      (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdStdPho :
+        	                      (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdTchPho :
+        	                	                                           ActUpdGstPho)));	// Guest, visitor or admin
                if (!ItsMe)
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
                Par_PutHiddenParamString ("FileName",StrFileName);

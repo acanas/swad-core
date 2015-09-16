@@ -932,7 +932,9 @@ Users:
 	765b. ActDetGstPho		Receive other user's photo and detect faces on it
 	765c. ActDetStdPho		Receive other user's photo and detect faces on it
 	765d. ActDetTchPho		Receive other user's photo and detect faces on it
-	766. ActUpdUsrPho		Update other user's photo
+	766b. ActUpdGstPho		Update other user's photo
+	766c. ActUpdStdPho		Update other user's photo
+	766d. ActUpdTchPho		Update other user's photo
 	767. ActRemUsrPho		Remove the photo of otro user
 	768. ActCreOthUsrDat		Insertar a new user in this course
 	769b. ActUpdOthGst		Update another user's data and groups
@@ -2335,7 +2337,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDetUsrPho	*/{1436,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecUsrPhotoDetFaces	,NULL},
    /* ActDetUsrPho	*/{1437,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecUsrPhotoDetFaces	,NULL},
 
-   /* ActUpdUsrPho	*/{ 374,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdGstPho	*/{1438,-1,TabUsr,ActLstGst		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdStdPho	*/{1439,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdTchPho	*/{1440,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+
    /* ActRemUsrPho	*/{ 429,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
 
    /* ActCreOthUsrDat	*/{ 440,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
@@ -3089,7 +3094,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActEditorSylPra,	// #371
 	ActEditorSylLec,	// #372
 	-1,			// #373 (obsolete action)
-	ActUpdUsrPho,		// #374
+	-1,			// #374 (obsolete action)
 	-1,			// #375 (obsolete action)
 	ActEditorBib,		// #376
 	ActPlaTxtEdiBib,	// #377
@@ -4156,6 +4161,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActDetGstPho,		// #1435
 	ActDetStdPho,		// #1436
 	ActDetTchPho,		// #1437
+	ActUpdGstPho,		// #1438
+	ActUpdStdPho,		// #1439
+	ActUpdTchPho,		// #1440
 	};
 
 /*****************************************************************************/
