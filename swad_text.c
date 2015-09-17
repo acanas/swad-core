@@ -17573,27 +17573,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstGst
-#if   L==0
-	"Convidats"
-#elif L==1
-	"Eingeladen"
-#elif L==2
-	"Guests"
-#elif L==3
-	"Invitados"
-#elif L==4
-	"Invit&eacute;s"
-#elif L==5
-	"Invitados"	// Okoteve traducción
-#elif L==6
-	"Ospiti"
-#elif L==7
-	"Zaproszenie"
-#elif L==8
-	"Convidados"
-#endif
-	,
 	// ActLstStd
 #if   L==0
 	"Estudiants"
@@ -17657,25 +17636,25 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Professores"
 #endif
 	,
-	// ActLstAdm
+	// ActLstUsr
 #if   L==0
-	"Administradors"
+	"Altres"
 #elif L==1
-	"Verwalter"
+	"Andere"
 #elif L==2
-	"Administrators"
+	"Other"
 #elif L==3
-	"Administradores"
+	"Otros"
 #elif L==4
-	"Administrateurs"
+	"Autres"
 #elif L==5
-	"Administradores"	// Okoteve traducción
+	"Otros"		// Okoteve traducción
 #elif L==6
-	"Amministratori"
+	"Altri"
 #elif L==7
-	"Administratorzy"
+	"Inne"
 #elif L==8
-	"Administradores"
+	"Outros"
 #endif
 	,
 	// ActReqSignUp
@@ -17762,6 +17741,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19522,27 +19502,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstGst
-#if   L==0
-	"Llistat i fitxes dels convidats"
-#elif L==1
-	"Eingeladenverzeichnis und profile"
-#elif L==2
-	"Guests' list and records"
-#elif L==3
-	"Listado y fichas de los invitados"
-#elif L==4
-	"Liste et cartes d'invit&eacute;s"
-#elif L==5
-	"Listado y fichas de los invitados"// Okoteve traducción
-#elif L==6
-	"Elenco e schede ospiti"
-#elif L==7
-	"Listy i rekordy zaproszenie"
-#elif L==8
-	"Lista e cart&otilde;es convidados"
-#endif
-	,
 	// ActLstStd
 #if   L==0
 	"Llistat i fitxes dels estudiants"
@@ -19610,31 +19569,25 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es professores"
 #endif
 	,
-	// ActLstAdm
+	// ActLstUsr
 #if   L==0
-	"Llista d'administradors de titulacions"
-	" a les quals podeu consultar"
-	" per crear assignatures o altres gestions"
+	"Llistat i fitxes d'altres usuaris"
 #elif L==1
-	"Liste der Administratoren"
+	"Eingeladenverzeichnis und profile von anderen Benutzer"
 #elif L==2
-	"Administrators"
+	"Other users' list and records"
 #elif L==3
-	"Lista de administradores de titulaciones"
-	" a los que puede consultar"
-	" para crear asignaturas u otras gestiones"
+	"Listado y fichas de otros usuarios"
 #elif L==4
-	"Liste administrateurs"
+	"Liste et cartes d'autres utilisateurs"
 #elif L==5
-	"Lista de administradores de titulaciones"
-	" a los que puede consultar"
-	" para crear asignaturas u otras gestiones"// Okoteve traducción
+	"Listado y fichas de otros usuarios"	// Okoteve traducción
 #elif L==6
-	"Lista degli amministratori"
+	"Elenco e schede da altri utenti"
 #elif L==7
-	"Administratorzy"
+	"Listy i rekordy innych u&zdot;ytkownik&oacute;w"
 #elif L==8
-	"Lista administradores"
+	"Lista e cart&otilde;es de outros usu&aacute;rios"
 #endif
 	,
 	// ActReqSignUp
@@ -19721,6 +19674,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -26165,7 +26119,7 @@ const char *Txt_Other_places =
 
 const char *Txt_Other_recipients =
 #if   L==0
-	"Otros destinatarios";	// Necessita traduccio
+	"Altres destinataris";
 #elif L==1
 	"Andere Empf&auml;nger";
 #elif L==2

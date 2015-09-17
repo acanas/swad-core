@@ -861,12 +861,12 @@ void Rec_PutLinkToEditRecordFields (void)
 /*********************** Draw records of several guests **********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsInvs (void)
+void Rec_ListRecordsGsts (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumUsrs = 0;
    const char *Ptr;
-   Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevInv) ? Rec_RECORD_LIST :
+   Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevGst) ? Rec_RECORD_LIST :
                                                                            Rec_RECORD_PRINT;
    struct UsrData UsrDat;
 
@@ -874,7 +874,7 @@ void Rec_ListRecordsInvs (void)
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
-   if (Gbl.CurrentAct == ActPrnRecSevInv)
+   if (Gbl.CurrentAct == ActPrnRecSevGst)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected users *****/
@@ -888,13 +888,13 @@ void Rec_ListRecordsInvs (void)
       return;
      }
 
-   if (Gbl.CurrentAct == ActSeeRecSevInv)
+   if (Gbl.CurrentAct == ActSeeRecSevGst)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
-      Act_FormStart (ActPrnRecSevInv);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevInv,Gbl.Usrs.Select.All);
+      Act_FormStart (ActPrnRecSevGst);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Select.All);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -916,7 +916,7 @@ void Rec_ListRecordsInvs (void)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin-bottom:10px;");
-	 if (Gbl.CurrentAct == ActPrnRecSevInv &&
+	 if (Gbl.CurrentAct == ActPrnRecSevGst &&
 	     NumUsrs != 0 &&
 	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
 	    fprintf (Gbl.F.Out,"page-break-before:always;");
@@ -1016,7 +1016,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 /******************** Draw records of several students ***********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsStdsCrs (void)
+void Rec_ListRecordsStds (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumUsrs = 0;
@@ -1186,7 +1186,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 /******************** Draw records of several teachers ***********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsTchsCrs (void)
+void Rec_ListRecordsTchs (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_teachers;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
@@ -2006,9 +2006,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
    bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                        TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
-   bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
-                    TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
-                    TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR);
+   bool RoleForm = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+	            (TypeOfView == Rec_FORM_SIGN_UP ||
+                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
+                     TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR));
    bool SexForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD);
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
@@ -2463,14 +2464,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
 	    Act_FormStart ( Gbl.CurrentAct == ActReqMdfStd ? ActCreStd :
 		           (Gbl.CurrentAct == ActReqMdfTch ? ActCreTch :
-		        	                             ActCreGst));
+		        	                             ActCreOth));
 	    ID_PutParamOtherUsrIDPlain ();				// New user
 	    break;
          case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
-	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB  < Rol_STUDENT ? ActUpdOthGst :
-		           (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdOthStd :
-		           (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdOthTch :
-		        	                                        ActUpdOthAdm)));
+	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdStd :
+		           (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdTch :
+		        	                                        ActUpdOth));
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
          default:

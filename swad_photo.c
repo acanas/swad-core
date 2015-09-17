@@ -198,7 +198,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
 	 Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
 	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
-	                                                                                   ActReqGstPho),	// Guest, visitor or admin
+	                                                                                   ActReqOthPho),	// Guest, visitor or admin
 	                        Usr_PutParamOtherUsrCodEncrypted,
 				"photo",PhotoExists ? Txt_Change_photo :
 						      Txt_Upload_photo);
@@ -228,7 +228,7 @@ static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
    /***** Link for removing the photo *****/
    Act_PutContextualLink ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
 	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
-	                                                               ActRemGstPho),	// Guest, visitor or admin
+	                                                               ActRemOthPho),	// Guest, visitor or admin
                           Usr_PutParamOtherUsrCodEncrypted,
                           "delon",Txt_Remove_photo);
   }
@@ -294,7 +294,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
      {
       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActDetStdPho :
 	             (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActDetTchPho :
-	                                                          ActDetGstPho));	// Guest, visitor or admin
+	                                                          ActDetOthPho));	// Guest, visitor or admin
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 
@@ -555,7 +555,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                Act_FormStart (ItsMe ? ActUpdMyPho :
         	                      (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdStdPho :
         	                      (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdTchPho :
-        	                	                                           ActUpdGstPho)));	// Guest, visitor or admin
+        	                	                                           ActUpdOthPho)));	// Guest, visitor or admin
                if (!ItsMe)
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
                Par_PutHiddenParamString ("FileName",StrFileName);

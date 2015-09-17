@@ -113,14 +113,12 @@ void Enr_ShowEnrollmentRequests (void);
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction);
 
-void Enr_ReqRegRemGst (void);
+void Enr_ReqRegRemOth (void);
 void Enr_ReqRegRemStd (void);
 void Enr_ReqRegRemTch (void);
-void Enr_ReqRegRemAdm (void);
-void Enr_AskIfRegRemAnotherGst (void);
+void Enr_AskIfRegRemAnotherOth (void);
 void Enr_AskIfRegRemAnotherStd (void);
 void Enr_AskIfRegRemAnotherTch (void);
-void Enr_AskIfRegRemAnotherAdm (void);
 void Enr_AddAdmToIns (void);
 void Enr_AddAdmToCtr (void);
 void Enr_AddAdmToDeg (void);

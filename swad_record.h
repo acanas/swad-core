@@ -130,11 +130,11 @@ void Rec_ChangeVisibilityField (void);
 void Rec_FreeListFields (void);
 
 void Rec_PutLinkToEditRecordFields (void);
-void Rec_ListRecordsInvs (void);
+void Rec_ListRecordsGsts (void);
 void Rec_GetUsrAndShowRecordOneStdCrs (void);
-void Rec_ListRecordsStdsCrs (void);
+void Rec_ListRecordsStds (void);
 void Rec_GetUsrAndShowRecordOneTchCrs (void);
-void Rec_ListRecordsTchsCrs (void);
+void Rec_ListRecordsTchs (void);
 void Rec_ShowLinkToPrintPreviewOfRecords (void);
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);

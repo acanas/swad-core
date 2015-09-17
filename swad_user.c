@@ -162,6 +162,8 @@ static void Usr_GetAndUpdatePrefAboutListWithPhotos (void);
 static bool Usr_GetParamListWithPhotosFromForm (void);
 static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 
+static void Usr_PutLinkToSeeAdmins (void);
+static void Usr_PutLinkToSeeGuests (void);
 static void Usr_PutLinkToShowGuestsAllDataParams (void);
 static void Usr_PutLinkToShowStdsAllDataParams (void);
 static void Usr_PutLinkToShowTchsAllDataParams (void);
@@ -4824,7 +4826,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
   {
    switch (Gbl.CurrentAct)
      {
-      case ActLstGst:
+      case ActLstUsr:
       case ActLstStd:
       case ActLstTch:
          Sco_PutParamScope (Gbl.Scope.Current);
@@ -5865,8 +5867,14 @@ void Usr_ListDataAdms (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
+      /* Put link to remove old users */
+      Usr_PutLinkToSeeGuests ();
+
       /* Put link to go to admin one user */
-      Enr_PutLinkToAdminOneUsr (ActReqMdfOneAdm);
+      Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
+
+      /* Put link to remove old users */
+      Enr_PutLinkToRemOldUsrs ();
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -5899,7 +5907,7 @@ void Usr_ListDataAdms (void)
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	              "%s: ",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Act_FormStart (ActLstAdm);
+   Act_FormStart (ActLstUsr);
    Sco_PutSelectorScope (true);
    Usr_PutParamListWithPhotos ();
    Act_FormEnd ();
@@ -5912,7 +5920,7 @@ void Usr_ListDataAdms (void)
      {
       /****** See the photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActLstAdm);
+      Act_FormStart (ActLstUsr);
       Sco_PutParamScope (Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Act_FormEnd ();
@@ -6298,6 +6306,30 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
   }
 
 /*****************************************************************************/
+/********** Put a link (form) to show list or class photo of guests **********/
+/*****************************************************************************/
+
+static void Usr_PutLinkToSeeAdmins (void)
+  {
+   // extern const char *Txt_Remove_old_users;
+
+   /***** Put form to list admins *****/
+   Act_PutContextualLink (ActLstUsr,NULL,"adm","Ver administradores");	// TODO: Need translation!!!
+  }
+
+/*****************************************************************************/
+/********** Put a link (form) to show list or class photo of guests **********/
+/*****************************************************************************/
+
+static void Usr_PutLinkToSeeGuests (void)
+  {
+   // extern const char *Txt_Remove_old_users;
+
+   /***** Put form to list guests *****/
+   Act_PutContextualLink (ActLstGst,NULL,"usrs","Ver invitados");	// TODO: Need translation!!!
+  }
+
+/*****************************************************************************/
 /********************* Show list or class photo of guests ********************/
 /*****************************************************************************/
 
@@ -6311,18 +6343,19 @@ void Usr_SeeGuests (void)
    extern const char *Txt_Show_records;
 
    /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to remove old users */
+   Usr_PutLinkToSeeAdmins ();
+
+   /* Put link to go to admin one user */
+   Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
+
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Put link to go to admin one user */
-      Enr_PutLinkToAdminOneUsr (ActReqMdfOneGst);
-
       /* Put link to remove old users */
       Enr_PutLinkToRemOldUsrs ();
 
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6341,7 +6374,7 @@ void Usr_SeeGuests (void)
          /***** Form to select range of guests *****/
          fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Act_FormStart (ActLstGst);
+         Act_FormStart (ActLstUsr);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();
@@ -6372,7 +6405,7 @@ void Usr_SeeGuests (void)
            {
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
-               Act_PutContextualLink (ActPrnInvPho,Usr_PutLinkToShowGuestsAllDataParams,
+               Act_PutContextualLink (ActPrnGstPho,Usr_PutLinkToShowGuestsAllDataParams,
                                       "print",Txt_Print);
 	       break;
 	    case Usr_LIST:
@@ -6385,7 +6418,7 @@ void Usr_SeeGuests (void)
 
          /***** Draw a class photo with students of the course *****/
          /* Start form */
-	 Act_FormStart (ActSeeRecSevInv);
+	 Act_FormStart (ActSeeRecSevGst);
 	 Grp_PutParamsCodGrps ();
 
          /* Header */

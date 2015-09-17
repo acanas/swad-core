@@ -2584,7 +2584,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 /************** Form to request the user's ID of another user ****************/
 /*****************************************************************************/
 
-void Enr_ReqRegRemGst (void)
+void Enr_ReqRegRemOth (void)
   {
    Enr_ReqRegRemUsr (Rol__GUEST_);
   }
@@ -2597,11 +2597,6 @@ void Enr_ReqRegRemStd (void)
 void Enr_ReqRegRemTch (void)
   {
    Enr_ReqRegRemUsr (Rol_TEACHER);
-  }
-
-void Enr_ReqRegRemAdm (void)
-  {
-   Enr_ReqRegRemUsr (Rol_DEG_ADM);
   }
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
@@ -2651,10 +2646,9 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Lay_StartRoundFrame (NULL,Txt_Admin_one_user);
 
    /***** Write form to request another user's ID *****/
-   Enr_WriteFormToReqAnotherUsrID ( Role == Rol__GUEST_ ? ActReqMdfGst :
-	                           (Role == Rol_STUDENT ? ActReqMdfStd :
+   Enr_WriteFormToReqAnotherUsrID ( Role == Rol_STUDENT ? ActReqMdfStd :
 	                           (Role == Rol_TEACHER ? ActReqMdfTch :
-	                        	                  ActReqMdfAdm)));
+	                        	                  ActReqMdfOth));
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -2681,7 +2675,7 @@ static void Enr_AskIfRegRemMe (Rol_Role_t Role)
 /****************** Ask me for register/remove another user ******************/
 /*****************************************************************************/
 
-void Enr_AskIfRegRemAnotherGst (void)
+void Enr_AskIfRegRemAnotherOth (void)
   {
    Enr_AskIfRegRemAnotherUsr (Rol__GUEST_);
   }
@@ -2694,11 +2688,6 @@ void Enr_AskIfRegRemAnotherStd (void)
 void Enr_AskIfRegRemAnotherTch (void)
   {
    Enr_AskIfRegRemAnotherUsr (Rol_TEACHER);
-  }
-
-void Enr_AskIfRegRemAnotherAdm (void)
-  {
-   Enr_AskIfRegRemAnotherUsr (Rol_DEG_ADM);
   }
 
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
