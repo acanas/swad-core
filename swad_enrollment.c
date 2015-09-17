@@ -3475,7 +3475,8 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Rec_ShowCommonRecordUnmodifiable (UsrDat);
 
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActRemUsrCrs);
+      Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdCrs :
+	                                                         ActRemTchCrs);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :

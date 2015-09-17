@@ -974,7 +974,8 @@ Users:
 
 	783. ActFrmPwdOthUsr		Show form to the change of the password of another user
 	784. ActChgPwdOthUsr		Change the password of another user
-	785. ActRemUsrCrs		Remove a user from the current course
+	785b. ActRemStdCrs		Remove a student from the current course
+	785c. ActRemTchCrs		Remove a teacher from the current course
 	786. ActRemUsrGbl		Eliminate completely a user from the platform
 	787. ActReqRemAllStdCrs		Request the removal of all the students from the current course
 	788. ActRemAllStdCrs		Remove all the students from the current course
@@ -2402,7 +2403,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmPwdOthUsr	*/{ 598,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
    /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
-   /* ActRemUsrCrs	*/{  58,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1E8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemTchCrs	*/{1463,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+
    /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemUsrGbl			,NULL},
 
    /* ActReqRemAllStdCrs*/{  88,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemAllStdsThisCrs	,NULL},
@@ -2809,7 +2812,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #55 (obsolete action)
 	-1,			// #56 (obsolete action)
 	-1,			// #57 (obsolete action)
-	ActRemUsrCrs,		// #58 * SuperSIC forever!
+	-1,			// #58 (obsolete action)
 	ActWriNot,		// #59
 	ActRcvNot,		// #60
 	-1,			// #61 (obsolete action)
@@ -4216,6 +4219,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActAccEnrTch,		// #1459
 	ActRemMe_Std,		// #1460
 	ActRemMe_Tch,		// #1461
+	ActRemStdCrs,		// #1462
+	ActRemTchCrs,		// #1463
 	};
 
 /*****************************************************************************/
