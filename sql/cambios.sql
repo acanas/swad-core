@@ -10612,3 +10612,55 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart',
 
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googleplus','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','quitter','researchgate','researcherid','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
 
+
+----- 2015-09-17, swad14.134
+/*
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+
+UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0x7F) << 1) | (NotifNtfEvents & 0x7F) | 0x80);
+UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfEvents & 0x7F));
+
+
+
+
+   Ntf_EVENT_UNKNOWN			=  0,	// old  0
+
+   /* Course tab */
+   Ntf_EVENT_DOCUMENT_FILE		=  1,	// old  1
+   Ntf_EVENT_SHARED_FILE		=  2,	// old  2
+
+   /* Assessment tab */
+   Ntf_EVENT_ASSIGNMENT			=  3,	// old  3
+   Ntf_EVENT_EXAM_ANNOUNCEMENT		=  4,	// old  4
+   Ntf_EVENT_MARKS_FILE			=  5,	// old  5
+
+   /* Enrollment tab */
+   Ntf_EVENT_ENROLLMENT_STUDENT		=  6,	// old  6
+   Ntf_EVENT_ENROLLMENT_TEACHER		=  7,
+   Ntf_EVENT_ENROLLMENT_REQUEST		=  8,	// old  7
+
+   /* Messages tab */
+   Ntf_EVENT_NOTICE			=  9,	// old  8
+   Ntf_EVENT_FORUM_POST_COURSE		= 10,	// old  9
+   Ntf_EVENT_FORUM_REPLY		= 11,	// old 10
+   Ntf_EVENT_MESSAGE			= 12,	// old 11
+
+   /* Statistics tab */
+   Ntf_EVENT_SURVEY			= 13,	// old 12
+
+   /* Profile tab */
+   Ntf_EVENT_FOLLOWER			= 14,	// old 13

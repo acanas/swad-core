@@ -98,11 +98,40 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.133.1 (2015/09/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.134 (2015/09/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.134:   Sep 17, 2015	Changes in user enrollment.
+					Changes in notifications about enrollment. (184823 lines)
+					25 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='592';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1456','es','N','Solicitar acept. inscrip. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1457','es','N','Solicitar acept. inscrip. profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='558';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1458','es','N','Aceptar inscrip. como estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1459','es','N','Aceptar inscrip. como profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='559';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1460','es','N','Rechazar inscrip. como estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1461','es','N','Rechazar inscrip. como profesor');
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0x7F) << 1) | (NotifNtfEvents & 0x7F) | 0x80);
+UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfEvents & 0x7F));
+
         Version 14.133.1: Sep 17, 2015	Changes in user enrollment. (184669 lines)
         Version 14.133:   Sep 17, 2015	Changes in user enrollment. (184665 lines)
 					1 change necessary in database:

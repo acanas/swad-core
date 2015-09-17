@@ -942,12 +942,16 @@ Users:
 	768b. ActCreOth			Create a new user
 	768c. ActCreStd			Create a new user
 	768d. ActCreTch			Create a new user
-	769b. ActUpdOth		Update another user's data and groups
-	769c. ActUpdStd		Update another user's data and groups
-	769d. ActUpdTch		Update another user's data and groups
-	770. ActReqAccEnrCrs		Confirm acceptation / refusion of enrollment in current course
-	771. ActAccEnrCrs		Accept enrollment in current course
-	772. ActRemMeCrs		Refuse enrollment in current course
+	769b. ActUpdOth			Update another user's data and groups
+	769c. ActUpdStd			Update another user's data and groups
+	769d. ActUpdTch			Update another user's data and groups
+	770b. ActReqAccEnrStd		Confirm acceptation / refusion of enrollment as student in current course
+	770c. ActReqAccEnrTch		Confirm acceptation / refusion of enrollment as teacher in current course
+	771b. ActAccEnrStd		Accept enrollment as student in current course
+	771c. ActAccEnrTch		Accept enrollment as teacher in current course
+	772b. ActRemMe_Std		Reject enrollment as student in current course
+	772b. ActRemMe_Tch		Reject enrollment as teacher in current course
+
 	773. ActNewAdmIns		Register an administrador in this institution
 	774. ActRemAdmIns		Remove an administrador of this institution
 	775. ActNewAdmCtr		Register an administrador in this centre
@@ -2364,9 +2368,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUpdStd		*/{1423,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
    /* ActUpdTch		*/{1424,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
 
-   /* ActReqAccEnrCrs	*/{ 592,-1,TabUsr,ActLstStd		,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActAccEnrCrs	*/{ 558,-1,TabUsr,ActLstStd		,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActRemMeCrs	*/{ 559,-1,TabUsr,ActLstStd		,0x1F8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActReqAccEnrStd	*/{1456,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActReqAccEnrTch	*/{1457,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActAccEnrStd	*/{1458,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActAccEnrTch	*/{1459,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActRemMe_Std	*/{1460,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActRemMe_Tch	*/{1461,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
 
    /* ActNewAdmIns	*/{1337,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToIns		,NULL},
    /* ActRemAdmIns	*/{1338,-1,TabUsr,ActLstOth		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmIns			,NULL},
@@ -3302,8 +3309,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActEdiCrs,		// #555
 	ActNewCrs,		// #556
 	-1,			// #557 (obsolete action)
-	ActAccEnrCrs,		// #558
-	ActRemMeCrs,		// #559
+	-1,			// #558 (obsolete action)
+	-1,			// #559 (obsolete action)
 	ActRemCrs,		// #560
 	ActChgCrsYea,		// #561
 	ActChgCrsSem,		// #562
@@ -3336,7 +3343,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgMyRol,		// #589
 	ActReqRemOldUsr,	// #590
 	ActReqAccGbl,		// #591
-	ActReqAccEnrCrs,	// #592
+	-1,			// #592 (obsolete action)
 	ActReqDelAllRcvMsg,	// #593
 	ActReqAccCrs,		// #594
 	ActReqRemFilMrkCrs,	// #595
@@ -4194,15 +4201,21 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCreOth,		// #1444
 	ActCreStd,		// #1445
 	ActCreTch,		// #1446
-	ActFrmIDsOth,	// #1447
-	ActFrmIDsStd,	// #1448
-	ActFrmIDsTch,	// #1449
+	ActFrmIDsOth,		// #1447
+	ActFrmIDsStd,		// #1448
+	ActFrmIDsTch,		// #1449
 	ActRemID_Oth,		// #1450
 	ActRemID_Std,		// #1451
 	ActRemID_Tch,		// #1452
 	ActNewID_Oth,		// #1453
 	ActNewID_Std,		// #1454
 	ActNewID_Tch,		// #1455
+	ActReqAccEnrStd,	// #1456
+	ActReqAccEnrTch,	// #1457
+	ActAccEnrStd,		// #1458
+	ActAccEnrTch,		// #1459
+	ActRemMe_Std,		// #1460
+	ActRemMe_Tch,		// #1461
 	};
 
 /*****************************************************************************/
@@ -4578,7 +4591,8 @@ void Act_AdjustCurrentAction (void)
              the only action possible is show a form to ask for enrollment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.CurrentAct != ActLogOut)
 	{
-	 Gbl.CurrentAct = ActReqAccEnrCrs;
+	 Gbl.CurrentAct = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT) ? ActReqAccEnrStd :
+	                                                                           ActReqAccEnrTch;
 	 Tab_SetCurrentTab ();
 	 return;
 	}

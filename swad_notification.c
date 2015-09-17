@@ -68,7 +68,8 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "marksFile",
 
    /* Enrollment tab */
-   "enrollment",
+   "enrollmentStudent",
+   "enrollmentTeacher",
    "enrollmentRequest",
 
    /* Messages tab */
@@ -98,7 +99,8 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeAdmMrk,	// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   ActReqAccEnrCrs,	// Ntf_EVENT_ENROLLMENT
+   ActReqAccEnrStd,	// Ntf_EVENT_ENROLLMENT_STUDENT
+   ActReqAccEnrTch,	// Ntf_EVENT_ENROLLMENT_TEACHER
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Messages tab */
@@ -133,7 +135,8 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "NotifyNtfEventMarksFile",
 
    /* Enrollment tab */
-   "NotifyNtfEventEnrollment",
+   "NotifyNtfEventEnrollmentStudent",
+   "NotifyNtfEventEnrollmentTeacher",
    "NotifyNtfEventEnrollmentRequest",
 
    /* Messages tab */
@@ -164,7 +167,8 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "EmailNtfEventMarksFile",
 
    /* Enrollment tab */
-   "EmailNtfEventEnrollment",
+   "EmailNtfEventEnrollmentStudent",
+   "EmailNtfEventEnrollmentTeacher",
    "EmailNtfEventEnrollmentRequest",
 
    /* Messages tab */
@@ -195,7 +199,8 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "grades",			// Ntf_EVENT_MARKS_FILE
 
    /* Enrollment tab */
-   "adduser",			// Ntf_EVENT_ENROLLMENT
+   "adduser",			// Ntf_EVENT_ENROLLMENT_STUDENT
+   "adduser",			// Ntf_EVENT_ENROLLMENT_TEACHER
    "enrollmentrequest",		// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Messages tab */
@@ -739,7 +744,8 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,MaxChars,GetContent);
          break;
-      case Ntf_EVENT_ENROLLMENT:
+      case Ntf_EVENT_ENROLLMENT_STUDENT:
+      case Ntf_EVENT_ENROLLMENT_TEACHER:
 	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod,MaxChars);
          break;
       case Ntf_EVENT_ENROLLMENT_REQUEST:
@@ -1067,7 +1073,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_ENROLLMENT:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLLMENT_STUDENT:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLLMENT_TEACHER:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLLMENT_REQUEST:
 	 if (Gbl.CurrentCrs.Crs.NumTchs)
@@ -1444,7 +1451,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_ASSIGNMENT:
 	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
 	       case Ntf_EVENT_MARKS_FILE:
-	       case Ntf_EVENT_ENROLLMENT:
+	       case Ntf_EVENT_ENROLLMENT_STUDENT:
+	       case Ntf_EVENT_ENROLLMENT_TEACHER:
 	       case Ntf_EVENT_ENROLLMENT_REQUEST:
 	       case Ntf_EVENT_NOTICE:
 	       case Ntf_EVENT_MESSAGE:

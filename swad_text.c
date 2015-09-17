@@ -598,16 +598,28 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][Txt_NUM_LA
 	"Novo arquivo de notas",
 	},
 	{
-	// Ntf_EVENT_ENROLLMENT
-	"Nova inscripció",
-	"New Einschreibung",
-	"New enrollment",
-	"Nueva inscripción",
-	"Nouvelle inscription",
-	"Nueva inscripción",			// Okoteve traducción
-	"Nuova iscrizione",
-	"Nowe zapisy",
-	"Nova inscrição",
+	// Ntf_EVENT_ENROLLMENT_STUDENT
+	"Nova inscripció com a estudiant",
+	"New Einschreibung als Student",
+	"New enrollment as a student",
+	"Nueva inscripción como estudiante",
+	"Nouvelle inscriptionen tant qu'étudiant",
+	"Nueva inscripción como estudiante",			// Okoteve traducción
+	"Nuova iscrizione come studente",
+	"Nowe zapisy jako student",
+	"Nova inscrição como estudante",
+	},
+	{
+	// Ntf_EVENT_ENROLLMENT_TEACHER
+	"Nova inscripció com a professor",
+	"New Einschreibung als Lehrkraft",
+	"New enrollment as a teacher",
+	"Nueva inscripción como profesor",
+	"Nouvelle inscription en tant qu'enseignant",
+	"Nueva inscripción como profesor",			// Okoteve traducción
+	"Nuova iscrizione come professore",
+	"Nowe zapisy jako nauczyciel",
+	"Nova inscrição como professor",
 	},
 	{
 	// Ntf_EVENT_ENROLLMENT_REQUEST
@@ -24692,24 +24704,44 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos arquivos de notas"
 #endif
 	 ,
-#if   L==0	// Ntf_EVENT_ENROLLMENT
-	 "Novas inscripci&oacute;s"
+#if   L==0	// Ntf_EVENT_ENROLLMENT_STUDENT
+	 "Novas inscripci&oacute;s com a estudiant"
 #elif L==1
-	 "New Einschreibungen"
+	 "New Einschreibungen als Student"
 #elif L==2
-	 "New enrollments"
+	 "New enrollments as a student"
 #elif L==3
-	 "Nuevas inscripciones"
+	 "Nuevas inscripciones como estudiante"
 #elif L==4
-	 "Nouvelles inscriptions"
+	 "Nouvelles inscriptions en tant qu'&eacute;tudiant"
 #elif L==5
-	 "Nuevas inscripciones"	// Okoteve traducción
+	 "Nuevas inscripciones como estudiante"	// Okoteve traducción
 #elif L==6
-	 "Nuova iscrizione"
+	 "Nuova iscrizione come studente"
 #elif L==7
-	 "Nowe zapisy"
+	 "Nowe zapisy jako student"
 #elif L==8
-	 "Novas inscri&ccedil;&otilde;es"
+	 "Novas inscri&ccedil;&otilde;es como estudante"
+#endif
+	 ,
+#if   L==0	// Ntf_EVENT_ENROLLMENT_TEACHER
+	 "Novas inscripci&oacute;s com a professor"
+#elif L==1
+	 "New Einschreibungen als Lehrkraft"
+#elif L==2
+	 "New enrollments as a teacher"
+#elif L==3
+	 "Nuevas inscripciones como profesor/a"
+#elif L==4
+	 "Nouvelles inscriptions en tant qu'enseignant"
+#elif L==5
+	 "Nuevas inscripciones como profesor/a"	// Okoteve traducción
+#elif L==6
+	 "Nuova iscrizione come professore"
+#elif L==7
+	 "Nowe zapisy jako nauczyciel"
+#elif L==8
+	 "Novas inscri&ccedil;&otilde;es como professor"
 #endif
 	 ,
 #if   L==0	// Ntf_EVENT_ENROLLMENT_REQUEST
@@ -24975,24 +25007,44 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Arquivo de notas"
 #endif
 	 ,
-#if   L==0	// Ntf_EVENT_ENROLLMENT
-	 "Inscripci&oacute;"
+#if   L==0	// Ntf_EVENT_ENROLLMENT_STUDENT
+	 "Inscripci&oacute; com a estudiant"
 #elif L==1
-	 "Einschreibung"
+	 "Einschreibung als Student"
 #elif L==2
-	 "Enrollment"
+	 "Enrollment as a student"
 #elif L==3
-	 "Inscripci&oacute;n"
+	 "Inscripci&oacute;n como estudiante"
 #elif L==4
-	 "Inscription"
+	 "Inscription en tant qu'&eacute;tudiant"
 #elif L==5
-	 "Inscripci&oacute;n"	// Okoteve traducción
+	 "Inscripci&oacute;n como estudiante"	// Okoteve traducción
 #elif L==6
-	 "Iscrizione"
+	 "Iscrizione come studente"
 #elif L==7
-	 "Zapisy"
+	 "Zapisy jako student"
 #elif L==8
-	 "Inscri&ccedil;&atilde;o"
+	 "Inscri&ccedil;&atilde;o como estudante"
+#endif
+	 ,
+#if   L==0	// Ntf_EVENT_ENROLLMENT_TEACHER
+	 "Inscripci&oacute; com a professor"
+#elif L==1
+	 "Einschreibung als Lehrkraft"
+#elif L==2
+	 "Enrollment as a teacher"
+#elif L==3
+	 "Inscripci&oacute;n como profesor/a"
+#elif L==4
+	 "Inscription en tant qu'enseignant"
+#elif L==5
+	 "Inscripci&oacute;n como profesor/a"	// Okoteve traducción
+#elif L==6
+	 "Iscrizione come professore"
+#elif L==7
+	 "Zapisy jako nauczyciel"
+#elif L==8
+	 "Inscri&ccedil;&atilde;o como professor"
 #endif
 	 ,
 #if   L==0	// Ntf_EVENT_ENROLLMENT_REQUEST

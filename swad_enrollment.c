@@ -86,6 +86,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole);
+
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
 
@@ -156,15 +158,25 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
    if (NewRole != OldRole)        // The role must be updated
      {
       /***** Check if user's role is allowed *****/
-      if (!(NewRole == Rol_STUDENT ||
-	    NewRole == Rol_TEACHER))
-	 Lay_ShowErrorAndExit ("Wrong role.");
+      switch (NewRole)
+	{
+	 case Rol_STUDENT:
+	 case Rol_TEACHER:
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	}
 
       /***** Update the role of a user in a course *****/
       sprintf (Query,"UPDATE crs_usr SET Role='%u'"
 		     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
 	       (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
       DB_QueryUPDATE (Query,"can not modify user's role in course");
+
+      /***** Create notification for this user.
+	     If this user wants to receive notifications by e-mail,
+	     activate the sending of a notification *****/
+      Enr_NotifyAfterEnrollment (UsrDat,NewRole);
 
       /***** Show info message *****/
       if (QuietOrVerbose == Cns_VERBOSE)
@@ -194,13 +206,16 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    char Query[1024];
-   bool CreateNotif;
-   bool NotifyByEmail;
 
    /***** Check if user's role is allowed *****/
-   if (!(NewRole == Rol_STUDENT ||
-	 NewRole == Rol_TEACHER))
-      Lay_ShowErrorAndExit ("Wrong role.");
+   switch (NewRole)
+     {
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+	 break;
+      default:
+         Lay_ShowErrorAndExit ("Wrong role.");
+     }
 
    /***** Register user in current course in database *****/
    sprintf (Query,"INSERT INTO crs_usr (CrsCod,UsrCod,Role,Accepted,"
@@ -220,20 +235,10 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    UsrDat->RoleInCurrentCrsDB = NewRole;
    UsrDat->Roles |= NewRole;
 
-   /***** Remove possible inscription request ******/
-   Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-
    /***** Create notification for this user.
 	  If this user wants to receive notifications by e-mail,
 	  activate the sending of a notification *****/
-   CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << Ntf_EVENT_ENROLLMENT));
-   NotifyByEmail = CreateNotif &&
-		   (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
-		   (UsrDat->Prefs.EmailNtfEvents & (1 << Ntf_EVENT_ENROLLMENT));
-   if (CreateNotif)
-      Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_ENROLLMENT,UsrDat,-1L,
-				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-					                             0));
+   Enr_NotifyAfterEnrollment (UsrDat,NewRole);
 
    /***** Show info message *****/
    if (QuietOrVerbose == Cns_VERBOSE)
@@ -242,6 +247,48 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	       UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
+  }
+
+/*****************************************************************************/
+/********* Create notification after register user in current course *********/
+/*****************************************************************************/
+
+static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole)
+  {
+   bool CreateNotif;
+   bool NotifyByEmail;
+   Ntf_NotifyEvent_t NotifyEvent;
+
+   /***** Check if user's role is allowed *****/
+   switch (NewRole)
+     {
+      case Rol_STUDENT:
+	 NotifyEvent = Ntf_EVENT_ENROLLMENT_STUDENT;
+	 break;
+      case Rol_TEACHER:
+	 NotifyEvent = Ntf_EVENT_ENROLLMENT_TEACHER;
+	 break;
+      default:
+	 NotifyEvent = Ntf_EVENT_UNKNOWN;
+         Lay_ShowErrorAndExit ("Wrong role.");
+     }
+
+   /***** Remove possible enrollment request ******/
+   Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+
+   /***** Remove old enrollment notifications before inserting the new one ******/
+   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1,UsrDat->UsrCod);
+   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1,UsrDat->UsrCod);
+
+   /***** Create new notification ******/
+   CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
+   NotifyByEmail = CreateNotif &&
+		   (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
+		   (UsrDat->Prefs.EmailNtfEvents & (1 << NotifyEvent));
+   if (CreateNotif)
+      Ntf_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
+				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+					                             0));
   }
 
 /*****************************************************************************/
@@ -288,17 +335,20 @@ void Enr_ReqAcceptRegisterInCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /***** Send button to accept register in the current course *****/
-   Act_PutContextualLink (ActAccEnrCrs,NULL,
-                          "ok_green",Txt_Confirm_my_enrollment);
+   Act_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
+	                                                                         ActAccEnrTch,
+	                  NULL,"ok_green",Txt_Confirm_my_enrollment);
 
    /***** Send button to refuse register in the current course *****/
-   Act_PutContextualLink (ActRemMeCrs,NULL,
-                          "delon",Txt_Remove_me_from_this_course);
+   Act_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
+	                                                                         ActRemMe_Tch,
+                          NULL,"delon",Txt_Remove_me_from_this_course);
 
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Mark possible notification as seen *****/
-   Ntf_SetNotifAsSeen (Ntf_EVENT_ENROLLMENT,
+   Ntf_SetNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
+	                                                                      Ntf_EVENT_ENROLLMENT_TEACHER,
                        -1L,
                        Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -3182,6 +3232,13 @@ void Enr_AcceptRegisterMeInCrs (void)
 
    /***** Confirm my enrollment *****/
    Enr_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Mark all notifications about enrollment (as student or as teacher)
+          in current course as removed *****/
+   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1L,
+                                  Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1L,
+                                  Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
    sprintf (Gbl.Message,Txt_You_have_confirmed_your_enrollment_in_the_course_X,
