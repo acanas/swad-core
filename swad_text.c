@@ -17636,7 +17636,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Professores"
 #endif
 	,
-	// ActLstUsr
+	// ActLstOth
 #if   L==0
 	"Altres"
 #elif L==1
@@ -19569,7 +19569,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es professores"
 #endif
 	,
-	// ActLstUsr
+	// ActLstOth
 #if   L==0
 	"Llistat i fitxes d'altres usuaris"
 #elif L==1

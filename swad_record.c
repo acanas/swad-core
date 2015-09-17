@@ -2240,8 +2240,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
-	 Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
-	                                                            ActReqMdfStd);
+	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
+	                (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
+	                        	                             ActReqMdfOth));
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""

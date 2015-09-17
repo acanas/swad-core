@@ -4826,7 +4826,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
   {
    switch (Gbl.CurrentAct)
      {
-      case ActLstUsr:
+      case ActLstOth:
       case ActLstStd:
       case ActLstTch:
          Sco_PutParamScope (Gbl.Scope.Current);
@@ -5907,7 +5907,7 @@ void Usr_ListDataAdms (void)
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	              "%s: ",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Act_FormStart (ActLstUsr);
+   Act_FormStart (ActLstOth);
    Sco_PutSelectorScope (true);
    Usr_PutParamListWithPhotos ();
    Act_FormEnd ();
@@ -5920,7 +5920,7 @@ void Usr_ListDataAdms (void)
      {
       /****** See the photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActLstUsr);
+      Act_FormStart (ActLstOth);
       Sco_PutParamScope (Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Act_FormEnd ();
@@ -6314,7 +6314,7 @@ static void Usr_PutLinkToSeeAdmins (void)
    // extern const char *Txt_Remove_old_users;
 
    /***** Put form to list admins *****/
-   Act_PutContextualLink (ActLstUsr,NULL,"adm","Ver administradores");	// TODO: Need translation!!!
+   Act_PutContextualLink (ActLstOth,NULL,"adm","Ver administradores");	// TODO: Need translation!!!
   }
 
 /*****************************************************************************/
@@ -6374,7 +6374,7 @@ void Usr_SeeGuests (void)
          /***** Form to select range of guests *****/
          fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Act_FormStart (ActLstUsr);
+         Act_FormStart (ActLstOth);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();

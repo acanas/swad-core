@@ -95,6 +95,7 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
       NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
       if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
          break;
+
       if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
         {
          IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
@@ -151,8 +152,10 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
          fprintf (Gbl.F.Out,"</li>");
 
          PreviousVisibleOptions = true;
-         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
         }
+
+      if (!SeparationBetweenPreviousAndCurrentOption)
+         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
      }
 
    /***** List end *****/

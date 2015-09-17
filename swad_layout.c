@@ -520,20 +520,19 @@ static void Lay_WriteScriptInit (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
-
-   fprintf (Gbl.F.Out,"function init(){\n");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+                      "function init(){\n");
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)	// Clock visible
-    {
-      fprintf (Gbl.F.Out,"	IsToday = true;\n");
-      fprintf (Gbl.F.Out,"	StrToday = \"%u %s\";\n",
+      fprintf (Gbl.F.Out,"	IsToday = true;\n"
+                         "	StrToday = \"%u %s\";\n"
+                         "	Hour = %u;\n"
+                         "	Minute = %u;\n"
+                         "	writeClock();\n",
                Gbl.Now.Date.Day,
-               Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1]);
-      fprintf (Gbl.F.Out,"	Hour = %u;\n",Gbl.Now.Time.Hour);
-      fprintf (Gbl.F.Out,"	Minute = %u;\n",Gbl.Now.Time.Minute);
-      fprintf (Gbl.F.Out,"	writeClock();\n");
-     }
+               Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
+               Gbl.Now.Time.Hour,
+               Gbl.Now.Time.Minute);
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
@@ -542,17 +541,16 @@ static void Lay_WriteScriptInit (void)
    // Put the focus on login form
    fprintf (Gbl.F.Out,"	LoginForm = document.getElementById('UsrId');\n"
                       "	if (LoginForm)\n"
-                      "		LoginForm.focus();\n");
-
-   fprintf (Gbl.F.Out,"	ActionAJAX = \"%s\";\n",Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   fprintf (Gbl.F.Out,"	setTimeout(\"refreshConnected()\",%lu);\n",
+                      "		LoginForm.focus();\n"
+                      "	ActionAJAX = \"%s\";\n"
+                      "	setTimeout(\"refreshConnected()\",%lu);\n",
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);
    if (Gbl.CurrentAct == ActLstClk)
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   fprintf (Gbl.F.Out,"}\n");
-
-   fprintf (Gbl.F.Out,"</script>\n");
+   fprintf (Gbl.F.Out,"}\n"
+                      "</script>\n");
   }
 
 /*****************************************************************************/
@@ -561,18 +559,16 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptConnectedUsrs (void)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
-
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
-            Act_Actions[ActRefCon].ActCod);
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
-            Act_Actions[ActRefLstClk].ActCod);
-   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n",
-            Gbl.Session.Id);
-   fprintf (Gbl.F.Out,"var RefreshParamCrsCod = \"crs=%ld\";\n",
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+                      "var RefreshParamNxtActCon = \"act=%ld\";\n"
+                      "var RefreshParamNxtActLog = \"act=%ld\";\n"
+                      "var RefreshParamIdSes = \"ses=%s\";\n"
+                      "var RefreshParamCrsCod = \"crs=%ld\";\n"
+                      "</script>\n",
+            Act_Actions[ActRefCon].ActCod,
+            Act_Actions[ActRefLstClk].ActCod,
+            Gbl.Session.Id,
             Gbl.CurrentCrs.Crs.CrsCod);
-
-   fprintf (Gbl.F.Out,"</script>\n");
   }
 
 /*****************************************************************************/
@@ -582,11 +578,10 @@ static void Lay_WriteScriptConnectedUsrs (void)
 
 static void Lay_WriteScriptCustomDropzone (void)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
-
    // "myAwesomeDropzone" is the camelized version of the HTML element's ID
    // Add a line "forceFallback: true,\n" to test classic upload
-   fprintf (Gbl.F.Out,"Dropzone.options.myAwesomeDropzone = {\n"
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+                      "Dropzone.options.myAwesomeDropzone = {\n"
 	              "maxFiles: 100,\n"
 		      "parallelUploads: 100,\n"
 		      "maxFilesize: %lu,\n"
@@ -594,10 +589,9 @@ static void Lay_WriteScriptCustomDropzone (void)
 		      "document.getElementById('dropzone-upload').style.display='none';\n"
 		      "document.getElementById('classic-upload').style.display='block';\n"
 		      "}\n"
-		      "};\n",
+		      "};\n"
+                      "</script>\n",
             (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
-
-   fprintf (Gbl.F.Out,"</script>\n");
   }
 
 /*****************************************************************************/

@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.133 (2015/09/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.133.1 (2015/09/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.133.1: Sep 17, 2015	Changes in user enrollment. (184669 lines)
         Version 14.133:   Sep 17, 2015	Changes in user enrollment. (184665 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1417','1421','1425');
