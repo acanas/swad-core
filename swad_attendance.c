@@ -3040,7 +3040,9 @@ static void Att_ListStdsAttendanceTable (unsigned NumStdsInList,long *LstSelecte
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get from the database the data of the student
 	{
-	 UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+	 UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+	                                               Gbl.CurrentCrs.Crs.CrsCod,
+	                                               true);
 	 Att_WriteRowStdSeveralAttEvents (NumStd,&UsrDat);
 	}
      }
@@ -3247,7 +3249,9 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
       UsrDat.UsrCod = LstSelectedUsrCods[NumStd];
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
 	{
-	 UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+	 UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+	                                               Gbl.CurrentCrs.Crs.CrsCod,
+	                                               true);
 	 Att_ListAttEventsForAStd (NumStd,&UsrDat);
 	}
      }

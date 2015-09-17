@@ -135,19 +135,27 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
       case Rol_TEACHER:
 	 /* If I am a teacher in current course,
 	    I only can change the photo of users from current course */
-	 return UsrDat->Accepted;
+	 return Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+	                                    Gbl.CurrentCrs.Crs.CrsCod,
+	                                    true);
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
+	                                    Gbl.CurrentDeg.Deg.DegCod,
+	                                    true);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current centre,
 	    I only can change the photo of users from current centre */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
+	                                    Gbl.CurrentCtr.Ctr.CtrCod,
+	                                    true);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can change the photo of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
+	                                    Gbl.CurrentIns.Ins.InsCod,
+	                                    true);
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -337,7 +345,9 @@ void Pho_SendPhotoUsr (void)
      {
       if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                                              Gbl.CurrentCrs.Crs.CrsCod,
+	                                                              true);
 	 Pho_ReqUsrPhoto (&Gbl.Usrs.Other.UsrDat);        // Request user's photograph
 	}
       else

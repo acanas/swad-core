@@ -6041,7 +6041,9 @@ void Tst_ShowUsrsTestResults (void)
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))               // Get of the database the data of the user
-	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
+	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                    Gbl.CurrentCrs.Crs.CrsCod,
+	                                    false))
 	       /***** Show the result of test exams *****/
 	       Tst_ShowResultsOfTestExams (&Gbl.Usrs.Other.UsrDat);
 	}

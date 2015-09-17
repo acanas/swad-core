@@ -222,7 +222,9 @@ bool Prf_ShowUserProfile (void)
 	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Get if user has accepted enrollment in current course */
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                                                              Gbl.CurrentCrs.Crs.CrsCod,
+	                                                              true);
 	}
 
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"

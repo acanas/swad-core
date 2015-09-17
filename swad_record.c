@@ -966,7 +966,9 @@ static void Rec_ShowRecordOneStdCrs (void)
    bool ItsMe;
 
    /***** Get if student has accepted enrollment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                                                Gbl.CurrentCrs.Crs.CrsCod,
+                                                                true);
 
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
@@ -1071,9 +1073,13 @@ void Rec_ListRecordsStdsCrs (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
-         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
+         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+                                         Gbl.CurrentCrs.Crs.CrsCod,
+                                         false))
            {
-            UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+            UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+                                                          Gbl.CurrentCrs.Crs.CrsCod,
+                                                          true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
         	               " style=\"margin-bottom:10px;");
@@ -1101,6 +1107,7 @@ void Rec_ListRecordsStdsCrs (void)
             NumUsrs++;
            }
      }
+
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
 
@@ -1138,7 +1145,9 @@ static void Rec_ShowRecordOneTchCrs (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Get if teacher has accepted enrollment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Other.UsrDat.UsrCod);
+   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                                                Gbl.CurrentCrs.Crs.CrsCod,
+                                                                true);
 
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1240,9 +1249,13 @@ void Rec_ListRecordsTchsCrs (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
-         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,false))
+         if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+                                         Gbl.CurrentCrs.Crs.CrsCod,
+                                         false))
            {
-            UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat.UsrCod);
+            UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+                                                          Gbl.CurrentCrs.Crs.CrsCod,
+                                                          true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
         	               " style=\"margin-bottom:10px;");
@@ -1919,7 +1932,9 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat);
-   UsrDat->Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (UsrDat->UsrCod);
+   UsrDat->Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+                                                  Gbl.CurrentCrs.Crs.CrsCod,
+                                                  true);
 
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -2224,9 +2239,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
-	                (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
-	                                                             ActReqMdfGst));
+	 Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
+	                                                            ActReqMdfStd);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""

@@ -423,7 +423,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    if (UsrDat->RoleInCurrentCrsDB == Rol_UNKNOWN)
       UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_STUDENT)) ?
 	                           Rol__GUEST_ :	// User does not belong to any course
-	                           Rol_VISITOR;	// User belongs to some courses
+	                           Rol_VISITOR;		// User belongs to some courses
 
    /* Get name */
    strncpy (UsrDat->Surname1 ,row[2],sizeof (UsrDat->Surname1 ) - 1);
@@ -1013,10 +1013,17 @@ void Usr_GetMyCourses (void)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod,bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
+                                 long InsCod,
+                                 bool CountOnlyAcceptedCourses)
   {
    char Query[512];
    const char *SubQuery;
+
+   /***** Trivial case *****/
+   if (UsrCod <= 0 ||
+       InsCod <= 0)
+      return false;
 
    /***** Get is a user belongs to an institution from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
@@ -1036,10 +1043,17 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod,bool CountOnlyAcceptedC
 /******************* Check if a user belongs to a centre *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod,bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,
+                                 long CtrCod,
+                                 bool CountOnlyAcceptedCourses)
   {
    char Query[512];
    const char *SubQuery;
+
+   /***** Trivial case *****/
+   if (UsrCod <= 0 ||
+       CtrCod <= 0)
+      return false;
 
    /***** Get is a user belongs to a centre from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
@@ -1058,10 +1072,17 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod,bool CountOnlyAcceptedC
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod,bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,
+                                 long DegCod,
+                                 bool CountOnlyAcceptedCourses)
   {
    char Query[512];
    const char *SubQuery;
+
+   /***** Trivial case *****/
+   if (UsrCod <= 0 ||
+       DegCod <= 0)
+      return false;
 
    /***** Get is a user belongs to a degree from database *****/
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
@@ -1079,12 +1100,14 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod,bool CountOnlyAcceptedC
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
+                                 long CrsCod,
+                                 bool CountOnlyAcceptedCourses)
   {
    char Query[512];
    const char *SubQuery;
 
-   /***** If user code or course code not valid... *****/
+   /***** Trivial case *****/
    if (UsrCod <= 0 ||
        CrsCod <= 0)
       return false;
@@ -2394,7 +2417,11 @@ static void Usr_SetUsrRoleAndPrefs (void)
    else
       Gbl.Usrs.Me.IBelongToCurrentCrs = false;
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-      Gbl.Usrs.Me.UsrDat.Accepted = Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
+      Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                                Gbl.CurrentCrs.Crs.CrsCod,
+                                                                true);
+   else
+      Gbl.Usrs.Me.UsrDat.Accepted = false;
 
    /***** Check if I belong to current degree *****/
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -2558,36 +2585,6 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
    UsrDat->UsrIDNickOrEmail[0] = '\0';
    Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);
    return false;
-  }
-
-/*****************************************************************************/
-/********* Get if a user has accepted to belong to current course ************/
-/*****************************************************************************/
-
-bool Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (long UsrCod)
-  {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool Accepted = false;
-
-   /***** Get if a user has accepted belonging to current course *****/
-   sprintf (Query,"SELECT Accepted FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-            Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,
-                       "can not check if a user has accepted"
-                       " the enrollment in the current course") == 1)
-     {
-      /* Get if accepted */
-      row = mysql_fetch_row (mysql_res);
-      Accepted = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Accepted;
   }
 
 /*****************************************************************************/

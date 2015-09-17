@@ -220,10 +220,18 @@ void Usr_GetMyInstitutions (void);
 void Usr_GetMyCentres (void);
 void Usr_GetMyDegrees (void);
 void Usr_GetMyCourses (void);
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod,bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod,bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod,bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,bool CountOnlyAcceptedCourses);
+bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
+                                 long InsCod,
+                                 bool CountOnlyAcceptedCourses);
+bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,
+                                 long CtrCod,
+                                 bool CountOnlyAcceptedCourses);
+bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,
+                                 long DegCod,
+                                 bool CountOnlyAcceptedCourses);
+bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
+                                 long CrsCod,
+                                 bool CountOnlyAcceptedCourses);
 bool Usr_CheckIfIBelongToIns (long InsCod);
 bool Usr_CheckIfIBelongToCtr (long CtrCod);
 bool Usr_CheckIfIBelongToDeg (long DegCod);
@@ -257,7 +265,6 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void);
 void Usr_ShowFormsLogoutAndRole (void);
 
 bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
-bool Usr_GetIfUserHasAcceptedEnrollmentInCurrentCrs (long UsrCod);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
