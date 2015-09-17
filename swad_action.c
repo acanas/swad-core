@@ -972,7 +972,9 @@ Users:
 	782c. ActNewID_Std		Create a new user's ID for another user
 	782d. ActNewID_Tch		Create a new user's ID for another user
 
-	783. ActFrmPwdOthUsr		Show form to the change of the password of another user
+	783b. ActFrmPwdOth		Show form to change the password of another user
+	783c. ActFrmPwdStd		Show form to change the password of another user
+	783d. ActFrmPwdTch		Show form to change the password of another user
 	784. ActChgPwdOthUsr		Change the password of another user
 	785b. ActRemStdCrs		Remove a student from the current course
 	785c. ActRemTchCrs		Remove a teacher from the current course
@@ -2400,10 +2402,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewID_Std	*/{1454,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
    /* ActNewID_Tch	*/{1455,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
 
-   /* ActFrmPwdOthUsr	*/{ 598,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
+   /* ActFrmPwdOth	*/{1464,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
+   /* ActFrmPwdStd	*/{1465,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
+   /* ActFrmPwdTch	*/{1466,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
    /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
-   /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1E8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
    /* ActRemTchCrs	*/{1463,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
 
    /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemUsrGbl			,NULL},
@@ -3352,7 +3356,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemFilMrkCrs,	// #595
 	ActFrmCreMrkCrs,	// #596
 	ActFrmCreBrf,		// #597
-	ActFrmPwdOthUsr,	// #598
+	-1,			// #598 (obsolete action)
 	ActRcvRepForCrsUsr,	// #599
 	ActReqRemFilMrkGrp,	// #600
 	ActFrmCreMrkGrp,	// #601
@@ -4221,6 +4225,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemMe_Tch,		// #1461
 	ActRemStdCrs,		// #1462
 	ActRemTchCrs,		// #1463
+	ActFrmPwdOth,		// #1464
+	ActFrmPwdStd,		// #1465
+	ActFrmPwdTch,		// #1466
 	};
 
 /*****************************************************************************/

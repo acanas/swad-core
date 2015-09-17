@@ -834,7 +834,10 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
-      Act_PutContextualLink (ActFrmPwdOthUsr,Usr_PutParamOtherUsrCodEncrypted,
+      Act_PutContextualLink ( Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
+	                     (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
+	                	                                                     ActFrmPwdOth),
+                             Usr_PutParamOtherUsrCodEncrypted,
                              "key",Txt_Change_password);
   }
 

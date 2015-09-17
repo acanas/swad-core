@@ -98,12 +98,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.134.1 (2015/09/17)"
+#define Log_PLATFORM_VERSION	"SWAD 14.134.2 (2015/09/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 14.134.1: Sep 17, 2015	Changes in user enrollment. (184833 lines)
+        Version 14.134.2: Sep 17, 2015	Changes in user enrollment. (184852 lines)
+					4 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='598';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1464','es','N','Solicitar cambio contrase&ntilde;a otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1465','es','N','Solicitar cambio contrase&ntilde;a estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1466','es','N','Solicitar cambio contrase&ntilde;a profesor');
+
+        Version 14.134.1: Sep 17, 2015	Changes in user enrollment. (184834 lines)
+					3 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='58';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1462','es','N','Eliminar estudiante asignatura');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1463','es','N','Eliminar profesor asignatura');
