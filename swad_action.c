@@ -959,8 +959,8 @@ Users:
 	797. ActNewAdmDeg		Register an administrador in this degree
 	798. ActRemAdmDeg		Remove an administrador of this degree
 
-	799. ActRcvFrmEnrSevStd	Receive a form with IDs of users to be registeres/removed to/from current course
-	800. ActRcvFrmEnrSevTch	Receive a form with IDs of users to be registeres/removed to/from current course
+	799. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
+	800. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
 
 	801. ActFrmIDsOth		Show form to the change of the IDs of another user
 	802. ActFrmIDsStd		Show form to the change of the IDs of another user
@@ -2388,8 +2388,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewAdmDeg	*/{ 586,-1,TabUsr,ActLstOth		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
    /* ActRemAdmDeg	*/{ 584,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmDeg			,NULL},
 
-   /* ActRcvFrmEnrSevStd*/{1427,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
-   /* ActRcvFrmEnrSevTch*/{1428,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
+   /* ActRcvFrmEnrSevStd*/{1428,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
+   /* ActRcvFrmEnrSevTch*/{1429,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
 
    /* ActFrmIDsOth	*/{1447,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},

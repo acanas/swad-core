@@ -10664,3 +10664,118 @@ UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfE
 
    /* Profile tab */
    Ntf_EVENT_FOLLOWER			= 14,	// old 13
+
+
+
+
+				
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart','diaspora','edmodo','facebook','flickr','foursquare','github','gnusocial','googleplus','googlescholar','identica','instagram','linkedin','orcid','paperli','pinterest','quitter','researchgate','researcherid','scoopit','slideshare','storify','tumblr','twitter','wikipedia','youtube') NOT NULL;
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='177';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1414','es','N','Solicitar ID modif. invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1415','es','N','Solicitar ID modif. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1416','es','N','Solicitar ID modif. profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1417','es','N','Solicitar ID modif. administrador');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='161';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1418','es','N','Confirmar modif. invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1419','es','N','Confirmar modif. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1420','es','N','Confirmar modif. profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1421','es','N','Confirmar modif. administrador');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='439';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1422','es','N','Modificar datos invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1423','es','N','Modificar datos estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1424','es','N','Modificar datos profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1425','es','N','Modificar datos administrador');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='797';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1426','es','N','Administrar varios estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1427','es','N','Administrar varios profesores');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='799';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1428','es','N','Inscribir/eliminar varios estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1429','es','N','Inscribir/eliminar varios profesores');
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1430','es','N','Preguntar si eliminar mi cuenta');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1431','es','N','Eliminar mi cuenta');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='375';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1432','es','N','Solicitar cambio foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1433','es','N','Solicitar cambio foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1434','es','N','Solicitar cambio foto profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='695';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1435','es','N','Detectar rostros foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1436','es','N','Detectar rostros foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1437','es','N','Detectar rostros foto profesor');
+	
+UPDATE actions SET Obsolete='Y' WHERE ActCod='374';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1438','es','N','Cambiar foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1439','es','N','Cambiar foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1440','es','N','Cambiar foto profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='429';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1441','es','N','Eliminar foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1442','es','N','Eliminar foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1443','es','N','Eliminar foto profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='440';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1444','es','N','Crear invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1445','es','N','Crear usuario como estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1446','es','N','Crear usuario como profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1239';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1447','es','N','Solicitar edici&oacute;n ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1448','es','N','Solicitar edici&oacute;n ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1449','es','N','Solicitar edici&oacute;n ID profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1240';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1450','es','N','Eliminar ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1451','es','N','Eliminar ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1452','es','N','Eliminar ID profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1241';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1453','es','N','Crear ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1454','es','N','Crear ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1455','es','N','Crear ID profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1417','1421','1425');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='592';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1456','es','N','Solicitar acept. inscrip. estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1457','es','N','Solicitar acept. inscrip. profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='558';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1458','es','N','Aceptar inscrip. como estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1459','es','N','Aceptar inscrip. como profesor');
+UPDATE actions SET Obsolete='Y' WHERE ActCod='559';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1460','es','N','Rechazar inscrip. como estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1461','es','N','Rechazar inscrip. como profesor');
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0x7F) << 1) | (NotifNtfEvents & 0x7F) | 0x80);
+UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfEvents & 0x7F));
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='58';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1462','es','N','Eliminar estudiante asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1463','es','N','Eliminar profesor asignatura');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='598';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1464','es','N','Solicitar cambio contrase&ntilde;a otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1465','es','N','Solicitar cambio contrase&ntilde;a estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1466','es','N','Solicitar cambio contrase&ntilde;a profesor');
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod='82';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1467','es','N','Cambiar contrase&ntilde;a otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1468','es','N','Cambiar contrase&ntilde;a estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Cambiar contrase&ntilde;a profesor');
+		
+
