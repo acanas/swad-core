@@ -6374,7 +6374,7 @@ void Usr_SeeGuests (void)
          /***** Form to select range of guests *****/
          fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Act_FormStart (ActLstOth);
+         Act_FormStart (ActLstGst);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();
