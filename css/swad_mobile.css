@@ -948,3 +948,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:10pt;
 	font-weight:bold;
 	}
+
+/********************* Used to align buttons in account forms ****************/
+.FORM_ACCOUNT
+	{
+	display:inline-block;
+	min-width:250px;
+	}

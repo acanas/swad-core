@@ -975,7 +975,9 @@ Users:
 	783b. ActFrmPwdOth		Show form to change the password of another user
 	783c. ActFrmPwdStd		Show form to change the password of another user
 	783d. ActFrmPwdTch		Show form to change the password of another user
-	784. ActChgPwdOthUsr		Change the password of another user
+	784b. ActChgPwdOth		Change the password of another user
+	784c. ActChgPwdStd		Change the password of another user
+	784d. ActChgPwdTch		Change the password of another user
 	785b. ActRemStdCrs		Remove a student from the current course
 	785c. ActRemTchCrs		Remove a teacher from the current course
 	786. ActRemUsrGbl		Eliminate completely a user from the platform
@@ -2405,7 +2407,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmPwdOth	*/{1464,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
    /* ActFrmPwdStd	*/{1465,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
    /* ActFrmPwdTch	*/{1466,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
-   /* ActChgPwdOthUsr	*/{  82,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdOth	*/{1467,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdStd	*/{1468,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdTch	*/{1469,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
    /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
    /* ActRemTchCrs	*/{1463,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
@@ -2840,7 +2844,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeAccGbl,		// #79
 	-1,			// #80 (obsolete action)
 	-1,			// #81 (obsolete action)
-	ActChgPwdOthUsr,	// #82
+	-1,			// #82 (obsolete action)
 	-1,			// #83 (obsolete action)
 	ActSeeUseGbl,		// #84
 	ActSeeExaAnn,		// #85
@@ -4228,6 +4232,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActFrmPwdOth,		// #1464
 	ActFrmPwdStd,		// #1465
 	ActFrmPwdTch,		// #1466
+	ActChgPwdOth,		// #1467
+	ActChgPwdStd,		// #1468
+	ActChgPwdTch,		// #1469
 	};
 
 /*****************************************************************************/

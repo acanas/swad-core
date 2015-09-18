@@ -233,7 +233,6 @@ void Acc_ShowFormChangeMyAccount (void)
    Lay_EndRoundFrameTable ();
   }
 
-
 /*****************************************************************************/
 /******** Put a link to the action used to request user's password ***********/
 /*****************************************************************************/
@@ -262,7 +261,7 @@ static void Acc_PrintAccountSeparator (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" class=\"CENTER_MIDDLE\">"
+		      "<td colspan=\"2\" class=\"CENTER_MIDDLE\">"
 		      "<hr class=\"%s\" />"
 		      "</td>"
 		      "</tr>",

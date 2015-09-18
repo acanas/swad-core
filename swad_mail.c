@@ -939,18 +939,14 @@ void Mai_ShowFormChangeUsrEmail (void)
       Confirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
 
       if (NumEmail == 1)
-	{
 	 /* The first mail is the current one */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td",
+			    "<td class=\"LEFT_MIDDLE\">"
+			    "<div class=\"FORM_ACCOUNT\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_email);
-	 if (Confirmed)
-	    fprintf (Gbl.F.Out," colspan=\"2\"");
-	 fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">");
-	}
       else	// NumEmail >= 2
 	{
 	 fprintf (Gbl.F.Out,"<tr>");
@@ -961,7 +957,8 @@ void Mai_ShowFormChangeUsrEmail (void)
 		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"LEFT_TOP\">");
+			    "<td class=\"LEFT_TOP\">"
+			    "<div class=\"FORM_ACCOUNT\">");
 
 	 /* Form to remove old e-mail */
 	 Act_FormStart (ActRemOldMai);
@@ -992,11 +989,11 @@ void Mai_ShowFormChangeUsrEmail (void)
       // if (NumEmail == 1 && Gbl.Usrs.Me.UsrDat.Email[0] && Confirmed)
       //    QR_PutLinkToPrintMyQRCode (QR_EMAIL);
 
+      fprintf (Gbl.F.Out,"</div>");
+
       /* Form to change the email */
       if (NumEmail > 1 || !Confirmed)
 	{
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActChgMai);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
 		  row[0]);	// E-mail
@@ -1020,12 +1017,12 @@ void Mai_ShowFormChangeUsrEmail (void)
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
    Act_FormStart (ActChgMai);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewEmail\""
-	              " size=\"16\" maxlength=\"%u\" value=\"%s\" />",
+   fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
+	              "<input type=\"text\" name=\"NewEmail\""
+	              " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
-   fprintf (Gbl.F.Out,"</td>"
-	              "<td class=\"LEFT_MIDDLE\">");
    Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// I already have an e-mail address
         	                          Txt_Save);		// I have no e-mail address yet);
    Act_FormEnd ();

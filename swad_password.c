@@ -713,8 +713,8 @@ void Pwd_ShowFormChgPwd (void)
 
    /***** Send button and end form *****/
    Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,
-                             IHaveAPasswordInDB ? Txt_Change_password :
-	                                          Txt_Set_password);
+                                     IHaveAPasswordInDB ? Txt_Change_password :
+	                                                  Txt_Set_password);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -782,26 +782,28 @@ void Pwd_ShowFormOthPwd (void)
 	 /***** Information message *****/
 	 Lay_ShowAlert (Lay_INFO,Txt_Changing_the_password_for_the_following_user);
 
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+
 	 /***** Show user's record *****/
-	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-			    "<tr>"
-			    "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
 
 	 /***** Form to change password *****/
 	 /* Start form */
-	 Act_FormStart (ActChgPwdOthUsr);
+	 Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActChgPwdStd :
+	                (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActChgPwdTch :
+	                	                                                   ActChgPwdOth));
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
          Pwd_PutFormToGetNewPasswordTwice ();
 	 fprintf (Gbl.F.Out,"</table>");
 
 	 /* End form */
 	 Lay_PutConfirmButton (Txt_Save);
 	 Act_FormEnd ();
+
+	 fprintf (Gbl.F.Out,"</div>");
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -834,9 +836,9 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
-      Act_PutContextualLink ( Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
-	                     (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
-	                	                                                     ActFrmPwdOth),
+      Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
+	                	                                                        ActFrmPwdOth),
                              Usr_PutParamOtherUsrCodEncrypted,
                              "key",Txt_Change_password);
   }

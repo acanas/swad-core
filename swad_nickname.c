@@ -213,7 +213,8 @@ void Nck_ShowFormChangeUsrNickname (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
+			    "<td class=\"LEFT_MIDDLE\">"
+			    "<div class=\"FORM_ACCOUNT\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Current_nickname);
       else	// NumNick >= 2
 	{
@@ -225,7 +226,8 @@ void Nck_ShowFormChangeUsrNickname (void)
 		     The_ClassForm[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"LEFT_TOP\">");
+			    "<td class=\"LEFT_TOP\">"
+			    "<div class=\"FORM_ACCOUNT\">");
 
 	 /* Form to remove old nickname */
 	 Act_FormStart (ActRemOldNic);
@@ -245,11 +247,11 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
          QR_PutLinkToPrintQRCode (&Gbl.Usrs.Me.UsrDat,false);
 
+      fprintf (Gbl.F.Out,"</div>");
+
       /* Form to change the nickname */
       if (NumNick > 1)
 	{
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "<td class=\"LEFT_TOP\">");
 	 Act_FormStart (ActChgNic);
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />",
 		  row[0]);	// Nickname
@@ -271,12 +273,12 @@ void Nck_ShowFormChangeUsrNickname (void)
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewNick\""
-	              " size=\"16\" maxlength=\"%u\" value=\"@%s\" />",
+   fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
+                      "<input type=\"text\" name=\"NewNick\""
+	              " size=\"20\" maxlength=\"%u\" value=\"@%s\" />"
+	              "</div>",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
-   fprintf (Gbl.F.Out,"</td>"
-	              "<td class=\"LEFT_MIDDLE\">");
    Lay_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);			// I have no nickname yet);
    Act_FormEnd ();

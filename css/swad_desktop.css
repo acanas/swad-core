@@ -1143,6 +1143,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-weight:bold;
 	}
 
+/********************* Used to align buttons in account forms ****************/
+.FORM_ACCOUNT
+	{
+	display:inline-block;
+	min-width:250px;
+	}
+	              
 /********************************** Page foot ********************************/
 .FOOT_LIST_CONTAINER
 	{

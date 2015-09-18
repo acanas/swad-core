@@ -392,19 +392,17 @@ void ID_ShowFormOthIDs (void)
 	 Lay_ShowAlert (Lay_INFO,Txt_Changing_the_IDs_for_the_following_user);
 
 	 /***** Form to change IDs *****/
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+
 	 /* Show user's record */
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-			    "<tr>"
-			    "<td colspan=\"3\" class=\"CENTER_MIDDLE\">");
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
 
 	 /* Form with the user's ID */
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-
-	 fprintf (Gbl.F.Out,"</table>");
+	 fprintf (Gbl.F.Out,"</table>"
+	                    "</div>");
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -438,7 +436,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
-			    "<td colspan=\"2\" class=\"LEFT_TOP\">",
+			    "<td class=\"LEFT_TOP\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -507,13 +505,13 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	                	                                     ActNewID_Oth));	// Guest, visitor or admin
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewID\""
-	                 " size=\"16\" maxlength=\"%u\" value=\"%s\" />",
+      fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
+                         "<input type=\"text\" name=\"NewID\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+	                 "</div>",
 	       ID_MAX_LENGTH_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
-      fprintf (Gbl.F.Out,"</td>"
-	                 "<td class=\"LEFT_MIDDLE\">");
       Lay_PutCreateButtonInline (Txt_Add_this_ID);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -522,7 +520,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
 
    /***** Write help text *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
    if (ItsMe)
       fprintf (Gbl.F.Out,"%s ",
                Txt_The_ID_is_used_in_order_to_facilitate_);
