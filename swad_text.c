@@ -4203,48 +4203,6 @@ const char *Txt_Change_preferences =
 	"Alterar prefer&ecirc;ncias";
 #endif
 
-const char *Txt_Changing_the_IDs_for_the_following_user =
-#if   L==0
-	"Canvi de IDs (DNI/c&egrave;dulas) del seg&uuml;ent usuari:";
-#elif L==1
-	"Changing the IDs for the following user:";			// Need Übersetzung
-#elif L==2
-	"Changing the IDs for the following user:";
-#elif L==3
-	"Cambio de los ID (DNI/c&eacute;dulas) del siguiente usuario:";
-#elif L==4
-	"Changing the IDs for the following user:";			// Besoin de traduction
-#elif L==5
-	"Cambio de los ID (DNI/c&eacute;dulas) del siguiente usuario:";	// Okoteve traducción
-#elif L==6
-	"Cambiare gli ID per il seguente utente:";
-#elif L==7
-	"Zmiana hasla dla identyfikatory uzytkownik&oacute;w:";
-#elif L==8
-	"Changing the IDs for the following user:";			// Necessita de tradução
-#endif
-
-const char *Txt_Changing_the_password_for_the_following_user =
-#if   L==0
-	"Canvi de la contrasenya del seg&uuml;ent usuari:";
-#elif L==1
-	"Changing the password for the following user:";		// Need Übersetzung
-#elif L==2
-	"Changing the password for the following user:";
-#elif L==3
-	"Cambio de la contrase&ntilde;a del siguiente usuario:";
-#elif L==4
-	"Changing the password for the following user:";		// Besoin de traduction
-#elif L==5
-	"Cambio de la contrase&ntilde;a del siguiente usuario:";	// Okoteve traducción
-#elif L==6
-	"Cambiare la password per il seguente utente:";
-#elif L==7
-	"Zmiana hasla dla nastepujacych uzytkownik&oacute;w:";
-#elif L==8
-	"Changing the password for the following user:";		// Necessita de tradução
-#endif
-
 const char *Txt_CHAT_Room =
 #if   L==0
 	"Sala";
@@ -17606,27 +17564,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudantes"
 #endif
 	,
-	// ActSeeAtt
-#if   L==0
-	"Assist&egrave;ncia"
-#elif L==1
-	"Anwesenheit"
-#elif L==2
-	"Attendance"
-#elif L==3
-	"Asistencia"
-#elif L==4
-	"Pr&eacute;sence"
-#elif L==5
-	"Asistencia"	// Okoteve traducción
-#elif L==6
-	"Frequenza"
-#elif L==7
-	"Frekwencji"
-#elif L==8
-	"Presen&ccedil;a"
-#endif
-	,
 	// ActLstTch
 #if   L==0
 	"Professors"
@@ -17667,6 +17604,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inne"
 #elif L==8
 	"Outros"
+#endif
+	,
+	// ActSeeAtt
+#if   L==0
+	"Assist&egrave;ncia"
+#elif L==1
+	"Anwesenheit"
+#elif L==2
+	"Attendance"
+#elif L==3
+	"Asistencia"
+#elif L==4
+	"Pr&eacute;sence"
+#elif L==5
+	"Asistencia"	// Okoteve traducción
+#elif L==6
+	"Frequenza"
+#elif L==7
+	"Frekwencji"
+#elif L==8
+	"Presen&ccedil;a"
 #endif
 	,
 	// ActReqSignUp
@@ -19535,31 +19493,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es estudantes"
 #endif
 	,
-	// ActSeeAtt
-#if   L==0
-	"Control d'assist&egrave;ncia dels estudiants"
-	" a les classes d'aquesta assignatura"
-#elif L==1
-	"Kontrolle der Studierenden Anwesenheit"
-#elif L==2
-	"Control of students' attendance"
-	" to classes in this course"
-#elif L==3
-	"Control de asistencia de los estudiantes"
-	" a las clases de esta asignatura"
-#elif L==4
-	"Contr&ocirc;le de pr&eacute;sence des &eacute;tudiants"
-#elif L==5
-	"Control de asistencia de los estudiantes"
-	" a las clases de esta asignatura"// Okoteve traducción
-#elif L==6
-	"Controllo di frequenza degli studenti"
-#elif L==7
-	"Kontrola frekwencji"
-#elif L==8
-	"Lista de presen&ccedil;a"
-#endif
-	,
 	// ActLstTch
 #if   L==0
 	"Llistat i fitxes de professors"
@@ -19600,6 +19533,31 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Listy i rekordy innych u&zdot;ytkownik&oacute;w"
 #elif L==8
 	"Lista e cart&otilde;es de outros usu&aacute;rios"
+#endif
+	,
+	// ActSeeAtt
+#if   L==0
+	"Control d'assist&egrave;ncia dels estudiants"
+	" a les classes d'aquesta assignatura"
+#elif L==1
+	"Kontrolle der Studierenden Anwesenheit"
+#elif L==2
+	"Control of students' attendance"
+	" to classes in this course"
+#elif L==3
+	"Control de asistencia de los estudiantes"
+	" a las clases de esta asignatura"
+#elif L==4
+	"Contr&ocirc;le de pr&eacute;sence des &eacute;tudiants"
+#elif L==5
+	"Control de asistencia de los estudiantes"
+	" a las clases de esta asignatura"// Okoteve traducción
+#elif L==6
+	"Controllo di frequenza degli studenti"
+#elif L==7
+	"Kontrola frekwencji"
+#elif L==8
+	"Lista de presen&ccedil;a"
 #endif
 	,
 	// ActReqSignUp
@@ -31647,7 +31605,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31687,7 +31645,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31707,7 +31665,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31728,7 +31686,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31768,7 +31726,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31788,7 +31746,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31809,7 +31767,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31849,7 +31807,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -31869,7 +31827,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	   "Administradores"	// Necessita traduccio
+	   "Administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32379,7 +32337,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32419,7 +32377,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32439,7 +32397,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32460,7 +32418,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32500,7 +32458,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32520,7 +32478,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32541,7 +32499,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32581,7 +32539,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -32601,7 +32559,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	   ,
 #if   L==0	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	   "administradores"	// Necessita traduccio
+	   "administradors"
 #elif L==1
 	   "Administratoren"
 #elif L==2
@@ -33400,6 +33358,27 @@ const char *Txt_Search_courses =
 	"Procurar disciplinas";
 #endif
 
+const char *Txt_See_administrators =
+#if   L==0
+	"Veure administradors";
+#elif L==1
+	"Siehe Administratoren";
+#elif L==2
+	"See administrators";
+#elif L==3
+	"Ver administradores";
+#elif L==4
+	"Voir administrateurs";
+#elif L==5
+	"Ver administradores";	// Okoteve traducción
+#elif L==6
+	"Vedi amministratori";
+#elif L==7
+	"Wiadomo&sacute;ci administratorzy";
+#elif L==8
+	"Veja administradores";
+#endif
+
 const char *Txt_See_exam =
 #if   L==0
 	"Veure ex&agrave;men";
@@ -33461,6 +33440,27 @@ const char *Txt_See_full_notice =
 	"Wiadomo&sacute;ci ca&lstrok;y obwieszczenie";
 #elif L==8
 	"Veja aviso completo";
+#endif
+
+const char *Txt_See_guests =
+#if   L==0
+	"Veure convidats";
+#elif L==1
+	"Siehe Eingeladen";
+#elif L==2
+	"See guests";
+#elif L==3
+	"Ver invitados";
+#elif L==4
+	"Voir invit&eacute;s";
+#elif L==5
+	"Ver invitados";	// Okoteve traducción
+#elif L==6
+	"Vedi ospiti";
+#elif L==7
+	"Wiadomo&sacute;ci zaproszenie";
+#elif L==8
+	"Veja convidados";
 #endif
 
 const char *Txt_See_message =

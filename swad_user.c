@@ -6311,10 +6311,10 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 
 static void Usr_PutLinkToSeeAdmins (void)
   {
-   // extern const char *Txt_Remove_old_users;
+   extern const char *Txt_See_administrators;
 
    /***** Put form to list admins *****/
-   Act_PutContextualLink (ActLstOth,NULL,"adm","Ver administradores");	// TODO: Need translation!!!
+   Act_PutContextualLink (ActLstOth,NULL,"adm",Txt_See_administrators);
   }
 
 /*****************************************************************************/
@@ -6323,10 +6323,10 @@ static void Usr_PutLinkToSeeAdmins (void)
 
 static void Usr_PutLinkToSeeGuests (void)
   {
-   // extern const char *Txt_Remove_old_users;
+   extern const char *Txt_See_guests;
 
    /***** Put form to list guests *****/
-   Act_PutContextualLink (ActLstGst,NULL,"usrs","Ver invitados");	// TODO: Need translation!!!
+   Act_PutContextualLink (ActLstGst,NULL,"usrs",Txt_See_guests);
   }
 
 /*****************************************************************************/

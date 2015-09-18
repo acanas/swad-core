@@ -875,7 +875,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
+	              " style=\"display:inline-block; margin:10px;\">"
                       "<ul class=\"LIST_LEFT %s\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
 

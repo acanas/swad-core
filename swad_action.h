@@ -867,9 +867,9 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 // Actions in menu
 #define ActReqSelGrp		(ActChgNumRowFooGrp+  1)
 #define ActLstStd		(ActChgNumRowFooGrp+  2)
-#define ActSeeAtt		(ActChgNumRowFooGrp+  3)
-#define ActLstTch		(ActChgNumRowFooGrp+  4)
-#define ActLstOth		(ActChgNumRowFooGrp+  5)
+#define ActLstTch		(ActChgNumRowFooGrp+  3)
+#define ActLstOth		(ActChgNumRowFooGrp+  4)
+#define ActSeeAtt		(ActChgNumRowFooGrp+  5)
 #define ActReqSignUp		(ActChgNumRowFooGrp+  6)
 #define ActSeeSignUpReq		(ActChgNumRowFooGrp+  7)
 #define ActLstCon		(ActChgNumRowFooGrp+  8)

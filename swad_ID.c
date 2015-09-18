@@ -380,7 +380,7 @@ void ID_PutLinkToChangeUsrIDs (void)
 
 void ID_ShowFormOthIDs (void)
   {
-   extern const char *Txt_Changing_the_IDs_for_the_following_user;
+   extern const char *Txt_ID;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user whose password must be changed *****/
@@ -388,21 +388,20 @@ void ID_ShowFormOthIDs (void)
      {
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 /***** Information message *****/
-	 Lay_ShowAlert (Lay_INFO,Txt_Changing_the_IDs_for_the_following_user);
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_ID);
 
-	 /***** Form to change IDs *****/
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-
-	 /* Show user's record */
+	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-	 /* Form with the user's ID */
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+	 /***** Form with the user's ID *****/
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-	 fprintf (Gbl.F.Out,"</table>"
-	                    "</div>");
+	 fprintf (Gbl.F.Out,"</table>");
+
+         /***** End frame *****/
+         Lay_EndRoundFrame ();
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

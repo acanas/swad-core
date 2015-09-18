@@ -375,7 +375,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	background-position:10px 10px;
 	padding:10px 10px 10px 36px;
 	border-radius:4px;
-	box-shadow:1px 1px 1px #CCC7B4;
+	box-shadow:1px 1px 3px #CCC7B4;
 	font-family:Arial, "Nimbus Sans L", "DejaVu LGC Sans", "Bitstream Vera Sans", sans-serif;
 	font-size:10pt;
 	color:#632921;
@@ -413,11 +413,11 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /********************************* Frame 10 **********************************/
 .FRAME10
 	{
-	margin:0;
+	margin:4px 0;
 	padding:10px;
 	background-color:white;
 	border-radius:4px;
-	box-shadow:1px 1px 1px #CCC;
+	box-shadow:1px 1px 3px #CCC;
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;

@@ -770,8 +770,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
 void Pwd_ShowFormOthPwd (void)
   {
-   extern const char *Txt_Changing_the_password_for_the_following_user;
-   extern const char *Txt_Save;
+   extern const char *Txt_Password;
+   extern const char *Txt_Change_password;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user whose password must be changed *****/
@@ -779,10 +779,8 @@ void Pwd_ShowFormOthPwd (void)
      {
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 /***** Information message *****/
-	 Lay_ShowAlert (Lay_INFO,Txt_Changing_the_password_for_the_following_user);
-
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_Password);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -800,10 +798,11 @@ void Pwd_ShowFormOthPwd (void)
 	 fprintf (Gbl.F.Out,"</table>");
 
 	 /* End form */
-	 Lay_PutConfirmButton (Txt_Save);
+	 Lay_PutConfirmButton (Txt_Change_password);
 	 Act_FormEnd ();
 
-	 fprintf (Gbl.F.Out,"</div>");
+         /***** End frame *****/
+         Lay_EndRoundFrame ();
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
