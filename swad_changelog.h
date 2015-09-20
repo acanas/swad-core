@@ -98,11 +98,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.134.7 (2015/09/18)"
+#define Log_PLATFORM_VERSION	"SWAD 14.134.8 (2015/09/20)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.134.8: Sep 20, 2015	Fixed bug in list of guests.
+                                        Changes in listing of connected users. (184885 lines)
         Version 14.134.7: Sep 18, 2015	Fixed bug in list of guests. (184879 lines)
         Version 14.134.6: Sep 18, 2015	Fixed bug in user enrollment. (184878 lines)
         Version 14.134.5: Sep 18, 2015	Change in order of options in user menu.

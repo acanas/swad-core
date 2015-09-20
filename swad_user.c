@@ -4826,7 +4826,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
   {
    switch (Gbl.CurrentAct)
      {
-      case ActLstOth:
+      case ActLstGst:
       case ActLstStd:
       case ActLstTch:
          Sco_PutParamScope (Gbl.Scope.Current);

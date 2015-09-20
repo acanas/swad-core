@@ -258,25 +258,35 @@ void Sco_SetScopesForListingGuests (void)
 
 void Sco_SetScopesForListingStudents (void)
   {
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STUDENT:
       case Rol_TEACHER:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
-	 Gbl.Scope.Default = Sco_SCOPE_CRS;
 	 break;
       case Rol_DEG_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
-	 Gbl.Scope.Default = Sco_SCOPE_DEG;
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG |
+		             1 << Sco_SCOPE_CRS;
+	 break;
+      case Rol_CTR_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR |
+		             1 << Sco_SCOPE_DEG |
+		             1 << Sco_SCOPE_CRS;
+	 break;
+      case Rol_INS_ADM:
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS |
+		             1 << Sco_SCOPE_CTR |
+		             1 << Sco_SCOPE_DEG |
+		             1 << Sco_SCOPE_CRS;
 	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	                     1 << Sco_SCOPE_CTY     |
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	                     1 << Sco_SCOPE_CTY |
 		             1 << Sco_SCOPE_INS |
-		             1 << Sco_SCOPE_CTR      |
-		             1 << Sco_SCOPE_DEG      |
+		             1 << Sco_SCOPE_CTR |
+		             1 << Sco_SCOPE_DEG |
 		             1 << Sco_SCOPE_CRS;
-	 Gbl.Scope.Default = Sco_SCOPE_CRS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
