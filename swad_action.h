@@ -69,7 +69,7 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+142+168+28+79)
+#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+143+168+27+79)
 
 #define Act_MAX_ACTION_COD 1469
 
@@ -1016,17 +1016,19 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActReqRemOldUsr		(ActChgNumRowFooGrp+131)
 #define ActRemOldUsr		(ActChgNumRowFooGrp+132)
 
-#define ActSeePubPrf		(ActChgNumRowFooGrp+133)
-#define ActCal1stClkTim		(ActChgNumRowFooGrp+134)
-#define ActCalNumClk		(ActChgNumRowFooGrp+135)
-#define ActCalNumFilVie		(ActChgNumRowFooGrp+136)
-#define ActCalNumForPst		(ActChgNumRowFooGrp+137)
-#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+138)
+#define ActLstClk		(ActChgNumRowFooGrp+133)
 
-#define ActFolUsr		(ActChgNumRowFooGrp+139)
-#define ActUnfUsr		(ActChgNumRowFooGrp+140)
-#define ActSeeFlg		(ActChgNumRowFooGrp+141)
-#define ActSeeFlr		(ActChgNumRowFooGrp+142)
+#define ActSeePubPrf		(ActChgNumRowFooGrp+134)
+#define ActCal1stClkTim		(ActChgNumRowFooGrp+135)
+#define ActCalNumClk		(ActChgNumRowFooGrp+136)
+#define ActCalNumFilVie		(ActChgNumRowFooGrp+137)
+#define ActCalNumForPst		(ActChgNumRowFooGrp+138)
+#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+139)
+
+#define ActFolUsr		(ActChgNumRowFooGrp+140)
+#define ActUnfUsr		(ActChgNumRowFooGrp+141)
+#define ActSeeFlg		(ActChgNumRowFooGrp+142)
+#define ActSeeFlr		(ActChgNumRowFooGrp+143)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/
@@ -1211,31 +1213,30 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeePhoDeg		(ActCht+ 3)
 #define ActReqStaCrs		(ActCht+ 4)
 #define ActReqAccGbl		(ActCht+ 5)
-#define ActLstClk		(ActCht+ 6)
 // Secondary actions
-#define ActSeeOneSvy		(ActCht+ 7)
-#define ActAnsSvy		(ActCht+ 8)
-#define ActFrmNewSvy		(ActCht+ 9)
-#define ActEdiOneSvy		(ActCht+10)
-#define ActNewSvy		(ActCht+11)
-#define ActChgSvy		(ActCht+12)
-#define ActReqRemSvy		(ActCht+13)
-#define ActRemSvy		(ActCht+14)
-#define ActReqRstSvy		(ActCht+15)
-#define ActRstSvy		(ActCht+16)
-#define ActHidSvy		(ActCht+17)
-#define ActShoSvy		(ActCht+18)
-#define ActEdiOneSvyQst		(ActCht+19)
-#define ActRcvSvyQst		(ActCht+20)
-#define ActRemSvyQst		(ActCht+21)
+#define ActSeeOneSvy		(ActCht+ 6)
+#define ActAnsSvy		(ActCht+ 7)
+#define ActFrmNewSvy		(ActCht+ 8)
+#define ActEdiOneSvy		(ActCht+ 9)
+#define ActNewSvy		(ActCht+10)
+#define ActChgSvy		(ActCht+11)
+#define ActReqRemSvy		(ActCht+12)
+#define ActRemSvy		(ActCht+13)
+#define ActReqRstSvy		(ActCht+14)
+#define ActRstSvy		(ActCht+15)
+#define ActHidSvy		(ActCht+16)
+#define ActShoSvy		(ActCht+17)
+#define ActEdiOneSvyQst		(ActCht+18)
+#define ActRcvSvyQst		(ActCht+19)
+#define ActRemSvyQst		(ActCht+20)
 
-#define ActSeeUseGbl		(ActCht+22)
-#define ActPrnPhoDeg		(ActCht+23)
-#define ActCalPhoDeg		(ActCht+24)
-#define ActSeeAccGbl		(ActCht+25)
-#define ActReqAccCrs		(ActCht+26)
-#define ActSeeAccCrs		(ActCht+27)
-#define ActSeeAllStaCrs		(ActCht+28)
+#define ActSeeUseGbl		(ActCht+21)
+#define ActPrnPhoDeg		(ActCht+22)
+#define ActCalPhoDeg		(ActCht+23)
+#define ActSeeAccGbl		(ActCht+24)
+#define ActReqAccCrs		(ActCht+25)
+#define ActSeeAccCrs		(ActCht+26)
+#define ActSeeAllStaCrs		(ActCht+27)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

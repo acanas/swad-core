@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 14.134.9 (2015/09/22)"
+#define Log_PLATFORM_VERSION	"SWAD 14.135 (2015/09/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 14.135:   Sep 23, 2015	Option to show last clicks in real time is moved inside "Users - Connected". (184883 lines)
         Version 14.134.9: Sep 22, 2015	Link in connected users to clicks in real time. (184923 lines)
         Version 14.134.8: Sep 20, 2015	Fixed bug in list of guests.
                                         Changes in listing of connected users. (184885 lines)

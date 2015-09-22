@@ -18054,27 +18054,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Visitas"
 #endif
 	,
-	// ActLstClk
-#if   L==0
-	"Clics"
-#elif L==1
-	"Klicks"
-#elif L==2
-	"Clicks"
-#elif L==3
-	"Clics"
-#elif L==4
-	"Clics"
-#elif L==5
-	"Clics"	// Okoteve traducción
-#elif L==6
-	"Clic"
-#elif L==7
-	"Klikni&eogon;&cacute;"
-#elif L==8
-	"Cliques"
-#endif
-	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20005,27 +19985,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estat&iacute;sticas de acesso &agrave; plataforma"
 #endif
 	,
-	// ActLstClk
-#if   L==0
-	"&Uacute;ltims clics en temps real"
-#elif L==1
-	"Letzte Klicks in Echtzeit"
-#elif L==2
-	"Last clicks in real time"
-#elif L==3
-	"&Uacute;ltimos clics en tiempo real"
-#elif L==4
-	"Derni&egrave;re clics en temps r&eacute;el"
-#elif L==5
-	"&Uacute;ltimos clics en tiempo real"// Okoteve traducción
-#elif L==6
-	"Ultimi clic in tempo reale"
-#elif L==7
-	"Ostatnie dwa klikni&eogon;cia w czasie rzeczywistym"
-#elif L==8
-	"&Uacute;ltimos cliques em tempo real"
-#endif
-	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
