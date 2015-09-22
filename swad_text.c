@@ -15099,6 +15099,27 @@ const char *Txt_Language =
 	"Lingua";
 #endif
 
+const char *Txt_Last_clicks =
+#if   L==0
+	"&Uacute;ltims clics";
+#elif L==1
+	"Letzte Klicks";
+#elif L==2
+	"Last clicks";
+#elif L==3
+	"&Uacute;ltimos clics";
+#elif L==4
+	"Derni&egrave;re clics";
+#elif L==5
+	"&Uacute;ltimos clics";	// Okoteve traducción
+#elif L==6
+	"Ultimi clic";
+#elif L==7
+	"Ostatnie dwa klikni&eogon;cia";
+#elif L==8
+	"&Uacute;ltimos cliques";
+#endif
+
 const char *Txt_Last_clicks_in_real_time =
 #if   L==0
 	"&Uacute;ltims clics en temps real";

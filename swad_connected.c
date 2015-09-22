@@ -52,6 +52,8 @@ extern struct Globals Gbl;
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
+static void Con_PutLinkToLastClicks (void);
+
 static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_Role_t Role);
@@ -74,6 +76,14 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Txt_Scope;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Connected_users;
+
+   /***** Link to log in *****/
+   if (Gbl.Usrs.Me.Logged)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Con_PutLinkToLastClicks ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Set where to show connected users to main zone *****/
    Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_MAIN_ZONE;
@@ -122,6 +132,18 @@ void Con_ShowConnectedUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/*************** Put a link to show last clicks in real time *****************/
+/*****************************************************************************/
+
+static void Con_PutLinkToLastClicks (void)
+  {
+   extern const char *Txt_Last_clicks;
+
+   Act_PutContextualLink (ActLstClk,NULL,
+                          "click",Txt_Last_clicks);
   }
 
 /*****************************************************************************/
