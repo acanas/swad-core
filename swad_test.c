@@ -1614,7 +1614,7 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<table style=\"border-spacing:2px;\">",
+                      "<table style=\"border-spacing:3px;\">",	// Changed!
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_No_of_questions);
 
@@ -4204,7 +4204,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       /***** Write the tags already existing in a selector *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	                 "<select id=\"SelDesc%u\" name=\"SelDesc%u\""
-	                 " style=\"width:230px;\" onchange=\"changeTxtTag('%u')\">",
+	                 " style=\"width:345px;\" onchange=\"changeTxtTag('%u')\">",	// Changed!
                NumTag,NumTag,NumTag);
       fprintf (Gbl.F.Out,"<option value=\"\">&nbsp;</option>");
       mysql_data_seek (mysql_res, 0);
@@ -5914,7 +5914,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
          fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                            "<table style=\"margin:0 auto; border-spacing:4px;\">"
+                            "<table style=\"margin:0 auto; border-spacing:6px;\">"	// Changed!
                             "<tr>"
                             "<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
 

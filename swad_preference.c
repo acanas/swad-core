@@ -73,7 +73,7 @@ void Pre_EditPrefs (void)
    Lay_EndRoundFrame ();
 
    /***** Layout, theme, icon set, menu & side columns *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:15px;\">"	// Changed!
                       "<tr>"
                       "<td>");
    Lay_PutIconsToSelectLayout ();	// 1. Layout
@@ -225,12 +225,12 @@ void Pre_PutSelectorToSelectLanguage (void)
    Txt_Language_t Lan;
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      90,	// Lay_LAYOUT_DESKTOP
-      120,	// Lay_LAYOUT_MOBILE
+      135,	// Lay_LAYOUT_DESKTOP	// Changed!
+      180,	// Lay_LAYOUT_MOBILE	// Changed!
      };
 
    Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""
+   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""	// Changed!
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
@@ -352,7 +352,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " style=\"display:block;"
-	                 " width:32px; height:20px;\" />",
+	                 " width:48px; height:30px;\" />",	// Changed!
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],

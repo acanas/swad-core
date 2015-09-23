@@ -916,7 +916,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteLinkToAForum (Gbl.Forum.ForumType,true,1,IsLastItemInLevel);
 
    /* Write thread title */
-   fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:20px;\">");
+   fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:30px;\">");	// Changed!
    IsLastItemInLevel[2] = true;
    Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 
@@ -1079,7 +1079,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s CENTER_TOP\" style=\"width:24px;\">"
+	              "<td class=\"%s CENTER_TOP\" style=\"width:36px;\">"	// Changed!
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -1119,7 +1119,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    /***** Form to remove post *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_TOP\" style=\"width:18px;\">");
+	              "<td class=\"CENTER_TOP\" style=\"width:27px;\">");	// Changed!
    if (LastPst && Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)
       // Post can be removed if post is the last (without answers) and it's mine
      {
@@ -1179,13 +1179,13 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Write author or destinatary, and form to reply (in case of received post) *****/
    fprintf (Gbl.F.Out,"</td>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP\""
-	              " style=\"width:120px;\">"
-                      "<table class=\"CELLS_PAD_2\" style=\"width:120px;\">");
+	              " style=\"width:180px;\">"	// Changed!
+                      "<table class=\"CELLS_PAD_2\" style=\"width:180px;\">");	// Changed!
 
    /* Write author */
    fprintf (Gbl.F.Out,"<tr>");
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,100,16,"MSG_AUT",Enabled,NULL);
+   Msg_WriteMsgAuthor (&UsrDat,150,16,"MSG_AUT",Enabled,NULL);	// Changed!
    fprintf (Gbl.F.Out,"</tr>");
    if (Enabled)
      {
@@ -1312,7 +1312,7 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
 
    /***** Star table cell *****/
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_AUT CENTER_TOP\""
-	              " style=\"width:120px;\">");
+	              " style=\"width:180px;\">");	// Changed!
 
    /***** Get number of posts from database *****/
    switch (ForumType)
@@ -1751,7 +1751,7 @@ static void For_PutFormWhichForums (void)
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
-   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:15px 0;\">"	// Changed!
 	              "<ul class=\"LIST_CENTER\">");
 
    for (WhichForums = (For_WhichForums_t) 0;
@@ -1783,7 +1783,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Forums;
 
-   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
+   fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");	// Changed!
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
    Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
@@ -2122,7 +2122,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
 	                          The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<li style=\"height:20px;\">");
+   fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");	// Changed!
 
    /***** Indent forum title *****/
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
@@ -2491,10 +2491,10 @@ void For_ShowForumThrs (void)
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th class=\"LEFT_MIDDLE\""
-	                 " style=\"width:14px;\">"
+	                 " style=\"width:21px;\">"	// Changed!
 	                 "</th>"
                          "<th class=\"LEFT_MIDDLE\""
-                         " style=\"width:18px;\">"
+                         " style=\"width:27px;\">"	// Changed!
                          "</th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -3246,7 +3246,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP %s\" style=\"width:14px;\">",
+	                 "<td class=\"RIGHT_TOP %s\" style=\"width:21px;\">",	// Changed!
                BgColor);
       if (Thr.NumMyPosts)
         {
@@ -3269,7 +3269,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Put an icon with thread status *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\" style=\"width:24px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\" style=\"width:36px;\">"	// Changed!
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />",
@@ -3336,7 +3336,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            Msg_WriteMsgAuthor (&UsrDat,55,9,Style,Thr.Enabled[Order],BgColor);
+            Msg_WriteMsgAuthor (&UsrDat,82,9,Style,Thr.Enabled[Order],BgColor);	// Changed!
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",

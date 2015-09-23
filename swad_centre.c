@@ -432,7 +432,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);
+	 QR_LinkTo (300,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);	// Changed!
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -1046,7 +1046,7 @@ void Ctr_WriteSelectorOfCentre (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeDeg);
-   fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:210px;\"");	// Changed!
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -1164,7 +1164,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Centre logo */
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
-	                 " style=\"width:20px;\">",
+	                 " style=\"width:30px;\">",	// Changed!
                Ctr->FullName);
       Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
@@ -1175,7 +1175,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActChgCtrIns);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:50px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:75px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumIns = 0;
@@ -1199,7 +1199,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:50px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:75px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
@@ -1300,7 +1300,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:80px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:120px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1319,10 +1319,10 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+			 "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,120,10,"DAT",true,NULL);	// Changed!
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -1960,13 +1960,13 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"<td></td>");
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:30px;\">");	// Changed!
    Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthInsCod\" style=\"width:50px;\""
+                      "<select name=\"OthInsCod\" style=\"width:75px;\""	// Changed!
                       " disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
@@ -1978,7 +1978,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Place *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"PlcCod\" style=\"width:50px;\">"
+                      "<select name=\"PlcCod\" style=\"width:75px;\">"	// Changed!
                       "<option value=\"0\"");
    if (Ctr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2029,10 +2029,10 @@ static void Ctr_PutFormToCreateCentre (void)
             Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+		      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,120,10,"DAT",true,NULL);	// Changed!
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -2128,7 +2128,7 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:20px;\"></th>"
+                      "<th style=\"width:30px;\"></th>"	// Changed!
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

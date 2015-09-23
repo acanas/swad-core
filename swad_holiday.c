@@ -503,7 +503,7 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:50px;\""
+      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:75px;\""	// Changed!
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"-1\"",
 	       Gbl.FormId);
@@ -526,7 +526,7 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:50px;\""
+      fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:75px;\""	// Changed!
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">",
 	       Gbl.FormId);
       for (HolidayType = (Hld_HolidayType_t) 0;
@@ -937,7 +937,7 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Holiday place *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"PlcCod\" style=\"width:50px;\">"
+                      "<select name=\"PlcCod\" style=\"width:75px;\">"	// Changed!
                       "<option value=\"-1\"");
    if (Hld->PlcCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -955,7 +955,7 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday type *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"HldTyp\" style=\"width:50px;\">");
+                      "<select name=\"HldTyp\" style=\"width:75px;\">");	// Changed!
    for (HolidayType = (Hld_HolidayType_t) 0;
 	HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	HolidayType++)

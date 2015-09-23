@@ -99,7 +99,7 @@ void Plg_ListPlugins (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th style=\"width:32px;\">"
+                      "<th style=\"width:48px;\">"	// Changed!
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
@@ -119,7 +119,7 @@ void Plg_ListPlugins (void)
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:36px;\">"
+                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:54px;\">"	// Changed!
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
@@ -383,7 +383,7 @@ static void Plg_ListPluginsForEdition (void)
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:36px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:54px;\">"	// Changed!
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON32x32\" />"
@@ -929,7 +929,7 @@ static void Plg_PutHeadPlugins (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:28px;\"></th>"
+                      "<th style=\"width:42px;\"></th>"	// Changed!
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

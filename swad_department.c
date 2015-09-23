@@ -527,7 +527,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:50px;\""
+      fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:75px;\""	// Changed!
 	                 "onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"0\"",
 	       Gbl.FormId);
@@ -895,7 +895,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"OthInsCod\" style=\"width:50px;\">"
+                      "<select name=\"OthInsCod\" style=\"width:75px;\">"	// Changed!
                       "<option value=\"0\"");
    if (Dpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1106,7 +1106,7 @@ void Dpt_WriteSelectorDepartment (long InsCod)
    /* Get list of departments */
    Dpt_GetListDepartments (InsCod);
 
-   fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:300px;\">"
+   fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:450px;\">"	// Changed!
                       "<option value=\"-1\"");
    if (Gbl.Stat.DptCod == -1L)
       fprintf (Gbl.F.Out," selected=\"selected\"");

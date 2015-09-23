@@ -355,7 +355,7 @@ static void Ins_Configuration (bool PrintView)
 			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"ins",Gbl.CurrentIns.Ins.InsCod);
+	 QR_LinkTo (300,"ins",Gbl.CurrentIns.Ins.InsCod);	// Changed!
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -526,7 +526,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 
    /***** Icon *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\""
-	              " style=\"width:20px;\">"
+	              " style=\"width:30px;\">"	// Changed!
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
 	    BgColor,
 	    Ins->WWW,Ins->FullName);
@@ -602,7 +602,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th style=\"width:20px;\"></th>");
+                      "<th style=\"width:30px;\"></th>");	// Changed!
    for (Order = Ins_ORDER_BY_INSTITUTION;
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
@@ -989,7 +989,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCtr);
-   fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:210px;\"");	// Changed!
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -1103,7 +1103,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Institution logo */
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
-	                 " style=\"width:20px;\">",
+	                 " style=\"width:30px;\">",	// Changed!
                Ins->FullName);
       Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
                     16,NULL,true);
@@ -1115,7 +1115,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActChgInsCty);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:80px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:120px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
 			    "<option value=\"0\"",
 		  Gbl.FormId);
@@ -1216,7 +1216,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:80px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:120px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1235,10 +1235,10 @@ static void Ins_ListInstitutionsForEdition (void)
       /* Degree requester */
       UsrDat.UsrCod = Ins->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+			 "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,120,10,"DAT",true,NULL);	// Changed!
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -1737,14 +1737,14 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"<td></td>");
 
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:30px;\">");	// Changed!
    Log_DrawLogo (Sco_SCOPE_INS,-1L,"",16,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthCtyCod\""
-                      " style=\"width:80px;\" disabled=\"disabled\">"
+                      " style=\"width:120px;\" disabled=\"disabled\">"	// Changed!
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"
@@ -1788,10 +1788,10 @@ static void Ins_PutFormToCreateInstitution (void)
             Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+		      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,120,10,"DAT",true,NULL);	// Changed!
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -1825,7 +1825,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:20px;\"></th>"
+                      "<th style=\"width:30px;\"></th>"	// Changed!
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

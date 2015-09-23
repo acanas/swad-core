@@ -31,8 +31,8 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define Pho_PHOTO_REAL_WIDTH		150
-#define Pho_PHOTO_REAL_HEIGHT		200
+#define Pho_PHOTO_REAL_WIDTH		225
+#define Pho_PHOTO_REAL_HEIGHT		300
 
 /***** Zoom? *****/
 typedef enum

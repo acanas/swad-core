@@ -73,8 +73,8 @@
 #define Cfg_ABOUT_NAME				"Centro de Educaci&oacute;n Virtual de la Universidad Nacional de Asunci&oacute;n"
 #define Cfg_ABOUT_URL				"http://www.cevuna.una.py/"
 #define Cfg_ABOUT_LOGO				"cevuna.una.py100x32.gif"
-#define Cfg_ABOUT_LOGO_WIDTH			100
-#define Cfg_ABOUT_LOGO_HEIGHT			32
+#define Cfg_ABOUT_LOGO_WIDTH			150	// Changed!
+#define Cfg_ABOUT_LOGO_HEIGHT			48	// Changed!
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc

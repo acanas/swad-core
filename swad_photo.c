@@ -756,14 +756,14 @@ static void Pho_UpdatePhoto2 (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\" style=\"width:33%%;\">"
                          "<img src=\"%s/%s/%s/%s_paso%u.jpg\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:%upx; height:%upx;\" />"
+                         " style=\"width:%upx; height:%upx;\" />"	// Changed!
                          "<br />%s"
                          "</td>",
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
-               Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
+               Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,	// Changed!
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
@@ -2179,7 +2179,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
-   unsigned PhotoWidth,PhotoHeight;
+   unsigned PhotoWidth;
+   unsigned PhotoHeight;
    char PathRelAvgPhoto[PATH_MAX+1];
    char PhotoURL[PATH_MAX+1];
    char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
@@ -2213,8 +2214,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
                   Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
                   Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
                   Deg->DegCod,Usr_StringsSexDB[Sex]);
-         fprintf (Gbl.F.Out,"%s\" style=\"width:%upx; height:%upx;\"",
-                  PhotoURL,PhotoWidth,PhotoHeight);
+         fprintf (Gbl.F.Out,"%s\" style=\"width:%upx; height:%upx;\"",	// Changed!
+                  PhotoURL,PhotoWidth,PhotoHeight);	// Changed!
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
             sprintf (PhotoCaption,"%s<br />"
@@ -2233,12 +2234,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
         }
       else
          fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
-                            " style=\"width:%upx; height:%upx;\"",
+                            " style=\"width:%upx; height:%upx;\"",	// Changed!
                   Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
      }
    else
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
-	                 " style=\"width:%upx; height:%upx;\"",
+	                 " style=\"width:%upx; height:%upx;\"",	// Changed!
 	       Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
    fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" />",
             Deg->ShortName,
@@ -2260,15 +2261,15 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
 /*****************************************************************************/
 /******** Compute photo width and height for class photo of degrees **********/
 /*****************************************************************************/
-#define MIN_WIDTH_PHOTO 9
-#define MIN_HEIGHT_PHOTO 12
-#define MIN_PIXELS_PHOTO (MIN_WIDTH_PHOTO * MIN_HEIGHT_PHOTO)
-#define DEF_WIDTH_PHOTO 36
-#define DEF_HEIGHT_PHOTO 48
-#define DEF_PIXELS_PHOTO (DEF_WIDTH_PHOTO * DEF_HEIGHT_PHOTO)
-#define MAX_WIDTH_PHOTO 72
-#define MAX_HEIGHT_PHOTO 96
-#define MAX_PIXELS_PHOTO (MAX_WIDTH_PHOTO * MAX_HEIGHT_PHOTO)
+#define MIN_WIDTH_PHOTO		12	// Changed!
+#define MIN_HEIGHT_PHOTO	18	// Changed!
+#define MIN_PIXELS_PHOTO	(MIN_WIDTH_PHOTO * MIN_HEIGHT_PHOTO)
+#define DEF_WIDTH_PHOTO		54	// Changed!
+#define DEF_HEIGHT_PHOTO	72	// Changed!
+#define DEF_PIXELS_PHOTO	(DEF_WIDTH_PHOTO * DEF_HEIGHT_PHOTO)
+#define MAX_WIDTH_PHOTO		108	// Changed!
+#define MAX_HEIGHT_PHOTO	144	// Changed!
+#define MAX_PIXELS_PHOTO	(MAX_WIDTH_PHOTO * MAX_HEIGHT_PHOTO)
 
 static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight)
   {

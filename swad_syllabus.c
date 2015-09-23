@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 #define Syl_MAX_LENGTH_TEXT_ITEM	1024
 #define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_LENGTH_TEXT_ITEM*Str_MAX_CHARACTER)
 
-#define Syl_WIDTH_NUM_SYLLABUS 16
+#define Syl_WIDTH_NUM_SYLLABUS 24	// Changed!
 
 static const char *StyleSyllabus[1+Syl_MAX_LEVELS_SYLLABUS] =
   {
@@ -136,7 +136,7 @@ void Syl_PutFormWhichSyllabus (void)
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
    Act_FormStart (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:15px 0;\">"	// Changed!
                       "<ul class=\"LIST_CENTER\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
@@ -696,7 +696,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Le
 
       /***** Code of the item *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\""
-	                 " style=\"width:%dpx;\">",
+	                 " style=\"width:%dpx;\">",	// Changed!
                StyleSyllabus[Level],Gbl.RowEvenOdd,
                Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
@@ -840,7 +840,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *File
 		  LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td class=\"%s RIGHT_TOP\" style=\"width:%dpx;\">",
+      fprintf (FileHTMLTmp,"<td class=\"%s RIGHT_TOP\" style=\"width:%dpx;\">",	// Changed!
 	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level],
 	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
       if (LstItemsSyllabus.Lst[NumItem].Level == 1)
@@ -886,13 +886,13 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
 
    /***** Write the code of the item *****/
    if (NewItem)	// If the item is new (not stored in the file) ==> it has not a number
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"width:%dpx;\">"
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"width:%dpx;\">"	// Changed!
 	                 "</td>",
                Gbl.RowEvenOdd,Level * Syl_WIDTH_NUM_SYLLABUS);
    else
      {
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
-	                 " style=\"width:%dpx;\">",
+	                 " style=\"width:%dpx;\">",	// Changed!
                StyleSyllabus[Level],Gbl.RowEvenOdd,
                Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)

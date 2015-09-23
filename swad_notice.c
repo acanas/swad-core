@@ -51,8 +51,8 @@ extern struct Globals Gbl;
 
 const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
   {
-   100,	// Not_LIST_BRIEF_NOTICES
-   400,	// Not_LIST_FULL_NOTICES
+   150,	// Not_LIST_BRIEF_NOTICES	// Changed!
+   600,	// Not_LIST_FULL_NOTICES	// Changed!
   };
 
 const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
@@ -379,8 +379,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	{
 	 if (NumNotices)
 	   {
-	    sprintf (StrWidth,"%upx",
-		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 40);
+	    sprintf (StrWidth,"%upx",	// Changed!
+		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 60);	// Changed!
             Lay_StartRoundFrameTable (StrWidth,2,Txt_All_notices);
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"CENTER_TOP\">");
@@ -481,8 +481,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    struct UsrData UsrDat;
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\" style=\"width:%upx;\">",
-	    Not_ContainerWidth[TypeNoticesListing]);
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\" style=\"width:%upx;\">",	// Changed!
+	    Not_ContainerWidth[TypeNoticesListing]);	// Changed!
 
    /***** Write the date in the top part of the yellow note *****/
    /* Write symbol to indicate if notice is obsolete or active */

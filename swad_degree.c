@@ -416,7 +416,7 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"deg",Gbl.CurrentDeg.Deg.DegCod);
+	 QR_LinkTo (300,"deg",Gbl.CurrentDeg.Deg.DegCod);	// Changed!
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -481,7 +481,7 @@ void Deg_WriteMenuAllCourses (void)
 
    /***** Start of table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"margin:0 auto 10px auto;\">");
+	              " style=\"margin:0 auto 15px auto;\">");	// Changed!
 
    /***** Write a 1st selector
           with all the countries *****/
@@ -575,7 +575,7 @@ static void Deg_WriteSelectorOfDegree (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCrs);
-   fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:140px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:210px;\"");	// Changed!
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -1412,7 +1412,7 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree logo */
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\""
-	                 " style=\"width:20px;>",
+	                 " style=\"width:30px;>",	// Changed!
                Deg->FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
@@ -1423,7 +1423,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActChgDegCtr);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:50px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:75px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumCtr = 0;
@@ -1478,7 +1478,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
-	                    " style=\"width:50px;\""
+	                    " style=\"width:75px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumDegTyp = 0;
@@ -1616,7 +1616,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:80px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:120px;\""	// Changed!
 			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1635,10 +1635,10 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+			 "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,80,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,120,10,"DAT",true,NULL);	// Changed!
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -1809,7 +1809,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Centre *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"OthCtrCod\""
-                      " style=\"width:50px;\" disabled=\"disabled\">"
+                      " style=\"width:75px;\" disabled=\"disabled\">"	// Changed!
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"
@@ -1832,7 +1832,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthDegTypCod\" style=\"width:50px;\">");
+                      "<select name=\"OthDegTypCod\" style=\"width:75px;\">");	// Changed!
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.Degs.DegTypes.Num;
 	NumDegTyp++)
@@ -1899,10 +1899,10 @@ static void Deg_PutFormToCreateDegree (void)
             Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
 
    /***** Degree requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:100px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"	// Changed!
+		      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"	// Changed!
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,80,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,120,10,"DAT",true,NULL);	// Changed!
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -2047,7 +2047,7 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:20px;\"></th>"
+                      "<th style=\"width:30px;\"></th>"	// Changed!
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

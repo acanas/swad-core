@@ -348,7 +348,7 @@ static void Cty_Configuration (bool PrintView)
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_QR_code);
-	 QR_LinkTo (200,"cty",Gbl.CurrentCty.Cty.CtyCod);
+	 QR_LinkTo (300,"cty",Gbl.CurrentCty.Cty.CtyCod);	// Changed!
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -663,8 +663,8 @@ void Cty_ListCountries2 (void)
    /***** Div for Google Geochart *****/
    if (Gbl.CurrentAct == ActSeeCty)
      {
-      fprintf (Gbl.F.Out,"<div id='chart_div' style=\"width:500px;"
-	                 " margin:10px auto;\">"
+      fprintf (Gbl.F.Out,"<div id='chart_div' style=\"width:750px;"	// Changed!
+	                 " margin:15px auto;\">"	// Changed!
                          "</div>");
      }
 
@@ -970,7 +970,7 @@ void Cty_WriteSelectorOfCountry (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeIns);
-   fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:140px;\""
+   fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:210px;\""	// Changed!
                       " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.FormId);

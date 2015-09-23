@@ -278,7 +278,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"6\" class=\"CENTER_MIDDLE\""
-	              " style=\"padding-top:10px;\">");
+	              " style=\"padding-top:15px;\">");	// Changed!
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</td>"
@@ -1159,7 +1159,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Act_FormStart (ActChgMdtGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\""
-	                 " style=\"width:120px;\""
+	                 " style=\"width:180px;\""	// Changed!
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
@@ -1181,7 +1181,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Act_FormStart (ActChgMulGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\""
-	                 " style=\"width:120px;\""
+	                 " style=\"width:180px;\""	// Changed!
 	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
@@ -1204,7 +1204,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                          "<tr>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
+                         "<td class=\"LEFT_MIDDLE\" style=\"width:24px;\">"	// Changed!
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICON16x16\" />"
@@ -1966,7 +1966,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
-   fprintf (Gbl.F.Out,"\" style=\"width:12px;\">"
+   fprintf (Gbl.F.Out,"\" style=\"width:18px;\">"	// Changed!
 	              "<img src=\"%s/%s_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
@@ -2059,7 +2059,7 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"MandatoryEnrollment\""
-                      " style=\"width:120px;\">"
+                      " style=\"width:180px;\">"	// Changed!
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2076,7 +2076,7 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Is it possible to register in multiple groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"MultipleEnrollment\""
-                      " style=\"width:120px;\">"
+                      " style=\"width:180px;\">"	// Changed!
                       "<option value=\"N\"");
    if (!Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2099,7 +2099,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "</td>"
-	              "<td class=\"LEFT_BOTTOM\" style=\"width:16px;\">",
+	              "<td class=\"LEFT_BOTTOM\" style=\"width:24px;\">",	// Changed!
             Gbl.Prefs.IconsURL,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
         	                                      "time-off",
@@ -4175,7 +4175,7 @@ void Grp_ShowSelectorWhichGrps (void)
    extern const char *Txt_Show_WHICH_groups[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<div style=\"margin:10px 0;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:15px 0;\">"	// Changed!
                       "<ul class=\"LIST_CENTER\">");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;

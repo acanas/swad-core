@@ -327,7 +327,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    // char StrTimeGenerationInMicroseconds[64];
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 10px;\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 15px;\">");	// Changed!
    /*
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
      {
@@ -1319,7 +1319,7 @@ void Prf_ShowRankingFigure (const char *Query)
 	 fprintf (Gbl.F.Out,"<tr>");
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:40px;\">"
+	                    " style=\"height:60px;\">"	// Changed!
 	                    "%ld"
 	                    "</td>"
 			    "</tr>",
@@ -1464,7 +1464,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 fprintf (Gbl.F.Out,"<tr>");
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:40px;\">",
+	                    " style=\"height:60px;\">",	// Changed!
 	          Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (NumClicksPerDay);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -1493,11 +1493,11 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
-	              " style=\"height:40px;\">"
+	              " style=\"height:60px;\">"	// Changed!
 		      "#%u"
 		      "</td>"
                       "<td class=\"COLOR%u\""
-                      " style=\"width:28px; height:40px;\">",
+                      " style=\"width:42px; height:60px;\">",	// Changed!
 	    Gbl.RowEvenOdd,
 	    Rank,
             Gbl.RowEvenOdd);
@@ -1513,7 +1513,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
      }
 
    fprintf (Gbl.F.Out,"</td>"
-		      "<td class=\"COLOR%u\" style=\"height:40px;\">",
+		      "<td class=\"COLOR%u\" style=\"height:60px;\">",	// Changed!
             Gbl.RowEvenOdd);
 
    /***** Put form to go to public profile *****/

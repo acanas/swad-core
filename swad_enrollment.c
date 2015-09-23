@@ -875,7 +875,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block; margin:10px;\">"
+	              " style=\"display:inline-block; margin:15px;\">"	// Changed!
                       "<ul class=\"LIST_LEFT %s\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
 
@@ -2159,7 +2159,7 @@ void Enr_ShowEnrollmentRequests (void)
    /***** Selection of scope and roles *****/
    /* Start form */
    Act_FormStart (ActSeeSignUpReq);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:4px;\">");
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">");	// Changed!
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2505,7 +2505,7 @@ void Enr_ShowEnrollmentRequests (void)
 
             /***** User photo *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
-        	               " style=\"width:18px;\">");
+        	               " style=\"width:27px;\">");	// Changed!
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,

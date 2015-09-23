@@ -219,8 +219,8 @@ function zoom(imagen,urlPhoto,shortName) {
 		yPos += tempEl.offsetTop;
 		tempEl = tempEl.offsetParent;
 	}
-        xPos -= (150+12);
-        yPos -= ((200+12)/2);
+        xPos -= (225+18);
+        yPos -= ((300+18)/2);
         if (yPos < 0)
            yPos = 0;
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
@@ -231,8 +231,8 @@ function zoom(imagen,urlPhoto,shortName) {
 
 // Exit from zooming a user's photograph
 function noZoom(imagen) {
-	var xPos = -(150+12);
-	var yPos = -(200+12+88);
+	var xPos = -(225+18);
+	var yPos = -(300+18+132);
 	document.getElementById('zoomTxt').innerHTML = '';
 	document.getElementById('zoomImg').src='/icon/_.gif';
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
