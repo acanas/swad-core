@@ -617,6 +617,7 @@ static void Lay_WritePageTopHeading (void)
      };
 
    fprintf (Gbl.F.Out,"<tr style=\"background-image:url('%s/head_row1_1x48.gif');"
+	              " background-size:1px 72px;"
 	              " background-repeat:repeat-x;\">",
             Gbl.Prefs.PathTheme);
 
@@ -684,6 +685,7 @@ static void Lay_WritePageTopHeading (void)
    /***** 2nd. row *****/
    fprintf (Gbl.F.Out,"<tr style=\"height:96px;"	// Changed!
 	              " background-image:url('%s/head_row2_1x64.gif');"
+	              " background-size:1px 96px;"
 	              " background-repeat:repeat-x;\">",
             Gbl.Prefs.PathTheme);
 
@@ -723,6 +725,7 @@ static void Lay_WritePageTopHeading (void)
          fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\""
                             " style=\"height:48px;"	// Changed!
                             " background-image:url('%s/head_row2_1x64.gif');"
+                            " background-size:1px 96px;"
                             " background-repeat:repeat-x;\">",
                   Gbl.Prefs.PathTheme);
          Deg_WriteCtyInsCtrDeg ();
@@ -744,6 +747,7 @@ static void Lay_WritePageTopHeading (void)
          if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
             fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:192px;"	// Changed!
                                " background-image:url('%s/head_base_background_1x56.gif');"
+                               " background-size:1px 84px;"
                                " background-repeat:repeat-x;\">"
                                "</td>",
             Gbl.Prefs.PathTheme);
@@ -794,7 +798,8 @@ static void Lay_WriteTitleAction (void)
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
-	              " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
+	              " style=\"background-image:url('%s/%s/%s64x64.gif');"
+	              " background-size:96px 96px;\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	    Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].Icon);
 
@@ -880,6 +885,7 @@ static void Lay_ShowRightColumn (void)
                       "<tr>"
                       "<td class=\"RIGHT_TOP\""
                       " style=\"background-image:url('%s/head_base_background_1x56.gif');"
+                      " background-size:1px 84px;"
                       " background-repeat:repeat-x;\">"
                       "<table style=\"width:100%%; padding-top:84px;"	// Changed!
                       " border-spacing:6px;\">",	// Changed!
@@ -1310,7 +1316,8 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
    if (Message)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	                 "<div class=\"ALERT\""
-	                 " style=\"background-image:url('%s/%s16x16.gif');\">"
+	                 " style=\"background-image:url('%s/%s16x16.gif');"
+	                 " background-size:24px 24px;\">"
                          "%s"
 			 "</div>"
 			 "</div>",
@@ -1576,7 +1583,8 @@ void Lay_PutIconsToSelectLayout (void)
       Act_FormStart (ActChgLay);
       Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
+	                 " style=\"margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Lay_LayoutIcons[Layout],
                Txt_LAYOUT_NAMES[Layout],

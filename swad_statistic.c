@@ -2883,6 +2883,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_TOP\""
 	                 " style=\"width:%upx;"	// Changed!
 	                 " background-image:url('%s/ejey24x30.gif');"
+	                 " background-size:36px 45px;"
 	                 " background-repeat:repeat;\">"
 	                 "00h"
 	                 "</td>",
@@ -2892,6 +2893,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
 	                 " style=\"width:%upx;"	// Changed!
 	                 " background-image:url('%s/ejey24x30.gif');"
+	                 " background-size:36px 45px;"
 	                 " background-repeat:repeat;\">"
 	                 "24h"
 	                 "</td>",
@@ -2901,6 +2903,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
       fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
 	                 " style=\"width:%upx;"	// Changed!
 	                 " background-image:url('%s/ejey24x60.gif');"
+	                 " background-size:36px 90px;"
 	                 " background-repeat:repeat;\">"
 	                 "%02uh"
 	                 "</td>",
@@ -2910,6 +2913,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
 	              " style=\"width:%upx; height:1px;"	// Changed!
 	              " background-image:url('%s/malla%c48x1.gif');"
+	              " background-size:72px 1px;"
 	              " background-repeat:repeat;\">",
 	    NUM_DIVISIONS_X*2,WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
 	    (Minute % 60) == 0 ? 'v' :
