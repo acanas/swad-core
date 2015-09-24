@@ -395,14 +395,17 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 void Sta_AskSeeCrsAccesses (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Statistics_of_access;
+   extern const char *Txt_Users;
+   extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
-   extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
+   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_results_per_page;
    extern const char *Txt_Show_visits;
    extern const char *Txt_No_teachers_or_students_found;
    static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
-   Sta_ClicksStatType_t ClicksStatType;
+   Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned long i;
 
    /***** Get and update type of list, number of columns in class photo and preference about view photos *****/
@@ -432,20 +435,22 @@ void Sta_AskSeeCrsAccesses (void)
          Par_PutHiddenParamLong ("FirstRow",0);
          Par_PutHiddenParamLong ("LastRow",0);
 
-         /***** Draw two class photographs with the users: one for teachers of the course and another one for students *****/
-         /* Start the table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">"
-                            "<tr>"
-                            "<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
-         Lay_StartRoundFrameTable (NULL,0,NULL);
+         /***** Start frame *****/
+         Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_access);
 
-         /* Put list of users to select some users */
+         /***** Put list of users to select some of them *****/
+         fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_TOP\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s LEFT_TOP\">"
+                            "<table>",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
+                  The_ClassForm[Gbl.Prefs.Theme]);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-
-         /* End the table */
-         Lay_EndRoundFrameTable ();
-         fprintf (Gbl.F.Out,"</td>"
+         fprintf (Gbl.F.Out,"</table>"
+                            "</td>"
                             "</tr>");
 
          /***** Initial and final dates of the search *****/
@@ -454,49 +459,57 @@ void Sta_AskSeeCrsAccesses (void)
          /***** Selection of action *****/
          Sta_WriteSelectorAction ();
 
-         /***** Selection of count type (number of pages generated, accesses per user, etc.) *****/
+         /***** Option a) Listing of clicks distributed by some metric *****/
+         fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_TOP\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"%s LEFT_TOP\">",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
+                  The_ClassForm[Gbl.Prefs.Theme]);
+
+         if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
+              Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
+              Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+            Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
+
+         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GroupedOrDetailed\" value=\"%u\"",
+                  (unsigned) Sta_CLICKS_GROUPED);
+         if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+            fprintf (Gbl.F.Out," checked=\"checked\"");
+         fprintf (Gbl.F.Out," onclick=\"disableDetailedClicks()\" />");
+
+         /* Selection of count type (number of pages generated, accesses per user, etc.) */
          Sta_WriteSelectorCountType ();
 
-         /***** Type of statistic *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s RIGHT_TOP\">"
-                            "%s:"
-                            "</td>"
-                            "<td class=\"DAT LEFT_TOP\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
-         if ((Gbl.Stat.ClicksStatType < Sta_ACC_CRS_PER_USR ||
-              Gbl.Stat.ClicksStatType > Sta_ACC_CRS_PER_ACTION) &&
-              Gbl.Stat.ClicksStatType != Sta_ACC_CRS_LISTING)
-            Gbl.Stat.ClicksStatType = Sta_ACC_CRS_PER_USR;
-         for (ClicksStatType = Sta_ACC_CRS_PER_USR;
-              ClicksStatType <= Sta_ACC_CRS_PER_ACTION;
-              ClicksStatType++)
+         fprintf (Gbl.F.Out," %s <select id=\"GroupedBy\" name=\"GroupedBy\">",
+                  Txt_distributed_by);
+         for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
+              ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
+              ClicksGroupedBy++)
            {
-            fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ClickStatType\" value=\"%u\"",
-                     (unsigned) ClicksStatType);
-            if (ClicksStatType == Gbl.Stat.ClicksStatType)
-               fprintf (Gbl.F.Out," checked=\"checked\"");
-            fprintf (Gbl.F.Out," onclick=\"disableRowsPage()\" />%s<br />",
-                     Txt_STAT_CLICK_STAT_TYPES[ClicksStatType]);
+            fprintf (Gbl.F.Out,"<option value=\"%u\"",
+                     (unsigned) ClicksGroupedBy);
+            if (ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy)
+	       fprintf (Gbl.F.Out," selected=\"selected\"");
+            fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</select>"
+                            "<br />");
 
-         /* Listing of clicks to this course  */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
-                            "<input type=\"radio\" name=\"ClickStatType\" value=\"%u\"",
-                  The_ClassForm[Gbl.Prefs.Theme],(unsigned) Sta_ACC_CRS_LISTING);
-         if (Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING)
+         /***** Option b) Listing of detailed clicks to this course *****/
+         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GroupedOrDetailed\" value=\"%u\"",
+                  (unsigned) Sta_CLICKS_DETAILED);
+         if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"enableRowsPage()\" />%s",
-                  Txt_STAT_CLICK_STAT_TYPES[Sta_ACC_CRS_LISTING]);
+         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />%s",
+                  Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
 
          /* Number of rows per page */
          // To use getElementById in Firefox, it's necessary to have the id attribute
          fprintf (Gbl.F.Out," (%s: <select id=\"RowsPage\" name=\"RowsPage\"",
                   Txt_results_per_page);
-         if (Gbl.Stat.ClicksStatType != Sta_ACC_CRS_LISTING)
+         if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
          fprintf (Gbl.F.Out,">");
          for (i = 0;
@@ -510,11 +523,10 @@ void Sta_AskSeeCrsAccesses (void)
            }
          fprintf (Gbl.F.Out,"</select>)"
                             "</td>"
-                            "</tr>"
-                            "</table>");
+                            "</tr>");
 
-         /***** Submit button *****/
-         Lay_PutConfirmButton (Txt_Show_visits);
+	 /***** End frame *****/
+         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_visits);
 
          /***** End form *****/
          Act_FormEnd ();
@@ -541,14 +553,16 @@ void Sta_AskSeeCrsAccesses (void)
 void Sta_AskSeeGblAccesses (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Statistics_of_access;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
    extern const char *Txt_Scope;
+   extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
-   extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
+   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_Show_visits;
    Sta_Role_t RoleStat;
-   Sta_ClicksStatType_t ClicksStatType;
+   Sta_ClicksGroupedBy_t ClicksGroupedBy;
 
    /***** Put form to go to test edition and configuration *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
@@ -563,7 +577,9 @@ void Sta_AskSeeGblAccesses (void)
 
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_access);
 
    /***** Start and end dates for the search *****/
    Dat_WriteFormIniEndDates ();
@@ -612,35 +628,39 @@ void Sta_AskSeeGblAccesses (void)
 	              "</tr>");
 
    /***** Count type for the statistic *****/
-   Sta_WriteSelectorCountType ();
-
-   /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"DAT LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
-   if (Gbl.Stat.ClicksStatType < Sta_ACC_GBL_PER_DAYS ||
-       Gbl.Stat.ClicksStatType > Sta_ACC_GBL_PER_COURSE)
-      Gbl.Stat.ClicksStatType = Sta_ACC_GBL_PER_DAYS;
-   for (ClicksStatType = Sta_ACC_GBL_PER_DAYS;
-	ClicksStatType <= Sta_ACC_GBL_PER_COURSE;
-	ClicksStatType++)
-     {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ClickStatType\" value=\"%u\"",
-               (unsigned) ClicksStatType);
-      if (ClicksStatType == Gbl.Stat.ClicksStatType)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s<br />",
-               Txt_STAT_CLICK_STAT_TYPES[ClicksStatType]);
-     }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-                      "</table>");
+                      "<td class=\"%s LEFT_TOP\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
+            The_ClassForm[Gbl.Prefs.Theme]);
+   Sta_WriteSelectorCountType ();
 
-   /***** Submit button *****/
-   Lay_PutConfirmButton (Txt_Show_visits);
+   /***** Type of statistic *****/
+   fprintf (Gbl.F.Out," %s ",Txt_distributed_by);
+
+   if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAYS ||
+       Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
+      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAYS;
+
+   fprintf (Gbl.F.Out,"<select name=\"GroupedBy\">");
+   for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAYS;
+	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
+	ClicksGroupedBy++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",
+	       (unsigned) ClicksGroupedBy);
+      if (ClicksGroupedBy == Gbl.Stat.ClicksGroupedBy)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+		      "</td>"
+		      "</tr>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_visits);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -652,21 +672,13 @@ void Sta_AskSeeGblAccesses (void)
 
 static void Sta_WriteSelectorCountType (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Show;
-   extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    Sta_CountType_t StatCountType;
 
    /**** Count type *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<select name=\"CountType\" id=\"CountType\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
+   fprintf (Gbl.F.Out,"<select id=\"CountType\" name=\"CountType\">");
    for (StatCountType = (Sta_CountType_t) 0;
-	StatCountType < Sta_NUM_STAT_COUNT_TYPES;
+	StatCountType < Sta_NUM_COUNT_TYPES;
 	StatCountType++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) StatCountType);
@@ -674,9 +686,7 @@ static void Sta_WriteSelectorCountType (void)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</select>");
   }
 
 /*****************************************************************************/
@@ -782,9 +792,9 @@ static bool Sta_SeeAccesses (void)
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
    extern const char *Txt_Action;
    extern const char *Txt_The_graph_shows_the_NUMBER;
-   extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_distributed_by;
-   extern const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS];
+   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
@@ -804,6 +814,7 @@ static bool Sta_SeeAccesses (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    const char *LogTable;
+   Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    struct UsrData UsrDat;
    unsigned NumUsr = 0;
    const char *Ptr;
@@ -824,20 +835,30 @@ static bool Sta_SeeAccesses (void)
 	                                                                                                      "log";
 
    /***** Get the type of stat of clicks ******/
-   Par_GetParToText ("ClickStatType",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Type of query of accesses is missing.");
-   if (UnsignedNum >= Sta_NUM_TYPES_CLICK_STATS)
-      Lay_ShowErrorAndExit ("Type of query of accesses is missing.");
-   Gbl.Stat.ClicksStatType = (Sta_ClicksStatType_t) UnsignedNum;
+   Par_GetParToText ("GroupedOrDetailed",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Sta_NUM_CLICKS_DETAILED_OR_GROUPED)
+         DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t) UnsignedNum;
+
+   if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
+      Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
+   else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
+     {
+      Par_GetParToText ("GroupedBy",UnsignedStr,10);
+      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
+	 Lay_ShowErrorAndExit ("Type of grouping is missing.");
+      if (UnsignedNum >= Sta_NUM_CLICKS_GROUPED_BY)
+	 Lay_ShowErrorAndExit ("Type of grouping is missing.");
+      Gbl.Stat.ClicksGroupedBy = (Sta_ClicksGroupedBy_t) UnsignedNum;
+     }
 
    /***** Get the type of count of clicks *****/
-   if (Gbl.Stat.ClicksStatType != Sta_ACC_CRS_LISTING)
+   if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
      {
       Par_GetParToText ("CountType",UnsignedStr,10);
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
          Lay_ShowErrorAndExit ("Type of count is missing.");
-      if (UnsignedNum >= Sta_NUM_STAT_COUNT_TYPES)
+      if (UnsignedNum >= Sta_NUM_COUNT_TYPES)
          Lay_ShowErrorAndExit ("Type of count is missing.");
       Gbl.Stat.CountType = (Sta_CountType_t) UnsignedNum;
      }
@@ -850,20 +871,20 @@ static bool Sta_SeeAccesses (void)
       Lay_ShowErrorAndExit ("Action is missing.");
    Gbl.Stat.NumAction = (Act_Action_t) UnsignedNum;
 
-   switch (Gbl.Stat.ClicksStatType)
+   switch (Gbl.Stat.ClicksGroupedBy)
      {
-      case Sta_ACC_GBL_PER_DAYS:
-      case Sta_ACC_GBL_PER_DAYS_AND_HOUR:
-      case Sta_ACC_GBL_PER_WEEKS:
-      case Sta_ACC_GBL_PER_MONTHS:
-      case Sta_ACC_GBL_PER_HOUR:
-      case Sta_ACC_GBL_PER_MINUTE:
-      case Sta_ACC_GBL_PER_ACTION:
-      case Sta_ACC_GBL_PER_PLUGIN:
-      case Sta_ACC_GBL_PER_Svc_FUNCTION:
-      case Sta_ACC_GBL_PER_BANNER:
-      case Sta_ACC_GBL_PER_DEGREE:
-      case Sta_ACC_GBL_PER_COURSE:
+      case Sta_CLICKS_GBL_PER_DAYS:
+      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_WEEKS:
+      case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_GBL_PER_HOUR:
+      case Sta_CLICKS_GBL_PER_MINUTE:
+      case Sta_CLICKS_GBL_PER_ACTION:
+      case Sta_CLICKS_GBL_PER_PLUGIN:
+      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
+      case Sta_CLICKS_GBL_PER_BANNER:
+      case Sta_CLICKS_GBL_PER_DEGREE:
+      case Sta_CLICKS_GBL_PER_COURSE:
          StatsGlobalOrCourse = STAT_GLOBAL;
 	 break;
       default:
@@ -873,7 +894,7 @@ static bool Sta_SeeAccesses (void)
 
    if (Gbl.CurrentAct == ActSeeAccCrs)
      {
-      if (Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING)
+      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	{
 	 /****** Get the number of the first row to show ******/
 	 Par_GetParToText ("FirstRow",UnsignedStr,10);
@@ -966,71 +987,71 @@ static bool Sta_SeeAccesses (void)
 
    /***** Select clicks from the table of log *****/
    /* Start the query */
-   switch (Gbl.Stat.ClicksStatType)
+   switch (Gbl.Stat.ClicksGroupedBy)
      {
-      case Sta_ACC_CRS_LISTING:
+      case Sta_CLICKS_CRS_DETAILED_LIST:
    	 sprintf (Query,"SELECT SQL_NO_CACHE LogCod,UsrCod,Role,DATE_FORMAT(ClickTime,'%%Y%%m%%d%%H%%i%%S') AS F,ActCod FROM %s",
                   LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_USR:
+      case Sta_CLICKS_CRS_PER_USR:
 	 sprintf (Query,"SELECT SQL_NO_CACHE UsrCod,%s AS Num FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_DAYS:
-      case Sta_ACC_GBL_PER_DAYS:
+      case Sta_CLICKS_CRS_PER_DAYS:
+      case Sta_CLICKS_GBL_PER_DAYS:
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%Y%%m%%d') AS Day,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_DAYS_AND_HOUR:
-      case Sta_ACC_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%Y%%m%%d') AS Day,DATE_FORMAT(ClickTime,'%%H') AS Hour,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_WEEKS:
-      case Sta_ACC_GBL_PER_WEEKS:
+      case Sta_CLICKS_CRS_PER_WEEKS:
+      case Sta_CLICKS_GBL_PER_WEEKS:
 	 /* With %v the weeks always are counted from monday to sunday.
 	    01/01/2006 was sunday => it's counted in the week 52 of 2005, that goes from 26/12/2005 (monday) to 01/01/2006 (sunday).
 	    The week 1 of 2006 goes from 02/01/2006 (monday) to 08/01/2006 (sunday) */
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%x%%v') AS Week,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_MONTHS:
-      case Sta_ACC_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_MONTHS:
+      case Sta_CLICKS_GBL_PER_MONTHS:
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%Y%%m') AS Month,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_HOUR:
-      case Sta_ACC_GBL_PER_HOUR:
+      case Sta_CLICKS_CRS_PER_HOUR:
+      case Sta_CLICKS_GBL_PER_HOUR:
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%H') AS Hour,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_MINUTE:
-      case Sta_ACC_GBL_PER_MINUTE:
+      case Sta_CLICKS_CRS_PER_MINUTE:
+      case Sta_CLICKS_GBL_PER_MINUTE:
          sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%H%%i') AS Minute,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_CRS_PER_ACTION:
-      case Sta_ACC_GBL_PER_ACTION:
+      case Sta_CLICKS_CRS_PER_ACTION:
+      case Sta_CLICKS_GBL_PER_ACTION:
          sprintf (Query,"SELECT SQL_NO_CACHE ActCod,%s AS Num FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_GBL_PER_PLUGIN:
+      case Sta_CLICKS_GBL_PER_PLUGIN:
          sprintf (Query,"SELECT SQL_NO_CACHE log_ws.PlgCod,%s AS Num FROM %s,log_ws",
                   StrQueryCountType,LogTable);
          break;
-      case Sta_ACC_GBL_PER_Svc_FUNCTION:
+      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
          sprintf (Query,"SELECT SQL_NO_CACHE log_ws.FunCod,%s AS Num FROM %s,log_ws",
                   StrQueryCountType,LogTable);
          break;
-      case Sta_ACC_GBL_PER_BANNER:
+      case Sta_CLICKS_GBL_PER_BANNER:
          sprintf (Query,"SELECT SQL_NO_CACHE log_banners.BanCod,%s AS Num FROM %s,log_banners",
                   StrQueryCountType,LogTable);
          break;
-      case Sta_ACC_GBL_PER_DEGREE:
+      case Sta_CLICKS_GBL_PER_DEGREE:
          sprintf (Query,"SELECT SQL_NO_CACHE DegCod,%s AS Num FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
-      case Sta_ACC_GBL_PER_COURSE:
+      case Sta_CLICKS_GBL_PER_COURSE:
 	 sprintf (Query,"SELECT SQL_NO_CACHE CrsCod,%s AS Num FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
@@ -1147,15 +1168,15 @@ static bool Sta_SeeAccesses (void)
 	   }
          strcat (Query,StrRole);
 
-         switch (Gbl.Stat.ClicksStatType)
+         switch (Gbl.Stat.ClicksGroupedBy)
            {
-            case Sta_ACC_GBL_PER_PLUGIN:
-            case Sta_ACC_GBL_PER_Svc_FUNCTION:
+            case Sta_CLICKS_GBL_PER_PLUGIN:
+            case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
                sprintf (QueryAux," AND %s.LogCod=log_ws.LogCod",
                         LogTable);
                strcat (Query,QueryAux);
                break;
-            case Sta_ACC_GBL_PER_BANNER:
+            case Sta_CLICKS_GBL_PER_BANNER:
                sprintf (QueryAux," AND %s.LogCod=log_banners.LogCod",
                         LogTable);
                strcat (Query,QueryAux);
@@ -1201,58 +1222,58 @@ static bool Sta_SeeAccesses (void)
      }
 
    /* End the query */
-   switch (Gbl.Stat.ClicksStatType)
+   switch (Gbl.Stat.ClicksGroupedBy)
      {
-      case Sta_ACC_CRS_LISTING:
+      case Sta_CLICKS_CRS_DETAILED_LIST:
 	 strcat (Query," ORDER BY F");
 	 break;
-      case Sta_ACC_CRS_PER_USR:
+      case Sta_CLICKS_CRS_PER_USR:
 	 sprintf (QueryAux," GROUP BY %s.UsrCod ORDER BY Num DESC",LogTable);
          strcat (Query,QueryAux);
 	 break;
-     case Sta_ACC_CRS_PER_DAYS:
-     case Sta_ACC_GBL_PER_DAYS:
+     case Sta_CLICKS_CRS_PER_DAYS:
+     case Sta_CLICKS_GBL_PER_DAYS:
 	 strcat (Query," GROUP BY Day DESC");
 	 break;
-      case Sta_ACC_CRS_PER_DAYS_AND_HOUR:
-      case Sta_ACC_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
 	 strcat (Query," GROUP BY Day DESC,Hour");
 	 break;
-     case Sta_ACC_CRS_PER_WEEKS:
-     case Sta_ACC_GBL_PER_WEEKS:
+     case Sta_CLICKS_CRS_PER_WEEKS:
+     case Sta_CLICKS_GBL_PER_WEEKS:
 	 strcat (Query," GROUP BY Week DESC");
 	 break;
-     case Sta_ACC_CRS_PER_MONTHS:
-     case Sta_ACC_GBL_PER_MONTHS:
+     case Sta_CLICKS_CRS_PER_MONTHS:
+     case Sta_CLICKS_GBL_PER_MONTHS:
 	 strcat (Query," GROUP BY Month DESC");
 	 break;
-      case Sta_ACC_CRS_PER_HOUR:
-      case Sta_ACC_GBL_PER_HOUR:
+      case Sta_CLICKS_CRS_PER_HOUR:
+      case Sta_CLICKS_GBL_PER_HOUR:
 	 strcat (Query," GROUP BY Hour");
 	 break;
-      case Sta_ACC_CRS_PER_MINUTE:
-      case Sta_ACC_GBL_PER_MINUTE:
+      case Sta_CLICKS_CRS_PER_MINUTE:
+      case Sta_CLICKS_GBL_PER_MINUTE:
 	 strcat (Query," GROUP BY Minute");
 	 break;
-      case Sta_ACC_CRS_PER_ACTION:
-      case Sta_ACC_GBL_PER_ACTION:
+      case Sta_CLICKS_CRS_PER_ACTION:
+      case Sta_CLICKS_GBL_PER_ACTION:
 	 sprintf (QueryAux," GROUP BY %s.ActCod ORDER BY Num DESC",LogTable);
          strcat (Query,QueryAux);
 	 break;
-      case Sta_ACC_GBL_PER_PLUGIN:
+      case Sta_CLICKS_GBL_PER_PLUGIN:
          strcat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC");
          break;
-      case Sta_ACC_GBL_PER_Svc_FUNCTION:
+      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
          strcat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC");
          break;
-      case Sta_ACC_GBL_PER_BANNER:
+      case Sta_CLICKS_GBL_PER_BANNER:
          strcat (Query," GROUP BY log_banners.BanCod ORDER BY Num DESC");
          break;
-      case Sta_ACC_GBL_PER_DEGREE:
+      case Sta_CLICKS_GBL_PER_DEGREE:
 	 sprintf (QueryAux," GROUP BY %s.DegCod ORDER BY Num DESC",LogTable);
          strcat (Query,QueryAux);
 	 break;
-      case Sta_ACC_GBL_PER_COURSE:
+      case Sta_CLICKS_GBL_PER_COURSE:
 	 sprintf (QueryAux," GROUP BY %s.CrsCod ORDER BY Num DESC",LogTable);
          strcat (Query,QueryAux);
 	 break;
@@ -1270,7 +1291,7 @@ static bool Sta_SeeAccesses (void)
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
    else
      {
-      if (Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING)
+      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
         {
          sprintf (Gbl.Message,Txt_List_of_detailed_clicks_in_the_course_X,
                   Gbl.CurrentCrs.Crs.FullName);
@@ -1279,16 +1300,16 @@ static bool Sta_SeeAccesses (void)
         }
       else
         {
-         switch (Gbl.Stat.ClicksStatType)
+         switch (Gbl.Stat.ClicksGroupedBy)
            {
-            case Sta_ACC_CRS_PER_USR:
-            case Sta_ACC_CRS_PER_DAYS:
-            case Sta_ACC_CRS_PER_DAYS_AND_HOUR:
-            case Sta_ACC_CRS_PER_WEEKS:
-            case Sta_ACC_CRS_PER_MONTHS:
-            case Sta_ACC_CRS_PER_HOUR:
-            case Sta_ACC_CRS_PER_MINUTE:
-            case Sta_ACC_CRS_PER_ACTION:
+            case Sta_CLICKS_CRS_PER_USR:
+            case Sta_CLICKS_CRS_PER_DAYS:
+            case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
+            case Sta_CLICKS_CRS_PER_WEEKS:
+            case Sta_CLICKS_CRS_PER_MONTHS:
+            case Sta_CLICKS_CRS_PER_HOUR:
+            case Sta_CLICKS_CRS_PER_MINUTE:
+            case Sta_CLICKS_CRS_PER_ACTION:
                sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_course_X,
                         Gbl.CurrentCrs.Crs.FullName);
                Lay_WriteTitle (Gbl.Message);
@@ -1343,64 +1364,64 @@ static bool Sta_SeeAccesses (void)
                   Txt_The_graph_shows_the_NUMBER,
                   Txt_STAT_TYPE_COUNT_SMALL[Gbl.Stat.CountType],
                   Txt_distributed_by,
-                  Txt_STAT_CLICK_STAT_TYPES[Gbl.Stat.ClicksStatType]);
+                  Txt_STAT_CLICKS_GROUPED_BY[Gbl.Stat.ClicksGroupedBy]);
          Lay_WriteTitle (Gbl.Message);
   	}
 
       /***** Put the table with the clicks *****/
       /* Write start of table frame */
-      Lay_StartRoundFrameTable ((Gbl.Stat.ClicksStatType == Sta_ACC_CRS_LISTING) ? "95%" :
-	                                                                           NULL,
+      Lay_StartRoundFrameTable ((Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? "95%" :
+	                                                                                    NULL,
 	                        0,NULL);
-      switch (Gbl.Stat.ClicksStatType)
+      switch (Gbl.Stat.ClicksGroupedBy)
 	{
-	 case Sta_ACC_CRS_LISTING:
+	 case Sta_CLICKS_CRS_DETAILED_LIST:
 	    Sta_ShowDetailedAccessesList (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_USR:
+	 case Sta_CLICKS_CRS_PER_USR:
 	    Sta_ShowNumAccessesPerUsr (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_DAYS:
-	 case Sta_ACC_GBL_PER_DAYS:
+	 case Sta_CLICKS_CRS_PER_DAYS:
+	 case Sta_CLICKS_GBL_PER_DAYS:
 	    Sta_ShowNumAccessesPerDays (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_DAYS_AND_HOUR:
-	 case Sta_ACC_GBL_PER_DAYS_AND_HOUR:
+	 case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
+	 case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
 	    Sta_ShowDistrAccessesPerDaysAndHour (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_WEEKS:
-	 case Sta_ACC_GBL_PER_WEEKS:
+	 case Sta_CLICKS_CRS_PER_WEEKS:
+	 case Sta_CLICKS_GBL_PER_WEEKS:
 	    Sta_ShowNumAccessesPerWeeks (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_MONTHS:
-	 case Sta_ACC_GBL_PER_MONTHS:
+	 case Sta_CLICKS_CRS_PER_MONTHS:
+	 case Sta_CLICKS_GBL_PER_MONTHS:
 	    Sta_ShowNumAccessesPerMonths (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_HOUR:
-	 case Sta_ACC_GBL_PER_HOUR:
+	 case Sta_CLICKS_CRS_PER_HOUR:
+	 case Sta_CLICKS_GBL_PER_HOUR:
 	    Sta_ShowNumAccessesPerHour (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_MINUTE:
-	 case Sta_ACC_GBL_PER_MINUTE:
+	 case Sta_CLICKS_CRS_PER_MINUTE:
+	 case Sta_CLICKS_GBL_PER_MINUTE:
 	    Sta_ShowAverageAccessesPerMinute (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_CRS_PER_ACTION:
-	 case Sta_ACC_GBL_PER_ACTION:
+	 case Sta_CLICKS_CRS_PER_ACTION:
+	 case Sta_CLICKS_GBL_PER_ACTION:
 	    Sta_ShowNumAccessesPerAction (NumRows,mysql_res);
 	    break;
-         case Sta_ACC_GBL_PER_PLUGIN:
+         case Sta_CLICKS_GBL_PER_PLUGIN:
             Sta_ShowNumAccessesPerPlugin (NumRows,mysql_res);
             break;
-         case Sta_ACC_GBL_PER_Svc_FUNCTION:
+         case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
             Sta_ShowNumAccessesPerWSFunction (NumRows,mysql_res);
             break;
-         case Sta_ACC_GBL_PER_BANNER:
+         case Sta_CLICKS_GBL_PER_BANNER:
             Sta_ShowNumAccessesPerBanner (NumRows,mysql_res);
             break;
-         case Sta_ACC_GBL_PER_DEGREE:
+         case Sta_CLICKS_GBL_PER_DEGREE:
 	    Sta_ShowNumAccessesPerDegree (NumRows,mysql_res);
 	    break;
-	 case Sta_ACC_GBL_PER_COURSE:
+	 case Sta_CLICKS_GBL_PER_COURSE:
 	    Sta_ShowNumAccessesPerCourse (NumRows,mysql_res);
 	    break;
 	}
@@ -1500,7 +1521,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      {
       Act_FormStart (ActSeeAccCrs);
       Sta_WriteParamsDatesSeeAccesses ();
-      Par_PutHiddenParamUnsigned ("ClickStatType",(unsigned) Sta_ACC_CRS_LISTING);
+      Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
       Par_PutHiddenParamLong ("FirstRow",FirstRow-Gbl.Stat.RowsPerPage);
       Par_PutHiddenParamLong ("LastRow",FirstRow-1);
@@ -1535,7 +1556,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      {
       Act_FormStart (ActSeeAccCrs);
       Sta_WriteParamsDatesSeeAccesses ();
-      Par_PutHiddenParamUnsigned ("ClickStatType",(unsigned) Sta_ACC_CRS_LISTING);
+      Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
       Par_PutHiddenParamUnsigned ("FirstRow",(unsigned) (LastRow+1));
       Par_PutHiddenParamUnsigned ("LastRow",(unsigned) (LastRow+Gbl.Stat.RowsPerPage));
@@ -1708,7 +1729,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
    extern const char *Txt_ID;
    extern const char *Txt_Name;
    extern const char *Txt_Type;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1836,7 +1857,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
   {
    extern const char *Txt_Date;
    extern const char *Txt_Day;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_DAYS_SMALL[7];
    unsigned long NumRow;
    struct Date ReadDate,LastDate,Date;
@@ -1981,7 +2002,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
    extern const char *Txt_Day;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_DAYS_SMALL[7];
    Sta_ColorType_t ColorType,SelectedColorType;
    unsigned long NumRow;
@@ -2002,7 +2023,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    Act_FormStart (Gbl.CurrentAct);
    Sta_WriteParamsDatesSeeAccesses ();
-   Par_PutHiddenParamUnsigned ("ClickStatType",(unsigned) Gbl.Stat.ClicksStatType);
+   Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
    if (Gbl.CurrentAct == ActSeeAccCrs)
@@ -2419,7 +2440,7 @@ static void Sta_SetColor (Sta_ColorType_t ColorType,float NumPagesGenerated,floa
 static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Week;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    struct Date ReadDate,LastDate,Date;
    unsigned W,NumWeeksBetweenLastDateAndCurrentDate;
@@ -2525,7 +2546,7 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
 static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Month;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    struct Date ReadDate,LastDate,Date;
    unsigned M,NumMesesEntreLastDateYAct;
@@ -2943,7 +2964,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
 static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Action;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    float NumPagesGenerated;
    float MaxPagesGenerated = 0.0;
@@ -3014,7 +3035,7 @@ static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql
 static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Plugin;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    float NumPagesGenerated;
    float MaxPagesGenerated = 0.0;
@@ -3080,7 +3101,7 @@ static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql
 static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Function;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    float NumPagesGenerated;
    float MaxPagesGenerated = 0.0;
@@ -3144,7 +3165,7 @@ static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *m
 static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Banner;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    float NumClicks;
    float MaxClicks = 0.0;
@@ -3219,7 +3240,7 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow,Ranking;
    float NumPagesGenerated;
    float MaxPagesGenerated = 0.0;
@@ -3297,7 +3318,7 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES];
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned long NumRow;
@@ -3522,9 +3543,9 @@ void Sta_ReqUseOfPlatform (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
-   Sta_UseStatType_t UseStatType;
+   Sta_FigureType_t UseStatType;
 
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -3549,8 +3570,8 @@ void Sta_ReqUseOfPlatform (void)
    fprintf (Gbl.F.Out,"<br />"
 	              "%s: <select name=\"UseStatType\">",
 	    Txt_Statistic);
-   for (UseStatType = (Sta_UseStatType_t) 0;
-	UseStatType < Sta_NUM_TYPES_USE_STATS;
+   for (UseStatType = (Sta_FigureType_t) 0;
+	UseStatType < Sta_NUM_FIGURES;
 	UseStatType++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",
@@ -3586,9 +3607,9 @@ void Sta_ShowUseOfPlatform (void)
    Par_GetParToText ("UseStatType",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
       Lay_ShowErrorAndExit ("Type of stat is missing.");
-   if (UnsignedNum >= Sta_NUM_TYPES_USE_STATS)
+   if (UnsignedNum >= Sta_NUM_FIGURES)
       Lay_ShowErrorAndExit ("Type of stat is missing.");
-   Gbl.Stat.UseStatType = (Sta_UseStatType_t) UnsignedNum;
+   Gbl.Stat.UseStatType = (Sta_FigureType_t) UnsignedNum;
 
    /***** Show again the form to see use of the platform *****/
    Sta_ReqUseOfPlatform ();
@@ -3690,7 +3711,7 @@ void Sta_ShowUseOfPlatform (void)
 
 static void Sta_GetAndShowUsersStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
    extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
@@ -3730,7 +3751,7 @@ static void Sta_GetAndShowUsersStats (void)
 
 static void Sta_GetAndShowUsersRanking (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
    extern const char *Txt_Downloads;
@@ -3800,7 +3821,7 @@ static void Sta_GetAndShowUsersRanking (void)
 
 static void Sta_GetAndShowHierarchyStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY]);
    Sta_WriteHeadDegsCrssInSWAD ();
@@ -4919,7 +4940,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
 
 static void Sta_GetAndShowFileBrowsersStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
    extern const char *Txt_Virtual_pendrives;
    static const Brw_FileBrowser_t StatCrsFileZones[Sta_NUM_STAT_CRS_FILE_ZONES] =
@@ -5764,7 +5785,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 
 static void Sta_GetAndShowOERsStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_No_of_private_files;
    extern const char *Txt_No_of_public_files;
@@ -5941,7 +5962,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 
 static void Sta_GetAndShowAssignmentsStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
    extern const char *Txt_Average_number_BR_of_ASSIG_BR_per_course;
@@ -6010,7 +6031,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
 static void Sta_GetAndShowTestsStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
    extern const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions;
@@ -6177,7 +6198,7 @@ static void Sta_GetAndShowTestsStats (void)
 
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_No_of_users;
@@ -6504,7 +6525,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
 static void Sta_GetAndShowNoticesStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
    extern const char *Txt_NOTICE_Deleted_BR_notices;
@@ -6592,7 +6613,7 @@ static void Sta_GetAndShowNoticesStats (void)
 
 static void Sta_GetAndShowMsgsStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
    extern const char *Txt_MSGS_Deleted;
@@ -6694,7 +6715,7 @@ static void Sta_GetAndShowMsgsStats (void)
 
 static void Sta_GetAndShowForumStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Scope;
    extern const char *Txt_Forums;
    extern const char *Txt_No_of_forums;
@@ -7045,7 +7066,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
 static void Sta_GetAndShowSurveysStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
    extern const char *Txt_Average_number_BR_of_surveys_BR_per_course;
@@ -7129,7 +7150,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
   {
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY]);
 
@@ -7285,7 +7306,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 
 static void Sta_GetAndShowNumUsrsPerLanguage (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
@@ -7422,7 +7443,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 static void Sta_GetAndShowNumUsrsPerLayout (void)
   {
    extern const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS];
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Layout;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -7559,7 +7580,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Theme_SKIN;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -7695,7 +7716,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Icons;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -7832,7 +7853,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 static void Sta_GetAndShowNumUsrsPerMenu (void)
   {
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Menu;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -7967,7 +7988,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
 static void Sta_GetAndShowNumUsrsPerSideColumns (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;

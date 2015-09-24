@@ -432,11 +432,13 @@ function enableDisableContAns(Elem,IsDisabled) {
 }
 
 // Selection of statistics of current course ****/
-function enableRowsPage () {
+function enableDetailedClicks () {
 	document.getElementById('CountType').disabled = true;
+	document.getElementById('GroupedBy').disabled = true;
 	document.getElementById('RowsPage').disabled = false;
 }
-function disableRowsPage () {
+function disableDetailedClicks () {
 	document.getElementById('CountType').disabled = false;
+	document.getElementById('GroupedBy').disabled = false;
 	document.getElementById('RowsPage').disabled = true;
 }

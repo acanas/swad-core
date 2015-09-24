@@ -98,11 +98,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.0.3 (2015/09/24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.1 (2015/09/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+BUG: Stats from country: "Wrong scope"
+
+        Version 15.1:     Sep 25, 2015	Changes in layout of statistics of clicks. (185058 lines)
         Version 15.0.3:   Sep 24, 2015	Fixed bug when printing country information. (185013 lines)
         Version 15.0.2:   Sep 24, 2015	New layout in preferences. (185011 lines)
         Version 15.0.1:   Sep 23, 2015	Fix bugs in size of background images. (185006 lines)

@@ -653,8 +653,8 @@ struct Globals
      } Svys;
    struct
      {
-      Sta_ClicksStatType_t ClicksStatType;
-      Sta_UseStatType_t UseStatType;
+      Sta_ClicksGroupedBy_t ClicksGroupedBy;
+      Sta_FigureType_t UseStatType;
       Sta_Role_t Role;
       Sta_CountType_t CountType;
       Act_Action_t NumAction;

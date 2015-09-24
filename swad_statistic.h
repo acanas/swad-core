@@ -49,7 +49,7 @@ typedef enum
    Sta_ME              = 10,
   } Sta_Role_t;
 
-#define Sta_NUM_STAT_COUNT_TYPES	5
+#define Sta_NUM_COUNT_TYPES	5
 typedef enum
   {
    Sta_TOTAL_CLICKS     = 0,
@@ -59,34 +59,42 @@ typedef enum
    Sta_SEND_TIME	= 4,
   } Sta_CountType_t;
 
-#define Sta_NUM_TYPES_CLICK_STATS 21
+#define Sta_NUM_CLICKS_DETAILED_OR_GROUPED	2
 typedef enum
   {
-   Sta_ACC_CRS_LISTING           =  0,
-   Sta_ACC_CRS_PER_USR           =  1,
-   Sta_ACC_CRS_PER_DAYS          =  2,
-   Sta_ACC_CRS_PER_DAYS_AND_HOUR =  3,
-   Sta_ACC_CRS_PER_WEEKS         =  4,
-   Sta_ACC_CRS_PER_MONTHS        =  5,
-   Sta_ACC_CRS_PER_HOUR          =  6,
-   Sta_ACC_CRS_PER_MINUTE        =  7,
-   Sta_ACC_CRS_PER_ACTION        =  8,
+   Sta_CLICKS_DETAILED	= 0,
+   Sta_CLICKS_GROUPED	= 1,
+  } Sta_ClicksDetailedOrGrouped_t;
 
-   Sta_ACC_GBL_PER_DAYS          =  9,
-   Sta_ACC_GBL_PER_DAYS_AND_HOUR = 10,
-   Sta_ACC_GBL_PER_WEEKS         = 11,
-   Sta_ACC_GBL_PER_MONTHS        = 12,
-   Sta_ACC_GBL_PER_HOUR          = 13,
-   Sta_ACC_GBL_PER_MINUTE        = 14,
-   Sta_ACC_GBL_PER_ACTION        = 15,
-   Sta_ACC_GBL_PER_PLUGIN        = 16,
-   Sta_ACC_GBL_PER_Svc_FUNCTION   = 17,
-   Sta_ACC_GBL_PER_BANNER        = 18,
-   Sta_ACC_GBL_PER_DEGREE        = 19,
-   Sta_ACC_GBL_PER_COURSE        = 20,
-  } Sta_ClicksStatType_t;
+#define Sta_NUM_CLICKS_GROUPED_BY	21
+typedef enum
+  {
+   Sta_CLICKS_CRS_DETAILED_LIST			=  0,
 
-#define Sta_NUM_TYPES_USE_STATS 21
+   Sta_CLICKS_CRS_PER_USR			=  1,
+   Sta_CLICKS_CRS_PER_DAYS			=  2,
+   Sta_CLICKS_CRS_PER_DAYS_AND_HOUR		=  3,
+   Sta_CLICKS_CRS_PER_WEEKS			=  4,
+   Sta_CLICKS_CRS_PER_MONTHS			=  5,
+   Sta_CLICKS_CRS_PER_HOUR			=  6,
+   Sta_CLICKS_CRS_PER_MINUTE			=  7,
+   Sta_CLICKS_CRS_PER_ACTION			=  8,
+
+   Sta_CLICKS_GBL_PER_DAYS			=  9,
+   Sta_CLICKS_GBL_PER_DAYS_AND_HOUR		= 10,
+   Sta_CLICKS_GBL_PER_WEEKS			= 11,
+   Sta_CLICKS_GBL_PER_MONTHS			= 12,
+   Sta_CLICKS_GBL_PER_HOUR			= 13,
+   Sta_CLICKS_GBL_PER_MINUTE			= 14,
+   Sta_CLICKS_GBL_PER_ACTION			= 15,
+   Sta_CLICKS_GBL_PER_PLUGIN			= 16,
+   Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION	= 17,
+   Sta_CLICKS_GBL_PER_BANNER			= 18,
+   Sta_CLICKS_GBL_PER_DEGREE			= 19,
+   Sta_CLICKS_GBL_PER_COURSE			= 20,
+  } Sta_ClicksGroupedBy_t;
+
+#define Sta_NUM_FIGURES 21
 typedef enum
   {
    Sta_USERS,			// Number of users
@@ -110,7 +118,7 @@ typedef enum
    Sta_ICON_SETS,		// Number of users per icon set
    Sta_MENUS,			// Number of users per menu
    Sta_SIDE_COLUMNS,		// Number of users per layout of columns
-  } Sta_UseStatType_t;
+  } Sta_FigureType_t;
 
 #define Sta_NUM_COLOR_TYPES 3
 typedef enum

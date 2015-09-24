@@ -19970,7 +19970,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Zugriffsstatistik auf die Plattform"
 #elif L==2
-	"Access statistics to the platform"
+	"Statistics of access to the platform"
 #elif L==3
 	"Estad&iacute;sticas de acceso a la plataforma"
 #elif L==4
@@ -34966,26 +34966,26 @@ const char *Txt_Start_date =
 	"Data de in&iacute;cio";
 #endif
 
-const char *Txt_STAT_CLICK_STAT_TYPES[Sta_NUM_TYPES_CLICK_STATS] =
+const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
    {
 #if   L==0
-	 "Mostra clics detallats"
+	 "clics detallats"
 #elif L==1
-	 "Zeige detaillierte Klicks"
+	 "detaillierte Klicks"
 #elif L==2
-	 "Show detailed clicks"
+	 "detailed clicks"
 #elif L==3
-	 "Mostrar clics detallados"
+	 "clics detallados"
 #elif L==4
-	 "Afficher clics d&eacute;taill&eacute;es"
+	 "clics d&eacute;taill&eacute;es"
 #elif L==5
-	 "Mostrar clics detallados"	// Okoteve traducción
+	 "clics detallados"	// Okoteve traducción
 #elif L==6
-	 "Visualizza dettagli di scatto"
+	 "dettagli di scatto"
 #elif L==7
-	 "Poka&zdot; szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
+	 "szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
 #elif L==8
-	 "Mostrar detalhadamente cliques"
+	 "detalhadamente cliques"
 #endif
 	 ,
 #if   L==0
@@ -35801,7 +35801,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #endif
 	};
 
-const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES] =
+const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
    {
 #if   L==0
 	 "N&ordm; total de clics"	// Necessita traduccio
@@ -35904,7 +35904,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_STAT_COUNT_TYPES] =
 #endif
 	};
 
-const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES] =
+const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
    {
 #if   L==0
 	 "n&ordm; total de clics"	// Necessita traduccio
@@ -36007,7 +36007,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_STAT_COUNT_TYPES] =
 #endif
 	};
 
-const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS] =
+const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
    {
 #if   L==0				// Sta_USERS
 	 "Usuaris"
@@ -36449,6 +36449,27 @@ const char *Txt_Statistic =
 	 "Statystyki";
 #elif L==8
 	 "Estat&iacute;sticas";
+#endif
+
+const char *Txt_Statistics_of_access =
+#if   L==0
+	"Estad&iacute;stiques d'accesso";
+#elif L==1
+	"Zugriffsstatistik";
+#elif L==2
+	"Statistics of access";
+#elif L==3
+	"Estad&iacute;sticas de acceso";
+#elif L==4
+	"Statistiques de connexion";
+#elif L==5
+	"Estad&iacute;sticas de acceso";	// Okoteve traducción
+#elif L==6
+	"Statistiche di accesso";
+#elif L==7
+	"Statystyki dost&eogon;p";
+#elif L==8
+	"Estat&iacute;sticas de acesso";
 #endif
 
 const char *Txt_Statistics_of_all_visits =

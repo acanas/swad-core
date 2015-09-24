@@ -360,7 +360,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 
 void Net_ShowWebAndSocialNetworksStats (void)
   {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_TYPES_USE_STATS];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
