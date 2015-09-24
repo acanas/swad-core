@@ -229,17 +229,19 @@ static void Cty_Configuration (bool PrintView)
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      /***** Links to show institutions and to print view  *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Link to show institutions */
-      Act_PutContextualLink (ActSeeIns,NULL,"ins",Txt_Institutions);
-
-      /* Link to print view */
       if (!PrintView)
-         Act_PutContextualLink (ActPrnCtyInf,NULL,"print",Txt_Print);
+	{
+	 /***** Links to show institutions and to print view  *****/
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      fprintf (Gbl.F.Out,"</div>");
+	 /* Link to show institutions */
+	 Act_PutContextualLink (ActSeeIns,NULL,"ins",Txt_Institutions);
+
+	 /* Link to print view */
+	 Act_PutContextualLink (ActPrnCtyInf,NULL,"print",Txt_Print);
+
+	 fprintf (Gbl.F.Out,"</div>");
+	}
 
       /***** Start frame *****/
       Lay_StartRoundFrameTable (NULL,2,NULL);

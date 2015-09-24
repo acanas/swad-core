@@ -98,13 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.0.2 (2015/09/24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.0.3 (2015/09/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-BUG: Enlace a "Instituciones" sale erróneamente en País > Información > Imprimir.
-
+        Version 15.0.3:   Sep 24, 2015	Fixed bug when printing country information. (185013 lines)
         Version 15.0.2:   Sep 24, 2015	New layout in preferences. (185011 lines)
         Version 15.0.1:   Sep 23, 2015	Fix bugs in size of background images. (185006 lines)
         Version 15.0:     Sep 23, 2015	All sizes are multiplied by 1.5 (50% bigger). (184885 lines)
