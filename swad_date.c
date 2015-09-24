@@ -160,7 +160,7 @@ void Dat_ShowCurrentDateTime (void)
    extern const char *The_ClassCurrentTime[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
 
-   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\" style=\"padding-top:12px;\">"	// Changed!
+   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\" style=\"padding-top:12px;\">"
                       "%u %s, %u:%02u"
                       "</div>",
             The_ClassCurrentTime[Gbl.Prefs.Theme],

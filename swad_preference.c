@@ -72,28 +72,32 @@ void Pre_EditPrefs (void)
    Pre_PutSelectorToSelectLanguage ();
    Lay_EndRoundFrame ();
 
-   /***** Layout, theme, icon set, menu & side columns *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:15px;\">"	// Changed!
+   /***** Layout, side columns, theme, icon set & menu *****/
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:20px 0;\">"
                       "<tr>"
                       "<td>");
    Lay_PutIconsToSelectLayout ();	// 1. Layout
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td>");
-   The_PutIconsToSelectTheme ();	// 2. Theme
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td>");
-   Ico_PutIconsToSelectIconSet ();	// 3. Icon set
    fprintf (Gbl.F.Out,"</td>");
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {
       fprintf (Gbl.F.Out,"<td>");
-      Mnu_PutIconsToSelectMenu ();	// 4. Menu
+      Mnu_PutIconsToSelectMenu ();	// 2. Menu
       fprintf (Gbl.F.Out,"</td>"
                          "<td>");
-      Pre_PutIconsToSelectSideCols ();	// 5. Side columns
+      Pre_PutIconsToSelectSideCols ();	// 3. Side columns
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"</tr>"
+	              "</table>"
+                      "<table style=\"margin:0 auto; border-spacing:20px 0;\">"
+                      "<tr>"
+	              "<td>");
+   The_PutIconsToSelectTheme ();	// 4. Theme
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td>");
+   Ico_PutIconsToSelectIconSet ();	// 5. Icon set
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
 	              "</table>");
 
    /***** Automatic e-mail to notify of new events *****/
@@ -225,12 +229,12 @@ void Pre_PutSelectorToSelectLanguage (void)
    Txt_Language_t Lan;
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      135,	// Lay_LAYOUT_DESKTOP	// Changed!
-      180,	// Lay_LAYOUT_MOBILE	// Changed!
+      135,	// Lay_LAYOUT_DESKTOP
+      180,	// Lay_LAYOUT_MOBILE
      };
 
    Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""	// Changed!
+   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
@@ -352,7 +356,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " style=\"display:block;"
-	                 " width:48px; height:30px;\" />",	// Changed!
+	                 " width:48px; height:30px;\" />",
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],

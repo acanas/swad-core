@@ -57,8 +57,8 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Rec_INSTITUTION_LOGO_SIZE	72	// Changed!
-#define Rec_DEGREE_LOGO_SIZE		72	// Changed!
+#define Rec_INSTITUTION_LOGO_SIZE	72
+#define Rec_DEGREE_LOGO_SIZE		72
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
 
 /*****************************************************************************/
@@ -209,7 +209,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Act_FormStart (ActRenFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
-	                 " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\""	// Changed!
+	                 " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Rec_MAX_LENGTH_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
@@ -282,7 +282,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Field name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FieldName\""
-                      " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\" />"	// Changed!
+                      " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Rec_MAX_LENGTH_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
 
@@ -915,7 +915,7 @@ void Rec_ListRecordsGsts (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                    " style=\"margin-bottom:15px;");	// Changed!
+	                    " style=\"margin-bottom:15px;");
 	 if (Gbl.CurrentAct == ActPrnRecSevGst &&
 	     NumUsrs != 0 &&
 	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1082,7 +1082,7 @@ void Rec_ListRecordsStds (void)
                                                           true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:15px;");	// Changed!
+        	               " style=\"margin-bottom:15px;");
             if (Gbl.CurrentAct == ActPrnRecSevStd &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1169,7 +1169,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"margin-bottom:15px;\">");	// Changed!
+	              " style=\"margin-bottom:15px;\">");
 
    /* Common record */
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1258,7 +1258,7 @@ void Rec_ListRecordsTchs (void)
                                                           true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:15px;");	// Changed!
+        	               " style=\"margin-bottom:15px;");
             if (Gbl.CurrentAct == ActPrnRecSevTch &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1348,7 +1348,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 7px; display:inline;\">"	// Changed!
+   fprintf (Gbl.F.Out,"<div style=\"margin:0 7px; display:inline;\">"
                       "<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
    if (ShowOfficeHours)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1453,10 +1453,10 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
-   unsigned RecordWidth = Rec_RECORD_WIDTH_WIDE;	// Changed!
+   unsigned RecordWidth = Rec_RECORD_WIDTH_WIDE;
    char StrRecordWidth[10+1];
-   unsigned FrameWidth = 15;	// Changed!
-   unsigned Col1Width = 210;	// Changed!
+   unsigned FrameWidth = 15;
+   unsigned Col1Width = 210;
    unsigned Col2Width;
    char *ClassHead;
    char *ClassData;
@@ -1539,7 +1539,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
    Col2Width = RecordWidth - FrameWidth * 2 - Col1Width;
 
    /***** Start frame *****/
-   sprintf (StrRecordWidth,"%upx",RecordWidth);	// Changed!
+   sprintf (StrRecordWidth,"%upx",RecordWidth);
    Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Header *****/
@@ -1547,7 +1547,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 	              "<td colspan=\"2\" class=\"LEFT_TOP\">"
 	              "<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
                  Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL,true);
@@ -1581,11 +1581,11 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"%s LEFT_TOP COLOR%u\""
-                            " style=\"width:%upx;\">"	// Changed!
+                            " style=\"width:%upx;\">"
                             "%s:",
                   ICanEdit ? The_ClassForm[Gbl.Prefs.Theme] :
                 	     "DAT_REC_SMALL",
-                  Gbl.RowEvenOdd,Col1Width,	// Changed!
+                  Gbl.RowEvenOdd,Col1Width,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_RECORD_LIST)
             fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
@@ -1603,12 +1603,12 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 
          /***** Write form, text, or nothing depending on the user's role and the visibility of the field... */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\""
-                            " style=\"width:%upx;\">",	// Changed!
-                  ClassData,Gbl.RowEvenOdd,Col2Width);	// Changed!
+                            " style=\"width:%upx;\">",
+                  ClassData,Gbl.RowEvenOdd,Col2Width);
          if (ICanEdit)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
-        	               " style=\"width:540px;\">",	// Changed!
+        	               " style=\"width:540px;\">",
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)
@@ -2118,13 +2118,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                   Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
    /***** Start frame *****/
-   sprintf (StrRecordWidth,"%upx",RecordWidth);	// Changed!
+   sprintf (StrRecordWidth,"%upx",RecordWidth);
    Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\""
-                      " style=\"width:%upx; height:%upx;\">",	// Changed!
+                      " style=\"width:%upx; height:%upx;\">",
 	    TopC1Width,TopC1Width);
    if (UsrDat->InsCod > 0)
      {
@@ -2148,7 +2148,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "<td class=\"%s LEFT_MIDDLE\""
-		      " style=\"width:%upx; height:%upx;\">",	// Changed!
+		      " style=\"width:%upx; height:%upx;\">",
 	    ClassHead,TopC2Width,TopC1Width);
    if (UsrDat->InsCod > 0)
      {
@@ -2171,7 +2171,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /***** Photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CENTER_TOP\""
-	              " style=\"width:%upx;\">",	// Changed!
+	              " style=\"width:%upx;\">",
 	    TopC3Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -2182,12 +2182,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /***** Commands *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td rowspan=\"3\" class=\"LEFT_TOP\""
-	              " style=\"width:%upx;\">",	// Changed!
+	              " style=\"width:%upx;\">",
 	    TopC1Width);
 
    if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"width:30px; margin:9px auto;\">");	// Changed!
+      fprintf (Gbl.F.Out,"<div style=\"width:30px; margin:9px auto;\">");
 
       /***** Button to edit my record card *****/
       if (ItsMe)
@@ -2395,7 +2395,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Full name *****/
    fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_TOP\""
-	              " style=\"width:%upx;\">"	// Changed!
+	              " style=\"width:%upx;\">"
 	              "%s<br />%s<br />%s"
 	              "</td>"
 	              "</tr>",
@@ -2406,7 +2406,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's nickname *****/
    fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_BOTTOM\""
-	              " style=\"width:%upx;\">"	// Changed!
+	              " style=\"width:%upx;\">"
 	              "<div class=\"REC_NICK\">",
 	    TopC2Width);
    if (UsrDat->Nickname[0])
@@ -2434,7 +2434,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s LEFT_TOP\" style=\"width:%upx;\">",	// Changed!
+		      "<td class=\"%s LEFT_TOP\" style=\"width:%upx;\">",
 	    ClassData,TopC2Width);
    if (ShowData && UsrDat->CtyCod > 0)
      {
@@ -2444,7 +2444,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's web and social networks *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",	// Changed!
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",
 	    TopC3Width);
    Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</td>"
@@ -2485,11 +2485,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** User's e-mail *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Email,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (UsrDat->Email[0])
@@ -2511,11 +2511,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** User's ID *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_TOP\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_ID,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 ID_WriteUsrIDs (UsrDat,ShowID);
@@ -2527,10 +2527,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"%s RIGHT_MIDDLE\""
-			       " style=\"width:%upx;\">"	// Changed!
+			       " style=\"width:%upx;\">"
 			       "%s:</td>"
 			       "<td class=\"%s LEFT_MIDDLE\""
-			       " style=\"width:%upx;\">",	// Changed!
+			       " style=\"width:%upx;\">",
 		     ClassForm,Rec_C1_BOTTOM_WIDE,
 		     Txt_Role,
 		     ClassData,Rec_C2_BOTTOM_WIDE);
@@ -2663,10 +2663,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"%s RIGHT_MIDDLE\""
-			       " style=\"width:%upx;\">"	// Changed!
+			       " style=\"width:%upx;\">"
 			       "%s*:</td>"
 			       "<td class=\"%s LEFT_MIDDLE\""
-			       " style=\"width:%upx;\">",	// Changed!
+			       " style=\"width:%upx;\">",
 		     ClassForm,Rec_C1_BOTTOM_WIDE,
 		     Txt_Sex,
 		     ClassData,Rec_C2_BOTTOM_WIDE);
@@ -2693,11 +2693,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 else	// RoleForm == false, SexForm == false
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"%s RIGHT_MIDDLE\""
-			       " style=\"width:%upx;\">"	// Changed!
+			       " style=\"width:%upx;\">"
 			       "%s:"
 			       "</td>"
 			       "<td class=\"%s LEFT_MIDDLE\""
-			       " style=\"width:%upx;\">"	// Changed!
+			       " style=\"width:%upx;\">"
 			       "%s"
 			       "</td>"
 			       "</tr>",
@@ -2712,22 +2712,22 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Surname 1 */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Surname_1);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	    fprintf (Gbl.F.Out,"*");
 	 fprintf (Gbl.F.Out,":</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 			       " maxlength=\"%u\" value=\"%s\""
-			       " style=\"width:%upx;\" />",	// Changed!
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->Surname1,
-		     Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+		     Rec_C2_BOTTOM_WIDE - 90);
 	 else if (UsrDat->Surname1[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2736,21 +2736,21 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Surname 2 */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,
 		  Txt_Surname_2,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
 			       " maxlength=\"%u\" value=\"%s\""
-			       " style=\"width:%upx;\" />",	// Changed!
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->Surname2,
-		     Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+		     Rec_C2_BOTTOM_WIDE - 90);
 	 else if (UsrDat->Surname2[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",
 		     UsrDat->Surname2);
@@ -2760,22 +2760,22 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* First name */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_First_name);
 	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	    fprintf (Gbl.F.Out,"*");
 	 fprintf (Gbl.F.Out,":</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (DataForm)
 	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
 			       " maxlength=\"%u\" value=\"%s\""
-			       " style=\"width:%upx;\" />",	// Changed!
+			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->FirstName,
-		     Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+		     Rec_C2_BOTTOM_WIDE - 90);
 	 else if (UsrDat->FirstName[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2793,19 +2793,19 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td class=\"%s RIGHT_MIDDLE\""
-			       " style=\"width:%upx;\">"	// Changed!
+			       " style=\"width:%upx;\">"
 			       "%s",
 		     ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Country);
 	    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
 	       fprintf (Gbl.F.Out,"*");
 	    fprintf (Gbl.F.Out,":</td>"
 			       "<td colspan=\"2\" class=\"%s LEFT_MIDDLE\""
-			       " style=\"width:%upx;\">",	// Changed!
+			       " style=\"width:%upx;\">",
 		     ClassData,Rec_C2_BOTTOM_WIDE);
 
 	    /* Selector of country */
 	    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
-		               " style=\"width:%upx;\">"	// Changed!
+		               " style=\"width:%upx;\">"
 			       "<option value=\"-1\">%s</option>"
 			       "<option value=\"0\"",
 		     Rec_C2_BOTTOM_WIDE - 90,
@@ -2836,11 +2836,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Origin place */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Place_of_origin,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2848,7 +2848,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
 				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",	// Changed!
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->OriginPlace,
 			Rec_C2_BOTTOM_WIDE - 90);
@@ -2861,11 +2861,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Date of birth */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Date_of_birth,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2885,11 +2885,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Local address */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Local_address,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2897,10 +2897,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
 				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",	// Changed!
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->LocalAddress,
-			Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+			Rec_C2_BOTTOM_WIDE - 90);
 	    else if (UsrDat->LocalAddress[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
 	   }
@@ -2910,11 +2910,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Local phone */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2922,10 +2922,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
 				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",	// Changed!
+				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
 			UsrDat->LocalPhone,
-			Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+			Rec_C2_BOTTOM_WIDE - 90);
 	    else if (UsrDat->LocalPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
 	   }
@@ -2935,11 +2935,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Family address */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Family_address,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2947,7 +2947,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
 				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",	// Changed!
+				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->FamilyAddress,
 			Rec_C2_BOTTOM_WIDE - 90);
@@ -2960,11 +2960,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Family phone */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -2972,10 +2972,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
 				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",	// Changed!
+				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
 			UsrDat->FamilyPhone,
-			Rec_C2_BOTTOM_WIDE - 90);	// Changed!
+			Rec_C2_BOTTOM_WIDE - 90);
 	    else if (UsrDat->FamilyPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
 	   }
@@ -2985,20 +2985,20 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Common comments for all the courses */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"%s LEFT_TOP\" style=\"width:%upx;\">",	// Changed!
+			    "<td class=\"%s LEFT_TOP\" style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_USER_comments,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
 	   {
 	    if (DataForm)
 	       fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
-				  " style=\"width:%upx;\">"	// Changed!
+				  " style=\"width:%upx;\">"
 				  "%s"
 				  "</textarea>",
-			Rec_C2_BOTTOM_WIDE - 90,	// Changed!
+			Rec_C2_BOTTOM_WIDE - 90,
 			UsrDat->Comments);
 	    else if (UsrDat->Comments[0])
 	      {
@@ -3017,11 +3017,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Institution */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Institution,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -3042,11 +3042,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Centre */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Centre,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -3069,11 +3069,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Department */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
+			    " style=\"width:%upx;\">",
 		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Department,
 		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
@@ -3096,13 +3096,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Office */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
-		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Office,	// Changed!
-		  ClassData,Rec_C2_BOTTOM_WIDE);	// Changed!
+			    " style=\"width:%upx;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Office,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
 	    fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -3111,13 +3111,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /* Phone */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"	// Changed!
+			    " style=\"width:%upx;\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"%s LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",	// Changed!
-		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,	// Changed!
-		  ClassData,Rec_C2_BOTTOM_WIDE);	// Changed!
+			    " style=\"width:%upx;\">",
+		  ClassForm,Rec_C1_BOTTOM_WIDE,Txt_Phone,
+		  ClassData,Rec_C2_BOTTOM_WIDE);
 	 if (ShowData)
 	    fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -3351,7 +3351,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
 /********* Show form to edit my institution, centre and department ***********/
 /*****************************************************************************/
 
-#define COL2_WIDTH 600	// Changed!
+#define COL2_WIDTH 600
 
 void Rec_ShowFormMyInsCtrDpt (void)
   {
@@ -3385,7 +3385,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable ("840px",3,	// Changed!
+   Lay_StartRoundFrameTable ("840px",3,
                              IAmTeacher ? Txt_Institution_centre_and_department :
 	                                  Txt_Institution);
 
@@ -3394,9 +3394,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Country_of_institution,
-            COL2_WIDTH);	// Changed!
+            COL2_WIDTH);
 
    /* If list of countries is empty, try to get it */
    if (!Gbl.Ctys.Num)
@@ -3407,7 +3407,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select the country of my institution */
    Act_FormGoToStart (ActChgCtyMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:600px;\""	// Changed!
+   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:600px;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
@@ -3435,9 +3435,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Institution,
-	    COL2_WIDTH);	// Changed!
+	    COL2_WIDTH);
 
    /* Get list of institutions in this country */
    Ins_FreeListInstitutions ();
@@ -3446,7 +3446,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select institution */
    Act_FormGoToStart (ActChgMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:600px;\""	// Changed!
+   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:600px;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
@@ -3481,9 +3481,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Centre,
-	       COL2_WIDTH);	// Changed!
+	       COL2_WIDTH);
 
       /* Get list of centres in this institution */
       Ctr_FreeListCentres ();
@@ -3492,7 +3492,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select centre */
       Act_FormGoToStart (ActChgMyCtr);
-      fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:600px;\""	// Changed!
+      fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:600px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
@@ -3525,9 +3525,9 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Department,
-	       COL2_WIDTH);	// Changed!
+	       COL2_WIDTH);
 
       /* Get list of departments in this institution */
       Dpt_FreeListDepartments ();
@@ -3536,7 +3536,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select department */
       Act_FormGoToStart (ActChgMyDpt);
-      fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:600px;\""	// Changed!
+      fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:600px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
@@ -3569,13 +3569,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	                 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+                         "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Office,
-               COL2_WIDTH);	// Changed!
+               COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOff);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:600px;\""	// Changed!
+			 " style=\"width:600px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
@@ -3589,13 +3589,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
 	                 "<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
-	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Phone,
-               COL2_WIDTH);	// Changed!
+               COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:600px;\""	// Changed!
+			 " style=\"width:600px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,

@@ -91,7 +91,7 @@ void Tab_DrawTabs (void)
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
-	              " style=\"height:84px;"	// Changed!
+	              " style=\"height:84px;"
 		      " background-image:url('%s/head_base_background_1x56.gif');"
 		      " background-size:1px 84px;"
 		      " background-repeat:repeat-x;\">"
@@ -165,7 +165,7 @@ static void Tab_DrawTabsDeskTop (void)
 							   The_ClassTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:6px;\" />"	// Changed!
+			       " class=\"ICON32x32\" style=\"margin:6px;\" />"
 			       "<div>%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
@@ -179,7 +179,7 @@ static void Tab_DrawTabsDeskTop (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:6px;\" />"	// Changed!
+			       " class=\"ICON32x32\" style=\"margin:6px;\" />"
 			       "<div class=\"%s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],
@@ -234,7 +234,7 @@ void Tab_DrawTabsMobile (void)
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],The_ClassMenuOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\" class=\"ICON64x64\""
-			       " style=\"margin:6px;\" />"	// Changed!
+			       " style=\"margin:6px;\" />"
 			       "<div>%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
@@ -249,7 +249,7 @@ void Tab_DrawTabsMobile (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON64x64\" style=\"margin:6px;\" />"	// Changed!
+			       " class=\"ICON64x64\" style=\"margin:6px;\" />"
 			       "<div class=\"%s\">%s</div>"
 			       "</div>",
 		     Gbl.Prefs.PathIconSet,

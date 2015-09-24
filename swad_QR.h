@@ -42,7 +42,7 @@
 void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText);
 void QR_PrintQRCode (void);
 
-void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);	// Changed!
+void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);
 void QR_ExamAnnnouncement (void);
 
 #endif

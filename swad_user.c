@@ -1512,7 +1512,7 @@ void Usr_WelcomeUsr (void)
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                    " style=\"margin:15px;\">");	// Changed!
+	                    " style=\"margin:15px;\">");
 
          /***** User's first name *****/
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])

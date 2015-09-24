@@ -429,7 +429,7 @@ void Ntf_ShowMyNotifications (void)
          /***** Write row for this notification *****/
 	 /* Write event icon */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\" style=\"width:30px;\">",	// Changed!
+                            "<td class=\"%s LEFT_TOP\" style=\"width:30px;\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -470,7 +470,7 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write user (from) */
-         Msg_WriteMsgAuthor (&UsrDat,120,11,ClassAuthorBg,true,NULL);	// Changed!
+         Msg_WriteMsgAuthor (&UsrDat,120,11,ClassAuthorBg,true,NULL);
 
          /* Write location */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
@@ -551,7 +551,7 @@ void Ntf_ShowMyNotifications (void)
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
                                "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
-                               " style=\"padding-bottom:15px;\">"	// Changed!
+                               " style=\"padding-bottom:15px;\">"
                                "%s"
                                "</td>"
                                "</tr>",

@@ -288,16 +288,16 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      135,        // Lay_LAYOUT_DESKTOP	// Changed!
-      135,        // Lay_LAYOUT_MOBILE	// Changed!
+      135,        // Lay_LAYOUT_DESKTOP
+      135,        // Lay_LAYOUT_MOBILE
      };
    Rol_Role_t Role;
 
    Act_FormStart (ActChgMyRol);
    fprintf (Gbl.F.Out,"<select name=\"UsrTyp\"");
    if (FormInHead)
-      fprintf (Gbl.F.Out," style=\"width:%upx;\"",	// Changed!
-               SelectorWidth[Gbl.Prefs.Layout]);	// Changed!
+      fprintf (Gbl.F.Out," style=\"width:%upx;\"",
+               SelectorWidth[Gbl.Prefs.Layout]);
    fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (Role = Rol__GUEST_;

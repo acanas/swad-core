@@ -164,7 +164,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div style=\"width:216px; margin:0 auto;\">");	// Changed!
+   fprintf (Gbl.F.Out,"<div style=\"width:216px; margin:0 auto;\">");
 
    /***** Show link to public profile *****/
    Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
@@ -227,7 +227,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 /********************* Show form to edit my social networks ******************/
 /*****************************************************************************/
 
-#define Net_COL2_WIDTH 600	// Changed!
+#define Net_COL2_WIDTH 600
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
@@ -274,9 +274,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<img src=\"%s/%s16x16.gif\""
 			 " alt=\"%s\" title=\"%s\""
                          " class=\"ICON16x16\""
-			 " style=\"margin-right:15px;\" />"	// Changed!
+			 " style=\"margin-right:15px;\" />"
 			 "%s:</td>"
-			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",	// Changed!
+			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
 	       Net_TitleWebsAndSocialNetworks[NumURL],
@@ -286,7 +286,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       Act_FormStart (ActChgMyNet);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
-			 " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\""	// Changed!
+			 " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Cns_MAX_LENGTH_URL,URL,
 	       Gbl.FormId);
@@ -492,7 +492,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"ICON16x16\""
-			    " style=\"margin-right:15px;\" />"	// Changed!
+			    " style=\"margin-right:15px;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"

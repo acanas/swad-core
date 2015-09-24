@@ -41,7 +41,7 @@
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
 
-#define QR_CODE_SIZE	((6+25+6)*9)	// Changed!
+#define QR_CODE_SIZE	((6+25+6)*9)
 #define QR_DEFAULT_TYPE QR_ID
 
 /*****************************************************************************/
@@ -106,11 +106,11 @@ void QR_PrintQRCode (void)
 
 static void QR_ImageQRCode (const char *QRString)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"	// Changed!
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " style=\"width:%upx; height:%upx;"	// Changed!
-                      " border:1px dashed silver;\" />"	// Changed!
+                      " style=\"width:%upx; height:%upx;"
+                      " border:1px dashed silver;\" />"
                       "<br />"
                       "<span class=\"DAT\">%s</span>"
                       "</div>",
@@ -133,10 +133,10 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
    /***** Show QR code with direct link to the current centre *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""	// Changed!
+   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""
                       " alt=\"%s\" title=\"%s\""
-                      " style=\"width:%upx; height:%upx;\" />",	// Changed!
-            Size,Size,	// Changed!
+                      " style=\"width:%upx; height:%upx;\" />",
+            Size,Size,
             Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
             Txt_Shortcut,
             Txt_Shortcut,
@@ -155,9 +155,9 @@ void QR_ExamAnnnouncement (void)
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
                       " alt=\"%s\" title=\"%s\""
-                      " style=\"width:300px; height:300px;\" />"	// Changed!
+                      " style=\"width:300px; height:300px;\" />"
                       "</div>",
-            300,300,	// Changed!
+            300,300,
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeExaAnn].ActCod,
             Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);

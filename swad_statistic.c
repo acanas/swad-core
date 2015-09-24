@@ -434,7 +434,7 @@ void Sta_AskSeeCrsAccesses (void)
 
          /***** Draw two class photographs with the users: one for teachers of the course and another one for students *****/
          /* Start the table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">"	// Changed!
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">"
                             "<tr>"
                             "<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
          Lay_StartRoundFrameTable (NULL,0,NULL);
@@ -556,7 +556,7 @@ void Sta_AskSeeGblAccesses (void)
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                 " style=\"padding-bottom:15px;\">");	// Changed!
+	                 " style=\"padding-bottom:15px;\">");
       Sta_PutFormToRequestAccessesCrs ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -696,7 +696,7 @@ static void Sta_WriteSelectorAction (void)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<select name=\"StatAct\" id=\"StatAct\" style=\"width:450px;\">",	// Changed!
+                      "<select name=\"StatAct\" id=\"StatAct\" style=\"width:450px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
    for (NumAction = (Act_Action_t) 0;
 	NumAction < Act_NUM_ACTIONS;
@@ -1801,7 +1801,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	 MaxPagesGenerated = NumPagesGenerated;
       if (MaxPagesGenerated > 0.0)
         {
-         BarWidth = (unsigned) (((NumPagesGenerated * 450.0) / MaxPagesGenerated) + 0.5);	// Changed!
+         BarWidth = (unsigned) (((NumPagesGenerated * 450.0) / MaxPagesGenerated) + 0.5);
          if (BarWidth == 0)
             BarWidth = 1;
         }
@@ -1813,7 +1813,7 @@ static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_re
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
 	                    " alt=\"\" title=\"\""
                             " class=\"LEFT_TOP\""
-	                    " style=\"width:%upx; height:21px;\" />"	// Changed!
+	                    " style=\"width:%upx; height:21px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
 		  UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? 'c' :
@@ -1923,7 +1923,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
                                                  'c',
                                D == NumDaysFromLastDateToCurrDate ? NumPagesGenerated :
                         	                                    0.0,
-                               MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+                               MaxPagesGenerated,TotalPagesGenerated,600);
 
          /* Decrease day */
          Dat_GetDateBefore (&Date,&Date);
@@ -1960,7 +1960,7 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
       /* Draw bar proportional to number of pages generated */
       Sta_DrawBarNumClicks (NumDayWeek == 6 ? 'r' :
 	                                      'c',
-	                    0.0,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+	                    0.0,MaxPagesGenerated,TotalPagesGenerated,600);
 
       /* Decrease day */
       Dat_GetDateBefore (&Date,&Date);
@@ -1971,8 +1971,8 @@ static void Sta_ShowNumAccessesPerDays (unsigned long NumRows,MYSQL_RES *mysql_r
 /************ Show graphic of number of pages generated per hour *************/
 /*****************************************************************************/
 
-#define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 30	// Changed!
-#define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH*24)	// Changed!
+#define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 30
+#define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH*24)
 
 static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
@@ -2062,18 +2062,18 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
                       "%s&nbsp;"
                       "</th>"
                       "<th colspan=\"24\" class=\"LEFT_TOP\""
-                      " style=\"width:%upx;\">"	// Changed!
+                      " style=\"width:%upx;\">"
                       "%s"
                       "</th>"
                       "</tr>",
             Txt_Date,
             Txt_Day,
-            GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,	// Changed!
+            GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"24\" class=\"LEFT_TOP\""
-	              " style=\"width:%upx;\">",	// Changed!
-	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);	// Changed!
+	              " style=\"width:%upx;\">",
+	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,MaxPagesGenerated);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
@@ -2081,10 +2081,10 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    for (Hour = 0;
 	Hour < 24;
 	Hour++)
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\" style=\"width:%upx;\">"	// Changed!
+      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\" style=\"width:%upx;\">"
 	                 "%02uh"
 	                 "</td>",
-               GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,Hour);	// Changed!
+               GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,Hour);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write rows beginning by the most recent day and ending by the oldest one *****/
@@ -2273,7 +2273,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
 	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
-	              " style=\"width:%upx;\">"	// Changed!
+	              " style=\"width:%upx;\">"
 	              "0"
 	              "</td>",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
@@ -2283,14 +2283,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
 	Interval++)
      {
       fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG CENTER_BOTTOM\""
-	                 " style=\"width:%upx;\">",	// Changed!
+	                 " style=\"width:%upx;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
       Str_WriteFloatNum ((float) Interval * MaxPagesGenerated / 5.0);
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\""
-	              " style=\"width:%upx;\">",	// Changed!
+	              " style=\"width:%upx;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (MaxPagesGenerated);
@@ -2304,7 +2304,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxPagesGenerated
 	NumColor++)
      {
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:1px;"	// Changed!
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:1px;"
 	                 " background-color:#%02X%02X%02X;\">"
 	                 "<img src=\"%s/tr1x14.gif\""
 	                 " alt=\"\" title=\"\" />"
@@ -2330,7 +2330,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumP
       Sta_SetColor (ColorType,NumPagesGenerated[Hour],MaxPagesGenerated,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
       Str_WriteFloatNum (NumPagesGenerated[Hour]);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx;"	// Changed!
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx;"
 	                 " background-color:#%02X%02X%02X;\">"
                          "</td>",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
@@ -2488,7 +2488,7 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
          Sta_DrawBarNumClicks ('c',
                                W == NumWeeksBetweenLastDateAndCurrentDate ? NumPagesGenerated :
                         	                                            0.0,
-                               MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+                               MaxPagesGenerated,TotalPagesGenerated,600);
 
          /* Decrement week */
          Dat_GetWeekBefore (&Date,&Date);
@@ -2511,7 +2511,7 @@ static void Sta_ShowNumAccessesPerWeeks (unsigned long NumRows,MYSQL_RES *mysql_
               Date.Week,Date.Year % 100);
 
      /* Draw bar proportional to number of pages generated */
-     Sta_DrawBarNumClicks ('c',0.0,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+     Sta_DrawBarNumClicks ('c',0.0,MaxPagesGenerated,TotalPagesGenerated,600);
 
      /* Decrement week */
      Dat_GetWeekBefore (&Date,&Date);
@@ -2593,7 +2593,7 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
          Sta_DrawBarNumClicks ('c',
                                M == NumMesesEntreLastDateYAct ? NumPagesGenerated :
                         	                                0.0,
-                               MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+                               MaxPagesGenerated,TotalPagesGenerated,600);
 
          /* Decrease month */
          Dat_GetMonthBefore (&Date,&Date);
@@ -2615,7 +2615,7 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
               Date.Month,Date.Year % 100);
 
      /* Draw bar proportional to number of pages generated */
-     Sta_DrawBarNumClicks ('c',0.0,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+     Sta_DrawBarNumClicks ('c',0.0,MaxPagesGenerated,TotalPagesGenerated,600);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
@@ -2626,7 +2626,7 @@ static void Sta_ShowNumAccessesPerMonths (unsigned long NumRows,MYSQL_RES *mysql
 /**************** Show graphic of number of pages generated per hour ***************/
 /*****************************************************************************/
 
-#define DIGIT_WIDTH 7	// Changed!
+#define DIGIT_WIDTH 7
 
 static void Sta_ShowNumAccessesPerHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
@@ -2657,7 +2657,7 @@ static void Sta_ShowNumAccessesPerHour (unsigned long NumRows,MYSQL_RES *mysql_r
       /* Maximum number of dígits. If less than 4, set it to 4 to ensure a minimum width */
       NumDigits = (MaxPagesGenerated >= 1000) ? (unsigned) floor (log10 ((double) MaxPagesGenerated)) + 1 :
 	                                        4;
-      ColumnWidth = NumDigits * DIGIT_WIDTH + 3;	// Changed!
+      ColumnWidth = NumDigits * DIGIT_WIDTH + 3;
 
       /***** Draw the graphic *****/
       mysql_data_seek (mysql_res, 0);
@@ -2675,15 +2675,15 @@ static void Sta_ShowNumAccessesPerHour (unsigned long NumRows,MYSQL_RES *mysql_r
 	    for (H = Hour;
 		 H < ReadHour;
 		 H++, Hour++)
-	       Sta_WriteAccessHour (H,0.0,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);	// Changed!
-	    Sta_WriteAccessHour (ReadHour,NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);	// Changed!
+	       Sta_WriteAccessHour (H,0.0,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);
+	    Sta_WriteAccessHour (ReadHour,NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);
 	    Hour++;
 	   }
 	 else
 	    for (H = ReadHour + 1;
 		 H < 24;
 		 H++, Hour++)
-	       Sta_WriteAccessHour (H,0.0,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);	// Changed!
+	       Sta_WriteAccessHour (H,0.0,MaxPagesGenerated,TotalPagesGenerated,ColumnWidth);
 	}
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -2698,7 +2698,7 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
    unsigned BarHeight;
 
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_BOTTOM\""
-	              " style=\"width:%upx;\">",	// Changed!
+	              " style=\"width:%upx;\">",
 	    ColumnWidth);
 
    /* Draw bar with a height porportional to the number of clicks */
@@ -2709,12 +2709,12 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
 		            TotalPagesGenerated) + 0.5));
       Str_WriteFloatNum (NumPagesGenerated);
       fprintf (Gbl.F.Out,"<br />");
-      BarHeight = (unsigned) (((NumPagesGenerated * 600.0) / MaxPagesGenerated) + 0.5);	// Changed!
+      BarHeight = (unsigned) (((NumPagesGenerated * 600.0) / MaxPagesGenerated) + 0.5);
       if (BarHeight == 0)
          BarHeight = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " style=\"width:12px; height:%upx;\" />",	// Changed!
+	                 " style=\"width:12px; height:%upx;\" />",
 	       Gbl.Prefs.IconsURL,BarHeight);
      }
    else
@@ -2729,7 +2729,7 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumPagesGenerated,float Max
 /*****************************************************************************/
 
 #define NUM_MINUTES_PER_DAY		(60*24)			// 1440 minutes in a day
-#define WIDTH_SEMIDIVISION_GRAPHIC	36	// Changed!
+#define WIDTH_SEMIDIVISION_GRAPHIC	36
 #define NUM_DIVISIONS_X			10
 
 static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *mysql_res)
@@ -2805,10 +2805,10 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       /***** X axis *****/
       /* First division (left) */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"	// Changed!
+	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/ejexizq24x1.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " style=\"display:block; width:%upx; height:1px;\" />"	// Changed!
+	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
 	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
 	       WIDTH_SEMIDIVISION_GRAPHIC);
@@ -2816,19 +2816,19 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       for (i = 0;
 	   i < NUM_DIVISIONS_X*2;
 	   i++)
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"	// Changed!
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                    "<img src=\"%s/ejex24x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
-	                    " width:%upx; height:1px;\" />"	// Changed!
+	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
 		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
 		  WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"	// Changed!
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/tr24x1.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " style=\"display:block; width:%upx; height:1px;\" />"	// Changed!
+	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
 	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
@@ -2843,7 +2843,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 /****** Write labels of the X axis in the graphic of clicks per minute *******/
 /*****************************************************************************/
 
-#define WIDTH_DIVISION_GRAPHIC	(WIDTH_SEMIDIVISION_GRAPHIC*2)	// 72	// Changed!
+#define WIDTH_DIVISION_GRAPHIC	(WIDTH_SEMIDIVISION_GRAPHIC*2)	// 72
 
 static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
   {
@@ -2856,7 +2856,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 	i++, NumX += IncX)
      {
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LOG CENTER_BOTTOM\""
-	                 " style=\"width:%upx;\">",	// Changed!
+	                 " style=\"width:%upx;\">",
                WIDTH_DIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,Format,NumX);
       fprintf (Gbl.F.Out,"</td>");
@@ -2868,7 +2868,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 /***** Write a row of the graphic with number of clicks in every minute ******/
 /*****************************************************************************/
 
-#define WIDTH_GRAPHIC		(WIDTH_DIVISION_GRAPHIC*NUM_DIVISIONS_X)	// 72*10=720	// Changed!
+#define WIDTH_GRAPHIC		(WIDTH_DIVISION_GRAPHIC*NUM_DIVISIONS_X)	// 72*10=720
 
 static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float MaxX)
   {
@@ -2881,7 +2881,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    if (!Minute)
       // If minute 0
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_TOP\""
-	                 " style=\"width:%upx;"	// Changed!
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-size:36px 45px;"
 	                 " background-repeat:repeat;\">"
@@ -2891,7 +2891,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    else if (Minute == (NUM_MINUTES_PER_DAY - 30))
       // If 23:30
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
-	                 " style=\"width:%upx;"	// Changed!
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-size:36px 45px;"
 	                 " background-repeat:repeat;\">"
@@ -2901,7 +2901,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
    else if (!(Minute % 30) && (Minute % 60))
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
       fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
-	                 " style=\"width:%upx;"	// Changed!
+	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x60.gif');"
 	                 " background-size:36px 90px;"
 	                 " background-repeat:repeat;\">"
@@ -2911,7 +2911,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
 
    /***** Start of cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
-	              " style=\"width:%upx; height:1px;"	// Changed!
+	              " style=\"width:%upx; height:1px;"
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-size:72px 1px;"
 	              " background-repeat:repeat;\">",
@@ -2921,11 +2921,11 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumPagesGenerated,float
 
    /***** Draw bar with anchura proporcional al number of clicks *****/
    if (NumPagesGenerated != 0.0)
-      if ((BarWidth = (unsigned) (((NumPagesGenerated * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)	// Changed!
+      if ((BarWidth = (unsigned) (((NumPagesGenerated * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
-	                    " width:%upx; height:1px;\" />",	// Changed!
+	                    " width:%upx; height:1px;\" />",
                   Gbl.Prefs.IconsURL,
                   (Minute % 60) == 0 ? 'g' :
                 	               'b',
@@ -3003,7 +3003,7 @@ static void Sta_ShowNumAccessesPerAction (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Draw bar proportional to number of pages generated */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);
      }
   }
 
@@ -3069,7 +3069,7 @@ static void Sta_ShowNumAccessesPerPlugin (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Draw bar proportional to number of pages generated */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);
      }
   }
 
@@ -3133,7 +3133,7 @@ static void Sta_ShowNumAccessesPerWSFunction (unsigned long NumRows,MYSQL_RES *m
 
       /* Draw bar proportional to number of pages generated */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,600);
      }
   }
 
@@ -3196,7 +3196,7 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER_SMALL\""
-                         " style=\"margin:0 12px 6px 0;\" />"	// Changed!
+                         " style=\"margin:0 12px 6px 0;\" />"
                          "</a>",
                Ban.WWW,
                Ban.FullName,
@@ -3207,7 +3207,7 @@ static void Sta_ShowNumAccessesPerBanner (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Draw bar proportional to number of clicks */
       NumClicks = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumClicks,MaxClicks,TotalClicks,600);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumClicks,MaxClicks,TotalClicks,600);
      }
   }
 
@@ -3283,7 +3283,7 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Draw bar proportional to number of pages generated */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,450);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,450);
      }
   }
 
@@ -3399,7 +3399,7 @@ static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Draw bar proportional to number of pages generated */
       NumPagesGenerated = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,450);	// Changed!
+      Sta_DrawBarNumClicks ('c',NumPagesGenerated,MaxPagesGenerated,TotalPagesGenerated,450);
      }
   }
 
@@ -3451,7 +3451,7 @@ static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPa
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
 	                 " alt=\"\" title=\"\""
                          " class=\"LEFT_TOP\""
-	                 " style=\"width:%upx; height:21px;\" />"	// Changed!
+	                 " style=\"width:%upx; height:21px;\" />"
                          "&nbsp;",
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
@@ -3528,7 +3528,7 @@ void Sta_ReqUseOfPlatform (void)
 
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"padding-bottom:15px;\">");	// Changed!
+	              " style=\"padding-bottom:15px;\">");
    Act_FormStart (ActSeeUseGbl);
 
    /***** Compute stats for anywhere, degree or course? *****/
@@ -6717,7 +6717,7 @@ static void Sta_GetAndShowForumStats (void)
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\" style=\"width:24px;\">"	// Changed!
+                      "<th class=\"LEFT_TOP\" style=\"width:24px;\">"
                       "<img src=\"%s/forum16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -6943,7 +6943,7 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_TOP\" style=\"width:24px;\">"	// Changed!
+                      "<td class=\"LEFT_TOP\" style=\"width:24px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICON16x16\" />"
@@ -7002,7 +7002,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
    /***** Write forum name and stats *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP\" style=\"width:24px;\">"	// Changed!
+                      "<td class=\"DAT_N_LINE_TOP\" style=\"width:24px;\">"
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
@@ -7667,7 +7667,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
                          "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:48px; height:30px;\" />"	// Changed!
+                         " style=\"width:48px; height:30px;\" />"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
@@ -8075,7 +8075,7 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
                          "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/layout%u%u_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:48px; height:30px;\" />"	// Changed!
+                         " style=\"width:48px; height:30px;\" />"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
