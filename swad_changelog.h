@@ -98,13 +98,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.1 (2015/09/25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.1.1 (2015/09/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-BUG: Stats from country: "Wrong scope"
+BUG: Registering teachers after notification, as Institution admin --> "You don't have permission to list requesters."
 
+        Version 15.1.1:   Sep 26, 2015	Fixed bug in statistics. (185084 lines)
         Version 15.1:     Sep 25, 2015	Changes in layout of statistics of clicks. (185058 lines)
         Version 15.0.3:   Sep 24, 2015	Fixed bug when printing country information. (185013 lines)
         Version 15.0.2:   Sep 24, 2015	New layout in preferences. (185011 lines)

@@ -801,6 +801,7 @@ static bool Sta_SeeAccesses (void)
    extern const char *Txt_There_are_no_accesses_with_the_selected_search_criteria;
    extern const char *Txt_List_of_detailed_clicks_in_the_course_X;
    extern const char *Txt_Statistics_of_all_visits;
+   extern const char *Txt_Statistics_of_visits_to_COUNTRY_X;
    extern const char *Txt_Statistics_of_visits_to_the_institution_X;
    extern const char *Txt_Statistics_of_visits_to_the_centre_X;
    extern const char *Txt_Statistics_of_visits_to_the_degree_X;
@@ -943,11 +944,11 @@ static bool Sta_SeeAccesses (void)
         }
 
       /***** Get users range for access statistics *****/
-      Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	                  1 << Sco_SCOPE_CTY     |
+      Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	                  1 << Sco_SCOPE_CTY |
 		          1 << Sco_SCOPE_INS |
-	                  1 << Sco_SCOPE_CTR      |
-                          1 << Sco_SCOPE_DEG      |
+	                  1 << Sco_SCOPE_CTR |
+                          1 << Sco_SCOPE_DEG |
                           1 << Sco_SCOPE_CRS;
       Gbl.Scope.Default = Sco_SCOPE_SYS;
       Sco_GetScope ();
@@ -1320,6 +1321,10 @@ static bool Sta_SeeAccesses (void)
                  {
                   case Sco_SCOPE_SYS:
                      strcpy (Gbl.Message,Txt_Statistics_of_all_visits);
+                     break;
+                  case Sco_SCOPE_CTY:
+                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_COUNTRY_X,
+                              Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
                      break;
                   case Sco_SCOPE_INS:
                      sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_institution_X,

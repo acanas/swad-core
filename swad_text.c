@@ -36493,6 +36493,27 @@ const char *Txt_Statistics_of_all_visits =
 	"Statistics of all visits";			// Necessita de tradução
 #endif
 
+const char *Txt_Statistics_of_visits_to_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Estad&iacute;stica de accesos a <strong>%s</strong>";	// Necessita traduccio
+#elif L==1
+	"Statistics of visits to <strong>%s</strong>";	// Need Übersetzung
+#elif L==2
+	"Statistics of visits to <strong>%s</strong>";
+#elif L==3
+	"Estad&iacute;stica de accesos a <strong>%s</strong>";
+#elif L==4
+	"Statistics of visits to <strong>%s</strong>";	// Besoin de traduction
+#elif L==5
+	"Estad&iacute;stica de accesos a <strong>%s</strong>";	// Okoteve traducción
+#elif L==6
+	"Statistiche degli accessi al centro <strong>%s</strong>";
+#elif L==7
+	"Statistics of visits to the centre <strong>%s</strong>";	// Potrzebujesz tlumaczenie
+#elif L==8
+	"Statistics of visits to the centre <strong>%s</strong>";	// Necessita de tradução
+#endif
+
 const char *Txt_Statistics_of_visits_to_the_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Estad&iacute;stica de accesos al centro <strong>%s</strong>";	// Necessita traduccio
