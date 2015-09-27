@@ -56,6 +56,17 @@ table td
 img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
 
+/********************************** Background *******************************/
+.WHITE_BACKGROUND	{background:linear-gradient(black 0,black 72px,white 72px,#cfcfce 72px,white 112px,white 100%); background-repeat: no-repeat;}
+.GREY_BACKGROUND	{background:linear-gradient(#383838 0,#404040 48px,#404040 212px,white 212px,white 100%); background-repeat: no-repeat;}
+.BLUE_BACKGROUND	{background:linear-gradient(#5fa5df 0,#4f90c8 48px,#4f90c8 212px,white 212px,white 100%); background-repeat: no-repeat;}
+.YELLOW_BACKGROUND	{background:linear-gradient(#201420 0,#201420 212px,white 212px,white 100%); background-repeat: no-repeat;}
+
+.WHITE_HEAD_ROW_1	{background-color:black;}
+.GREY_HEAD_ROW_1	{background:linear-gradient(#383838 0,#383838 48px,#404040 100%); background-repeat: no-repeat;}
+.BLUE_HEAD_ROW_1	{background:linear-gradient(#5fa5df 0,#4f90c8 48px,#4f90c8 100%); background-repeat: no-repeat;}
+.YELLOW_HEAD_ROW_1	{background-color:#201420;}
+
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
 	{

@@ -61,6 +61,17 @@ hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
+/********************************** Background *******************************/
+.WHITE_BACKGROUND	{background:linear-gradient(black 0,black 48px,white 48px,#cfcfce 48px,white 88px,white 100%); background-repeat: no-repeat;}
+.GREY_BACKGROUND	{background:linear-gradient(#383838 0,#404040 32px,#404040 228px,white 228px,white 100%); background-repeat: no-repeat;}
+.BLUE_BACKGROUND	{background:linear-gradient(#5fa5df 0,#4f90c8 32px,#4f90c8 228px,white 228px,white 100%); background-repeat: no-repeat;}
+.YELLOW_BACKGROUND	{background:linear-gradient(#201420 0,#201420 228px,white 228px,white 100%); background-repeat: no-repeat;}
+
+.WHITE_HEAD_ROW_1	{background-color:black;}
+.GREY_HEAD_ROW_1	{background:linear-gradient(#383838 0,#383838 32px,#404040 100%); background-repeat: no-repeat;}
+.BLUE_HEAD_ROW_1	{background:linear-gradient(#5fa5df 0,#4f90c8 32px,#4f90c8 100%); background-repeat: no-repeat;}
+.YELLOW_HEAD_ROW_1	{background-color:#201420;}
+
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
 	{

@@ -91,10 +91,7 @@ void Tab_DrawTabs (void)
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
-	              " style=\"height:84px;"
-		      " background-image:url('%s/head_base_background_1x56.gif');"
-		      " background-size:1px 84px;"
-		      " background-repeat:repeat-x;\">"
+	              " style=\"height:84px;\">"
 		      "<div id=\"tabs_container\">",
             ColspanCentralPart,Gbl.Prefs.PathTheme);
    switch (Gbl.Prefs.Layout)

@@ -109,6 +109,13 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
+   const char *ClassBackground[The_NUM_THEMES] =
+     {
+      "WHITE_BACKGROUND",	// The_THEME_WHITE
+      "GREY_BACKGROUND",	// The_THEME_GREY
+      "BLUE_BACKGROUND",	// The_THEME_BLUE
+      "YELLOW_BACKGROUND",	// The_THEME_YELLOW
+      };
    unsigned ColspanCentralPart = 3;	// Initialized to avoid warnning
 
    /***** If, when this function is called, the head is being written
@@ -252,7 +259,8 @@ void Lay_WriteStartOfPage (void)
 	       Gbl.Prefs.IconsURL);
 
    /***** Header of layout *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+   fprintf (Gbl.F.Out,"<table class=\"%s\" style=\"width:100%%;\">",
+            ClassBackground[Gbl.Prefs.Theme]);
 
    Lay_WritePageTopHeading ();
 
@@ -615,11 +623,15 @@ static void Lay_WritePageTopHeading (void)
          "swad168x48.gif",252,72,
         },
      };
+   const char *ClassHeadRow1[The_NUM_THEMES] =
+     {
+      "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
+      "GREY_HEAD_ROW_1",	// The_THEME_GREY
+      "BLUE_HEAD_ROW_1",	// The_THEME_BLUE
+      "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
+      };
 
-   fprintf (Gbl.F.Out,"<tr style=\"background-image:url('%s/head_row1_1x48.gif');"
-	              " background-size:1px 72px;"
-	              " background-repeat:repeat-x;\">",
-            Gbl.Prefs.PathTheme);
+   fprintf (Gbl.F.Out,"<tr class=\"%s\">",ClassHeadRow1[Gbl.Prefs.Theme]);
 
    /***** 1st. row, 1st. column: logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">",
@@ -683,11 +695,7 @@ static void Lay_WritePageTopHeading (void)
                       "</tr>");
 
    /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<tr style=\"height:96px;"
-	              " background-image:url('%s/head_row2_1x64.gif');"
-	              " background-size:1px 96px;"
-	              " background-repeat:repeat-x;\">",
-            Gbl.Prefs.PathTheme);
+   fprintf (Gbl.F.Out,"<tr>");
 
    switch (Gbl.Prefs.Layout)
      {
@@ -723,11 +731,7 @@ static void Lay_WritePageTopHeading (void)
          break;
       case Lay_LAYOUT_MOBILE:
          fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\""
-                            " style=\"height:48px;"
-                            " background-image:url('%s/head_row2_1x64.gif');"
-                            " background-size:1px 96px;"
-                            " background-repeat:repeat-x;\">",
-                  Gbl.Prefs.PathTheme);
+                            " style=\"height:48px;\">");
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
          break;
@@ -745,12 +749,8 @@ static void Lay_WritePageTopHeading (void)
       case Lay_LAYOUT_DESKTOP:
          /***** 3rd. row, 1st. column *****/
          if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-            fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:192px;"
-                               " background-image:url('%s/head_base_background_1x56.gif');"
-                               " background-size:1px 84px;"
-                               " background-repeat:repeat-x;\">"
-                               "</td>",
-            Gbl.Prefs.PathTheme);
+            fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">"
+        	               "</td>");
 
          /***** 3rd. row, 2nd. column *****/
          Tab_DrawTabs ();
@@ -883,13 +883,9 @@ static void Lay_ShowRightColumn (void)
    /***** Connected users *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td class=\"RIGHT_TOP\""
-                      " style=\"background-image:url('%s/head_base_background_1x56.gif');"
-                      " background-size:1px 84px;"
-                      " background-repeat:repeat-x;\">"
+                      "<td class=\"RIGHT_TOP\">"
                       "<table style=\"width:100%%; padding-top:84px;"
-                      " border-spacing:6px;\">",
-            Gbl.Prefs.PathTheme);
+                      " border-spacing:6px;\">");
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
