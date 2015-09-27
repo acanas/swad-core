@@ -32,6 +32,7 @@ body
 	margin:0;
 	background-color:white;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size:1.5em;
 	}
 input			{font-size:15pt; vertical-align:middle;}
 select			{font-size:15pt;}
