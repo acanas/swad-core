@@ -98,12 +98,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.2 (2015/09/27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.2.1 (2015/09/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.2:     Sep 27, 2015	Change in layout. Background images are changed to CSS backgrounds. (185185 lines)
+        Version 15.2.1:   Sep 27, 2015	Change in layout. Background images are changed to CSS linear gradients. (185171 lines)
+        Version 15.2:     Sep 27, 2015	Change in layout. Background images are changed to CSS linear gradients. (185185 lines)
         Version 15.1.3:   Sep 27, 2015	Change in CSS. (185173 lines)
         Version 15.1.2:   Sep 27, 2015	Fixed bug in requests for registration. (185170 lines)
         Version 15.1.1:   Sep 26, 2015	Fixed bug in statistics. (185084 lines)

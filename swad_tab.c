@@ -93,7 +93,7 @@ void Tab_DrawTabs (void)
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
 	              " style=\"height:84px;\">"
 		      "<div id=\"tabs_container\">",
-            ColspanCentralPart,Gbl.Prefs.PathTheme);
+            ColspanCentralPart);
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
