@@ -2198,6 +2198,8 @@ void Enr_ShowEnrollmentRequests (void)
             Roles = (1 << Rol_STUDENT) | (1 << Rol_TEACHER);
             break;
          case Rol_DEG_ADM:
+         case Rol_CTR_ADM:
+         case Rol_INS_ADM:
          case Rol_SYS_ADM:
             Roles = (1 << Rol_TEACHER);
             break;
@@ -2224,7 +2226,11 @@ void Enr_ShowEnrollmentRequests (void)
          switch (Gbl.Usrs.Me.LoggedRole)
            {
             case Rol_TEACHER:
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
                               " AND crs_usr.CrsCod=crs_usr_requests.CrsCod"
@@ -2234,7 +2240,11 @@ void Enr_ShowEnrollmentRequests (void)
                         Roles);
                break;
             case Rol_DEG_ADM:
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
                               " AND admin.Cod=courses.DegCod"
@@ -2244,9 +2254,47 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Roles);
                break;
+            case Rol_CTR_ADM:
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+                              " FROM admin,degrees,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ctr'"
+                              " AND admin.Cod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
+                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+                              " ORDER BY crs_usr_requests.RequestTime DESC",
+                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Roles);
+               break;
+            case Rol_INS_ADM:
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+                              " FROM admin,centres,degrees,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ins'"
+                              " AND admin.Cod=centres.InsCod"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
+                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+                              " ORDER BY crs_usr_requests.RequestTime DESC",
+                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Roles);
+               break;
            case Rol_SYS_ADM:
-               sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
-                              " FROM crs_usr_requests WHERE ((1<<Role)&%u)<>0"
+               sprintf (Query,"SELECT ReqCod,"
+        	              "CrsCod,"
+        	              "UsrCod,"
+        	              "Role,"
+        	              "DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+                              " FROM crs_usr_requests"
+                              " WHERE ((1<<Role)&%u)<>0"
                               " ORDER BY RequestTime DESC",
                         Roles);
                break;
@@ -2259,13 +2307,17 @@ void Enr_ShowEnrollmentRequests (void)
          switch (Gbl.Usrs.Me.LoggedRole)
            {
             case Rol_TEACHER:
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,centres,degrees,courses,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
-                              " AND centres.InsCod='%ld'"
                               " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.DegCod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
+                              " AND centres.InsCod='%ld'"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2274,13 +2326,17 @@ void Enr_ShowEnrollmentRequests (void)
                         Roles);
                break;
             case Rol_DEG_ADM:
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
-                              " AND centres.InsCod='%ld'"
                               " AND admin.Cod=degrees.DegCod"
-                              " AND admin.Cod=courses.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
+                              " AND centres.InsCod='%ld'"
+                              " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2288,8 +2344,32 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentIns.Ins.InsCod,
                         Roles);
                break;
-           case Rol_SYS_ADM:
-               sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+            case Rol_CTR_ADM:
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+                              " FROM admin,centres,degrees,courses,crs_usr_requests"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ctr'"
+                              " AND admin.Cod=centres.CtrCod"
+                              " AND centres.InsCod='%ld'"
+                              " AND centres.CtrCod=degrees.CtrCod"
+                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.CrsCod=crs_usr_requests.CrsCod"
+                              " AND ((1<<crs_usr_requests.Role)&%u)<>0"
+                              " ORDER BY crs_usr_requests.RequestTime DESC",
+                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.CurrentIns.Ins.InsCod,
+                        Roles);
+               break;
+            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this institution
+            case Rol_SYS_ADM:
+               sprintf (Query,"SELECT crs_usr_requests.ReqCod,"
+        	              "crs_usr_requests.CrsCod,"
+        	              "crs_usr_requests.UsrCod,"
+        	              "crs_usr_requests.Role,"
+        	              "DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM centres,degrees,courses,crs_usr_requests"
                               " WHERE centres.InsCod='%ld'"
                               " AND centres.CtrCod=degrees.CtrCod"
@@ -2312,9 +2392,9 @@ void Enr_ShowEnrollmentRequests (void)
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr,degrees,courses,crs_usr_requests"
                               " WHERE crs_usr.UsrCod='%ld'"
-                              " AND degrees.CtrCod='%ld'"
                               " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND degrees.DegCod=courses.DegCod"
+                              " AND courses.DegCod=degrees.DegCod"
+                              " AND degrees.CtrCod='%ld'"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2326,9 +2406,9 @@ void Enr_ShowEnrollmentRequests (void)
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM admin,degrees,courses,crs_usr_requests"
                               " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
-                              " AND degrees.CtrCod='%ld'"
                               " AND admin.Cod=degrees.DegCod"
-                              " AND admin.Cod=courses.DegCod"
+                              " AND degrees.CtrCod='%ld'"
+                              " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2336,7 +2416,9 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         Roles);
                break;
-           case Rol_SYS_ADM:
+            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this centre
+            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this centre
+            case Rol_SYS_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM degrees,courses,crs_usr_requests"
                               " WHERE degrees.CtrCod='%ld'"
@@ -2368,7 +2450,9 @@ void Enr_ShowEnrollmentRequests (void)
                         Gbl.CurrentDeg.Deg.DegCod,
                         Roles);
                break;
-            case Rol_DEG_ADM:
+            case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this degree
+            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this degree
+            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this degree
             case Rol_SYS_ADM:
                sprintf (Query,"SELECT crs_usr_requests.ReqCod,crs_usr_requests.CrsCod,crs_usr_requests.UsrCod,crs_usr_requests.Role,DATE_FORMAT(crs_usr_requests.RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM courses,crs_usr_requests"
@@ -2387,8 +2471,10 @@ void Enr_ShowEnrollmentRequests (void)
       case Sco_SCOPE_CRS:        // Show requesters for the current course
          switch (Gbl.Usrs.Me.LoggedRole)
            {
-            case Rol_TEACHER:
-            case Rol_DEG_ADM:
+            case Rol_TEACHER:	// If I am logged as teacher of this course   , I can view all the requesters from this course
+            case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this course
+            case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this course
+            case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this course
             case Rol_SYS_ADM:
                sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
                               " FROM crs_usr_requests"
