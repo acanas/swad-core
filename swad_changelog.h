@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.3 (2015/09/28)"
+#define Log_PLATFORM_VERSION	"SWAD 15.3.1 (2015/09/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.3.1:   Sep 29, 2015	Changes in background and fonts. (185156 lines)
         Version 15.3:     Sep 28, 2015	All sizes are multiplied by 0.8333 (25% bigger than those previous to version 15.0). (185148 lines)
         Version 15.2.2:   Sep 27, 2015	Fixed minor problem in CSS. (185172 lines)
         Version 15.2.1:   Sep 27, 2015	Change in layout. Background images are changed to CSS linear gradients. (185171 lines)
