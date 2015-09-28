@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 #define Syl_MAX_LENGTH_TEXT_ITEM	1024
 #define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_LENGTH_TEXT_ITEM*Str_MAX_CHARACTER)
 
-#define Syl_WIDTH_NUM_SYLLABUS 24
+#define Syl_WIDTH_NUM_SYLLABUS 20
 
 static const char *StyleSyllabus[1+Syl_MAX_LEVELS_SYLLABUS] =
   {
@@ -136,7 +136,7 @@ void Syl_PutFormWhichSyllabus (void)
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
    Act_FormStart (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<div style=\"margin:15px 0;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
                       "<ul class=\"LIST_CENTER\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;

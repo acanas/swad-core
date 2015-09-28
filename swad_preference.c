@@ -73,7 +73,7 @@ void Pre_EditPrefs (void)
    Lay_EndRoundFrame ();
 
    /***** Layout, side columns, theme, icon set & menu *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:20px 0;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
    Lay_PutIconsToSelectLayout ();	// 1. Layout
@@ -89,7 +89,7 @@ void Pre_EditPrefs (void)
      }
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>"
-                      "<table style=\"margin:0 auto; border-spacing:20px 0;\">"
+                      "<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
 	              "<td>");
    The_PutIconsToSelectTheme ();	// 4. Theme
@@ -229,8 +229,8 @@ void Pre_PutSelectorToSelectLanguage (void)
    Txt_Language_t Lan;
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      135,	// Lay_LAYOUT_DESKTOP
-      180,	// Lay_LAYOUT_MOBILE
+      112,	// Lay_LAYOUT_DESKTOP
+      150,	// Lay_LAYOUT_MOBILE
      };
 
    Act_FormStart (ActReqChgLan);
@@ -356,7 +356,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " style=\"display:block;"
-	                 " width:48px; height:30px;\" />",
+	                 " width:40px; height:25px;\" />",
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],

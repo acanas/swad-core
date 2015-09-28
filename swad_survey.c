@@ -3164,7 +3164,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
         }
 
       /* Write the number of option */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:60px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:50px;\">"
 	                 "%u)"
 	                 "</td>",
                NumAns + 1);
@@ -3194,7 +3194,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 /***************** Draw a bar with the percentage of answers *****************/
 /*****************************************************************************/
 
-#define Svy_MAX_BAR_WIDTH 150
+#define Svy_MAX_BAR_WIDTH 125
 
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   {
@@ -3213,7 +3213,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    /***** Draw bar with a with proportional to the number of clicks *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:%upx;\">",
-            Svy_MAX_BAR_WIDTH + 150);
+            Svy_MAX_BAR_WIDTH + 125);
    if (NumUsrs && MaxUsrs)
       BarWidth = (unsigned) ((((float) NumUsrs * (float) Svy_MAX_BAR_WIDTH) /
 	                       (float) MaxUsrs) + 0.5);
@@ -3222,7 +3222,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"LEFT_TOP\""
-	              " style=\"width:%upx; height:24px;\" />"
+	              " style=\"width:%upx; height:20px;\" />"
 	              "&nbsp;",
       Gbl.Prefs.IconsURL,
       Gbl.Title,

@@ -2600,7 +2600,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                                                               Txt_MSG_Unopened) :
                                                       Txt_MSG_Sent;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s CENTER_TOP\" style=\"width:24px;\">"
+	              "<td class=\"%s CENTER_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />",
@@ -2625,7 +2625,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 
    /***** Write message author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,120,11,
+   Msg_WriteMsgAuthor (&UsrDat,100,11,
 	               Open ? "MSG_AUT_BG" :
 	        	      "MSG_AUT_BG_NEW",	// Style
 	               true,NULL);
@@ -2757,7 +2757,7 @@ void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,unsigne
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:54px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:45px;\">"
                       "%lu:"
                       "</td>",
 	    NewMsg ? "MSG_TIT_BG_NEW" :
@@ -2824,7 +2824,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",Style);
    if (BgColor)
       fprintf (Gbl.F.Out," %s",BgColor);
-   fprintf (Gbl.F.Out,"\" style=\"width:36px;\">");
+   fprintf (Gbl.F.Out,"\" style=\"width:30px;\">");
 
    /***** Write author name or don't write it? *****/
    if (Enabled)
@@ -2981,7 +2981,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    /***** Put an icon to show if user has read the message *****/
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:24px;\">"
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -2995,7 +2995,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       Txt_MSG_Sent);
 
    /***** Put user's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:36px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:30px;\">");
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -3127,7 +3127,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                              (Deleted ? Txt_MSG_Deleted_without_opening :
                                         Txt_MSG_Unopened);
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LEFT_MIDDLE\" style=\"width:24px;\">"
+                            "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                             "<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON16x16\" />"
@@ -3140,7 +3140,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                   Title,Title);
 
          /* Put user's photo */
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:36px;\">");
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
          ShowPhoto = (UsrValid ? Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -3212,7 +3212,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
   {
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"width:127px;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"width:106px;\">",
             ClassBackground);
 
    /***** Write date and time (DateTime holds date and time in YYYYMMDDHHMMSS format) *****/
@@ -3308,7 +3308,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/open_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" style=\"margin-left:15px;\" />",
+	              " class=\"ICON16x16\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
@@ -3518,7 +3518,7 @@ void Msg_ListBannedUsrs (void)
 
             /* Show photo */
             fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-        	               " style=\"width:36px;\">");
+        	               " style=\"width:30px;\">");
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,

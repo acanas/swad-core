@@ -113,7 +113,7 @@ void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"margin-bottom:30px;\">");
+	              " style=\"margin-bottom:25px;\">");
    Crs_Configuration (false);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -362,7 +362,7 @@ static void Crs_Configuration (bool PrintView)
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_QR_code);
-      QR_LinkTo (300,"crs",Gbl.CurrentCrs.Crs.CrsCod);
+      QR_LinkTo (250,"crs",Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -568,7 +568,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                       "<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
-   fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+   fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
@@ -604,7 +604,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_ShowErrorAndExit ("Country not found.");
 
       /***** Write link to country *****/
-      fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+      fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Act_FormStart (ActSeeCtyInf);
@@ -647,7 +647,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+	 fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	 Act_FormStart (ActSeeInsInf);
@@ -685,7 +685,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/
-	    fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+	    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 	    Act_FormStart (ActSeeCtrInf);
@@ -723,7 +723,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
-	       fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+	       fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 	       Act_FormStart (ActSeeDegInf);
@@ -761,7 +761,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
-		  fprintf (Gbl.F.Out,"<li style=\"height:30px;\">");
+		  fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 		  Act_FormStart (ActSeeCrsInf);
@@ -942,7 +942,7 @@ void Crs_WriteSelectorOfCourse (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCrsInf);
-   fprintf (Gbl.F.Out,"<select name=\"crs\" style=\"width:210px;\"");
+   fprintf (Gbl.F.Out,"<select name=\"crs\" style=\"width:175px;\"");
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -1129,8 +1129,8 @@ void Crs_WriteSelectorMyCourses (void)
    extern const char *Txt_No_COURSE_SELECTED;
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      210,	// Lay_LAYOUT_DESKTOP
-      360,	// Lay_LAYOUT_MOBILE
+      175,	// Lay_LAYOUT_DESKTOP
+      300,	// Lay_LAYOUT_MOBILE
      };
    unsigned NumMyCrs;
    bool IBelongToCurrentCrs = false;
@@ -1454,7 +1454,7 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActChgCrsDeg);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-        	                  " style=\"width:120px;\""
+        	                  " style=\"width:100px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
                         Gbl.FormId);
                for (NumDeg = 0;
@@ -1479,7 +1479,7 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActChgCrsYea);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
-        	                  " style=\"width:60px;\""
+        	                  " style=\"width:50px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
                         Gbl.FormId);
                for (YearAux = 0;
@@ -1576,7 +1576,7 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActChgCrsSta);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<select name=\"Status\""
-        	                  " style=\"width:120px;\""
+        	                  " style=\"width:100px;\""
         	                  " onchange=\"javascript:document.getElementById('%s').submit();\">"
                                   "<option value=\"%u\" selected=\"selected\">%s</option>"
                                   "<option value=\"%u\">%s</option>"
@@ -1596,11 +1596,11 @@ static void Crs_ListCoursesForEdition (void)
             UsrDat.UsrCod = Crs->RequesterUsrCod;
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
             fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-        	               " style=\"width:150px;\">"
+        	               " style=\"width:125px;\">"
                                "<table class=\"CELLS_PAD_2\""
-                               " style=\"width:150px;\">"
+                               " style=\"width:125px;\">"
                                "<tr>");
-            Msg_WriteMsgAuthor (&UsrDat,120,10,"DAT",true,NULL);
+            Msg_WriteMsgAuthor (&UsrDat,100,10,"DAT",true,NULL);
             fprintf (Gbl.F.Out,"</tr>"
         	               "</table>"
         	               "</td>"
@@ -1721,7 +1721,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthDegCod\""
-                      " style=\"width:120px;\" disabled=\"disabled\">"
+                      " style=\"width:100px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\">%s</option>"
                       "</select>"
                       "</td>",
@@ -1730,7 +1730,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-	              "<select name=\"OthCrsYear\" style=\"width:60px;\">");
+	              "<select name=\"OthCrsYear\" style=\"width:50px;\">");
    for (Year = 0;
 	Year <= Gbl.CurrentDeg.Deg.LastYear;
         Year++)
@@ -1786,10 +1786,10 @@ static void Crs_PutFormToCreateCourse (void)
             Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
 
    /***** Course requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:150px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
+		      "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,120,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,10,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"

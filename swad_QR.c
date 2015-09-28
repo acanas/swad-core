@@ -41,7 +41,7 @@
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
 
-#define QR_CODE_SIZE	((6+25+6)*9)
+#define QR_CODE_SIZE	((6+25+6)*8)
 #define QR_DEFAULT_TYPE QR_ID
 
 /*****************************************************************************/
@@ -155,7 +155,7 @@ void QR_ExamAnnnouncement (void)
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
                       " alt=\"%s\" title=\"%s\""
-                      " style=\"width:300px; height:300px;\" />"
+                      " style=\"width:250px; height:250px;\" />"
                       "</div>",
             300,300,
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeExaAnn].ActCod,

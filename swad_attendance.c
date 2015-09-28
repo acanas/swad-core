@@ -1887,7 +1887,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 		      "<th></th>"
 		      "<th></th>");
    if (Gbl.Usrs.Listing.WithPhotos)
-      fprintf (Gbl.F.Out,"<th style=\"width:27px;\"></th>");
+      fprintf (Gbl.F.Out,"<th style=\"width:22px;\"></th>");
    fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
 	              "%s"
 	              "</th>"
@@ -1958,7 +1958,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                          "<th></th>"
                          "<th></th>");
       if (Gbl.Usrs.Listing.WithPhotos)
-         fprintf (Gbl.F.Out,"<th style=\"width:27px;\"></th>");
+         fprintf (Gbl.F.Out,"<th style=\"width:22px;\"></th>");
       fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
 	                 "%s"
 	                 "</th>"
@@ -3158,7 +3158,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\""
-	                 " style=\"width:27px;\">",
+	                 " style=\"width:22px;\">",
 	       Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -3292,7 +3292,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 
    /***** Show student's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\""
-	              " style=\"width:27px;\">",
+	              " style=\"width:22px;\">",
             Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :

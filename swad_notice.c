@@ -51,8 +51,8 @@ extern struct Globals Gbl;
 
 const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
   {
-   150,	// Not_LIST_BRIEF_NOTICES
-   600,	// Not_LIST_FULL_NOTICES
+   125,	// Not_LIST_BRIEF_NOTICES
+   500,	// Not_LIST_FULL_NOTICES
   };
 
 const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
@@ -380,7 +380,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 if (NumNotices)
 	   {
 	    sprintf (StrWidth,"%upx",
-		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 60);
+		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
             Lay_StartRoundFrameTable (StrWidth,2,Txt_All_notices);
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"CENTER_TOP\">");

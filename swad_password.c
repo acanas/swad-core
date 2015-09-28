@@ -884,7 +884,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:15px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "<span class=\"%s\">%s</span><br />"
 		      "<span class=\"%s\">%s: </span>"

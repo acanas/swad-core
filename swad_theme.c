@@ -247,7 +247,7 @@ void The_PutIconsToSelectTheme (void)
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
 	                 " title=\"%s\" style=\"display:block;"
-	                 " width:48px; height:30px; margin:0 auto;\" />",
+	                 " width:40px; height:25px; margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_THEMES,
                The_ThemeId[Theme],

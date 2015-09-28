@@ -293,14 +293,14 @@ void Lay_WriteStartOfPage (void)
      {
       case Lay_LAYOUT_DESKTOP:
          /* Left bar used to expand-contract central zone */
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:15px;\">");
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:12px;\">");
          Pre_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</td>");
 
          if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
            {
 	    /* Tab content, including vertical menu (left) and main zone (right) */
-	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:210px;\">");
+	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:175px;\">");
 	    Mnu_WriteVerticalMenuThisTabDesktop ();
 	    fprintf (Gbl.F.Out,"</td>");
            }
@@ -324,7 +324,7 @@ void Lay_WriteStartOfPage (void)
    /***** Main zone *****/
    /* Start of main zone for actions output */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	              " style=\"padding:0 15px 15px 15px;\">");
+	              " style=\"padding:0 12px 12px 12px;\">");
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
@@ -353,7 +353,7 @@ void Lay_WriteStartOfPage (void)
 	  Gbl.Now.Date.Day == 1)
         {
          fprintf (Gbl.F.Out,"<div class=\"ASG_TITLE CENTER_MIDDLE\""
-                            " style=\"margin:75px;\">");
+                            " style=\"margin:62px;\">");
          fprintf (Gbl.F.Out,Txt_NEW_YEAR_GREETING,Gbl.Now.Date.Year);
          fprintf (Gbl.F.Out,"</div>");
         }
@@ -376,7 +376,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	{
 	 /* Right bar used to expand-contract central zone */
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:15px;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:12px;\">");
 	 Pre_PutRigthIconToHideShowCols ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -617,10 +617,10 @@ static void Lay_WritePageTopHeading (void)
      } LogoLayout[Lay_NUM_LAYOUTS] =
      {
         {	// Lay_LAYOUT_DESKTOP
-         "swad112x32.gif",168,48,
+         "swad112x32.gif",140,40,
         },
         {	// Lay_LAYOUT_MOBILE
-         "swad168x48.gif",252,72,
+         "swad168x48.gif",210,60,
         },
      };
    const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -635,7 +635,7 @@ static void Lay_WritePageTopHeading (void)
 
    /***** 1st. row, 1st. column: logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">",
-            LogoLayout[Gbl.Prefs.Layout].Width + 24);
+            LogoLayout[Gbl.Prefs.Layout].Width + 20);
 
    /* Left logo */
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
@@ -685,7 +685,7 @@ static void Lay_WritePageTopHeading (void)
 	              "</td>");
 
    /***** 1st. row, 3rd. column: link to open/close session *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:192px;\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
@@ -703,14 +703,14 @@ static void Lay_WritePageTopHeading (void)
          /***** 2nd. row, 1st. column *****/
          /* Clock with hour:minute (server hour is shown) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-                            " style=\"width:192px; height:96px;\">");
+                            " style=\"width:160px; height:80px;\">");
          Dat_ShowCurrentDateTime ();
          fprintf (Gbl.F.Out,"</td>");	// End of first column
 
          /***** 2nd. row, 2nd. column: degree and course *****/
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"height:96px;\">"
+         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"height:80px;\">"
                             "<div class=\"CENTER_TOP\""
-                            " style=\"padding-top:6px;\">");
+                            " style=\"padding-top:5px;\">");
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
          Deg_WriteBigNameCtyInsCtrDegCrs ();
@@ -719,19 +719,19 @@ static void Lay_WritePageTopHeading (void)
 
          /***** 2nd. row, 3rd. column *****/
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-                            " style=\"width:192px; height:96px;\">");
+                            " style=\"width:160px; height:80px;\">");
          if (Gbl.Usrs.Me.Logged)
            {
             /* Number of new messages (not seen) */
             fprintf (Gbl.F.Out,"<div id=\"msg\""	// Used for AJAX based refresh
-        	               " style=\"padding-top:12px;\">");
+        	               " style=\"padding-top:10px;\">");
             Ntf_WriteNumberOfNewNtfs ();
             fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
            }
          break;
       case Lay_LAYOUT_MOBILE:
          fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\""
-                            " style=\"height:48px;\">");
+                            " style=\"height:40px;\">");
          Deg_WriteCtyInsCtrDeg ();
          Crs_WriteSelectorMyCourses ();
          break;
@@ -759,7 +759,7 @@ static void Lay_WritePageTopHeading (void)
          if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
            {
             fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CENTER_TOP\""
-        	               " style=\"width:192px;\">");
+        	               " style=\"width:160px;\">");
             Lay_ShowRightColumn ();
             fprintf (Gbl.F.Out,"</td>");
            }
@@ -771,7 +771,7 @@ static void Lay_WritePageTopHeading (void)
          if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
            {
             fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-        	               " style=\"width:192px;\">");
+        	               " style=\"width:160px;\">");
             Lay_ShowLeftColumn ();
             fprintf (Gbl.F.Out,"</td>");
            }
@@ -799,7 +799,7 @@ static void Lay_WriteTitleAction (void)
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
 	              " style=\"background-image:url('%s/%s/%s64x64.gif');"
-	              " background-size:96px 96px;\">",
+	              " background-size:80px 80px;\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	    Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].Icon);
 
@@ -826,10 +826,10 @@ static void Lay_ShowLeftColumn (void)
   {
    struct Act_ListMFUActions ListMFUActions;
 
-   fprintf (Gbl.F.Out,"<table style=\"width:192px;\">"
+   fprintf (Gbl.F.Out,"<table style=\"width:160px;\">"
                       "<tr>"
                       "<td class=\"LEFT_TOP\">"
-                      "<table style=\"width:192px; border-spacing:6px;\">");
+                      "<table style=\"width:160px; border-spacing:5px;\">");
 
    /***** Most frequently used actions *****/
    if (Gbl.Usrs.Me.Logged)
@@ -884,8 +884,8 @@ static void Lay_ShowRightColumn (void)
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
                       "<td class=\"RIGHT_TOP\">"
-                      "<table style=\"width:100%%; padding-top:84px;"
-                      " border-spacing:6px;\">");
+                      "<table style=\"width:100%%; padding-top:70px;"
+                      " border-spacing:5px;\">");
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
@@ -924,7 +924,7 @@ static void Lay_ShowRightColumn (void)
 			 " target=\"_blank\" title=\"%s\">"
 			 "<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
-			 " style=\"width:180px; height:300px;\" />"
+			 " style=\"width:150px; height:250px;\" />"
 			 "</a>"
 			 "</td>"
 			 "</tr>",
@@ -995,7 +995,7 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	              " style=\"margin:0 7px; display:inline;\">"
+	              " style=\"margin:0 6px; display:inline;\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" />"
@@ -1313,7 +1313,7 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	                 "<div class=\"ALERT\""
 	                 " style=\"background-image:url('%s/%s16x16.gif');"
-	                 " background-size:24px 24px;\">"
+	                 " background-size:20px 20px;\">"
                          "%s"
 			 "</div>"
 			 "</div>",
@@ -1399,7 +1399,7 @@ void Lay_WritePageFooter (void)
 	 Lay_WriteFootFromHTMLFile ();
 
          fprintf (Gbl.F.Out,"<div class=\"FOOT CENTER_MIDDLE\""
-                            " style=\"padding-bottom:15px;\">");
+                            " style=\"padding-bottom:12px;\">");
 
          /***** Institution and centre hosting the platform *****/
          fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
@@ -1485,12 +1485,12 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    /***** Table start *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"%u\" class=\"CENTER_MIDDLE\">"
-                      "<table style=\"width:100%%; padding:15px;\">"
+                      "<table style=\"width:100%%; padding:12px;\">"
                       "<tr>",
             NumColumns);
 
    /***** First column: institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:96px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:80px;\">");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1537,7 +1537,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Third column: degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:96px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:80px;\">");
    if (DegCod > 0)
      {
       if (!PrintView)
@@ -1644,7 +1644,7 @@ void Lay_AdvertisementMobile (void)
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
      {
-      fprintf (Gbl.F.Out,"<div style=\"margin-top:30px;\">");
+      fprintf (Gbl.F.Out,"<div style=\"margin-top:25px;\">");
 
       /***** Table start *****/
       Lay_StartRoundFrameTable (NULL,8,NULL);
@@ -1657,7 +1657,7 @@ void Lay_AdvertisementMobile (void)
                          "%s<br /><br />"
                          "<img src=\"%s/SWADroid200x300.png\""
                          " alt=\"SWADroid\" title=\"%s\""
-                         " style=\"width:300px; height:450px;\" />"
+                         " style=\"width:250px; height:375px;\" />"
                          "</a>"
 	                 "</td>"
 	                 "</tr>",

@@ -762,7 +762,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable ("750px",0,NULL);
+   Lay_StartRoundFrameTable ("625px",0,NULL);
 
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
      {
@@ -805,7 +805,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
 
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
                       " style=\"width:100%%;"
-                      " padding:30px 30px 150px 30px;\">");      // Bottom space used for signatures
+                      " padding:25px 25px 125px 25px;\">");      // Bottom space used for signatures
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>" \

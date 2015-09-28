@@ -142,7 +142,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CENTER_TOP\">"
-	              "<table style=\"border-spacing:7px;\">");
+	              "<table style=\"border-spacing:6px;\">");
    for (Row = 0;
 	Row < 4;
 	Row++)
@@ -152,7 +152,7 @@ void Cal_DrawCalendar (void)
 	   Col < 4;
 	   Col++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:180px;\">");
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:150px;\">");
 	 Cal_DrawMonth (Year,Month,true,!PrintView,(Gbl.CurrentAct == ActPrnCal));
 	 fprintf (Gbl.F.Out,"</td>");
 	 if (++Month == 13)

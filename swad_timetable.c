@@ -749,7 +749,7 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"min-width:840px; margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table style=\"min-width:700px; margin:0 auto;\">");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();
@@ -1096,7 +1096,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	 if (HourType == TT_FREE_HOUR) // If cell is empty...
 	    fprintf (Gbl.F.Out,"<img src=\"%s/tr1x16.gif\""
 	                       " alt=\"\" title=\"\""
-		               " style=\"width:1px; height:24px;\" />",
+		               " style=\"width:1px; height:20px;\" />",
                      Gbl.Prefs.IconsURL);
 	 else
 	   {
@@ -1149,7 +1149,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	 fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">");
 
 	 /***** Class type *****/
-	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:81px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:68px;\""
 	                    " onchange=\"javascript:document.getElementById('%s').submit();\">",
 	          Gbl.FormId);
 	 for (CT = (TT_ClassType_t) 0;
@@ -1187,7 +1187,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	 else
 	   {
 	    /***** Class duration *****/
-	    fprintf (Gbl.F.Out,"<select name=\"ModTTDur\" style=\"width:69px;\""
+	    fprintf (Gbl.F.Out,"<select name=\"ModTTDur\" style=\"width:57px;\""
 		               " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		     Gbl.FormId);
             for (H = Hour + TimeTable[Day][Hour].Columns[Column].Duration;
@@ -1217,7 +1217,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />%s"
 	                          "<select name=\"ModTTGrpCod\""
-	                          " style=\"width:132px;\""
+	                          " style=\"width:110px;\""
 		                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
 		        Txt_Group,Gbl.FormId);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");

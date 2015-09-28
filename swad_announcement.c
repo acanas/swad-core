@@ -209,7 +209,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
 
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\""
-	              " style=\"width:600px;\">");
+	              " style=\"width:500px;\">");
 
    /***** Write the content of the announcement *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_SUBJECT\">%s</div>",
@@ -220,7 +220,7 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
             Content);
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:15px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">");
 
    if (ShowAllAnnouncements)
      {

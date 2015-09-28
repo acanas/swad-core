@@ -4874,12 +4874,12 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
          /* Icon and text */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LEFT_MIDDLE\""
-                            " style=\"padding-left:3px;\">");
+                            " style=\"padding-left:2px;\">");
          Act_FormStart (Action);
          Act_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON32x32\" style=\"margin:6px;\" />",
+	                    " class=\"ICON32x32\" style=\"margin:5px;\" />",
 		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		  Act_Actions[Action].Icon,
 		  MenuStr,TabMenuStr);

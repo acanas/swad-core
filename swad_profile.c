@@ -327,15 +327,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    // char StrTimeGenerationInMicroseconds[64];
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 15px;\">");
-   /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-     {
-      Sta_ComputeTimeToGeneratePage ();
-      Sta_WriteTime (StrTimeGenerationInMicroseconds,Gbl.TimeGenerationInMicroseconds);
-      fprintf (Gbl.F.Out,"<tr><td>%s</td></tr>",StrTimeGenerationInMicroseconds);
-     }
-   */
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 12px;\">");
+
    /***** Number of courses in which the user is teacher or student *****/
    if ((NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER)))
      {
@@ -1319,7 +1312,7 @@ void Prf_ShowRankingFigure (const char *Query)
 	 fprintf (Gbl.F.Out,"<tr>");
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:60px;\">"
+	                    " style=\"height:50px;\">"
 	                    "%ld"
 	                    "</td>"
 			    "</tr>",
@@ -1464,7 +1457,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 fprintf (Gbl.F.Out,"<tr>");
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:60px;\">",
+	                    " style=\"height:50px;\">",
 	          Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (NumClicksPerDay);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -1493,11 +1486,11 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
-	              " style=\"height:60px;\">"
+	              " style=\"height:50px;\">"
 		      "#%u"
 		      "</td>"
                       "<td class=\"COLOR%u\""
-                      " style=\"width:42px; height:60px;\">",
+                      " style=\"width:35px; height:50px;\">",
 	    Gbl.RowEvenOdd,
 	    Rank,
             Gbl.RowEvenOdd);
@@ -1513,7 +1506,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
      }
 
    fprintf (Gbl.F.Out,"</td>"
-		      "<td class=\"COLOR%u\" style=\"height:60px;\">",
+		      "<td class=\"COLOR%u\" style=\"height:50px;\">",
             Gbl.RowEvenOdd);
 
    /***** Put form to go to public profile *****/

@@ -111,7 +111,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"INS_LNK CENTER_MIDDLE\""
-			 " style=\"width:180px;\">"
+			 " style=\"width:150px;\">"
 			 "<div id=\"institutional_links\">");
       Lnk_WriteListOfLinks ();
       fprintf (Gbl.F.Out,"</div>"

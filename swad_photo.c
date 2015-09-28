@@ -2261,14 +2261,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
 /*****************************************************************************/
 /******** Compute photo width and height for class photo of degrees **********/
 /*****************************************************************************/
-#define MIN_WIDTH_PHOTO		12
-#define MIN_HEIGHT_PHOTO	18
+#define MIN_WIDTH_PHOTO		10
+#define MIN_HEIGHT_PHOTO	15
 #define MIN_PIXELS_PHOTO	(MIN_WIDTH_PHOTO * MIN_HEIGHT_PHOTO)
-#define DEF_WIDTH_PHOTO		54
-#define DEF_HEIGHT_PHOTO	72
+#define DEF_WIDTH_PHOTO		45
+#define DEF_HEIGHT_PHOTO	60
 #define DEF_PIXELS_PHOTO	(DEF_WIDTH_PHOTO * DEF_HEIGHT_PHOTO)
-#define MAX_WIDTH_PHOTO		108
-#define MAX_HEIGHT_PHOTO	144
+#define MAX_WIDTH_PHOTO		90
+#define MAX_HEIGHT_PHOTO	120
 #define MAX_PIXELS_PHOTO	(MAX_WIDTH_PHOTO * MAX_HEIGHT_PHOTO)
 
 static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight)

@@ -3089,7 +3089,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICON20x20\""
-                            " style=\"margin-left:7px;\" />"
+                            " style=\"margin-left:6px;\" />"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
@@ -3155,7 +3155,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX+1];
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:120px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:100px;\">");
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -3163,7 +3163,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
-   fprintf (Gbl.F.Out,"<td class=\"MSG_AUT LEFT_TOP\" style=\"width:240px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"MSG_AUT LEFT_TOP\" style=\"width:200px;\">");
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                           ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3525,7 +3525,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    extern const char *Txt_nobody_else_can_access_this_content;
    char Subtitle[1024];
 
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 auto; min-width:900px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"margin:0 auto; min-width:750px;\">");
 
    /***** Form to change zone (course and group browsers) *****/
    switch (Gbl.FileBrowser.Type)
@@ -5287,7 +5287,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
    for (i = 1;
 	i < Level;
 	i++)
-      fprintf (Gbl.F.Out,"<td style=\"width:24px;\">"
+      fprintf (Gbl.F.Out,"<td style=\"width:20px;\">"
 	                 "<img src=\"%s/tr16x16.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " class=\"ICON16x16B\" />"
@@ -5393,7 +5393,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
 
    /***** Start cell *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-            Level * 24);
+            Level * 20);
 
    /***** Put icon *****/
    if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
@@ -5771,7 +5771,7 @@ static void Brw_WriteDatesAssignment (void)
 	       Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Time.Minute);
 
       /***** Arrow *****/
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:24px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/arrow%s16x12.gif\""
                          " alt=\"\" title=\"\""
                          " class=\"ICON16x16B\" />"
@@ -7708,7 +7708,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Form to upload files using the library Dropzone.js *****/
-   // Use min-height:150px; or other number to stablish the height?
+   // Use min-height:125px; or other number to stablish the height?
    Gbl.NumForm++;
    fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\""
                       " class=\"dropzone\""

@@ -429,7 +429,7 @@ void Ntf_ShowMyNotifications (void)
          /***** Write row for this notification *****/
 	 /* Write event icon */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\" style=\"width:30px;\">",
+                            "<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
                   ClassBackground);
          if (PutLink)
            {
@@ -551,7 +551,7 @@ void Ntf_ShowMyNotifications (void)
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
                                "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
-                               " style=\"padding-bottom:15px;\">"
+                               " style=\"padding-bottom:12px;\">"
                                "%s"
                                "</td>"
                                "</tr>",

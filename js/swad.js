@@ -219,8 +219,8 @@ function zoom(imagen,urlPhoto,shortName) {
 		yPos += tempEl.offsetTop;
 		tempEl = tempEl.offsetParent;
 	}
-        xPos -= (225+18);
-        yPos -= ((300+18)/2);
+        xPos -= (187+15);
+        yPos -= ((250+15)/2);
         if (yPos < 0)
            yPos = 0;
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
@@ -231,8 +231,8 @@ function zoom(imagen,urlPhoto,shortName) {
 
 // Exit from zooming a user's photograph
 function noZoom(imagen) {
-	var xPos = -(225+18);
-	var yPos = -(300+18+132);
+	var xPos = -(187+15);
+	var yPos = -(250+15+110);
 	document.getElementById('zoomTxt').innerHTML = '';
 	document.getElementById('zoomImg').src='/icon/_.gif';
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
@@ -305,26 +305,6 @@ function setDateTo (elem,Day,Month,Year) {
 	document.getElementById('EndMonth').options[Month].selected = true;
 	adjustDateForm (elem.form.EndDay,elem.form.EndMonth,elem.form.EndYear)
 	document.getElementById('EndDay').options[Day].selected = true;
-}
-
-// Adjust iFrame height to height of browser
-function iFrameHeight () {
-	var h;
-	if (document.getElementById) {
-		if (self.innerHeight) // all except Explorer
-			h = self.innerHeight;
-		else if (document.documentElement && document.documentElement.clientHeight)
-			// Explorer 6 Strict Mode
-			h = document.documentElement.clientHeight;
-		else if (document.body) // other Explorers
-			h = document.body.clientHeight;
-		if (h == 0) h = 480;
-		else {
-			h = h - 210;
-			if (h < 200) h = 200;
-		}
-		document.getElementById('iframe_central').style.height = h;
-	}
 }
 
 // Change text of a test descriptor

@@ -100,7 +100,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    extern const char *Txt_Followers;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto 6px auto;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto 5px auto;\">"
 	              "<tr>");
 
    /***** Followed users *****/
@@ -132,7 +132,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
 
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-	              " style=\"min-width:150px;\">");
+	              " style=\"min-width:125px;\">");
    /* Number */
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
             (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
@@ -238,7 +238,7 @@ void Fol_ListFollowing (void)
 
 	    /***** Start listing *****/
 	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-		               " style=\"margin:15px auto;\">");
+		               " style=\"margin:12px auto;\">");
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -315,7 +315,7 @@ void Fol_ListFollowers (void)
 
 	    /***** Start listing *****/
 	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-		               " style=\"margin:15px auto;\">");
+		               " style=\"margin:12px auto;\">");
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -374,7 +374,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 
    /***** Put form to follow / unfollow *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\""
-	              " style=\"width:30px; height:75px;\">");
+	              " style=\"width:25px; height:62px;\">");
    if (Visible &&
        Gbl.Usrs.Me.Logged &&
        Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat->UsrCod)
@@ -414,7 +414,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 
    /***** Check if I can see the public profile *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"width:60px; height:75px;\">");
+	              " style=\"width:50px; height:62px;\">");
    if (Visible)
      {
       /***** User's photo *****/
@@ -427,7 +427,7 @@ static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
 
    /***** Put form to go to public profile *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	              " style=\"min-width:105px; height:75px;\">");
+	              " style=\"min-width:87px; height:62px;\">");
    if (Visible &&
        UsrDat->Nickname[0])
      {

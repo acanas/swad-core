@@ -31,11 +31,11 @@ body
 	margin:0;
 	background-color:white;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size:1.5em;
+	font-size:1.25em;
 	}
-input			{font-size:24pt; vertical-align:middle;}
-select			{font-size:24pt;}
-textarea		{font-size:24pt;}
+input			{font-size:20pt; vertical-align:middle;}
+select			{font-size:20pt;}
+textarea		{font-size:20pt;}
 table
 	{
 	border-width:0;
@@ -46,7 +46,7 @@ table th
 	{
 	padding:0;
 	color:#4D88A1;
-	font-size:21pt;
+	font-size:18pt;
 	font-weight:bold;
 	}
 table td
@@ -57,20 +57,20 @@ img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
 
 /********************************** Background *******************************/
-.WHITE_BACKGROUND	{background:linear-gradient(black 0,black 72px,white 72px,#cfcfce 72px,white 112px,white 100%); background-repeat:no-repeat;}
-.GREY_BACKGROUND	{background:linear-gradient(#383838 0,#404040 48px,#404040 212px,white 212px,white 100%); background-repeat:no-repeat;}
-.BLUE_BACKGROUND	{background:linear-gradient(#5fa5df 0,#4f90c8 48px,#4f90c8 212px,white 212px,white 100%); background-repeat:no-repeat;}
-.YELLOW_BACKGROUND	{background:linear-gradient(#201420 0,#201420 212px,white 212px,white 100%); background-repeat:no-repeat;}
+.WHITE_BACKGROUND	{background-image:linear-gradient(black 0,black 60px,white 60px,#cfcfce 60px,white 94px,white 100%); background-repeat:no-repeat;}
+.GREY_BACKGROUND	{background-image:linear-gradient(#383838 0,#404040 40px,#404040 176px,white 176px,white 100%); background-repeat:no-repeat;}
+.BLUE_BACKGROUND	{background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 176px,white 176px,white 100%); background-repeat:no-repeat;}
+.YELLOW_BACKGROUND	{background-image:linear-gradient(#201420 0,#201420 176px,white 176px,white 100%); background-repeat:no-repeat;}
 
 .WHITE_HEAD_ROW_1	{background-color:black;}
-.GREY_HEAD_ROW_1	{background:linear-gradient(#383838 0,#383838 48px,#404040 100%); background-repeat:no-repeat;}
-.BLUE_HEAD_ROW_1	{background:linear-gradient(#5fa5df 0,#4f90c8 48px,#4f90c8 100%); background-repeat:no-repeat;}
+.GREY_HEAD_ROW_1	{background-image:linear-gradient(#383838 0,#383838 40px,#404040 100%); background-repeat:no-repeat;}
+.BLUE_HEAD_ROW_1	{background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 100%); background-repeat:no-repeat;}
 .YELLOW_HEAD_ROW_1	{background-color:#201420;}
 
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
 	{
-	margin-right:12px;
+	margin-right:10px;
 	text-align:left;
 	vertical-align:top !important;
 	}
@@ -82,10 +82,10 @@ form			{margin:0; display:inline;}
 	border-style:solid;
 	border-width:1px;
 	border-color:#398000;
-	padding:6px;
-	border-radius:6px;
+	padding:5px;
+	border-radius:5px;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:14pt;
+	font-size:12pt;
 	color:#398000;
 	overflow:hidden;
 	}
@@ -93,21 +93,21 @@ form			{margin:0; display:inline;}
 /*********************************** Month ***********************************/
 .MONTH_CONTAINER
 	{
-	width:165px;
+	width:138px;
 	margin:0;
-	padding:6px;
+	padding:5px;
 	border-style:solid;
 	border-width:1px;
 	border-color:#8CBCCE;
-	border-radius:6px;
+	border-radius:5px;
 	text-align:center;
 	overflow:hidden;
 	}
 .MONTH_TABLE_DAYS
 	{
-	width:165px;
-	margin-top:3px;
-	padding-top:3px;
+	width:138px;
+	margin-top:2px;
+	padding-top:2px;
 	border-style:solid;
 	border-width:1px 0 0 0;
 	border-color:#DDECF1;
@@ -115,55 +115,55 @@ form			{margin:0; display:inline;}
 .MONTH
 	{
 	color:#4D88A1;
-	font-size:12pt;
+	font-size:10pt;
 	white-space:nowrap;
 	}
 .DAY_WRK_HEAD
 	{
 	color:#4D88A1;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_NO_WRK_HEAD
 	{
 	color:#FF0000;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_WRK
 	{
 	color:#202020;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_NO_WORK
 	{
 	color:#C04080;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_HLD
 	{
 	color:#FF0000;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_WRK_LIGHT
 	{
 	color:#E0E0E0;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_NO_WORK_LIGHT
 	{
 	color:#FFE0FF;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY_HLD_LIGHT
 	{
 	color:#FFE0E0;
-	font-size:12pt;
+	font-size:10pt;
 	text-align:center;
 	}
 .DAY
@@ -212,41 +212,41 @@ form			{margin:0; display:inline;}
 .BT_SUBMIT
 	{
 	color:white;
-	font-size:24px;
+	font-size:20px;
 	font-weight:bold;
 	line-height:normal;
-	margin:12px;
-	padding:12px 24px;
-	border-radius:6px;
+	margin:10px;
+	padding:10px 20px;
+	border-radius:5px;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
 	}
 .BT_SUBMIT_INLINE
 	{
 	color:white;
-	font-size:18px;
+	font-size:15px;
 	font-weight:bold;
 	line-height:normal;
-	margin:0 6px;
-	padding:6px 12px;
-	border-radius:6px;
+	margin:0 5px;
+	padding:5px 10px;
+	border-radius:5px;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
 	}
 .BT_SUBMIT:hover
 	{
-	background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
+	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
 	}
 .BT_SUBMIT_INLINE:hover
 	{
-	background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
+	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
 	}
 
 /********************************** Notice ***********************************/
 .NOTICE_CONTAINER
 	{
-	margin:12px auto;
-	padding:12px;
-	background:linear-gradient(#EED86C 0%,#FEED95 15%,#FAF098 100%);
-	box-shadow:0 9px 12px -6px rgba(125,113,0,0.8);
+	margin:10px auto;
+	padding:10px;
+	background-image:linear-gradient(#EED86C 0%,#FEED95 15%,#FAF098 100%);
+	box-shadow:0 8px 10px -5px rgba(125,113,0,0.8);
 	text-align:center;
 	overflow:hidden;
 	}
@@ -254,14 +254,14 @@ form			{margin:0; display:inline;}
 	{
 	float:right;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:15pt;
+	font-size:12pt;
 	color:#404040;
 	overflow:hidden;
 	}
 .NOTICE_SUBJECT
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:18pt;
+	font-size:15pt;
 	font-weight:bold;
 	color:#404040;
 	text-align:center;
@@ -272,7 +272,7 @@ form			{margin:0; display:inline;}
 	{
 	clear:both;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:15pt;
+	font-size:12pt;
 	color:#000080;
 	overflow:hidden;
 	}
@@ -280,22 +280,22 @@ form			{margin:0; display:inline;}
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#404040;
-	font-size:15pt;
+	font-size:12pt;
 	overflow:hidden;
 	}
 
 /**************************** Institutional links ****************************/
 #institutional_links
 	{
-	width:165px;
+	width:138px;
 	margin:0;
 	border-style:solid;
 	border-width:1px;
 	border-color:#4D88A1;
-	padding:6px;
-	border-radius:6px;
+	padding:5px;
+	border-radius:5px;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:13pt;
+	font-size:11pt;
 	color:#4D88A1;
 	overflow:hidden;
 	}
@@ -303,23 +303,23 @@ form			{margin:0; display:inline;}
 	{
 	padding:1px;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:13pt;
+	font-size:11pt;
 	color:#4D88A1;
 	}
 
 /***************************** Tabs and main zone ****************************/
 #tabs_container
 	{
-	height:84px;
+	height:70px;
 	margin:0 auto;
 	}
 .TAB_ON
 	{
-	height:93px;
+	height:78px;
 	margin:0;
-	padding:0 30px;
-	border-radius:12px 15px 0 0;
-	box-shadow:inset -3px -3px 1px 0 rgba(50,50,50,0.2);
+	padding:0 25px;
+	border-radius:10px 12px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
 	text-align:center;
 	vertical-align:middle;
 	overflow:hidden;
@@ -327,13 +327,13 @@ form			{margin:0; display:inline;}
 	}
 #CENTRAL_ZONE
 	{
-	min-width:1110px;
-	min-height:1110px;
+	min-width:925px;
+	min-height:925px;
 	width:100%;
-	margin:-9px 0 0 0;
-	padding:12px 0;
-	border-radius:12px;
-	box-shadow:inset -3px -3px 1px 0 rgba(50,50,50,0.2);
+	margin:-8px 0 0 0;
+	padding:10px 0;
+	border-radius:10px;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
 	text-align:center;
 	vertical-align:top;
 	overflow:hidden;
@@ -344,15 +344,15 @@ form			{margin:0; display:inline;}
 /********************************** Alerts ***********************************/
 .ALERT
 	{
-	margin:6px auto;
+	margin:5px auto;
 	background-color:#FFF9E0;
 	background-repeat:no-repeat;
-	background-position:15px 15px;
-	padding:15px 15px 15px 54px;
-	border-radius:12px;
-	box-shadow:1px 1px 4px #CCC7B4;
+	background-position:12px 12px;
+	padding:12px 12px 12px 45px;
+	border-radius:10px;
+	box-shadow:1px 1px 3px #CCC7B4;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:24pt;
+	font-size:20pt;
 	color:#632921;
 	text-align:justify;
 	overflow:hidden;
@@ -360,51 +360,51 @@ form			{margin:0; display:inline;}
 	}
 
 /*********************************** Icons ***********************************/
-.ICON16x16	{width:24px; height:24px; vertical-align:middle;}
-.ICON16x16B	{width:24px; height:24px; vertical-align:middle; display:block;}
-.ICON20x20	{width:30px; height:30px; vertical-align:middle;}
-.ICON32x32	{width:48px; height:48px; vertical-align:middle;}
-.ICON32x32B	{width:48px; height:48px; vertical-align:middle; display:block;}
-.ICON48x48	{width:72px; height:72px; vertical-align:middle;}
-.ICON64x64	{width:96px; height:96px; vertical-align:middle;}
-.ICON128x128	{width:192px; height:192px; vertical-align:middle;}
-.BANNER		{width:180px; height:60px;}
-.BANNER_SMALL	{width:90px; height:30px;}
+.ICON16x16	{width:20px; height:20px; vertical-align:middle;}
+.ICON16x16B	{width:20px; height:20px; vertical-align:middle; display:block;}
+.ICON20x20	{width:25px; height:25px; vertical-align:middle;}
+.ICON32x32	{width:40px; height:40px; vertical-align:middle;}
+.ICON32x32B	{width:40px; height:40px; vertical-align:middle; display:block;}
+.ICON48x48	{width:60px; height:60px; vertical-align:middle;}
+.ICON64x64	{width:80px; height:80px; vertical-align:middle;}
+.ICON128x128	{width:160px; height:160px; vertical-align:middle;}
+.BANNER		{width:150px; height:50px;}
+.BANNER_SMALL	{width:75px; height:25px;}
 
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	margin-bottom:15px;
+	margin-bottom:12px;
 	text-align:center;
 	}
 .CONTEXT_OPT
 	{
 	display:inline;
-	margin:0 7px;
+	margin:0 6px;
 	}
 
 /********************************* Frame 10 **********************************/
 .FRAME10
 	{
-	margin:6px 0;
-	padding:15px;
+	margin:5px 0;
+	padding:12px;
 	background-color:white;
-	border-radius:12px;
-	box-shadow:1px 1px 4px #CCC;
+	border-radius:10px;
+	box-shadow:1px 1px 3px #CCC;
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;
 	}
 .FRAME10_SHADOW
 	{
-	margin:6px 0 21px 0;
-	padding:15px;
+	margin:5px 0 18px 0;
+	padding:12px;
 	background-color:rgba(255,255,255,0.95);
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
-	border-radius:12px;
-	box-shadow:3px 6px 18px #888;
+	border-radius:10px;
+	box-shadow:2px 5px 15px #888;
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;
@@ -415,25 +415,25 @@ form			{margin:0; display:inline;}
 	}
 .TIT_TBL_10
 	{
-	margin:15px;
+	margin:12px;
 	color:#808080;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	}
 .CELLS_PAD_1 th {padding:1px;}
 .CELLS_PAD_1 td {padding:1px;}
-.CELLS_PAD_2 th {padding:3px;}
-.CELLS_PAD_2 td {padding:3px;}
-.CELLS_PAD_4 th {padding:6px;}
-.CELLS_PAD_4 td {padding:6px;}
-.CELLS_PAD_8 th {padding:12px;}
-.CELLS_PAD_8 td {padding:12px;}
+.CELLS_PAD_2 th {padding:2px;}
+.CELLS_PAD_2 td {padding:2px;}
+.CELLS_PAD_4 th {padding:5px;}
+.CELLS_PAD_4 td {padding:5px;}
+.CELLS_PAD_8 th {padding:10px;}
+.CELLS_PAD_8 td {padding:10px;}
 
 /*********************************** Title ***********************************/
 .TIT	{
-	margin:24px auto 0 auto;
+	margin:20px auto 0 auto;
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:24pt;
+	font-size:20pt;
 	font-weight:bold; 
 	color:#94745C;
 	text-align:center;
@@ -443,7 +443,7 @@ form			{margin:0; display:inline;}
 .TITLE_LOCATION
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	color:#808080;
 	text-align:center;
@@ -452,43 +452,43 @@ form			{margin:0; display:inline;}
 /******************************* Map of country ******************************/
 .COUNTRY_MAP_TITLE
 	{
-	width:48px; height:48px;
-	margin-right:12px;
+	width:40px; height:40px;
+	margin-right:10px;
 	vertical-align:top;
 	}
 .COUNTRY_MAP_SMALL
 	{
-	width:75px; height:75px;
+	width:62px; height:62px;
 	}
 .COUNTRY_MAP_SHOW
 	{
-	width:375px; height:375px;
-	margin:12px;
+	width:312px; height:312px;
+	margin:10px;
 	}
 .COUNTRY_MAP_PRINT
 	{
-	width:750px; height:750px;
-	margin:15px;
+	width:625px; height:625px;
+	margin:12px;
 	}
 
 /****************************** Photo of centre ******************************/
 .CENTRE_PHOTO_SHOW
 	{
-	width:576px; height:384px; 
-	padding:7px; margin:12px;
+	width:480px; height:320px;
+	padding:6px; margin:10px;
 	border:solid 1px #EEE;
 	}
 a:hover img.CENTRE_PHOTO_SHOW
 	{
 	border:solid 1px #CCC;
-        box-shadow:1px 1px 7px #999;
+        box-shadow:1px 1px 6px #999;
 	}
 .CENTRE_PHOTO_PRINT
 	{
-	width:864px; height:576px;
-	padding:12px; margin:15px; 
+	width:720px; height:480px;
+	padding:10px; margin:12px;
 	border:solid 1px #EEE;
-        box-shadow:1px 1px 7px #999;
+        box-shadow:1px 1px 6px #999;
 	}
 	
 /**************** Attribution (author and license) of images *****************/
@@ -496,89 +496,89 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#A0A0A0;
-	font-size:10pt;
-	max-width:600px;
+	font-size:8pt;
+	max-width:500px;
 	text-align:center;
 	}
 
 /******************************* User's photo ********************************/
-.PHOTO12x16	{width: 18px; height: 24px; vertical-align:middle; border-radius:3px;}
-.PHOTO12x16B	{width: 18px; height: 24px; vertical-align:middle; border-radius:3px; display:block;}
-.PHOTO15x20	{width: 22px; height: 30px; vertical-align:middle; border-radius:3px;}
-.PHOTO18x24	{width: 27px; height: 36px; vertical-align:middle; border-radius:3px;}
-.PHOTO24x32	{width: 36px; height: 48px; vertical-align:middle; border-radius:4px;}
-.PHOTO36x48	{width: 54px; height: 72px; vertical-align:middle; border-radius:6px;}
-.PHOTO75x100	{width:112px; height:150px; vertical-align:middle; border-radius:7px;}
-.PHOTO150x200	{width:225px; height:300px; vertical-align:middle; border-radius:12px;}
+.PHOTO12x16	{width: 15px; height: 24px; vertical-align:middle; border-radius:2px;}
+.PHOTO12x16B	{width: 15px; height: 24px; vertical-align:middle; border-radius:2px; display:block;}
+.PHOTO15x20	{width: 18px; height: 25px; vertical-align:middle; border-radius:2px;}
+.PHOTO18x24	{width: 21px; height: 28px; vertical-align:middle; border-radius:2px;}
+.PHOTO24x32	{width: 30px; height: 40px; vertical-align:middle; border-radius:3px;}
+.PHOTO36x48	{width: 45px; height: 60px; vertical-align:middle; border-radius:5px;}
+.PHOTO75x100	{width: 93px; height:124px; vertical-align:middle; border-radius:6px;}
+.PHOTO150x200	{width:186px; height:248px; vertical-align:middle; border-radius:10px;}
 .IMG_USR
 	{
-	width:225px;
-	height:300px;
-	border-radius:7px;
+	width:186px;
+	height:248px;
+	border-radius:6px;
 	}
 .ZOOM
 	{
 	position:absolute;
 	z-index:1000;
-	left:-243px;
-	top:-450px;
-	padding:7px;
+	left:-203px;
+	top:-375px;
+	padding:6px;
 	background-color:rgba(255,255,255,0.8);
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
-	border-radius:12px;
-	box-shadow:3px 6px 18px #888;
+	border-radius:10px;
+	box-shadow:2px 5px 15px #888;
 	}
 .ZOOM_TXT
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#202020;
-	font-size:15pt;
+	font-size:12pt;
 	}
 
 .NO_BR			{white-space:nowrap;}
 
 .BG_MSG_BLUE
 	{
-	background:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
+	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
 	}
 .BG_MSG_GREEN
 	{
-	background:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
+	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
 	}
 
-.WHITE_DEGREE		{color:#707070; font-size:21pt; font-weight:bold; white-space:nowrap;}
-.GREY_DEGREE		{color:#FFB42E; font-size:21pt; font-weight:bold; white-space:nowrap;}
-.BLUE_DEGREE		{color:#FFE880; font-size:21pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_DEGREE		{color:#FFC040; font-size:21pt; font-weight:bold; white-space:nowrap;}
+.WHITE_DEGREE		{color:#707070; font-size:18pt; font-weight:bold; white-space:nowrap;}
+.GREY_DEGREE		{color:#FFB42E; font-size:18pt; font-weight:bold; white-space:nowrap;}
+.BLUE_DEGREE		{color:#FFE880; font-size:18pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_DEGREE		{color:#FFC040; font-size:18pt; font-weight:bold; white-space:nowrap;}
 
-.WHITE_COURSE		{color:#4D88A1; font-size:21pt; white-space:nowrap;}
-.GREY_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5; font-size:21pt; white-space:nowrap;}
-.BLUE_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:21pt; white-space:nowrap;}
-.YELLOW_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:21pt; white-space:nowrap;}
+.WHITE_COURSE		{color:#4D88A1; font-size:18pt; white-space:nowrap;}
+.GREY_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5; font-size:18pt; white-space:nowrap;}
+.BLUE_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:18pt; white-space:nowrap;}
+.YELLOW_COURSE		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:18pt; white-space:nowrap;}
 
-.WHITE_HEAD		{color:#E0E0E0; font-size:24pt; white-space:nowrap;}
-.GREY_HEAD		{color:#E0E0E0; font-size:24pt; white-space:nowrap;}
-.BLUE_HEAD		{color:white; font-size:24pt; white-space:nowrap;}
-.YELLOW_HEAD		{color:#B3B0B3; font-size:24pt; white-space:nowrap;}
+.WHITE_HEAD		{color:#E0E0E0; font-size:20pt; white-space:nowrap;}
+.GREY_HEAD		{color:#E0E0E0; font-size:20pt; white-space:nowrap;}
+.BLUE_HEAD		{color:white;   font-size:20pt; white-space:nowrap;}
+.YELLOW_HEAD		{color:#B3B0B3; font-size:20pt; white-space:nowrap;}
 
-.WHITE_USR		{color:#E0E0E0; font-size:24pt; font-weight:bold; white-space:nowrap;}
-.GREY_USR		{color:#E0E0E0; font-size:24pt; font-weight:bold; white-space:nowrap;}
-.BLUE_USR		{color:white; font-size:24pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_USR		{color:#B3B0B3; font-size:24pt; font-weight:bold; white-space:nowrap;}
+.WHITE_USR		{color:#E0E0E0; font-size:20pt; font-weight:bold; white-space:nowrap;}
+.GREY_USR		{color:#E0E0E0; font-size:20pt; font-weight:bold; white-space:nowrap;}
+.BLUE_USR		{color:white;   font-size:20pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_USR		{color:#B3B0B3; font-size:20pt; font-weight:bold; white-space:nowrap;}
 
-.WHITE_CONNECTED	{color:#398000; font-size:15pt;}
-.GREY_CONNECTED		{color:#398000; font-size:15pt;}
-.BLUE_CONNECTED		{color:#398000; font-size:15pt;}
-.YELLOW_CONNECTED	{color:#398000; font-size:15pt;}
+.WHITE_CONNECTED	{color:#398000; font-size:12pt;}
+.GREY_CONNECTED		{color:#398000; font-size:12pt;}
+.BLUE_CONNECTED		{color:#398000; font-size:12pt;}
+.YELLOW_CONNECTED	{color:#398000; font-size:12pt;}
 
-.WHITE_TITLE		{color:#505050; font-size:24pt;}
-.GREY_TITLE		{color:#505050; font-size:24pt;}
-.BLUE_TITLE		{color:#4D88A1; font-size:24pt;}
-.YELLOW_TITLE		{color:#FF4301; font-size:24pt;}
+.WHITE_TITLE		{color:#505050; font-size:20pt;}
+.GREY_TITLE		{color:#505050; font-size:20pt;}
+.BLUE_TITLE		{color:#4D88A1; font-size:20pt;}
+.YELLOW_TITLE		{color:#FF4301; font-size:20pt;}
 
 /**************************** Icon highlighting ******************************/
 .ICON_HIDDEN
@@ -599,7 +599,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#4D88A1;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -608,7 +608,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#606060;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -617,7 +617,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#4D88A1;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
@@ -626,38 +626,38 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:Arial,"Nimbus Sans L","DejaVu LGC Sans","Bitstream Vera Sans",sans-serif;
 	color:#BD4815;
-	font-size:30pt;
+	font-size:25pt;
 	font-weight:bold;
 	line-height:100%;
 	white-space:nowrap;
 	}
 
 /********************************* Menu fonts ********************************/
-.WHITE_MENU_OFF		{color:#707070; font-size:30pt; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:30pt; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:30pt; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#FF4301; font-size:30pt; line-height:110%;}
+.WHITE_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
+.GREY_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
+.BLUE_MENU_OFF		{color:#4D88A1; font-size:25pt; line-height:110%;}
+.YELLOW_MENU_OFF	{color:#FF4301; font-size:25pt; line-height:110%;}
 
-.WHITE_MENU_ON		{color:#4D88A1; font-size:30pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:30pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:30pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#FF4301; font-size:30pt; font-weight:bold; line-height:110%;}
+.WHITE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{color:#606060; font-size:25pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{color:#FF4301; font-size:25pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
-.WHITE_FORM		{color:#4D88A1; font-size:24pt;}
-.GREY_FORM		{color:#4D88A1; font-size:24pt;}
-.BLUE_FORM		{color:#4D88A1; font-size:24pt;}
-.YELLOW_FORM		{color:#FF4301; font-size:24pt;}
+.WHITE_FORM		{color:#4D88A1; font-size:20pt;}
+.GREY_FORM		{color:#4D88A1; font-size:20pt;}
+.BLUE_FORM		{color:#4D88A1; font-size:20pt;}
+.YELLOW_FORM		{color:#FF4301; font-size:20pt;}
 
-.WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:24pt; white-space:nowrap;}
-.GREY_FORM_NOWRAP	{color:#4D88A1; font-size:24pt; white-space:nowrap;}
-.BLUE_FORM_NOWRAP	{color:#4D88A1; font-size:24pt; white-space:nowrap;}
-.YELLOW_FORM_NOWRAP	{color:#FF4301; font-size:24pt; white-space:nowrap;}
+.WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:20pt; white-space:nowrap;}
+.GREY_FORM_NOWRAP	{color:#4D88A1; font-size:20pt; white-space:nowrap;}
+.BLUE_FORM_NOWRAP	{color:#4D88A1; font-size:20pt; white-space:nowrap;}
+.YELLOW_FORM_NOWRAP	{color:#FF4301; font-size:20pt; white-space:nowrap;}
 
-.WHITE_FORM_BOLD	{color:#4D88A1; font-size:24pt; font-weight:bold;}
-.GREY_FORM_BOLD		{color:#4D88A1; font-size:24pt; font-weight:bold;}
-.BLUE_FORM_BOLD		{color:#4D88A1; font-size:24pt; font-weight:bold;}
-.YELLOW_FORM_BOLD	{color:#FF4301; font-size:24pt; font-weight:bold;}
+.WHITE_FORM_BOLD	{color:#4D88A1; font-size:20pt; font-weight:bold;}
+.GREY_FORM_BOLD		{color:#4D88A1; font-size:20pt; font-weight:bold;}
+.BLUE_FORM_BOLD		{color:#4D88A1; font-size:20pt; font-weight:bold;}
+.YELLOW_FORM_BOLD	{color:#FF4301; font-size:20pt; font-weight:bold;}
 
 /****************************** Placing of objects ***************************/
 .LEFT_TOP		{text-align:left; vertical-align:top;}
@@ -691,7 +691,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 #crs_info
 	{
 	margin:0;
-	padding:0 15px;
+	padding:0 12px;
 	color:inherit;
 	}
 #crs_info table
@@ -702,21 +702,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	border:1px solid grey;
 	background-color:#F0F0F0;
-	padding:7px;
+	padding:6px;
 	}
 #crs_info td
 	{
 	border:1px solid grey;
-	padding:7px;
+	padding:6px;
 	}
 
 /************************ Help for the text editor ***************************/
 .HELP_EDIT
 	{
-	margin:15px;
+	margin:12px;
 	text-align:center;
 	color:#808080;
-	font-size:15pt;
+	font-size:12pt;
 	}
 
 /*********************************** Lists ***********************************/
@@ -739,179 +739,179 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 /*****************************************************************************/
 
-.FILENAME		{color:#404040; font-size:27pt; font-weight:bold;}
+.FILENAME		{color:#404040; font-size:22pt; font-weight:bold;}
 
-.BROWSER_TITLE		{color:#94745C; font-size:24pt; font-weight:bold;}
-.BROWSER_TITLE_LIGHT	{color:#D5C6BB; font-size:24pt; font-weight:bold;}
-.BROWSER_SUBTITLE	{color:#94745C; font-size:21pt;}
+.BROWSER_TITLE		{color:#94745C; font-size:20pt; font-weight:bold;}
+.BROWSER_TITLE_LIGHT	{color:#D5C6BB; font-size:20pt; font-weight:bold;}
+.BROWSER_SUBTITLE	{color:#94745C; font-size:18pt;}
 
-.T1			{color:#404040; font-size:24pt;}
-.T2			{color:#404040; font-size:21pt;}
-.T3			{color:#404040; font-size:18pt;}
+.T1			{color:#404040; font-size:20pt;}
+.T2			{color:#404040; font-size:18pt;}
+.T3			{color:#404040; font-size:15pt;}
 
-.LST			{color:#404040; font-size:18pt; white-space:nowrap;}
-.LST_HID		{color:#A0A0A0; font-size:18pt; white-space:nowrap;}
-.LST_REC		{color:#008000; font-size:18pt; white-space:nowrap;}
-.LST_REC_HID		{color:#89BE87; font-size:18pt; white-space:nowrap;}
-.LST_EDIT		{color:#404040; font-weight:bold; font-size:13pt; height:24px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_HID		{color:#A0A0A0; font-weight:bold; font-size:13pt; height:24px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC		{color:#008000; font-weight:bold; font-size:13pt; height:24px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC_HID	{color:#89BE87; font-weight:bold; font-size:13pt; height:24px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST			{color:#404040; font-size:15pt; white-space:nowrap;}
+.LST_HID		{color:#A0A0A0; font-size:15pt; white-space:nowrap;}
+.LST_REC		{color:#008000; font-size:15pt; white-space:nowrap;}
+.LST_REC_HID		{color:#89BE87; font-size:15pt; white-space:nowrap;}
+.LST_EDIT		{color:#404040; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_HID		{color:#A0A0A0; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC		{color:#008000; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC_HID	{color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
-.USR_ID			{color:#404040; font-size:24pt; font-weight:bold;}
+.USR_ID			{color:#404040; font-size:20pt; font-weight:bold;}
 
-.DAT			{color:#707070; font-size:24pt;}
-.DAT_GREEN		{color:#008000; font-size:24pt;}
-.DAT_LIGHT		{color:#A0A0A0; font-size:24pt;}
-.DAT_NOBR		{color:#707070; font-size:24pt; white-space:nowrap;}
-.DAT_N			{color:#404040; font-size:24pt;}
-.DAT_NOBR_N		{color:#404040; font-size:24pt; white-space:nowrap;}
+.DAT			{color:#707070; font-size:20pt;}
+.DAT_GREEN		{color:#008000; font-size:20pt;}
+.DAT_LIGHT		{color:#A0A0A0; font-size:20pt;}
+.DAT_NOBR		{color:#707070; font-size:20pt; white-space:nowrap;}
+.DAT_N			{color:#404040; font-size:20pt;}
+.DAT_NOBR_N		{color:#404040; font-size:20pt; white-space:nowrap;}
 
 /*********************** Line in top part of a table row *********************/
 .LINE_TOP
 	{
 	color:#404040;
-	font-size:24pt;
+	font-size:20pt;
 	border-style:solid none none none;
 	border-width:1px;
 	}
 
-.DAT_SMALL		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:21pt;}
-.DAT_SMALL_LIGHT	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:21pt;}
-.DAT_SMALL_NOBR		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:21pt; white-space:nowrap;}
-.DAT_SMALL_N		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:21pt;}
-.DAT_SMALL_NOBR_N	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:21pt; white-space:nowrap;}
+.DAT_SMALL		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:18pt;}
+.DAT_SMALL_LIGHT	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:18pt;}
+.DAT_SMALL_NOBR		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:18pt; white-space:nowrap;}
+.DAT_SMALL_N		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:18pt;}
+.DAT_SMALL_NOBR_N	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:18pt; white-space:nowrap;}
 
-.DAT_SMALL_GREY		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:21pt;}
-.DAT_SMALL_RED		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:21pt;}
-.DAT_SMALL_GREEN	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#008000; font-size:21pt;}
-.DAT_SMALL_BLUE		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:21pt;}
-.DAT_SMALL_YELLOW	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:21pt;}
+.DAT_SMALL_GREY		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:18pt;}
+.DAT_SMALL_RED		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:18pt;}
+.DAT_SMALL_GREEN	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#008000; font-size:18pt;}
+.DAT_SMALL_BLUE		{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:18pt;}
+.DAT_SMALL_YELLOW	{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:18pt;}
 
-.HEAD_REC		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:24pt;}
-.HEAD_REC_SMALL		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:18pt;}
-.REC_NAME		{color:#808080; font-size:30pt; font-weight:bold;}
-.REC_NICK		{color:#808080; font-size:24pt; font-weight:bold;}
-.DAT_REC		{color:#404040; font-size:21pt; line-height:110%;}
-.DAT_REC_SMALL		{color:#808080; font-size:21pt; line-height:110%;}
-.DAT_REC_SMALL_BOLD	{color:#202020; font-size:21pt; line-height:110%;}
-.MSJ_AVISO		{color:#632921; font-size:18pt;}
-.TIT_TBL		{color:#4D88A1; font-size:21pt; font-weight:bold;}
-.TIT_CLASSPHOTO		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#606060; font-size:16pt;}
-.CLASSPHOTO		{color:#606060; font-size:16pt; line-height:100%; white-space:nowrap;}
+.HEAD_REC		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:20pt;}
+.HEAD_REC_SMALL		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:15pt;}
+.REC_NAME		{color:#808080; font-size:25pt; font-weight:bold;}
+.REC_NICK		{color:#808080; font-size:20pt; font-weight:bold;}
+.DAT_REC		{color:#404040; font-size:18pt; line-height:110%;}
+.DAT_REC_SMALL		{color:#808080; font-size:18pt; line-height:110%;}
+.DAT_REC_SMALL_BOLD	{color:#202020; font-size:18pt; line-height:110%;}
+.MSJ_AVISO		{color:#632921; font-size:15pt;}
+.TIT_TBL		{color:#4D88A1; font-size:18pt; font-weight:bold;}
+.TIT_CLASSPHOTO		{font-Family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#606060; font-size:13pt;}
+.CLASSPHOTO		{color:#606060; font-size:13pt; line-height:100%; white-space:nowrap;}
 
-.GRP_TITLE		{color:#4D88A1; font-size:24pt; font-weight:bold;}
+.GRP_TITLE		{color:#4D88A1; font-size:20pt; font-weight:bold;}
 
-.ASG_TITLE		{color:#4D88A1; font-size:24pt; font-weight:bold;}
-.ASG_TITLE_LIGHT	{color:#AFC4CC; font-size:24pt; font-weight:bold;}
-.ASG_GRP		{color:#4D88A1; font-size:18pt;}
-.ASG_GRP_LIGHT		{color:#AFC4CC; font-size:18pt;}
-.DATE_GREEN		{color:#008000; font-size:21pt;}
-.DATE_GREEN_LIGHT	{color:#89BE87; font-size:21pt;}
-.DATE_RED		{color:#FF0000; font-size:21pt;}
-.DATE_RED_LIGHT		{color:#F98A8A; font-size:21pt;}
+.ASG_TITLE		{color:#4D88A1; font-size:20pt; font-weight:bold;}
+.ASG_TITLE_LIGHT	{color:#AFC4CC; font-size:20pt; font-weight:bold;}
+.ASG_GRP		{color:#4D88A1; font-size:15pt;}
+.ASG_GRP_LIGHT		{color:#AFC4CC; font-size:15pt;}
+.DATE_GREEN		{color:#008000; font-size:18pt;}
+.DATE_GREEN_LIGHT	{color:#89BE87; font-size:18pt;}
+.DATE_RED		{color:#FF0000; font-size:18pt;}
+.DATE_RED_LIGHT		{color:#F98A8A; font-size:18pt;}
 
-.ASG_LST_DATE_GREEN	{color:#008000; font-size:18pt; white-space:nowrap;}
-.ASG_LST_DATE_RED	{color:#FF0000; font-size:18pt; white-space:nowrap;}
+.ASG_LST_DATE_GREEN	{color:#008000; font-size:15pt; white-space:nowrap;}
+.ASG_LST_DATE_RED	{color:#FF0000; font-size:15pt; white-space:nowrap;}
 
-.STATUS_GREEN		{color:#008000; font-size:21pt;}
-.STATUS_GREEN_LIGHT	{color:#89BE87; font-size:21pt;}
-.STATUS_RED		{color:#FF0000; font-size:21pt;}
-.STATUS_RED_LIGHT	{color:#F98A8A; font-size:21pt;}
+.STATUS_GREEN		{color:#008000; font-size:18pt;}
+.STATUS_GREEN_LIGHT	{color:#89BE87; font-size:18pt;}
+.STATUS_RED		{color:#FF0000; font-size:18pt;}
+.STATUS_RED_LIGHT	{color:#F98A8A; font-size:18pt;}
 
 /********************************** Tests ************************************/
-.ANS			{color:#404040; font-size:24pt; font-weight:bold;}
-.ANS_OK			{color:#008000; font-size:24pt; font-weight:bold;}
-.ANS_BAD		{color:#FF0000; font-size:24pt; font-weight:bold;}
-.TST_TIT		{color:#404040; font-size:30pt;}
-.TEST			{color:#404040; font-size:21pt;}
-.TEST_EXA		{color:#404040; font-size:21pt;}
-.TEST_EXA_LIGHT		{color:#A0A0A0; font-size:21pt;}
-.TEST_EDI		{color:#404040; font-size:21pt;}
-.TEST_EDI_LIGHT		{color:#A0A0A0; font-size:21pt;}
+.ANS			{color:#404040; font-size:20pt; font-weight:bold;}
+.ANS_OK			{color:#008000; font-size:20pt; font-weight:bold;}
+.ANS_BAD		{color:#FF0000; font-size:20pt; font-weight:bold;}
+.TST_TIT		{color:#404040; font-size:25pt;}
+.TEST			{color:#404040; font-size:18pt;}
+.TEST_EXA		{color:#404040; font-size:18pt;}
+.TEST_EXA_LIGHT		{color:#A0A0A0; font-size:18pt;}
+.TEST_EDI		{color:#404040; font-size:18pt;}
+.TEST_EDI_LIGHT		{color:#A0A0A0; font-size:18pt;}
 
-.HOR			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#345C6C; font-size:18pt; line-height:110%; letter-spacing:0;}
+.HOR			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#345C6C; font-size:15pt; line-height:110%; letter-spacing:0;}
 .FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
 .FREE1			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
 .FREE2			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
 .FREE3			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
-.THEO			{background-color:#C0DAE4; border:solid 3px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
-.PRAC			{background-color:#DBE5E9; border:solid 3px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
-.TUTO			{background-color:#D6E9C3; border:solid 3px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
+.THEO			{background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
+.PRAC			{background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
+.TUTO			{background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
-.CUR_TIME		{color:#BAD2DA; font-size:18pt; font-weight:bold;}
+.CUR_TIME		{color:#BAD2DA; font-size:15pt; font-weight:bold;}
 
 .USR_LIST_TYPE_OFF	{border:solid 1px; border-color:white;}
 .USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
 
-.LAYOUT_OFF		{height:48px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
-.LAYOUT_ON		{height:48px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
+.LAYOUT_OFF		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
+.LAYOUT_ON		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
 
-.LOG			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:13pt;}
-.LOG_R			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:13pt;}
+.LOG			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
+.LOG_R			{font-Family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:11pt;}
 
-.MSG_TXT		{font-Family:"Courier New","DejaVu LGC Sans Mono","Bitstream Vera Sans Mono",monospace; color:#404040; font-size:15pt;}
+.MSG_TXT		{font-Family:"Courier New","DejaVu LGC Sans Mono","Bitstream Vera Sans Mono",monospace; color:#404040; font-size:12pt;}
 
-.MSG_TIT		{color:#4D88A1; font-size:15pt;}
-.MSG_TIT_NEW		{color:#4D88A1; font-size:15pt; font-weight:bold;}
-.MSG_TIT_REM		{color:#AFC4CC; font-size:15pt;}
+.MSG_TIT		{color:#4D88A1; font-size:12pt;}
+.MSG_TIT_NEW		{color:#4D88A1; font-size:12pt; font-weight:bold;}
+.MSG_TIT_REM		{color:#AFC4CC; font-size:12pt;}
 .MSG_TIT_BG
 	{
-	background:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
+	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
 	background-repeat:repeat-x;
 	color:#4D88A1;
-	font-size:15pt;
+	font-size:12pt;
 	}
 .MSG_TIT_BG_NEW
 	{
-	background:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
+	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#4D88A1;
-	font-size:15pt;
+	font-size:12pt;
 	font-weight:bold;
 	}
 .MSG_TIT_BG_REM
 	{
-	background:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
+	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#AFC4CC;
-	font-size:15pt;
+	font-size:12pt;
 	}
-.MSG_AUT		{color:#4D88A1; font-size:13pt;}
-.MSG_AUT_LIGHT		{color:#AFC4CC; font-size:13pt;}
-.MSG_AUT_NEW		{color:#4D88A1; font-size:13pt; font-weight:bold;}
+.MSG_AUT		{color:#4D88A1; font-size:11pt;}
+.MSG_AUT_LIGHT		{color:#AFC4CC; font-size:11pt;}
+.MSG_AUT_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 .MSG_AUT_BG
 	{
-	background:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
+	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#4D88A1;
-	font-size:13pt;
+	font-size:11pt;
 	}
 .MSG_AUT_BG_NEW
 	{
-	background:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
+	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#4D88A1;
-	font-size:13pt;
+	font-size:11pt;
 	font-weight:bold;
 	}
 .MSG_AUT_BG_REM
 	{
-	background:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
+	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#AFC4CC;
-	font-size:13pt;
+	font-size:11pt;
 	}
-.MSG_DATE		{color:#4D88A1; font-size:13pt;}
-.MSG_DATE_NEW		{color:#4D88A1; font-size:13pt; font-weight:bold;}
-.BT			{width:24px; text-align:left; vertical-align:top;}
-.BT0			{width:24px; text-align:left; vertical-align:top; background-color:#F4F2EA;}
-.BT1			{width:24px; text-align:left; vertical-align:top; background-color:#FBFAF7;}
-.BM			{width:24px; text-align:left; vertical-align:middle;}
-.BM_SEL			{width:24px; text-align:left; vertical-align:middle; background-color:#C0FF40;}
-.BM0			{width:24px; text-align:left; vertical-align:middle; background-color:#F4F2EA;}
-.BM1			{width:24px; text-align:left; vertical-align:middle; background-color:#FBFAF7;}
+.MSG_DATE		{color:#4D88A1; font-size:11pt;}
+.MSG_DATE_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.BT			{width:20px; text-align:left; vertical-align:top;}
+.BT0			{width:20px; text-align:left; vertical-align:top; background-color:#F4F2EA;}
+.BT1			{width:20px; text-align:left; vertical-align:top; background-color:#FBFAF7;}
+.BM			{width:20px; text-align:left; vertical-align:middle;}
+.BM_SEL			{width:20px; text-align:left; vertical-align:middle; background-color:#C0FF40;}
+.BM0			{width:20px; text-align:left; vertical-align:middle; background-color:#F4F2EA;}
+.BM1			{width:20px; text-align:left; vertical-align:middle; background-color:#FBFAF7;}
 
 /***************************** Calls for exams *******************************/
 .CONV_TIT
@@ -919,21 +919,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
  	color:#404040;
  	font-weight:bold;
- 	font-size:21pt;
+ 	font-size:18pt;
  	}
 .CONV_TIT_IMPR
 	{
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	color:#202020;
 	font-weight:bold;
-	font-size:21pt;
+	font-size:18pt;
 	}
 .CONV_NEG
 	{
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	color:#404040;
 	font-weight:bold;
-	font-size:16pt;
+	font-size:13pt;
 	white-space:nowrap;
 	}
 .CONV_NEG_IMPR
@@ -941,45 +941,45 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	color:#202020;
 	font-weight:bold;
-	font-size:16pt;
+	font-size:13pt;
 	white-space:nowrap;
 	}
 .CONV
 	{
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	color:#404040;
-	font-size:11pt;
+	font-size:9pt;
 	}
 .CONV_IMPR
 	{
 	font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	color:#202020;
-	font-size:11pt;
+	font-size:9pt;
 	}
 
 /***************************** Public user's profile *************************/
 .FOLLOW
 	{
 	color:#C0C0C0;
-	font-size:42pt;
+	font-size:35pt;
 	font-weight:bold;
 	}
 .FOLLOW_B
 	{
 	color:#000000;
-	font-size:42pt;
+	font-size:35pt;
 	font-weight:bold;
 	}
 .PRF_ICON_CONTAINER
 	{
-	width:30px;
+	width:25px;
 	}
 .PRF_ICON
 	{
 	margin:auto;
 	display:block;
-	width:24px;
-	height:24px;
+	width:20px;
+	height:20px;
 	opacity:0.33;
 	}
 .PRF_FIG
@@ -988,8 +988,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	}
 
-.CON			{color:#B8D070; font-size:13pt; line-height:110%; white-space:nowrap;}
-.CON_CRS		{color:#398000; font-size:13pt; line-height:110%; white-space:nowrap;}
+.CON			{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
+.CON_CRS		{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
 
 /*************************** Indicators about courses ************************/
 .INDICATORS td,.INDICATORS th
@@ -1001,7 +1001,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .INDICATORS th
 	{
 	color:#4D88A1;
-	font-size:15pt;
+	font-size:12pt;
 	font-weight:bold;
 	}
 
@@ -1009,5 +1009,5 @@ a:hover img.CENTRE_PHOTO_SHOW
 .FORM_ACCOUNT
 	{
 	display:inline-block;
-	min-width:375px;
+	min-width:312px;
 	}

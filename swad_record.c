@@ -209,7 +209,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Act_FormStart (ActRenFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
-	                 " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\""
+	                 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Rec_MAX_LENGTH_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
@@ -282,7 +282,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Field name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FieldName\""
-                      " style=\"width:600px;\" maxlength=\"%u\" value=\"%s\" />"
+                      " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Rec_MAX_LENGTH_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
 
@@ -915,7 +915,7 @@ void Rec_ListRecordsGsts (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                    " style=\"margin-bottom:15px;");
+	                    " style=\"margin-bottom:12px;");
 	 if (Gbl.CurrentAct == ActPrnRecSevGst &&
 	     NumUsrs != 0 &&
 	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1082,7 +1082,7 @@ void Rec_ListRecordsStds (void)
                                                           true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:15px;");
+        	               " style=\"margin-bottom:12px;");
             if (Gbl.CurrentAct == ActPrnRecSevStd &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1169,7 +1169,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"margin-bottom:15px;\">");
+	              " style=\"margin-bottom:12px;\">");
 
    /* Common record */
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1258,7 +1258,7 @@ void Rec_ListRecordsTchs (void)
                                                           true);
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:15px;");
+        	               " style=\"margin-bottom:12px;");
             if (Gbl.CurrentAct == ActPrnRecSevTch &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
@@ -1348,7 +1348,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 7px; display:inline;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:0 6px; display:inline;\">"
                       "<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
    if (ShowOfficeHours)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1608,7 +1608,7 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
          if (ICanEdit)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
-        	               " style=\"width:540px;\">",
+        	               " style=\"width:450px;\">",
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)
@@ -2187,7 +2187,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"width:30px; margin:9px auto;\">");
+      fprintf (Gbl.F.Out,"<div style=\"width:25px; margin:8px auto;\">");
 
       /***** Button to edit my record card *****/
       if (ItsMe)
@@ -3385,7 +3385,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable ("840px",3,
+   Lay_StartRoundFrameTable ("700px",3,
                              IAmTeacher ? Txt_Institution_centre_and_department :
 	                                  Txt_Institution);
 
@@ -3407,7 +3407,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select the country of my institution */
    Act_FormGoToStart (ActChgCtyMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:600px;\""
+   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:500px;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
@@ -3446,7 +3446,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select institution */
    Act_FormGoToStart (ActChgMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:600px;\""
+   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:500px;\""
 	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
@@ -3492,7 +3492,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select centre */
       Act_FormGoToStart (ActChgMyCtr);
-      fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:600px;\""
+      fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:500px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
@@ -3536,7 +3536,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select department */
       Act_FormGoToStart (ActChgMyDpt);
-      fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:600px;\""
+      fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:500px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
@@ -3575,7 +3575,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Act_FormGoToStart (ActChgMyOff);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:600px;\""
+			 " style=\"width:500px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
@@ -3595,7 +3595,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Act_FormGoToStart (ActChgMyOffPho);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:600px;\""
+			 " style=\"width:500px;\""
 			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,

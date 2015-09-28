@@ -250,7 +250,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"</div>");
 
    /***** What to search? *****/
-   fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:225px;\">");
+   fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:186px;\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;
         WhatToSearch < Sch_NUM_WHAT_TO_SEARCH;
         WhatToSearch++)

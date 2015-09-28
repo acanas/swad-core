@@ -127,7 +127,7 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_OPTION\""
 			    " style=\"background-image:url('%s/%s/%s64x64.gif');"
-			    " background-size:48px 48px;\"\">",
+			    " background-size:40px 40px;\">",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[NumAct].Icon);
 
@@ -277,7 +277,7 @@ void Mnu_WriteMenuThisTabMobile (void)
                                                                                    The_ClassMenuOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s64x64.gif\""
 	                    " alt=\"%s\" class=\"ICON64x64\""
-	                    " style=\"margin:6px;\" />"
+	                    " style=\"margin:5px;\" />"
 			    "<div>%s</div>"
                             "</a>",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
