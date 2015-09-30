@@ -229,45 +229,51 @@ void Dat_WriteFormIniEndDates (void)
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
 
+   /***** Start date *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
-                      "</td>",
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Start_date);
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"StartDay","StartMonth","StartYear",
                       &(Gbl.DateRange.DateIni),
                       false,false);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_End_date);
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",
-                      &(Gbl.DateRange.DateEnd),
-                      false,false);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td></td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
-                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
-                      "<input type=\"button\" name=\"Today\" value=\"%s\""
+   /***** "Yesterday" button *****/
+   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Yesterday\" value=\"%s\""
+                      " style=\"margin-left:40px;\""
                       " onclick=\"setDateTo(this,%u,%u,%u)\" />"
                       "</td>"
                       "</tr>",
             Txt_Yesterday,
-	    Gbl.Yesterday.Day,Gbl.Yesterday.Month,Gbl.Yesterday.Year-Cfg_LOG_START_YEAR+1,
+	    Gbl.Yesterday.Day,
+	    Gbl.Yesterday.Month,
+	    Gbl.Yesterday.Year - Cfg_LOG_START_YEAR + 1);
+
+   /***** End date *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_End_date);
+   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",
+                      &(Gbl.DateRange.DateEnd),
+                      false,false);
+
+   /***** "Today" button *****/
+   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Today\" value=\"%s\""
+                      " style=\"margin-left:40px;\""
+                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
+                      "</td>"
+                      "</tr>",
             Txt_Today,
-            Gbl.Now.Date.Day,Gbl.Now.Date.Month,Gbl.Now.Date.Year-Cfg_LOG_START_YEAR+1);
+            Gbl.Now.Date.Day,
+            Gbl.Now.Date.Month,
+            Gbl.Now.Date.Year - Cfg_LOG_START_YEAR + 1);
   }
 
 /*****************************************************************************/
@@ -294,10 +300,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    extern const char *Txt_MONTHS_SMALL[12];
 
    /***** Day *****/
-   fprintf (Gbl.F.Out,"<table>"
-                      "<tr>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\"",
+   fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\"",
             NameSelectDay,NameSelectDay);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
@@ -320,8 +323,6 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"</select>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\""
                       " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
@@ -344,8 +345,6 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"</select>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
 	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
@@ -364,10 +363,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Year);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</select>");
   }
 
 /*****************************************************************************/
