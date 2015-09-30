@@ -477,7 +477,7 @@ void Gbl_Cleanup (void)
    Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
    Usr_FreeListOtherRecipients ();
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
    Syl_FreeListItemsSyllabus ();
    Tst_FreeTagsList ();
    Exa_FreeMemExamAnnouncement ();

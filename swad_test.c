@@ -5945,7 +5945,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
 
    /***** Free the memory used by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -6022,13 +6022,13 @@ void Tst_ShowUsrsTestResults (void)
    const char *Ptr;
 
    /***** Get list of the selected users's IDs *****/
-   Usr_GetListSelectedUsrs ();
+   Usr_GetListsSelectedUsrs ();
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Check the number of users whose tests results will be shown *****/
-   if (Usr_CountNumUsrsInEncryptedList ())				// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())				// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
@@ -6060,7 +6060,7 @@ void Tst_ShowUsrsTestResults (void)
      }
 
    /***** Free the memory used for the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
   }
 
 /*****************************************************************************/

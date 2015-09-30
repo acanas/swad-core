@@ -121,7 +121,6 @@ static void Sta_ShowNumAccessesPerDegree (unsigned long NumRows,MYSQL_RES *mysql
 static void Sta_ShowNumAccessesPerCourse (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteDegree (long DegCod);
 static void Sta_DrawBarNumClicks (char Color,float NumPagesGenerated,float MaxPagesGenerated,float TotalPagesGenerated,unsigned MaxBarWidth);
-static void Sta_WriteSelectedRangeOfDates (unsigned NumDays);
 
 static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
@@ -395,7 +394,7 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 void Sta_AskSeeCrsAccesses (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Statistics_of_access;
+   extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
    extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
@@ -427,8 +426,8 @@ void Sta_AskSeeCrsAccesses (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
-         /***** Get list of selected users *****/
-         Usr_GetListSelectedUsrs ();
+         /***** Get lists of selected users *****/
+         Usr_GetListsSelectedUsrs ();
 
          Act_FormStart (ActSeeAccCrs);
          Grp_PutParamsCodGrps ();
@@ -436,7 +435,9 @@ void Sta_AskSeeCrsAccesses (void)
          Par_PutHiddenParamLong ("LastRow",0);
 
          /***** Start frame *****/
-         Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_access);
+         sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
+                  Gbl.CurrentCrs.Crs.ShortName);
+         Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
          /***** Put list of users to select some of them *****/
          fprintf (Gbl.F.Out,"<tr>"
@@ -532,7 +533,7 @@ void Sta_AskSeeCrsAccesses (void)
          Act_FormEnd ();
 
          /* Free the memory used by the list of users */
-         Usr_FreeListsEncryptedUsrCods ();
+         Usr_FreeListsSelectedUsrCods ();
         }
      }
    else	// No teachers nor students found
@@ -553,7 +554,7 @@ void Sta_AskSeeCrsAccesses (void)
 void Sta_AskSeeGblAccesses (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Statistics_of_access;
+   extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
    extern const char *Txt_Scope;
@@ -579,7 +580,7 @@ void Sta_AskSeeGblAccesses (void)
    Act_FormStart (ActSeeAccGbl);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_access);
+   Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_all_visits);
 
    /***** Start and end dates for the search *****/
    Dat_WriteFormIniEndDates ();
@@ -788,25 +789,12 @@ void Sta_SeeGblAccesses (void)
 
 static bool Sta_SeeAccesses (void)
   {
-   extern const char *Txt_User;
-   extern const char *Txt_Users;
-   extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
-   extern const char *Txt_Action;
-   extern const char *Txt_The_graph_shows_the_NUMBER;
-   extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
-   extern const char *Txt_distributed_by;
-   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
    extern const char *Txt_There_are_no_accesses_with_the_selected_search_criteria;
-   extern const char *Txt_List_of_detailed_clicks_in_the_course_X;
-   extern const char *Txt_Statistics_of_all_visits;
-   extern const char *Txt_Statistics_of_visits_to_COUNTRY_X;
-   extern const char *Txt_Statistics_of_visits_to_the_institution_X;
-   extern const char *Txt_Statistics_of_visits_to_the_centre_X;
-   extern const char *Txt_Statistics_of_visits_to_the_degree_X;
-   extern const char *Txt_Statistics_of_visits_to_the_course_X;
+   extern const char *Txt_List_of_detailed_clicks;
+   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    enum {STAT_GLOBAL,STAT_COURSE} StatsGlobalOrCourse;
    char Query[MAX_LENGTH_QUERY_ACCESS+1];
    char QueryAux[512];
@@ -823,7 +811,6 @@ static bool Sta_SeeAccesses (void)
    char StrRole[256];
    char StrQueryCountType[256];
    unsigned NumDays;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
    /***** Initialize data structure of the user *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -914,11 +901,14 @@ static bool Sta_SeeAccesses (void)
 	    Lay_ShowErrorAndExit ("Number of rows per page is missing.");
 	}
 
-      /****** Get list of selected users ******/
-      Usr_GetListSelectedUsrs ();
+      /***** Show form again *****/
+      Sta_AskSeeCrsAccesses ();
+
+      /****** Get lists of selected users ******/
+      Usr_GetListsSelectedUsrs ();
 
       /* Check the number of users whose clicks will be shown */
-      if (!Usr_CountNumUsrsInEncryptedList ())	// If there are no users selected...
+      if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
 	{					// ...write warning message and show the form again
 	 Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
 	 return false;
@@ -953,6 +943,9 @@ static bool Sta_SeeAccesses (void)
                           1 << Sco_SCOPE_CRS;
       Gbl.Scope.Default = Sco_SCOPE_SYS;
       Sco_GetScope ();
+
+      /***** Show form again *****/
+      Sta_AskSeeGblAccesses ();
      }
 
    /***** Check if range of dates is forbidden for me *****/
@@ -1293,92 +1286,13 @@ static bool Sta_SeeAccesses (void)
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
    else
      {
-      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-        {
-         sprintf (Gbl.Message,Txt_List_of_detailed_clicks_in_the_course_X,
-                  Gbl.CurrentCrs.Crs.FullName);
-         Lay_WriteTitle (Gbl.Message);
-         Sta_WriteSelectedRangeOfDates (NumDays);
-        }
-      else
-        {
-         switch (Gbl.Stat.ClicksGroupedBy)
-           {
-            case Sta_CLICKS_CRS_PER_USR:
-            case Sta_CLICKS_CRS_PER_DAYS:
-            case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
-            case Sta_CLICKS_CRS_PER_WEEKS:
-            case Sta_CLICKS_CRS_PER_MONTHS:
-            case Sta_CLICKS_CRS_PER_HOUR:
-            case Sta_CLICKS_CRS_PER_MINUTE:
-            case Sta_CLICKS_CRS_PER_ACTION:
-               sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_course_X,
-                        Gbl.CurrentCrs.Crs.FullName);
-               Lay_WriteTitle (Gbl.Message);
-               Sta_WriteSelectedRangeOfDates (NumDays);
-	       break;
-            default:
-               switch (Gbl.Scope.Current)
-                 {
-                  case Sco_SCOPE_SYS:
-                     strcpy (Gbl.Message,Txt_Statistics_of_all_visits);
-                     break;
-                  case Sco_SCOPE_CTY:
-                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_COUNTRY_X,
-                              Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-                     break;
-                  case Sco_SCOPE_INS:
-                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_institution_X,
-                              Gbl.CurrentIns.Ins.ShortName);
-                     break;
-                  case Sco_SCOPE_CTR:
-                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_centre_X,
-                              Gbl.CurrentCtr.Ctr.ShortName);
-                     break;
-                  case Sco_SCOPE_DEG:
-                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_degree_X,
-                              Gbl.CurrentDeg.Deg.ShortName);
-                     break;
-                  case Sco_SCOPE_CRS:
-                     sprintf (Gbl.Message,Txt_Statistics_of_visits_to_the_course_X,
-                              Gbl.CurrentCrs.Crs.ShortName);
-                     break;
-		  default:
-		     Lay_ShowErrorAndExit ("Wrong scope.");
-		     break;
-                 }
-               Lay_WriteTitle (Gbl.Message);
-               Sta_WriteSelectedRangeOfDates (NumDays);
-               fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">");
-               if (Gbl.Stat.Role == Sta_ME)
-                  fprintf (Gbl.F.Out,"%s: %s",
-                           Txt_User,
-                           Gbl.Usrs.Me.UsrDat.FullName);
-               else
-                  fprintf (Gbl.F.Out,"%s: %s",
-                           Txt_Users,
-                           Txt_ROLE_STATS[Gbl.Stat.Role]);
-               fprintf (Gbl.F.Out,"</p>");
-               break;
-           }
-
-         fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">%s: %s</p>",
-                  Txt_Action,
-                  Act_GetActionTextFromDB (Act_Actions[Gbl.Stat.NumAction].ActCod,ActTxt));
-
-         sprintf (Gbl.Message,"%s %s, %s %s",
-                  Txt_The_graph_shows_the_NUMBER,
-                  Txt_STAT_TYPE_COUNT_SMALL[Gbl.Stat.CountType],
-                  Txt_distributed_by,
-                  Txt_STAT_CLICKS_GROUPED_BY[Gbl.Stat.ClicksGroupedBy]);
-         Lay_WriteTitle (Gbl.Message);
-  	}
-
       /***** Put the table with the clicks *****/
       /* Write start of table frame */
-      Lay_StartRoundFrameTable ((Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? "95%" :
-	                                                                                    NULL,
-	                        0,NULL);
+      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+	 Lay_StartRoundFrameTable ("95%",0,Txt_List_of_detailed_clicks);
+      else
+	 Lay_StartRoundFrameTable (NULL,0,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+
       switch (Gbl.Stat.ClicksGroupedBy)
 	{
 	 case Sta_CLICKS_CRS_DETAILED_LIST:
@@ -1441,7 +1355,7 @@ static bool Sta_SeeAccesses (void)
 
    /***** Free the memory used by the list of users *****/
    if (Gbl.CurrentAct == ActSeeAccCrs)
-      Usr_FreeListsEncryptedUsrCods ();
+      Usr_FreeListsSelectedUsrCods ();
 
    /***** Free memory used by the data of the user *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1548,7 +1462,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormEnd ();
 
    /* Write number of current page */
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:60%%;\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\">"
                       "<strong>"
                       "%s %lu-%lu %s %lu (%s %ld %s %lu)"
                       "</strong>"
@@ -3509,35 +3423,6 @@ void Sta_WriteParamsDatesSeeAccesses (void)
    Par_PutHiddenParamUnsigned ("EndDay"    ,Gbl.DateRange.DateEnd.Day);
    Par_PutHiddenParamUnsigned ("EndMonth"  ,Gbl.DateRange.DateEnd.Month);
    Par_PutHiddenParamUnsigned ("EndYear"   ,Gbl.DateRange.DateEnd.Year);
-  }
-
-/*****************************************************************************/
-/******************** Write the selected range of dates **********************/
-/*****************************************************************************/
-
-static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
-  {
-   extern const char *Txt_Date;
-   extern const char *Txt_Dates;
-   extern const char *Txt_DATES_RANGE;
-   extern const char *Txt_one_day;
-   extern const char *Txt_days;
-   char StrDateIni[2+1+2+1+4+1];
-   char StrDateEnd[2+1+2+1+4+1];
-   char StrDatesRange[1024];
-
-   sprintf (StrDateIni,"%02u/%02u/%04u",Gbl.DateRange.DateIni.Day,Gbl.DateRange.DateIni.Month,Gbl.DateRange.DateIni.Year);
-   fprintf (Gbl.F.Out,"<p class=\"DAT CENTER_MIDDLE\">");
-   if (NumDays == 1)
-      fprintf (Gbl.F.Out,"%s: %s (%s)",Txt_Date,StrDateIni,Txt_one_day);
-   else
-     {
-      sprintf (StrDateEnd,"%02u/%02u/%04u",Gbl.DateRange.DateEnd.Day,Gbl.DateRange.DateEnd.Month,Gbl.DateRange.DateEnd.Year);
-      sprintf (StrDatesRange,Txt_DATES_RANGE,StrDateIni,StrDateEnd);
-      fprintf (Gbl.F.Out,"%s: %s (%u %s)",
-               Txt_Dates,StrDatesRange,NumDays,Txt_days);
-     }
-   fprintf (Gbl.F.Out,"</p>");
   }
 
 /*****************************************************************************/

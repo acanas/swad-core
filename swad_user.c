@@ -145,6 +145,8 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 
 static Usr_Sex_t Usr_GetSexOfUsrsLst (struct ListUsers *LstUsrs);
 
+static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender);
+
 static void Usr_SetUsrDatMainFieldNames (void);
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
@@ -2650,7 +2652,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    // Two colors are used alternatively to better distinguish the rows
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
-   Usr_PutCheckboxToSelectUser (Rol__GUEST_,UsrDat->EncryptedUsrCod,false);
+   Usr_PutCheckboxToSelectUser (UsrDat,false);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Student has accepted enrollment in current course? *****/
@@ -2737,7 +2739,9 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-      Usr_PutCheckboxToSelectUser (Rol_STUDENT,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
+
+      Usr_PutCheckboxToSelectUser (UsrDat,UsrIsTheMsgSender);
+
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3049,7 +3053,9 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-      Usr_PutCheckboxToSelectUser (Rol_TEACHER,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
+
+      Usr_PutCheckboxToSelectUser (UsrDat,UsrIsTheMsgSender);
+
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -4382,14 +4388,14 @@ void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
 /************************* Get list of selected users ************************/
 /*****************************************************************************/
 
-void Usr_GetListSelectedUsrs (void)
+void Usr_GetListsSelectedUsrs (void)
   {
    unsigned Length;
 
    /***** Allocate memory for the lists of users *****/
-   Usr_AllocateListEncryptedUsrCodAll ();
-   Usr_AllocateListEncryptedUsrCodTch ();
-   Usr_AllocateListEncryptedUsrCodStd ();
+   Usr_AllocateListSelectedUsrCodAll ();
+   Usr_AllocateListSelectedUsrCodTch ();
+   Usr_AllocateListSelectedUsrCodStd ();
 
    /***** Get selected users *****/
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
@@ -4402,9 +4408,9 @@ void Usr_GetListSelectedUsrs (void)
    else
       Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select.Tch,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select.Tch,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers or guests
 
-   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
 /*
 sprintf (Gbl.Message,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
          Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
@@ -4457,7 +4463,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    bool Error = false;
 
    /***** Allocate memory for the lists of users's IDs *****/
-   Usr_AllocateListEncryptedUsrCodAll ();
+   Usr_AllocateListSelectedUsrCodAll ();
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
    Usr_AllocateListOtherRecipients ();
@@ -4580,7 +4586,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	       Usr_GetUsrDataFromUsrCod (&UsrDat);	// Really only EncryptedUsrCod is needed
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncryptedUsrCodInList (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
+               if (!Usr_FindUsrCodInListOfSelectedUsrs (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
                  {
                   /* Add encrypted user's code to list of users */
                   if ((Length = strlen (Gbl.Usrs.Select.All)) == 0)        // First user in list
@@ -4614,26 +4620,29 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 // Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Select.All
 
-bool Usr_FindEncryptedUsrCodInList (const char *EncryptedUsrCodToFind)
+bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
 
-   Ptr = Gbl.Usrs.Select.All;
-   while (*Ptr)
+   if (Gbl.Usrs.Select.All)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
-         return true;        // Found!
+      Ptr = Gbl.Usrs.Select.All;
+      while (*Ptr)
+	{
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
+	    return true;        // Found!
+	}
      }
-   return false;        // Not found
+   return false;        // List not allocated or user not found
   }
 
 /*****************************************************************************/
 /************ Count number of valid users' IDs in encrypted list *************/
 /*****************************************************************************/
 
-unsigned Usr_CountNumUsrsInEncryptedList (void)
+unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
   {
    const char *Ptr;
    unsigned NumUsrs = 0;
@@ -4655,7 +4664,7 @@ unsigned Usr_CountNumUsrsInEncryptedList (void)
 /********************* Allocate memory for list of users *********************/
 /*****************************************************************************/
 
-void Usr_AllocateListEncryptedUsrCodAll (void)
+void Usr_AllocateListSelectedUsrCodAll (void)
   {
    if (!Gbl.Usrs.Select.All)
      {
@@ -4669,26 +4678,26 @@ void Usr_AllocateListEncryptedUsrCodAll (void)
 /****************** Allocate memory for list of students *********************/
 /*****************************************************************************/
 
-void Usr_AllocateListEncryptedUsrCodStd (void)
+void Usr_AllocateListSelectedUsrCodStd (void)
   {
    if (!Gbl.Usrs.Select.Std)
      {
       if ((Gbl.Usrs.Select.Std = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS+1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of students.");
+         Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
       Gbl.Usrs.Select.Std[0] = '\0';
      }
   }
 
 /*****************************************************************************/
-/****************** Allocate memory for list of teachers *********************/
+/************* Allocate memory for list of teachers or guests ****************/
 /*****************************************************************************/
 
-void Usr_AllocateListEncryptedUsrCodTch (void)
+void Usr_AllocateListSelectedUsrCodTch (void)
   {
    if (!Gbl.Usrs.Select.Tch)
      {
       if ((Gbl.Usrs.Select.Tch = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS+1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of teachers.");
+         Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
       Gbl.Usrs.Select.Tch[0] = '\0';
      }
   }
@@ -4697,7 +4706,7 @@ void Usr_AllocateListEncryptedUsrCodTch (void)
 /********************** Free memory for lists of users ***********************/
 /*****************************************************************************/
 
-void Usr_FreeListsEncryptedUsrCods (void)
+void Usr_FreeListsSelectedUsrCods (void)
   {
    if (Gbl.Usrs.Select.All)
      {
@@ -4911,7 +4920,7 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
 	                 " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
       LstUsrs = &Gbl.Usrs.LstStds;
      }
-   else
+   else	// Role == Rol_TEACHER or Role == Rol__GUEST_
      {
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_TCHS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
@@ -4922,7 +4931,7 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
 	              "</th>"
 	              "</tr>",
 	    LstUsrs->NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-                                    Txt_ROLES_PLURAL_Abc  [Role][Sex]);
+                                    Txt_ROLES_PLURAL_Abc[Role][Sex]);
   }
 
 /*****************************************************************************/
@@ -4966,15 +4975,31 @@ unsigned Usr_GetColumnsForSelectUsrs (void)
 /******* Put a checkbox, in a classphoto or a list, to select a user *********/
 /*****************************************************************************/
 
-void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,const char *EncryptedUsrCod,bool UsrIsTheMsgSender)
+static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender)
   {
+   bool CheckboxChecked;
+
+   /***** Check box *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"");
-   if (Role == Rol_STUDENT)
-      fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\" onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",EncryptedUsrCod);
+   if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT)
+      fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\""
+	                 " onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",
+	       UsrDat->EncryptedUsrCod);
+   else	// Role == Rol_TEACHER or Role == Rol__GUEST_
+      fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\""
+	                 " onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",
+	       UsrDat->EncryptedUsrCod);
+
+   /***** Check box must be checked? *****/
+   CheckboxChecked = false;
+   if (UsrIsTheMsgSender)
+      CheckboxChecked = true;
    else
-      fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\" onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",EncryptedUsrCod);
-   if (UsrIsTheMsgSender)        // Reply to a user
+      /* Check if user is in lists of selected users */
+      CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (UsrDat->EncryptedUsrCod);
+   if (CheckboxChecked)
       fprintf (Gbl.F.Out," checked=\"checked\"");
+
    fprintf (Gbl.F.Out," />");
   }
 
@@ -6398,7 +6423,7 @@ void Usr_SeeGuests (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstGsts.NumUsrs))
 	{
          /***** Get list of selected users *****/
-         Usr_GetListSelectedUsrs ();
+         Usr_GetListsSelectedUsrs ();
 
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          switch (Gbl.Usrs.Me.ListType)
@@ -6574,7 +6599,7 @@ void Usr_SeeStudents (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
 	{
          /***** Get list of selected users *****/
-         Usr_GetListSelectedUsrs ();
+         Usr_GetListsSelectedUsrs ();
 
          switch (Gbl.Usrs.Me.ListType)
            {
@@ -7056,7 +7081,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
          /***** Checkbox to select this user *****/
          if (PutCheckBoxToSelectUsr)
-            Usr_PutCheckboxToSelectUser (RoleInClassPhoto,UsrDat.EncryptedUsrCod,UsrIsTheMsgSender);
+            Usr_PutCheckboxToSelectUser (&UsrDat,UsrIsTheMsgSender);
 
          /***** Show photo *****/
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);

@@ -878,10 +878,10 @@ void Rec_ListRecordsGsts (void)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected users *****/
-   Usr_GetListSelectedUsrs ();
+   Usr_GetListsSelectedUsrs ();
 
    /* Check the number of students to show */
-   if (!Usr_CountNumUsrsInEncryptedList ())	// If no students selected...
+   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
       Usr_SeeGuests ();			// ...show again the form
@@ -938,7 +938,7 @@ void Rec_ListRecordsGsts (void)
       Rec_FreeListFields ();
 
    /***** Free memory used for by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
   }
 
 /*****************************************************************************/
@@ -1034,10 +1034,10 @@ void Rec_ListRecordsStds (void)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected students *****/
-   Usr_GetListSelectedUsrs ();
+   Usr_GetListsSelectedUsrs ();
 
    /* Check the number of students to show */
-   if (!Usr_CountNumUsrsInEncryptedList ())	// If no students selected...
+   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_students);
       Usr_SeeStudents ();			// ...show again the form
@@ -1116,7 +1116,7 @@ void Rec_ListRecordsStds (void)
       Rec_FreeListFields ();
 
    /***** Free memory used for by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
   }
 
 /*****************************************************************************/
@@ -1208,10 +1208,10 @@ void Rec_ListRecordsTchs (void)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected teachers *****/
-   Usr_GetListSelectedUsrs ();
+   Usr_GetListsSelectedUsrs ();
 
    /* Check the number of teachers to show */
-   if (!Usr_CountNumUsrsInEncryptedList ())	// If no teachers selected...
+   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no teachers selected...
      {						// ...write warning notice
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_teachers);
       Usr_SeeTeachers ();			// ...show again the form
@@ -1285,7 +1285,7 @@ void Rec_ListRecordsTchs (void)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free memory used for by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
   }
 
 /*****************************************************************************/

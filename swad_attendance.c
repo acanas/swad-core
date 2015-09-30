@@ -2268,7 +2268,7 @@ void Att_RegisterStudentsInAttEvent (void)
          Gbl.Usrs.LstStds.Lst[NumStd].Remove = true;
 
       /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select.Std *****/
-      Usr_GetListSelectedUsrs ();
+      Usr_GetListsSelectedUsrs ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrData);
@@ -2298,7 +2298,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** Free memory *****/
       /* Free memory used for list of students */
-      Usr_FreeListsEncryptedUsrCods ();
+      Usr_FreeListsSelectedUsrCods ();
 
       // 5. Delete from att_usr all the students marked as Remove=true
       // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
@@ -2608,7 +2608,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Get list of selected users *****/
-         Usr_GetListSelectedUsrs ();
+         Usr_GetListsSelectedUsrs ();
 
          /***** Draw a class photo with students of the course *****/
          /* Start form */
@@ -2628,7 +2628,7 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Act_FormEnd ();
 
          /***** Free memory used for by the list of users *****/
-         Usr_FreeListsEncryptedUsrCods ();
+         Usr_FreeListsSelectedUsrCods ();
         }
      }
    else
@@ -2657,10 +2657,10 @@ void Usr_ListAttendanceStdsCrs (void)
    Att_GetListAttEvents (Att_OLDEST_FIRST);
 
    /***** Get list of selected students *****/
-   Usr_GetListSelectedUsrs ();
+   Usr_GetListsSelectedUsrs ();
 
    /* Check the number of students to list */
-   if ((NumStdsInList = Usr_CountNumUsrsInEncryptedList ()))
+   if ((NumStdsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
      {
       /***** Get boolean parameter that indicates if details must be shown *****/
       Par_GetParToText ("ShowDetails",YN,1);
@@ -2716,7 +2716,7 @@ void Usr_ListAttendanceStdsCrs (void)
      }
 
    /***** Free memory used for by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

@@ -2013,8 +2013,8 @@ void Brw_GetParAndInitFileBrowser (void)
      {
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
-         /* Get list of the selected users's IDs */
-         Usr_GetListSelectedUsrs ();
+         /* Get lists of the selected users */
+         Usr_GetListsSelectedUsrs ();
          /* Get user whose folder will be used to make any operation */
          Usr_GetParamOtherUsrCodEncrypted ();
          /* Get whether we must create the zip file or not */
@@ -2885,7 +2885,7 @@ void Brw_AskEditWorksCrs (void)
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
 
    /***** Free the memory used by the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -2915,7 +2915,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    struct UsrData UsrDat;
 
    /***** Check the number of users whose works will be shown *****/
-   if (Usr_CountNumUsrsInEncryptedList ())	// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       if (Gbl.FileBrowser.ZIP.CreateZIP)
 	{
@@ -3006,7 +3006,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
      }
 
    /***** Free the memory used for the list of users *****/
-   Usr_FreeListsEncryptedUsrCods ();
+   Usr_FreeListsSelectedUsrCods ();
   }
 
 /*****************************************************************************/

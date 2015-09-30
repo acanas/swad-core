@@ -6724,48 +6724,6 @@ const char *Txt_Date_of_creation =
 	"Data da cria&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Dates =
-#if   L==0
-	"Dates";
-#elif L==1
-	"Datum";
-#elif L==2
-	"Dates";
-#elif L==3
-	"Fechas";
-#elif L==4
-	"Dates";
-#elif L==5
-	"Fechas";	// Okoteve traducción
-#elif L==6
-	"Date";
-#elif L==7
-	"Daty";
-#elif L==8
-	"Datas";
-#endif
-
-const char *Txt_DATES_RANGE =	// Warning: it is very important to include two %s in the following sentences
-#if   L==0
-	"desde el %s hasta el %s";	// Necessita traduccio
-#elif L==1
-	"von %s bis %s";
-#elif L==2
-	"from %s to %s";
-#elif L==3
-	"desde el %s hasta el %s";
-#elif L==4
-	"de %s jusqu'&agrave; %s";
-#elif L==5
-	"desde el %s hasta el %s";	// Okoteve traducción
-#elif L==6
-	"dal %s al %s";
-#elif L==7
-	"z %s do %s";
-#elif L==8
-	"%s at&eacute; %s";
-#endif
-
 const char *Txt_Day =
 #if   L==0
 	"D&iacute;a";	// Necessita traduccio
@@ -15640,25 +15598,25 @@ const char *Txt_Link_to_announcement_of_exam =
 	"Link para chamada para exame";
 #endif
 
-const char *Txt_List_of_detailed_clicks_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_List_of_detailed_clicks =
 #if   L==0
-	"Listado de clics detallados en la asignatura <strong>%s</strong>";	// Necessita traduccio
+	"Listado de clics detallados";		// Necessita traduccio
 #elif L==1
-	"List of detailed clicks in the course <strong>%s</strong>";		// Need Übersetzung
+	"List of detailed clicks";		// Need Übersetzung
 #elif L==2
-	"List of detailed clicks in the course <strong>%s</strong>";
+	"List of detailed clicks";
 #elif L==3
-	"Listado de clics detallados en la asignatura <strong>%s</strong>";
+	"Listado de clics detallados";
 #elif L==4
-	"List of detailed clicks in the course <strong>%s</strong>";		// Besoin de traduction
+	"List of detailed clicks";		// Besoin de traduction
 #elif L==5
-	"Listado de clics detallados en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Listado de clics detallados";		// Okoteve traducción
 #elif L==6
-	"Lista di scatti dettagliati nel corso <strong>%s</strong>";
+	"Lista di scatti dettagliati";
 #elif L==7
-	"Lista szczeg&oacute;lowa klikniec w trakcie <strong>%s</strong>";
+	"Lista szczeg&oacute;lowa klikniec";
 #elif L==8
-	"List of detailed clicks in the course <strong>%s</strong>";		// Necessita de tradução
+	"List of detailed clicks";		// Necessita de tradução
 #endif
 
 const char *Txt_List_of_nicks_emails_or_IDs =
@@ -25503,27 +25461,6 @@ const char *Txt_Official_students =
 	"Dziennik student&oacute;w";
 #elif L==8
 	"Estudantes oficiais";
-#endif
-
-const char *Txt_one_day =
-#if   L==0
-	"un d&iacute;a";	// Necessita traduccio
-#elif L==1
-	"ein Tag";
-#elif L==2
-	"one day";
-#elif L==3
-	"un d&iacute;a";
-#elif L==4
-	"un jour";
-#elif L==5
-	"un d&iacute;a";	// Okoteve traducción
-#elif L==6
-	"un giorno";
-#elif L==7
-	"jeden dzien";
-#elif L==8
-	"um dia";
 #endif
 
 const char *Txt_One_message_has_been_deleted =
@@ -36451,27 +36388,6 @@ const char *Txt_Statistic =
 	 "Estat&iacute;sticas";
 #endif
 
-const char *Txt_Statistics_of_access =
-#if   L==0
-	"Estad&iacute;stiques d'accesso";
-#elif L==1
-	"Zugriffsstatistik";
-#elif L==2
-	"Statistics of access";
-#elif L==3
-	"Estad&iacute;sticas de acceso";
-#elif L==4
-	"Statistiques de connexion";
-#elif L==5
-	"Estad&iacute;sticas de acceso";	// Okoteve traducción
-#elif L==6
-	"Statistiche di accesso";
-#elif L==7
-	"Statystyki dost&eogon;p";
-#elif L==8
-	"Estat&iacute;sticas de acesso";
-#endif
-
 const char *Txt_Statistics_of_all_visits =
 #if   L==0
 	"Estad&iacute;stica de todos los accesos";	// Necessita traduccio
@@ -36493,48 +36409,6 @@ const char *Txt_Statistics_of_all_visits =
 	"Statistics of all visits";			// Necessita de tradução
 #endif
 
-const char *Txt_Statistics_of_visits_to_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Estad&iacute;stica de accesos a <strong>%s</strong>";	// Necessita traduccio
-#elif L==1
-	"Statistics of visits to <strong>%s</strong>";	// Need Übersetzung
-#elif L==2
-	"Statistics of visits to <strong>%s</strong>";
-#elif L==3
-	"Estad&iacute;stica de accesos a <strong>%s</strong>";
-#elif L==4
-	"Statistics of visits to <strong>%s</strong>";	// Besoin de traduction
-#elif L==5
-	"Estad&iacute;stica de accesos a <strong>%s</strong>";	// Okoteve traducción
-#elif L==6
-	"Statistiche degli accessi al centro <strong>%s</strong>";
-#elif L==7
-	"Statistics of visits to the centre <strong>%s</strong>";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Statistics of visits to the centre <strong>%s</strong>";	// Necessita de tradução
-#endif
-
-const char *Txt_Statistics_of_visits_to_the_centre_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Estad&iacute;stica de accesos al centro <strong>%s</strong>";	// Necessita traduccio
-#elif L==1
-	"Statistics of visits to the centre <strong>%s</strong>";	// Need Übersetzung
-#elif L==2
-	"Statistics of visits to the centre <strong>%s</strong>";
-#elif L==3
-	"Estad&iacute;stica de accesos al centro <strong>%s</strong>";
-#elif L==4
-	"Statistics of visits to the centre <strong>%s</strong>";	// Besoin de traduction
-#elif L==5
-	"Estad&iacute;stica de accesos al centro <strong>%s</strong>";	// Okoteve traducción
-#elif L==6
-	"Statistiche degli accessi al centro <strong>%s</strong>";
-#elif L==7
-	"Statistics of visits to the centre <strong>%s</strong>";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Statistics of visits to the centre <strong>%s</strong>";	// Necessita de tradução
-#endif
-
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Estad&iacute;stica d'accessos a l'assignatura <strong>%s</strong>";
@@ -36554,48 +36428,6 @@ const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very im
 	"Statistics of visits to the course <strong>%s</strong>";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Statistics of visits to the course <strong>%s</strong>";		// Necessita de tradução
-#endif
-
-const char *Txt_Statistics_of_visits_to_the_degree_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Estad&iacute;stica de accesos a la titulaci&oacute;n <strong>%s</strong>";	// Necessita traduccio
-#elif L==1
-	"Statistics of visits to the degree <strong>%s</strong>";			// Need Übersetzung
-#elif L==2
-	"Statistics of visits to the degree <strong>%s</strong>";
-#elif L==3
-	"Estad&iacute;stica de accesos a la titulaci&oacute;n <strong>%s</strong>";
-#elif L==4
-	"Statistics of visits to the degree <strong>%s</strong>";			// Besoin de traduction
-#elif L==5
-	"Estad&iacute;stica de accesos a la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
-#elif L==6
-	"Statistiche degli accessi alla laurea <strong>%s</strong>";
-#elif L==7
-	"Statistics of visits to the degree <strong>%s</strong>";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"Statistics of visits to the degree <strong>%s</strong>";			// Necessita de tradução
-#endif
-
-const char *Txt_Statistics_of_visits_to_the_institution_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Estad&iacute;stica de accesos a la instituci&oacute;n <strong>%s</strong>";	// Necessita traduccio
-#elif L==1
-	"Statistics of visits to the institution <strong>%s</strong>";			// Need Übersetzung
-#elif L==2
-	"Statistics of visits to the institution <strong>%s</strong>";
-#elif L==3
-	"Estad&iacute;stica de accesos a la instituci&oacute;n <strong>%s</strong>";
-#elif L==4
-	"Statistics of visits to the institution <strong>%s</strong>";			// Besoin de traduction
-#elif L==5
-	"Estad&iacute;stica de accesos a la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
-#elif L==6
-	"Statistiche degli accessi alla istituzione <strong>%s</strong>";
-#elif L==7
-	"Statistics of visits to the institution <strong>%s</strong>";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"Statistics of visits to the institution <strong>%s</strong>";			// Necessita de tradução
 #endif
 
 const char *Txt_Status =
@@ -39692,27 +39524,6 @@ const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_fol
 #elif L==8
 	"The folder name <strong>%s</strong> has not changed"
 	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_graph_shows_the_NUMBER =
-#if   L==0
-	"La gr&aacute;fica muestra el";	// Necessita traduccio
-#elif L==1
-	"Die Grafik zeigt die";
-#elif L==2
-	"The graph shows the";
-#elif L==3
-	"La gr&aacute;fica muestra el";
-#elif L==4
-	"Le graphique montre le";
-#elif L==5
-	"La gr&aacute;fica muestra el";	// Okoteve traducción
-#elif L==6
-	"Il grafico mostra il";
-#elif L==7
-	"The graph shows the";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"O gr&aacute;fico mostra o";
 #endif
 
 const char *Txt_The_group_X_already_exists =	// Warning: it is very important to include %s in the following sentences
