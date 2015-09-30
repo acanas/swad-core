@@ -88,6 +88,12 @@ struct Sta_StatsForum
    unsigned NumUsrsToBeNotifiedByEMail;
   };
 
+typedef enum
+  {
+   Sta_SHOW_GLOBAL_ACCESSES,
+   Sta_SHOW_COURSE_ACCESSES,
+  } Sta_GlobalOrCourseAccesses_t;
+
 /*****************************************************************************/
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
@@ -96,7 +102,7 @@ static void Sta_PutFormToRequestAccessesCrs (void);
 
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
-static bool Sta_SeeAccesses (void);
+static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
 static void Sta_ShowNumAccessesPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res);
@@ -767,16 +773,14 @@ void Sta_SetIniEndDates (void)
 /******************** Compute and show access statistics *********************/
 /*****************************************************************************/
 
-void Sta_SeeCrsAccesses (void)
-  {
-   if (!Sta_SeeAccesses ())
-      Sta_AskSeeCrsAccesses ();
-  }
-
 void Sta_SeeGblAccesses (void)
   {
-   if (!Sta_SeeAccesses ())
-      Sta_AskSeeGblAccesses ();
+   Sta_SeeAccesses (Sta_SHOW_GLOBAL_ACCESSES);
+  }
+
+void Sta_SeeCrsAccesses (void)
+  {
+   Sta_SeeAccesses (Sta_SHOW_COURSE_ACCESSES);
   }
 
 /*****************************************************************************/
@@ -787,7 +791,7 @@ void Sta_SeeGblAccesses (void)
 
 // Returns false on error
 
-static bool Sta_SeeAccesses (void)
+static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
@@ -795,7 +799,6 @@ static bool Sta_SeeAccesses (void)
    extern const char *Txt_There_are_no_accesses_with_the_selected_search_criteria;
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
-   enum {STAT_GLOBAL,STAT_COURSE} StatsGlobalOrCourse;
    char Query[MAX_LENGTH_QUERY_ACCESS+1];
    char QueryAux[512];
    long LengthQuery;
@@ -860,104 +863,86 @@ static bool Sta_SeeAccesses (void)
       Lay_ShowErrorAndExit ("Action is missing.");
    Gbl.Stat.NumAction = (Act_Action_t) UnsignedNum;
 
-   switch (Gbl.Stat.ClicksGroupedBy)
+   switch (GlobalOrCourse)
      {
-      case Sta_CLICKS_GBL_PER_DAYS:
-      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
-      case Sta_CLICKS_GBL_PER_WEEKS:
-      case Sta_CLICKS_GBL_PER_MONTHS:
-      case Sta_CLICKS_GBL_PER_HOUR:
-      case Sta_CLICKS_GBL_PER_MINUTE:
-      case Sta_CLICKS_GBL_PER_ACTION:
-      case Sta_CLICKS_GBL_PER_PLUGIN:
-      case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
-      case Sta_CLICKS_GBL_PER_BANNER:
-      case Sta_CLICKS_GBL_PER_DEGREE:
-      case Sta_CLICKS_GBL_PER_COURSE:
-         StatsGlobalOrCourse = STAT_GLOBAL;
+      case Sta_SHOW_GLOBAL_ACCESSES:
+	 /***** Get the type of user of clicks *****/
+	 Par_GetParToText ("Role",UnsignedStr,10);
+	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
+	    Lay_ShowErrorAndExit ("Type of users is missing.");
+	 if (UnsignedNum >= Sta_NUM_ROLES_STAT)
+	    Lay_ShowErrorAndExit ("Type of users is missing.");
+	 Gbl.Stat.Role = (Sta_Role_t) UnsignedNum;
+
+	 /***** Get users range for access statistics *****/
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+			     1 << Sco_SCOPE_CTY |
+			     1 << Sco_SCOPE_INS |
+			     1 << Sco_SCOPE_CTR |
+			     1 << Sco_SCOPE_DEG |
+			     1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Default = Sco_SCOPE_SYS;
+	 Sco_GetScope ();
+
+	 /***** Show form again *****/
+	 Sta_AskSeeGblAccesses ();
+
+	 /***** The following types of query will never give a valid result *****/
+	 if ((Gbl.Stat.Role == Sta_ALL_USRS ||
+	      Gbl.Stat.Role == Sta_UNKNOWN_USRS) &&
+	     (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
+	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))
+	   {
+	    Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
+	    Usr_UsrDataDestructor (&UsrDat);
+	    return;
+	   }
 	 break;
-      default:
-         StatsGlobalOrCourse = STAT_COURSE;
-         break;
-     }
+      case Sta_SHOW_COURSE_ACCESSES:
+	 if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+	   {
+	    /****** Get the number of the first row to show ******/
+	    Par_GetParToText ("FirstRow",UnsignedStr,10);
+	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.FirstRow) != 1)
+	       Lay_ShowErrorAndExit ("Number of start row is missing.");
 
-   if (Gbl.CurrentAct == ActSeeAccCrs)
-     {
-      if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	{
-	 /****** Get the number of the first row to show ******/
-	 Par_GetParToText ("FirstRow",UnsignedStr,10);
-	 if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.FirstRow) != 1)
-	    Lay_ShowErrorAndExit ("Number of start row is missing.");
+	    /****** Get the number of the last row to show ******/
+	    Par_GetParToText ("LastRow",UnsignedStr,10);
+	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.LastRow) != 1)
+	       Lay_ShowErrorAndExit ("Number of end row is missing.");
 
-	 /****** Get the number of the last row to show ******/
-	 Par_GetParToText ("LastRow",UnsignedStr,10);
-	 if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.LastRow) != 1)
-	    Lay_ShowErrorAndExit ("Number of end row is missing.");
+	    /****** Get the number of rows per page ******/
+	    Par_GetParToText ("RowsPage",UnsignedStr,10);
+	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.RowsPerPage) != 1)
+	       Lay_ShowErrorAndExit ("Number of rows per page is missing.");
+	   }
 
-	 /****** Get the number of rows per page ******/
-	 Par_GetParToText ("RowsPage",UnsignedStr,10);
-	 if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.RowsPerPage) != 1)
-	    Lay_ShowErrorAndExit ("Number of rows per page is missing.");
-	}
+	 /***** Show form again *****/
+	 Sta_AskSeeCrsAccesses ();
 
-      /***** Show form again *****/
-      Sta_AskSeeCrsAccesses ();
+	 /****** Get lists of selected users ******/
+	 Usr_GetListsSelectedUsrs ();
 
-      /****** Get lists of selected users ******/
-      Usr_GetListsSelectedUsrs ();
-
-      /* Check the number of users whose clicks will be shown */
-      if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
-	{					// ...write warning message and show the form again
-	 Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
-	 return false;
-	}
-     }
-   else // Gbl.CurrentAct == ActSeeAccGbl
-     {
-      /***** Get the type of user of clicks *****/
-      Par_GetParToText ("Role",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Type of users is missing.");
-      if (UnsignedNum >= Sta_NUM_ROLES_STAT)
-         Lay_ShowErrorAndExit ("Type of users is missing.");
-      Gbl.Stat.Role = (Sta_Role_t) UnsignedNum;
-      /* The following types of query will never give a valid result */
-      if ((Gbl.Stat.Role == Sta_ALL_USRS ||
-           Gbl.Stat.Role == Sta_UNKNOWN_USRS) &&
-          (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
-           Gbl.Stat.CountType == Sta_CLICKS_PER_USR))
-        {
-         Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
-         Usr_UsrDataDestructor (&UsrDat);
-         return false;
-        }
-
-      /***** Get users range for access statistics *****/
-      Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	                  1 << Sco_SCOPE_CTY |
-		          1 << Sco_SCOPE_INS |
-	                  1 << Sco_SCOPE_CTR |
-                          1 << Sco_SCOPE_DEG |
-                          1 << Sco_SCOPE_CRS;
-      Gbl.Scope.Default = Sco_SCOPE_SYS;
-      Sco_GetScope ();
-
-      /***** Show form again *****/
-      Sta_AskSeeGblAccesses ();
+	 /* Check the number of users whose clicks will be shown */
+	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
+	   {					// ...write warning message and show the form again
+	    Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
+	    return;
+	   }
+	 break;
      }
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd);
    if (!(Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && StatsGlobalOrCourse == STAT_COURSE)))
+         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)))
+      // TODO: How long can query other admins?
       if (NumDays > Cfg_DAYS_IN_RECENT_LOG)
         {
          sprintf (Gbl.Message,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
                   Cfg_DAYS_IN_RECENT_LOG);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// ...write warning message and show the form again
-         return false;
+         return;
         }
 
    /***** Query depending on the type of count *****/
@@ -1062,9 +1047,9 @@ static bool Sta_SeeAccesses (void)
             Gbl.DateRange.DateEnd.Day);
    strcat (Query,QueryAux);
 
-   switch (StatsGlobalOrCourse)
+   switch (GlobalOrCourse)
      {
-      case STAT_GLOBAL:
+      case Sta_SHOW_GLOBAL_ACCESSES:
 	 /* Scope */
          if (Gbl.Scope.Current == Sco_SCOPE_INS &&
              Gbl.CurrentIns.Ins.InsCod > 0)
@@ -1180,7 +1165,7 @@ static bool Sta_SeeAccesses (void)
                break;
            }
 	 break;
-      case STAT_COURSE:
+      case Sta_SHOW_COURSE_ACCESSES:
          sprintf (QueryAux," AND %s.CrsCod='%ld'",
                   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
 	 strcat (Query,QueryAux);
@@ -1359,8 +1344,6 @@ static bool Sta_SeeAccesses (void)
 
    /***** Free memory used by the data of the user *****/
    Usr_UsrDataDestructor (&UsrDat);
-
-   return true;	// No error
   }
 
 /*****************************************************************************/
