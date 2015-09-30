@@ -3547,16 +3547,17 @@ static void Sta_WriteSelectedRangeOfDates (unsigned NumDays)
 void Sta_ReqUseOfPlatform (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
+   extern const char *Txt_Scope;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
    Sta_FigureType_t UseStatType;
 
-   /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"padding-bottom:12px;\">");
+   /***** Form to show statistic *****/
    Act_FormStart (ActSeeUseGbl);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Statistic);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
@@ -3592,12 +3593,11 @@ void Sta_ReqUseOfPlatform (void)
    fprintf (Gbl.F.Out,"</select>"
                       "</div>");
 
-   /***** Submit button *****/
-   Lay_PutConfirmButton (Txt_Show_statistic);
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Show_statistic);
 
-   /***** End form *****/
+   /***** End of form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
