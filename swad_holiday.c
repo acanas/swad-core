@@ -92,7 +92,8 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Put link (form) to edit holidays *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      // Institution admins or system admins can edit holidays
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	 Hld_PutFormToEditHlds ();
 
       /***** Table head *****/

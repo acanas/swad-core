@@ -1587,14 +1587,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenPlcSho	*/{ 894,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RenamePlaceShort		,NULL},
    /* ActRenPlcFul	*/{ 895,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RenamePlaceFull		,NULL},
 
-   /* ActEdiHld		*/{ 713,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_EditHolidays		,NULL},
-   /* ActNewHld		*/{ 714,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RecFormNewHoliday		,NULL},
-   /* ActRemHld		*/{ 716,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RemoveHoliday		,NULL},
-   /* ActChgHldPlc	*/{ 896,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayPlace		,NULL},
-   /* ActChgHldTyp	*/{ 715,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayType		,NULL},
-   /* ActChgHldStrDat	*/{ 717,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeStartDate		,NULL},
-   /* ActChgHldEndDat	*/{ 718,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeEndDate		,NULL},
-   /* ActRenHld		*/{ 766,-1,TabIns,ActSeeHld		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RenameHoliday		,NULL},
+   /* ActEdiHld		*/{ 713,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_EditHolidays		,NULL},
+   /* ActNewHld		*/{ 714,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RecFormNewHoliday		,NULL},
+   /* ActRemHld		*/{ 716,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RemoveHoliday		,NULL},
+   /* ActChgHldPlc	*/{ 896,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayPlace		,NULL},
+   /* ActChgHldTyp	*/{ 715,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayType		,NULL},
+   /* ActChgHldStrDat	*/{ 717,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeStartDate		,NULL},
+   /* ActChgHldEndDat	*/{ 718,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeEndDate		,NULL},
+   /* ActRenHld		*/{ 766,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RenameHoliday		,NULL},
 
    /* ActChgToSeeDocIns	*/{1308,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
