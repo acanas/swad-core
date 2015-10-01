@@ -288,9 +288,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Form to select groups *****/
       Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
 
-      /***** Form to select type of list used for select several users *****/
-      Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
-
       /***** Get and order lists of users from this course *****/
       Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
       Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
@@ -304,6 +301,14 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                     Gbl.Usrs.LstStds.NumUsrs))
      {
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_New_message);
+
+      /***** Form to select type of list used for select several users *****/
+      if (Gbl.Usrs.LstTchs.NumUsrs ||
+          Gbl.Usrs.LstStds.NumUsrs)
+	 Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+
       /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
       if (Gbl.Msg.IsReply)
@@ -313,11 +318,9 @@ static void Msg_PutFormMsgUsrs (const char *Content)
          Usr_PutParamOtherUsrCodEncrypted ();
         }
 
-      /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_New_message);
-
       /***** Draw lists of users with the recipients *****/
-      fprintf (Gbl.F.Out,"<tr>"
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+	                 "<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
@@ -347,13 +350,17 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 			 "<td colspan=\"2\">");
       Lay_HelpPlainEditor ();
       fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+			 "</tr>"
+			 "</table>");
 
-      /***** End frame *****/
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
+      /***** Send button *****/
+      Lay_PutCreateButton (Txt_Send_message);
 
       /***** End form *****/
       Act_FormEnd ();
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
 
    /***** Free memory used by the list of nicknames *****/

@@ -146,6 +146,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 static Usr_Sex_t Usr_GetSexOfUsrsLst (struct ListUsers *LstUsrs);
 
 static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender);
+static void Usr_PutCheckboxListWithPhotos (void);
 
 static void Usr_SetUsrDatMainFieldNames (void);
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
@@ -4758,13 +4759,9 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
-   extern const char *Txt_List_type;
-
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,8,Txt_List_type);
-
    /***** Select USR_CLASS_ROOM *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:4px auto;\">"
+	              "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">",
             Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "USR_LIST_TYPE_ON" :
         	                                      "USR_LIST_TYPE_OFF");
@@ -4794,10 +4791,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutCheckboxListWithPhotos ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of table *****/
-   Lay_EndRoundFrameTable ();
+	              "</tr>"
+	              "</table>");
   }
 
 /*****************************************************************************/
@@ -5007,7 +5002,7 @@ static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsg
 /********* Put a checkbox to select whether list users with photos ***********/
 /*****************************************************************************/
 
-void Usr_PutCheckboxListWithPhotos (void)
+static void Usr_PutCheckboxListWithPhotos (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Display_photos;
@@ -5943,23 +5938,25 @@ void Usr_ListDataAdms (void)
 
    if (Gbl.Usrs.LstAdms.NumUsrs)
      {
-      /****** See the photos? *****/
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      /***** Initialize number of columns *****/
+      NumColumns = Usr_NUM_MAIN_FIELDS_DATA_ADM;
+
+      /***** Start table with list of administrators *****/
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
+
+      /****** Show photos? *****/
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	                 " style=\"margin-bottom:8px;\">");
       Act_FormStart (ActLstOth);
       Sco_PutParamScope (Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Initialize number of columns *****/
-      NumColumns = Usr_NUM_MAIN_FIELDS_DATA_ADM;
-
-      /***** Start table with list of administrators *****/
-      Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
-
       /***** Heading row with column names *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+	                 "<tr>");
       for (NumCol = 0;
            NumCol < NumColumns;
            NumCol++)
@@ -5991,7 +5988,8 @@ void Usr_ListDataAdms (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
      }
    else        // Gbl.Usrs.LstAdms.NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
@@ -6412,9 +6410,6 @@ void Usr_SeeGuests (void)
          break;
      }
 
-   /***** Form to select type of list of users *****/
-   Usr_ShowFormsToSelectUsrListType (ActLstGst);
-
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
@@ -6441,13 +6436,19 @@ void Usr_SeeGuests (void)
            }
 	 fprintf (Gbl.F.Out,"</div>");
 
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+
+	 /***** Form to select type of list of users *****/
+	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
+
          /***** Draw a class photo with students of the course *****/
          /* Start form */
 	 Act_FormStart (ActSeeRecSevGst);
 	 Grp_PutParamsCodGrps ();
 
-         /* Header */
-         Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6472,11 +6473,17 @@ void Usr_SeeGuests (void)
                break;
            }
 
-         /* Send button and end frame */
-         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_records);
+         /* End table */
+         fprintf (Gbl.F.Out,"</table>");
+
+         /* Send button */
+	 Lay_PutConfirmButton (Txt_Show_records);
 
          /* End form */
          Act_FormEnd ();
+
+         /* End frame */
+         Lay_EndRoundFrame ();
 	}
      }
    else
@@ -6588,9 +6595,6 @@ void Usr_SeeStudents (void)
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
 
-   /***** Form to select type of list of users *****/
-   Usr_ShowFormsToSelectUsrListType (ActLstStd);
-
    /***** Get and order list of students *****/
    Usr_GetUsrsLst (Rol_STUDENT,Gbl.Scope.Current,NULL,false);
 
@@ -6622,6 +6626,12 @@ void Usr_SeeStudents (void)
 	       break;
            }
 
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+
+	 /***** Form to select type of list of users *****/
+	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
+
          /***** Draw a class photo with students of the course *****/
          /* Start form */
          if (ICanViewRecords)
@@ -6630,8 +6640,8 @@ void Usr_SeeStudents (void)
 	    Grp_PutParamsCodGrps ();
            }
 
-         /* Header */
-         Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6663,14 +6673,20 @@ void Usr_SeeStudents (void)
                break;
            }
 
-         /* Send button and end frame */
+         /* End table */
+         fprintf (Gbl.F.Out,"</table>");
+
          if (ICanViewRecords)
            {
-            Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_records);
-            Act_FormEnd ();
+            /* Send button */
+	    Lay_PutConfirmButton (Txt_Show_records);
+
+	    /* End form */
+	    Act_FormEnd ();
            }
-         else
-            Lay_EndRoundFrameTable ();
+
+         /* End frame */
+         Lay_EndRoundFrame ();
 	}
      }
    else
@@ -6742,9 +6758,6 @@ void Usr_SeeTeachers (void)
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Form to select type of list of users *****/
-   Usr_ShowFormsToSelectUsrListType (ActLstTch);
-
    /***** Get and order list of teachers *****/
    Usr_GetUsrsLst (Rol_TEACHER,Gbl.Scope.Current,NULL,false);
 
@@ -6773,15 +6786,19 @@ void Usr_SeeTeachers (void)
                break;
            }
 
-         /***** Draw a class photo with teachers of the course *****/
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
 
+	 /***** Form to select type of list of users *****/
+	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
+
+         /***** Draw a class photo with teachers of the course *****/
          /* Start form */
          if (ICanViewRecords)
             Act_FormStart (ActSeeRecSevTch);
 
-         /* Header */
-         Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
@@ -6813,16 +6830,20 @@ void Usr_SeeTeachers (void)
                break;
            }
 
-         /* Send button and end frame */
+         /* End table */
+         fprintf (Gbl.F.Out,"</table>");
+
          if (ICanViewRecords)
            {
-            Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_records);
-            Act_FormEnd ();
-           }
-         else
-            Lay_EndRoundFrameTable ();
+            /* Send button */
+	    Lay_PutConfirmButton (Txt_Show_records);
 
-         fprintf (Gbl.F.Out,"</div>");
+	    /* End form */
+	    Act_FormEnd ();
+           }
+
+         /* End frame */
+         Lay_EndRoundFrame ();
 	}
      }
    else

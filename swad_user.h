@@ -308,7 +308,6 @@ unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_PutExtraParamsUsrList (Act_Action_t NextAction);
 void Usr_ListUsersToSelect (Rol_Role_t Role);
 
-void Usr_PutCheckboxListWithPhotos (void);
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListUsrsForSelection (Rol_Role_t Role);

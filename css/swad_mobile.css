@@ -382,7 +382,7 @@ form			{margin:0; display:inline;}
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	margin-bottom:12px;
+	margin:6px 0 8px 0;
 	text-align:center;
 	}
 .CONTEXT_OPT
@@ -798,7 +798,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSJ_AVISO		{color:#632921; font-size:15pt;}
 .TIT_TBL		{color:#4D88A1; font-size:18pt; font-weight:bold;}
 .TIT_CLASSPHOTO		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#606060; font-size:13pt;}
-.CLASSPHOTO		{color:#606060; font-size:13pt; line-height:100%; white-space:nowrap;}
+.CLASSPHOTO		{color:#606060; font-size:13pt; line-height:110%; white-space:nowrap;}
 
 .GRP_TITLE		{color:#4D88A1; font-size:20pt; font-weight:bold;}
 

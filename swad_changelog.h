@@ -98,12 +98,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.4.2 (2015/10/01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.5 (2015/10/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.4.2:   Oct 31, 2015	Institution admins can edit holidays. (184863 lines)
+        Version 15.5:     Oct 01, 2015	Changes in layout of selectors classphoto/list. (184909 lines)
+        Version 15.4.2:   Oct 01, 2015	Institution admins can edit holidays. (184863 lines)
         Version 15.4.1:   Sep 30, 2015	Code refactoring in global/course statistics. (184861 lines)
         Version 15.4:     Sep 30, 2015	Changes in global/course statistics forms. (184877 lines)
         Version 15.3.3:   Sep 30, 2015	Changes in layout of form to selected initial and final dates. (185152 lines)

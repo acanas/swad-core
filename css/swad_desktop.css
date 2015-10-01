@@ -417,7 +417,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	margin-bottom:12px;
+	margin:6px 0 8px 0;
 	text-align:center;
 	}
 .CONTEXT_OPT
@@ -772,7 +772,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	list-style-type:none;
 	border:0;
 	margin:0 auto;
-	padding:0 0 10px 0;
+	padding:0 0 4px 0;
 	}
 #horizontal_menu_container li
 	{
@@ -995,7 +995,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSJ_AVISO		{color:#632921; font-size:12pt;}
 .TIT_TBL		{color:#4D88A1; font-size:12pt; font-weight:bold;}
 .TIT_CLASSPHOTO		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#606060; font-size:13pt;}
-.CLASSPHOTO		{color:#606060; font-size:10pt; line-height:100%; white-space:nowrap;}
+.CLASSPHOTO		{color:#606060; font-size:10pt; line-height:110%; white-space:nowrap;}
 
 .GRP_TITLE		{color:#4D88A1; font-size:15pt; font-weight:bold;}
 

@@ -5897,9 +5897,6 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstExa);
 
-   /***** Form to select type of list used for select several users *****/
-   Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
-
    /***** Get and order lists of users from this course *****/
    Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
    Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
@@ -5910,31 +5907,35 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
+         /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_Users);
+
+	 /***** Form to select type of list used for select several users *****/
+	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
+
          /***** Start form *****/
          Act_FormStart (ActSeeUsrTstExa);
          Grp_PutParamsCodGrps ();
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                            "<table style=\"margin:0 auto; border-spacing:5px;\">"
-                            "<tr>"
-                            "<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
 
          /***** Put list of users to select some of them *****/
-         Lay_StartRoundFrameTable (NULL,0,Txt_Users);
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTable ();
-
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</table>");
 
          /***** Starting and ending dates in the search *****/
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 	 Dat_WriteFormIniEndDates ();
+         fprintf (Gbl.F.Out,"</table>");
 
-         /***** Button to send the form *****/
-         fprintf (Gbl.F.Out,"</table>"
-	                    "</div>");
-         Lay_PutConfirmButton (Txt_See_exams);
+         /***** Send button *****/
+	 Lay_PutConfirmButton (Txt_See_exams);
+
+         /***** End form *****/
          Act_FormEnd ();
+
+         /***** End frame *****/
+         Lay_EndRoundFrame ();
         }
      }
    else

@@ -2597,9 +2597,6 @@ void Usr_ReqListAttendanceStdsCrs (void)
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstAttStd);
 
-   /***** Form to select type of list used for select several users *****/
-   Usr_ShowFormsToSelectUsrListType (ActReqLstAttStd);
-
    /***** Get and order lists of users from current course *****/
    Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 
@@ -2611,21 +2608,29 @@ void Usr_ReqListAttendanceStdsCrs (void)
          Usr_GetListsSelectedUsrs ();
 
          /***** Draw a class photo with students of the course *****/
+         /* Start frame */
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+
+	 /* Form to select type of list used for select several users */
+	 Usr_ShowFormsToSelectUsrListType (ActReqLstAttStd);
+
          /* Start form */
          Act_FormStart (ActSeeLstAttStd);
          Grp_PutParamsCodGrps ();
 
-         /* Start frame */
-         Lay_StartRoundFrameTable (NULL,0,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
-
          /* Write list of students to select some of them */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
          Usr_ListUsersToSelect (Rol_STUDENT);
+         fprintf (Gbl.F.Out,"</table>");
 
-         /* Send button and end frame */
-         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_list);
+         /* Send button */
+	 Lay_PutConfirmButton (Txt_Show_list);
 
          /* End form */
          Act_FormEnd ();
+
+         /* End frame */
+         Lay_EndRoundFrame ();
 
          /***** Free memory used for by the list of users *****/
          Usr_FreeListsSelectedUsrCods ();

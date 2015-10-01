@@ -419,9 +419,6 @@ void Sta_AskSeeCrsAccesses (void)
    /***** Show form to select the grupos *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
 
-   /***** Form to select type of list used for select several users *****/
-   Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
-
    /***** Get and order the lists of users of this course *****/
    Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
    Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
@@ -435,18 +432,24 @@ void Sta_AskSeeCrsAccesses (void)
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrs ();
 
+         /***** Start frame *****/
+         sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
+                  Gbl.CurrentCrs.Crs.ShortName);
+         Lay_StartRoundFrame (NULL,Gbl.Title);
+
+	 /***** Form to select type of list used for select several users *****/
+	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
+
+	 /***** Start form *****/
          Act_FormStart (ActSeeAccCrs);
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamLong ("FirstRow",0);
          Par_PutHiddenParamLong ("LastRow",0);
 
-         /***** Start frame *****/
-         sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
-                  Gbl.CurrentCrs.Crs.ShortName);
-         Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
-
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<tr>"
+         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+                            " style=\"margin:0 auto;\">"
+                            "<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
@@ -530,13 +533,17 @@ void Sta_AskSeeCrsAccesses (void)
            }
          fprintf (Gbl.F.Out,"</select>)"
                             "</td>"
-                            "</tr>");
+                            "</tr>"
+                            "</table>");
 
-	 /***** End frame *****/
-         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_visits);
+         /***** Send button *****/
+	 Lay_PutConfirmButton (Txt_Show_visits);
 
          /***** End form *****/
          Act_FormEnd ();
+
+	 /***** End frame *****/
+         Lay_EndRoundFrame ();
 
          /* Free the memory used by the list of users */
          Usr_FreeListsSelectedUsrCods ();

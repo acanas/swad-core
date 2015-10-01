@@ -2848,9 +2848,6 @@ void Brw_AskEditWorksCrs (void)
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
 
-   /***** Form to select type of list used for select several users *****/
-   Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
-
    /***** Get and order lists of users from this course *****/
    Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
    Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
@@ -2862,19 +2859,30 @@ void Brw_AskEditWorksCrs (void)
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Draw class photos to select users *****/
+         Lay_StartRoundFrame (NULL,Txt_Users);
+
+	 /* Form to select type of list used for select several users */
+	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
+
          /* Start form */
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
 
          /* Put list of users to select some of them */
-         Lay_StartRoundFrameTable (NULL,0,Txt_Users);
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_works);
+         fprintf (Gbl.F.Out,"</table>");
+
+         /* Send button */
+	 Lay_PutConfirmButton (Txt_View_works);
 
          /* End form */
          Act_FormEnd ();
+
+         /* End frame */
+         Lay_EndRoundFrame ();
         }
      }
    else

@@ -1505,9 +1505,6 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       fprintf (Gbl.F.Out,"</table>");
 
-      /***** Form to select type of list used to display degree photos *****/
-      Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
-
       /***** Link to print view *****/
       Pho_PutLinkToPrintViewOfDegreeStats ();
 
@@ -1886,73 +1883,89 @@ static void Pho_GetMaxStdsPerDegree (void)
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Degrees;
+   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    struct Degree Deg;
    unsigned NumDegsNotEmpty;
-   int NumStds,NumStdsWithPhoto;
+   int NumStds;
+   int NumStdsWithPhoto;
    struct Date DateAvgPhoto;
    bool TRIsOpen = false;
-
-   /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_Degrees);
 
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
-   /***** Get degrees *****/
-   for (NumRow = 0, NumDegsNotEmpty = 0;
-	NumRow < NumRows;
-	NumRow++)
+   if (NumRows)	// Degrees with students found
      {
-      /***** Get next degree *****/
-      row = mysql_fetch_row (mysql_res);
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Degrees);
 
-      /* Get degree code (row[0]) */
-      if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of degree.");
+      /***** Form to select type of list used to display degree photos *****/
+      if (SeeOrPrint == Pho_DEGREES_SEE)
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
-      /* Get data of degree */
-      Deg_GetDataOfDegreeByCod (&Deg);
+      /***** Get and print degrees *****/
+      for (NumRow = 0, NumDegsNotEmpty = 0;
+	   NumRow < NumRows;
+	   NumRow++)
+	{
+	 /***** Get next degree *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get number of students and number of students with photo in this degree */
-      Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
+	 /* Get degree code (row[0]) */
+	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of degree.");
 
-      if (NumStds > 0)
-        {
-         /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
-         if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
-            Lay_ShowErrorAndExit ("Wrong date.");
+	 /* Get data of degree */
+	 Deg_GetDataOfDegreeByCod (&Deg);
 
-         if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
-           {
-            fprintf (Gbl.F.Out,"<tr>");
-            TRIsOpen = true;
-           }
+	 /* Get number of students and number of students with photo in this degree */
+	 Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
 
-         /***** Show average photo of students belonging to this degree *****/
-         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE\">");
-         Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
-         fprintf (Gbl.F.Out,"</td>");
+	 if (NumStds > 0)
+	   {
+	    /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
+	    if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
+	       Lay_ShowErrorAndExit ("Wrong date.");
 
-         if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
-           {
-            fprintf (Gbl.F.Out,"</tr>");
-            TRIsOpen = false;
-           }
-        }
+	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	      {
+	       fprintf (Gbl.F.Out,"<tr>");
+	       TRIsOpen = true;
+	      }
+
+	    /***** Show average photo of students belonging to this degree *****/
+	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE\">");
+	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
+	    fprintf (Gbl.F.Out,"</td>");
+
+	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	      {
+	       fprintf (Gbl.F.Out,"</tr>");
+	       TRIsOpen = false;
+	      }
+	   }
+	}
+      if (TRIsOpen)
+	 fprintf (Gbl.F.Out,"</tr>");
+
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
-   if (TRIsOpen)
-      fprintf (Gbl.F.Out,"</tr>");
+   else	// No degrees with students found
+      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** End frame *****/
-   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -1961,113 +1974,126 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern const char *Txt_Degrees;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
+   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    unsigned NumDegsNotEmpty;
-   int NumStds,NumStdsWithPhoto;
+   int NumStds;
+   int NumStdsWithPhoto;
    struct Date DateAvgPhoto;
    struct Degree Deg;
    Usr_Sex_t Sex;
-
-   /***** Class photo start *****/
-   if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_StartRoundFrameTable (NULL,0,NULL);
-   else
-      fprintf (Gbl.F.Out,"<table>");
-
-   /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>",
-            Txt_No_INDEX,
-            Txt_Degree);
-   for (Sex = (Usr_Sex_t) 0;
-	Sex < Usr_NUM_SEXS;
-	Sex++)
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-	                 "%s"
-	                 "</th>",
-               Txt_SEX_PLURAL_Abc[Sex]);
-   fprintf (Gbl.F.Out,"</tr>");
 
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
-   /***** Get degrees *****/
-   for (NumRow = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
-	NumRow < NumRows;
-	NumRow++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+   if (NumRows)	// Degrees with students found
      {
-      /***** Get next degree *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get degree code (row[0]) */
-      if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-         Lay_ShowErrorAndExit ("Wrong code of degree.");
-
-      /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
-      if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
-         Lay_ShowErrorAndExit ("Wrong date.");
-
-      /* Get data of degree */
-      Deg_GetDataOfDegreeByCod (&Deg);
-
-      /***** Show logo and name of this degree *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
-                         "%u"
-                         "</td>",
-               Gbl.RowEvenOdd,++NumDegsNotEmpty);
-
-      /***** Show logo and name of this degree *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE COLOR%u\">",
-               Gbl.RowEvenOdd);
+      /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-                  Deg.WWW,Deg.FullName);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                    16,"CENTER_TOP",true);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
-               Deg.ShortName);
-      if (SeeOrPrint == Pho_DEGREES_SEE)
-         fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</td>");
+	{
+	 Lay_StartRoundFrame (NULL,Txt_Degrees);
 
+	 /***** Form to select type of list used to display degree photos *****/
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
+	}
+
+      /***** Write heading *****/
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	                 " style=\"margin:0 auto;\">"
+			 "<tr>"
+			 "<th class=\"RIGHT_TOP\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"CENTER_TOP\">"
+			 "%s"
+			 "</th>",
+	       Txt_No_INDEX,
+	       Txt_Degree);
       for (Sex = (Usr_Sex_t) 0;
 	   Sex < Usr_NUM_SEXS;
 	   Sex++)
-        {
-         /***** Show average photo of students belonging to this degree *****/
-         Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
-                  Gbl.RowEvenOdd);
-         if (Gbl.Usrs.Listing.WithPhotos)
-            Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
-         else
-            Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
-         fprintf (Gbl.F.Out,"</td>");
-        }
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
+			    "%s"
+			    "</th>",
+		  Txt_SEX_PLURAL_Abc[Sex]);
       fprintf (Gbl.F.Out,"</tr>");
+
+      /***** Get degrees *****/
+      for (NumRow = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
+	   NumRow < NumRows;
+	   NumRow++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	{
+	 /***** Get next degree *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get degree code (row[0]) */
+	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of degree.");
+
+	 /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
+	 if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
+	    Lay_ShowErrorAndExit ("Wrong date.");
+
+	 /* Get data of degree */
+	 Deg_GetDataOfDegreeByCod (&Deg);
+
+	 /***** Show logo and name of this degree *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
+			    "%u"
+			    "</td>",
+		  Gbl.RowEvenOdd,++NumDegsNotEmpty);
+
+	 /***** Show logo and name of this degree *****/
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE COLOR%u\">",
+		  Gbl.RowEvenOdd);
+	 if (SeeOrPrint == Pho_DEGREES_SEE)
+	    fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
+		     Deg.WWW,Deg.FullName);
+	 Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
+		       16,"CENTER_TOP",true);
+	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",
+		  Deg.ShortName);
+	 if (SeeOrPrint == Pho_DEGREES_SEE)
+	    fprintf (Gbl.F.Out,"</a>");
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 for (Sex = (Usr_Sex_t) 0;
+	      Sex < Usr_NUM_SEXS;
+	      Sex++)
+	   {
+	    /***** Show average photo of students belonging to this degree *****/
+	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
+	    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
+		     Gbl.RowEvenOdd);
+	    if (Gbl.Usrs.Listing.WithPhotos)
+	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
+	    else
+	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
+	    fprintf (Gbl.F.Out,"</td>");
+	   }
+	 fprintf (Gbl.F.Out,"</tr>");
+	}
+
+      /***** Photos end *****/
+      fprintf (Gbl.F.Out,"</table>");
+      if (SeeOrPrint == Pho_DEGREES_SEE)
+	 Lay_EndRoundFrame ();
      }
+   else	// No degrees with students found!
+      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Photos end *****/
-   if (SeeOrPrint == Pho_DEGREES_SEE)
-      Lay_EndRoundFrameTable ();
-   else
-      fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -2081,25 +2107,33 @@ static void Pho_BuildQueryOfDegrees (char *Query)
       case Pho_NUMBER_OF_STUDENTS:
          sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
                         " FROM degrees,sta_degrees"
-                        " WHERE sta_degrees.Sex='all' AND sta_degrees.NumStds>'0' AND degrees.DegCod=sta_degrees.DegCod"
+                        " WHERE sta_degrees.Sex='all'"
+                        " AND sta_degrees.NumStds>'0'"
+                        " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStds DESC,sta_degrees.NumStdsWithPhoto DESC,degrees.ShortName");
          break;
       case Pho_NUMBER_OF_PHOTOS:
          sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
                         " FROM degrees,sta_degrees"
-                        " WHERE sta_degrees.Sex='all' AND sta_degrees.NumStds>'0' AND degrees.DegCod=sta_degrees.DegCod"
+                        " WHERE sta_degrees.Sex='all'"
+                        " AND sta_degrees.NumStds>'0'"
+                        " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStdsWithPhoto DESC,sta_degrees.NumStds DESC,degrees.ShortName");
          break;
       case Pho_PERCENT:
          sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
                         " FROM degrees,sta_degrees"
-                        " WHERE sta_degrees.Sex='all' AND sta_degrees.NumStds>'0' AND degrees.DegCod=sta_degrees.DegCod"
+                        " WHERE sta_degrees.Sex='all'"
+                        " AND sta_degrees.NumStds>'0'"
+                        " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStdsWithPhoto/sta_degrees.NumStds DESC,degrees.ShortName");
          break;
       case Pho_DEGREE_NAME:
          sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
                         " FROM degrees,sta_degrees"
-                        " WHERE sta_degrees.Sex='all' AND sta_degrees.NumStds>'0' AND degrees.DegCod=sta_degrees.DegCod"
+                        " WHERE sta_degrees.Sex='all'"
+                        " AND sta_degrees.NumStds>'0'"
+                        " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY degrees.ShortName");
          break;
      }
