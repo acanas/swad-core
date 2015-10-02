@@ -718,26 +718,23 @@ static void Tst_WriteTestHead (unsigned NumTst)
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,NULL);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.CurrentAct == ActSeeTst ? Txt_Test :
+                                                                  Txt_Test_result);
    Lay_WriteHeaderClassPhoto (3,false,false,
                               Gbl.CurrentIns.Ins.InsCod,
                               Gbl.CurrentDeg.Deg.DegCod,
                               Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Header row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"3\" class=\"TST_TIT CENTER_MIDDLE\">"
-                      "<strong>%s</strong>",
-            Gbl.CurrentAct == ActSeeTst ? Txt_Test :
-                                          Txt_Test_result);
    if (Gbl.CurrentAct == ActAssTst &&
        Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
-      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"3\" class=\"DAT CENTER_MIDDLE\">");
       fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
   }
 
 /*****************************************************************************/
