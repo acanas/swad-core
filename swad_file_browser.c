@@ -2967,7 +2967,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable (NULL,0,NULL);
+      Lay_StartRoundFrameTable ("95%",0,"Actividades y otros trabajos");	// TODO: Need translation!
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
@@ -3311,8 +3311,9 @@ static void Brw_ShowFileBrowser (void)
    /***** Check if the clipboard is in this tree *****/
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
 
-   /***** Start of table *****/
-   Lay_StartRoundFrameTable (NULL,0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
+   /***** Start frame *****/
+   fprintf (Gbl.F.Out,"<section id=\"file_browser\">");
+   Lay_StartRoundFrameTable ("95%",0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3336,6 +3337,7 @@ static void Brw_ShowFileBrowser (void)
 
    /***** End of table *****/
    Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
@@ -5201,8 +5203,6 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
   {
    extern const char *Txt_Expand_FOLDER_X;
    extern const char *Txt_Contract_FOLDER_X;
-   static unsigned NumAnchor = 0;
-   char StrAnchor[32];
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
@@ -5220,10 +5220,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_PLUS:
          /***** Form to expand folder *****/
-	 sprintf (StrAnchor,"folder_%u",++NumAnchor);
-         fprintf (Gbl.F.Out,"<section id=\"%s\">",StrAnchor);
-         // Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],StrAnchor);
-         Act_FormStart (Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
+         Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],"file_browser");
          switch (Gbl.FileBrowser.Type)
            {
             case Brw_SHOW_DOCUM_GRP:
@@ -5254,10 +5251,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_MINUS:
          /***** Form to contract folder *****/
-	 sprintf (StrAnchor,"folder_%u",++NumAnchor);
-         fprintf (Gbl.F.Out,"<section id=\"%s\">",StrAnchor);
-         // Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],StrAnchor);
-         Act_FormStart (Brw_ActContractFolder[Gbl.FileBrowser.Type]);
+         Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],"file_browser");
          switch (Gbl.FileBrowser.Type)
            {
             case Brw_SHOW_DOCUM_GRP:

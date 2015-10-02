@@ -1153,10 +1153,11 @@ void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char
 
 void Lay_StartRoundFrame (const char *Width,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"FRAME10\"");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"width:100%%;\">"
+	              "<div class=\"FRAME10\"");
    if (Width)
-      fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
+       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
    if (Title)
@@ -1170,10 +1171,11 @@ void Lay_StartRoundFrame (const char *Width,const char *Title)
 
 void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"FRAME10_SHADOW\"");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"width:100%%;\">"
+	              "<div class=\"FRAME10_SHADOW\"");
    if (Width)
-      fprintf (Gbl.F.Out," style=\"width:%s\"",Width);
+       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
    fprintf (Gbl.F.Out,">"
                       "<table class=\"TABLE10");
    if (CellPadding)
