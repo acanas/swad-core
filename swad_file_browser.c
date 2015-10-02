@@ -3312,7 +3312,8 @@ static void Brw_ShowFileBrowser (void)
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
 
    /***** Start frame *****/
-   fprintf (Gbl.F.Out,"<section id=\"file_browser\">");
+   Gbl.FileBrowser.Id++;
+   fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
    Lay_StartRoundFrameTable ("95%",0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
 
    /***** Title *****/
@@ -5203,6 +5204,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
   {
    extern const char *Txt_Expand_FOLDER_X;
    extern const char *Txt_Contract_FOLDER_X;
+   char Anchor[32];
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
@@ -5220,7 +5222,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_PLUS:
          /***** Form to expand folder *****/
-         Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],"file_browser");
+	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
+         Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Anchor);
          switch (Gbl.FileBrowser.Type)
            {
             case Brw_SHOW_DOCUM_GRP:
@@ -5251,7 +5254,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_MINUS:
          /***** Form to contract folder *****/
-         Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],"file_browser");
+	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
+         Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],Anchor);
          switch (Gbl.FileBrowser.Type)
            {
             case Brw_SHOW_DOCUM_GRP:

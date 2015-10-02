@@ -484,6 +484,7 @@ struct Globals
      } LstExamAnnouncements;
    struct
      {
+      unsigned Id;		// Each file browser in the page has a unique identifier
       Brw_FileBrowser_t Type;
       bool FullTree;		// Show full tree?
       bool ShowOnlyPublicFiles;	// Show only public files?
