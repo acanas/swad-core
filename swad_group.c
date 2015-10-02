@@ -1217,7 +1217,7 @@ static void Grp_ListGroupTypesForEdition (void)
         	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open);
-      Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year+1,
+      Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year + 1,
 	                 "OpenDay","OpenMonth","OpenYear",
                          &(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTime.Date),
                          true,false);
@@ -2107,7 +2107,7 @@ static void Grp_PutFormToCreateGroupType (void)
         	                                      Txt_The_groups_will_not_automatically_open,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open);
-   Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year+1,
+   Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year + 1,
                       "OpenDay","OpenMonth","OpenYear",
                       &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date),
                       false,false);

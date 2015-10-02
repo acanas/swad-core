@@ -453,7 +453,7 @@ void Sta_AskSeeCrsAccesses (void)
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"%s LEFT_TOP\">"
+			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
                             "<table>",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
@@ -474,7 +474,7 @@ void Sta_AskSeeCrsAccesses (void)
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"%s LEFT_TOP\">",
+			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
                   The_ClassForm[Gbl.Prefs.Theme]);
 
@@ -603,7 +603,7 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+                      "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
                       "<select name=\"Role\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    for (RoleStat = (Sta_Role_t) 0;
@@ -627,7 +627,7 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
@@ -646,7 +646,7 @@ void Sta_AskSeeGblAccesses (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
             The_ClassForm[Gbl.Prefs.Theme]);
    Sta_WriteSelectorCountType ();
@@ -719,7 +719,7 @@ static void Sta_WriteSelectorAction (void)
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-                      "<td class=\"LEFT_TOP\">"
+                      "<td colspan=\"2\" class=\"LEFT_TOP\">"
                       "<select name=\"StatAct\" id=\"StatAct\""
                       " style=\"width:375px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);

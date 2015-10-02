@@ -5887,6 +5887,8 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 
 void Tst_SelUsrsToSeeUsrsTstExams (void)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Exams;
    extern const char *Txt_Users;
    extern const char *Txt_See_exams;
 
@@ -5908,7 +5910,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Users);
+         Lay_StartRoundFrame (NULL,Txt_Exams);
 
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
@@ -5918,14 +5920,25 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+                            " style=\"margin:0 auto;\">"
+                            "<tr>"
+			    "<td class=\"%s RIGHT_TOP\">"
+			    "%s:"
+			    "</td>"
+			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
+                            "<table>",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
+                  The_ClassForm[Gbl.Prefs.Theme]);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         fprintf (Gbl.F.Out,"</table>");
+         fprintf (Gbl.F.Out,"</table>"
+                            "</td>"
+                            "</tr>");
 
          /***** Starting and ending dates in the search *****/
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 	 Dat_WriteFormIniEndDates ();
+
          fprintf (Gbl.F.Out,"</table>");
 
          /***** Send button *****/
@@ -5958,18 +5971,20 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 
 void Tst_SelDatesToSeeMyTstExams (void)
   {
+   extern const char *Txt_Exams;
    extern const char *Txt_See_exams;
 
    /***** Start form *****/
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
    Dat_WriteFormIniEndDates ();
-   fprintf (Gbl.F.Out,"</table>");
 
-   /***** Button to send the form *****/
-   Lay_PutConfirmButton (Txt_See_exams);
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_See_exams);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 

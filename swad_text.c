@@ -7877,17 +7877,17 @@ const char *Txt_Display_photos =
 
 const char *Txt_distributed_by =
 #if   L==0
-	"distribuïts per";
+	"distribu&iuml;t per";
 #elif L==1
 	"vertrieben von";
 #elif L==2
 	"distributed by";
 #elif L==3
-	"distribuidos por";
+	"distribuido por";
 #elif L==4
 	"distribu&eacute; par";
 #elif L==5
-	"distribuidos por";	// Okoteve traducción
+	"distribuido por";	// Okoteve traducción
 #elif L==6
 	"distribuito da";
 #elif L==7
@@ -35883,43 +35883,43 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #endif
 	 ,
 #if   L==0
-	 "tiempo de generaci&oacute;n de p&aacute;gina"	// Necessita traduccio
+	 "tiempo de generaci&oacute;n"		// Necessita traduccio
 #elif L==1
-	 "Zeit zur Erzeugung der Seite"
+	 "Zeit zur Erzeugung"
 #elif L==2
-	 "time to generate page"
+	 "time to generate"
 #elif L==3
-	 "tiempo de generaci&oacute;n de p&aacute;gina"
+	 "tiempo de generaci&oacute;n"
 #elif L==4
-	 "temps pour g&eacute;n&eacute;rer la page"
+	 "temps pour g&eacute;n&eacute;rer"
 #elif L==5
-	 "tiempo de generaci&oacute;n de p&aacute;gina"	// Okoteve traducción
+	 "tiempo de generaci&oacute;n"		// Okoteve traducción
 #elif L==6
-	 "tempo per generare pagina"
+	 "tempo per generare"
 #elif L==7
-	 "time to generate page"			// Potrzebujesz tlumaczenie
+	 "time to generate"			// Potrzebujesz tlumaczenie
 #elif L==8
-	 "tempo para gerar p&aacute;gina"
+	 "tempo para gerar"
 #endif
 	 ,
 #if   L==0
-	 "tiempo de env&iacute;o de p&aacute;gina"	// Necessita traduccio
+	 "tiempo de env&iacute;o"	// Necessita traduccio
 #elif L==1
-	 "Zeit, um Seite zu senden"
+	 "Zeit, um Seite"
 #elif L==2
-	 "time to send page"
+	 "time to send"
 #elif L==3
-	 "tiempo de env&iacute;o de p&aacute;gina"
+	 "tiempo de env&iacute;o"
 #elif L==4
-	 "temps pour envoyer la page"
+	 "temps pour envoyer"
 #elif L==5
-	 "tiempo de env&iacute;o de p&aacute;gina"	// Okoteve traducción
+	 "tiempo de env&iacute;o"	// Okoteve traducción
 #elif L==6
-	 "tempo d'invio di una pagina"
+	 "tempo d'invio"
 #elif L==7
-	 "time to send page"				// Potrzebujesz tlumaczenie
+	 "time to send"			// Potrzebujesz tlumaczenie
 #elif L==8
-	 "Tempo para enviar a p&aacute;gina"
+	 "Tempo para enviar"
 #endif
 	};
 
