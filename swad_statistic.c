@@ -1280,6 +1280,7 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       /* Write start of table frame */
+      fprintf (Gbl.F.Out,"<section id=\"stat_results\">");
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Lay_StartRoundFrameTable ("95%",0,Txt_List_of_detailed_clicks);
       else
@@ -1340,6 +1341,7 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
       /* End of frame */
       Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</section>");
      }
 
    /***** Free structure that stores the query result *****/
@@ -1429,7 +1431,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
      {
-      Act_FormStart (ActSeeAccCrs);
+      Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
@@ -1451,6 +1453,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    if (FirstRow > 1)
       Act_FormEnd ();
 
+
    /* Write number of current page */
    fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\">"
                       "<strong>"
@@ -1464,7 +1467,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to next page (more recent clicks) */
    if (LastRow < NumRows)
      {
-      Act_FormStart (ActSeeAccCrs);
+      Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);

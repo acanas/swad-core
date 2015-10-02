@@ -5201,6 +5201,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
   {
    extern const char *Txt_Expand_FOLDER_X;
    extern const char *Txt_Contract_FOLDER_X;
+   static unsigned NumAnchor = 0;
+   char StrAnchor[32];
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
@@ -5218,6 +5220,9 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_PLUS:
          /***** Form to expand folder *****/
+	 sprintf (StrAnchor,"folder_%u",++NumAnchor);
+         fprintf (Gbl.F.Out,"<section id=\"%s\">",StrAnchor);
+         // Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],StrAnchor);
          Act_FormStart (Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
          switch (Gbl.FileBrowser.Type)
            {
@@ -5245,9 +5250,13 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</section>");
          break;
       case Brw_EXPAND_TREE_MINUS:
          /***** Form to contract folder *****/
+	 sprintf (StrAnchor,"folder_%u",++NumAnchor);
+         fprintf (Gbl.F.Out,"<section id=\"%s\">",StrAnchor);
+         // Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],StrAnchor);
          Act_FormStart (Brw_ActContractFolder[Gbl.FileBrowser.Type]);
          switch (Gbl.FileBrowser.Type)
            {
@@ -5275,6 +5284,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
+         fprintf (Gbl.F.Out,"</section>");
          break;
      }
 

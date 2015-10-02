@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.5.2 (2015/10/02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.6 (2015/10/02)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.6  :   Oct 02, 2015	Now a click in a form can go to a part of the destination page. (184959 lines)
         Version 15.5.2:   Oct 02, 2015	Changes in layout of tests exams. (184934 lines)
         Version 15.5.1:   Oct 02, 2015	Changes in layout of forms with initial and final dates. (184938 lines)
         Version 15.5:     Oct 01, 2015	Changes in layout of selectors classphoto/list. (184909 lines)

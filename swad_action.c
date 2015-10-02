@@ -4241,7 +4241,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id);
+static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor);
 
 /*****************************************************************************/
 /************* Check if I have permission to execute an action ***************/
@@ -4341,31 +4341,43 @@ void Act_FormStart (Act_Action_t NextAction)
   {
    Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
-   Act_FormStartInternal (NextAction,true,Gbl.FormId);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.FormId,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormGoToStart (Act_Action_t NextAction)
   {
    Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
-   Act_FormStartInternal (NextAction,false,Gbl.FormId);	// Do not put now parameter location
+   Act_FormStartInternal (NextAction,false,Gbl.FormId,NULL);	// Do not put now parameter location
+  }
+
+void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor)
+  {
+   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
+   Act_FormStartInternal (NextAction,true,Gbl.FormId,Anchor);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartId (Act_Action_t NextAction,const char *Id)
   {
    Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   Act_FormStartInternal (NextAction,true,Id);		// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Id,NULL);		// Do put now parameter location (if no open session)
   }
 
 // Id can not be NULL
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id)
+static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
    if (!Gbl.InsideForm)
      {
-      fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\" id=\"%s\"",
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Id);
+      fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+      if (Anchor)
+	 if (Anchor[0])
+            fprintf (Gbl.F.Out,"#%s",Anchor);
+      fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
 
       switch (Act_Actions[NextAction].BrowserWindow)
 	{
