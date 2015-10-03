@@ -2885,6 +2885,27 @@ const char *Txt_Assignments =
 	"Atividades";
 #endif
 
+const char *Txt_Assignments_and_other_works =
+#if   L==0
+	"Activitats i altres treballs";
+#elif L==1
+	"Aufgaben und andere Hausarbeiten";
+#elif L==2
+	"Assignments and other works";
+#elif L==3
+	"Actividades y otros trabajos";		// Okoteve traducción
+#elif L==4
+	"Activit&eacute;s et autres travaux";
+#elif L==5
+	"Actividades y otros trabajos";
+#elif L==6
+	"Attivit&agrave; e altri lavori";
+#elif L==7
+	"Assignments and other works";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Atividades e outros trabalhos";
+#endif
+
 const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2] =
    {
 #if   L==0

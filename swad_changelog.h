@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.7 (2015/10/03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.7.1 (2015/10/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.7.1:   Oct 03, 2015	Message translated. (184984 lines)
         Version 15.7:     Oct 03, 2015	Height of tabs reduced.
 					Changes in layout of students record cards in course. (184962 lines)
         Version 15.6.3:   Oct 03, 2015	Radius of rounded corners is reduced. (184966 lines)

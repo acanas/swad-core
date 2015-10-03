@@ -2918,6 +2918,7 @@ static void Brw_ShowFileBrowserNormal (void)
 
 static void Brw_ShowFileBrowsersAsgWrkCrs (void)
   {
+   extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
    struct UsrData UsrDat;
@@ -2967,7 +2968,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable ("95%",0,"Actividades y otros trabajos");	// TODO: Need translation!
+      Lay_StartRoundFrameTable ("95%",0,Txt_Assignments_and_other_works);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
