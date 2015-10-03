@@ -98,11 +98,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.6.2 (2015/10/03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.6.3 (2015/10/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.6.3:   Oct 03, 2015	Radius of rounded corners is reduced. (184966 lines)
         Version 15.6.2:   Oct 03, 2015	Changes in layout of file browsers. (184963 lines)
         Version 15.6.1:   Oct 03, 2015	Changes in layout of file browsers. (184956 lines)
         Version 15.6  :   Oct 02, 2015	Now a click in a form may go to a part of the destination page. (184959 lines)
