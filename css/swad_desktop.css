@@ -69,17 +69,17 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	}
 .GREY_BACKGROUND
 	{
-	background-image:linear-gradient(#383838 0,#404040 26px,#404040 191px,white 191px,white 100%);
+	background-image:linear-gradient(#383838 0,#404040 26px,#404040 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
 .BLUE_BACKGROUND
 	{
-	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 191px,white 191px,white 100%);
+	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
 .YELLOW_BACKGROUND
 	{
-	background-image:linear-gradient(#201420 0,#201420 191px,white 191px,white 100%);
+	background-image:linear-gradient(#201420 0,#201420 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
 
@@ -664,13 +664,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 #tabs_container
 	{
 	width:672px;	/* 112 px * 6 visible tabs */
-	height:70px;
+	height:64px;
 	margin:0 auto;
 	}
 .TAB_OFF
 	{
 	float:left;
-	width:108px;height:76px;
+	width:108px;height:70px;
 	margin:1px 1px 0 1px;
 	padding:0 1px 0 1px;
 	border-radius:6px 6px 0 0;
@@ -683,7 +683,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TAB_ON
 	{
 	float:left;
-	width:110px; height:78px;
+	width:110px; height:72px;
 	margin:0;
 	padding:1px 1px 0 1px;
 	border-radius:6px 6px 0 0;

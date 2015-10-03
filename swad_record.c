@@ -69,13 +69,16 @@ static void Rec_WriteHeadingRecordFields (void);
 static void Rec_GetFieldByCod (long FieldCod,char *Name,unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
 static void Rec_ShowRecordOneStdCrs (void);
+static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView);
 static void Rec_ShowRecordOneTchCrs (void);
 
+static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_GetParamRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
 static bool Rec_GetParamShowOfficeHours (void);
+static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat,
+                               const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
-static void Rec_ShowOtherCrsRecordUpdated (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
@@ -963,8 +966,6 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 
 static void Rec_ShowRecordOneStdCrs (void)
   {
-   bool ItsMe;
-
    /***** Get if student has accepted enrollment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
                                                                 Gbl.CurrentCrs.Crs.CrsCod,
@@ -998,14 +999,10 @@ static void Rec_ShowRecordOneStdCrs (void)
      {
       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	 Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-      else
-	{
-	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod ==
-	          Gbl.Usrs.Other.UsrDat.UsrCod);	// It's me
-	 if (ItsMe && Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
-	    Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Other.UsrDat);
-	}
+	 Rec_ShowCrsRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
+	 Rec_ShowCrsRecord (Rec_FORM_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Other.UsrDat,NULL);
      }
 
    /* Free list of fields of records */
@@ -1016,21 +1013,29 @@ static void Rec_ShowRecordOneStdCrs (void)
 /******************** Draw records of several students ***********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsStds (void)
+void Rec_ListRecordsStdsForEdit (void)
+  {
+   Rec_ListRecordsStds (Rec_RECORD_LIST);
+  }
+
+void Rec_ListRecordsStdsForPrint (void)
+  {
+   Rec_ListRecordsStds (Rec_RECORD_PRINT);
+  }
+
+static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView)
   {
    extern const char *Txt_You_must_select_one_ore_more_students;
-   unsigned NumUsrs = 0;
+   unsigned NumUsr = 0;
    const char *Ptr;
-   bool ItsMe;
-   Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevStd) ? Rec_RECORD_LIST :
-                                                                           Rec_RECORD_PRINT;
+   char Anchor[32];
    struct UsrData UsrDat;
 
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
-   if (Gbl.CurrentAct == ActPrnRecSevStd)
+   if (TypeOfView == Rec_RECORD_PRINT)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected students *****/
@@ -1047,7 +1052,7 @@ void Rec_ListRecordsStds (void)
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
-   if (Gbl.CurrentAct == ActSeeRecSevStd)
+   if (TypeOfView == Rec_RECORD_LIST)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -1077,15 +1082,21 @@ void Rec_ListRecordsStds (void)
                                          Gbl.CurrentCrs.Crs.CrsCod,
                                          false))
            {
+            /* Check if this student has accepted
+               his/her inscription in the current course */
             UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
                                                           Gbl.CurrentCrs.Crs.CrsCod,
                                                           true);
 
-            fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:12px;");
+            /* Start records of this student */
+            sprintf (Anchor,"record_%u",NumUsr);
+            fprintf (Gbl.F.Out,"<section id=\"%s\""
+        	               " class=\"CENTER_MIDDLE\""
+        	               " style=\"margin-bottom:12px;",
+        	     Anchor);
             if (Gbl.CurrentAct == ActPrnRecSevStd &&
-                NumUsrs != 0 &&
-                (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
+                NumUsr != 0 &&
+                (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
                fprintf (Gbl.F.Out,"page-break-before:always;");
             fprintf (Gbl.F.Out,"\">");
 
@@ -1094,17 +1105,15 @@ void Rec_ListRecordsStds (void)
 
             /* Record of the student in the course */
             if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
-	      {
-               ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);	// It's me
-	       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-		   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && ItsMe))	// I am student in this course and it's me
-		  Rec_ShowCrsRecord (TypeOfView,&UsrDat);
-	      }
+	       if ( Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&		// I am student in this course...
+		    Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod))	// ...and it's me
+		  Rec_ShowCrsRecord (TypeOfView,&UsrDat,Anchor);
 
-            fprintf (Gbl.F.Out,"</div>");
+            fprintf (Gbl.F.Out,"</section>");
 
-            NumUsrs++;
+            NumUsr++;
            }
      }
 
@@ -1112,7 +1121,7 @@ void Rec_ListRecordsStds (void)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** Free list of fields of records *****/
-   if (Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS)
+   // if (Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS)
       Rec_FreeListFields ();
 
    /***** Free memory used for by the list of users *****/
@@ -1292,7 +1301,7 @@ void Rec_ListRecordsTchs (void)
 /*************** Show a link to print preview of users' records **************/
 /*****************************************************************************/
 
-void Rec_ShowLinkToPrintPreviewOfRecords (void)
+static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -1412,15 +1421,15 @@ void Rec_UpdateAndShowMyCrsRecord (void)
   }
 
 /*****************************************************************************/
-/***** Update record in the course of another user (student) and show it *****/
+/***** Update record in the course of one student and show records again *****/
 /*****************************************************************************/
 
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
-   /***** Get the user's code of the student whose record we want to modify *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
 
-   /***** Get data of the student, because we need the name *****/
+   /***** Get the user whose record we want to modify *****/
+   Usr_GetParamOtherUsrCodEncrypted ();
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
    /***** Get list of fields of records in current course *****/
@@ -1435,8 +1444,9 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-   /***** Show updated user's record *****/
-   Rec_ShowOtherCrsRecordUpdated ();
+   /***** Show records again (including the updated one) *****/
+   Lay_ShowAlert (Lay_SUCCESS,Txt_Student_record_card_in_this_course_has_been_updated);
+   Rec_ListRecordsStdsForEdit ();
 
    /***** Free memory used for some fields *****/
    Rec_FreeMemFieldsRecordsCrs ();
@@ -1447,7 +1457,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 /*****************************************************************************/
 // Show form or only data depending on TypeOfView
 
-void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
+static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat,
+                               const char *Anchor)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
@@ -1514,14 +1525,14 @@ void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat)
 	 ClassData = "DAT_REC";
 	 break;
       case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
-      case Rec_CHECK_OTHER_USR_COURSE_RECORD:
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
 	 ClassData = "DAT_REC_SMALL_BOLD";
          break;
       case Rec_RECORD_LIST:
          DataForm = true;
-	 Act_FormStart (ActRcvRecOthUsr);
+	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
+	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 FrameWidth = 10;
 	 ClassHead = "HEAD_REC_SMALL";
@@ -1790,25 +1801,7 @@ static void Rec_ShowMyCrsRecordUpdated (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
 
    /***** Show updated user's record *****/
-   Rec_ShowCrsRecord (Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Me.UsrDat);
-  }
-
-/*****************************************************************************/
-/**************** Show updated user's record in the course *******************/
-/*****************************************************************************/
-
-static void Rec_ShowOtherCrsRecordUpdated (void)
-  {
-   extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
-
-   /***** Write mensaje of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Student_record_card_in_this_course_has_been_updated);
-
-   /***** Common record *****/
-   Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
-
-   /***** Show updated user's record *****/
-   Rec_ShowCrsRecord (Rec_CHECK_OTHER_USR_COURSE_RECORD,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowCrsRecord (Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT,&Gbl.Usrs.Me.UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -2088,7 +2081,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_MY_COMMON_RECORD_CHECK:
       case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
       case Rec_CHECK_OTHER_USR_COMMON_RECORD:
-      case Rec_CHECK_OTHER_USR_COURSE_RECORD:
       case Rec_RECORD_LIST:
       case Rec_RECORD_PUBLIC:
       case Rec_RECORD_PRINT:

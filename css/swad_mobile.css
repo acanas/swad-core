@@ -64,17 +64,17 @@ form			{margin:0; display:inline;}
 	}
 .GREY_BACKGROUND
 	{
-	background-image:linear-gradient(#383838 0,#404040 40px,#404040 176px,white 176px,white 100%);
+	background-image:linear-gradient(#383838 0,#404040 40px,#404040 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
 .BLUE_BACKGROUND
 	{
-	background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 176px,white 176px,white 100%);
+	background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
 .YELLOW_BACKGROUND
 	{
-	background-image:linear-gradient(#201420 0,#201420 176px,white 176px,white 100%);
+	background-image:linear-gradient(#201420 0,#201420 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
 
@@ -319,12 +319,12 @@ form			{margin:0; display:inline;}
 /***************************** Tabs and main zone ****************************/
 #tabs_container
 	{
-	height:70px;
+	height:64px;
 	margin:0 auto;
 	}
 .TAB_ON
 	{
-	height:78px;
+	height:72px;
 	margin:0;
 	padding:0 25px;
 	border-radius:8px 8px 0 0;

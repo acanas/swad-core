@@ -91,7 +91,7 @@ void Tab_DrawTabs (void)
 	 ColspanCentralPart = 2;
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
-	              " style=\"height:70px;\">"
+	              " style=\"height:64px;\">"
 		      "<div id=\"tabs_container\">",
             ColspanCentralPart);
    switch (Gbl.Prefs.Layout)
@@ -162,7 +162,7 @@ static void Tab_DrawTabsDeskTop (void)
 							   The_ClassTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:5px;\" />"
+			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
 			       "<div>%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
@@ -176,7 +176,7 @@ static void Tab_DrawTabsDeskTop (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:5px;\" />"
+			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
 			       "<div class=\"%s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],

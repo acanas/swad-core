@@ -68,7 +68,6 @@ typedef enum
 
    Rec_FORM_MY_COURSE_RECORD_AS_STUDENT,
    Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT,
-   Rec_CHECK_OTHER_USR_COURSE_RECORD,
 
    Rec_RECORD_LIST,
    Rec_RECORD_PRINT,
@@ -132,13 +131,12 @@ void Rec_FreeListFields (void);
 void Rec_PutLinkToEditRecordFields (void);
 void Rec_ListRecordsGsts (void);
 void Rec_GetUsrAndShowRecordOneStdCrs (void);
-void Rec_ListRecordsStds (void);
+void Rec_ListRecordsStdsForEdit (void);
+void Rec_ListRecordsStdsForPrint (void);
 void Rec_GetUsrAndShowRecordOneTchCrs (void);
 void Rec_ListRecordsTchs (void);
-void Rec_ShowLinkToPrintPreviewOfRecords (void);
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);
-void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat);
 unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res);
 void Rec_GetFieldsCrsRecordFromForm (void);
 void Rec_UpdateCrsRecord (long UsrCod);
