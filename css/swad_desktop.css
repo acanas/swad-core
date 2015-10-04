@@ -545,7 +545,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 /******************************* User's photo ********************************/
 .PHOTO12x16	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px;}
-.PHOTO12x16B	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px; display:block;}
+.PHOTO12x16B	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px; display:block; margin:0 auto;}
 .PHOTO15x20	{width: 18px; height: 25px; vertical-align:middle; border-radius:2px;}
 .PHOTO18x24	{width: 21px; height: 28px; vertical-align:middle; border-radius:2px;}
 .PHOTO24x32	{width: 30px; height: 40px; vertical-align:middle; border-radius:2px;}
@@ -1099,13 +1099,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .MSG_DATE		{color:#4D88A1; font-size:11pt;}
 .MSG_DATE_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
-.BT			{width:20px; text-align:left; vertical-align:top;}
-.BT0			{width:20px; text-align:left; vertical-align:top; background-color:#F4F2EA;}
-.BT1			{width:20px; text-align:left; vertical-align:top; background-color:#FBFAF7;}
-.BM			{width:20px; text-align:left; vertical-align:middle;}
-.BM_SEL			{width:20px; text-align:left; vertical-align:middle; background-color:#C0FF40;}
-.BM0			{width:20px; text-align:left; vertical-align:middle; background-color:#F4F2EA;}
-.BM1			{width:20px; text-align:left; vertical-align:middle; background-color:#FBFAF7;}
+.BT			{width:20px; text-align:center; vertical-align:top;}
+.BT0			{width:20px; text-align:center; vertical-align:top; background-color:#F4F2EA;}
+.BT1			{width:20px; text-align:center; vertical-align:top; background-color:#FBFAF7;}
+.BM			{width:20px; text-align:center; vertical-align:middle;}
+.BM_SEL			{width:20px; text-align:center; vertical-align:middle; background-color:#C0FF40;}
+.BM0			{width:20px; text-align:center; vertical-align:middle; background-color:#F4F2EA;}
+.BM1			{width:20px; text-align:center; vertical-align:middle; background-color:#FBFAF7;}
 
 /***************************** Calls for exams *******************************/
 .CONV_TIT

@@ -98,11 +98,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.7.2 (2015/10/04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.8 (2015/10/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+TODO: If photo zoom is out of the screen at left, put on right
+
+        Version 15.8:     Oct 04, 2015	Changes in file browser layout.
+					Folder owners are not displayed. (185022 lines)
         Version 15.7.2:   Oct 04, 2015	New layout in enrollment requests. (185018 lines)
         Version 15.7.1:   Oct 03, 2015	Message translated. (184984 lines)
         Version 15.7:     Oct 03, 2015	Height of tabs reduced.

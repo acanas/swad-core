@@ -248,31 +248,31 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
 // Number of columns of a file browser
 static const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   5,	// Brw_UNKNOWN
-   5,	// Brw_SHOW_DOCUM_CRS
+   4,	// Brw_UNKNOWN
+   4,	// Brw_SHOW_DOCUM_CRS
    4,	// Brw_SHOW_MARKS_CRS
-   8,	// Brw_ADMI_DOCUM_CRS
-   8,	// Brw_ADMI_SHARE_CRS
-   8,	// Brw_ADMI_SHARE_GRP
-   8,	// Brw_ADMI_WORKS_USR
-   8,	// Brw_ADMI_WORKS_CRS
-  10,	// Brw_ADMI_MARKS_CRS
-   8,	// Brw_ADMI_BRIEF_USR
-   5,	// Brw_SHOW_DOCUM_GRP
-   8,	// Brw_ADMI_DOCUM_GRP
+   7,	// Brw_ADMI_DOCUM_CRS
+   7,	// Brw_ADMI_SHARE_CRS
+   7,	// Brw_ADMI_SHARE_GRP
+   7,	// Brw_ADMI_WORKS_USR
+   7,	// Brw_ADMI_WORKS_CRS
+   9,	// Brw_ADMI_MARKS_CRS
+   7,	// Brw_ADMI_BRIEF_USR
+   4,	// Brw_SHOW_DOCUM_GRP
+   7,	// Brw_ADMI_DOCUM_GRP
    4,	// Brw_SHOW_MARKS_GRP
-  10,	// Brw_ADMI_MARKS_GRP
-   8,	// Brw_ADMI_ASSIG_USR
-   8,	// Brw_ADMI_ASSIG_CRS
-   5,	// Brw_SHOW_DOCUM_DEG
-   8,	// Brw_ADMI_DOCUM_DEG
-   5,	// Brw_SHOW_DOCUM_CTR
-   8,	// Brw_ADMI_DOCUM_CTR
-   5,	// Brw_SHOW_DOCUM_INS
-   8,	// Brw_ADMI_DOCUM_INS
-   8,	// Brw_ADMI_SHARE_DEG
-   8,	// Brw_ADMI_SHARE_CTR
-   8,	// Brw_ADMI_SHARE_INS
+   9,	// Brw_ADMI_MARKS_GRP
+   7,	// Brw_ADMI_ASSIG_USR
+   7,	// Brw_ADMI_ASSIG_CRS
+   4,	// Brw_SHOW_DOCUM_DEG
+   7,	// Brw_ADMI_DOCUM_DEG
+   4,	// Brw_SHOW_DOCUM_CTR
+   7,	// Brw_ADMI_DOCUM_CTR
+   4,	// Brw_SHOW_DOCUM_INS
+   7,	// Brw_ADMI_DOCUM_INS
+   7,	// Brw_ADMI_SHARE_DEG
+   7,	// Brw_ADMI_SHARE_CTR
+   7,	// Brw_ADMI_SHARE_INS
   };
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -4855,7 +4855,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
       /* Icon with folder */
       Brw_PutIconFolder (Level,ExpandTree,
                          PathInTree,FileName,FileNameToShow);
-   else
+   else	// File or link
      {
       /* Icon with file type or link */
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
@@ -4877,32 +4877,30 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 	              "</table>"
 	              "</td>");
 
-   /***** Put icon to download ZIP of folder *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT &&	// Only ZIP folders if I am student, teacher...
-       !SeeMarks)					// Do not ZIP folders when seeing marks
-     {
-      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-      if (FileType == Brw_IS_FOLDER &&	// If it is a folder
-	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
-	 ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
-      fprintf (Gbl.F.Out,"</td>");
-     }
+   if (AdminMarks)
+      /***** Header and footer rows *****/
+      Mrk_GetAndWriteNumRowsHeaderAndFooter (FileType,PathInTree,FileName);
 
    if (AssignmentsZone && Level == 1)
       /***** Start and end dates of assignment *****/
       Brw_WriteDatesAssignment ();
    else
-     {
-      /***** User who created the file or folder *****/
-      Brw_WriteFileOrFolderPublisher (Level,FileMetadata.PublisherUsrCod);
-
-      if (AdminMarks)
-         /***** Header and footer rows *****/
-         Mrk_GetAndWriteNumRowsHeaderAndFooter (FileType,PathInTree,FileName);
-
       /***** File date and size *****/
       Brw_WriteFileSizeAndDate (FileType,&FileMetadata);
+
+   if (FileType == Brw_IS_FOLDER)
+     {
+      /***** Put icon to download ZIP of folder *****/
+      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT &&	// Only ZIP folders if I am student, teacher...
+	  !SeeMarks &&					// Do not ZIP folders when seeing marks
+	  !(SeeDocsZone && RowSetAsHidden))		// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	    ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
+      fprintf (Gbl.F.Out,"</td>");
      }
+   else	// File or link
+      /***** User who created the file or folder *****/
+      Brw_WriteFileOrFolderPublisher (Level,FileMetadata.PublisherUsrCod);
 
    /***** End this row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -5766,7 +5764,7 @@ static void Brw_WriteDatesAssignment (void)
   {
    extern const char *Txt_unknown_assignment;
 
-   fprintf (Gbl.F.Out,"<td colspan=\"4\""
+   fprintf (Gbl.F.Out,"<td colspan=\"2\""
 	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
 
@@ -10637,6 +10635,8 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void)
          return (Gbl.Usrs.Me.UsrDat.UsrCod == PublisherUsrCod);	// Am I the publisher of subtree?
       case Rol_TEACHER:
       case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
       case Rol_SYS_ADM:
          return true;
       default:
