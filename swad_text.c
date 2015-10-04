@@ -781,9 +781,9 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" Un cop hagi entrat, pot canviar la contrasenya per una altra.\n"
 	"Si no accedeix amb aquesta nova contrasenya,"
 	" seguirà tenint la contrasenya que tingués fins ara.\n"
-	"Si ha rebut aquest missatge sense sol·licitar-lo,"
+	"Si ha rebut aquest missatge sense sol&middot;licitar-lo,"
 	" es deu a que algú que coneix el seu ID (DNI/cédula), el seu sobrenom o el seu e-mail"
-	" ha sol·licitat l'enviament de una nova contrasenya per a vostè.\n"
+	" ha sol&middot;licitat l'enviament de una nova contrasenya per a vostè.\n"
 	"Aquesta nova contrasenya se ha enviat només a la adreça de correu %s,"
 	" que és la que apareix a la seva fitxa.\n\n";
 #elif L==1
@@ -4690,9 +4690,9 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 #if   L==0
 	"Enhorabona! Ha creat el seu compte @%s."
 	" Ara %s li demanar&agrave; algunes dades per completar el seu perfil."
-	" Despr&eacute;s podr&agrave; sol·licitar la seva inscripci&oacute; en assignatures."
+	" Despr&eacute;s podr&agrave; sol&middot;licitar la seva inscripci&oacute; en assignatures."
 	" Si no hi ha una assignatura,"
-	" vost&egrave; pot crear abans de sol·licitar la seva inscripci&oacute; en ella"
+	" vost&egrave; pot crear abans de sol&middot;licitar la seva inscripci&oacute; en ella"
 	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
 #elif L==1
 	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Konto @%s erstellt."
@@ -9863,7 +9863,6 @@ const char *Txt_Enroll_in_groups =
 	"Inscreva-me em grupos ";
 #endif
 
-
 const char *Txt_Enrollment_confirmed =
 #if   L==0
 	"Inscripci&oacute;n confirmada";	// Necessita traduccio
@@ -9925,6 +9924,27 @@ const char *Txt_Enrollment_not_confirmed =
 	"Rejestracja nie potwierdzona";
 #elif L==8
 	"Enrollment not confirmed";				// Necessita de tradução
+#endif
+
+const char *Txt_Enrollment_requests =
+#if   L==0
+	"Peticions d'inscripci&oacute;";
+#elif L==1
+	"Registrierungsanforderungen";
+#elif L==2
+	"Enrollment requests";
+#elif L==3
+	"Solicitudes de inscripci&oacute;n";
+#elif L==4
+	"Demandes d'inscription";
+#elif L==5
+	"Solicitudes de inscripci&oacute;n";	// Okoteve traducción
+#elif L==6
+	"Richieste di registrazione";
+#elif L==7
+	"Pro&sacute;by o rejestracji";
+#elif L==8
+	"Pedidos de inscri&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Enter_a_new_item_here =
@@ -19521,7 +19541,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActReqSignUp
 #if   L==0
-	"Sol·licitar inscripci&oacute;"
+	"Sol&middot;licitar inscripci&oacute;"
 #elif L==1
 	"Registrierung beantragen"
 #elif L==2
@@ -19546,13 +19566,13 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==1
 	"Registrierungsanforderungen"
 #elif L==2
-	"Requests for enrollment in this course pending verification"
+	"Enrollment requests in this course pending verification"
 #elif L==3
 	"Peticiones de inscripci&oacute;n pendientes de verificar"
 #elif L==4
 	"Demandes d'inscription"
 #elif L==5
-	"Peticiones de inscripci&oacute;n pendientes de verificar"// Okoteve traducción
+	"Peticiones de inscripci&oacute;n pendientes de verificar"	// Okoteve traducción
 #elif L==6
 	"Richieste di iscrizione"
 #elif L==7
@@ -23012,17 +23032,17 @@ const char *Txt_No_degrees_have_been_created_in_this_centre =
 
 const char *Txt_No_enrollment_requests =
 #if   L==0
-	"No hay peticiones de inscripci&oacute;n.";	// Necessita traduccio
+	"No hay solicitudes de inscripci&oacute;n.";	// Necessita traduccio
 #elif L==1
 	"No enrollment requests.";			// Need Übersetzung
 #elif L==2
 	"No enrollment requests.";
 #elif L==3
-	"No hay peticiones de inscripci&oacute;n.";
+	"No hay solicitudes de inscripci&oacute;n.";
 #elif L==4
 	"No enrollment requests.";			// Besoin de traduction
 #elif L==5
-	"No hay peticiones de inscripci&oacute;n.";	// Okoteve traducción
+	"No hay solicitudes de inscripci&oacute;n.";	// Okoteve traducción
 #elif L==6
 	"No enrollment requests.";			// Bisogno di traduzione
 #elif L==7
@@ -29260,7 +29280,7 @@ const char *Txt_Reply_again =
 
 const char *Txt_Requester =
 #if   L==0
-	"Sol·licitant";
+	"Sol&middot;licitant";
 #elif L==1
 	"Requester";
 #elif L==2
@@ -34758,7 +34778,7 @@ const char *Txt_Shuffle =
 
 const char *Txt_Sign_up =
 #if   L==0
-	"Sol·licitar inscripci&oacute;";
+	"Sol&middot;licitar inscripci&oacute;";
 #elif L==1
 	"Registrierung beantragen";
 #elif L==2
@@ -41544,7 +41564,7 @@ const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is ver
 
 const char *Txt_The_requested_group_changes_were_successful =
 #if   L==0
-	"Els canvis de grup sol·licitats s'han realitzat correctament.";
+	"Els canvis de grup sol&middot;licitats s'han realitzat correctament.";
 #elif L==1
 	"The requested group changes were successful.";				// Need Übersetzung
 #elif L==2
@@ -43176,7 +43196,7 @@ const char *Txt_There_are_no_banners =
 
 const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 #if   L==0
-	"No hi ha centres amb sol·licituds de titulacions pendents de confirmar.";
+	"No hi ha centres amb sol&middot;licituds de titulacions pendents de confirmar.";
 #elif L==1
 	"There are no centres with requests for degrees to be confirmed";		// Need Übersetzung
 #elif L==2
@@ -43197,7 +43217,7 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 
 const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed =
 #if   L==0
-	"No hi ha pa&iuml;sos amb sol·licituds de institucions pendents de confirmar.";
+	"No hi ha pa&iuml;sos amb sol&middot;licituds de institucions pendents de confirmar.";
 #elif L==1
 	"There are no countries with requests for institutions to be confirmed";		// Need Übersetzung
 #elif L==2
@@ -43218,7 +43238,7 @@ const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_conf
 
 const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 #if   L==0
-	"No hi ha titulacions amb sol·licituds d'assignatures pendents de confirmar.";
+	"No hi ha titulacions amb sol&middot;licituds d'assignatures pendents de confirmar.";
 #elif L==1
 	"There are no degrees with requests for courses to be confirmed";		// Need Übersetzung
 #elif L==2
@@ -43239,7 +43259,7 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 
 const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed =
 #if   L==0
-	"No hi ha institucions amb sol·licituds de centres pendents de confirmar.";
+	"No hi ha institucions amb sol&middot;licituds de centres pendents de confirmar.";
 #elif L==1
 	"There are no institutions with requests for centres to be confirmed";		// Need Übersetzung
 #elif L==2
@@ -49719,7 +49739,7 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them =
 #if   L==0
 	"Podeu cercar assignatures, seleccionar-les"
-	" i sol·licitar la seva inscripci&oacute; en elles.";
+	" i sol&middot;licitar la seva inscripci&oacute; en elles.";
 #elif L==1
 	"Sie k&ouml;nnen f&uuml;r Kurse zu suchen, w&auml;hlen Sie sie aus"
 	" und fordern Sie Ihre Anmeldung in ihnen.";

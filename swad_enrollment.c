@@ -2127,6 +2127,7 @@ void Enr_ShowEnrollmentRequests (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Enrollment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Update;
@@ -2155,6 +2156,9 @@ void Enr_ShowEnrollmentRequests (void)
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
    Rol_Role_t DesiredRole;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Enrollment_requests);
 
    /***** Selection of scope and roles *****/
    /* Start form */
@@ -2502,8 +2506,8 @@ void Enr_ShowEnrollmentRequests (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      Lay_StartRoundFrameTable (NULL,2,NULL);
-      fprintf (Gbl.F.Out,"<tr>"
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	                 " style=\"margin:0 auto;\">"
                          "<th></th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"
@@ -2617,7 +2621,7 @@ void Enr_ShowEnrollmentRequests (void)
         	                                        ActReqMdfTch);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutCreateButton (Txt_Register);
+            Lay_PutCreateButtonInline (Txt_Register);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 
@@ -2626,7 +2630,7 @@ void Enr_ShowEnrollmentRequests (void)
             Act_FormStart (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-            Lay_PutConfirmButton (Txt_Reject);
+            Lay_PutRemoveButtonInline (Txt_Reject);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>"
                                "</tr>");
@@ -2640,14 +2644,17 @@ void Enr_ShowEnrollmentRequests (void)
             Enr_RemoveEnrollmentRequest (Crs.CrsCod,UsrDat.UsrCod);
         }
 
-      /* End frame */
-      Lay_EndRoundFrameTable ();
+      /* End table */
+      fprintf (Gbl.F.Out,"</table>");
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else        // There are no requests
+   else	// There are no requests
       Lay_ShowAlert (Lay_INFO,Txt_No_enrollment_requests);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

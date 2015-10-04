@@ -1124,6 +1124,14 @@ void Lay_PutRemoveButton (const char *Text)
             Text);
   }
 
+void Lay_PutRemoveButtonInline (const char *Text)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_REMOVE\">"
+                      "%s"
+                      "</button>",
+            Text);
+  }
+
 /*****************************************************************************/
 /************ Write a centered message with the title of a table *************/
 /*****************************************************************************/

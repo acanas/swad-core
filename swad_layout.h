@@ -96,6 +96,7 @@ void Lay_PutCreateButtonInline (const char *Text);
 void Lay_PutConfirmButton (const char *Text);
 void Lay_PutConfirmButtonInline (const char *Text);
 void Lay_PutRemoveButton (const char *Text);
+void Lay_PutRemoveButtonInline (const char *Text);
 
 void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char *Title);
 void Lay_StartRoundFrame (const char *Width,const char *Title);
