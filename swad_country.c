@@ -33,6 +33,7 @@
 #include "swad_constant.h"
 #include "swad_country.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_institution.h"
 #include "swad_parameter.h"
@@ -196,6 +197,9 @@ void Cty_SeeCtyWithPendingInss (void)
 void Cty_ShowConfiguration (void)
   {
    Cty_Configuration (false);
+
+   /***** Show help to enroll me *****/
+   Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/

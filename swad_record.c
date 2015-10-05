@@ -3377,7 +3377,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable ("700px",3,
+   Lay_StartRoundFrameTable ("800px",2,
                              IAmTeacher ? Txt_Institution_centre_and_department :
 	                                  Txt_Institution);
 

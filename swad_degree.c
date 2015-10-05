@@ -37,6 +37,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree.h"
+#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_indicator.h"
@@ -267,6 +268,9 @@ void Deg_SeeDegWithPendingCrss (void)
 void Deg_ShowConfiguration (void)
   {
    Deg_Configuration (false);
+
+   /***** Show help to enroll me *****/
+   Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
@@ -1000,10 +1004,6 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
       /***** Write menu to select country, institution and centre *****/
       Deg_WriteMenuAllCourses ();
-
-      /***** Put link (form) to edit degrees of the current centre *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
-         Lay_PutFormToEdit (ActEdiDeg);
 
       /***** Show list of degrees *****/
       Deg_ListDegrees ();
@@ -2190,11 +2190,25 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
 static void Deg_ListDegrees (void)
   {
    extern const char *Txt_No_degrees_have_been_created_in_this_centre;
+   extern const char *Txt_Create_degree;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.CurrentCtr.Ctr.NumDegs) // If there are degrees in the centre...
+   if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
+     {
+      if (ICanEdit)
+	 Lay_PutFormToEdit (ActEdiDeg);
       Deg_ListDegreesForSeeing ();
-   else
+     }
+   else					// No degrees created in the current centre
+     {
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees_have_been_created_in_this_centre);
+      if (ICanEdit)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Act_PutContextualLink (ActEdiDeg,NULL,"edit",Txt_Create_degree);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+     }
   }
 
 /*****************************************************************************/
@@ -2203,7 +2217,6 @@ static void Deg_ListDegrees (void)
 
 void Deg_EditDegrees (void)
   {
-   extern const char *Txt_No_degrees_have_been_created_in_this_centre;
    extern const char *Txt_There_is_no_list_of_centres;
    extern const char *Txt_You_must_create_at_least_one_centre_before_creating_degrees;
    extern const char *Txt_There_is_no_list_of_types_of_degree;
@@ -2214,9 +2227,6 @@ void Deg_EditDegrees (void)
 
    /***** Get list of degrees in the current centre *****/
    Deg_GetListDegsOfCurrentCtr ();
-
-   if (!Gbl.CurrentCtr.Ctr.NumDegs)	// There aren't degrees in the current centre
-      Lay_ShowAlert (Lay_INFO,Txt_No_degrees_have_been_created_in_this_centre);
 
    /***** Get list of centres of the current institution *****/
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);

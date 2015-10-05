@@ -33,6 +33,7 @@
 #include "swad_centre.h"
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
@@ -216,6 +217,9 @@ void Ctr_SeeCtrWithPendingDegs (void)
 void Ctr_ShowConfiguration (void)
   {
    Ctr_Configuration (false);
+
+   /***** Show help to enroll me *****/
+   Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
@@ -513,10 +517,6 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       /***** Write menu to select country and institution *****/
       Deg_WriteMenuAllCourses ();
 
-      /***** Put link (form) to edit centres in current institution *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
-         Lay_PutFormToEdit (ActEdiCtr);
-
       /***** List centres *****/
       Ctr_ListCentres ();
 
@@ -532,11 +532,25 @@ void Ctr_ShowCtrsOfCurrentIns (void)
 static void Ctr_ListCentres (void)
   {
    extern const char *Txt_No_centres_have_been_created_in_this_institution;
+   extern const char *Txt_Create_centre;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.Ctrs.Num)
+   if (Gbl.Ctrs.Num)	// There are centres in the current institution
+     {
+      if (ICanEdit)
+	 Lay_PutFormToEdit (ActEdiCtr);
       Ctr_ListCentresForSeeing ();
-   else
+     }
+   else			// No centres created in the current institution
+     {
       Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
+      if (ICanEdit)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Act_PutContextualLink (ActEdiCtr,NULL,"edit",Txt_Create_centre);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+     }
   }
 
 /*****************************************************************************/
@@ -673,7 +687,6 @@ static void Ctr_GetParamCtrOrderType (void)
 
 void Ctr_EditCentres (void)
   {
-   extern const char *Txt_No_centres_have_been_created_in_this_institution;
    extern const char *Txt_There_is_no_list_of_institutions;
    extern const char *Txt_You_must_create_at_least_one_institution_before_creating_centres;
 
@@ -690,9 +703,6 @@ void Ctr_EditCentres (void)
       if (Gbl.Ctrs.Num)
 	 /***** Put link (form) to view centres *****/
          Lay_PutFormToView (ActSeeCtr);
-      else
-         /***** Help message *****/
-	 Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
 
       /***** Put a form to create a new centre *****/
       Ctr_PutFormToCreateCentre ();

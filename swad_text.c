@@ -12533,6 +12533,27 @@ const char *Txt_Go_to_course_and_reply_again =
 	"Ir para a disciplina e responder novamente";
 #endif
 
+const char *Txt_Go_to_one_of_my_courses =
+#if   L==0
+	"Anar a una de les meves assignatures";
+#elif L==1
+	"Gehen Sie zu einem meiner Kurse";
+#elif L==2
+	"Go to one of my courses";
+#elif L==3
+	"Ir a una de mis asignaturas";
+#elif L==4
+	"Allez &agrave; l'une de mes mati&egrave;res";
+#elif L==5
+	"Ir a una de mis asignaturas";	// Okoteve traducción
+#elif L==6
+	"Vai a uno dei miei corsi";
+#elif L==7
+	"Id&zacute; do jednej z moich kurs&oacute;w";
+#elif L==8
+	"V&aacute; para uma das minha disciplinas";
+#endif
+
 const char *Txt_Group =
 #if   L==0
 	"Grup";
@@ -21982,7 +22003,7 @@ const char *Txt_Multiple_enrollment =		// (to a type of group)
 
 const char *Txt_My_courses =
 #if   L==0
-	"Els meus assignatures";
+	"Les meves assignatures";
 #elif L==1
 	"Meine Kursen";
 #elif L==2
@@ -28699,6 +28720,27 @@ const char *Txt_Remove_logo =
 	"Remover logotipo";
 #endif
 
+const char *Txt_Remove_me =
+#if   L==0
+	"Eliminarme";
+#elif L==1
+	"Entfernen Sie";
+#elif L==2
+	"Remove me";
+#elif L==3
+	"Eliminarme";
+#elif L==4
+	"Enlever-moi";
+#elif L==5
+	"Eliminarme";	// Okoteve traducción
+#elif L==6
+	"Rimuovimi";
+#elif L==7
+	"Usu&ntilde;";
+#elif L==8
+	"Tirar me";
+#endif
+
 const char *Txt_Remove_me_as_an_administrator =
 #if   L==0
 	"Eliminarme com a administrador";
@@ -28810,7 +28852,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	" da institu&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_me_from_this_course =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_me_from_this_course =
 #if   L==0
 	"Eliminarme d'aquesta assignatura";
 #elif L==1
@@ -33483,6 +33525,216 @@ const char *Txt_See_page_X_of_Y =	// Warning: it is very important to include tw
 	"See page %u of %u";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"Veja p&aacute;gina %u de %u";
+#endif
+
+const char *Txt_Select_another_centre_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar un altre centre de la instituci&oacute; <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen anderen Lehrinstitut der Hochschule <strong>%s</strong>";
+#elif L==2
+	"Select another centre of the institution <strong>%s</strong>";
+#elif L==3
+	"Seleccionar otro centro de la instituci&oacute;n <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un autre &eacute;tude du &eacute;tablissement <strong>%s</strong>";
+#elif L==5
+	"Seleccionar otro centro de la instituci&oacute;n <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare un altro centro di istituzione <strong>%s</strong>";
+#elif L==7
+	"Select another degree of the institution <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar um outro centro da institu&ccedil;&atilde;o <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_another_country =
+#if   L==0
+	"Seleccionar un altre país";
+#elif L==1
+	"W&auml;hlen Sie eine anderes Land";
+#elif L==2
+	"Select another country";
+#elif L==3
+	"Seleccionar otro pa&iacute;s";
+#elif L==4
+	"S&eacute;lectionnez un autre pays";
+#elif L==5
+	"Seleccionar otro pa&iacute;s";		// Okoteve traducción
+#elif L==6
+	"Selezionare un altro paese";
+#elif L==7
+	"Wybierz inny kraj";
+#elif L==8
+	"Selecionar outro pa&iacute;s";
+#endif
+
+const char *Txt_Select_another_course_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una altra assignatura de la titulaci&oacute; <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen anderen Kurs der Studiengang <strong>%s</strong>";
+#elif L==2
+	"Select another course of the degree <strong>%s</strong>";
+#elif L==3
+	"Seleccionar otra asignatura de la titulaci&oacute;n <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez une autre mati&egrave;re du &eacute;tude <strong>%s</strong>";
+#elif L==5
+	"Seleccionar otra asignatura de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
+#elif L==6
+	"Selezionare un altro corso di laurea <strong>%s</strong>";
+#elif L==7
+	"Select another course of the degree <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma outra disciplina da titula&ccedil;&atilde;o <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_another_degree_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una altra titulaci&oacute; del centre <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen anderen Studiengang der Lehrinstitut <strong>%s</strong>";
+#elif L==2
+	"Select another degree of the centre <strong>%s</strong>";
+#elif L==3
+	"Seleccionar otra titulaci&oacute;n del centro <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un autre &eacute;tude du centre <strong>%s</strong>";
+#elif L==5
+	"Seleccionar otra titulaci&oacute;n del centro <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare una altra laurea di centro <strong>%s</strong>";
+#elif L==7
+	"Select another degree of the centre <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma outra titula&ccedil;&atilde;o do centro <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_another_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una altra instituci&oacute; de <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen anderen Hochschule von <strong>%s</strong>";
+#elif L==2
+	"Select another institution of <strong>%s</strong>";
+#elif L==3
+	"Seleccionar otra instituci&oacute;n de <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un autre &eacute;tablissement de <strong>%s</strong>";
+#elif L==5
+	"Seleccionar otra instituci&oacute;n de <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare una altra istituzione di <strong>%s</strong>";
+#elif L==7
+	"Select another institution of <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma outra institu&ccedil;&atilde;o de <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_one_centre_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar un centre de la instituci&oacute; <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen Lehrinstitut der Hochschule <strong>%s</strong>";
+#elif L==2
+	"Select one centre of the institution <strong>%s</strong>";
+#elif L==3
+	"Seleccionar un centro de la instituci&oacute;n <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un &eacute;tude du &eacute;tablissement <strong>%s</strong>";
+#elif L==5
+	"Seleccionar un centro de la instituci&oacute;n <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare un centro di istituzione <strong>%s</strong>";
+#elif L==7
+	"Select one degree of the institution <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar um centro da institu&ccedil;&atilde;o <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_one_course_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una assignatura de la titulaci&oacute; <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie eine Kurs der Studiengang <strong>%s</strong>";
+#elif L==2
+	"Select one course of the degree <strong>%s</strong>";
+#elif L==3
+	"Seleccionar una asignatura de la titulaci&oacute;n <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez une mati&egrave;re du &eacute;tude <strong>%s</strong>";
+#elif L==5
+	"Seleccionar una asignatura de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
+#elif L==6
+	"Selezionare un corso di laurea <strong>%s</strong>";
+#elif L==7
+	"Select one course of the degree <strong>%s</strong>";				// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma disciplina da titula&ccedil;&atilde;o <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_one_country =
+#if   L==0
+	"Seleccionar un pa&iacute;s";
+#elif L==1
+	"W&auml;hlen Sie ein Land";
+#elif L==2
+	"Select one country";
+#elif L==3
+	"Seleccionar un pa&iacute;s";
+#elif L==4
+	"S&eacute;lectionnez un pays";
+#elif L==5
+	"Seleccionar un pa&iacute;s";		// Okoteve traducción
+#elif L==6
+	"Selezionare un paese";
+#elif L==7
+	"Wybierz jeden kraj";
+#elif L==8
+	"Selecionar um pa&iacute;s";
+#endif
+
+const char *Txt_Select_one_degree_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una titulaci&oacute; del centre <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen Studiengang der Lehrinstitut <strong>%s</strong>";
+#elif L==2
+	"Select one degree of the centre <strong>%s</strong>";
+#elif L==3
+	"Seleccionar una titulaci&oacute;n del centro <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un &eacute;tude du centre <strong>%s</strong>";
+#elif L==5
+	"Seleccionar una titulaci&oacute;n del centro <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare una laurea di centro <strong>%s</strong>";
+#elif L==7
+	"Select one degree of the centre <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma titula&ccedil;&atilde;o do centro <strong>%s</strong>";
+#endif
+
+const char *Txt_Select_one_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Seleccionar una instituci&oacute; de <strong>%s</strong>";
+#elif L==1
+	"W&auml;hlen Sie einen Hochschule von <strong>%s</strong>";
+#elif L==2
+	"Select one institution of <strong>%s</strong>";
+#elif L==3
+	"Seleccionar una instituci&oacute;n de <strong>%s</strong>";
+#elif L==4
+	"S&eacute;lectionnez un &eacute;tablissement de <strong>%s</strong>";
+#elif L==5
+	"Seleccionar una instituci&oacute;n de <strong>%s</strong>";		// Okoteve traducción
+#elif L==6
+	"Selezionare una istituzione di <strong>%s</strong>";
+#elif L==7
+	"Select one institution of <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"Selecionar uma institu&ccedil;&atilde;o de <strong>%s</strong>";
 #endif
 
 const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here =
@@ -47092,27 +47344,6 @@ const char *Txt_View_in_a_new_window =
 	"Ver em uma nova janela";
 #endif
 
-const char *Txt_View_my_courses =
-#if   L==0
-	"Veure els meus assignatures";
-#elif L==1
-	"Anzeigen meine Kursen";
-#elif L==2
-	"View my courses";
-#elif L==3
-	"Ver mis asignaturas";
-#elif L==4
-	"Voir mes mati&egrave;res";
-#elif L==5
-	"Ver mis asignaturas";	// Okoteve traducción
-#elif L==6
-	"Vedi i miei corsi";
-#elif L==7
-	"View my courses";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"Ver as minha disciplinas";
-#endif
-
 const char *Txt_View_public_profile =
 #if   L==0
 	"Veure perfil p&uacute;blic";
@@ -47739,6 +47970,27 @@ const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS] =	// Warning: it is v
 	   "Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
 #endif
 	};
+
+const char *Txt_What_would_you_like_to_do =
+#if   L==0
+	"Qu&egrave; voleu fer?";
+#elif L==1
+	"Was w&uuml;rden Sie tun?";
+#elif L==2
+	"What would you like to do?";
+#elif L==3
+	"&iquest;Qu&eacute; desea hacer?";
+#elif L==4
+	"Que feriez-vous?";
+#elif L==5
+	"&iquest;Qu&eacute; desea hacer?";	// Okoteve traducción
+#elif L==6
+	"Cosa si dovrebbe fare?";
+#elif L==7
+	"Co by&sacute; zrobi&lstrok;?";
+#elif L==8
+	"O que voc&ecirc; faria?";
+#endif
 
 const char *Txt_With_centres =
 #if   L==0
@@ -49986,27 +50238,6 @@ const char *Txt_You_dont_have_permission_to_perform_this_action =
 #elif L==8
 	"Voc&ecirc; n&atilde;o tem permiss&atilde;o"
 	" para realizar esta a&ccedil;&atilde;o.";
-#endif
-
-const char *Txt_You_dont_have_photo =
-#if   L==0
-	"Usted no tiene fotograf&iacute;a.";	// Necessita traduccio
-#elif L==1
-	"Sie haben keine Foto.";
-#elif L==2
-	"You don't have photo.";
-#elif L==3
-	"Usted no tiene fotograf&iacute;a.";
-#elif L==4
-	"Vous n'avez pas de photo.";
-#elif L==5
-	"Usted no tiene fotograf&iacute;a.";	// Okoteve traducción
-#elif L==6
-	"Non hai foto.";
-#elif L==7
-	"You don't have photo.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Voc&ecirc; n&atilde;o tem foto.";
 #endif
 
 const char *Txt_You_have_confirmed_that_you_have_read_this_information =

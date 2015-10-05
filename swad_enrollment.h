@@ -135,4 +135,6 @@ void Enr_CreateNewUsr (void);
 void Enr_ModifyUsr (void);
 void Enr_AcceptUsrInCrs (long UsrCod);
 
+void Enr_HelpToEnroll (void);
+
 #endif

@@ -341,11 +341,14 @@ void Inf_ShowInfo (void)
    switch (InfoSrc)
      {
       case Inf_INFO_SRC_NONE:
-	 Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+	 if (InfoType != Inf_INTRODUCTION)
+	    Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
          break;
       case Inf_INFO_SRC_EDITOR:
          switch (InfoType)
            {
+            case Inf_INTRODUCTION:
+               break;
             case Inf_LECTURES:
             case Inf_PRACTICALS:
 
@@ -365,7 +368,6 @@ void Inf_ShowInfo (void)
 
                Syl_EditSyllabus ();
                break;
-            case Inf_INTRODUCTION:
             case Inf_TEACHING_GUIDE:
             case Inf_BIBLIOGRAPHY:
             case Inf_FAQ:

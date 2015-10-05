@@ -237,6 +237,7 @@ form			{margin:0; display:inline;}
 	}
 .BT_SUBMIT_INLINE
 	{
+	min-width:180px;
 	color:white;
 	font-size:15px;
 	font-weight:bold;

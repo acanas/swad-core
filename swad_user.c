@@ -1375,8 +1375,13 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
 void Usr_WriteFormLoginLogout (void)
   {
    if (Gbl.Session.IsOpen)
+     {
       /***** Form to change my role *****/
       Usr_ShowFormsLogoutAndRole ();
+
+      /***** Show help to enroll me *****/
+      Enr_HelpToEnroll ();
+     }
    else
       /***** Form to log in *****/
       Usr_WriteFormLogin ();
@@ -1506,7 +1511,6 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
-   extern const char *Txt_You_dont_have_photo;
    extern const char *Txt_Switching_to_LANGUAGE[Txt_NUM_LANGUAGES];
    bool CongratulateMyBirthday;
 
@@ -1514,6 +1518,17 @@ void Usr_WelcomeUsr (void)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
+	 /***** Contextual menu *****/
+         if (Gbl.Usrs.Me.UsrDat.Password[0] &&
+             Gbl.Usrs.Me.UsrDat.FirstName[0] &&
+             Gbl.Usrs.Me.UsrDat.Surname1[0] &&
+             !Gbl.Usrs.Me.MyPhotoExists)	// Check if I have no photo
+	   {
+	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	    Pho_PutLinkToChangeMyPhoto ();
+            fprintf (Gbl.F.Out,"</div>");
+	   }
+
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin:12px;\">");
 
@@ -1543,14 +1558,8 @@ void Usr_WelcomeUsr (void)
          else
             Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
-         if (Gbl.Usrs.Me.UsrDat.Password[0] &&
-             Gbl.Usrs.Me.UsrDat.FirstName[0] &&
-             Gbl.Usrs.Me.UsrDat.Surname1[0] &&
-             !Gbl.Usrs.Me.MyPhotoExists)	// Check if I have no photo
-	   {
-	    Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_photo);
-	    Pho_PutLinkToChangeMyPhoto ();
-	   }
+	 /***** Show help to enroll me *****/
+	 Enr_HelpToEnroll ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 

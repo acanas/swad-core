@@ -32,6 +32,7 @@
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
@@ -64,6 +65,7 @@ extern struct Globals Gbl;
 
 static void Ins_Configuration (bool PrintView);
 
+static void Ins_ListInstitutions (void);
 static void Ins_ListInstitutionsForSeeing (void);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
@@ -205,6 +207,9 @@ void Ins_SeeInsWithPendingCtrs (void)
 void Ins_ShowConfiguration (void)
   {
    Ins_Configuration (false);
+
+   /***** Show help to enroll me *****/
+   Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
@@ -462,15 +467,39 @@ void Ins_ShowInssOfCurrentCty (void)
       /***** Write menu to select country *****/
       Deg_WriteMenuAllCourses ();
 
-      /***** Put link (form) to edit institutions *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
-          Lay_PutFormToEdit (ActEdiIns);
-
       /***** List institutions *****/
-      Ins_ListInstitutionsForSeeing ();
+      Ins_ListInstitutions ();
 
       /***** Free list of institutions *****/
       Ins_FreeListInstitutions ();
+     }
+  }
+
+/*****************************************************************************/
+/*************** List the institutions of the current country ****************/
+/*****************************************************************************/
+
+static void Ins_ListInstitutions (void)
+  {
+   extern const char *Txt_No_institutions_have_been_created_in_this_country;
+   extern const char *Txt_Create_institution;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+
+   if (Gbl.Inss.Num)	// There are institutions in the current country
+     {
+      if (ICanEdit)
+	 Lay_PutFormToEdit (ActEdiIns);
+      Ins_ListInstitutionsForSeeing ();
+     }
+   else			// No institutions created in the current country
+     {
+      Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
+      if (ICanEdit)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Act_PutContextualLink (ActEdiIns,NULL,"edit",Txt_Create_institution);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
      }
   }
 
@@ -675,17 +704,12 @@ static void Ins_GetParamInsOrderType (void)
 
 void Ins_EditInstitutions (void)
   {
-   extern const char *Txt_No_institutions_have_been_created_in_this_country;
-
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
    if (Gbl.Inss.Num)
       /***** Put link (form) to view institutions *****/
       Lay_PutFormToView (ActSeeIns);
-   else
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();

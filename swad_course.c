@@ -119,6 +119,9 @@ void Crs_ShowIntroduction (void)
 
    /***** Course introduction *****/
    Inf_ShowInfo ();
+
+   /***** Show help to enroll me *****/
+   Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
@@ -1006,10 +1009,6 @@ void Crs_ShowCrssOfCurrentDeg (void)
       /***** Write menu to select country, institution, centre and degree *****/
       Deg_WriteMenuAllCourses ();
 
-      /***** Put link (form) to edit courses in current degree *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
-         Lay_PutFormToEdit (ActEdiCrs);
-
       /***** Show list of courses *****/
       Crs_ListCourses ();
 
@@ -1216,11 +1215,25 @@ void Crs_WriteSelectorMyCourses (void)
 static void Crs_ListCourses (void)
   {
    extern const char *Txt_No_courses_have_been_created_in_this_degree;
+   extern const char *Txt_Create_course;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.CurrentDeg.Deg.NumCourses)
+   if (Gbl.CurrentDeg.Deg.NumCourses)	// There are courses in the current degree
+     {
+      if (ICanEdit)
+	 Lay_PutFormToEdit (ActEdiCrs);
       Crs_ListCoursesForSeeing ();
-   else
+     }
+   else					// No courses created in the current degree
+     {
       Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
+      if (ICanEdit)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Act_PutContextualLink (ActEdiCrs,NULL,"edit",Txt_Create_course);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+     }
   }
 
 /*****************************************************************************/
@@ -1229,14 +1242,9 @@ static void Crs_ListCourses (void)
 
 static void Crs_EditCourses (void)
   {
-   extern const char *Txt_No_courses_have_been_created_in_this_degree;
-
    if (Gbl.CurrentDeg.Deg.NumCourses)
       /***** Put link (form) to view courses *****/
       Lay_PutFormToView (ActSeeCrs);
-   else
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
 
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
@@ -1856,7 +1864,8 @@ static void Crs_PutHeadCoursesForSeeing (void)
 static void Crs_PutHeadCoursesForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Institutional_BR_code;
+   extern const char *Txt_Institutional_code;
+   extern const char *Txt_optional;
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Semester_ABBREVIATION;
@@ -1873,7 +1882,7 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
+                      "%s (%s)"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
@@ -1904,7 +1913,7 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_Institutional_BR_code,
+            Txt_Institutional_code,Txt_optional,
             Txt_Degree,
             Txt_Year_OF_A_DEGREE,
             Txt_Semester_ABBREVIATION,
@@ -2980,10 +2989,6 @@ static void Crs_PutLinkToGoToCrs (struct Course *Crs)
 
 void Crs_ReqSelectOneOfMyCourses (void)
   {
-   extern const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS];
-   extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them;
-   extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
-
    /***** Search / select more courses *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Crs_PutLinkToSearchCourses ();
@@ -2994,15 +2999,11 @@ void Crs_ReqSelectOneOfMyCourses (void)
    Usr_GetMyCourses ();
 
    if (Gbl.Usrs.Me.MyCourses.Num)
+      /* Show my courses */
       Crs_WriteListMyCoursesToSelectOne ();
-   else
-     {
-      sprintf (Gbl.Message,"%s<br />%s<br />%s",
-               Txt_You_are_not_enrolled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
-               Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them,
-               Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
-     }
+   else	// I am not enrolled in any course
+      /* Show help to enroll me */
+      Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
