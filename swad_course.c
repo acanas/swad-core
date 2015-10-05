@@ -121,7 +121,8 @@ void Crs_ShowIntroduction (void)
    Inf_ShowInfo ();
 
    /***** Show help to enroll me *****/
-   Enr_HelpToEnroll ();
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to this course
+      Enr_HelpToEnroll ();
   }
 
 /*****************************************************************************/
