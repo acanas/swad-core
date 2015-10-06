@@ -33,8 +33,8 @@
 #include "swad_centre.h"
 #include "swad_constant.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
+#include "swad_help.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -219,7 +219,7 @@ void Ctr_ShowConfiguration (void)
    Ctr_Configuration (false);
 
    /***** Show help to enroll me *****/
-   Enr_HelpToEnroll ();
+   Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/

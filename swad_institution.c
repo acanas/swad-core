@@ -32,8 +32,8 @@
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
+#include "swad_help.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -209,7 +209,7 @@ void Ins_ShowConfiguration (void)
    Ins_Configuration (false);
 
    /***** Show help to enroll me *****/
-   Enr_HelpToEnroll ();
+   Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/

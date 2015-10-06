@@ -37,9 +37,9 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree.h"
-#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
+#include "swad_help.h"
 #include "swad_indicator.h"
 #include "swad_info.h"
 #include "swad_logo.h"
@@ -270,7 +270,7 @@ void Deg_ShowConfiguration (void)
    Deg_Configuration (false);
 
    /***** Show help to enroll me *****/
-   Enr_HelpToEnroll ();
+   Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/

@@ -35,9 +35,9 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_degree.h"
-#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
+#include "swad_help.h"
 #include "swad_indicator.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -122,7 +122,7 @@ void Crs_ShowIntroduction (void)
 
    /***** Show help to enroll me *****/
    if (!Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to this course
-      Enr_HelpToEnroll ();
+      Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/
@@ -3004,7 +3004,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
       Crs_WriteListMyCoursesToSelectOne ();
    else	// I am not enrolled in any course
       /* Show help to enroll me */
-      Enr_HelpToEnroll ();
+      Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/

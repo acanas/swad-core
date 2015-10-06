@@ -40,9 +40,9 @@
 #include "swad_connected.h"
 #include "swad_course.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_help.h"
 #include "swad_ID.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -1380,7 +1380,7 @@ void Usr_WriteFormLoginLogout (void)
       Usr_ShowFormsLogoutAndRole ();
 
       /***** Show help to enroll me *****/
-      Enr_HelpToEnroll ();
+      Hlp_ShowHelpWhatWouldYouLikeToDo ();
      }
    else
       /***** Form to log in *****/
@@ -1559,7 +1559,7 @@ void Usr_WelcomeUsr (void)
             Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
 	 /***** Show help to enroll me *****/
-	 Enr_HelpToEnroll ();
+	 Hlp_ShowHelpWhatWouldYouLikeToDo ();
 
 	 fprintf (Gbl.F.Out,"</div>");
 
