@@ -40,6 +40,7 @@
 #include "swad_connected.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_help.h"
@@ -1518,17 +1519,6 @@ void Usr_WelcomeUsr (void)
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
         {
-	 /***** Contextual menu *****/
-         if (Gbl.Usrs.Me.UsrDat.Password[0] &&
-             Gbl.Usrs.Me.UsrDat.FirstName[0] &&
-             Gbl.Usrs.Me.UsrDat.Surname1[0] &&
-             !Gbl.Usrs.Me.MyPhotoExists)	// Check if I have no photo
-	   {
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	    Pho_PutLinkToChangeMyPhoto ();
-            fprintf (Gbl.F.Out,"</div>");
-	   }
-
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin:12px;\">");
 

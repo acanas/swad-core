@@ -35,6 +35,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_degree.h"
+#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -112,8 +113,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"margin-bottom:25px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Crs_Configuration (false);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -121,7 +121,7 @@ void Crs_ShowIntroduction (void)
    Inf_ShowInfo ();
 
    /***** Show help to enroll me *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to this course
+   // if (!Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to this course
       Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 

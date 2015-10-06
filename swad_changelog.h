@@ -98,13 +98,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.10 (2015/10/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.10.1 (2015/10/06)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
 TODO: If photo zoom is out of the screen at left, put on right
 
+        Version 15.10.1:  Oct 06, 2015	New row in contextual help to upload photo. (185581 lines)
         Version 15.10:    Oct 06, 2015	New module swad_help for contextual help to enhance usability. (185561 lines)
 					1 change necessary in Makefile:
 Add swad_help.o to list of object files

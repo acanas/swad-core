@@ -46696,6 +46696,27 @@ const char *Txt_Upload_logo =
 	"Fazer upload de logotipo";
 #endif
 
+const char *Txt_Upload_my_picture =
+#if   L==0
+	"Pujar la meva fotografia";
+#elif L==1
+	"Hochladen Mein Foto";
+#elif L==2
+	"Upload my picture";
+#elif L==3
+	"Subir mi fotograf&iacute;a";
+#elif L==4
+	"Ajouter ma photo";
+#elif L==5
+	"Subir mi fotograf&iacute;a";		// Okoteve traducción
+#elif L==6
+	"Caricare una foto";
+#elif L==7
+	"Prze&sacute;lij swoje zdj&eogon;cia";
+#elif L==8
+	"Carregar minha foto";
+#endif
+
 const char *Txt_Upload_photo =
 #if   L==0
 	"Enviar foto";
@@ -46714,7 +46735,7 @@ const char *Txt_Upload_photo =
 #elif L==7
 	"Upload photo";		// Potrzebujesz tlumaczenie
 #elif L==8
-	"Fazer upload de foto";
+	"Upload foto";
 #endif
 
 const char *Txt_Uploaded_by =
