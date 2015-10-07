@@ -9605,6 +9605,27 @@ const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1 =
 	" os utilizadores que est&atilde;o na lista";
 #endif
 
+const char *Txt_Eliminate_old_courses =
+#if   L==0
+	"Eliminar assignatures antics";
+#elif L==1
+	"Fr&uuml;here Kursen entfernen";
+#elif L==2
+	"Eliminate old courses";
+#elif L==3
+	"Eliminar asignaturas antiguas";
+#elif L==4
+	"&Eacute;liminer anciens mati&egrave;res";
+#elif L==5
+	"Eliminar asignaturas antiguas";	// Okoteve traducción
+#elif L==6
+	"Rimuovere vecchi corsi";
+#elif L==7
+	"Wyeleminuj starych kurs&oacute;w";
+#elif L==8
+	"Eliminar antigas disciplinas";
+#endif
+
 const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access =	// Warning: it is very important to include %lu and %u in the following sentences
 #if   L==0
 	"Eliminando %lu asignatura(s) sin usuarios"

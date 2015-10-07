@@ -3412,15 +3412,20 @@ void Crs_UpdateCrsLast (void)
 void Crs_AskRemoveOldCrss (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
    extern const char *Txt_Eliminate;
    unsigned MonthsWithoutAccess = Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
    unsigned i;
 
-   /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   /***** Start form *****/
    Act_FormStart (ActRemOldCrs);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses);
+
+   /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
@@ -3441,10 +3446,11 @@ void Crs_AskRemoveOldCrss (void)
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</span>");
 
-   /***** Send button*****/
-   Lay_PutRemoveButton (Txt_Eliminate);
+   /***** End frame *****/
+   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+
+   /***** End form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
