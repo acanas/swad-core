@@ -1711,7 +1711,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
    Par_GetParToText ("OtherUsrIDNickOrEMail",Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,Usr_MAX_BYTES_USR_LOGIN);
 
    // If it's a user's ID (if does not contain '@')
-   if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' found
+   if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
@@ -1728,6 +1728,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
 unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods)
   {
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
+   bool Wrong = false;
 
    /***** Reset default list of users' codes *****/
    ListUsrCods->NumUsrs = 0;
@@ -1737,50 +1738,58 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
    Usr_GetParamOtherUsrIDNickOrEMail ();
 
    /***** Check if it's an ID, a nickname or an e-mail address *****/
-   if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+   if (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0])
      {
-      if ((Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
+      if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	{
-	 ListUsrCods->NumUsrs = 1;	// One user found
-	 Usr_AllocateListUsrCods (ListUsrCods);
-	 ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
-	}
-     }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an e-mail
-     {
-      if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
-	{
-	 ListUsrCods->NumUsrs = 1;	// One user found
-	 Usr_AllocateListUsrCods (ListUsrCods);
-	 ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
-	}
-     }
-   else											// 3: It's not a nickname nor e-mail
-     {
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))
-	{
-	 if (strlen (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) <= ID_MAX_LENGTH_USR_ID)
+	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
 	   {
-	    /* Allocate space for the list */
-	    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
-
-	    strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-	    Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-
-	    /* Check if user's ID exists in database */
-	    ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
+	    ListUsrCods->NumUsrs = 1;	// One user found
+	    Usr_AllocateListUsrCods (ListUsrCods);
+	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	   }
 	}
-      else
+      else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an e-mail
 	{
-	 /***** String is not a valid user's nickname, e-mail or ID *****/
-	 sprintf (Gbl.Message,Txt_The_ID_nickname_or_email_X_is_not_valid,
-		  Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
+	   {
+	    ListUsrCods->NumUsrs = 1;	// One user found
+	    Usr_AllocateListUsrCods (ListUsrCods);
+	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
+	   }
 	}
+      else											// 3: It's not a nickname nor e-mail
+	{
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+	 Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+	 if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))
+	   {
+	    if (strlen (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) <= ID_MAX_LENGTH_USR_ID)
+	      {
+	       /* Allocate space for the list */
+	       ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
+
+	       strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
+	       Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+
+	       /* Check if user's ID exists in database */
+	       ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
+	      }
+	   }
+	 else	// Not a valid user's nickname, e-mail or ID
+	    Wrong = true;
+	}
+     }
+   else	// Empty string
+      Wrong = true;
+
+   if (Wrong)
+     {
+      /***** String is not a valid user's nickname, e-mail or ID *****/
+      sprintf (Gbl.Message,Txt_The_ID_nickname_or_email_X_is_not_valid,
+	       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
    return ListUsrCods->NumUsrs;
@@ -1995,6 +2004,18 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    struct ListUsrCods ListUsrCods;
    bool PasswordCorrect = false;
+
+   /***** Check if user typed anything *****/
+   if (!Gbl.Usrs.Me.UsrIdLogin)
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      return false;
+     }
+   if (!Gbl.Usrs.Me.UsrIdLogin[0])
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      return false;
+     }
 
    /***** Check if user has typed his user's ID, his nickname or his e-mail address *****/
    if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname

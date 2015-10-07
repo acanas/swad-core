@@ -1352,27 +1352,43 @@ void Str_RemoveTrailingSpacesHTML (char *Str)
   }
 
 /*****************************************************************************/
-/********** Remove the leading zeros ('0', not '\0') of a string *************/
+/********* Remove the leading zeros ('0', not '\0') from a string ************/
 /*****************************************************************************/
 
 void Str_RemoveLeadingZeros (char *Str)
   {
-   size_t NumLeadingZeros = strspn (Str,"0");
+   size_t NumLeadingZeros;
 
-   if (NumLeadingZeros)
-      strcpy (Str,&Str[NumLeadingZeros]);
+   if (Str)
+      if (Str[0])
+	{
+	 NumLeadingZeros = strspn (Str,"0");
+	 if (NumLeadingZeros)
+	    // Do not use strcpy / memcpy because the strings overlap
+	    memmove (Str,&Str[NumLeadingZeros],
+		     strlen (Str) - NumLeadingZeros + 1);
+	}
   }
 
 /*****************************************************************************/
 /***************** Delete @'s at the start of a string ***********************/
 /*****************************************************************************/
 
+#include "swad_database.h"
+
 void Str_RemoveLeadingArrobas (char *Str)
   {
-   size_t NumLeadingZeros = strspn (Str,"@");
+   size_t NumLeadingArrobas;
 
-   if (NumLeadingZeros)
-      strcpy (Str,&Str[NumLeadingZeros]);
+   if (Str)
+      if (Str[0])
+	{
+	 NumLeadingArrobas = strspn (Str,"@");
+	 if (NumLeadingArrobas)
+	    // Do not use strcpy / memcpy because the strings overlap
+	    memmove (Str,&Str[NumLeadingArrobas],
+		     strlen (Str) - NumLeadingArrobas + 1);
+	}
   }
 
 /*****************************************************************************/

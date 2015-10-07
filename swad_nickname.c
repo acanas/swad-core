@@ -146,28 +146,32 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
    MYSQL_ROW row;
    long UsrCod = -1L;
 
-   /***** Make a copy without possible starting arrobas *****/
-   strncpy (NicknameWithoutArroba,Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-   NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
-   Str_RemoveLeadingArrobas (NicknameWithoutArroba);
+   if (Nickname)
+      if (Nickname[0])
+	{
+	 /***** Make a copy without possible starting arrobas *****/
+	 strncpy (NicknameWithoutArroba,Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+	 NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+	 Str_RemoveLeadingArrobas (NicknameWithoutArroba);
 
-   /***** Get user's code from database *****/
-   /* Check if user code from table usr_nicknames is also in table usr_data */
-   sprintf (Query,"SELECT usr_nicknames.UsrCod FROM usr_nicknames,usr_data"
-                  " WHERE usr_nicknames.Nickname='%s'"
-                  " AND usr_nicknames.UsrCod=usr_data.UsrCod",
-            NicknameWithoutArroba);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code"))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+	 /***** Get user's code from database *****/
+	 /* Check if user code from table usr_nicknames is also in table usr_data */
+	 sprintf (Query,"SELECT usr_nicknames.UsrCod FROM usr_nicknames,usr_data"
+			" WHERE usr_nicknames.Nickname='%s'"
+			" AND usr_nicknames.UsrCod=usr_data.UsrCod",
+		  NicknameWithoutArroba);
+	 if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code"))
+	   {
+	    /* Get row */
+	    row = mysql_fetch_row (mysql_res);
 
-      /* Get user's code */
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
+	    /* Get user's code */
+	    UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	   }
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
 
    return UsrCod;
   }
@@ -347,7 +351,6 @@ void Nck_UpdateNick (void)
 
    /***** Get new nickname from form *****/
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/

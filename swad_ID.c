@@ -295,22 +295,35 @@ void ID_GetParamOtherUsrIDPlain (void)
 // Wrapper function to avoid passing extra parameters
 bool ID_CheckIfUsrIDIsValid (const char *UsrID)
   {
-   return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID);
+   if (UsrID)
+      if (UsrID[0])
+         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_USR_ID);
+
+   return false;
   }
 
 // Wrapper function to avoid passing extra parameters
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID)
   {
-   return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_AUTOMATIC_DETECT_USR_ID);
+   if (UsrID)
+      if (UsrID[0])
+         return ID_CheckIfUsrIDIsValidUsingMinDigits (UsrID,ID_MIN_DIGITS_AUTOMATIC_DETECT_USR_ID);
+
+   return false;
   }
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits)
   {
    const char *Ptr;
    unsigned NumDigits = 0;
-   unsigned Length = strlen (UsrID);
+   unsigned Length;
 
    /***** Check length *****/
+   if (!UsrID)
+      return false;
+   if (!UsrID[0])
+      return false;
+   Length = strlen (UsrID);
    if (Length < ID_MIN_LENGTH_USR_ID ||
        Length > ID_MAX_LENGTH_USR_ID)
       return false;			// 1. Must be ID_MIN_LENGTH_USR_ID <= characters <= ID_MAX_LENGTH_USR_ID

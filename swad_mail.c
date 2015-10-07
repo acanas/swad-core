@@ -872,29 +872,33 @@ long Mai_GetUsrCodFromEmail (const char *Email)
    unsigned NumUsrs;
    long UsrCod = -1L;
 
-   /***** Get user's code from database *****/
-   /* Check if user code from table usr_emails is also in table usr_data */
-   sprintf (Query,"SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
-                  " WHERE usr_emails.E_mail='%s'"
-                  " AND usr_emails.UsrCod=usr_data.UsrCod",
-            Email);
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
-   if (NumUsrs == 0)
-      /* User not found for this e-mail ==> set user's code to void */
-      UsrCod = -1L;
-   else if (NumUsrs == 1)	// One user found
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+   if (Email)
+      if (Email[0])
+	{
+	 /***** Get user's code from database *****/
+	 /* Check if user code from table usr_emails is also in table usr_data */
+	 sprintf (Query,"SELECT usr_emails.UsrCod FROM usr_emails,usr_data"
+			" WHERE usr_emails.E_mail='%s'"
+			" AND usr_emails.UsrCod=usr_data.UsrCod",
+		  Email);
+	 NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
+	 if (NumUsrs == 0)
+	    /* User not found for this e-mail ==> set user's code to void */
+	    UsrCod = -1L;
+	 else if (NumUsrs == 1)	// One user found
+	   {
+	    /* Get row */
+	    row = mysql_fetch_row (mysql_res);
 
-      /* Get user's code */
-      UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-     }
-   else	// NumRows > 1 ==> impossible, an e-mail can not be reapeated
-      Lay_ShowErrorAndExit ("Internal error: e-mail is repeated in database.");
+	    /* Get user's code */
+	    UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	   }
+	 else	// NumRows > 1 ==> impossible, an e-mail can not be reapeated
+	    Lay_ShowErrorAndExit ("Internal error: e-mail is repeated in database.");
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
 
    return UsrCod;
   }

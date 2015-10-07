@@ -1281,6 +1281,7 @@ const char *Brw_MIMETypesAllowed[] =
    "text/plain",			// plain text C, cc, h, txt. BAS
    "text/richtext",			// RTF
    "text/xml",				//
+   "text/x-c",				// Source code in C
    "text/x-chdr",			// Source code in C
    "text/x-csrc",			// Source code in C
    "text/x-c++src",			// Source code in C++

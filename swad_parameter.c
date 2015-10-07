@@ -327,12 +327,13 @@ void Par_GetMainParameters (void)
 
    /***** Get user's nickname, if exists
           (this nickname is used to go to a user's profile, not to get the logged user) *****/
-   Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-   if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
-     {
-      Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
-      Gbl.CurrentAct = ActSeePubPrf;
-     }
+   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+      if (Nickname[0])
+	 if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
+	   {
+	    Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
+	    Gbl.CurrentAct = ActSeePubPrf;
+	   }
 
    /***** Get tab to activate *****/
    Gbl.CurrentTab = TabUnk;

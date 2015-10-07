@@ -10779,3 +10779,5 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1468','es','N','Camb
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Cambiar contrase&ntilde;a profesor');
 		
 
+
+SELECT usr_nicknames.UsrCod FROM usr_nicknames,usr_data WHERE usr_nicknames.Nickname='JFERNAND' AND usr_nicknames.UsrCod=usr_data.UsrCod;
