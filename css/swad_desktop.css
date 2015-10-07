@@ -278,7 +278,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	font-size:20px;
 	font-weight:bold;
 	line-height:normal;
-	margin:10px;
+	margin:4px auto 12px auto;
 	padding:10px 20px;
 	border-radius:4px;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
@@ -387,7 +387,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /*********************************** Alerts **********************************/
 .ALERT
 	{
-	margin:8px auto;
+	margin:2px auto 0 auto;
 	background-color:#FFF9E0;
 	background-repeat:no-repeat;
 	background-position:12px 12px;

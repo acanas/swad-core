@@ -98,13 +98,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.10.5 (2015/10/07)"
+#define Log_PLATFORM_VERSION	"SWAD 15.11 (2015/10/08)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
 TODO: If photo zoom is out of the screen at left, put on right
 
+        Version 15.11:    Oct 08, 2015	Changes in layout of sent / received messages. (185680 lines)
         Version 15.10.5:  Oct 07, 2015	Change in layout of removal of old users. (185669 lines)
         Version 15.10.4:  Oct 07, 2015	Change in layout of removal of old courses. (185665 lines)
         Version 15.10.3:  Oct 07, 2015	New contextual link in visits to last clicks. (185641 lines)

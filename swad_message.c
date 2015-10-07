@@ -764,7 +764,7 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_GetParamFilterContent ();
    Msg_GetParamOnlyUnreadMsgs ();
 
-   /***** Request confirmation to delete messages *****/
+   /***** Request confirmation to remove messages *****/
    if (Gbl.Msg.FilterContent[0])
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
@@ -793,10 +793,14 @@ void Msg_ReqDelAllRecMsgs (void)
      }
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
+   /***** Form to remove received messages *****/
    Act_FormStart (ActDelAllRcvMsg);
    Msg_PutHiddenParamsMsgsFilters ();
    Lay_PutRemoveButton (Txt_Delete_messages_received);
    Act_FormEnd ();
+
+   /***** Show messages again *****/
+   Msg_ShowRecMsgs ();
   }
 
 /*****************************************************************************/
@@ -815,7 +819,7 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_GetParamFilterFromTo ();
    Msg_GetParamFilterContent ();
 
-   /***** Request confirmation to delete messages *****/
+   /***** Request confirmation to remove messages *****/
    if (Gbl.Msg.FilterContent[0])
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
@@ -827,10 +831,15 @@ void Msg_ReqDelAllSntMsgs (void)
                 	                    Txt_any_user,
                Gbl.Msg.FilterCrsShortName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+
+   /***** Form to remove sent messages *****/
    Act_FormStart (ActDelAllSntMsg);
    Msg_PutHiddenParamsMsgsFilters ();
    Lay_PutRemoveButton (Txt_Delete_messages_sent);
    Act_FormEnd ();
+
+   /***** Show messages again *****/
+   Msg_ShowSntMsgs ();
   }
 
 /*****************************************************************************/
@@ -1580,6 +1589,10 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    NumMsgs = (unsigned) NumRows;
 
+   /***** Start frame with messages *****/
+   Lay_StartRoundFrame ("97%",TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
+								        Txt_Messages_sent);
+
    /* Write number of messages and number of new messages */
    fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">");
    Msg_WriteNumMsgs (NumMsgs,NumUnreadMsgs);
@@ -1628,9 +1641,8 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
                                         0,&Pagination);
 
       /***** Show received / sent messages in this page *****/
-      Lay_StartRoundFrameTable ("95%",2,
-                                TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
-                                	                                  Txt_Messages_sent);
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	                 " style=\"width:100%%;\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1645,7 +1657,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
          Msg_ShowASentOrReceivedMessage (TypeOfMessages,NumMsg,MsgCod);
         }
 
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -1653,6 +1665,9 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
                                                                                   Pag_MESSAGES_SENT,
                                         0,&Pagination);
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
