@@ -658,10 +658,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
 void Enr_PutLinkToRemOldUsrs (void)
   {
-   extern const char *Txt_Remove_old_users;
+   extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Act_PutContextualLink (ActReqRemOldUsr,NULL,"delon",Txt_Remove_old_users);
+   Act_PutContextualLink (ActReqRemOldUsr,NULL,"delon",Txt_Eliminate_old_users);
   }
 
 /*****************************************************************************/
@@ -671,15 +671,20 @@ void Enr_PutLinkToRemOldUsrs (void)
 void Enr_AskRemoveOldUsrs (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2;
    extern const char *Txt_Eliminate;
    unsigned MonthsWithoutAccess = Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
    unsigned Months;
 
-   /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   /***** Start form *****/
    Act_FormStart (ActRemOldUsr);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users);
+
+   /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2);
@@ -700,10 +705,11 @@ void Enr_AskRemoveOldUsrs (void)
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</span>");
 
-   /***** Send button*****/
-   Lay_PutRemoveButton (Txt_Eliminate);
+   /***** End frame *****/
+   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);
+
+   /***** End form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

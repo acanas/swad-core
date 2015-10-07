@@ -9626,6 +9626,27 @@ const char *Txt_Eliminate_old_courses =
 	"Eliminar antigas disciplinas";
 #endif
 
+const char *Txt_Eliminate_old_users =
+#if   L==0
+	"Eliminar usuaris antics";
+#elif L==1
+	"Fr&uuml;here Benutzer entfernen";
+#elif L==2
+	"Eliminate old users";
+#elif L==3
+	"Eliminar usuarios antiguos";
+#elif L==4
+	"&Eacute;liminer anciens utilisateurs";
+#elif L==5
+	"Eliminar usuarios antiguos";	// Okoteve traducción
+#elif L==6
+	"Rimuovere vecchi utenti";
+#elif L==7
+	"Usu&nacute; starych uzytkownik&oacute;w";
+#elif L==8
+	"Eliminar antigos utilizadores";
+#endif
+
 const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access =	// Warning: it is very important to include %lu and %u in the following sentences
 #if   L==0
 	"Eliminando %lu asignatura(s) sin usuarios"
@@ -28913,27 +28934,6 @@ const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important t
 	"Usu&nacute; mnie w kurs <strong>%s</strong>";
 #elif L==8
 	"Tirar me da disciplina <strong>%s</strong>";
-#endif
-
-const char *Txt_Remove_old_users =
-#if   L==0
-	"Eliminar usuaris antics";
-#elif L==1
-	"Fr&uuml;here Benutzer entfernen";
-#elif L==2
-	"Eliminate old users";
-#elif L==3
-	"Eliminar usuarios antiguos";
-#elif L==4
-	"&Eacute;liminer anciens utilisateurs";
-#elif L==5
-	"Eliminar usuarios antiguos";	// Okoteve traducción
-#elif L==6
-	"Rimuovere vecchi utenti";
-#elif L==7
-	"Usu&nacute; starych uzytkownik&oacute;w";
-#elif L==8
-	"Eliminar antigos utilizadores";
 #endif
 
 const char *Txt_Remove_photo =
