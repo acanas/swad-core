@@ -578,16 +578,20 @@ void Sta_AskSeeGblAccesses (void)
    Sta_Role_t RoleStat;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
 
-   /***** Put form to go to test edition and configuration *****/
+   /***** Contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+		      " style=\"padding-bottom:12px;\">");
+
+   /* Put form to go to test edition and configuration */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                 " style=\"padding-bottom:12px;\">");
       Sta_PutFormToRequestAccessesCrs ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
+
+   /* Link to show last clicks in real time */
+   Con_PutLinkToLastClicks ();
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Start form *****/
    Act_FormStart (ActSeeAccGbl);

@@ -48,6 +48,7 @@ typedef enum
 /*****************************************************************************/
 
 void Con_ShowConnectedUsrs (void);
+void Con_PutLinkToLastClicks (void);
 void Con_ShowLastClicks (void);
 void Con_GetAndShowLastClicks (void);
 void Con_ShowGlobalConnectedUsrs (void);

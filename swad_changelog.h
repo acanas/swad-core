@@ -98,13 +98,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.10.2 (2015/10/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.10.3 (2015/10/07)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
 TODO: If photo zoom is out of the screen at left, put on right
 
+        Version 15.10.3:  Oct 07, 2015	New contextual link in visits to last clicks. (185641 lines)
         Version 15.10.2:  Oct 07, 2015	Fixed bug in nicknames, reported by Javier Fdez. Baldomero.
 					New MIME type, suggested by Javier Fdez. Baldomero.
 					Some code refactoring related to nicknames. (185639 lines)
