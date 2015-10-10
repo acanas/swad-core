@@ -1347,6 +1347,9 @@ mysql> DESCRIBE log;
 +----------------+------------+------+-----+---------+----------------+
 | LogCod         | int(11)    | NO   | PRI | NULL    | auto_increment |
 | ActCod         | int(11)    | NO   | MUL | -1      |                |
+| CtyCod         | int(11)    | NO   | MUL | -1      |                |
+| InsCod         | int(11)    | NO   | MUL | -1      |                |
+| CtrCod         | int(11)    | NO   | MUL | -1      |                |
 | DegCod         | int(11)    | NO   | MUL | -1      |                |
 | CrsCod         | int(11)    | NO   | MUL | -1      |                |
 | UsrCod         | int(11)    | NO   | MUL | -1      |                |
@@ -1356,12 +1359,15 @@ mysql> DESCRIBE log;
 | TimeToSend     | int(11)    | NO   |     | NULL    |                |
 | IP             | char(15)   | NO   |     | NULL    |                |
 +----------------+------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
+13 rows in set (0.01 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log ("
                    "LogCod INT NOT NULL AUTO_INCREMENT,"
                    "ActCod INT NOT NULL DEFAULT -1,"
+                   "CtyCod INT NOT NULL DEFAULT -1,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
                    "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "UsrCod INT NOT NULL DEFAULT -1,"
@@ -1370,7 +1376,9 @@ mysql> DESCRIBE log;
                    "TimeToGenerate INT NOT NULL,"
                    "TimeToSend INT NOT NULL,"
                    "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(ActCod),INDEX(DegCod),INDEX(CrsCod),INDEX(UsrCod),INDEX(ClickTime,Role))");
+                   "UNIQUE INDEX(LogCod),INDEX(ActCod),"
+                   "INDEX(CtyCod),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod),"
+                   "INDEX(UsrCod),INDEX(ClickTime,Role))");
 
    /***** Table log_banners *****/
 /*
@@ -1414,6 +1422,9 @@ mysql> DESCRIBE log_recent;
 +----------------+------------+------+-----+---------+-------+
 | LogCod         | int(11)    | NO   | PRI | NULL    |       |
 | ActCod         | int(11)    | NO   | MUL | -1      |       |
+| CtyCod         | int(11)    | NO   | MUL | -1      |       |
+| InsCod         | int(11)    | NO   | MUL | -1      |       |
+| CtrCod         | int(11)    | NO   | MUL | -1      |       |
 | DegCod         | int(11)    | NO   | MUL | -1      |       |
 | CrsCod         | int(11)    | NO   | MUL | -1      |       |
 | UsrCod         | int(11)    | NO   | MUL | -1      |       |
@@ -1423,12 +1434,15 @@ mysql> DESCRIBE log_recent;
 | TimeToSend     | int(11)    | NO   |     | NULL    |       |
 | IP             | char(15)   | NO   |     | NULL    |       |
 +----------------+------------+------+-----+---------+-------+
-10 rows in set (0.01 sec)
+13 rows in set (0.01 sec)
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_recent ("
                    "LogCod INT NOT NULL,"
                    "ActCod INT NOT NULL DEFAULT -1,"
+                   "CtyCod INT NOT NULL DEFAULT -1,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
                    "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "UsrCod INT NOT NULL DEFAULT -1,"
@@ -1437,7 +1451,9 @@ mysql> DESCRIBE log_recent;
                    "TimeToGenerate INT NOT NULL,"
                    "TimeToSend INT NOT NULL,"
                    "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(ActCod),INDEX(DegCod),INDEX(CrsCod),INDEX(UsrCod),INDEX(ClickTime,Role))");
+                   "UNIQUE INDEX(LogCod),INDEX(ActCod),"
+                   "INDEX(CtyCod),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod),"
+                   "INDEX(UsrCod),INDEX(ClickTime,Role))");
 
    /***** Table log_ws *****/
 /*

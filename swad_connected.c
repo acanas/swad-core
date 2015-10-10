@@ -173,6 +173,9 @@ void Con_GetAndShowLastClicks (void)
    extern const char *Txt_Click;
    extern const char *Txt_Hour;
    extern const char *Txt_Role;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Action;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -183,13 +186,18 @@ void Con_GetAndShowLastClicks (void)
    unsigned NumRows;
    long ActCod;
    const char *ClassRow;
+   struct Country Cty;
+   struct Institution Ins;
+   struct Centre Ctr;
    struct Degree Deg;
 
    /***** Get last clicks from database *****/
-   /* Important for maximum performance: do the LIMIT in the big log table before the JOIN */
-   sprintf (Query,"SELECT last_logs.LogCod,last_logs.ActCod,last_logs.T,last_logs.Role,last_logs.DegCod,actions.Txt"
+   /* Important for maximum performance:
+      do the LIMIT in the big log table before the JOIN */
+   sprintf (Query,"SELECT last_logs.LogCod,last_logs.ActCod,last_logs.T,last_logs.Role,"
+	          "last_logs.CtyCod,last_logs.InsCod,last_logs.CtrCod,last_logs.DegCod,actions.Txt"
 	          " FROM"
-	          " (SELECT LogCod,ActCod,DATE_FORMAT(ClickTime,'%%H:%%i:%%S') AS T,Role,DegCod"
+	          " (SELECT LogCod,ActCod,DATE_FORMAT(ClickTime,'%%H:%%i:%%S') AS T,Role,CtyCod,InsCod,CtrCod,DegCod"
                   " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
                   " AS last_logs,actions"
 	          " WHERE last_logs.ActCod=actions.ActCod AND actions.Language='es'");
@@ -200,28 +208,43 @@ void Con_GetAndShowLastClicks (void)
                       "<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:87px;\">"
-                      "%s"
+                      "%s"				// Click
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:75px;\">"
-                      "%s"
+                      "%s"				// Hour
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:125px;\">"
-                      "%s"
+                      "%s"				// Role
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:187px;\">"
-                      "%s"
+                      "%s"				// Country
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:187px;\">"
+                      "%s"				// Institution
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:187px;\">"
+                      "%s"				// Centre
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\""
+                      " style=\"width:187px;\">"
+                      "%s"				// Degree
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:275px;\">"
-                      "%s"
+                      "%s"				// Action
                       "</th>"
                       "</tr>",
                Txt_Click,
                Txt_Hour,
                Txt_Role,
+               Txt_Country,
+               Txt_Institution,
+               Txt_Centre,
                Txt_Degree,
                Txt_Action);
 
@@ -241,34 +264,57 @@ void Con_GetAndShowLastClicks (void)
                  (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED LEFT_MIDDLE" :
                  (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE LEFT_MIDDLE" :
                                                                 "DAT_SMALL_GREY LEFT_MIDDLE";
-
       /* Get degree code (row[4]) */
-      Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
+      Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
+      Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
+
+      /* Get degree code (row[5]) */
+      Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
+      Ins_GetShortNameOfInstitutionByCod (&Ins);
+
+      /* Get degree code (row[6]) */
+      Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
+      Ctr_GetShortNameOfCentreByCod (&Ctr);
+
+      /* Get degree code (row[7]) */
+      Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
       Deg_GetShortNameOfDegreeByCod (&Deg);
 
       /* Print table row */
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s\">"
-                         "%s"
+                         "%s"			// Click
                          "</td>"
                          "<td class=\"%s\">"
-                         "%s"
+                         "%s"			// Hour
                          "</td>"
                          "<td class=\"%s\">"
-                         "%s"
+                         "%s"			// Role
                          "</td>"
                          "<td class=\"%s\">"
-                         "%s"
+                         "%s"			// Country
                          "</td>"
                          "<td class=\"%s\">"
-                         "%s"
+                         "%s"			// Institution
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"			// Centre
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"			// Degree
+                         "</td>"
+                         "<td class=\"%s\">"
+                         "%s"			// Action
                          "</td>"
 			 "</tr>",
                ClassRow,row[0],
                ClassRow,row[2],
                ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
+               ClassRow,Cty.Name[Gbl.Prefs.Language],
+               ClassRow,Ins.ShortName,
+               ClassRow,Ctr.ShortName,
                ClassRow,Deg.ShortName,
-	       ClassRow,row[5]);
+	       ClassRow,row[8]);
      }
    fprintf (Gbl.F.Out,"</table>");
 

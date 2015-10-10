@@ -978,6 +978,35 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
   }
 
 /*****************************************************************************/
+/*************** Get the short name of a centre from its code ****************/
+/*****************************************************************************/
+
+void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   Ctr->ShortName[0] = '\0';
+   if (Ctr->CtrCod > 0)
+     {
+      /***** Get the short name of a centre from database *****/
+      sprintf (Query,"SELECT ShortName FROM centres"
+		     " WHERE CtrCod ='%ld'",
+	       Ctr->CtrCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a centre") == 1)
+	{
+	 /***** Get the short name of this centre *****/
+	 row = mysql_fetch_row (mysql_res);
+	 strcpy (Ctr->ShortName,row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+  }
+
+/*****************************************************************************/
 /******************* Get photo attribution from database *********************/
 /*****************************************************************************/
 

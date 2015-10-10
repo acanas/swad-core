@@ -279,11 +279,14 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Insert access into database *****/
    /* Log access in historical log */
-   sprintf (Query,"INSERT INTO log (ActCod,DegCod,CrsCod,UsrCod,"
+   sprintf (Query,"INSERT INTO log (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES ('%ld','%ld','%ld','%ld',"
+                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
             Act_Actions[Gbl.CurrentAct].ActCod,
+            Gbl.CurrentCty.Cty.CtyCod,
+            Gbl.CurrentIns.Ins.InsCod,
+            Gbl.CurrentCtr.Ctr.CtrCod,
             Gbl.CurrentDeg.Deg.DegCod,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -301,11 +304,14 @@ void Sta_LogAccess (const char *Comments)
       LogCod = DB_QueryINSERTandReturnCode (Query,"can not log access (historical)");
 
    /* Log access in recent log */
-   sprintf (Query,"INSERT INTO log_recent (LogCod,ActCod,DegCod,CrsCod,UsrCod,"
+   sprintf (Query,"INSERT INTO log_recent (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES ('%ld','%ld','%ld','%ld','%ld',"
+                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
             LogCod,Act_Actions[Gbl.CurrentAct].ActCod,
+            Gbl.CurrentCty.Cty.CtyCod,
+            Gbl.CurrentIns.Ins.InsCod,
+            Gbl.CurrentCtr.Ctr.CtrCod,
             Gbl.CurrentDeg.Deg.DegCod,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,

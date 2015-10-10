@@ -969,6 +969,35 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
   }
 
 /*****************************************************************************/
+/*********** Get the short name of an institution from its code **************/
+/*****************************************************************************/
+
+void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   Ins->ShortName[0] = '\0';
+   if (Ins->InsCod > 0)
+     {
+      /***** Get the short name of an institution from database *****/
+      sprintf (Query,"SELECT ShortName FROM institutions"
+		     " WHERE InsCod ='%ld'",
+	       Ins->InsCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
+	{
+	 /***** Get the short name of this institution *****/
+	 row = mysql_fetch_row (mysql_res);
+	 strcpy (Ins->ShortName,row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+  }
+
+/*****************************************************************************/
 /****************** Get number of users in an institution ********************/
 /*****************************************************************************/
 

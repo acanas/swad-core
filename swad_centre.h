@@ -93,6 +93,7 @@ void Ctr_EditCentres (void);
 void Ctr_GetListCentres (long InsCod);
 bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr);
 long Ctr_GetInsCodOfCentreByCod (long CtrCod);
+void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr);
 void Ctr_FreeListCentres (void);
 void Ctr_WriteSelectorOfCentre (void);
 void Ctr_PutParamCtrCod (long CtrCod);

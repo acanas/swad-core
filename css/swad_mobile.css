@@ -230,7 +230,7 @@ form			{margin:0; display:inline;}
 	font-size:20px;
 	font-weight:bold;
 	line-height:normal;
-	margin:4px auto 12px auto;
+	margin:8px auto;
 	padding:10px 20px;
 	border-radius:4px;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
@@ -354,7 +354,7 @@ form			{margin:0; display:inline;}
 /********************************** Alerts ***********************************/
 .ALERT
 	{
-	margin:2px auto 0 auto;
+	margin:8px auto 0 auto;
 	background-color:#FFF9E0;
 	background-repeat:no-repeat;
 	background-position:12px 12px;
@@ -400,7 +400,7 @@ form			{margin:0; display:inline;}
 	padding:12px;
 	background-color:white;
 	border-radius:8px;
-	box-shadow:1px 1px 3px #CCC;
+	box-shadow:1px 1px 2px #CCC;
 	text-align:center;
 	overflow:hidden;
 	display:inline-block;
@@ -593,7 +593,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .ICON_HIGHLIGHT
 	{
-	opacity:0.7;
+	opacity:0.67;
 	}
 .ICON_HIGHLIGHT:hover
 	{

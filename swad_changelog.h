@@ -98,12 +98,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.11 (2015/10/08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.12 (2015/10/10)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
 TODO: If photo zoom is out of the screen at left, put on right
+TODO: Change link to Degree in Statistics > Visits > By degree to internal Degree
+TODO: Link to user's country in public profile
+TODO: Show guests in connected users.
+
+        Version 15.12:    Oct 10, 2015	Country, institution and centre are now stored in log. (185817 lines)
+					2 slow changes necessary in database (may spend many minutes or even hours depending on the size of log tables):
+ALTER TABLE log_recent ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
+ALTER TABLE log        ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
 
         Version 15.11:    Oct 08, 2015	Changes in layout of sent / received messages. (185680 lines)
         Version 15.10.5:  Oct 07, 2015	Change in layout of removal of old users. (185669 lines)

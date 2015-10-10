@@ -10778,6 +10778,9 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1467','es','N','Camb
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1468','es','N','Cambiar contrase&ntilde;a estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Cambiar contrase&ntilde;a profesor');
 		
+----- SWAD 15.12 (2015/10/10) -----
 
+ALTER TABLE log_recent ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
 
-SELECT usr_nicknames.UsrCod FROM usr_nicknames,usr_data WHERE usr_nicknames.Nickname='JFERNAND' AND usr_nicknames.UsrCod=usr_data.UsrCod;
+ALTER TABLE log ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
+
