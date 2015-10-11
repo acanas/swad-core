@@ -10781,6 +10781,13 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Camb
 ----- SWAD 15.12 (2015/10/10) -----
 
 ALTER TABLE log_recent ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
-
 ALTER TABLE log ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);
+
+----- SWAD 15.12 (2015/10/11) -----
+
+UPDATE log,degrees SET log.CtrCod=degrees.CtrCod WHERE log.DegCod=degrees.DegCod;
+UPDATE log,centres SET log.InsCod=centres.InsCod WHERE log.CtrCod=centres.CtrCod;
+UPDATE log,institutions SET log.CtyCod=institutions.CtyCod WHERE log.InsCod=institutions.InsCod;
+
+
 

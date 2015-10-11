@@ -98,7 +98,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.13 (2015/10/11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.13.1 (2015/10/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
@@ -107,6 +107,15 @@ TODO: If photo zoom is out of the screen at left, put on right
 TODO: Change link to Degree in Statistics > Visits > By degree to internal Degree
 TODO: Link to user's country in public profile
 TODO: Show guests in connected users.
+
+        Version 15.13.1:  Oct 11, 2015	Refactoring and bug fixing in statistics related to scopes. (186300 lines)
+					6 optional slow changes in database (may spend many minutes or even hours depending on the size of log tables):
+UPDATE log_recent,degrees SET log_recent.CtrCod=degrees.CtrCod WHERE log_recent.DegCod=degrees.DegCod;
+UPDATE log_recent,centres SET log_recent.InsCod=centres.InsCod WHERE log_recent.CtrCod=centres.CtrCod;
+UPDATE log_recent,institutions SET log_recent.CtyCod=institutions.CtyCod WHERE log_recent.InsCod=institutions.InsCod;
+UPDATE log,degrees SET log.CtrCod=degrees.CtrCod WHERE log.DegCod=degrees.DegCod;
+UPDATE log,centres SET log.InsCod=centres.InsCod WHERE log.CtrCod=centres.CtrCod;
+UPDATE log,institutions SET log.CtyCod=institutions.CtyCod WHERE log.InsCod=institutions.InsCod;
 
         Version 15.13:    Oct 11, 2015	Code refactoring in module swad_statistic.
 					New statistics distributed by country, institution and centre. (186282 lines)

@@ -102,7 +102,7 @@ static void Sta_PutFormToRequestAccessesCrs (void);
 
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
-static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
+static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
 static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
@@ -423,7 +423,7 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 /******************** Show a form to make a query of clicks ******************/
 /*****************************************************************************/
 
-void Sta_AskSeeCrsAccesses (void)
+void Sta_AskShowCrsHits (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
@@ -591,7 +591,7 @@ void Sta_AskSeeCrsAccesses (void)
 /********** Show a form to select the type of global stat of clics ***********/
 /*****************************************************************************/
 
-void Sta_AskSeeGblAccesses (void)
+void Sta_AskShowGblHits (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
@@ -815,12 +815,12 @@ void Sta_SetIniEndDates (void)
 
 void Sta_SeeGblAccesses (void)
   {
-   Sta_SeeAccesses (Sta_SHOW_GLOBAL_ACCESSES);
+   Sta_ShowHits (Sta_SHOW_GLOBAL_ACCESSES);
   }
 
 void Sta_SeeCrsAccesses (void)
   {
-   Sta_SeeAccesses (Sta_SHOW_COURSE_ACCESSES);
+   Sta_ShowHits (Sta_SHOW_COURSE_ACCESSES);
   }
 
 /*****************************************************************************/
@@ -829,9 +829,7 @@ void Sta_SeeCrsAccesses (void)
 
 #define MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000)
 
-// Returns false on error
-
-static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
+static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
@@ -925,7 +923,7 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sco_GetScope ();
 
 	 /***** Show form again *****/
-	 Sta_AskSeeGblAccesses ();
+	 Sta_AskShowGblHits ();
 
 	 /***** The following types of query will never give a valid result *****/
 	 if ((Gbl.Stat.Role == Sta_ALL_USRS ||
@@ -958,7 +956,7 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 
 	 /***** Show form again *****/
-	 Sta_AskSeeCrsAccesses ();
+	 Sta_AskShowCrsHits ();
 
 	 /****** Get lists of selected users ******/
 	 Usr_GetListsSelectedUsrs ();
@@ -1103,41 +1101,52 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       case Sta_SHOW_GLOBAL_ACCESSES:
 	 /* Scope */
-         if (Gbl.Scope.Current == Sco_SCOPE_INS &&
-             Gbl.CurrentIns.Ins.InsCod > 0)
-           {
-	    sprintf (QueryAux," AND %s.DegCod IN"
-		              " (SELECT degrees.DegCod"
-		              " FROM centres,degrees"
-		              " WHERE centres.InsCod='%ld'"
-		              " AND centres.CtrCod=degrees.CtrCod)",
-                     LogTable,Gbl.CurrentIns.Ins.InsCod);
-            strcat (Query,QueryAux);
-           }
-         else if (Gbl.Scope.Current == Sco_SCOPE_CTR &&
-             Gbl.CurrentCtr.Ctr.CtrCod > 0)
-           {
-	    sprintf (QueryAux," AND %s.DegCod"
-		              " IN (SELECT DegCod"
-		              " FROM degrees"
-		              " WHERE CtrCod='%ld')",
-                     LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
-            strcat (Query,QueryAux);
-           }
-         else if (Gbl.Scope.Current == Sco_SCOPE_DEG &&
-             Gbl.CurrentDeg.Deg.DegCod > 0)
-           {
-	    sprintf (QueryAux," AND %s.DegCod='%ld'",
-                     LogTable,Gbl.CurrentDeg.Deg.DegCod);
-            strcat (Query,QueryAux);
-           }
-         else if (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-                  Gbl.CurrentCrs.Crs.CrsCod > 0)
-           {
-	    sprintf (QueryAux," AND %s.CrsCod='%ld'",
-                     LogTable,Gbl.CurrentCrs.Crs.CrsCod);
-            strcat (Query,QueryAux);
-           }
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_UNK:
+	    case Sco_SCOPE_SYS:
+               break;
+	    case Sco_SCOPE_CTY:
+               if (Gbl.CurrentCty.Cty.CtyCod > 0)
+		 {
+		  sprintf (QueryAux," AND %s.CtyCod='%ld'",
+			   LogTable,Gbl.CurrentCty.Cty.CtyCod);
+		  strcat (Query,QueryAux);
+		 }
+               break;
+	    case Sco_SCOPE_INS:
+	       if (Gbl.CurrentIns.Ins.InsCod > 0)
+		 {
+		  sprintf (QueryAux," AND %s.InsCod='%ld'",
+			   LogTable,Gbl.CurrentIns.Ins.InsCod);
+		  strcat (Query,QueryAux);
+		 }
+	       break;
+	    case Sco_SCOPE_CTR:
+               if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+		 {
+		  sprintf (QueryAux," AND %s.CtrCod='%ld'",
+			   LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
+		  strcat (Query,QueryAux);
+		 }
+               break;
+	    case Sco_SCOPE_DEG:
+	       if (Gbl.CurrentDeg.Deg.DegCod > 0)
+		 {
+		  sprintf (QueryAux," AND %s.DegCod='%ld'",
+			   LogTable,Gbl.CurrentDeg.Deg.DegCod);
+		  strcat (Query,QueryAux);
+		 }
+	       break;
+	    case Sco_SCOPE_CRS:
+	       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+		 {
+		  sprintf (QueryAux," AND %s.CrsCod='%ld'",
+			   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
+		  strcat (Query,QueryAux);
+		 }
+	       break;
+	   }
 
          /* Type of users */
 	 switch (Gbl.Stat.Role)
@@ -1263,20 +1272,20 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 sprintf (QueryAux," GROUP BY %s.UsrCod ORDER BY Num DESC",LogTable);
          strcat (Query,QueryAux);
 	 break;
-     case Sta_CLICKS_CRS_PER_DAYS:
-     case Sta_CLICKS_GBL_PER_DAYS:
+      case Sta_CLICKS_CRS_PER_DAYS:
+      case Sta_CLICKS_GBL_PER_DAYS:
 	 strcat (Query," GROUP BY Day DESC");
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
 	 strcat (Query," GROUP BY Day DESC,Hour");
 	 break;
-     case Sta_CLICKS_CRS_PER_WEEKS:
-     case Sta_CLICKS_GBL_PER_WEEKS:
+      case Sta_CLICKS_CRS_PER_WEEKS:
+      case Sta_CLICKS_GBL_PER_WEEKS:
 	 strcat (Query," GROUP BY Week DESC");
 	 break;
-     case Sta_CLICKS_CRS_PER_MONTHS:
-     case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_MONTHS:
+      case Sta_CLICKS_GBL_PER_MONTHS:
 	 strcat (Query," GROUP BY Month DESC");
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
@@ -1323,10 +1332,10 @@ static void Sta_SeeAccesses (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
      }
    /***** Write query for debug *****/
-/*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   /*
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
-*/
+   */
    /***** Make the query *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
