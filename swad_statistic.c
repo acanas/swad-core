@@ -94,6 +94,13 @@ typedef enum
    Sta_SHOW_COURSE_ACCESSES,
   } Sta_GlobalOrCourseAccesses_t;
 
+struct Sta_Hits
+  {
+   float Num;
+   float Max;
+   float Total;
+  };
+
 /*****************************************************************************/
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
@@ -111,19 +118,20 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
                                     MYSQL_RES *mysql_res);
 static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res);
 static Sta_ColorType_t Sta_GetStatColorType (void);
-static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxHits);
-static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumHits[24],float MaxHits);
-static void Sta_SetColor (Sta_ColorType_t ColorType,float NumHits,float MaxHits,unsigned *R,unsigned *G,unsigned *B);
+static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax);
+static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float HitsNum[24],float HitsMax);
+static void Sta_SetColor (Sta_ColorType_t ColorType,float HitsNum,float HitsMax,
+                          unsigned *R,unsigned *G,unsigned *B);
 static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
                                      MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
                                     MYSQL_RES *mysql_res);
-static void Sta_WriteAccessHour (unsigned Hour,float NumHits,float MaxHits,float TotalHits,unsigned ColumnWidth);
+static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth);
 static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format);
-static void Sta_WriteAccessMinute (unsigned Minute,float NumHits,float MaxX);
+static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX);
 static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
@@ -146,7 +154,11 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
 static void Sta_WriteDegree (long DegCod);
 static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_DrawBarNumHits (char Color,float NumHits,float MaxHits,float TotalHits,unsigned MaxBarWidth);
+static void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
+                                        unsigned long NumRows,
+                                        MYSQL_RES *mysql_res,unsigned Field,
+                                        unsigned Divisor);
+static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
 
 static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
@@ -1722,8 +1734,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_ROW row;
    unsigned long NumRow;
-   float NumHits;
-   float MaxHits = 0.0;
+   struct Sta_Hits Hits;
    unsigned BarWidth;
    struct UsrData UsrDat;
    char PhotoURL[PATH_MAX+1];
@@ -1761,7 +1772,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Write rows *****/
-   for (NumRow = 1, Gbl.RowEvenOdd = 0;
+   for (NumRow = 1, Hits.Max = 0.0, Gbl.RowEvenOdd = 0;
 	NumRow <= NumRows;
 	NumRow++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -1807,12 +1818,12 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 	       Txt_ROLES_SINGUL_Abc[UsrDat.RoleInCurrentCrsDB][UsrDat.Sex]);
 
       /* Write the number of clicks */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
       if (NumRow == 1)
-	 MaxHits = NumHits;
-      if (MaxHits > 0.0)
+	 Hits.Max = Hits.Num;
+      if (Hits.Max > 0.0)
         {
-         BarWidth = (unsigned) (((NumHits * 375.0) / MaxHits) + 0.5);
+         BarWidth = (unsigned) (((Hits.Num * 375.0) / Hits.Max) + 0.5);
          if (BarWidth == 0)
             BarWidth = 1;
         }
@@ -1830,7 +1841,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 		  UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? 'c' :
 			                                     'v',
 		  BarWidth);
-      Str_WriteFloatNum (NumHits);
+      Str_WriteFloatNum (Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;</td>"
 	                 "</tr>");
      }
@@ -1857,9 +1868,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
    unsigned D;
    unsigned NumDaysFromLastDateToCurrDate;
    unsigned NumDayWeek;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
@@ -1882,18 +1891,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per day *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumHits > MaxHits)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows beginning by the most recent day and ending by the oldest *****/
    mysql_data_seek (mysql_res,0);
@@ -1908,12 +1906,12 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&ReadDate,&LastDate);
       /* In the next loop (NumDaysFromLastDateToCurrDate-1) días (the more recent) with 0 clicks are shown
-         and a last day (the oldest) with NumHits */
+         and a last day (the oldest) with Hits.Num */
       for (D = 1;
 	   D <= NumDaysFromLastDateToCurrDate;
 	   D++)
@@ -1939,9 +1937,9 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
                                                'c',
-                             D == NumDaysFromLastDateToCurrDate ? NumHits :
+                             D == NumDaysFromLastDateToCurrDate ? Hits.Num :
                         	                                  0.0,
-                             MaxHits,TotalHits,500);
+                             Hits.Max,Hits.Total,500);
 
          /* Decrease day */
          Dat_GetDateBefore (&Date,&Date);
@@ -1978,7 +1976,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
       /* Draw bar proportional to number of pages generated */
       Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
 	                                    'c',
-	                  0.0,MaxHits,TotalHits,500);
+	                  0.0,Hits.Max,Hits.Total,500);
 
       /* Decrease day */
       Dat_GetDateBefore (&Date,&Date);
@@ -2013,8 +2011,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    unsigned NumDayWeek;
    unsigned Hour;
    unsigned ReadHour = 0;
-   float NumHits;
-   float MaxHits = 0.0;
+   struct Sta_Hits Hits;
    float NumAccPerHour[24];
    float NumAccPerHourZero[24];
    MYSQL_ROW row;
@@ -2027,7 +2024,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	              "<td colspan=\"26\" class=\"%s CENTER_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme]);
 
-   Act_FormStart (Gbl.CurrentAct);
+   Act_FormStartAnchor (Gbl.CurrentAct,"stat_form");
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
@@ -2059,17 +2056,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	              "</tr>");
 
    /***** Compute maximum number of pages generated per day-hour *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[2]);
-      if (NumHits > MaxHits)
-	 MaxHits = NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,2,1);
 
    /***** Initialize LastDate *****/
    Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd));
@@ -2101,7 +2088,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	              "<td colspan=\"24\" class=\"LEFT_TOP\""
 	              " style=\"width:%upx;\">",
 	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
-   Sta_DrawBarColors (SelectedColorType,MaxHits);
+   Sta_DrawBarColors (SelectedColorType,Hits.Max);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "<tr>");
@@ -2132,7 +2119,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	 Lay_ShowErrorAndExit ("Wrong hour.");
 
       /* Get number of pages generated (in row[2]) */
-      NumHits = Str_GetFloatNumFromStr (row[2]);
+      Hits.Num = Str_GetFloatNumFromStr (row[2]);
 
       /* If this is the first read date, initialize PreviousReadDate */
       if (NumRow == 1)
@@ -2144,7 +2131,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
           PreviousReadDate.Day   != CurrentReadDate.Day)	// Current read date (CurrentReadDate) is older than previous read date (PreviousReadDate) */
         {
          /* In the next loop we show (NumDaysFromLastDateToCurrDate-1) days (the menos antiguos) with 0 clicks
-            and a last day (older) with NumHits */
+            and a last day (older) with Hits.Num */
          Dat_AssignDate (&Date,&LastDate);
          NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&PreviousReadDate,&LastDate);
          for (D = 1;
@@ -2172,9 +2159,9 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
             /* Draw a cell with the color proportional to the number of clicks */
             if (D == NumDaysFromLastDateToCurrDate)
-               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,MaxHits);
+               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
             else	// D < NumDaysFromLastDateToCurrDate
-               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,MaxHits);
+               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
             fprintf (Gbl.F.Out,"</tr>");
 
             /* Decrease day */
@@ -2189,12 +2176,12 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
               Hour++)
             NumAccPerHour[Hour] = 0.0;
         }
-      NumAccPerHour[ReadHour] = NumHits;
+      NumAccPerHour[ReadHour] = Hits.Num;
      }
 
    /***** Show the clicks of the oldest day with clicks *****/
    /* In the next loop we show (NumDaysFromLastDateToCurrDate-1) days (more recent) with 0 clicks
-      and a last day (older) with NumHits clicks */
+      and a last day (older) with Hits.Num clicks */
    Dat_AssignDate (&Date,&LastDate);
    NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&PreviousReadDate,&LastDate);
    for (D = 1;
@@ -2222,9 +2209,9 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
       /* Draw the color proporcional al number of clicks */
       if (D == NumDaysFromLastDateToCurrDate)
-         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,MaxHits);
+         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
       else	// D < NumDaysFromLastDateToCurrDate
-         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,MaxHits);
+         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
       fprintf (Gbl.F.Out,"</tr>");
 
       /* Decrease day */
@@ -2259,7 +2246,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
                Txt_DAYS_SMALL[NumDayWeek]);
 
       /* Draw the color proportional to number of clicks */
-      Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,MaxHits);
+      Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
       fprintf (Gbl.F.Out,"</tr>");
 
       /* Decrease day */
@@ -2292,11 +2279,15 @@ static Sta_ColorType_t Sta_GetStatColorType (void)
 /************************* Draw a bar with colors ****************************/
 /*****************************************************************************/
 
-static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxHits)
+static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
   {
-   unsigned Interval,NumColor,R,G,B;
+   unsigned Interval;
+   unsigned NumColor;
+   unsigned R;
+   unsigned G;
+   unsigned B;
 
-   /***** Write numbers from 0 to MaxHits *****/
+   /***** Write numbers from 0 to Hits.Max *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
 	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
@@ -2313,14 +2304,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxHits)
 	                 " style=\"width:%upx;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      Str_WriteFloatNum ((float) Interval * MaxHits / 5.0);
+      Str_WriteFloatNum ((float) Interval * HitsMax / 5.0);
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\""
 	              " style=\"width:%upx;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   Str_WriteFloatNum (MaxHits);
+   Str_WriteFloatNum (HitsMax);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "<tr>");
@@ -2346,7 +2337,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float MaxHits)
 /********************* Draw accesses per hour for a day **********************/
 /*****************************************************************************/
 
-static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumHits[24],float MaxHits)
+static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float HitsNum[24],float HitsMax)
   {
    unsigned Hour;
    unsigned R;
@@ -2357,9 +2348,9 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumH
 	Hour < 24;
 	Hour++)
      {
-      Sta_SetColor (ColorType,NumHits[Hour],MaxHits,&R,&G,&B);
+      Sta_SetColor (ColorType,HitsNum[Hour],HitsMax,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
-      Str_WriteFloatNum (NumHits[Hour]);
+      Str_WriteFloatNum (HitsNum[Hour]);
       fprintf (Gbl.F.Out,"\" style=\"width:%upx;"
 	                 " background-color:#%02X%02X%02X;\">"
                          "</td>",
@@ -2370,7 +2361,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float NumH
 /*****************************************************************************/
 /************************* Set color depending on ratio **********************/
 /*****************************************************************************/
-// MaxHits must be > 0
+// Hits.Max must be > 0
 /*
 Black         Blue         Cyan        Green        Yellow        Red
   +------------+------------+------------+------------+------------+
@@ -2379,9 +2370,10 @@ Black         Blue         Cyan        Green        Yellow        Red
  0.0          0.2          0.4          0.6          0.8          1.0
 */
 
-static void Sta_SetColor (Sta_ColorType_t ColorType,float NumHits,float MaxHits,unsigned *R,unsigned *G,unsigned *B)
+static void Sta_SetColor (Sta_ColorType_t ColorType,float HitsNum,float HitsMax,
+                          unsigned *R,unsigned *G,unsigned *B)
   {
-   float Result = (NumHits / MaxHits);
+   float Result = (HitsNum / HitsMax);
 
    switch (ColorType)
      {
@@ -2457,9 +2449,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
    struct Date Date;
    unsigned W;
    unsigned NumWeeksBetweenLastDateAndCurrentDate;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
 
    /***** Initialize LastDate to avoid warning *****/
@@ -2479,18 +2469,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per week *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumHits > MaxHits)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
@@ -2505,7 +2484,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumWeeksBetweenLastDateAndCurrentDate = Dat_GetNumWeeksBetweenDates (&ReadDate,&LastDate);
@@ -2522,9 +2501,9 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
-                             W == NumWeeksBetweenLastDateAndCurrentDate ? NumHits :
+                             W == NumWeeksBetweenLastDateAndCurrentDate ? Hits.Num :
                         	                                          0.0,
-                             MaxHits,TotalHits,500);
+                             Hits.Max,Hits.Total,500);
 
          /* Decrement week */
          Dat_GetWeekBefore (&Date,&Date);
@@ -2547,7 +2526,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
               Date.Week,Date.Year % 100);
 
      /* Draw bar proportional to number of pages generated */
-     Sta_DrawBarNumHits ('c',0.0,MaxHits,TotalHits,500);
+     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
 
      /* Decrement week */
      Dat_GetWeekBefore (&Date,&Date);
@@ -2569,9 +2548,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
    struct Date Date;
    unsigned M;
    unsigned NumMesesEntreLastDateYAct;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
@@ -2590,18 +2567,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per month *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumHits > MaxHits)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
@@ -2616,7 +2582,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number of pages generated (in row[1]) */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
       NumMesesEntreLastDateYAct = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
@@ -2633,9 +2599,9 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
 
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
-                             M == NumMesesEntreLastDateYAct ? NumHits :
+                             M == NumMesesEntreLastDateYAct ? Hits.Num :
                         	                              0.0,
-                             MaxHits,TotalHits,500);
+                             Hits.Max,Hits.Total,500);
 
          /* Decrease month */
          Dat_GetMonthBefore (&Date,&Date);
@@ -2657,7 +2623,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
               Date.Month,Date.Year % 100);
 
      /* Draw bar proportional to number of pages generated */
-     Sta_DrawBarNumHits ('c',0.0,MaxHits,TotalHits,500);
+     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
@@ -2674,9 +2640,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
                                     MYSQL_RES *mysql_res)
   {
    unsigned long NumRow;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    unsigned NumDays;
    unsigned Hour = 0;
    unsigned ReadHour = 0;
@@ -2688,23 +2652,12 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
    if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd)))
      {
       /***** Compute maximum number of pages generated per hour *****/
-      for (NumRow = 1;
-	   NumRow <= NumRows;
-	   NumRow++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get number of pages generated */
-	 NumHits = Str_GetFloatNumFromStr (row[1]) / (float) NumDays;
-	 if (NumHits > MaxHits)
-	    MaxHits = NumHits;
-	 TotalHits += NumHits;
-	}
+      Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,NumDays);
 
       /***** Compute width of columns (one for each hour) *****/
       /* Maximum number of dígits. If less than 4, set it to 4 to ensure a minimum width */
-      NumDigits = (MaxHits >= 1000) ? (unsigned) floor (log10 ((double) MaxHits)) + 1 :
-	                                        4;
+      NumDigits = (Hits.Max >= 1000) ? (unsigned) floor (log10 ((double) Hits.Max)) + 1 :
+	                               4;
       ColumnWidth = NumDigits * DIGIT_WIDTH + 2;
 
       /***** Draw the graphic *****/
@@ -2713,25 +2666,29 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
       fprintf (Gbl.F.Out,"<tr>");
       while (Hour < 24)
 	{
+	 Hits.Num = 0.0;
 	 if (NumRow <= NumRows)	// If not read yet all the results of the query
 	   {
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumRow++;
 	    if (sscanf (row[0],"%02u",&ReadHour) != 1)   // In row[0] is the date in HH format
 	       Lay_ShowErrorAndExit ("Wrong hour.");
-	    NumHits = Str_GetFloatNumFromStr (row[1]) / (float) NumDays;
+
 	    for (H = Hour;
 		 H < ReadHour;
 		 H++, Hour++)
-	       Sta_WriteAccessHour (H,0.0,MaxHits,TotalHits,ColumnWidth);
-	    Sta_WriteAccessHour (ReadHour,NumHits,MaxHits,TotalHits,ColumnWidth);
+	       Sta_WriteAccessHour (H,&Hits,ColumnWidth);
+
+	    Hits.Num = Str_GetFloatNumFromStr (row[1]) / (float) NumDays;
+	    Sta_WriteAccessHour (ReadHour,&Hits,ColumnWidth);
+
 	    Hour++;
 	   }
 	 else
 	    for (H = ReadHour + 1;
 		 H < 24;
 		 H++, Hour++)
-	       Sta_WriteAccessHour (H,0.0,MaxHits,TotalHits,ColumnWidth);
+	       Sta_WriteAccessHour (H,&Hits,ColumnWidth);
 	}
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -2741,7 +2698,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
 /**** Write a column of the graphic of the number of clicks in each hour *****/
 /*****************************************************************************/
 
-static void Sta_WriteAccessHour (unsigned Hour,float NumHits,float MaxHits,float TotalHits,unsigned ColumnWidth)
+static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth)
   {
    unsigned BarHeight;
 
@@ -2750,14 +2707,14 @@ static void Sta_WriteAccessHour (unsigned Hour,float NumHits,float MaxHits,float
 	    ColumnWidth);
 
    /* Draw bar with a height porportional to the number of clicks */
-   if (NumHits > 0.0)
+   if (Hits->Num > 0.0)
      {
       fprintf (Gbl.F.Out,"%u%%<br />",
-	       (unsigned) (((NumHits * 100.0) /
-		            TotalHits) + 0.5));
-      Str_WriteFloatNum (NumHits);
+	       (unsigned) (((Hits->Num * 100.0) /
+		            Hits->Total) + 0.5));
+      Str_WriteFloatNum (Hits->Num);
       fprintf (Gbl.F.Out,"<br />");
-      BarHeight = (unsigned) (((NumHits * 500.0) / MaxHits) + 0.5);
+      BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
          BarHeight = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/c8x1.gif\""
@@ -2790,9 +2747,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
    unsigned MinuteRead;
    unsigned MinuteDayRead = 0;
    unsigned i;
-   float NumHits;
+   struct Sta_Hits Hits;
    float NumClicksPerMin[NUM_MINUTES_PER_DAY];
-   float MaxHits = 0.0;
    float Power10LeastOrEqual;
    float MaxX;
    float IncX;
@@ -2801,6 +2757,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
    if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd)))
      {
       /***** Compute number of clicks (and máximo) in every minute *****/
+      Hits.Max = 0.0;
       while (MinuteDay < NUM_MINUTES_PER_DAY)
 	{
 	 if (NumRow <= NumRows)	// If not all the result of the query are yet read
@@ -2810,15 +2767,15 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	    if (sscanf (row[0],"%02u%02u",&ReadHour,&MinuteRead) != 2)   // In row[0] is the date in formato HHMM
 	       Lay_ShowErrorAndExit ("Wrong hour-minute.");
 	    /* Get number of pages generated */
-	    NumHits = Str_GetFloatNumFromStr (row[1]);
+	    Hits.Num = Str_GetFloatNumFromStr (row[1]);
 	    MinuteDayRead = ReadHour * 60 + MinuteRead;
 	    for (i = MinuteDay;
 		 i < MinuteDayRead;
 		 i++, MinuteDay++)
 	       NumClicksPerMin[i] = 0.0;
-	    NumClicksPerMin[MinuteDayRead] = NumHits / (float) NumDays;
-	    if (NumClicksPerMin[MinuteDayRead] > MaxHits)
-	       MaxHits = NumClicksPerMin[MinuteDayRead];
+	    NumClicksPerMin[MinuteDayRead] = Hits.Num / (float) NumDays;
+	    if (NumClicksPerMin[MinuteDayRead] > Hits.Max)
+	       Hits.Max = NumClicksPerMin[MinuteDayRead];
 	    MinuteDay++;
 	   }
 	 else
@@ -2829,12 +2786,12 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	}
 
       /***** Compute the maximum value of X and the increment of the X axis *****/
-      if (MaxHits <= 0.000001)
+      if (Hits.Max <= 0.000001)
 	 MaxX = 0.000001;
       else
 	{
-	 Power10LeastOrEqual = (float) pow (10.0,floor (log10 ((double) MaxHits)));
-	 MaxX = ceil (MaxHits / Power10LeastOrEqual) * Power10LeastOrEqual;
+	 Power10LeastOrEqual = (float) pow (10.0,floor (log10 ((double) Hits.Max)));
+	 MaxX = ceil (Hits.Max / Power10LeastOrEqual) * Power10LeastOrEqual;
 	}
       IncX = MaxX / (float) NUM_DIVISIONS_X;
       if (IncX >= 1.0)
@@ -2925,7 +2882,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 
 #define WIDTH_GRAPHIC		(WIDTH_DIVISION_GRAPHIC*NUM_DIVISIONS_X)	// 60*10=600
 
-static void Sta_WriteAccessMinute (unsigned Minute,float NumHits,float MaxX)
+static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
   {
    unsigned BarWidth;
 
@@ -2975,8 +2932,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float NumHits,float MaxX)
 		                 'h');
 
    /***** Draw bar with anchura proporcional al number of clicks *****/
-   if (NumHits != 0.0)
-      if ((BarWidth = (unsigned) (((NumHits * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
+   if (HitsNum != 0.0)
+      if ((BarWidth = (unsigned) (((HitsNum * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
@@ -3001,9 +2958,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    extern const char *Txt_Action;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long ActCod;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
@@ -3021,18 +2976,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per day *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3058,8 +3002,8 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
                             "</td>");
 
       /* Draw bar proportional to number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,500);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3073,9 +3017,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    extern const char *Txt_Plugin;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    struct Plugin Plg;
 
@@ -3092,18 +3034,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per plugin *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3125,8 +3056,8 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Draw bar proportional to number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,500);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3140,9 +3071,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    extern const char *Txt_Function;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long FunCod;
 
@@ -3159,18 +3088,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per function *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3190,8 +3108,8 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
                Svc_GetFunctionNameFromFunCod (FunCod));
 
       /* Draw bar proportional to number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,500);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,500);
      }
   }
 
@@ -3282,9 +3200,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    unsigned long Ranking;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long CtyCod;
 
@@ -3305,20 +3221,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of hits per country *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-
-      /* Update maximum and total number of hits */
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3342,8 +3245,8 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       Sta_WriteCountry (CtyCod);
 
       /* Draw bar proportional to number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,375);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3400,9 +3303,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    unsigned long Ranking;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long InsCod;
 
@@ -3423,20 +3324,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of hits per institution *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-
-      /* Update maximum and total number of hits */
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3460,8 +3348,8 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       Sta_WriteInstitution (InsCod);
 
       /* Draw bar proportional to number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,375);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3518,9 +3406,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    unsigned long Ranking;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long CtrCod;
 
@@ -3541,20 +3427,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of hits per centre *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-
-      /* Update maximum and total number of hits */
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3578,8 +3451,8 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       Sta_WriteCentre (CtrCod);
 
       /* Draw bar proportional to number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,375);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3636,9 +3509,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned long NumRow;
    unsigned long Ranking;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    long DegCod;
 
@@ -3659,20 +3530,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of hits per degree *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-
-      /* Update maximum and total number of hits */
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3696,8 +3554,8 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       Sta_WriteDegree (DegCod);
 
       /* Draw bar proportional to number of hits */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,375);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
      }
   }
 
@@ -3758,9 +3616,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned long NumRow;
    unsigned long Ranking;
-   float NumHits;
-   float MaxHits = 0.0;
-   float TotalHits = 0.0;
+   struct Sta_Hits Hits;
    MYSQL_ROW row;
    bool CrsOK;
    struct Course Crs;
@@ -3790,19 +3646,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
 
    /***** Compute maximum number of pages generated per course *****/
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-
-      if (NumRow == 1)
-	 MaxHits = NumHits;
-      TotalHits += NumHits;
-     }
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res, 0);
@@ -3854,8 +3698,40 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Draw bar proportional to number of pages generated */
-      NumHits = Str_GetFloatNumFromStr (row[1]);
-      Sta_DrawBarNumHits ('c',NumHits,MaxHits,TotalHits,375);
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      Sta_DrawBarNumHits ('c',Hits.Num,Hits.Max,Hits.Total,375);
+     }
+  }
+
+/*****************************************************************************/
+/*************** Compute maximum and total number of hits ********************/
+/*****************************************************************************/
+
+static void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
+                                        unsigned long NumRows,
+                                        MYSQL_RES *mysql_res,unsigned Field,
+                                        unsigned Divisor)
+  {
+   unsigned long NumRow;
+   MYSQL_ROW row;
+
+   for (NumRow = 1, Hits->Max = Hits->Total = 0.0;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get number of hits */
+      Hits->Num = Str_GetFloatNumFromStr (row[Field]);
+      if (Divisor > 1)
+         Hits->Num /= (float) Divisor;
+
+      /* Update total hits */
+      Hits->Total += Hits->Num;
+
+      /* Update maximum hits */
+      if (Hits->Num > Hits->Max)
+	 Hits->Max = Hits->Num;
      }
   }
 
@@ -3863,18 +3739,16 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-static void Sta_DrawBarNumHits (char Color,
-                                float NumHits,float MaxHits,float TotalHits,
-                                unsigned MaxBarWidth)
+static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
   {
    unsigned BarWidth;
 
    fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
 
-   if (NumHits != 0.0)
+   if (HitsNum != 0.0)
      {
       /***** Draw bar with a with proportional to the number of hits *****/
-      BarWidth = (unsigned) (((NumHits * (float) MaxBarWidth) / MaxHits) + 0.5);
+      BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
       if (BarWidth == 0)
          BarWidth = 1;
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
@@ -3885,10 +3759,10 @@ static void Sta_DrawBarNumHits (char Color,
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
       /***** Write the number of hits *****/
-      Str_WriteFloatNum (NumHits);
+      Str_WriteFloatNum (HitsNum);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
-               (unsigned) (((NumHits * 100.0) /
-        	            TotalHits) + 0.5));
+               (unsigned) (((HitsNum * 100.0) /
+        	            HitsTotal) + 0.5));
      }
    else
       /***** Write the number of clicks *****/
