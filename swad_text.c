@@ -4413,27 +4413,6 @@ const char *Txt_Clicks_per_day =
 	"Cliques por dia";
 #endif
 
-const char *Txt_Clicks_without_degree_selected =
-#if   L==0
-	"Clics sense seleccionar titulaci&oacute;";
-#elif L==1
-	"Clicks without degree selected";		// Need Übersetzung
-#elif L==2
-	"Clicks without degree selected";
-#elif L==3
-	"Clics sin seleccionar titulaci&oacute;n";
-#elif L==4
-	"Clicks without degree selected";		// Besoin de traduction
-#elif L==5
-	"Clics sin seleccionar titulaci&oacute;n";	// Okoteve traducción
-#elif L==6
-	"Clicca senza selezionare laurea";
-#elif L==7
-	"Klikniec bez stopnia wybranych";
-#elif L==8
-	"Clicks without degree selected";		// Necessita de tradução
-#endif
-
 const char *Txt_Closed_survey =
 #if   L==0
 	"Enquesta tancada";
@@ -34712,6 +34691,27 @@ const char *Txt_Show_calendar =
 	"Mostrar calend&aacute;rio";
 #endif
 
+const char *Txt_Show_hits =	// hits = visits, clicks, page views...
+#if   L==0
+	"Veure accessos";
+#elif L==1
+	"Zeige Anmeldungen";
+#elif L==2
+	"Show hits";
+#elif L==3
+	"Ver accesos";
+#elif L==4
+	"Voir visites";
+#elif L==5
+	"Ver accesos";		// Okoteve traducción
+#elif L==6
+	"Visualizza visite";
+#elif L==7
+	"Show hits";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"Mostrar visitas";
+#endif
+
 const char *Txt_Show_left_column =
 #if   L==0
 	"Mostrar columna izquierda";	// Necessita traduccio
@@ -35005,27 +35005,6 @@ const char *Txt_Show_timetable =
 	"Wiadomo&sacute;ci plan lekcji";
 #elif L==8
 	"Veja hor&aacute;rio";
-#endif
-
-const char *Txt_Show_visits =
-#if   L==0
-	"Veure accessos";
-#elif L==1
-	"Zeige Anmeldungen";
-#elif L==2
-	"Show visits";
-#elif L==3
-	"Ver accesos";
-#elif L==4
-	"Voir visites";
-#elif L==5
-	"Ver accesos";		// Okoteve traducción
-#elif L==6
-	"Visualizza visite";
-#elif L==7
-	"Show visits";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Mostrar visitas";
 #endif
 
 const char *Txt_Shuffle =
@@ -35576,6 +35555,66 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 	 "banner"
 #elif L==8
 	 "banner"
+#endif
+	 ,
+#if   L==0
+	"pa&iacute;s"
+#elif L==1
+	"Land"
+#elif L==2
+	"country"
+#elif L==3
+	"pa&iacute;s"
+#elif L==4
+	"pays;"
+#elif L==5
+	"tet&atilde;"
+#elif L==6
+	"paese"
+#elif L==7
+	"kraj"
+#elif L==8
+	"pa&iacute;s"
+#endif
+	 ,
+#if   L==0
+	"instituci&oacute;"
+#elif L==1
+	"Hochschule"
+#elif L==2
+	"institution"
+#elif L==3
+	"instituci&oacute;n"
+#elif L==4
+	"&eacute;tablissement"
+#elif L==5
+	"mbo'ehao"
+#elif L==6
+	"istituzione"
+#elif L==7
+	"instytucji"
+#elif L==8
+	"institu&ccedil;&atilde;o"
+#endif
+	 ,
+#if   L==0
+	"centre"
+#elif L==1
+	"Lehrinstitut"
+#elif L==2
+	"centre"
+#elif L==3
+	"centro"
+#elif L==4
+	"centre"
+#elif L==5
+	"mbo'ehao"
+#elif L==6
+	"centro"
+#elif L==7
+	"centrum"
+#elif L==8
+	"centro"
 #endif
 	 ,
 #if   L==0

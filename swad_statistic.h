@@ -66,7 +66,7 @@ typedef enum
    Sta_CLICKS_GROUPED	= 1,
   } Sta_ClicksDetailedOrGrouped_t;
 
-#define Sta_NUM_CLICKS_GROUPED_BY	21
+#define Sta_NUM_CLICKS_GROUPED_BY	24
 typedef enum
   {
    Sta_CLICKS_CRS_DETAILED_LIST			=  0,
@@ -90,8 +90,11 @@ typedef enum
    Sta_CLICKS_GBL_PER_PLUGIN			= 16,
    Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION	= 17,
    Sta_CLICKS_GBL_PER_BANNER			= 18,
-   Sta_CLICKS_GBL_PER_DEGREE			= 19,
-   Sta_CLICKS_GBL_PER_COURSE			= 20,
+   Sta_CLICKS_GBL_PER_COUNTRY			= 19,
+   Sta_CLICKS_GBL_PER_INSTITUTION		= 20,
+   Sta_CLICKS_GBL_PER_CENTRE			= 21,
+   Sta_CLICKS_GBL_PER_DEGREE			= 22,
+   Sta_CLICKS_GBL_PER_COURSE			= 23,
   } Sta_ClicksGroupedBy_t;
 
 #define Sta_NUM_FIGURES 21

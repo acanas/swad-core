@@ -215,23 +215,23 @@ void Con_GetAndShowLastClicks (void)
                       "%s"				// Hour
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:125px;\">"
+                      " style=\"width:100px;\">"
                       "%s"				// Role
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:187px;\">"
+                      " style=\"width:100px;\">"
                       "%s"				// Country
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:187px;\">"
+                      " style=\"width:100px;\">"
                       "%s"				// Institution
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:187px;\">"
+                      " style=\"width:150px;\">"
                       "%s"				// Centre
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:187px;\">"
+                      " style=\"width:200px;\">"
                       "%s"				// Degree
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
