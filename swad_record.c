@@ -2058,7 +2058,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    Rol_Role_t Role;
    Rol_Role_t DefaultRoleInCurrentCrs;
    bool ShowPhoto;
-   char CtyName[Cty_MAX_LENGTH_COUNTRY_NAME+1];
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    unsigned NumCty;
    struct Institution Ins;
    struct Centre Ctr;

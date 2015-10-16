@@ -225,7 +225,7 @@ void Deg_SeeDegWithPendingCrss (void)
                             " target=\"_blank\">",
                   BgColor,Deg.WWW,Deg.FullName);
          Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                       16,"CENTER_TOP",true);
+                       16,"CENTER_MIDDLE",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -1283,7 +1283,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	    BgColor,
 	    Deg->WWW,Deg->FullName);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
-                 16,"CENTER_TOP",true);
+                 16,"CENTER_MIDDLE",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
@@ -1504,7 +1504,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree first year */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
       if (ICanEdit)
 	{
 	 Act_FormStart (ActChgDegFstYea);

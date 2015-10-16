@@ -107,12 +107,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.14 (2015/10/15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.14.2 (2015/10/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.14:    Oct 15, 2015	Table log (historical log) renamed as log_full. (? lines)
+        Version 15.14.2:  Oct 16, 2015	Minor changes in layout. (186166 lines)
+        Version 15.14.1:  Oct 16, 2015	Fixed minor bug in edition of degrees. (186170 lines)
+        Version 15.14:    Oct 15, 2015	Table log (historical log) renamed as log_full. (186169 lines)
 					1 change necessary in database:
 RENAME TABLE log TO log_full;
 

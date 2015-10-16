@@ -37,7 +37,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Cty_MAX_LENGTH_COUNTRY_NAME	    255
+#define Cty_MAX_BYTES_COUNTRY_NAME	    255
 #define Cty_MAX_LENGTH_COUNTRY_WWW	    255
 #define Cty_MAX_LENGTH_MAP_ATTRIBUTION	(4*1024)
 
@@ -45,7 +45,7 @@ struct Country
   {
    long CtyCod;
    char Alpha2[2+1];
-   char Name[Txt_NUM_LANGUAGES][Cty_MAX_LENGTH_COUNTRY_NAME+1];
+   char Name[Txt_NUM_LANGUAGES][Cty_MAX_BYTES_COUNTRY_NAME+1];
    char WWW[Txt_NUM_LANGUAGES][Cty_MAX_LENGTH_COUNTRY_WWW+1];
    unsigned NumUsrs;
    unsigned NumStds;
@@ -88,7 +88,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 bool Cty_GetDataOfCountryByCod (struct Country *Cty);
-void Cty_GetCountryName (long CtyCod,char *CtyName);
+void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1]);
 void Cty_PutParamCtyCod (long CtyCod);
 long Cty_GetParamOtherCtyCod (void);
 void Cty_RemoveCountry (void);

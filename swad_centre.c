@@ -174,7 +174,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ctr.WWW,Ctr.FullName);
          Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
-                       16,"CENTER_TOP",true);
+                       16,"CENTER_MIDDLE",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 
@@ -610,12 +610,12 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
             NumCtr);
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP %s\">"
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
 		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
 	    TxtClass,BgColor,
 	    Ctr->WWW,Ctr->FullName);
    Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
-                 16,"CENTER_TOP",true);
+                 16,"CENTER_MIDDLE",true);
    fprintf (Gbl.F.Out,"</a>"
 		      "</td>");
 
