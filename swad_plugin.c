@@ -29,11 +29,11 @@ TODO: Check if web service is called from an authorized IP.
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For fprintf
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
-#include "swad_bool.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_cryptography.h"

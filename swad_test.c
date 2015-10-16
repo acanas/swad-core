@@ -30,6 +30,7 @@
 #include <linux/stddef.h>	// For NULL
 #include <locale.h>		// For setlocale, LC_NUMERIC...
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For fprintf, etc.
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
@@ -37,7 +38,6 @@
 #include <sys/types.h>		// For mkdir
 
 #include "swad_action.h"
-#include "swad_bool.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"

@@ -1,9 +1,9 @@
-// swad_bool.h: bool type
+// swad_help.c: contextual help to enhance usability
 
-#ifndef _SWAD_BOO
-#define _SWAD_BOO
+#ifndef _SWAD_HLP
+#define _SWAD_HLP
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -24,12 +24,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
-#ifndef BOOL_TYPE
-#define BOOL_TYPE
-typedef enum {false=0, true=1} bool;
-#endif
+// #include "swad_user.h"
+
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************** Public types *******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/****************************** Public prototypes ****************************/
+/*****************************************************************************/
+
+void Hlp_ShowHelpWhatWouldYouLikeToDo (void);
 
 #endif

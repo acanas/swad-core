@@ -310,8 +310,8 @@ void Sta_LogAccess (const char *Comments)
                                                             Gbl.Usrs.Me.LoggedRole;
 
    /***** Insert access into database *****/
-   /* Log access in historical log */
-   sprintf (Query,"INSERT INTO log (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
+   /* Log access in historical log (log_full) */
+   sprintf (Query,"INSERT INTO log_full (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
@@ -329,13 +329,13 @@ void Sta_LogAccess (const char *Comments)
    if (Gbl.WebService.IsWebService)
      {
       if (mysql_query (&Gbl.mysql,Query))
-         Svc_Exit ("can not log access (historical)");
+         Svc_Exit ("can not log access (full)");
       LogCod = (long) mysql_insert_id (&Gbl.mysql);
      }
    else
-      LogCod = DB_QueryINSERTandReturnCode (Query,"can not log access (historical)");
+      LogCod = DB_QueryINSERTandReturnCode (Query,"can not log access (full)");
 
-   /* Log access in recent log */
+   /* Log access in recent log (log_recent) */
    sprintf (Query,"INSERT INTO log_recent (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
@@ -874,7 +874,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Set table where to find depending on initial date *****/
    // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
    LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.Now.Date) <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
-	                                                                                                      "log";
+	                                                                                                      "log_full";
 
    /***** Get the type of stat of clicks ******/
    Par_GetParToText ("GroupedOrDetailed",UnsignedStr,10);

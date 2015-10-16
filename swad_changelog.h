@@ -98,16 +98,25 @@
 // TODO: Change link to Degree in Statistics > Visits > By degree to internal Degree
 // TODO: Link to user's country in public profile
 // TODO: Show guests in connected users.
+// TODO: Hide global announcements without removing them
+// TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
+// TODO: Put headers Content-type and Content-disposition when redirecting with Location:
+// TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.13.2 (2015/10/11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.14 (2015/10/15)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.14:    Oct 15, 2015	Table log (historical log) renamed as log_full. (? lines)
+					1 change necessary in database:
+RENAME TABLE log TO log_full;
+
+        Version 15.13.3:  Oct 14, 2015	swad_bool.h replaced by stdbool.h. (? lines)
         Version 15.13.2:  Oct 11, 2015	Refactoring and bug fixing in statistics. (186183 lines)
         Version 15.13.1:  Oct 11, 2015	Refactoring and bug fixing in statistics related to scopes. (186300 lines)
 					6 optional slow changes in database (may spend many minutes or even hours depending on the size of log tables):

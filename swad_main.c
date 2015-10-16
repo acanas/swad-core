@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
 		      "<head><title>%s</title></head>"
 		      "<body><br /><br /><br /><br />"
 		      "<h1 class=\"CENTER_MIDDLE\">"
-		      "%s est&aacute; parado por mantenimiento durante pocos minutos"
+		      "%s est&aacute; parado por mantenimiento durante unos minutos"
 		      "</h1>"
 		      "<h2 class=\"CENTER_MIDDLE\">"
 		      "Intente acceder m&aacute;s tarde, por favor."

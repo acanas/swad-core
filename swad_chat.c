@@ -26,10 +26,10 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For sprintf
 #include <string.h>
 
-#include "swad_bool.h"
 #include "swad_chat.h"
 #include "swad_config.h"
 #include "swad_database.h"

@@ -25,10 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For sprintf
 #include <string.h>		// For string functions
 
-#include "swad_bool.h"
 #include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"

@@ -10790,4 +10790,369 @@ UPDATE log,centres SET log.InsCod=centres.InsCod WHERE log.CtrCod=centres.CtrCod
 UPDATE log,institutions SET log.CtyCod=institutions.CtyCod WHERE log.InsCod=institutions.InsCod;
 
 
+-------------------------
+
+CREATE TABLE IF NOT EXISTS log_full (LogCod INT NOT NULL AUTO_INCREMENT,ActCod INT NOT NULL DEFAULT -1,CtyCod INT NOT NULL DEFAULT -1,InsCod INT NOT NULL DEFAULT -1,CtrCod INT NOT NULL DEFAULT -1,DegCod INT NOT NULL DEFAULT -1,CrsCod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL DEFAULT -1,Role TINYINT NOT NULL,ClickTime DATETIME NOT NULL,TimeToGenerate INT NOT NULL,TimeToSend INT NOT NULL,IP CHAR(15) NOT NULL,UNIQUE INDEX(LogCod),INDEX(ActCod),INDEX(CtyCod),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod),INDEX(UsrCod),INDEX(ClickTime,Role));
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20040101' AND ClickTime<'20050101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20050101' AND ClickTime<'20060101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20060101' AND ClickTime<'20070101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20070101' AND ClickTime<'20080101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20080101' AND ClickTime<'20090101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20090101' AND ClickTime<'20100101';
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100101' AND ClickTime<'20100201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100201' AND ClickTime<'20100301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100301' AND ClickTime<'20100401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100401' AND ClickTime<'20100501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100501' AND ClickTime<'20100601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100601' AND ClickTime<'20100701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100701' AND ClickTime<'20100801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100801' AND ClickTime<'20100901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20100901' AND ClickTime<'20101001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20101001' AND ClickTime<'20101101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20101101' AND ClickTime<'20101201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20101201' AND ClickTime<'20110101';
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110101' AND ClickTime<'20110201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110201' AND ClickTime<'20110301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110301' AND ClickTime<'20110401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110401' AND ClickTime<'20110501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110501' AND ClickTime<'20110601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110601' AND ClickTime<'20110701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110701' AND ClickTime<'20110801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110801' AND ClickTime<'20110901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20110901' AND ClickTime<'20111001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20111001' AND ClickTime<'20111101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20111101' AND ClickTime<'20111201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20111201' AND ClickTime<'20120101';
+
+----------
+
+DELETE FROM log WHERE ClickTime<'20050101';
+DELETE FROM log WHERE ClickTime<'20060101';
+DELETE FROM log WHERE ClickTime<'20060601';
+DELETE FROM log WHERE ClickTime<'20060701';
+DELETE FROM log WHERE ClickTime<'20080601';
+DELETE FROM log WHERE ClickTime<'20090101';
+DELETE FROM log WHERE ClickTime<'20090201';
+DELETE FROM log WHERE ClickTime<'20090302';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20090303';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20090310';
+
+CREATE TABLE log_new LIKE log;
+// Insertar log muy recientes en una tabla de log nueva, sin repetir
+INSERT log_new SELECT * FROM log WHERE ClickTime>='20151013' AND LogCod NOT IN (SELECT LogCod FROM log_new);
+
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20090401';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20100101';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20110101';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20120101';
+
+Parar MySQL
+sync
+Mover temporalmente ficheros log_full* a /var/www para dejar espacio en /var/lib/mysql
+Lanzar MySQL
+OPTIMIZE TABLE log; para liberar espacio en disco
+Parar MySQL
+Mover ficheros log_full* de /var/www a /var/lib/mysql
+Lanzar MySQL
+
+Continuar las siguientes inserciones desde log a log_full
+
+Se estará usando log_new en lugar de log, por tanto al final copiar todo lo nuevo que esté en log_new a log o a log_full
+INSERT log SELECT * FROM log_new WHERE LogCod NOT IN (SELECT LogCod FROM log);
+
+
+Revisar:
+Prf_GetFirstClickFromLogAndStoreAsUsrFigure
+Prf_GetNumClicksAndStoreAsUsrFigure
+
+----------
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120101' AND ClickTime<'20120201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120201' AND ClickTime<'20120301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120301' AND ClickTime<'20120401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120401' AND ClickTime<'20120501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120501' AND ClickTime<'20120601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120601' AND ClickTime<'20120701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120701' AND ClickTime<'20120801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120801' AND ClickTime<'20120901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20120901' AND ClickTime<'20121001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20121001' AND ClickTime<'20121101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20121101' AND ClickTime<'20121201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20121201' AND ClickTime<'20130101';
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130101' AND ClickTime<'20130201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130201' AND ClickTime<'20130301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130301' AND ClickTime<'20130401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130401' AND ClickTime<'20130501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130501' AND ClickTime<'20130601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130601' AND ClickTime<'20130701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130701' AND ClickTime<'20130801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130801' AND ClickTime<'20130901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20130901' AND ClickTime<'20131001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20131001' AND ClickTime<'20131101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20131101' AND ClickTime<'20131201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20131201' AND ClickTime<'20140101';
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140101' AND ClickTime<'20140201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140201' AND ClickTime<'20140301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140301' AND ClickTime<'20140401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140401' AND ClickTime<'20140501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140501' AND ClickTime<'20140601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140601' AND ClickTime<'20140701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140701' AND ClickTime<'20140801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140801' AND ClickTime<'20140901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20140901' AND ClickTime<'20141001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20141001' AND ClickTime<'20141101';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20141101' AND ClickTime<'20141201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20141201' AND ClickTime<'20150101';
+
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20130101';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20140101';
+DELETE LOW_PRIORITY FROM log WHERE ClickTime<'20150101';
+
+Parar MySQL:
+/sbin/service mysqld stop
+sync
+
+Lanzar MySQL:
+/sbin/service mysqld start
+
+Mover temporalmente ficheros log_full* a /var/www para dejar espacio en /var/lib/mysql
+cd /var/lib/mysql/swad/
+ls -la log_full*
+mv log_full* /var/www
+
+Liberar espacio en disco:
+OPTIMIZE TABLE log;
+
+
+Mover ficheros log_full* de /var/www a /var/lib/mysql:
+mv /var/www/log_full* /var/lib/mysql/swad/
+
+Continuar las siguientes inserciones desde log a log_full
+
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150101' AND ClickTime<'20150201';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150201' AND ClickTime<'20150301';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150301' AND ClickTime<'20150401';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150401' AND ClickTime<'20150501';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150501' AND ClickTime<'20150601';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150601' AND ClickTime<'20150701';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150701' AND ClickTime<'20150801';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150801' AND ClickTime<'20150901';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20150901' AND ClickTime<'20151001';
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log WHERE ClickTime>='20151001' AND ClickTime<'20151013';
+
+
+UPDATE log_full,degrees      SET log_full.CtrCod=degrees.CtrCod      WHERE log_full.ClickTime>='20040101' AND log_full.ClickTime<'20050101' AND log_full.DegCod=degrees.DegCod;
+
+CREATE TABLE degrees_copy LIKE degrees; 
+INSERT degrees_copy SELECT * FROM degrees;
+
+CREATE TABLE centres_copy LIKE centres; 
+INSERT centres_copy SELECT * FROM centres;
+
+CREATE TABLE institutions_copy LIKE institutions; 
+INSERT institutions_copy SELECT * FROM institutions;
+
+Hecho hasta aquí
+
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050101' AND log_full.ClickTime<'20050201' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050201' AND log_full.ClickTime<'20050301' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050301' AND log_full.ClickTime<'20050401' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050401' AND log_full.ClickTime<'20050501' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050501' AND log_full.ClickTime<'20050601' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050601' AND log_full.ClickTime<'20050701' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050701' AND log_full.ClickTime<'20050801' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050801' AND log_full.ClickTime<'20050901' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20050901' AND log_full.ClickTime<'20051001' AND log_full.DegCod=degrees_copy.DegCod;
+
+
+DROP PROCEDURE IF EXISTS update_log_full;
+DELIMITER |
+CREATE PROCEDURE update_log_full()
+BEGIN
+  DECLARE LogCodStart INT;
+  DECLARE LogCodEnd INT;
+  SET LogCodStart = 0;
+  WHILE LogCodStart <= 400000000 DO
+    SET LogCodEnd = LogCodStart + 100000;
+    UPDATE log_full,degrees_copy SET log_full.CtrCod=degrees_copy.CtrCod WHERE (log_full.LogCod BETWEEN LogCodStart AND LogCodEnd) AND log_full.DegCod=degrees_copy.DegCod;
+    SET LogCodStart = LogCodEnd;
+  END WHILE;
+END;
+|
+DELIMITER ;
+CALL update_log_full();
+
+
+DROP PROCEDURE IF EXISTS update_log_full;
+DELIMITER |
+CREATE PROCEDURE update_log_full()
+BEGIN
+  DECLARE LogCodStart INT;
+  DECLARE LogCodEnd INT;
+  SET LogCodStart = 0;
+  WHILE LogCodStart <= 400000000 DO
+    SET LogCodEnd = LogCodStart + 100000;
+    UPDATE log_full,centres_copy SET log_full.InsCod=centres_copy.InsCod WHERE (log_full.LogCod BETWEEN LogCodStart AND LogCodEnd) AND log_full.CtrCod=centres_copy.CtrCod;
+    SET LogCodStart = LogCodEnd;
+  END WHILE;
+END;
+|
+DELIMITER ;
+CALL update_log_full();
+
+DROP PROCEDURE IF EXISTS update_log_full;
+DELIMITER |
+CREATE PROCEDURE update_log_full()
+BEGIN
+  DECLARE LogCodStart INT;
+  DECLARE LogCodEnd INT;
+  SET LogCodStart = 0;
+  WHILE LogCodStart <= 400000000 DO
+    SET LogCodEnd = LogCodStart + 100000;
+    UPDATE log_full,institutions_copy SET log_full.CtyCod=institutions_copy.CtyCod WHERE (log_full.LogCod BETWEEN LogCodStart AND LogCodEnd) AND log_full.InsCod=institutions_copy.InsCod;
+    SET LogCodStart = LogCodEnd;
+  END WHILE;
+END;
+|
+DELIMITER ;
+CALL update_log_full();
+
+
+Se estará usando log_new en lugar de log, por tanto al final copiar todo lo nuevo que esté en log_new a log o a log_full
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log_new WHERE ClickTime>='20151013' AND LogCod NOT IN (SELECT LogCod FROM log_full);
+
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20151013' AND log_full.ClickTime<'20151014' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20151014' AND log_full.ClickTime<'20151015' AND log_full.DegCod=degrees_copy.DegCod;
+
+UPDATE log_full,centres_copy      SET log_full.InsCod=centres_copy.InsCod      WHERE log_full.ClickTime>='20151013' AND log_full.ClickTime<'20151014' AND log_full.CtrCod=centres_copy.CtrCod;
+UPDATE log_full,centres_copy      SET log_full.InsCod=centres_copy.InsCod      WHERE log_full.ClickTime>='20151014' AND log_full.ClickTime<'20151015' AND log_full.CtrCod=centres_copy.CtrCod;
+
+UPDATE log_full,institutions_copy SET log_full.CtyCod=institutions_copy.CtyCod WHERE log_full.ClickTime>='20151013' AND log_full.ClickTime<'20151014' AND log_full.InsCod=institutions_copy.InsCod;
+UPDATE log_full,institutions_copy SET log_full.CtyCod=institutions_copy.CtyCod WHERE log_full.ClickTime>='20151014' AND log_full.ClickTime<'20151015' AND log_full.InsCod=institutions_copy.InsCod;
+
+Hecho hasta aquí
+
+
+-----------
+
+Paso final en swad.ugr.es con SWAD parado:
+
+touch /var/www/cgi-bin/swad.lock
+
+INSERT INTO log_full (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP) SELECT LogCod,ActCod, '-1' , '-1' , '-1' ,DegCod,CrsCod,UsrCod,Role,ClickTime,TimeToGenerate,TimeToSend,IP FROM log_new WHERE ClickTime>='20151015' AND LogCod NOT IN (SELECT LogCod FROM log_full);
+UPDATE log_full,degrees_copy      SET log_full.CtrCod=degrees_copy.CtrCod      WHERE log_full.ClickTime>='20151015' AND log_full.DegCod=degrees_copy.DegCod;
+UPDATE log_full,centres_copy      SET log_full.InsCod=centres_copy.InsCod      WHERE log_full.ClickTime>='20151015' AND log_full.CtrCod=centres_copy.CtrCod;
+UPDATE log_full,institutions_copy SET log_full.CtyCod=institutions_copy.CtyCod WHERE log_full.ClickTime>='20151015' AND log_full.InsCod=institutions_copy.InsCod;
+
+Copiar nuevo programa swad
+
+rm /var/www/cgi-bin/swad.lock
+
+
+
+
+
+OPTIMIZE TABLE IP_last;
+OPTIMIZE TABLE IP_prefs;
+OPTIMIZE TABLE actions;
+OPTIMIZE TABLE actions_MFU;
+OPTIMIZE TABLE admin;
+OPTIMIZE TABLE ann_seen;
+OPTIMIZE TABLE announcements;
+OPTIMIZE TABLE asg_grp;
+OPTIMIZE TABLE assignments;
+OPTIMIZE TABLE att_events;
+OPTIMIZE TABLE att_grp;
+OPTIMIZE TABLE att_usr;
+OPTIMIZE TABLE banners; 
+OPTIMIZE TABLE birthdays_today;
+OPTIMIZE TABLE centres;
+OPTIMIZE TABLE chat;
+OPTIMIZE TABLE clicks_without_photo;
+OPTIMIZE TABLE clipboard;
+OPTIMIZE TABLE connected;
+OPTIMIZE TABLE countries;
+OPTIMIZE TABLE courses;
+OPTIMIZE TABLE crs_grp;
+OPTIMIZE TABLE crs_grp_types;
+OPTIMIZE TABLE crs_grp_usr;
+OPTIMIZE TABLE crs_info_read;
+OPTIMIZE TABLE crs_info_src;
+OPTIMIZE TABLE crs_info_txt;
+OPTIMIZE TABLE crs_last;
+OPTIMIZE TABLE crs_record_fields;
+OPTIMIZE TABLE crs_records;
+OPTIMIZE TABLE crs_usr;
+OPTIMIZE TABLE crs_usr_requests;
+OPTIMIZE TABLE debug;
+OPTIMIZE TABLE deg_types;
+OPTIMIZE TABLE degrees;
+OPTIMIZE TABLE departments;
+OPTIMIZE TABLE exam_announcements;
+OPTIMIZE TABLE expanded_folders;
+OPTIMIZE TABLE file_browser_last;
+OPTIMIZE TABLE file_browser_size;
+OPTIMIZE TABLE file_view;
+OPTIMIZE TABLE files;
+OPTIMIZE TABLE forum_disabled_post;
+OPTIMIZE TABLE forum_post;
+OPTIMIZE TABLE forum_thr_clip;
+OPTIMIZE TABLE forum_thr_read;
+OPTIMIZE TABLE forum_thread;
+OPTIMIZE TABLE hidden_params;
+OPTIMIZE TABLE holidays;
+OPTIMIZE TABLE imported_groups;
+OPTIMIZE TABLE imported_sessions;
+OPTIMIZE TABLE imported_students;
+OPTIMIZE TABLE institutions;
+OPTIMIZE TABLE links;
+OPTIMIZE TABLE mail_domains;
+OPTIMIZE TABLE marks_properties;
+OPTIMIZE TABLE msg_banned;
+OPTIMIZE TABLE msg_rcv;
+OPTIMIZE TABLE msg_rcv_deleted;
+OPTIMIZE TABLE msg_snt;
+OPTIMIZE TABLE msg_snt_deleted;
+OPTIMIZE TABLE notices;
+OPTIMIZE TABLE notices_deleted;
+OPTIMIZE TABLE notif;
+OPTIMIZE TABLE pending_emails;
+OPTIMIZE TABLE pending_passwd;
+OPTIMIZE TABLE places;
+OPTIMIZE TABLE plugins;
+OPTIMIZE TABLE sessions;
+OPTIMIZE TABLE sta_degrees;
+OPTIMIZE TABLE sta_notif;
+OPTIMIZE TABLE surveys;
+OPTIMIZE TABLE svy_answers;
+OPTIMIZE TABLE svy_grp;
+OPTIMIZE TABLE svy_questions;
+OPTIMIZE TABLE svy_users;
+OPTIMIZE TABLE timetable_crs;
+OPTIMIZE TABLE timetable_tut;
+OPTIMIZE TABLE tst_answers;
+OPTIMIZE TABLE tst_config;
+OPTIMIZE TABLE tst_exam_questions;
+OPTIMIZE TABLE tst_exams;
+OPTIMIZE TABLE tst_question_tags;
+OPTIMIZE TABLE tst_questions;
+OPTIMIZE TABLE tst_status;
+OPTIMIZE TABLE tst_tags;
+OPTIMIZE TABLE usr_IDs;
+OPTIMIZE TABLE usr_banned;
+OPTIMIZE TABLE usr_data;
+OPTIMIZE TABLE usr_emails;
+OPTIMIZE TABLE usr_figures;
+OPTIMIZE TABLE usr_follow;
+OPTIMIZE TABLE usr_last;
+OPTIMIZE TABLE usr_nicknames;
+OPTIMIZE TABLE usr_webs;
+OPTIMIZE TABLE ws_keys;    
+
+
 

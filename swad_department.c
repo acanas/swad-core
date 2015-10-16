@@ -26,10 +26,10 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
+#include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
-#include "swad_bool.h"
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_department.h"

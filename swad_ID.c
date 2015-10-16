@@ -26,11 +26,11 @@
 /*****************************************************************************/
 
 #include <ctype.h>		// For isalnum, isdigit, etc.
+#include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
-#include "swad_bool.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"

@@ -9262,6 +9262,9 @@ void Brw_DownloadFile (void)
 
       /***** Download the file *****/
       fprintf (stdout,"Location: %s\n\n",URL);
+      // TODO: Put headers Content-type and Content-disposition:
+      // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
+      // http://elouai.com/force-download.php
       Gbl.Layout.HTMLStartWritten =
       Gbl.Layout.TablEndWritten   =
       Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all

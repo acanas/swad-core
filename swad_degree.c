@@ -27,12 +27,12 @@
 
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <linux/stddef.h>	// For NULL
+#include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For fprintf, etc.
 #include <stdlib.h>		// For exit, system, calloc, free, etc.
 #include <string.h>		// For string functions
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_bool.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
 #include "swad_database.h"

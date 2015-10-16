@@ -25,10 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <stdio.h>	// For fseek, ftell...
-#include <string.h>	// For strcasecmp...
+#include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For fseek, ftell...
+#include <string.h>		// For strcasecmp...
 
-#include "swad_bool.h"
 #include "swad_config.h"
 #include "swad_global.h"
 #include "swad_layout.h"
