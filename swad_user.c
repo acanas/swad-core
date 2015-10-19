@@ -4779,7 +4779,7 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
-   /***** Select USR_CLASS_ROOM *****/
+   /***** Select Usr_CLASS_PHOTO *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:4px auto;\">"
 	              "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">",
@@ -4868,6 +4868,9 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
             Msg_PutHiddenParamMsgCod (Gbl.Msg.RepliedMsgCod);
             Usr_PutParamOtherUsrCodEncrypted ();
            }
+         break;
+      case ActSeeUseGbl:
+         Pho_PutHiddenParamFigureType ();
          break;
       case ActSeePhoDeg:
          Pho_PutHiddenParamTypeOfAvg ();
@@ -5707,11 +5710,11 @@ void Usr_ListAllDataTchs (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
                        1 << Sco_SCOPE_INS |
-                       1 << Sco_SCOPE_CTR      |
-                       1 << Sco_SCOPE_DEG      |
+                       1 << Sco_SCOPE_CTR |
+                       1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
@@ -6756,11 +6759,11 @@ void Usr_SeeTeachers (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
                        1 << Sco_SCOPE_INS |
-                       1 << Sco_SCOPE_CTR      |
-                       1 << Sco_SCOPE_DEG      |
+                       1 << Sco_SCOPE_CTR |
+                       1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
@@ -6991,11 +6994,11 @@ void Usr_SeeTchClassPhotoPrn (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
                        1 << Sco_SCOPE_INS |
-                       1 << Sco_SCOPE_CTR      |
-                       1 << Sco_SCOPE_DEG      |
+                       1 << Sco_SCOPE_CTR |
+                       1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();

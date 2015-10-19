@@ -655,7 +655,7 @@ struct Globals
    struct
      {
       Sta_ClicksGroupedBy_t ClicksGroupedBy;
-      Sta_FigureType_t UseStatType;
+      Sta_FigureType_t FigureType;
       Sta_Role_t Role;
       Sta_CountType_t CountType;
       Act_Action_t NumAction;

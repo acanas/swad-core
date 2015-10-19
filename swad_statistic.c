@@ -175,6 +175,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
+static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res);
 
 static void Sta_GetAndShowUsersStats (void);
 static void Sta_GetAndShowUsersRanking (void);
@@ -451,7 +452,9 @@ void Sta_AskShowCrsHits (void)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned long i;
 
-   /***** Get and update type of list, number of columns in class photo and preference about view photos *****/
+   /***** Get and update type of list,
+          number of columns in class photo
+          and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Show form to select the grupos *****/
@@ -3799,7 +3802,7 @@ void Sta_ReqUseOfPlatform (void)
    extern const char *Txt_Scope;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
-   Sta_FigureType_t UseStatType;
+   Sta_FigureType_t FigureType;
 
    /***** Form to show statistic *****/
    Act_FormStart (ActSeeUseGbl);
@@ -3823,20 +3826,20 @@ void Sta_ReqUseOfPlatform (void)
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<br />"
-	              "%s: <select name=\"UseStatType\">",
+	              "%s: <select name=\"FigureType\">",
 	    Txt_Statistic);
-   for (UseStatType = (Sta_FigureType_t) 0;
-	UseStatType < Sta_NUM_FIGURES;
-	UseStatType++)
+   for (FigureType = (Sta_FigureType_t) 0;
+	FigureType < Sta_NUM_FIGURES;
+	FigureType++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",
-               (unsigned) UseStatType);
-      if (UseStatType == Gbl.Stat.UseStatType)
+               (unsigned) FigureType);
+      if (FigureType == Gbl.Stat.FigureType)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out," />"
 	                 "%s"
 	                 "</option>",
-               Txt_STAT_USE_STAT_TYPES[UseStatType]);
+               Txt_STAT_USE_STAT_TYPES[FigureType]);
      }
    fprintf (Gbl.F.Out,"</select>"
                       "</div>");
@@ -3849,6 +3852,15 @@ void Sta_ReqUseOfPlatform (void)
   }
 
 /*****************************************************************************/
+/********* Put hidden parameter for the type of figure (statistic) ***********/
+/*****************************************************************************/
+
+void Pho_PutHiddenParamFigureType (void)
+  {
+   Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Gbl.Stat.FigureType);
+  }
+
+/*****************************************************************************/
 /************************** Show use of the platform *************************/
 /*****************************************************************************/
 
@@ -3858,18 +3870,18 @@ void Sta_ShowUseOfPlatform (void)
    unsigned UnsignedNum;
 
    /***** Get the type of stat of use ******/
-   Par_GetParToText ("UseStatType",UnsignedStr,10);
+   Par_GetParToText ("FigureType",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
       Lay_ShowErrorAndExit ("Type of stat is missing.");
    if (UnsignedNum >= Sta_NUM_FIGURES)
       Lay_ShowErrorAndExit ("Type of stat is missing.");
-   Gbl.Stat.UseStatType = (Sta_FigureType_t) UnsignedNum;
+   Gbl.Stat.FigureType = (Sta_FigureType_t) UnsignedNum;
 
    /***** Show again the form to see use of the platform *****/
    Sta_ReqUseOfPlatform ();
 
    /***** Show the stat of use selected by user *****/
-   switch (Gbl.Stat.UseStatType)
+   switch (Gbl.Stat.FigureType)
      {
       case Sta_USERS_RANKING:
 	 /***** Users ranking *****/
@@ -4700,6 +4712,17 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 
 static void Sta_GetAndShowInstitutionsStats (void)
   {
+   extern const char *Txt_Institutions;
+
+   /***** Get and update type of list, number of columns in class photo
+          and preference about view photos *****/
+   Usr_GetAndUpdatePrefsAboutUsrList ();
+
+   /***** Form to select type of list used to display degree photos *****/
+   Lay_StartRoundFrame (NULL,Txt_Institutions);
+   Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
+   Lay_EndRoundFrame ();
+
    /****** Institutions ordered by number of centres ******/
    Sta_GetAndShowInssOrderedByNumCtrs ();
 
@@ -5000,82 +5023,150 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institution;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
    unsigned NumOrder;
    unsigned NumberLastRow;
    unsigned NumberThisRow;
    struct Institution Ins;
+   bool TRIsOpen = false;
 
    /***** Query database *****/
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th></th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"RIGHT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "</tr>",
-	       Txt_Institution,
-	       TxtFigure);
-
-      for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
-	   NumIns <= NumInss;
-	   NumIns++)
+      /* Draw the classphoto/list */
+      switch (Gbl.Usrs.Me.ListType)
 	{
-	 /***** Get next institution *****/
-	 row = mysql_fetch_row (mysql_res);
+	 case Usr_CLASS_PHOTO:
+	    /***** Draw institutions as a class photo *****/
+	    for (NumIns = 0;
+		 NumIns < NumInss;)
+	      {
+	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  fprintf (Gbl.F.Out,"<tr>");
+		  TRIsOpen = true;
+		 }
 
-	 /* Get data of this institution (row[0]) */
-	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
-	    Lay_ShowErrorAndExit ("Institution not found.");
+	       /***** Get institution data and statistic *****/
+	       NumberThisRow = Sta_GetInsAndStat (&Ins,mysql_res);
 
-	 /* Get statistic (row[1]) */
-	 if (sscanf (row[1],"%u",&NumberThisRow) != 1)
-            Lay_ShowErrorAndExit ("Error in statistic");
+	       /***** Write link to institution *****/
+	       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
+			The_ClassForm[Gbl.Prefs.Theme]);
 
-	 /***** Number of order *****/
-	 if (NumberThisRow != NumberLastRow)
-	    NumOrder = NumIns;
-	 fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u"
-	                    "</td>",
-	          NumOrder);
+	       /* Icon and name of this institution */
+	       Act_FormStart (ActSeeInsInf);
+	       Ins_PutParamInsCod (Ins.InsCod);
+	       Act_LinkFormSubmit (Ins.FullName,The_ClassForm[Gbl.Prefs.Theme]);
+	       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,
+			     32,NULL,true);
+	       fprintf (Gbl.F.Out,"<br />%u</a>",NumberThisRow);
+	       Act_FormEnd ();
 
-	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme]);
+	       fprintf (Gbl.F.Out,"</td>");
 
-	 /* Icon and name of this institution */
-	 Act_FormStart (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins.InsCod);
-	 Act_LinkFormSubmit (Ins.ShortName,The_ClassForm[Gbl.Prefs.Theme]);
-	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-		       32,NULL,true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
-	 Act_FormEnd ();
+	       /***** End of user's cell *****/
+	       fprintf (Gbl.F.Out,"</td>");
 
-	 fprintf (Gbl.F.Out,"</td>");
+	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  fprintf (Gbl.F.Out,"</tr>");
+		  TRIsOpen = false;
+		 }
+	      }
+	    if (TRIsOpen)
+	       fprintf (Gbl.F.Out,"</tr>");
 
-	 /***** Write statistic *****/
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-	                    "</tr>",
-	          NumberThisRow);
+	    break;
+	 case Usr_LIST:
+	    /***** Draw institutions as a list *****/
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<th></th>"
+			       "<th class=\"LEFT_MIDDLE\">"
+			       "%s"
+			       "</th>"
+			       "<th class=\"RIGHT_MIDDLE\">"
+			       "%s"
+			       "</th>"
+			       "</tr>",
+		     Txt_Institution,
+		     TxtFigure);
 
-	 NumberLastRow = NumberThisRow;
+	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
+		 NumIns <= NumInss;
+		 NumIns++)
+	      {
+	       /***** Get institution data and statistic *****/
+	       NumberThisRow = Sta_GetInsAndStat (&Ins,mysql_res);
+
+	       /***** Number of order *****/
+	       if (NumberThisRow != NumberLastRow)
+		  NumOrder = NumIns;
+	       fprintf (Gbl.F.Out,"<tr>"
+				  "<td class=\"DAT RIGHT_MIDDLE\">"
+				  "%u"
+				  "</td>",
+			NumOrder);
+
+	       /***** Write link to institution *****/
+	       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
+			The_ClassForm[Gbl.Prefs.Theme]);
+
+	       /* Icon and name of this institution */
+	       Act_FormStart (ActSeeInsInf);
+	       Ins_PutParamInsCod (Ins.InsCod);
+	       Act_LinkFormSubmit (Ins.ShortName,The_ClassForm[Gbl.Prefs.Theme]);
+	       if (Gbl.Usrs.Listing.WithPhotos)
+		 {
+		  Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
+				32,NULL,true);
+	          fprintf (Gbl.F.Out,"&nbsp;");
+		 }
+	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
+	       Act_FormEnd ();
+
+	       fprintf (Gbl.F.Out,"</td>");
+
+	       /***** Write statistic *****/
+	       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+				  "%u"
+				  "</td>"
+				  "</tr>",
+			NumberThisRow);
+
+	       NumberLastRow = NumberThisRow;
+	      }
+	    break;
 	}
      }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************* Get total number of users *************************/
+/*****************************************************************************/
+
+static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   unsigned NumberThisRow;
+
+   /***** Get next institution *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get data of this institution (row[0]) *****/
+   Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
+   if (!Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_MINIMAL_DATA))
+      Lay_ShowErrorAndExit ("Institution not found.");
+
+   /***** Get statistic (row[1]) *****/
+   if (sscanf (row[1],"%u",&NumberThisRow) != 1)
+      Lay_ShowErrorAndExit ("Error in statistic");
+
+   return NumberThisRow;
   }
 
 /*****************************************************************************/

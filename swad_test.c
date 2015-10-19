@@ -5889,7 +5889,8 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
    extern const char *Txt_Users;
    extern const char *Txt_See_exams;
 
-   /***** Get and update type of list, number of columns in class photo
+   /***** Get and update type of list,
+          number of columns in class photo
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 

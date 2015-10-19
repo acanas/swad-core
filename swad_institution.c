@@ -165,7 +165,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                             "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                   BgColor,Ins.WWW,Ins.FullName);
          Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-                       16,"CENTER_TOP",true);
+                       16,"CENTER_MIDDLE",true);
          fprintf (Gbl.F.Out,"</a>"
                             "</td>");
 

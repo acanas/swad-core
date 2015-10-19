@@ -281,8 +281,9 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
-      /***** Get and update type of list, number of columns in class photo
-             and preference about view photos *****/
+      /***** Get and update type of list,
+	     number of columns in class photo
+	     and preference about view photos *****/
       Usr_GetAndUpdatePrefsAboutUsrList ();
 
       /***** Form to select groups *****/

@@ -1486,7 +1486,9 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get how to order degrees from form *****/
    Gbl.Stat.DegPhotos.HowOrderDegrees = Pho_GetHowOrderDegreesFromForm ();
 
-   /***** Get and update type of list, number of columns in class photo and preference about view photos *****/
+   /***** Get and update type of list,
+          number of columns in class photo
+          and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    if (SeeOrPrint == Pho_DEGREES_SEE)

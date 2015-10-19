@@ -147,6 +147,7 @@ void Sta_SetIniEndDates (void);
 void Sta_SeeGblAccesses (void);
 void Sta_SeeCrsAccesses (void);
 void Sta_ReqUseOfPlatform (void);
+void Pho_PutHiddenParamFigureType (void);
 void Sta_ShowUseOfPlatform (void);
 unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role);
 void Sta_WriteParamsDatesSeeAccesses (void);

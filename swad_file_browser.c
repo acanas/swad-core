@@ -2842,7 +2842,8 @@ void Brw_AskEditWorksCrs (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Get and update type of list, number of columns in class photo
+   /***** Get and update type of list,
+          number of columns in class photo
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
