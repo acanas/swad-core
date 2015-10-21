@@ -102,6 +102,20 @@ void Dat_GetAndConvertCurrentDateTime (void)
   }
 
 /*****************************************************************************/
+/************ Get UNIX time (seconds since 1970 UTC) from string *************/
+/*****************************************************************************/
+
+time_t Dat_GetUNIXTimeFromStr (const char *Str)
+  {
+   time_t Time;
+
+   if (sscanf (Str,"%ld",&Time) != 1)
+      Time = (time_t) 0;
+
+   return Time;
+  }
+
+/*****************************************************************************/
 /*********** Get a struct Date from a string in YYYYMMDD format **************/
 /*****************************************************************************/
 
@@ -152,40 +166,13 @@ bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YY
   }
 
 /*****************************************************************************/
-/***************************** Show date ant time ****************************/
-/*****************************************************************************/
-/*
-void Dat_ShowCurrentDateTime (void)
-  {
-   extern const char *The_ClassCurrentTime[The_NUM_THEMES];
-   extern const char *Txt_MONTHS_SMALL_SHORT[12];
-
-   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\""
-	              " style=\"padding-top:10px;\">"
-                      "%u %s, %u:%02u"
-                      "</div>",
-            The_ClassCurrentTime[Gbl.Prefs.Theme],
-            Gbl.Now.Date.Day,
-            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
-            Gbl.Now.Time.Hour,Gbl.Now.Time.Minute);
-  }
-*/
-/*****************************************************************************/
-/***************************** Show date ant time ****************************/
+/******************** Write div for client local time ************************/
 /*****************************************************************************/
 
-void Dat_ShowCurrentDateTime (void)
+void Dat_ShowClientLocalTime (void)
   {
    extern const char *The_ClassCurrentTime[The_NUM_THEMES];
-/*
-<script type="text/javascript">
-function localize(t)
-{
-  var d=new Date(t+" UTC");
-  document.write(d.toString());
-}
-</script>
-*/
+
    fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\""
 	              " style=\"padding-top:10px;\">"
                       "</div>",
@@ -277,6 +264,137 @@ void Dat_WriteFormIniEndDates (void)
                       false,false);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
+  }
+
+
+/*****************************************************************************/
+/************************* Show a form to enter a date ***********************/
+/*****************************************************************************/
+
+void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
+	                               const char *NameSelectDay,
+	                               const char *NameSelectMonth,
+	                               const char *NameSelectYear,
+	                               const char *NameSelectHour,
+	                               const char *NameSelectMinute,
+                                       bool SubmitFormOnChange,bool Disabled)
+  {
+   extern const char *Txt_MONTHS_SMALL[12];
+   unsigned Day;
+   unsigned Month;
+   unsigned Year;
+   unsigned Hour;
+   unsigned Minute;
+
+   /***** Day *****/
+   fprintf (Gbl.F.Out,"<table>"
+	              "<tr>"
+	              "<td class=\"CENTER_MIDDLE\">"
+	              "<select id=\"%s\" name=\"%s\"",
+            NameSelectDay,NameSelectDay);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+               Gbl.FormId);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Day = 1;
+	Day <= 31;
+	Day++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
+               Day,Day);
+
+   /***** Month *****/
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+	              "<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%s\" name=\"%s\""
+                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
+	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Month = 1;
+	Month <= 12;
+	Month++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
+               Month,Txt_MONTHS_SMALL[Month-1]);
+
+   /***** Year *****/
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+	              "<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
+	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Year = FirstYear;
+	Year <= LastYear;
+	Year++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
+               Year,Year);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Hour *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"%s\"",
+            NameSelectHour);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+               Gbl.FormId);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Hour = 0;
+	Hour <= 23;
+	Hour++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u h</option>",
+               Hour,Hour);
+
+   /***** Minute *****/
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"%s\"",
+	    NameSelectMinute);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+               Gbl.FormId);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Minute = 0;
+	Minute <= 59;
+	Minute++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
+               Minute,Minute);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>"
+	              "</tr>"
+	              "</table>");
+  }
+
+/*****************************************************************************/
+/***************** Get an hour-minute time from a form ***********************/
+/*****************************************************************************/
+
+time_t Dat_GetDateTimeFromForm (const char *NameParam)
+  {
+   char LongStr[1+10+1];
+
+   /**** Get time ****/
+   Par_GetParToText (NameParam,LongStr,1+10);
+   return Dat_GetUNIXTimeFromStr (LongStr);
   }
 
 /*****************************************************************************/
@@ -391,7 +509,8 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
 		              struct Time *TimeSelected,
                               bool SubmitFormOnChange,bool Disabled)
   {
-   unsigned Hour,Minute;
+   unsigned Hour;
+   unsigned Minute;
 
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<table>"

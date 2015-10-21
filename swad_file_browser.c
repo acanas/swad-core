@@ -5765,6 +5765,7 @@ void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const ch
 static void Brw_WriteDatesAssignment (void)
   {
    extern const char *Txt_unknown_assignment;
+   static unsigned UniqueId;
 
    fprintf (Gbl.F.Out,"<td colspan=\"2\""
 	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE COLOR%u\">",
@@ -5772,20 +5773,21 @@ static void Brw_WriteDatesAssignment (void)
 
    if (Gbl.FileBrowser.Asg.AsgCod > 0)
      {
-      fprintf (Gbl.F.Out,"<table>"
-	                 "<tr>");
+      UniqueId++;
 
       /***** Write start date *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-                         "&nbsp;%02u/%02u/%02u&nbsp;%02u:%02u"
-                         "</td>",
+      fprintf (Gbl.F.Out,"<table>"
+	                 "<tr>"
+                         "<td id=\"asg_start_date%u\" class=\"%s RIGHT_MIDDLE\">",
+               UniqueId,
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
-                                          "ASG_LST_DATE_RED",
-               Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Date.Day,
-               Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Date.Month,
-	       Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Date.Year % 100,
-	       Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Time.Hour,
-	       Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME].Time.Minute);
+                                          "ASG_LST_DATE_RED");
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateTimeFromUTC('asg_start_date%u',%ld);"
+			 "</script>",
+               UniqueId,
+	       (long) Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME]);
+      fprintf (Gbl.F.Out,"</td>");
 
       /***** Arrow *****/
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20px;\">"
@@ -5797,19 +5799,18 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "green" :
         	                          "red");
 
-      /***** Write start date *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-                         "%02u/%02u/%02u&nbsp;%02u:%02u"
-                         "</td>",
+      /***** Write end date *****/
+      fprintf (Gbl.F.Out,"<td id=\"asg_end_date%u\" class=\"%s RIGHT_MIDDLE\">",
+               UniqueId,
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
-                                          "ASG_LST_DATE_RED",
-               Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME].Date.Day,
-               Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME].Date.Month,
-               Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME].Date.Year % 100,
-	       Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME].Time.Hour,
-	       Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME].Time.Minute);
-
-      fprintf (Gbl.F.Out,"</tr>"
+                                          "ASG_LST_DATE_RED");
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateTimeFromUTC('asg_end_date%u',%ld);"
+			 "</script>",
+               UniqueId,
+	       (long) Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME]);
+      fprintf (Gbl.F.Out,"</td>"
+                         "</tr>"
 	                 "</table>");
      }
    else

@@ -705,7 +705,7 @@ static void Lay_WritePageTopHeading (void)
          /* Clock with hour:minute (server hour is shown) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
                             " style=\"width:160px; height:80px;\">");
-         Dat_ShowCurrentDateTime ();
+         Dat_ShowClientLocalTime ();
          fprintf (Gbl.F.Out,"</td>");	// End of first column
 
          /***** 2nd. row, 2nd. column: degree and course *****/

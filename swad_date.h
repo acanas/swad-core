@@ -68,15 +68,26 @@ struct DateTime
 void Dat_GetTimeStartExecution (void);
 void Dat_GetAndConvertCurrentDateTime (void);
 
+time_t Dat_GetUNIXTimeFromStr (const char *Str);
 bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
 bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YYYYMMDDHHMMSS);
 
-void Dat_ShowCurrentDateTime (void);
+void Dat_ShowClientLocalTime (void);
 
 void Dat_GetLocalTimeFromClock (const time_t *clock);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_WriteFormIniEndDates (void);
+
+void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
+	                               const char *NameSelectDay,
+	                               const char *NameSelectMonth,
+	                               const char *NameSelectYear,
+	                               const char *NameSelectHour,
+	                               const char *NameSelectMinute,
+                                       bool SubmitFormOnChange,bool Disabled);
+time_t Dat_GetDateTimeFromForm (const char *NameParam);
+
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *NameSelectDay,
 	                const char *NameSelectMonth,
