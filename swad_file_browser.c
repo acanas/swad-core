@@ -5824,6 +5824,8 @@ static void Brw_WriteDatesAssignment (void)
 
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata)
   {
+   static unsigned UniqueId = 0;
+
    /***** Write the file size *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
 	              "&nbsp;",
@@ -5839,8 +5841,13 @@ static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadat
    if (FileType == Brw_IS_FILE ||
        FileType == Brw_IS_LINK)
      {
-      Dat_GetLocalTimeFromClock (&(FileMetadata->Time));
-      Dat_WriteDateFromtblock ();
+      UniqueId++;
+      fprintf (Gbl.F.Out,"<span id=\"filedate%u\"></span>"
+	                 "<script type=\"text/javascript\">"
+                         "writeLocalDateFromUTC('filedate%u',%ld);"
+                         "</script>",
+               UniqueId,
+               UniqueId,(long) FileMetadata->Time);
      }
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -8974,10 +8981,14 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
+			    "<td id=\"filedate\" class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
-	 Dat_GetLocalTimeFromClock (&(FileMetadata.Time));
-	 Dat_WriteDateTimeFromtblock ();
+
+	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+		            "writeLocalDateTimeFromUTC('filedate',%ld);"
+		            "</script>",
+	          (long) FileMetadata.Time);
+
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 

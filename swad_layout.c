@@ -540,7 +540,7 @@ static void Lay_WriteScriptInit (void)
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)	// Clock visible
       fprintf (Gbl.F.Out,"	secondsSince1970UTC = %ld;\n"
-                         "	writeLocalTime();",
+                         "	writeLocalClock();",
                (long) Gbl.TimeStartExecution);
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&

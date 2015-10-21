@@ -74,8 +74,6 @@ bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YY
 void Dat_ShowCurrentDateTime (void);
 
 void Dat_GetLocalTimeFromClock (const time_t *clock);
-void Dat_WriteDateTimeFromtblock (void);
-void Dat_WriteDateFromtblock (void);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_WriteFormIniEndDates (void);

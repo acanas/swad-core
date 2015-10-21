@@ -32,17 +32,43 @@ var NumUsrsCon;
 var ListSeconds = new Array();
 var countClockConnected = 0;
 
-// Write local date-time updated every minute
-function writeLocalTime() {
+// Write a date in client local time
+function writeLocalDateFromUTC(id,secsSince1970UTC) {
 	var d = new Date;
+
+	d.setTime(secsSince1970UTC * 1000);
+	document.getElementById(id).innerHTML = d.toLocaleDateString();
+}
+
+// Write a date-time in client local time
+function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
+	var d = new Date;
+        var Minutes;
+	var StrMinutes;
+
+	d.setTime(secsSince1970UTC * 1000);
+	Minutes = d.getMinutes();
+	StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
+	document.getElementById(id).innerHTML = d.toLocaleDateString() + " " + d.getHours() + ":" + StrMinutes;
+}
+
+// Write clock in client local time updated every minute
+function writeLocalClock() {
+	var d = new Date;
+        var Minutes;
+	var StrMinutes;
         var PrintableDate;
 
-	d.setTime(secondsSince1970UTC * 1000);
-	PrintableDate = d.toLocaleDateString() + "<br />" + d.getHours() + ":" + d.getMinutes();
-	document.getElementById('hm').innerHTML = PrintableDate;
-
-	secondsSince1970UTC += 60;	// For next call
 	setTimeout("writeLocalTime()",60000);
+
+	d.setTime(secondsSince1970UTC * 1000);
+	secondsSince1970UTC += 60;	// For next call
+
+	Minutes = d.getMinutes();
+	StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
+	// PrintableDate = d.toLocaleDateString() + "<br />" + d.getHours() + ":" + StrMinutes;
+	PrintableDate = d.getHours() + ":" + StrMinutes;
+	document.getElementById('hm').innerHTML = PrintableDate;
 }
       
 function writeClockConnected() {

@@ -209,23 +209,6 @@ void Dat_GetLocalTimeFromClock (const time_t *clock)
   }
 
 /*****************************************************************************/
-/********************** Write date from struct tblock ************************/
-/*****************************************************************************/
-
-void Dat_WriteDateTimeFromtblock (void)
-  {
-   Dat_WriteDateFromtblock ();
-   fprintf (Gbl.F.Out,"&nbsp;%02d:%02d",
-            Gbl.tblock->tm_hour,Gbl.tblock->tm_min);
-  }
-
-void Dat_WriteDateFromtblock (void)
-  {
-   fprintf (Gbl.F.Out,"%02d/%02d/%02d",
-            Gbl.tblock->tm_mday,1+Gbl.tblock->tm_mon,Gbl.tblock->tm_year%100);
-  }
-
-/*****************************************************************************/
 /********* Convert a struct with Day, Month and Year to a date string ********/
 /*****************************************************************************/
 
