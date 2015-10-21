@@ -79,7 +79,9 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_WriteFormIniEndDates (void);
 
-void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
+void Dat_WriteFormClientLocalDateTime (const char *Id,
+                                       time_t DateTime,
+                                       unsigned FirstYear,unsigned LastYear,
 	                               const char *NameSelectDay,
 	                               const char *NameSelectMonth,
 	                               const char *NameSelectYear,

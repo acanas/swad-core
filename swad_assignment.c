@@ -1047,6 +1047,7 @@ void Asg_RequestCreatOrEditAsg (void)
    struct Assignment Asg;
    bool ItsANewAssignment;
    Asg_StartOrEndTime_t StartOrEndTime;
+   const char *Id[Asg_NUM_DATES] = {"StartDateTime","EndDateTime"};
    const char *NameSelectYear  [Asg_NUM_DATES] = {"StartYear"  ,"EndYear"  };
    const char *NameSelectMonth [Asg_NUM_DATES] = {"StartMonth" ,"EndMonth" };
    const char *NameSelectDay   [Asg_NUM_DATES] = {"StartDay"   ,"EndDay"   };
@@ -1154,7 +1155,9 @@ void Asg_RequestCreatOrEditAsg (void)
                          &(Asg.DateTimes[StartOrEndTime].Date),
                          false,false);
       */
-      Dat_WriteFormClientLocalDateTime (Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
+      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
+	                                Asg.DateTimes[StartOrEndTime],
+	                                Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
                                         NameSelectDay   [StartOrEndTime],
                                         NameSelectMonth [StartOrEndTime],
                                         NameSelectYear  [StartOrEndTime],

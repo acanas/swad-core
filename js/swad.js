@@ -52,6 +52,28 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
 	document.getElementById(id).innerHTML = d.toLocaleDateString() + " " + d.getHours() + ":" + StrMinutes;
 }
 
+// Write a date-time in client local time
+function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
+	var d = new Date;
+	var Day;
+	var Month;
+	var Year;
+	var Hour;
+        var Minute;
+
+	d.setTime(secsSince1970UTC * 1000);
+	Day = d.getDate();
+	Month = d.getMonth() + 1;
+	Year = d.getFullYear();
+	Hour = d.getHours();
+	Minute = d.getMinutes();
+	document.getElementById(id+'_day_'   +Day   ).selected = true;
+	document.getElementById(id+'_month_' +Month ).selected = true;
+	document.getElementById(id+'_year_'  +Year  ).selected = true;
+	document.getElementById(id+'_hour_'  +Hour  ).selected = true;
+	document.getElementById(id+'_minute_'+Minute).selected = true;
+}
+
 // Write clock in client local time updated every minute
 function writeLocalClock() {
 	var d = new Date;

@@ -271,7 +271,9 @@ void Dat_WriteFormIniEndDates (void)
 /************************* Show a form to enter a date ***********************/
 /*****************************************************************************/
 
-void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
+void Dat_WriteFormClientLocalDateTime (const char *Id,
+                                       time_t DateTime,
+                                       unsigned FirstYear,unsigned LastYear,
 	                               const char *NameSelectDay,
 	                               const char *NameSelectMonth,
 	                               const char *NameSelectYear,
@@ -301,8 +303,8 @@ void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
    for (Day = 1;
 	Day <= 31;
 	Day++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
-               Day,Day);
+      fprintf (Gbl.F.Out,"<option id=\"%s_day_%u\" value=\"%u\">%u</option>",
+               Id,Day,Day,Day);
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"</select>"
@@ -321,8 +323,8 @@ void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
    for (Month = 1;
 	Month <= 12;
 	Month++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
-               Month,Txt_MONTHS_SMALL[Month-1]);
+      fprintf (Gbl.F.Out,"<option id=\"%s_month_%u\" value=\"%u\">%s</option>",
+               Id,Month,Month,Txt_MONTHS_SMALL[Month-1]);
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"</select>"
@@ -340,8 +342,8 @@ void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
-               Year,Year);
+      fprintf (Gbl.F.Out,"<option id=\"%s_year_%u\" value=\"%u\">%u</option>",
+               Id,Year,Year,Year);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -358,8 +360,8 @@ void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
    for (Hour = 0;
 	Hour <= 23;
 	Hour++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u h</option>",
-               Hour,Hour);
+      fprintf (Gbl.F.Out,"<option id=\"%s_hour_%u\" value=\"%u\">%02u h</option>",
+               Id,Hour,Hour,Hour);
 
    /***** Minute *****/
    fprintf (Gbl.F.Out,"</select>"
@@ -376,12 +378,17 @@ void Dat_WriteFormClientLocalDateTime (unsigned FirstYear,unsigned LastYear,
    for (Minute = 0;
 	Minute <= 59;
 	Minute++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
-               Minute,Minute);
+      fprintf (Gbl.F.Out,"<option id=\"%s_minute_%u\" value=\"%u\">%02u &#39;</option>",
+               Id,Minute,Minute,Minute);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "</tr>"
 	              "</table>");
+
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+		      "setLocalDateTimeFormFromUTC('%s',%ld);"
+		      "</script>",
+	    Id,(long) DateTime);
   }
 
 /*****************************************************************************/
