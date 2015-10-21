@@ -154,7 +154,7 @@ bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YY
 /*****************************************************************************/
 /***************************** Show date ant time ****************************/
 /*****************************************************************************/
-
+/*
 void Dat_ShowCurrentDateTime (void)
   {
    extern const char *The_ClassCurrentTime[The_NUM_THEMES];
@@ -168,6 +168,28 @@ void Dat_ShowCurrentDateTime (void)
             Gbl.Now.Date.Day,
             Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
             Gbl.Now.Time.Hour,Gbl.Now.Time.Minute);
+  }
+*/
+/*****************************************************************************/
+/***************************** Show date ant time ****************************/
+/*****************************************************************************/
+
+void Dat_ShowCurrentDateTime (void)
+  {
+   extern const char *The_ClassCurrentTime[The_NUM_THEMES];
+/*
+<script type="text/javascript">
+function localize(t)
+{
+  var d=new Date(t+" UTC");
+  document.write(d.toString());
+}
+</script>
+*/
+   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\""
+	              " style=\"padding-top:10px;\">"
+                      "</div>",
+            The_ClassCurrentTime[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/

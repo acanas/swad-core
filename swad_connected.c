@@ -207,11 +207,11 @@ void Con_GetAndShowLastClicks (void)
    fprintf (Gbl.F.Out,"<table class=\"TABLE10\">"
                       "<tr>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:87px;\">"
+                      " style=\"width:85px;\">"
                       "%s"				// Click
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:75px;\">"
+                      " style=\"width:70px;\">"
                       "%s"				// Hour
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
@@ -223,7 +223,7 @@ void Con_GetAndShowLastClicks (void)
                       "%s"				// Country
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:100px;\">"
+                      " style=\"width:150px;\">"
                       "%s"				// Institution
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""

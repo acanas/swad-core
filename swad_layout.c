@@ -533,22 +533,15 @@ static void Lay_WriteScripts (void)
 
 static void Lay_WriteScriptInit (void)
   {
-   extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
                       "function init(){\n");
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)	// Clock visible
-      fprintf (Gbl.F.Out,"	IsToday = true;\n"
-                         "	StrToday = \"%u %s\";\n"
-                         "	Hour = %u;\n"
-                         "	Minute = %u;\n"
-                         "	writeClock();\n",
-               Gbl.Now.Date.Day,
-               Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
-               Gbl.Now.Time.Hour,
-               Gbl.Now.Time.Minute);
+      fprintf (Gbl.F.Out,"	secondsSince1970UTC = %ld;\n"
+                         "	writeLocalTime();",
+               (long) Gbl.TimeStartExecution);
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible

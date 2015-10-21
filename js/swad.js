@@ -24,41 +24,25 @@
 // Global variable used in refreshConnected()
 var ActionAJAX;
 
-// Global variables used in writeClock()
-var IsToday;
-var StrToday;
-var Hour;
-var Minute;
+// Global variables used in writeLocalTime()
+var secondsSince1970UTC;
 
 // Global variables used in writeClockConnected()
 var NumUsrsCon;
 var ListSeconds = new Array();
 var countClockConnected = 0;
 
-// Write a clock updated every minute
-// IsToday, StrToday, Hour and Minute are global variables initialized before call this function
-function writeClock() {
-	var StrHour = Hour;
-	var StrMinute = Minute;
-	var MidnightExceeded = false;
-        var PrintableClock;
-	if (Minute < 10)
-		StrMinute = "0" + StrMinute;
-	if (++Minute == 60) {
-		Minute = 0;
-		if (++Hour == 24) {
-			Hour = 0;
-			MidnightExceeded = true;
-		}
-	}
-        if (IsToday)
-		PrintableClock = StrToday + ", " + StrHour + ":" + StrMinute;
-        else
-		PrintableClock = StrHour + ":" + StrMinute;
-        if (MidnightExceeded)
-		IsToday = false;	// For next call
-	document.getElementById('hm').innerHTML = PrintableClock;
-	setTimeout("writeClock()",60000);
+// Write local date-time updated every minute
+function writeLocalTime() {
+	var d = new Date;
+        var PrintableDate;
+
+	d.setTime(secondsSince1970UTC * 1000);
+	PrintableDate = d.toLocaleDateString() + "<br />" + d.getHours() + ":" + d.getMinutes();
+	document.getElementById('hm').innerHTML = PrintableDate;
+
+	secondsSince1970UTC += 60;	// For next call
+	setTimeout("writeLocalTime()",60000);
 }
       
 function writeClockConnected() {

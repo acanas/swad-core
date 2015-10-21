@@ -142,7 +142,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CENTER_TOP\">"
-	              "<table style=\"border-spacing:6px;\">");
+	              "<table style=\"margin:0 auto; border-spacing:6px;\">");
    for (Row = 0;
 	Row < 4;
 	Row++)
