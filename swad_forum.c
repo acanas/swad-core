@@ -1764,7 +1764,7 @@ static void For_PutFormWhichForums (void)
                (unsigned) WhichForums);
       if (WhichForums == Gbl.Forum.WhichForums)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
                Gbl.FormId,Txt_FORUM_WHICH_FORUM[WhichForums]);

@@ -339,7 +339,7 @@ static void Ctr_Configuration (bool PrintView)
 			       "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtrPhoAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
-			       " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.FormId);
             if (PhotoAttribution)
 	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
@@ -1087,7 +1087,7 @@ void Ctr_WriteSelectorOfCentre (void)
    Act_FormGoToStart (ActSeeDeg);
    fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:175px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1215,7 +1215,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActChgCtrIns);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumIns = 0;
 	      NumIns < Gbl.Inss.Num;
@@ -1239,7 +1239,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
 	 if (Ctr->PlcCod == 0)
@@ -1270,8 +1270,9 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.FormId);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
@@ -1286,8 +1287,9 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " size=\"30\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.FormId);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
@@ -1302,8 +1304,9 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.FormId);
 	 Act_FormEnd ();
 	}
@@ -1340,7 +1343,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
+			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",

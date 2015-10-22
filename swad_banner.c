@@ -354,8 +354,9 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenBanSho);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"12\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -364,8 +365,9 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenBanFul);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"24\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                 " size=\"24\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_FULL_NAME,Ban->FullName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -376,7 +378,7 @@ static void Ban_ListBannersForEdition (void)
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_IMAGE,Ban->Img,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -385,8 +387,9 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgBanWWW);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"24\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                 " size=\"24\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Ban->WWW,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -910,14 +913,14 @@ void Ban_WriteMenuWithBanners (void)
       Act_FormStart (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
-      fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
-			 " title=\"%s\">"
+      fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\""
+	                 " onclick=\"document.getElementById('%s').submit();\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>",
-	       Gbl.FormId,
 	       Gbl.Banners.Lst[NumBan].FullName,
+	       Gbl.FormId,
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShortName,

@@ -1146,8 +1146,9 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActRenGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.FormId);
@@ -1160,7 +1161,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
       if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrollment)
@@ -1182,7 +1183,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.FormId);
       if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment)
@@ -1369,7 +1370,7 @@ static void Grp_ListGroupsForEdition (void)
          Act_FormStart (ActChgGrpTyp);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                            " onchange=\"document.getElementById('%s').submit();\">",
                   Gbl.FormId);
          for (NumTipGrpAux = 0;
               NumTipGrpAux < Gbl.CurrentCrs.Grps.GrpTypes.Num;
@@ -1389,8 +1390,9 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActRenGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
+                            " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                            " onchange=\":document.getElementById('%s').submit();\" />",
                   MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.FormId);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
@@ -1399,9 +1401,10 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActChgMaxStdGrp);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\" size=\"3\" maxlength=\"10\" value=\"");
+         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
+                            " size=\"3\" maxlength=\"10\" value=\"");
          Grp_WriteMaxStdsGrp (Grp->MaxStudents);
-         fprintf (Gbl.F.Out,"\" onchange=\"javascript:document.getElementById('%s').submit();\" />",
+         fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.FormId);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
@@ -4187,7 +4190,7 @@ void Grp_ShowSelectorWhichGrps (void)
                (unsigned) WhichGrps);
       if (WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                          " %s"
                          "</li>",
                Gbl.FormId,Txt_Show_WHICH_groups[WhichGrps]);

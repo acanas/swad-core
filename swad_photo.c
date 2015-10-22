@@ -646,7 +646,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
             NumFace++;
             sprintf (FormId,"form_%d",NumLastForm + NumFace);
             fprintf (Gbl.F.Out,"<area shape=\"circle\""
-                               " href=\"javascript:document.getElementById('%s').submit();\""
+                               " href=\"document.getElementById('%s').submit();\""
                                " coords=\"%u,%u,%u\">\n",
                      FormId,X,Y,Radius);
            }
@@ -1551,7 +1551,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"AvgType\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
@@ -1620,7 +1620,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"PhotoSize\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
 	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
@@ -1689,7 +1689,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"OrdDeg\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (Order = (Pho_HowOrderDegrees_t) 0;
 	Order < Pho_NUM_HOW_ORDER_DEGREES;

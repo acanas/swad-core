@@ -4450,8 +4450,9 @@ void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *I
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out," onclick=\"javascript:"
-		      "document.getElementById('%s').submit();return false;\">",
+   fprintf (Gbl.F.Out," onclick=\""
+	              "document.getElementById('%s').submit();"
+	              "return false;\">",
 	    Id);
   }
 
@@ -4464,10 +4465,11 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out," onclick=\"javascript:"
+   fprintf (Gbl.F.Out," onclick=\""
 		      "document.getElementById('update_%d').style.display='none';"	// Icon to be hiden on click
-		      " document.getElementById('updating_%d').style.display='';"	// Icon to be shown on click
-		      " document.getElementById('%s').submit();return false;\">",
+		      "document.getElementById('updating_%d').style.display='';"	// Icon to be shown on click
+		      "document.getElementById('%s').submit();"
+		      "return false;\">",
 	    Gbl.NumForm,
 	    Gbl.NumForm,
 	    Gbl.FormId);

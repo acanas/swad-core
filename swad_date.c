@@ -287,17 +287,17 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td class=\"CENTER_MIDDLE\">"
-	              "<select id=\"%sDay\" name=\"%sDay\"",
-            Id,Id);
-   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
-	    Id);
+	              "<select id=\"%sDay\" name=\"%sDay\""
+	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+            Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   fprintf (Gbl.F.Out,">"
+	              "<option value=\"0\">-</option>");
    for (Day = 1;
 	Day <= 31;
 	Day++)
@@ -309,10 +309,10 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
                       "<select id=\"%sMonth\" name=\"%sMonth\""
-                      " onchange=\"javascript:adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);",
-	    Id,Id,Id,Id,Id);
-   fprintf (Gbl.F.Out,"setUTCFromLocalDateTimeForm('%s');",
-	    Id);
+                      " onchange=\""
+                      "adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -331,10 +331,10 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
                       "<select id=\"%sYear\" name=\"%sYear\""
-                      " onchange=\"javascript:adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);",
-	    Id,Id,Id,Id,Id);
-   fprintf (Gbl.F.Out,"setUTCFromLocalDateTimeForm('%s');",
-	    Id);
+                      " onchange=\""
+                      "adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -352,10 +352,9 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select id=\"%sHour\" name=\"%sHour\"",
-            Id,Id);
-   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
-	    Id);
+                      "<select id=\"%sHour\" name=\"%sHour\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+            Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -373,11 +372,9 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<select id=\"%sMinute\" name=\"%sMinute\"",
-	    Id,Id);
-
-   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
-	    Id);
+                      "<select id=\"%sMinute\" name=\"%sMinute\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -396,9 +393,11 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 	              "</tr>"
 	              "</table>");
 
+   /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
             Id,Id,(long) TimeUTC);
 
+   /***** Script to set selectors to local date and time from UTC time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		      "setLocalDateTimeFormFromUTC('%s',%ld);"
 		      "</script>",
@@ -452,7 +451,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	              "<select id=\"%s\" name=\"%s\"",
             NameSelectDay,NameSelectDay);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -475,10 +474,10 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
                       "<select id=\"%s\" name=\"%s\""
-                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
+                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s);",
 	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -498,10 +497,10 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
+                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s);",
 	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -540,7 +539,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
                       "<select name=\"%s\"",
             NameSelectHour);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -562,7 +561,7 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
                       "<select name=\"%s\"",
 	    NameSelectMinute);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");

@@ -505,7 +505,7 @@ static void Hld_ListHolidaysForEdition (void)
       Act_FormStart (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
-	                 " onchange=\"javascript:document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"-1\"",
 	       Gbl.FormId);
       if (Hld->PlcCod <= 0)
@@ -528,7 +528,7 @@ static void Hld_ListHolidaysForEdition (void)
       Act_FormStart (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\""
-	                 " onchange=\"javascript:document.getElementById('%s').submit();\">",
+	                 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.FormId);
       for (HolidayType = (Hld_HolidayType_t) 0;
 	   HolidayType < Hld_NUM_TYPES_HOLIDAY;
@@ -570,8 +570,9 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"

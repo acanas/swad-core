@@ -213,7 +213,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Rec_MAX_LENGTH_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
                Gbl.FormId);
@@ -226,7 +226,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\" size=\"2\""
                          " maxlength=\"2\" value=\"%u\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
                Gbl.FormId);
       Act_FormEnd ();
@@ -237,7 +237,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Act_FormStart (ActChgVisFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                         " onchange=\"document.getElementById('%s').submit();\">",
                Gbl.FormId);
       for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
@@ -1362,7 +1362,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
    if (ShowOfficeHours)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\""
-	              " onclick=\"javascript:document.getElementById('%s').submit();\" />"
+	              " onclick=\"document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
@@ -3400,7 +3400,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /* Start form to select the country of my institution */
    Act_FormGoToStart (ActChgCtyMyIns);
    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:500px;\""
-	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
+	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
@@ -3439,7 +3439,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /* Start form to select institution */
    Act_FormGoToStart (ActChgMyIns);
    fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:500px;\""
-	              " onchange=\"javascript:document.getElementById('%s').submit();\">"
+	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.FormId);
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
@@ -3485,7 +3485,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       /* Start form to select centre */
       Act_FormGoToStart (ActChgMyCtr);
       fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:500px;\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
+			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
@@ -3529,7 +3529,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       /* Start form to select department */
       Act_FormGoToStart (ActChgMyDpt);
       fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:500px;\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\">"
+			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.FormId);
       if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)
@@ -3568,7 +3568,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+			 " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.FormId);
@@ -3588,7 +3588,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
-			 " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	       Gbl.FormId);

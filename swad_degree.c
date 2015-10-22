@@ -581,7 +581,7 @@ static void Deg_WriteSelectorOfDegree (void)
    Act_FormGoToStart (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:175px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1171,8 +1171,9 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActRenDegTyp);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\" size=\"25\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
+	                 " size=\"25\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Deg_MAX_LENGTH_DEGREE_TYPE_NAME,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.FormId);
@@ -1184,7 +1185,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       Act_FormStart (ActChgDegTypLog);
       Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s"
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? " checked=\"checked\"" :
         	                                                   "",
                Gbl.FormId);
@@ -1424,7 +1425,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegCtr);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:62px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumCtr = 0;
 	      NumCtr < Gbl.Ctrs.Num;
@@ -1447,8 +1448,9 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.FormId);
 	 Act_FormEnd ();
 	}
@@ -1462,8 +1464,9 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " size=\"20\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName,Gbl.FormId);
 	 Act_FormEnd ();
 	}
@@ -1479,7 +1482,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
 	                    " style=\"width:62px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (NumDegTyp = 0;
 	      NumDegTyp < Gbl.Degs.DegTypes.Num;
@@ -1510,7 +1513,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegFstYea);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"FirstYear\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (Year = 0;
 	      Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1534,7 +1537,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegLstYea);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"LastYear\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.FormId);
 	 for (Year = 0;
 	      Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1558,7 +1561,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegOptYea);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"OptYear\" value=\"Y\"%s"
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Deg->OptYear ? " checked=\"checked\"" :
 			         "",
 	          Gbl.FormId);
@@ -1585,8 +1588,9 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"5\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " size=\"5\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.FormId);
 	 Act_FormEnd ();
 	}
@@ -1617,7 +1621,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
+			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",

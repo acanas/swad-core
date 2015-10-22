@@ -291,7 +291,7 @@ static void Cty_Configuration (bool PrintView)
 			       "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
-			       " onchange=\"javascript:document.getElementById('%s').submit();\">",
+			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.FormId);
             if (MapAttribution)
 	       fprintf (Gbl.F.Out,"%s",MapAttribution);
@@ -977,7 +977,7 @@ void Cty_WriteSelectorOfCountry (void)
    /***** Start form *****/
    Act_FormGoToStart (ActSeeIns);
    fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:175px;\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">"
+                      " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.FormId);
    if (Gbl.CurrentCty.Cty.CtyCod < 0)
@@ -1318,8 +1318,9 @@ static void Cty_ListCountriesForEdition (void)
          Act_FormStart (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
+                            " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                            " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_BYTES_COUNTRY_NAME,
                   Cty->Name[Lan],Gbl.FormId);
          Act_FormEnd ();
@@ -1330,8 +1331,9 @@ static void Cty_ListCountriesForEdition (void)
          Act_FormStart (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+                            " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                            " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_LENGTH_COUNTRY_WWW,
                   Cty->WWW[Lan],Gbl.FormId);
          Act_FormEnd ();

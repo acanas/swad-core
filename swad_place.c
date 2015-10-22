@@ -446,8 +446,9 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -456,8 +457,9 @@ static void Plc_ListPlacesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");

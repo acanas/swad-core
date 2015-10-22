@@ -417,8 +417,9 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
+	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain,
                Gbl.FormId);
       Act_FormEnd ();
@@ -428,8 +429,9 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
+	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_INFO,Mai->Info,
                Gbl.FormId);
       Act_FormEnd ();

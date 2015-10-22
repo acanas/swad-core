@@ -618,16 +618,6 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
    char Query[1024];
 
    /***** Build query *****/
-   /*
-   sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title,Folder"
-                  " FROM assignments"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
-            Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   */
    sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
@@ -650,16 +640,6 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
    char Query[1024];
 
    /***** Query database *****/
-   /*
-   sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title,Folder"
-                  " FROM assignments"
-                  " WHERE CrsCod='%ld' AND Folder='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder);
-   */
    sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
@@ -706,17 +686,9 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get start date (row[3] holds the start date in YYYYMMDDHHMMSS format) */
-      /*
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Asg->DateTimes[Asg_START_TIME]),row[3])))
-	 Lay_ShowErrorAndExit ("Error when reading start date of assignment.");
-      */
       Asg->TimeUTC[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date (row[4] holds the end date in YYYYMMDDHHMMSS format) */
-      /*
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Asg->DateTimes[Asg_END_TIME]),row[4])))
-	 Lay_ShowErrorAndExit ("Error when reading end date of assignment.");
-      */
       Asg->TimeUTC[Asg_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
@@ -806,12 +778,9 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt)
 void Asg_GetNotifAssignment (char *SummaryStr,char **ContentStr,
                              long AsgCod,unsigned MaxChars,bool GetContent)
   {
-   // extern const char *Txt_Start_date;
-   // extern const char *Txt_End_date;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   // struct DateTime DateTimes[Asg_NUM_DATES];
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -1064,22 +1033,7 @@ void Asg_RequestCreatOrEditAsg (void)
      {
       /* Initialize to empty assignment */
       Asg.AsgCod = -1L;
-      /*
-      Asg.DateTimes[Asg_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      Asg.DateTimes[Asg_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      Asg.DateTimes[Asg_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      Asg.DateTimes[Asg_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      Asg.DateTimes[Asg_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-      Asg.DateTimes[Asg_START_TIME].Time.Second = Gbl.Now.Time.Second;
-      */
       Asg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
-      /*
-      Asg.DateTimes[Asg_END_TIME  ].Date.Day    = Gbl.Now.Date.Day;
-      Asg.DateTimes[Asg_END_TIME  ].Date.Month  = Gbl.Now.Date.Month;
-      Asg.DateTimes[Asg_END_TIME  ].Date.Year   = Gbl.Now.Date.Year;
-      Asg.DateTimes[Asg_END_TIME  ].Time.Hour   = 23;
-      Asg.DateTimes[Asg_END_TIME  ].Time.Minute = 59;
-      */
       Asg.TimeUTC[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
@@ -1141,27 +1095,11 @@ void Asg_RequestCreatOrEditAsg (void)
                The_ClassForm[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
 
-      /* Date */
-      /*
-      Dat_WriteFormDate (Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
-                         NameSelectDay  [StartOrEndTime],
-                         NameSelectMonth[StartOrEndTime],
-                         NameSelectYear [StartOrEndTime],
-                         &(Asg.DateTimes[StartOrEndTime].Date),
-                         false,false);
-      */
+      /* Date-time */
       Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
 	                                Asg.TimeUTC[StartOrEndTime],
 	                                Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
                                         false,false);
-
-      /* Time */
-      /*
-      Dat_WriteFormHourMinute (NameSelectHour  [StartOrEndTime],
-                               NameSelectMinute[StartOrEndTime],
-		               &(Asg.DateTimes[StartOrEndTime].Time),
-                               false,false);
-      */
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
@@ -1293,31 +1231,9 @@ void Asg_RecFormAssignment (void)
       Asg_GetDataOfAssignmentByCod (&OldAsg);
      }
 
-   /***** Get start date *****/
-   /*
-   Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
-                        &(NewAsg.DateTimes[Asg_START_TIME].Date.Day),
-                        &(NewAsg.DateTimes[Asg_START_TIME].Date.Month),
-                        &(NewAsg.DateTimes[Asg_START_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("StartHour","StartMinute",
-                              &(NewAsg.DateTimes[Asg_START_TIME].Time.Hour),
-                              &(NewAsg.DateTimes[Asg_START_TIME].Time.Minute));
-   NewAsg.DateTimes[Asg_START_TIME].Time.Second = 0;
-   */
+   /***** Get start/end date-times *****/
    NewAsg.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-
-   /***** Get end date *****/
-   /*
-   Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-                        &(NewAsg.DateTimes[Asg_END_TIME].Date.Day),
-                        &(NewAsg.DateTimes[Asg_END_TIME].Date.Month),
-                        &(NewAsg.DateTimes[Asg_END_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("EndHour","EndMinute",
-                              &(NewAsg.DateTimes[Asg_END_TIME].Time.Hour),
-                              &(NewAsg.DateTimes[Asg_END_TIME].Time.Minute));
-   NewAsg.DateTimes[Asg_END_TIME].Time.Second = 59;
-   */
-   NewAsg.TimeUTC[Asg_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
+   NewAsg.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get assignment title *****/
    Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
@@ -1331,28 +1247,6 @@ void Asg_RecFormAssignment (void)
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   /*
-   if (NewAsg.DateTimes[Asg_START_TIME].Date.Day   == 0 ||
-       NewAsg.DateTimes[Asg_START_TIME].Date.Month == 0 ||
-       NewAsg.DateTimes[Asg_START_TIME].Date.Year  == 0)
-     {
-      NewAsg.DateTimes[Asg_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewAsg.DateTimes[Asg_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewAsg.DateTimes[Asg_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewAsg.DateTimes[Asg_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      NewAsg.DateTimes[Asg_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-     }
-   if (NewAsg.DateTimes[Asg_END_TIME].Date.Day   == 0 ||
-       NewAsg.DateTimes[Asg_END_TIME].Date.Month == 0 ||
-       NewAsg.DateTimes[Asg_END_TIME].Date.Year  == 0)
-     {
-      NewAsg.DateTimes[Asg_END_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewAsg.DateTimes[Asg_END_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewAsg.DateTimes[Asg_END_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewAsg.DateTimes[Asg_END_TIME].Time.Hour   = 23;
-      NewAsg.DateTimes[Asg_END_TIME].Time.Minute = 59;
-     }
-   */
    if (NewAsg.TimeUTC[Asg_START_TIME] == 0)
       NewAsg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
    if (NewAsg.TimeUTC[Asg_END_TIME] == 0)
@@ -1465,27 +1359,6 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new assignment *****/
-   /*
-   sprintf (Query,"INSERT INTO assignments (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
-                  " VALUES ('%ld','%ld','%04u%02u%02u%02u%02u%02u','%04u%02u%02u%02u%02u%02u','%s','%s','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Asg->DateTimes[Asg_START_TIME].Date.Year,
-            Asg->DateTimes[Asg_START_TIME].Date.Month,
-            Asg->DateTimes[Asg_START_TIME].Date.Day,
-            Asg->DateTimes[Asg_START_TIME].Time.Hour,
-            Asg->DateTimes[Asg_START_TIME].Time.Minute,
-            Asg->DateTimes[Asg_START_TIME].Time.Second,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Year,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Month,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Day,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Hour,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Minute,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Second,
-            Asg->Title,
-            Asg->Folder,
-            Txt);
-   */
    sprintf (Query,"INSERT INTO assignments"
 	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
                   " VALUES"
@@ -1520,28 +1393,6 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the assignment *****/
-   /*
-   sprintf (Query,"UPDATE assignments"
-	          " SET StartTime='%04u%02u%02u%02u%02u%02u',EndTime='%04u%02u%02u%02u%02u%02u',"
-                  "Title='%s',Folder='%s',Txt='%s'"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
-            Asg->DateTimes[Asg_START_TIME].Date.Year,
-            Asg->DateTimes[Asg_START_TIME].Date.Month,
-            Asg->DateTimes[Asg_START_TIME].Date.Day,
-            Asg->DateTimes[Asg_START_TIME].Time.Hour,
-            Asg->DateTimes[Asg_START_TIME].Time.Minute,
-            Asg->DateTimes[Asg_START_TIME].Time.Second,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Year,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Month,
-            Asg->DateTimes[Asg_END_TIME  ].Date.Day   ,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Hour,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Minute,
-            Asg->DateTimes[Asg_END_TIME  ].Time.Second,
-            Asg->Title,
-            Asg->Folder,
-            Txt,
-            Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
-   */
    sprintf (Query,"UPDATE assignments SET "
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"

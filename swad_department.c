@@ -528,7 +528,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Act_FormStart (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
-	                 "onchange=\"javascript:document.getElementById('%s').submit();\">"
+	                 "onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"0\"",
 	       Gbl.FormId);
       if (Dpt->InsCod == 0)
@@ -550,8 +550,9 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -560,8 +561,9 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -570,8 +572,9 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");

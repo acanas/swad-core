@@ -286,7 +286,7 @@ void Sta_ExitIfTooFast (void)
 		      "<body>"
 		      "<h1 style=\"text-align:center;\">%s</h1>"
 		      "<h2 style=\"text-align:center;\">"
-		      "<a href=\"javascript:window.history.back();\">&larr; %s</a>"
+		      "<a href=\"\" onclick=\"window.history.back();\">&larr; %s</a>"
 		      "</h2>"
 		      "</body>"
 		      "</html>",
@@ -2042,7 +2042,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    fprintf (Gbl.F.Out,"%s: ",Txt_Color_of_the_graphic);
    fprintf (Gbl.F.Out,"<select name=\"ColorType\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (ColorType = (Sta_ColorType_t) 0;
 	ColorType < Sta_NUM_COLOR_TYPES;

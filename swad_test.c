@@ -1496,7 +1496,7 @@ static void Tst_ShowFormEditTags (void)
          Par_PutHiddenParamString ("OldTagTxt",row[1]);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                            " onchange=\"document.getElementById('%s').submit();\" />",
                   Tst_MAX_TAG_LENGTH,row[1],Gbl.FormId);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
@@ -2553,7 +2553,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
          if (Str_ConvertToUpperLetter (row[3][0]) == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />",
+         fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
                   Gbl.FormId);
          Act_FormEnd ();
         }

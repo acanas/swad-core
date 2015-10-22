@@ -601,7 +601,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"All\" value=\"Y\"");
    if (AllNotifications)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       " %s",
             Gbl.FormId,
             Txt_Show_all_notifications);

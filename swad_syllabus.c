@@ -103,7 +103,8 @@ struct
 static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void);
 static void Syl_LoadToMemory (Inf_InfoType_t InfoType);
 static void Syl_ShowSyllabus (Inf_InfoType_t InfoType);
-static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem);
+static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
+                                 int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileHTMLTmp);
 static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
 
@@ -149,7 +150,7 @@ void Syl_PutFormWhichSyllabus (void)
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.CurrentCrs.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
                Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
@@ -181,7 +182,6 @@ void Syl_EditSyllabus (void)
    extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
    extern const char *Txt_View;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_Enter_a_new_item_here;
    extern const char *Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_;
    extern const char *Txt_The_syllabus_lectures_of_the_course_X_is_not_available;
    extern const char *Txt_The_syllabus_practicals_of_the_course_X_is_not_available;
@@ -213,8 +213,7 @@ void Syl_EditSyllabus (void)
 
       /***** If the syllabus is empty ==> show form to add a iten to the end *****/
       if (Gbl.CurrentCrs.Syllabus.EditionIsActive && LstItemsSyllabus.NumItems == 0)
-         Syl_ShowRowSyllabus (InfoType,0,1,LstItemsSyllabus.Lst[0].CodItem,
-                              Txt_Enter_a_new_item_here,true);
+         Syl_ShowRowSyllabus (InfoType,0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
 
       /***** End of table *****/
       Lay_EndRoundFrameTable ();
@@ -479,7 +478,6 @@ int Syl_ReadLevelItemSyllabus (void)
 
 static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
   {
-   extern const char *Txt_Enter_a_new_item_here;
    unsigned NumItem;
    int i;
    int NumButtons = Gbl.CurrentCrs.Syllabus.EditionIsActive ? 5 :
@@ -508,12 +506,15 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
 	NumItem < LstItemsSyllabus.NumItems;
 	NumItem++)
      {
-      Syl_ShowRowSyllabus (InfoType,NumItem,LstItemsSyllabus.Lst[NumItem].Level,LstItemsSyllabus.Lst[NumItem].CodItem,LstItemsSyllabus.Lst[NumItem].Text,false);
+      Syl_ShowRowSyllabus (InfoType,NumItem,
+                           LstItemsSyllabus.Lst[NumItem].Level,
+                           LstItemsSyllabus.Lst[NumItem].CodItem,
+                           LstItemsSyllabus.Lst[NumItem].Text,false);
       if (ShowRowInsertNewItem && NumItem == Gbl.CurrentCrs.Syllabus.NumItem)
 	 // Mostrar a new row where se puede insert a new item
 	 Syl_ShowRowSyllabus (InfoType,NumItem + 1,
 	                      LstItemsSyllabus.Lst[NumItem].Level,NULL,
-	                      Txt_Enter_a_new_item_here,true);
+	                      "",true);
      }
   }
 
@@ -521,7 +522,8 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
 /******** Write a row (item) of a syllabus of lectures or practicals *********/
 /*****************************************************************************/
 
-static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,int Level,int *CodItem,const char *Text,bool NewItem)
+static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
+                                 int Level,int *CodItem,const char *Text,bool NewItem)
   {
    extern const char *Txt_Move_up_X_and_its_subsections;
    extern const char *Txt_Move_up_X;
@@ -902,18 +904,20 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
      }
 
    /***** Text of the item *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"%d LEFT_MIDDLE COLOR%u\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\">",
             LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
    Act_FormStart (NewItem ? (InfoType == Inf_LECTURES ? ActInsIteSylLec :
 	                                                ActInsIteSylPra) :
                             (InfoType == Inf_LECTURES ? ActModIteSylLec :
                         	                        ActModIteSylPra));
    Syl_PutParamNumItem (NumItem);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\" size=\"80\" maxlength=\"%u\" value=\"%s\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\""
-                      " onfocus=\"javascript:if(this.value=='%s') this.value='';\" />",
-	    Syl_MAX_LENGTH_TEXT_ITEM,Text,Gbl.FormId,
-	    Txt_Enter_a_new_item_here);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\""
+	              " size=\"80\" maxlength=\"%u\" value=\"%s\""
+                      " placeholder=\"%s\""
+                      " onchange=\"document.getElementById('%s').submit();\" />",
+	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
+	    Txt_Enter_a_new_item_here,
+	    Gbl.FormId);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
   }

@@ -5036,7 +5036,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"WithPhotos\" value=\"Y\"");
    if (Gbl.Usrs.Listing.WithPhotos)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "<span class=\"%s\">%s</span>",
 	    Gbl.FormId,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Display_photos);
@@ -7210,7 +7210,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** Start selector *****/
    fprintf (Gbl.F.Out,"<select name=\"ColsClassPhoto\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/

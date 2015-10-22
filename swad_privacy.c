@@ -131,7 +131,7 @@ void Pri_PutFormVisibility (const char *TxtLabel,Act_Action_t Action,
                (unsigned) Visibility);
       if (Visibility == CurrentVisibilityInDB)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
                Gbl.FormId,Txt_PRIVACY_OPTIONS[Visibility]);

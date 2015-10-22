@@ -1044,7 +1044,7 @@ void Ins_WriteSelectorOfInstitution (void)
    Act_FormGoToStart (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:175px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1169,7 +1169,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActChgInsCty);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:100px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+			    " onchange=\"document.getElementById('%s').submit();\" />"
 			    "<option value=\"0\"",
 		  Gbl.FormId);
 	 if (Ins->CtyCod == 0)
@@ -1198,8 +1198,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName,
 		  Gbl.FormId);
 	 Act_FormEnd ();
@@ -1214,8 +1215,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " size=\"30\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName,
 		  Gbl.FormId);
 	 Act_FormEnd ();
@@ -1230,8 +1232,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ins->WWW,
 		  Gbl.FormId);
 	 Act_FormEnd ();
@@ -1270,7 +1273,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
-			    " onchange=\"javascript:document.getElementById('%s').submit();\">"
+			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",

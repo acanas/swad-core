@@ -3078,7 +3078,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                            "BROWSER_TITLE_LIGHT");
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "%s"
                       "</li>",
             Gbl.FormId,
@@ -3111,7 +3111,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	          GrpDat.GrpCod);
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			    "%s %s"
 			    "</li>",
 		  Gbl.FormId,
@@ -4366,7 +4366,7 @@ static void Brw_WriteFormFullTree (void)
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"FullTree\" value=\"Y\"");
    if (Gbl.FileBrowser.FullTree)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />"
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       " %s",
             Gbl.FormId,
             Txt_Show_all_files);
@@ -5513,10 +5513,10 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,Brw_FileType_t 
 	    FileNameToShow);
 
    /* Link to the form and to the file */
-   fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
-		      " title=\"%s\" class=\"%s\">",
-	    Gbl.FormId,
-	    Gbl.Title,Gbl.FileBrowser.TxtStyle);
+   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
+	              " onclick=\"document.getElementById('%s').submit();\">",
+	    Gbl.Title,Gbl.FileBrowser.TxtStyle,
+	    Gbl.FormId);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileType,FileName);
@@ -5617,7 +5617,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
       	                    " size=\"40\" maxlength=\"40\" value=\"%s\""
                             " class=\"%s %s\""
-                            " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                            " onchange=\"document.getElementById('%s').submit();\" />",
 		  FileName,Gbl.FileBrowser.InputStyle,
                   Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -5674,12 +5674,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
 	                  Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP) ? Txt_Check_marks_in_file_X :
 	                	                                                Txt_Download_FILE_OR_LINK_X,
 	       FileNameToShow);
-      fprintf (Gbl.F.Out,"<a href=\"javascript:document.getElementById('%s').submit();\""
-			 " title=\"%s\" class=\"%s\">"
+      fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
+	                 " onclick=\"document.getElementById('%s').submit();\">"
 			 "%s"
 			 "</a>",
-	       Gbl.FormId,
 	       Gbl.Title,Gbl.FileBrowser.TxtStyle,
+	       Gbl.FormId,
 	       FileNameToShow);
       Act_FormEnd ();
 

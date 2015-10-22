@@ -437,7 +437,7 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
    if (MustBeRead)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," name=\"MustBeRead\" value=\"Y\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                      " onchange=\"document.getElementById('%s').submit();\" />"
                       " %s",
             Gbl.FormId,
             Txt_Force_students_to_read_this_information);
@@ -462,7 +462,7 @@ static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
    if (IHaveRead)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," name=\"IHaveRead\" value=\"Y\""
-                      " onchange=\"javascript:document.getElementById('%s').submit();\" />"
+                      " onchange=\"document.getElementById('%s').submit();\" />"
                       "%s",
             Gbl.FormId,
             Txt_I_have_read_this_information);
@@ -948,7 +948,7 @@ void Inf_FormsToSelSendInfo (void)
 	       (unsigned) InfoSrc);
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"javascript:document.getElementById('%s').submit();\" />",
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
                Gbl.FormId);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");

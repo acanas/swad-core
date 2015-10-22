@@ -1150,7 +1150,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 
 	 /***** Class type *****/
 	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:68px;\""
-	                    " onchange=\"javascript:document.getElementById('%s').submit();\">",
+	                    " onchange=\"document.getElementById('%s').submit();\">",
 	          Gbl.FormId);
 	 for (CT = (TT_ClassType_t) 0;
 	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
@@ -1188,7 +1188,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	   {
 	    /***** Class duration *****/
 	    fprintf (Gbl.F.Out,"<select name=\"ModTTDur\" style=\"width:57px;\""
-		               " onchange=\"javascript:document.getElementById('%s').submit();\">",
+		               " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.FormId);
             for (H = Hour + TimeTable[Day][Hour].Columns[Column].Duration;
         	 H < TT_HOURS_PER_DAY * 2;
@@ -1218,7 +1218,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	       fprintf (Gbl.F.Out,"<br />%s"
 	                          "<select name=\"ModTTGrpCod\""
 	                          " style=\"width:110px;\""
-		                  " onchange=\"javascript:document.getElementById('%s').submit();\">",
+		                  " onchange=\"document.getElementById('%s').submit();\">",
 		        Txt_Group,Gbl.FormId);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
 	       if (GrpCod <= 0)
@@ -1245,8 +1245,9 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 
 	       /***** Class room *****/
 	       fprintf (Gbl.F.Out,"<br />%s"
-	                          "<input type=\"text\" name=\"ModHorLugar\" size=\"1\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+	                          "<input type=\"text\" name=\"ModHorLugar\""
+	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
+		                  " onchange=\"document.getElementById('%s').submit();\" />",
 		        Txt_Classroom,TT_MAX_LENGTH_PLACE,Place,Gbl.FormId);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
@@ -1254,8 +1255,9 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                Par_PutHiddenParamString ("ModHorGrp","");
 	       /***** Place *****/
 	       fprintf (Gbl.F.Out,"<br />%s"
-                                  "<input type=\"text\" name=\"ModHorLugar\" size=\"12\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"javascript:document.getElementById('%s').submit();\" />",
+                                  "<input type=\"text\" name=\"ModHorLugar\""
+                                  " size=\"12\" maxlength=\"%u\" value=\"%s\""
+		                  " onchange=\"document.getElementById('%s').submit();\" />",
 		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.FormId);
 	      }
 	   }
