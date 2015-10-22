@@ -107,11 +107,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.16.1 (2015/10/22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.16.2 (2015/10/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.16.2:  Oct 22, 2015	Assignment date-times are displayed in client local date-time. Not finished. (186479 lines)
         Version 15.16.1:  Oct 22, 2015	Assignment date-times are displayed in client local date-time. Not finished. (186468 lines)
         Version 15.16:    Oct 22, 2015	Assignment date-times are displayed in client local date-time. Not finished. (186436 lines)
         Version 15.15.3:  Oct 21, 2015	File date-time is displayed in client local date-time. (186264 lines)

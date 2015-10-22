@@ -52,7 +52,7 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
 	document.getElementById(id).innerHTML = d.toLocaleDateString() + " " + d.getHours() + ":" + StrMinutes;
 }
 
-// Write a date-time in client local time
+// Set local date-time form fields from UTC time
 function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
 	var d = new Date;
 	var Day;
@@ -62,16 +62,32 @@ function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
         var Minute;
 
 	d.setTime(secsSince1970UTC * 1000);
-	Day = d.getDate();
-	Month = d.getMonth() + 1;
-	Year = d.getFullYear();
-	Hour = d.getHours();
+	Year   = d.getFullYear();
+	Month  = d.getMonth() + 1;
+	Day    = d.getDate();
+	Hour   = d.getHours();
 	Minute = d.getMinutes();
-	document.getElementById(id+'_day_'   +Day   ).selected = true;
-	document.getElementById(id+'_month_' +Month ).selected = true;
 	document.getElementById(id+'_year_'  +Year  ).selected = true;
+	document.getElementById(id+'_month_' +Month ).selected = true;
+	document.getElementById(id+'_day_'   +Day   ).selected = true;
 	document.getElementById(id+'_hour_'  +Hour  ).selected = true;
 	document.getElementById(id+'_minute_'+Minute).selected = true;
+}
+
+// Set UTC time from local date-time form fields 
+function setUTCFromLocalDateTimeForm(id) {
+	var d = new Date;
+	
+	// Important: set year first in order to work properly with leap years
+	d.setFullYear(document.getElementById(id+'Year'  ).value);
+	d.setMonth   (document.getElementById(id+'Month' ).value - 1);
+	d.setDate    (document.getElementById(id+'Day'   ).value);
+	d.setHours   (document.getElementById(id+'Hour'  ).value);
+	d.setMinutes (document.getElementById(id+'Minute').value);
+	d.setSeconds(0);
+	d.setMilliseconds(0);
+
+	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
 }
 
 // Write clock in client local time updated every minute

@@ -272,13 +272,8 @@ void Dat_WriteFormIniEndDates (void)
 /*****************************************************************************/
 
 void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                       time_t DateTime,
+                                       time_t TimeUTC,
                                        unsigned FirstYear,unsigned LastYear,
-	                               const char *NameSelectDay,
-	                               const char *NameSelectMonth,
-	                               const char *NameSelectYear,
-	                               const char *NameSelectHour,
-	                               const char *NameSelectMinute,
                                        bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
@@ -292,11 +287,14 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td class=\"CENTER_MIDDLE\">"
-	              "<select id=\"%s\" name=\"%s\"",
-            NameSelectDay,NameSelectDay);
+	              "<select id=\"%sDay\" name=\"%sDay\"",
+            Id,Id);
+   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
+	    Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
@@ -310,11 +308,13 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\""
-                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
-	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
+                      "<select id=\"%sMonth\" name=\"%sMonth\""
+                      " onchange=\"javascript:adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);",
+	    Id,Id,Id,Id,Id);
+   fprintf (Gbl.F.Out,"setUTCFromLocalDateTimeForm('%s');",
+	    Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -330,10 +330,13 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s)",
-	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
+                      "<select id=\"%sYear\" name=\"%sYear\""
+                      " onchange=\"javascript:adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);",
+	    Id,Id,Id,Id,Id);
+   fprintf (Gbl.F.Out,"setUTCFromLocalDateTimeForm('%s');",
+	    Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,";javascript:document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -349,11 +352,14 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"%s\"",
-            NameSelectHour);
+                      "<select id=\"%sHour\" name=\"%sHour\"",
+            Id,Id);
+   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
+	    Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,">");
@@ -367,11 +373,16 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"%s\"",
-	    NameSelectMinute);
+                      "<select id=\"%sMinute\" name=\"%sMinute\"",
+	    Id,Id);
+
+   fprintf (Gbl.F.Out," onchange=\"javascript:setUTCFromLocalDateTimeForm('%s');",
+	    Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"javascript:document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,">");
@@ -385,22 +396,25 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 	              "</tr>"
 	              "</table>");
 
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
+            Id,Id,(long) TimeUTC);
+
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		      "setLocalDateTimeFormFromUTC('%s',%ld);"
 		      "</script>",
-	    Id,(long) DateTime);
+	    Id,(long) TimeUTC);
   }
 
 /*****************************************************************************/
 /***************** Get an hour-minute time from a form ***********************/
 /*****************************************************************************/
 
-time_t Dat_GetDateTimeFromForm (const char *NameParam)
+time_t Dat_GetTimeUTCFromForm (const char *ParamName)
   {
    char LongStr[1+10+1];
 
    /**** Get time ****/
-   Par_GetParToText (NameParam,LongStr,1+10);
+   Par_GetParToText (ParamName,LongStr,1+10);
    return Dat_GetUNIXTimeFromStr (LongStr);
   }
 
@@ -572,23 +586,23 @@ void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectM
 /*************************** Get a date from a form **************************/
 /*****************************************************************************/
 
-void Dat_GetDateFromForm (const char *NameParamDay,const char *NameParamMonth,const char *NameParamYear,
+void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
    char UnsignedStr[10+1];
 
    /**** Get day ****/
-   Par_GetParToText (NameParamDay,UnsignedStr,10);
+   Par_GetParToText (ParamNameDay,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Day) != 1)
       *Day = 0;
 
    /**** Get month ****/
-   Par_GetParToText (NameParamMonth,UnsignedStr,10);
+   Par_GetParToText (ParamNameMonth,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Month) != 1)
       *Month = 0;
 
    /**** Get year ****/
-   Par_GetParToText (NameParamYear,UnsignedStr,10);
+   Par_GetParToText (ParamNameYear,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Year) != 1)
       *Year = 0;
   }
@@ -597,18 +611,18 @@ void Dat_GetDateFromForm (const char *NameParamDay,const char *NameParamMonth,co
 /***************** Get an hour-minute time from a form ***********************/
 /*****************************************************************************/
 
-void Dat_GetHourMinuteFromForm (const char *NameParamHour,const char *NameParamMinute,
+void Dat_GetHourMinuteFromForm (const char *ParamNameHour,const char *ParamNameMinute,
                                 unsigned *Hour,unsigned *Minute)
   {
    char UnsignedStr[10+1];
 
    /**** Get hour ****/
-   Par_GetParToText (NameParamHour,UnsignedStr,10);
+   Par_GetParToText (ParamNameHour,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Hour) != 1)
       *Hour = 0;
 
    /**** Get minute ****/
-   Par_GetParToText (NameParamMinute,UnsignedStr,10);
+   Par_GetParToText (ParamNameMinute,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Minute) != 1)
       *Minute = 0;
   }

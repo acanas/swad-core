@@ -5786,7 +5786,7 @@ static void Brw_WriteDatesAssignment (void)
 			 "writeLocalDateTimeFromUTC('asg_start_date%u',%ld);"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.DateTimes[Asg_START_TIME]);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME]);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Arrow *****/
@@ -5808,7 +5808,7 @@ static void Brw_WriteDatesAssignment (void)
 			 "writeLocalDateTimeFromUTC('asg_end_date%u',%ld);"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.DateTimes[Asg_END_TIME]);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME]);
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>"
 	                 "</table>");

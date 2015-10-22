@@ -80,15 +80,10 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 void Dat_WriteFormIniEndDates (void);
 
 void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                       time_t DateTime,
+                                       time_t TimeUTC,
                                        unsigned FirstYear,unsigned LastYear,
-	                               const char *NameSelectDay,
-	                               const char *NameSelectMonth,
-	                               const char *NameSelectYear,
-	                               const char *NameSelectHour,
-	                               const char *NameSelectMinute,
                                        bool SubmitFormOnChange,bool Disabled);
-time_t Dat_GetDateTimeFromForm (const char *NameParam);
+time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *NameSelectDay,
@@ -99,9 +94,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectMinute,
 		              struct Time *TimeSelected,
                               bool SubmitFormOnChange,bool Disabled);
-void Dat_GetDateFromForm (const char *NameParamDay,const char *NameParamMonth,const char *NameParamYear,
+void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
-void Dat_GetHourMinuteFromForm (const char *NameParamHour,const char *NameParamMinute,
+void Dat_GetHourMinuteFromForm (const char *ParamNameHour,const char *ParamNameMinute,
                                 unsigned *Hour,unsigned *Minute);
 
 void Dat_GetIniEndDatesFromForm (void);

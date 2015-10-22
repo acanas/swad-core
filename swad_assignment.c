@@ -252,7 +252,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.DateTimes[Asg_START_TIME]);
+            UniqueId,Asg.TimeUTC[Asg_START_TIME]);
 
    /* End date/time */
    UniqueId++;
@@ -267,7 +267,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.DateTimes[Asg_END_TIME]);
+            UniqueId,Asg.TimeUTC[Asg_END_TIME]);
 
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
@@ -684,8 +684,8 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
    unsigned long NumRows;
 
    /***** Clear data *****/
-   Asg->DateTimes[Asg_START_TIME] =
-   Asg->DateTimes[Asg_END_TIME  ] = (time_t) 0;
+   Asg->TimeUTC[Asg_START_TIME] =
+   Asg->TimeUTC[Asg_END_TIME  ] = (time_t) 0;
    Asg->Title[0] = '\0';
 
    /***** Get data of assignment from database *****/
@@ -710,14 +710,14 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Asg->DateTimes[Asg_START_TIME]),row[3])))
 	 Lay_ShowErrorAndExit ("Error when reading start date of assignment.");
       */
-      Asg->DateTimes[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Asg->TimeUTC[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date (row[4] holds the end date in YYYYMMDDHHMMSS format) */
       /*
       if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Asg->DateTimes[Asg_END_TIME]),row[4])))
 	 Lay_ShowErrorAndExit ("Error when reading end date of assignment.");
       */
-      Asg->DateTimes[Asg_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+      Asg->TimeUTC[Asg_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
       Asg->Open = (row[5][0] == '1');
@@ -1047,12 +1047,7 @@ void Asg_RequestCreatOrEditAsg (void)
    struct Assignment Asg;
    bool ItsANewAssignment;
    Asg_StartOrEndTime_t StartOrEndTime;
-   const char *Id[Asg_NUM_DATES] = {"StartDateTime","EndDateTime"};
-   const char *NameSelectYear  [Asg_NUM_DATES] = {"StartYear"  ,"EndYear"  };
-   const char *NameSelectMonth [Asg_NUM_DATES] = {"StartMonth" ,"EndMonth" };
-   const char *NameSelectDay   [Asg_NUM_DATES] = {"StartDay"   ,"EndDay"   };
-   const char *NameSelectHour  [Asg_NUM_DATES] = {"StartHour"  ,"EndHour"  };
-   const char *NameSelectMinute[Asg_NUM_DATES] = {"StartMinute","EndMinute"};
+   const char *Id[Asg_NUM_DATES] = {"Start","End"};
    const char *Dates[Asg_NUM_DATES] = {Txt_Start_date,Txt_End_date};
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
@@ -1077,7 +1072,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg.DateTimes[Asg_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
       Asg.DateTimes[Asg_START_TIME].Time.Second = Gbl.Now.Time.Second;
       */
-      Asg.DateTimes[Asg_START_TIME] = Gbl.TimeStartExecution;
+      Asg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
       /*
       Asg.DateTimes[Asg_END_TIME  ].Date.Day    = Gbl.Now.Date.Day;
       Asg.DateTimes[Asg_END_TIME  ].Date.Month  = Gbl.Now.Date.Month;
@@ -1085,7 +1080,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg.DateTimes[Asg_END_TIME  ].Time.Hour   = 23;
       Asg.DateTimes[Asg_END_TIME  ].Time.Minute = 59;
       */
-      Asg.DateTimes[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
+      Asg.TimeUTC[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
       Asg.SendWork = false;
@@ -1156,13 +1151,8 @@ void Asg_RequestCreatOrEditAsg (void)
                          false,false);
       */
       Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
-	                                Asg.DateTimes[StartOrEndTime],
+	                                Asg.TimeUTC[StartOrEndTime],
 	                                Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
-                                        NameSelectDay   [StartOrEndTime],
-                                        NameSelectMonth [StartOrEndTime],
-                                        NameSelectYear  [StartOrEndTime],
-                                        NameSelectHour  [StartOrEndTime],
-                                        NameSelectMinute[StartOrEndTime],
                                         false,false);
 
       /* Time */
@@ -1314,7 +1304,7 @@ void Asg_RecFormAssignment (void)
                               &(NewAsg.DateTimes[Asg_START_TIME].Time.Minute));
    NewAsg.DateTimes[Asg_START_TIME].Time.Second = 0;
    */
-   NewAsg.DateTimes[Asg_START_TIME] = Dat_GetDateTimeFromForm ("StartDateTime");
+   NewAsg.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
 
    /***** Get end date *****/
    /*
@@ -1327,7 +1317,7 @@ void Asg_RecFormAssignment (void)
                               &(NewAsg.DateTimes[Asg_END_TIME].Time.Minute));
    NewAsg.DateTimes[Asg_END_TIME].Time.Second = 59;
    */
-   NewAsg.DateTimes[Asg_END_TIME] = Dat_GetDateTimeFromForm ("EndDateTime");
+   NewAsg.TimeUTC[Asg_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
 
    /***** Get assignment title *****/
    Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
@@ -1363,10 +1353,10 @@ void Asg_RecFormAssignment (void)
       NewAsg.DateTimes[Asg_END_TIME].Time.Minute = 59;
      }
    */
-   if (NewAsg.DateTimes[Asg_START_TIME] == 0)
-      NewAsg.DateTimes[Asg_START_TIME] = Gbl.TimeStartExecution;
-   if (NewAsg.DateTimes[Asg_END_TIME] == 0)
-      NewAsg.DateTimes[Asg_END_TIME] = NewAsg.DateTimes[Asg_START_TIME] + 2*60*60;	// +2 hours
+   if (NewAsg.TimeUTC[Asg_START_TIME] == 0)
+      NewAsg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
+   if (NewAsg.TimeUTC[Asg_END_TIME] == 0)
+      NewAsg.TimeUTC[Asg_END_TIME] = NewAsg.TimeUTC[Asg_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAsg.Title[0])	// If there's an assignment title
@@ -1503,8 +1493,8 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
                   "'%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Asg->DateTimes[Asg_START_TIME],
-            Asg->DateTimes[Asg_END_TIME  ],
+            Asg->TimeUTC[Asg_START_TIME],
+            Asg->TimeUTC[Asg_END_TIME  ],
             Asg->Title,
             Asg->Folder,
             Txt);
@@ -1557,8 +1547,8 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "Title='%s',Folder='%s',Txt='%s'"
                   " WHERE AsgCod='%ld' AND CrsCod='%ld'",
-            Asg->DateTimes[Asg_START_TIME],
-            Asg->DateTimes[Asg_END_TIME  ],
+            Asg->TimeUTC[Asg_START_TIME],
+            Asg->TimeUTC[Asg_END_TIME  ],
             Asg->Title,
             Asg->Folder,
             Txt,
