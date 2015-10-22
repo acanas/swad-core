@@ -929,8 +929,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
       Dat_WriteFormDate (Gbl.ExamAnnouncement.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnnouncement.ExamDate.Year :
                                                                                   Gbl.Now.Date.Year,
-                         Gbl.Now.Date.Year+1,
-                         "ExamDay","ExamMonth","ExamYear",
+                         Gbl.Now.Date.Year + 1,"Exam",
                          &(Gbl.ExamAnnouncement.ExamDate),
                          false,false);
       fprintf (Gbl.F.Out,"</td>");

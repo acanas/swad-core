@@ -1022,9 +1022,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
    Att_StartOrEndTime_t StartOrEndTime;
-   const char *NameSelectYear  [Att_NUM_DATES] = {"StartYear"  ,"EndYear"  };
-   const char *NameSelectMonth [Att_NUM_DATES] = {"StartMonth" ,"EndMonth" };
-   const char *NameSelectDay   [Att_NUM_DATES] = {"StartDay"   ,"EndDay"   };
+   const char *Id[Att_NUM_DATES] = {"Start","End"};
    const char *NameSelectHour  [Att_NUM_DATES] = {"StartHour"  ,"EndHour"  };
    const char *NameSelectMinute[Att_NUM_DATES] = {"StartMinute","EndMinute"};
    const char *Dates[Att_NUM_DATES] = {Txt_Start_date,Txt_End_date};
@@ -1112,9 +1110,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
       /* Date */
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
-                         NameSelectDay  [StartOrEndTime],
-                         NameSelectMonth[StartOrEndTime],
-                         NameSelectYear [StartOrEndTime],
+                         Id[StartOrEndTime],
                          &(Att.DateTimes[StartOrEndTime].Date),
                          false,false);
 

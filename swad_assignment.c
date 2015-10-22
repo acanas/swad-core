@@ -1323,6 +1323,7 @@ void Asg_RecFormAssignment (void)
       Grp_FreeListCodSelectedGrps ();
      }
    else
+      // TODO: The form should be filled with partial data, now is always empty
       Asg_RequestCreatOrEditAsg ();
 
    /***** Notify by e-mail about the new assignment *****/

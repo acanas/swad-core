@@ -229,7 +229,7 @@ void Dat_WriteFormIniEndDates (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Start_date);
-   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"StartDay","StartMonth","StartYear",
+   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"Start",
                       &(Gbl.DateRange.DateIni),
                       false,false);
 
@@ -259,7 +259,7 @@ void Dat_WriteFormIniEndDates (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_End_date);
-   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"EndDay","EndMonth","EndYear",
+   Dat_WriteFormDate (Cfg_LOG_START_YEAR,Gbl.Now.Date.Year,"End",
                       &(Gbl.DateRange.DateEnd),
                       false,false);
    fprintf (Gbl.F.Out,"</td>"
@@ -282,11 +282,58 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    unsigned Year;
    unsigned Hour;
    unsigned Minute;
+   unsigned Second;
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table>"
+	              "<tr>");
+
+   /***** Year *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%sYear\" name=\"%sYear\""
+                      " onchange=\""
+                      "adjustDateForm('%s');"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Year = FirstYear;
+	Year <= LastYear;
+	Year++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
+               Year,Year);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Month *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%sMonth\" name=\"%sMonth\""
+                      " onchange=\""
+                      "adjustDateForm('%s');"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Month = 1;
+	Month <= 12;
+	Month++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
+               Month,Txt_MONTHS_SMALL[Month-1]);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
 
    /***** Day *****/
-   fprintf (Gbl.F.Out,"<table>"
-	              "<tr>"
-	              "<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select id=\"%sDay\" name=\"%sDay\""
 	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
             Id,Id,Id);
@@ -301,57 +348,13 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    for (Day = 1;
 	Day <= 31;
 	Day++)
-      fprintf (Gbl.F.Out,"<option id=\"%s_day_%u\" value=\"%u\">%u</option>",
-               Id,Day,Day,Day);
-
-   /***** Month *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%sMonth\" name=\"%sMonth\""
-                      " onchange=\""
-                      "adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);"
-                      "setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id,Id,Id,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
-   for (Month = 1;
-	Month <= 12;
-	Month++)
-      fprintf (Gbl.F.Out,"<option id=\"%s_month_%u\" value=\"%u\">%s</option>",
-               Id,Month,Month,Txt_MONTHS_SMALL[Month-1]);
-
-   /***** Year *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%sYear\" name=\"%sYear\""
-                      " onchange=\""
-                      "adjustDateForm(this.form.%sDay,this.form.%sMonth,this.form.%sYear);"
-                      "setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id,Id,Id,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
-   for (Year = FirstYear;
-	Year <= LastYear;
-	Year++)
-      fprintf (Gbl.F.Out,"<option id=\"%s_year_%u\" value=\"%u\">%u</option>",
-               Id,Year,Year,Year);
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
+               Day,Day);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
    /***** Hour *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">,&nbsp;"
                       "<select id=\"%sHour\" name=\"%sHour\""
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
             Id,Id,Id);
@@ -365,13 +368,13 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    for (Hour = 0;
 	Hour <= 23;
 	Hour++)
-      fprintf (Gbl.F.Out,"<option id=\"%s_hour_%u\" value=\"%u\">%02u h</option>",
-               Id,Hour,Hour,Hour);
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u h</option>",
+               Hour,Hour);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
 
    /***** Minute *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%sMinute\" name=\"%sMinute\""
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
 	    Id,Id,Id);
@@ -379,18 +382,39 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
-
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,">");
    for (Minute = 0;
 	Minute <= 59;
 	Minute++)
-      fprintf (Gbl.F.Out,"<option id=\"%s_minute_%u\" value=\"%u\">%02u &#39;</option>",
-               Id,Minute,Minute,Minute);
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
+               Minute,Minute);
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>"
+	              "</td>");
+
+   /***** Second *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select id=\"%sSecond\" name=\"%sSecond\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Second = 0;
+	Second <= 59;
+	Second++)
+      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &quot;</option>",
+               Second,Second);
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
@@ -400,8 +424,9 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
    /***** Script to set selectors to local date and time from UTC time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		      "setLocalDateTimeFormFromUTC('%s',%ld);"
+		      "adjustDateForm('%s');"
 		      "</script>",
-	    Id,(long) TimeUTC);
+	    Id,(long) TimeUTC,Id);
   }
 
 /*****************************************************************************/
@@ -432,9 +457,7 @@ http://javascript.internet.com/forms/category-selection.html
 See also http://www.ashleyit.com/rs/jsrs/select/php/select.php
 */
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
-	                const char *NameSelectDay,
-	                const char *NameSelectMonth,
-	                const char *NameSelectYear,
+	                const char *Id,
 		        struct Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled)
   {
@@ -448,8 +471,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td class=\"CENTER_MIDDLE\">"
-	              "<select id=\"%s\" name=\"%s\"",
-            NameSelectDay,NameSelectDay);
+	              "<select id=\"%sDay\" name=\"%sDay\"",
+            Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.FormId);
@@ -473,9 +496,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\""
-                      " onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s);",
-	    NameSelectMonth,NameSelectMonth,NameSelectDay,NameSelectMonth,NameSelectYear);
+                      "<select id=\"%sMonth\" name=\"%sMonth\""
+                      " onchange=\"adjustDateForm('%s');",
+	    Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -497,8 +520,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>"
 	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%s\" name=\"%s\" onchange=\"adjustDateForm(this.form.%s,this.form.%s,this.form.%s);",
-	    NameSelectYear,NameSelectYear,NameSelectDay,NameSelectMonth,NameSelectYear);
+                      "<select id=\"%sYear\" name=\"%sYear\""
+                      " onchange=\"adjustDateForm('%s');",
+	    Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);

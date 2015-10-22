@@ -1497,9 +1497,7 @@ void Svy_RequestCreatOrEditSvy (void)
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
    Svy_StartOrEndTime_t StartOrEndTime;
-   const char *NameSelectYear  [Svy_NUM_DATES] = {"StartYear"  ,"EndYear"  };
-   const char *NameSelectMonth [Svy_NUM_DATES] = {"StartMonth" ,"EndMonth" };
-   const char *NameSelectDay   [Svy_NUM_DATES] = {"StartDay"   ,"EndDay"   };
+   const char *Id[Svy_NUM_DATES] = {"Start","End"};
    const char *NameSelectHour  [Svy_NUM_DATES] = {"StartHour"  ,"EndHour"  };
    const char *NameSelectMinute[Svy_NUM_DATES] = {"StartMinute","EndMinute"};
    const char *Dates[Svy_NUM_DATES] = {Txt_Start_date,Txt_End_date};
@@ -1619,9 +1617,7 @@ void Svy_RequestCreatOrEditSvy (void)
                Dates[StartOrEndTime]);
       Dat_WriteFormDate (Gbl.Now.Date.Year-1,
 	                 Gbl.Now.Date.Year+1,
-                         NameSelectDay  [StartOrEndTime],
-                         NameSelectMonth[StartOrEndTime],
-                         NameSelectYear [StartOrEndTime],
+	                 Id[StartOrEndTime],
                          &(Svy.DateTimes[StartOrEndTime].Date),
                          false,false);
       fprintf (Gbl.F.Out,"</td>"

@@ -48,30 +48,33 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
 
 	d.setTime(secsSince1970UTC * 1000);
 	Minutes = d.getMinutes();
+	Seconds = d.getSeconds();
 	StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
-	document.getElementById(id).innerHTML = d.toLocaleDateString() + " " + d.getHours() + ":" + StrMinutes;
+	StrSeconds = ((Seconds < 10) ? "0" : "") + Seconds;
+	document.getElementById(id).innerHTML = d.toLocaleDateString() + "<br />" +
+						d.getHours() + ":" + StrMinutes + ":" + StrSeconds;
 }
 
 // Set local date-time form fields from UTC time
 function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
 	var d = new Date;
-	var Day;
-	var Month;
+	var YearForm = document.getElementById(id+'Year');
 	var Year;
-	var Hour;
-        var Minute;
 
 	d.setTime(secsSince1970UTC * 1000);
-	Year   = d.getFullYear();
-	Month  = d.getMonth() + 1;
-	Day    = d.getDate();
-	Hour   = d.getHours();
-	Minute = d.getMinutes();
-	document.getElementById(id+'_year_'  +Year  ).selected = true;
-	document.getElementById(id+'_month_' +Month ).selected = true;
-	document.getElementById(id+'_day_'   +Day   ).selected = true;
-	document.getElementById(id+'_hour_'  +Hour  ).selected = true;
-	document.getElementById(id+'_minute_'+Minute).selected = true;
+
+	Year = d.getFullYear()
+	for (var i=0; i<YearForm.options.length ; i++)
+		if (YearForm.options[i].value == Year)
+		{
+			YearForm.options[i].selected = true;
+			break;
+		}
+	document.getElementById(id+'Month' ).options[d.getMonth()+1].selected = true;
+	document.getElementById(id+'Day'   ).options[d.getDate()   ].selected = true;
+	document.getElementById(id+'Hour'  ).options[d.getHours()  ].selected = true;
+	document.getElementById(id+'Minute').options[d.getMinutes()].selected = true;
+	document.getElementById(id+'Second').options[d.getSeconds()].selected = true;
 }
 
 // Set UTC time from local date-time form fields 
@@ -80,14 +83,55 @@ function setUTCFromLocalDateTimeForm(id) {
 	
 	// Important: set year first in order to work properly with leap years
 	d.setFullYear(document.getElementById(id+'Year'  ).value);
-	d.setMonth   (document.getElementById(id+'Month' ).value - 1);
+	d.setMonth   (document.getElementById(id+'Month' ).value-1);
 	d.setDate    (document.getElementById(id+'Day'   ).value);
 	d.setHours   (document.getElementById(id+'Hour'  ).value);
 	d.setMinutes (document.getElementById(id+'Minute').value);
-	d.setSeconds(0);
+	d.setSeconds (document.getElementById(id+'Second').value);
 	d.setMilliseconds(0);
 
 	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
+}
+
+// Adjust a date form correcting days in the month
+function adjustDateForm (id) {
+	var Days = 31;
+	var YearForm  = document.getElementById(id+'Year' );
+	var MonthForm = document.getElementById(id+'Month');
+	var DayForm   = document.getElementById(id+'Day'  );
+	var Year = YearForm.options[YearForm.selectedIndex].value;
+
+	if (MonthForm.options[2].selected)			// Adjust days of february
+		Days = ((((Year % 4) == 0) && ((Year % 100) != 0)) || ((Year % 400) == 0)) ? 29 : 28;
+	else if (MonthForm.options[ 4].selected ||
+		 MonthForm.options[ 6].selected ||
+		 MonthForm.options[ 9].selected ||
+		 MonthForm.options[11].selected)
+		Days = 30;
+
+	if (DayForm.selectedIndex > Days)
+		DayForm.options[Days].selected = true;
+
+	for (var i=DayForm.options.length; i<=Days ; i++)	// Create new days
+	{
+		var x = String (i);
+		DayForm.options[i] = new Option(x,x);
+	}
+	for (var i=DayForm.options.length-1; i>Days; i--)	// Remove days
+		DayForm.options[i] = null;
+}
+
+// Set a the date in a date form to a specified date  
+function setDateTo (elem,Day,Month,Year) {
+	document.getElementById('StartYear' ).options[Year ].selected = true;
+	document.getElementById('StartMonth').options[Month].selected = true;
+	adjustDateForm (elem.form.StartDay,elem.form.StartMonth,elem.form.StartYear)
+	document.getElementById('StartDay'  ).options[Day  ].selected = true;
+
+	document.getElementById('EndYear' ).options[Year ].selected = true;
+	document.getElementById('EndMonth').options[Month].selected = true;
+	adjustDateForm (elem.form.EndDay,elem.form.EndMonth,elem.form.EndYear)
+	document.getElementById('EndDay'  ).options[Day  ].selected = true;
 }
 
 // Write clock in client local time updated every minute
@@ -327,32 +371,6 @@ function uncheckChildren(MainCheckbox, GroupCheckboxes) {
         if (MainCheckbox.checked)
 		for (i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == GroupCheckboxes) Formul.elements[i].checked = false;
-}
-
-// Adjust a date form correcting days in the month
-function adjustDateForm (DayForm,MonthForm,YearForm) {
-	var Days = 31;
-	var Year = YearForm.options[YearForm.selectedIndex].value;
-	if (MonthForm.options[2].selected)			// Adjust days of february
-		{ if ((((Year % 4) == 0) && ((Year % 100) != 0)) || ((Year % 400) == 0)) Days = 29; else Days = 28; }
-	else if (MonthForm.options[4].selected || MonthForm.options[6].selected || MonthForm.options[9].selected || MonthForm.options[11].selected) Days = 30;
-	if (DayForm.selectedIndex > Days) DayForm.options[Days].selected = true;
-	for (var i=DayForm.options.length; i<=Days ; i++)	// Create new days at start
-		{ var x = String (i); DayForm.options[i] = new Option(x,x); }
-	for (var i=DayForm.options.length-1; i>Days; i--)	// Remove days at the end
-		DayForm.options[i] = null;
-}
-
-// Set a the date in a date form to a specified date  
-function setDateTo (elem,Day,Month,Year) {
-	document.getElementById('StartYear').options[Year].selected = true;
-	document.getElementById('StartMonth').options[Month].selected = true;
-	adjustDateForm (elem.form.StartDay,elem.form.StartMonth,elem.form.StartYear)
-	document.getElementById('StartDay').options[Day].selected = true;
-	document.getElementById('EndYear').options[Year].selected = true;
-	document.getElementById('EndMonth').options[Month].selected = true;
-	adjustDateForm (elem.form.EndDay,elem.form.EndMonth,elem.form.EndYear)
-	document.getElementById('EndDay').options[Day].selected = true;
 }
 
 // Change text of a test descriptor

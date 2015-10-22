@@ -86,9 +86,7 @@ void Dat_WriteFormClientLocalDateTime (const char *Id,
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
-	                const char *NameSelectDay,
-	                const char *NameSelectMonth,
-	                const char *NameSelectYear,
+	                const char *Id,
 		        struct Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled);
 void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectMinute,

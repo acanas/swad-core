@@ -546,9 +546,9 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgHldStrDat);
       Hld_PutParamHldCod (Hld->HldCod);
-      Dat_WriteFormDate (Gbl.Now.Date.Year-1,
-	                 Gbl.Now.Date.Year+1,
-	                 "StartDay","StartMonth","StartYear",
+      Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
+	                 Gbl.Now.Date.Year + 1,
+	                 "Start",
                          &(Gbl.Hlds.Lst[NumHld].StartDate),
                          true,false);
       Act_FormEnd ();
@@ -558,9 +558,9 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgHldEndDat);
       Hld_PutParamHldCod (Hld->HldCod);
-      Dat_WriteFormDate (Gbl.Now.Date.Year-1,
-	                 Gbl.Now.Date.Year+1,
-	                 "EndDay","EndMonth","EndYear",
+      Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
+	                 Gbl.Now.Date.Year + 1,
+	                 "End",
                          &(Gbl.Hlds.Lst[NumHld].EndDate),
                          true,(Hld->HldTyp == Hld_HOLIDAY));
       Act_FormEnd ();
@@ -971,18 +971,18 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday date / Non school period start date *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-   Dat_WriteFormDate (Gbl.Now.Date.Year-1,
-	              Gbl.Now.Date.Year+1,
-	              "StartDay","StartMonth","StartYear",
+   Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
+	              Gbl.Now.Date.Year + 1,
+	              "Start",
                       &(Hld->StartDate),
                       false,false);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Non school period end date *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-   Dat_WriteFormDate (Gbl.Now.Date.Year-1,
-	              Gbl.Now.Date.Year+1,
-	              "EndDay","EndMonth","EndYear",
+   Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
+	              Gbl.Now.Date.Year + 1,
+	              "End",
                       &(Hld->EndDate),
                       false,false);
    fprintf (Gbl.F.Out,"</td>");

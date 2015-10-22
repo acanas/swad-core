@@ -2865,7 +2865,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (DataForm)
 	       Dat_WriteFormDate (Gbl.Now.Date.Year - 99,
 				  Gbl.Now.Date.Year - 16,
-				  "DiaNac","MesNac","AnoNac",
+				  "Birth",
 				  &(UsrDat->Birthday),
 				  false,false);
 	    else if (UsrDat->StrBirthday[0])
@@ -3285,7 +3285,10 @@ void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
    Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Cns_MAX_BYTES_STRING);
    Str_ConvertToTitleType (UsrDat->OriginPlace);
 
-   Dat_GetDateFromForm ("DiaNac","MesNac","AnoNac",&(UsrDat->Birthday.Day),&(UsrDat->Birthday.Month),&(UsrDat->Birthday.Year));
+   Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
+                        &(UsrDat->Birthday.Day  ),
+                        &(UsrDat->Birthday.Month),
+                        &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
    Par_GetParToText ("LocalAddress",UsrDat->LocalAddress,Cns_MAX_BYTES_STRING);
