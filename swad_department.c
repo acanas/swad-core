@@ -916,19 +916,22 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName);
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"WWW\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Dpt->WWW);

@@ -1047,7 +1047,8 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"file\" name=\"%s\" size=\"50\" maxlength=\"100\" value=\"\" />"
+                      "<input type=\"file\" name=\"%s\""
+                      " size=\"50\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
                       "</table>",
@@ -1082,7 +1083,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"InfoSrcURL\" size=\"50\" maxlength=\"256\" value=\"",
+                      "<input type=\"text\" name=\"InfoSrcURL\""
+                      " size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
    if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");

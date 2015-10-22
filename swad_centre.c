@@ -1864,7 +1864,8 @@ void Ctr_RequestPhoto (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s:&nbsp;"
 	              "</label>"
-                      "<input type=\"file\" name=\"%s\" size=\"40\" maxlength=\"100\" value=\"\" />"
+                      "<input type=\"file\" name=\"%s\""
+                      " size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -2038,19 +2039,22 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName);
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"WWW\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ctr->WWW);
 

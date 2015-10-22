@@ -657,13 +657,15 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Mail domain *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Domain\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Domain\""
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain);
 
    /***** Mail domain info *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Info\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Info\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
                       "</tr>",

@@ -1811,19 +1811,22 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName);
 
    /***** Institution full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"30\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName);
 
    /***** Institution WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"WWW\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ins->WWW);
 

@@ -1072,7 +1072,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -1115,7 +1116,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	              "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s: "
-                      "<input type=\"text\" name=\"Folder\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Folder\""
+                      " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],

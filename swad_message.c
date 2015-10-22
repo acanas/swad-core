@@ -2343,7 +2343,8 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "%s:&nbsp;"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FilterFromTo\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FilterFromTo\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -2357,7 +2358,8 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
                       "%s:&nbsp;"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FilterContent\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FilterContent\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],

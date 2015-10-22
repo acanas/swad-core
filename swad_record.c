@@ -224,8 +224,8 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgRowFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\" size=\"2\""
-                         " maxlength=\"2\" value=\"%u\""
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
+	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
                Gbl.FormId);
@@ -291,7 +291,8 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Number of lines in form ******/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-	              "<input type=\"text\" name=\"NumLines\" size=\"2\" maxlength=\"2\" value=\"%u\" />"
+	              "<input type=\"text\" name=\"NumLines\""
+	              " size=\"2\" maxlength=\"2\" value=\"%u\" />"
 	              "</td>",
             Gbl.CurrentCrs.Records.Field.NumLines);
 

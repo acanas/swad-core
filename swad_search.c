@@ -309,7 +309,8 @@ void Sch_PutFormToSearch (const char *IconURL)
    extern const char *Txt_Search;
 
    /***** String to find *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Search\" size=\"30\" maxlength=\"%u\" value=\"%s\"",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Search\""
+	              " size=\"30\" maxlength=\"%u\" value=\"%s\"",
 	    Sch_MAX_LENGTH_STRING_TO_FIND,
             Gbl.Search.Str);
    if (!Gbl.Search.Str[0])

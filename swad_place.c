@@ -694,13 +694,15 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Place short name *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName);
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
                       "</tr>",

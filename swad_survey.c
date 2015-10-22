@@ -1593,7 +1593,8 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Title\" size=\"45\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Title\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],

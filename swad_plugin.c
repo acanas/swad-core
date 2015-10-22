@@ -874,37 +874,43 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Plugin name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Name\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Name\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name);
 
    /***** Plugin description *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Description\" size=\"30\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Description\""
+                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description);
 
    /***** Plugin logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Logo\" size=\"4\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Logo\""
+                      " size=\"4\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo);
 
    /***** Plugin application key *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"AppKey\" size=\"16\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"AppKey\""
+                      " size=\"16\" maxlength=\"%u\" value=\"%s\" />"
 		      "</td>",
 	    Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey);
 
    /***** Plugin URL *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"URL\" size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"URL\""
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Plg->URL);
 
    /***** Plugin IP address *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"IP\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"IP\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_IP,Plg->IP);

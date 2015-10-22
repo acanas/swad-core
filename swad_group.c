@@ -2054,7 +2054,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"GrpTypName\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"GrpTypName\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_GROUP_TYPE_NAME,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 
@@ -2195,12 +2196,14 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"GrpName\" size=\"40\" maxlength=\"%u\" value=\"%s\" /></td>",
+                      "<input type=\"text\" name=\"GrpName\""
+                      " size=\"40\" maxlength=\"%u\" value=\"%s\" /></td>",
             MAX_LENGTH_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
 
    /***** Maximum number of students *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-	              "<input type=\"text\" name=\"MaxStudents\" size=\"3\" maxlength=\"10\" value=\"");
+	              "<input type=\"text\" name=\"MaxStudents\""
+	              " size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStdsGrp (Gbl.CurrentCrs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" /></td>");
 

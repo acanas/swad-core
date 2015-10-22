@@ -283,7 +283,8 @@ void Tst_ShowFormAskTst (void)
                             "<label class=\"%s\">"
                             "%s:&nbsp;"
                             "</label>"
-                            "<input type=\"text\" name=\"NumQst\" size=\"3\" maxlength=\"3\" value=\"%u\"",
+                            "<input type=\"text\" name=\"NumQst\""
+                            " size=\"3\" maxlength=\"3\" value=\"%u\"",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_questions,
                   Gbl.Test.Config.Def);
          if (Gbl.Test.Config.Min == Gbl.Test.Config.Max)
@@ -1621,7 +1622,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstMin\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      "<input type=\"text\" name=\"NumQstMin\""
+                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>",
             Txt_minimum,Gbl.Test.Config.Min);
@@ -1632,7 +1634,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstDef\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      "<input type=\"text\" name=\"NumQstDef\""
+                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>",
             Txt_default,Gbl.Test.Config.Def);
@@ -1643,7 +1646,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstMax\" size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      "<input type=\"text\" name=\"NumQstMax\""
+                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
                       "</td>"
                       "</tr>"
                       "</table>"
@@ -1657,7 +1661,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"MinTimeNxtTstPerQst\" size=\"7\" maxlength=\"7\" value=\"%lu\" />"
+                      "<input type=\"text\" name=\"MinTimeNxtTstPerQst\""
+                      " size=\"7\" maxlength=\"7\" value=\"%lu\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -3302,7 +3307,8 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 static void Tst_WriteTextAnsSeeExam (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\" size=\"40\" maxlength=\"%u\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
+	              " size=\"40\" maxlength=\"%u\" value=\"\" />",
             NumQst,Tst_MAX_SIZE_ANSWERS_ONE_QST);
   }
 
@@ -3478,7 +3484,8 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 static void Tst_WriteIntAnsSeeExam (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\" size=\"11\" maxlength=\"11\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
+	              " size=\"11\" maxlength=\"11\" value=\"\" />",
             NumQst);
   }
 
@@ -3581,7 +3588,8 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 static void Tst_WriteFloatAnsSeeExam (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\" size=\"11\" maxlength=\"%u\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
+	              " size=\"11\" maxlength=\"%u\" value=\"\" />",
             NumQst,Tst_MAX_BYTES_FLOAT_ANSWER);
   }
 
@@ -4231,7 +4239,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /***** Input of a new tag *****/
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                         "<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\" size=\"36\" maxlength=\"%u\" value=\"%s\""
+                         "<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\""
+                         " size=\"36\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
 	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.TagText[NumTag],NumTag);
@@ -4307,7 +4316,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                       "</td>"
                       "<td class=\"%s LEFT_TOP\">"
                       "%s: "
-                      "<input type=\"text\" name=\"AnsInt\" size=\"11\" maxlength=\"11\" value=\"%ld\"",
+                      "<input type=\"text\" name=\"AnsInt\""
+                      " size=\"11\" maxlength=\"11\" value=\"%ld\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Answers,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Integer_number,
             Gbl.Test.Answer.Integer);
@@ -4321,12 +4331,15 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	              "<td></td>"
                       "<td class=\"%s LEFT_TOP\">"
                       "%s "
-                      "<input type=\"text\" name=\"AnsFloatMin\" size=\"11\" maxlength=\"%u\" value=\"%lg\"",
+                      "<input type=\"text\" name=\"AnsFloatMin\""
+                      " size=\"11\" maxlength=\"%u\" value=\"%lg\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Real_number_between_A_and_B_1,
             Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[0]);
    if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /> %s <input type=\"text\" name=\"AnsFloatMax\" size=\"11\" maxlength=\"%u\" value=\"%lg\"",
+   fprintf (Gbl.F.Out," /> %s "
+	              "<input type=\"text\" name=\"AnsFloatMax\""
+	              " size=\"11\" maxlength=\"%u\" value=\"%lg\"",
             Txt_Real_number_between_A_and_B_2,
             Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[1]);
    if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)

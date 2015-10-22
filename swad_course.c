@@ -318,7 +318,8 @@ static void Crs_Configuration (bool PrintView)
               The_ClassForm[Gbl.Prefs.Theme],
               Txt_Institutional_code);
       if (IsForm)
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />",
+         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
+                            " size=\"%u\" maxlength=\"%u\" value=\"%s\" />",
                   Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                   Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                Gbl.CurrentCrs.Crs.InstitutionalCrsCod);
@@ -1539,7 +1540,8 @@ static void Crs_ListCoursesForEdition (void)
               {
                Act_FormStart (ActRenCrsSho);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\""
+               fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+        	                  " size=\"10\" maxlength=\"%u\" value=\"%s\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
                         Gbl.FormId);
@@ -1723,7 +1725,8 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Institutional code of the course *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"InsCrsCod\" size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"InsCrsCod\""
+                      " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
@@ -1770,13 +1773,15 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\" size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"ShortName\""
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"FullName\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
 

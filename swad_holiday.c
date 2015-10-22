@@ -989,7 +989,8 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Name\" size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "<input type=\"text\" name=\"Name\""
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "<td></td>"
                       "</tr>",
