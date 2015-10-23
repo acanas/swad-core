@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.17.2 (2015/10/23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.17.3 (2015/10/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.17.3:  Oct 23, 2015	Changes in JavaScript functions related to date-time. (186477 lines)
         Version 15.17.2:  Oct 23, 2015	Code refactoring related to forms. (186472 lines)
         Version 15.17.1:  Oct 23, 2015	Code refactoring related to dates and JavaScript. (186407 lines)
         Version 15.17:    Oct 22, 2015	Code refactoring related to dates and JavaScript.

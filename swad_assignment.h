@@ -57,7 +57,6 @@ struct Assignment
    long AsgCod;
    bool Hidden;
    long UsrCod;
-   // struct DateTime DateTimes[Asg_NUM_DATES];
    time_t TimeUTC[Asg_NUM_DATES];
    bool Open;
    char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE+1];

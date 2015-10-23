@@ -43,16 +43,22 @@ function writeLocalDateFromUTC(id,secsSince1970UTC) {
 // Write a date-time in client local time
 function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
 	var d = new Date;
-        var Minutes;
-	var StrMinutes;
+        var H;
+        var M;
+        var S;
+	var StrH;
+	var StrM;
+	var StrS;
 
 	d.setTime(secsSince1970UTC * 1000);
-	Minutes = d.getMinutes();
-	Seconds = d.getSeconds();
-	StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
-	StrSeconds = ((Seconds < 10) ? "0" : "") + Seconds;
-	document.getElementById(id).innerHTML = d.toLocaleDateString() + "<br />" +
-						d.getHours() + ":" + StrMinutes + ":" + StrSeconds;
+	H = d.getHours();
+	M = d.getMinutes();
+	S = d.getSeconds();
+	StrH = ((H < 10) ? '0' : '') + H;
+	StrM = ((M < 10) ? '0' : '') + M;
+	StrS = ((S < 10) ? '0' : '') + S;
+	document.getElementById(id).innerHTML = d.toLocaleDateString() + '<br />' +
+						StrH + ':' + StrM + ':' + StrS;
 }
 
 // Set local date-time form fields from UTC time
@@ -65,8 +71,7 @@ function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
 
 	Year = d.getFullYear()
 	for (var i=0; i<YearForm.options.length ; i++)
-		if (YearForm.options[i].value == Year)
-		{
+		if (YearForm.options[i].value == Year) {
 			YearForm.options[i].selected = true;
 			break;
 		}
@@ -112,8 +117,7 @@ function adjustDateForm (id) {
 	if (DayForm.selectedIndex > Days)
 		DayForm.options[Days].selected = true;
 
-	for (var i=DayForm.options.length; i<=Days ; i++)	// Create new days
-	{
+	for (var i=DayForm.options.length; i<=Days ; i++) {	// Create new days
 		var x = String (i);
 		DayForm.options[i] = new Option(x,x);
 	}
@@ -137,29 +141,30 @@ function setDateTo (elem,Day,Month,Year) {
 // Write clock in client local time updated every minute
 function writeLocalClock() {
 	var d = new Date;
-        var Minutes;
-	var StrMinutes;
-        var PrintableDate;
+        var H;
+        var M;
+	var StrH;
+	var StrM;
 
-	setTimeout("writeLocalTime()",60000);
+	setTimeout('writeLocalTime()',60000);
 
 	d.setTime(secondsSince1970UTC * 1000);
 	secondsSince1970UTC += 60;	// For next call
 
-	Minutes = d.getMinutes();
-	StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
-	// PrintableDate = d.toLocaleDateString() + "<br />" + d.getHours() + ":" + StrMinutes;
-	PrintableDate = d.getHours() + ":" + StrMinutes;
-	document.getElementById('hm').innerHTML = PrintableDate;
+	H = d.getHours();
+	M = d.getMinutes();
+	StrH = ((H < 10) ? '0' : '') + H;
+	StrM = ((M < 10) ? '0' : '') + M;
+	document.getElementById('hm').innerHTML = StrH + ':' + StrM;
 }
       
 function writeClockConnected() {
         var BoxClock;
-	var Hours;
-	var Minutes;
-	var Seconds;
-	var StrMinutes;
-	var StrSeconds;
+	var H;
+	var M;
+	var S;
+	var StrM;
+	var StrS;
         var PrintableClock;
 
         countClockConnected++;
@@ -169,27 +174,27 @@ function writeClockConnected() {
 		if (BoxClock) {
 			ListSeconds[i] += 1;
 			if (!countClockConnected) {	// Print after 10 seconds
-				Minutes = Math.floor(ListSeconds[i] / 60);
-				if (Minutes >= 60) {
-					Hours = Math.floor(Minutes / 60);
-					Minutes %= 60;
+				M = Math.floor(ListSeconds[i] / 60);
+				if (M >= 60) {
+					H = Math.floor(M / 60);
+					M %= 60;
 				} else
-					Hours = 0;
-				Seconds = ListSeconds[i] % 60;
-				if (Hours != 0) {
-					StrMinutes = ((Minutes < 10) ? "0" : "") + Minutes;
-					StrSeconds = ((Seconds < 10) ? "0" : "") + Seconds;
-					PrintableClock = Hours + ":" + StrMinutes + "'" + StrSeconds + "&quot;";
-				} else if (Minutes != 0) {
-					StrSeconds = ((Seconds < 10) ? "0" : "") + Seconds;
-					PrintableClock = Minutes + "'" + StrSeconds + "&quot;";
+					H = 0;
+				S = ListSeconds[i] % 60;
+				if (H != 0) {
+					StrM = ((M < 10) ? '0' : '') + M;
+					StrS = ((S < 10) ? '0' : '') + S;
+					PrintableClock = H + ':' + StrM + '&#39;' + StrS + '&quot;';
+				} else if (M != 0) {
+					StrS = ((S < 10) ? '0' : '') + S;
+					PrintableClock = M + '&#39;' + StrS + '&quot;';
 				} else
-					PrintableClock = Seconds + "&quot;";
+					PrintableClock = S + '&quot;';
 				BoxClock.innerHTML = PrintableClock;
 			}
 		}
 	}
-	setTimeout("writeClockConnected()",1000);	// refresh after 1 second
+	setTimeout('writeClockConnected()',1000);	// refresh after 1 second
 }
 
 // Automatic refresh of connected users using AJAX. This function must be called from time to time
@@ -225,10 +230,10 @@ function AJAXCreateObject() {
 		obj = new XMLHttpRequest();
 	} else if (window.ActiveXObject) {	// IE
 		try {
-			obj = new ActiveXObject("Msxml2.XMLHTTP");
+			obj = new ActiveXObject('Msxml2.XMLHTTP');
 		} catch (e) {
 			try {
-				obj = new ActiveXObject("Microsoft.XMLHTTP");
+				obj = new ActiveXObject('Microsoft.XMLHTTP');
 			} catch (e) {}
 		}
 	}
@@ -277,7 +282,7 @@ function readConnUsrsData() {
 			}
 
 			if (delay >= 60000)	// If refresh slower than 1 time each 60 seconds, do refresh; else abort
-				setTimeout("refreshConnected()",delay);
+				setTimeout('refreshConnected()',delay);
 		}
 	}
 }
@@ -296,7 +301,7 @@ function readLastClicksData() {
 			if (divLastClicks)
 				divLastClicks.innerHTML = htmlLastClicks;				// Update global connected DIV
 			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
-				setTimeout("refreshLastClicks()",delay);
+				setTimeout('refreshLastClicks()',delay);
 		}
 	}
 }
