@@ -49,7 +49,7 @@ struct Survey
    long CrsCod;
    unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER)
    long UsrCod;
-   struct DateTime DateTimes[Svy_NUM_DATES];
+   time_t TimeUTC[Svy_NUM_DATES];
    char Title[Svy_MAX_LENGTH_SURVEY_TITLE+1];
    unsigned NumQsts;	// Number of questions in the survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey

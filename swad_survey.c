@@ -330,6 +330,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Answer_survey;
    extern const char *Txt_View_survey_results;
+   static unsigned UniqueId = 0;
    struct Survey Svy;
    Rol_Role_t Role;
    bool RolesSelected;
@@ -344,8 +345,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Svy_GetDataOfSurveyByCod (&Svy);
 
    /***** Start date/time *****/
+   UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_TOP",
+                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
+	    UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
                                  (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
@@ -353,17 +356,15 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    if (!ShowOnlyThisSvyComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-	              "%02u/%02u/%02u<br />"
-	              "%02u:%02u h"
+                      "<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('svy_date_start_%u',%ld,'<br />');"
+                      "</script>"
 	              "</td>",
-            Svy.DateTimes[Svy_START_TIME].Date.Day,
-            Svy.DateTimes[Svy_START_TIME].Date.Month,
-	    Svy.DateTimes[Svy_START_TIME].Date.Year % 100,
-	    Svy.DateTimes[Svy_START_TIME].Time.Hour,
-	    Svy.DateTimes[Svy_START_TIME].Time.Minute);
+            UniqueId,Svy.TimeUTC[Svy_START_TIME]);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
+            UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
                                  (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
@@ -371,14 +372,11 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    if (!ShowOnlyThisSvyComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-	              "%02u/%02u/%02u<br />"
-	              "%02u:%02u h"
+                      "<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('svy_date_end_%u',%ld,'<br />');"
+                      "</script>"
 	              "</td>",
-            Svy.DateTimes[Svy_END_TIME  ].Date.Day,
-            Svy.DateTimes[Svy_END_TIME  ].Date.Month,
-            Svy.DateTimes[Svy_END_TIME  ].Date.Year % 100,
-	    Svy.DateTimes[Svy_END_TIME  ].Time.Hour,
-	    Svy.DateTimes[Svy_END_TIME  ].Time.Minute);
+            UniqueId,Svy.TimeUTC[Svy_END_TIME]);
 
    /***** Survey title *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -921,8 +919,8 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
 
    /***** Build query *****/
    sprintf (Query,"SELECT SvyCod,DegCod,CrsCod,Hidden,Roles,UsrCod,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
+                  "UNIX_TIMESTAMP(StartTime),"
+                  "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
                   "Title"
                   " FROM surveys"
@@ -962,13 +960,11 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       /* Get author of the survey (row[5]) */
       Svy->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
-      /* Get start date (row[6] holds the start date in YYYYMMDDHHMMSS format) */
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Svy->DateTimes[Svy_START_TIME]),row[6])))
-	 Lay_ShowErrorAndExit ("Error when reading start date of survey.");
+      /* Get start date (row[6] holds the start UTC time) */
+      Svy->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
-      /* Get end date (row[7] holds the end date in YYYYMMDDHHMMSS format) */
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Svy->DateTimes[Svy_END_TIME]),row[7])))
-	 Lay_ShowErrorAndExit ("Error when reading end date of survey.");
+      /* Get end   date (row[7] holds the end   UTC time) */
+      Svy->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[7]);
 
       /* Get whether the survey is open or closed (row(8)) */
       Svy->Status.Open = (row[8][0] == '1');
@@ -1045,12 +1041,8 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       /* Initialize to empty survey */
       Svy->SvyCod = -1L;
       Svy->Roles = 0;
-      Svy->DateTimes[Svy_START_TIME].Date.Day   =
-      Svy->DateTimes[Svy_START_TIME].Date.Month =
-      Svy->DateTimes[Svy_START_TIME].Date.Year  = 0;
-      Svy->DateTimes[Svy_END_TIME].Date.Day   =
-      Svy->DateTimes[Svy_END_TIME].Date.Month =
-      Svy->DateTimes[Svy_END_TIME].Date.Year  = 0;
+      Svy->TimeUTC[Svy_START_TIME] =
+      Svy->TimeUTC[Svy_END_TIME  ] = (time_t) 0;
       Svy->Title[0] = '\0';
       Svy->NumQsts = 0;
       Svy->NumUsrs = 0;
@@ -1122,22 +1114,14 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt)
 
 void Svy_GetNotifSurvey (char *SummaryStr,char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent)
   {
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct DateTime DateTimes[Asg_NUM_DATES];
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   sprintf (Query,"SELECT Title,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "Txt"
-                  " FROM surveys"
-                  " WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT Title,Txt FROM surveys WHERE SvyCod='%ld'",
             SvyCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -1158,29 +1142,7 @@ void Svy_GetNotifSurvey (char *SummaryStr,char **ContentStr,long SvyCod,unsigned
               {
                if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-
-               /* Get start date (row[1] holds the start date in YYYYMMDDHHMMSS format) */
-               if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&DateTimes[Asg_START_TIME],row[1])))
-	          Lay_ShowErrorAndExit ("Error when reading start date of assignment.");
-
-               /* Get end date (row[2] holds the end date in YYYYMMDDHHMMSS format) */
-               if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&DateTimes[Asg_END_TIME  ],row[2])))
-	          Lay_ShowErrorAndExit ("Error when reading end date of assignment.");
-
-               sprintf (*ContentStr,"%s: %02u/%02u/%04u %02u:%02u<br />%s: %02u/%02u/%04u %02u:%02u<br />%s",
-                        Txt_Start_date,
-                        DateTimes[Asg_START_TIME].Date.Day,
-                        DateTimes[Asg_START_TIME].Date.Month,
-                        DateTimes[Asg_START_TIME].Date.Year,
-                        DateTimes[Asg_START_TIME].Time.Hour,
-                        DateTimes[Asg_START_TIME].Time.Minute,
-                        Txt_End_date,
-                        DateTimes[Asg_END_TIME].Date.Day,
-                        DateTimes[Asg_END_TIME].Date.Month,
-                        DateTimes[Asg_END_TIME].Date.Year,
-                        DateTimes[Asg_END_TIME].Time.Hour,
-                        DateTimes[Asg_END_TIME].Time.Minute,
-                        row[3]);
+               strcpy (*ContentStr,row[1]);
               }
            }
          mysql_free_result (mysql_res);
@@ -1497,9 +1459,7 @@ void Svy_RequestCreatOrEditSvy (void)
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
    Svy_StartOrEndTime_t StartOrEndTime;
-   const char *Id[Svy_NUM_DATES] = {"Start","End"};
-   const char *NameSelectHour  [Svy_NUM_DATES] = {"StartHour"  ,"EndHour"  };
-   const char *NameSelectMinute[Svy_NUM_DATES] = {"StartMinute","EndMinute"};
+   const char *Id[Att_NUM_DATES] = {"Start","End"};
    const char *Dates[Svy_NUM_DATES] = {Txt_Start_date,Txt_End_date};
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
@@ -1520,18 +1480,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
-      Svy.DateTimes[Svy_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      Svy.DateTimes[Svy_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      Svy.DateTimes[Svy_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      Svy.DateTimes[Svy_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      Svy.DateTimes[Svy_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-      Svy.DateTimes[Svy_START_TIME].Time.Second = Gbl.Now.Time.Second;
-      Svy.DateTimes[Svy_END_TIME  ].Date.Year   = Gbl.Now.Date.Year;
-      Svy.DateTimes[Svy_END_TIME  ].Date.Month  = Gbl.Now.Date.Month;
-      Svy.DateTimes[Svy_END_TIME  ].Date.Day    = Gbl.Now.Date.Day;
-      Svy.DateTimes[Svy_END_TIME  ].Time.Hour   = 23;
-      Svy.DateTimes[Svy_END_TIME  ].Time.Minute = 59;
-      Svy.DateTimes[Svy_END_TIME  ].Time.Second = 59;
+      Svy.TimeUTC[Svy_START_TIME] = Gbl.TimeStartExecution;
+      Svy.TimeUTC[Svy_END_TIME  ] = Gbl.TimeStartExecution + (24 * 60 * 60);	// +24 hours
       Svy.Title[0] = '\0';
       Svy.Roles = (1 << Rol_STUDENT);
       Svy.NumQsts = 0;
@@ -1616,17 +1566,14 @@ void Svy_RequestCreatOrEditSvy (void)
                          "<td class=\"LEFT_MIDDLE\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Dates[StartOrEndTime]);
-      Dat_WriteFormDate (Gbl.Now.Date.Year-1,
-	                 Gbl.Now.Date.Year+1,
-	                 Id[StartOrEndTime],
-                         &(Svy.DateTimes[StartOrEndTime].Date),
-                         false,false);
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td class=\"LEFT_TOP\">");
-      Dat_WriteFormHourMinute (NameSelectHour  [StartOrEndTime],
-                               NameSelectMinute[StartOrEndTime],
-		               &(Svy.DateTimes[StartOrEndTime].Time),
-                               false,false);
+
+      /* Date-time */
+      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
+	                                Svy.TimeUTC[StartOrEndTime],
+	                                Gbl.Now.Date.Year - 1,
+	                                Gbl.Now.Date.Year + 1,
+                                        false,false);
+
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>"
@@ -1840,23 +1787,9 @@ void Svy_RecFormSurvey (void)
 	 break;
      }
 
-   /***** Get start date *****/
-   Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
-                        &(NewSvy.DateTimes[Svy_START_TIME].Date.Day),
-                        &(NewSvy.DateTimes[Svy_START_TIME].Date.Month),
-                        &(NewSvy.DateTimes[Svy_START_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("StartHour","StartMinute",
-                              &(NewSvy.DateTimes[Svy_START_TIME].Time.Hour),
-                              &(NewSvy.DateTimes[Svy_START_TIME].Time.Minute));
-
-   /***** Get end date *****/
-   Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-                        &(NewSvy.DateTimes[Svy_END_TIME].Date.Day),
-                        &(NewSvy.DateTimes[Svy_END_TIME].Date.Month),
-                        &(NewSvy.DateTimes[Svy_END_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("EndHour","EndMinute",
-                              &(NewSvy.DateTimes[Svy_END_TIME].Time.Hour),
-                              &(NewSvy.DateTimes[Svy_END_TIME].Time.Minute));
+   /***** Get start/end date-times *****/
+   NewSvy.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewSvy.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get survey title *****/
    Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_LENGTH_SURVEY_TITLE);
@@ -1865,28 +1798,10 @@ void Svy_RecFormSurvey (void)
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewSvy.DateTimes[Svy_START_TIME].Date.Day   == 0 ||
-       NewSvy.DateTimes[Svy_START_TIME].Date.Month == 0 ||
-       NewSvy.DateTimes[Svy_START_TIME].Date.Year  == 0)
-     {
-      NewSvy.DateTimes[Svy_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewSvy.DateTimes[Svy_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewSvy.DateTimes[Svy_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewSvy.DateTimes[Svy_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      NewSvy.DateTimes[Svy_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-      NewSvy.DateTimes[Svy_START_TIME].Time.Second = Gbl.Now.Time.Second;
-     }
-   if (NewSvy.DateTimes[Svy_END_TIME].Date.Day   == 0 ||
-       NewSvy.DateTimes[Svy_END_TIME].Date.Month == 0 ||
-       NewSvy.DateTimes[Svy_END_TIME].Date.Year  == 0)
-     {
-      NewSvy.DateTimes[Svy_END_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewSvy.DateTimes[Svy_END_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewSvy.DateTimes[Svy_END_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewSvy.DateTimes[Svy_END_TIME].Time.Hour   = 23;
-      NewSvy.DateTimes[Svy_END_TIME].Time.Minute = 59;
-     }
-   NewSvy.DateTimes[Svy_END_TIME].Time.Second = 59;
+   if (NewSvy.TimeUTC[Svy_START_TIME] == 0)
+      NewSvy.TimeUTC[Svy_START_TIME] = Gbl.TimeStartExecution;
+   if (NewSvy.TimeUTC[Svy_END_TIME] == 0)
+      NewSvy.TimeUTC[Svy_END_TIME] = NewSvy.TimeUTC[Svy_START_TIME] + 24*60*60;	// +24 hours
 
    /***** Get users who can answer this survey *****/
    Rol_GetSelectedRoles (&(NewSvy.Roles));
@@ -1963,24 +1878,17 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new survey *****/
-   sprintf (Query,"INSERT INTO surveys (DegCod,CrsCod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES ('%ld','%ld','N','%u','%ld','%04u%02u%02u%02u%02u%02u','%04u%02u%02u%02u%02u%02u','%s','%s')",
+   sprintf (Query,"INSERT INTO surveys"
+	          " (DegCod,CrsCod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+                  " VALUES ('%ld','%ld','N','%u','%ld',"
+                  "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  "'%s','%s')",
             Svy->DegCod,
             Svy->CrsCod,
             Svy->Roles,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Svy->DateTimes[Svy_START_TIME].Date.Year,
-            Svy->DateTimes[Svy_START_TIME].Date.Month,
-            Svy->DateTimes[Svy_START_TIME].Date.Day,
-            Svy->DateTimes[Svy_START_TIME].Time.Hour,
-            Svy->DateTimes[Svy_START_TIME].Time.Minute,
-            Svy->DateTimes[Svy_START_TIME].Time.Second,
-            Svy->DateTimes[Svy_END_TIME].Date.Year,
-            Svy->DateTimes[Svy_END_TIME].Date.Month,
-            Svy->DateTimes[Svy_END_TIME].Date.Day,
-            Svy->DateTimes[Svy_END_TIME].Time.Hour,
-            Svy->DateTimes[Svy_END_TIME].Time.Minute,
-            Svy->DateTimes[Svy_END_TIME].Time.Second,
+            Svy->TimeUTC[Svy_START_TIME],
+            Svy->TimeUTC[Svy_END_TIME  ],
             Svy->Title,
             Txt);
    Svy->SvyCod = DB_QueryINSERTandReturnCode (Query,"can not create new survey");
@@ -2005,22 +1913,15 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
-   sprintf (Query,"UPDATE surveys SET DegCod='%ld',CrsCod='%ld',Roles='%u',StartTime='%04u%02u%02u%02u%02u%02u',EndTime='%04u%02u%02u%02u%02u%02u',Title='%s',Txt='%s'"
+   sprintf (Query,"UPDATE surveys SET DegCod='%ld',CrsCod='%ld',Roles='%u',"
+	          "StartTime=FROM_UNIXTIME('%ld'),"
+	          "EndTime=FROM_UNIXTIME('%ld'),"
+	          "Title='%s',Txt='%s'"
                   " WHERE SvyCod='%ld'",
             Svy->DegCod,Svy->CrsCod,
             Svy->Roles,
-            Svy->DateTimes[Svy_START_TIME].Date.Year,
-            Svy->DateTimes[Svy_START_TIME].Date.Month,
-            Svy->DateTimes[Svy_START_TIME].Date.Day,
-            Svy->DateTimes[Svy_START_TIME].Time.Hour,
-            Svy->DateTimes[Svy_START_TIME].Time.Minute,
-            Svy->DateTimes[Svy_START_TIME].Time.Second,
-            Svy->DateTimes[Svy_END_TIME  ].Date.Year,
-            Svy->DateTimes[Svy_END_TIME  ].Date.Month,
-            Svy->DateTimes[Svy_END_TIME  ].Date.Day,
-            Svy->DateTimes[Svy_END_TIME  ].Time.Hour,
-            Svy->DateTimes[Svy_END_TIME  ].Time.Minute,
-            Svy->DateTimes[Svy_END_TIME  ].Time.Second,
+            Svy->TimeUTC[Svy_START_TIME],
+            Svy->TimeUTC[Svy_END_TIME  ],
             Svy->Title,
             Txt,
             Svy->SvyCod);

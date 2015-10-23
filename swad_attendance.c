@@ -673,7 +673,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
       /* Get start date (row[4] holds the start UTC time) */
       Att->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get end date (row[5] holds the end UTC time) */
+      /* Get end   date (row[5] holds the end   UTC time) */
       Att->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
       /* Get whether the attendance event is open or closed (row(6)) */
@@ -1003,8 +1003,8 @@ void Att_RequestCreatOrEditAttEvent (void)
      {
       /* Initialize to empty attendance event */
       Att.AttCod = -1L;
-      Att.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
-      Att.TimeUTC[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
+      Att.TimeUTC[Att_START_TIME] = Gbl.TimeStartExecution;
+      Att.TimeUTC[Att_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
       Att.Open = true;
       Att.Title[0] = '\0';
      }
@@ -1209,8 +1209,8 @@ void Att_RecFormAttEvent (void)
      }
 
    /***** Get start/end date-times *****/
-   NewAtt.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAtt.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewAtt.TimeUTC[Att_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
    Par_GetParToText ("CommentTchVisible",YN,1);
@@ -1223,10 +1223,10 @@ void Att_RecFormAttEvent (void)
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAtt.TimeUTC[Asg_START_TIME] == 0)
-      NewAtt.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
-   if (NewAtt.TimeUTC[Asg_END_TIME] == 0)
-      NewAtt.TimeUTC[Asg_END_TIME] = NewAtt.TimeUTC[Asg_START_TIME] + 2*60*60;	// +2 hours
+   if (NewAtt.TimeUTC[Att_START_TIME] == 0)
+      NewAtt.TimeUTC[Att_START_TIME] = Gbl.TimeStartExecution;
+   if (NewAtt.TimeUTC[Att_END_TIME] == 0)
+      NewAtt.TimeUTC[Att_END_TIME] = NewAtt.TimeUTC[Att_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAtt.Title[0])	// If there's an attendance event title
@@ -1287,13 +1287,15 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new attendance event *****/
-   sprintf (Query,"INSERT INTO att_events (CrsCod,UsrCod,StartTime,EndTime,CommentTchVisible,Title,Txt)"
-                  " VALUES ('%ld','%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+   sprintf (Query,"INSERT INTO att_events"
+	          " (CrsCod,UsrCod,StartTime,EndTime,CommentTchVisible,Title,Txt)"
+                  " VALUES ('%ld','%ld',"
+                  "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%c','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Att->TimeUTC[Asg_START_TIME],
-            Att->TimeUTC[Asg_END_TIME  ],
+            Att->TimeUTC[Att_START_TIME],
+            Att->TimeUTC[Att_END_TIME  ],
             Att->CommentTchVisible ? 'Y' :
         	                     'N',
             Att->Title,
@@ -1319,8 +1321,8 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "CommentTchVisible='%c',Title='%s',Txt='%s'"
                   " WHERE AttCod='%ld' AND CrsCod='%ld'",
-            Att->TimeUTC[Asg_START_TIME],
-            Att->TimeUTC[Asg_END_TIME  ],
+            Att->TimeUTC[Att_START_TIME],
+            Att->TimeUTC[Att_END_TIME  ],
             Att->CommentTchVisible ? 'Y' :
         	                     'N',
             Att->Title,

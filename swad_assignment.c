@@ -688,7 +688,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       /* Get start date (row[3] holds the start UTC time) */
       Asg->TimeUTC[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-      /* Get end date (row[4] holds the end UTC time) */
+      /* Get end date   (row[4] holds the end   UTC time) */
       Asg->TimeUTC[Asg_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
