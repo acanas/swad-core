@@ -2087,7 +2087,6 @@ int swad__sendAttendanceEvent (struct soap *soap,
   {
    int ReturnCode;
    struct AttendanceEvent Att;
-   time_t StartOrEndTime;
    bool ItsANewAttEvent;
    const char *Ptr;
    char LongStr[1+10+1];
@@ -2151,24 +2150,10 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Att.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /* startTime */
-   StartOrEndTime = (time_t) startTime;
-   Dat_GetLocalTimeFromClock (&StartOrEndTime);
-   Att.DateTimes[Att_START_TIME].Date.Year   = Gbl.tblock->tm_year + 1900;
-   Att.DateTimes[Att_START_TIME].Date.Month  = Gbl.tblock->tm_mon + 1;
-   Att.DateTimes[Att_START_TIME].Date.Day    = Gbl.tblock->tm_mday;
-   Att.DateTimes[Att_START_TIME].Time.Hour   = Gbl.tblock->tm_hour;
-   Att.DateTimes[Att_START_TIME].Time.Minute = Gbl.tblock->tm_min;
-   Att.DateTimes[Att_START_TIME].Time.Second = Gbl.tblock->tm_sec;
+   Att.TimeUTC[Att_START_TIME] = (time_t) startTime;
 
    /* endTime */
-   StartOrEndTime = (time_t) endTime;
-   Dat_GetLocalTimeFromClock (&StartOrEndTime);
-   Att.DateTimes[Att_END_TIME].Date.Year   = Gbl.tblock->tm_year + 1900;
-   Att.DateTimes[Att_END_TIME].Date.Month  = Gbl.tblock->tm_mon + 1;
-   Att.DateTimes[Att_END_TIME].Date.Day    = Gbl.tblock->tm_mday;
-   Att.DateTimes[Att_END_TIME].Time.Hour   = Gbl.tblock->tm_hour;
-   Att.DateTimes[Att_END_TIME].Time.Minute = Gbl.tblock->tm_min;
-   Att.DateTimes[Att_END_TIME].Time.Second = Gbl.tblock->tm_sec;
+   Att.TimeUTC[Att_END_TIME  ] = (time_t) endTime;
 
    /* Are teacher's comments visible? */
    Att.CommentTchVisible = (commentsTeachersVisible ? true :

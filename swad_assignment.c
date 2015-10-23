@@ -241,9 +241,9 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"asg_date%u\" class=\"%s LEFT_TOP COLOR%u\">"
+	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('asg_date%u',%ld);"
+                      "writeLocalDateTimeFromUTC('asg_date_start_%u',%ld,'<br />');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -256,9 +256,9 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('asg_date%u',%ld);"
+                      "writeLocalDateTimeFromUTC('asg_date_end_%u',%ld,'<br />');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -685,11 +685,11 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       /* Get author of the assignment (row[2]) */
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get start date (row[3] holds the start date in YYYYMMDDHHMMSS format) */
+      /* Get start date (row[3] holds the start UTC time) */
       Asg->TimeUTC[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-      /* Get end date (row[4] holds the end date in YYYYMMDDHHMMSS format) */
-      Asg->TimeUTC[Asg_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get end date (row[4] holds the end UTC time) */
+      Asg->TimeUTC[Asg_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
       Asg->Open = (row[5][0] == '1');
@@ -1099,7 +1099,8 @@ void Asg_RequestCreatOrEditAsg (void)
       /* Date-time */
       Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
 	                                Asg.TimeUTC[StartOrEndTime],
-	                                Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
+	                                Gbl.Now.Date.Year - 1,
+	                                Gbl.Now.Date.Year + 1,
                                         false,false);
 
       fprintf (Gbl.F.Out,"</td>"
@@ -1216,8 +1217,11 @@ void Asg_RecFormAssignment (void)
    extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
    extern const char *Txt_You_must_specify_the_title_of_the_assignment;
+   extern const char *Txt_Created_new_assignment_X;
+   extern const char *Txt_The_assignment_has_been_modified;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
-   struct Assignment OldAsg,NewAsg;
+   struct Assignment OldAsg;
+   struct Assignment NewAsg;
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
@@ -1311,14 +1315,25 @@ void Asg_RecFormAssignment (void)
       Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy ();
 
       if (ItsANewAssignment)
+	{
          Asg_CreateAssignment (&NewAsg,Txt);	// Add new assignment to database
+
+	 /***** Write success message *****/
+	 sprintf (Gbl.Message,Txt_Created_new_assignment_X,NewAsg.Title);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	}
       else
         {
          if (OldAsg.Folder[0] && NewAsg.Folder[0])
             if (strcmp (OldAsg.Folder,NewAsg.Folder))	// Folder name has changed
                NewAssignmentIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,NewAsg.Folder);
          if (NewAssignmentIsCorrect)
+           {
             Asg_UpdateAssignment (&NewAsg,Txt);
+
+	    /***** Write success message *****/
+	    Lay_ShowAlert (Lay_SUCCESS,Txt_The_assignment_has_been_modified);
+           }
         }
 
       /* Free memory for list of selected groups */
@@ -1358,7 +1373,6 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
 
 static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   extern const char *Txt_Created_new_assignment_X;
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new assignment *****/
@@ -1379,11 +1393,6 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
    /***** Create groups *****/
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
-
-   /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_assignment_X,
-            Asg->Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -1392,7 +1401,6 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 
 static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   extern const char *Txt_The_assignment_has_been_modified;
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the assignment *****/
@@ -1416,9 +1424,6 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
    /* Create new groups */
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
-
-   /***** Write success message *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_assignment_has_been_modified);
   }
 
 /*****************************************************************************/

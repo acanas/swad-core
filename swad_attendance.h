@@ -49,7 +49,7 @@ struct AttendanceEvent
    long CrsCod;
    bool Hidden;
    long UsrCod;
-   struct DateTime DateTimes[Att_NUM_DATES];
+   time_t TimeUTC[Att_NUM_DATES];
    bool Open;
    char Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE+1];
    bool CommentTchVisible;

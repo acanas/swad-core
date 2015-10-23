@@ -258,6 +258,7 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete)
   {
    extern const char *Txt_View_event;
+   static unsigned UniqueId = 0;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get data of this attendance event *****/
@@ -265,8 +266,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Att_GetNumStdsTotalWhoAreInAttEvent (Att);
 
    /***** Start date/time *****/
+   UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"  \
-	              "<td class=\"%s LEFT_TOP",
+	              "<td id=\"att_date_start_%u\" class=\"%s LEFT_TOP",
+	    UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
                           (Att->Open ? "DATE_GREEN" :
@@ -274,17 +277,15 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-	              "%02u/%02u/%02u<br />"
-	              "%02u:%02u h"
+                      "<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'<br />');"
+                      "</script>"
 	              "</td>",
-            Att->DateTimes[Att_START_TIME].Date.Day,
-            Att->DateTimes[Att_START_TIME].Date.Month,
-	    Att->DateTimes[Att_START_TIME].Date.Year % 100,
-	    Att->DateTimes[Att_START_TIME].Time.Hour,
-	    Att->DateTimes[Att_START_TIME].Time.Minute);
+            UniqueId,Att->TimeUTC[Att_START_TIME]);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
+            UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
                           (Att->Open ? "DATE_GREEN" :
@@ -292,14 +293,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
-	              "%02u/%02u/%02u<br />"
-	              "%02u:%02u h"
+                      "<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('att_date_end_%u',%ld,'<br />');"
+                      "</script>"
 	              "</td>",
-            Att->DateTimes[Att_END_TIME  ].Date.Day,
-            Att->DateTimes[Att_END_TIME  ].Date.Month,
-            Att->DateTimes[Att_END_TIME  ].Date.Year % 100,
-	    Att->DateTimes[Att_END_TIME  ].Time.Hour,
-	    Att->DateTimes[Att_END_TIME  ].Time.Minute);
+            UniqueId,Att->TimeUTC[Att_END_TIME]);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -640,8 +638,8 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 
    /***** Build query *****/
    sprintf (Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
+                  "UNIX_TIMESTAMP(StartTime),"
+                  "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
                   "CommentTchVisible,"
                   "Title"
@@ -650,9 +648,8 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
             Att->AttCod);
 
    /***** Clear data *****/
-   Att->DateTimes[Att_START_TIME].Date.Day   =
-   Att->DateTimes[Att_START_TIME].Date.Month =
-   Att->DateTimes[Att_START_TIME].Date.Year  = 0;
+   Att->TimeUTC[Att_START_TIME] =
+   Att->TimeUTC[Att_END_TIME  ] = (time_t) 0;
    Att->Title[0] = '\0';
 
    /***** Get data of attendance event from database *****/
@@ -673,13 +670,11 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
       /* Get author of the attendance event (row[3]) */
       Att->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get start date (row[4] holds the start date in YYYYMMDDHHMMSS format) */
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Att->DateTimes[Att_START_TIME]),row[4])))
-	 Lay_ShowErrorAndExit ("Error when reading start date of attendance event.");
+      /* Get start date (row[4] holds the start UTC time) */
+      Att->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get end date (row[5] holds the end date in YYYYMMDDHHMMSS format) */
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Att->DateTimes[Att_END_TIME]),row[5])))
-	 Lay_ShowErrorAndExit ("Error when reading end date of attendance event.");
+      /* Get end date (row[5] holds the end UTC time) */
+      Att->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
       /* Get whether the attendance event is open or closed (row(6)) */
       Att->Open = (row[6][0] == '1');
@@ -753,22 +748,14 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt)
 
 void Att_GetNotifAttEvent (char *SummaryStr,char **ContentStr,long AttCod,unsigned MaxChars,bool GetContent)
   {
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct DateTime DateTimes[Att_NUM_DATES];
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   sprintf (Query,"SELECT Title,"
-                  "DATE_FORMAT(StartTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "DATE_FORMAT(EndTime,'%%Y%%m%%d%%H%%i%%S'),"
-                  "Txt"
-                  " FROM att_events"
-                  " WHERE AttCod='%ld'",
+   sprintf (Query,"SELECT Title,Txt FROM att_events WHERE AttCod='%ld'",
             AttCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -789,30 +776,7 @@ void Att_GetNotifAttEvent (char *SummaryStr,char **ContentStr,long AttCod,unsign
               {
                if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               (*ContentStr)[0] = '\0';	// Return nothing on error
-
-               /* Get start date (row[1] holds the start date in YYYYMMDDHHMMSS format) */
-               if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&DateTimes[Att_START_TIME],row[1])))
-	          Lay_ShowErrorAndExit ("Error when reading start date of attendance event.");
-
-               /* Get end date (row[2] holds the end date in YYYYMMDDHHMMSS format) */
-               if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&DateTimes[Att_END_TIME  ],row[2])))
-	          Lay_ShowErrorAndExit ("Error when reading end date of attendance event.");
-
-               sprintf (*ContentStr,"%s: %02u/%02u/%04u %02u:%02u<br />%s: %02u/%02u/%04u %02u:%02u<br />%s",
-                        Txt_Start_date,
-                        DateTimes[Att_START_TIME].Date.Day,
-                        DateTimes[Att_START_TIME].Date.Month,
-                        DateTimes[Att_START_TIME].Date.Year,
-                        DateTimes[Att_START_TIME].Time.Hour,
-                        DateTimes[Att_START_TIME].Time.Minute,
-                        Txt_End_date,
-                        DateTimes[Att_END_TIME].Date.Day,
-                        DateTimes[Att_END_TIME].Date.Month,
-                        DateTimes[Att_END_TIME].Date.Year,
-                        DateTimes[Att_END_TIME].Time.Hour,
-                        DateTimes[Att_END_TIME].Time.Minute,
-                        row[3]);
+               strcpy (*ContentStr,row[1]);
               }
            }
          mysql_free_result (mysql_res);
@@ -1023,8 +987,6 @@ void Att_RequestCreatOrEditAttEvent (void)
    bool ItsANewAttEvent;
    Att_StartOrEndTime_t StartOrEndTime;
    const char *Id[Att_NUM_DATES] = {"Start","End"};
-   const char *NameSelectHour  [Att_NUM_DATES] = {"StartHour"  ,"EndHour"  };
-   const char *NameSelectMinute[Att_NUM_DATES] = {"StartMinute","EndMinute"};
    const char *Dates[Att_NUM_DATES] = {Txt_Start_date,Txt_End_date};
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
@@ -1041,18 +1003,8 @@ void Att_RequestCreatOrEditAttEvent (void)
      {
       /* Initialize to empty attendance event */
       Att.AttCod = -1L;
-      Att.DateTimes[Att_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      Att.DateTimes[Att_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      Att.DateTimes[Att_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      Att.DateTimes[Att_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      Att.DateTimes[Att_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-      Att.DateTimes[Att_START_TIME].Time.Second = Gbl.Now.Time.Second;
-
-      Att.DateTimes[Att_END_TIME  ].Date.Day    = Gbl.Now.Date.Day;
-      Att.DateTimes[Att_END_TIME  ].Date.Month  = Gbl.Now.Date.Month;
-      Att.DateTimes[Att_END_TIME  ].Date.Year   = Gbl.Now.Date.Year;
-      Att.DateTimes[Att_END_TIME  ].Time.Hour   = 23;
-      Att.DateTimes[Att_END_TIME  ].Time.Minute = 59;
+      Att.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
+      Att.TimeUTC[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
       Att.Open = true;
       Att.Title[0] = '\0';
      }
@@ -1107,22 +1059,15 @@ void Att_RequestCreatOrEditAttEvent (void)
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],Dates[StartOrEndTime]);
+               The_ClassForm[Gbl.Prefs.Theme],
+               Dates[StartOrEndTime]);
 
-      /* Date */
-      Dat_WriteFormDate (Gbl.Now.Date.Year-1,Gbl.Now.Date.Year+1,
-                         Id[StartOrEndTime],
-                         &(Att.DateTimes[StartOrEndTime].Date),
-                         false,false);
-
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td class=\"LEFT_TOP\">");
-
-      /* Time */
-      Dat_WriteFormHourMinute (NameSelectHour  [StartOrEndTime],
-                               NameSelectMinute[StartOrEndTime],
-		               &(Att.DateTimes[StartOrEndTime].Time),
-                               false,false);
+      /* Date-time */
+      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
+	                                Att.TimeUTC[StartOrEndTime],
+	                                Gbl.Now.Date.Year - 1,
+	                                Gbl.Now.Date.Year + 1,
+                                        false,false);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr></table></td>"
@@ -1246,7 +1191,8 @@ void Att_RecFormAttEvent (void)
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct AttendanceEvent OldAtt,NewAtt;
+   struct AttendanceEvent OldAtt;
+   struct AttendanceEvent NewAtt;
    char YN[1+1];
    bool ItsANewAttEvent;
    bool NewAttEventIsCorrect = true;
@@ -1262,25 +1208,9 @@ void Att_RecFormAttEvent (void)
       Att_GetDataOfAttEventByCodAndCheckCrs (&OldAtt);
      }
 
-   /***** Get start date *****/
-   Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
-                        &(NewAtt.DateTimes[Att_START_TIME].Date.Day),
-                        &(NewAtt.DateTimes[Att_START_TIME].Date.Month),
-                        &(NewAtt.DateTimes[Att_START_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("StartHour","StartMinute",
-                              &(NewAtt.DateTimes[Att_START_TIME].Time.Hour),
-                              &(NewAtt.DateTimes[Att_START_TIME].Time.Minute));
-   NewAtt.DateTimes[Att_START_TIME].Time.Second = 0;
-
-   /***** Get end date *****/
-   Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-                        &(NewAtt.DateTimes[Att_END_TIME].Date.Day),
-                        &(NewAtt.DateTimes[Att_END_TIME].Date.Month),
-                        &(NewAtt.DateTimes[Att_END_TIME].Date.Year));
-   Dat_GetHourMinuteFromForm ("EndHour","EndMinute",
-                              &(NewAtt.DateTimes[Att_END_TIME].Time.Hour),
-                              &(NewAtt.DateTimes[Att_END_TIME].Time.Minute));
-   NewAtt.DateTimes[Att_END_TIME].Time.Second = 59;
+   /***** Get start/end date-times *****/
+   NewAtt.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAtt.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
    Par_GetParToText ("CommentTchVisible",YN,1);
@@ -1293,26 +1223,10 @@ void Att_RecFormAttEvent (void)
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAtt.DateTimes[Att_START_TIME].Date.Day   == 0 ||
-       NewAtt.DateTimes[Att_START_TIME].Date.Month == 0 ||
-       NewAtt.DateTimes[Att_START_TIME].Date.Year  == 0)
-     {
-      NewAtt.DateTimes[Att_START_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewAtt.DateTimes[Att_START_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewAtt.DateTimes[Att_START_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewAtt.DateTimes[Att_START_TIME].Time.Hour   = Gbl.Now.Time.Hour;
-      NewAtt.DateTimes[Att_START_TIME].Time.Minute = Gbl.Now.Time.Minute;
-     }
-   if (NewAtt.DateTimes[Att_END_TIME].Date.Day   == 0 ||
-       NewAtt.DateTimes[Att_END_TIME].Date.Month == 0 ||
-       NewAtt.DateTimes[Att_END_TIME].Date.Year  == 0)
-     {
-      NewAtt.DateTimes[Att_END_TIME].Date.Day    = Gbl.Now.Date.Day;
-      NewAtt.DateTimes[Att_END_TIME].Date.Month  = Gbl.Now.Date.Month;
-      NewAtt.DateTimes[Att_END_TIME].Date.Year   = Gbl.Now.Date.Year;
-      NewAtt.DateTimes[Att_END_TIME].Time.Hour   = 23;
-      NewAtt.DateTimes[Att_END_TIME].Time.Minute = 59;
-     }
+   if (NewAtt.TimeUTC[Asg_START_TIME] == 0)
+      NewAtt.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
+   if (NewAtt.TimeUTC[Asg_END_TIME] == 0)
+      NewAtt.TimeUTC[Asg_END_TIME] = NewAtt.TimeUTC[Asg_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAtt.Title[0])	// If there's an attendance event title
@@ -1374,21 +1288,12 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
    /***** Create a new attendance event *****/
    sprintf (Query,"INSERT INTO att_events (CrsCod,UsrCod,StartTime,EndTime,CommentTchVisible,Title,Txt)"
-                  " VALUES ('%ld','%ld','%04u%02u%02u%02u%02u%02u','%04u%02u%02u%02u%02u%02u','%c','%s','%s')",
+                  " VALUES ('%ld','%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  "'%c','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Att->DateTimes[Att_START_TIME].Date.Year,
-            Att->DateTimes[Att_START_TIME].Date.Month,
-            Att->DateTimes[Att_START_TIME].Date.Day,
-            Att->DateTimes[Att_START_TIME].Time.Hour,
-            Att->DateTimes[Att_START_TIME].Time.Minute,
-            Att->DateTimes[Att_START_TIME].Time.Second,
-            Att->DateTimes[Att_END_TIME  ].Date.Year,
-            Att->DateTimes[Att_END_TIME  ].Date.Month,
-            Att->DateTimes[Att_END_TIME  ].Date.Day,
-            Att->DateTimes[Att_END_TIME  ].Time.Hour,
-            Att->DateTimes[Att_END_TIME  ].Time.Minute,
-            Att->DateTimes[Att_END_TIME  ].Time.Second,
+            Att->TimeUTC[Asg_START_TIME],
+            Att->TimeUTC[Asg_END_TIME  ],
             Att->CommentTchVisible ? 'Y' :
         	                     'N',
             Att->Title,
@@ -1409,22 +1314,13 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the attendance event *****/
-   sprintf (Query,"UPDATE att_events"
-	          " SET StartTime='%04u%02u%02u%02u%02u%02u',EndTime='%04u%02u%02u%02u%02u%02u',"
+   sprintf (Query,"UPDATE att_events SET "
+	          "StartTime=FROM_UNIXTIME('%ld'),"
+	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "CommentTchVisible='%c',Title='%s',Txt='%s'"
                   " WHERE AttCod='%ld' AND CrsCod='%ld'",
-            Att->DateTimes[Att_START_TIME].Date.Year,
-            Att->DateTimes[Att_START_TIME].Date.Month,
-            Att->DateTimes[Att_START_TIME].Date.Day,
-            Att->DateTimes[Att_START_TIME].Time.Hour,
-            Att->DateTimes[Att_START_TIME].Time.Minute,
-            Att->DateTimes[Att_START_TIME].Time.Second,
-            Att->DateTimes[Att_END_TIME  ].Date.Year,
-            Att->DateTimes[Att_END_TIME  ].Date.Month,
-            Att->DateTimes[Att_END_TIME  ].Date.Day   ,
-            Att->DateTimes[Att_END_TIME  ].Time.Hour,
-            Att->DateTimes[Att_END_TIME  ].Time.Minute,
-            Att->DateTimes[Att_END_TIME  ].Time.Second,
+            Att->TimeUTC[Asg_START_TIME],
+            Att->TimeUTC[Asg_END_TIME  ],
             Att->CommentTchVisible ? 'Y' :
         	                     'N',
             Att->Title,
@@ -2923,6 +2819,7 @@ static void Att_ListEventsToSelect (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance_according_to_selected_events;
    extern const char *Txt_Update_attendance;
+   static unsigned UniqueId = 0;
    unsigned NumAttEvent;
 
    /***** Start form to update the attendance
@@ -2954,6 +2851,8 @@ static void Att_ListEventsToSelect (void)
 	NumAttEvent < Gbl.AttEvents.Num;
 	NumAttEvent++)
      {
+      UniqueId++;
+
       /* Get data of the attendance event from database */
       Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
       Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
@@ -2972,7 +2871,10 @@ static void Att_ListEventsToSelect (void)
 			 "%u:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
-			 "%02u/%02u/%04u %02u:%02u h %s"
+                         "<span id=\"att_date_start_%u\"></span> %s"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;');"
+			 "</script>"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
 			 "%u"
@@ -2981,12 +2883,9 @@ static void Att_ListEventsToSelect (void)
 	       Gbl.RowEvenOdd,
 	       NumAttEvent + 1,
 	       Gbl.RowEvenOdd,
-	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,
-	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Month,
-	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Year,
-	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Hour,
-	       Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
+	       UniqueId,
 	       Gbl.AttEvents.Lst[NumAttEvent].Title,
+               UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 	       Gbl.RowEvenOdd,
 	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
 
@@ -3275,6 +3174,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
+   static unsigned UniqueId = 0;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    unsigned NumAttEvent;
@@ -3341,6 +3241,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
 
 	 /***** Write a row for this event *****/
+	 UniqueId++;
 	 fprintf (Gbl.F.Out,"<tr>"
 		            "<td class=\"COLOR%u\"></td>"
 			    "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
@@ -3349,7 +3250,11 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
-	                    " %02u/%02u/%04u %02u:%02u h %s</td>"
+	                    "<span id=\"att_date_start_%u\"></span> %s"
+			    "<script type=\"text/javascript\">"
+			    "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;');"
+			    "</script>"
+	                    "</td>"
 			    "</tr>",
 	          Gbl.RowEvenOdd,
 	          Gbl.RowEvenOdd,
@@ -3362,12 +3267,9 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    Txt_Absent,
 		  Present ? Txt_Present :
 			    Txt_Absent,
-	          Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Day,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Month,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Date.Year,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Hour,
-		  Gbl.AttEvents.Lst[NumAttEvent].DateTimes[Att_START_TIME].Time.Minute,
-		  Gbl.AttEvents.Lst[NumAttEvent].Title);
+	          UniqueId,
+	          Gbl.AttEvents.Lst[NumAttEvent].Title,
+                  UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME]);
 
 	 /***** Write comments for this student *****/
 	 if (CommentStd[0] ||

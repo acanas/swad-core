@@ -5783,7 +5783,7 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_start_date%u',%ld);"
+			 "writeLocalDateTimeFromUTC('asg_start_date%u',%ld,'&nbsp;');"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME]);
@@ -5793,7 +5793,7 @@ static void Brw_WriteDatesAssignment (void)
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/arrow%s16x12.gif\""
                          " alt=\"\" title=\"\""
-                         " class=\"ICON16x16B\" />"
+                         " class=\"ICON16x12B\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,
                Gbl.FileBrowser.Asg.Open ? "green" :
@@ -5805,7 +5805,7 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_end_date%u',%ld);"
+			 "writeLocalDateTimeFromUTC('asg_end_date%u',%ld,'&nbsp;');"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME]);
@@ -8986,7 +8986,7 @@ void Brw_ShowFileMetadata (void)
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
 
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		            "writeLocalDateTimeFromUTC('filedate',%ld);"
+		            "writeLocalDateTimeFromUTC('filedate',%ld,'&nbsp;');"
 		            "</script>",
 	          (long) FileMetadata.Time);
 

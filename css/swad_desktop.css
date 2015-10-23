@@ -403,6 +403,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /*********************************** Icons ***********************************/
 .ICON16x16	{width:20px; height:20px; vertical-align:middle;}
+.ICON16x12B	{width:20px; height:15px; vertical-align:middle; display:block;}
 .ICON16x16B	{width:20px; height:20px; vertical-align:middle; display:block;}
 .ICON20x20	{width:25px; height:25px; vertical-align:middle;}
 .ICON28x28	{width:32px; height:32px; vertical-align:middle;}

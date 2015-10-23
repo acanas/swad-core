@@ -370,6 +370,7 @@ form			{margin:0; display:inline;}
 
 /*********************************** Icons ***********************************/
 .ICON16x16	{width:20px; height:20px; vertical-align:middle;}
+.ICON16x12B	{width:20px; height:15px; vertical-align:middle; display:block;}
 .ICON16x16B	{width:20px; height:20px; vertical-align:middle; display:block;}
 .ICON20x20	{width:25px; height:25px; vertical-align:middle;}
 .ICON32x32	{width:40px; height:40px; vertical-align:middle;}

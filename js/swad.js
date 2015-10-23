@@ -35,30 +35,55 @@ var countClockConnected = 0;
 // Write a date in client local time
 function writeLocalDateFromUTC(id,secsSince1970UTC) {
 	var d = new Date;
+        var Yea;
+        var Mon;
+        var Day;
+	var StrMon;
+	var StrDay;
 
 	d.setTime(secsSince1970UTC * 1000);
-	document.getElementById(id).innerHTML = d.toLocaleDateString();
+	Yea = d.getFullYear();
+	Mon = d.getMonth() + 1;
+	Day = d.getDate();
+	StrMon = ((Mon < 10) ? '0' : '') + Mon;
+	StrDay = ((Day < 10) ? '0' : '') + Day;
+	document.getElementById(id).innerHTML = Yea + '/' + StrMon + '/' + StrDay;
 }
 
-// Write a date-time in client local time
-function writeLocalDateTimeFromUTC(id,secsSince1970UTC) {
+/*************** Write a date-time in client local time **********************/
+// - id is the id of the HTML element in which date-time will be written
+// - secsSince1970UTC is the date-time to write in UTC UNIX time format
+// - separator is HTML code to write between date and time
+
+function writeLocalDateTimeFromUTC(id,secsSince1970UTC,separator) {
 	var d = new Date;
-        var H;
-        var M;
-        var S;
-	var StrH;
-	var StrM;
-	var StrS;
+        var Yea;
+        var Mon;
+        var Day;
+        var Hou;
+        var Min;
+        var Sec;
+	var StrMon;
+	var StrDay;
+	var StrHou;
+	var StrMin;
+	var StrSec;
 
 	d.setTime(secsSince1970UTC * 1000);
-	H = d.getHours();
-	M = d.getMinutes();
-	S = d.getSeconds();
-	StrH = ((H < 10) ? '0' : '') + H;
-	StrM = ((M < 10) ? '0' : '') + M;
-	StrS = ((S < 10) ? '0' : '') + S;
-	document.getElementById(id).innerHTML = d.toLocaleDateString() + '<br />' +
-						StrH + ':' + StrM + ':' + StrS;
+	Yea = d.getFullYear();
+	Mon = d.getMonth() + 1;
+	Day = d.getDate();
+	Hou = d.getHours();
+	Min = d.getMinutes();
+	Sec = d.getSeconds();
+	StrMon = ((Mon < 10) ? '0' : '') + Mon;
+	StrDay = ((Day < 10) ? '0' : '') + Day;
+	StrHou = ((Hou < 10) ? '0' : '') + Hou;
+	StrMin = ((Min < 10) ? '0' : '') + Min;
+	StrSec = ((Sec < 10) ? '0' : '') + Sec;
+	document.getElementById(id).innerHTML = Yea    + '/' + StrMon + '/' + StrDay +
+						separator +
+						StrHou + ':' + StrMin + ':' + StrSec;
 }
 
 // Set local date-time form fields from UTC time
