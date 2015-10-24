@@ -1750,10 +1750,10 @@ void Svy_RecFormSurvey (void)
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               // 1 << Sco_SCOPE_CTY     |	// TODO: Add this scope
+	               // 1 << Sco_SCOPE_CTY |	// TODO: Add this scope
 	               // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
-	               // 1 << Sco_SCOPE_CTR      |	// TODO: Add this scope
-                       1 << Sco_SCOPE_DEG      |
+	               // 1 << Sco_SCOPE_CTR |	// TODO: Add this scope
+                       1 << Sco_SCOPE_DEG    |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ();

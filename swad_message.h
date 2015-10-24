@@ -103,12 +103,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsig
                          const char *Style,bool Enabled,const char *BgColor);
 bool Msg_WriteCrsOrgMsg (long CrsCod);
 void Msg_WriteListUsrsDstMsg (long MsgCod);
-void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground);
+void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground);
 void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks,bool ChangeBRToRet);
 
 void Msg_PutHiddenParamMsgCod (long MsgCod);
-
-// void Msg_WriteLinkToNetiquette (void);
 
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);

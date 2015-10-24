@@ -103,7 +103,8 @@ static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod);
 static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery);
 
-static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,char *CreatTime,char *Subject,bool *Deleted);
+static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
+                               time_t *CreatTimeUTC,char *Subject,bool *Deleted);
 static void Msg_GetMsgContent (long MsgCod,char *Content);
 
 static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod,const char *Subject,bool Open,bool Expanded);
@@ -2406,7 +2407,8 @@ static void Msg_GetParamOnlyUnreadMsgs (void)
 /***************************** Get data of a message *************************/
 /*****************************************************************************/
 
-static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,char *CreatTime,char *Subject,bool *Deleted)
+static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
+                               time_t *CreatTimeUTC,char *Subject,bool *Deleted)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2415,14 +2417,14 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,char *Creat
 
    /***** Get data of message from table msg_snt *****/
    *Deleted = false;
-   sprintf (Query,"SELECT CrsCod,UsrCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S')"
+   sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
                   " FROM msg_snt WHERE MsgCod='%ld'",MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
    if (NumRows == 0)   // If not result ==> sent message is deleted
      {
       /***** Get data of message from table msg_snt_deleted *****/
-      sprintf (Query,"SELECT CrsCod,UsrCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S')"
+      sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
                      " FROM msg_snt_deleted WHERE MsgCod='%ld'",MsgCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
@@ -2443,7 +2445,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,char *Creat
    *UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /* Get creation time (row[2]) */
-   strcpy (CreatTime,row[2]);
+   *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -2592,21 +2594,21 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    extern const char *Txt_MSG_Message;
    struct UsrData UsrDat;
    const char *Title;
-   bool FromThisCrs = false;		// Initialized to avoid warning
-   char CreatTime[4+2+2+2+2+2+1];	// Creation time of a message in YYYYMMDDHHMMSS format
+   bool FromThisCrs = false;	// Initialized to avoid warning
+   time_t CreatTimeUTC;		// Creation time of a message
    long CrsCod;
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    bool Deleted;
    bool Open = true;
-   bool Replied = false;		// Initialized to avoid warning
+   bool Replied = false;	// Initialized to avoid warning
    bool Expanded = false;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Get data of message *****/
-   Msg_GetMsgSntData (MsgCod,&CrsCod,&UsrDat.UsrCod,CreatTime,Subject,&Deleted);
+   Msg_GetMsgSntData (MsgCod,&CrsCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
    switch (TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
@@ -2658,10 +2660,10 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    /***** Write subject *****/
    Msg_WriteSentOrReceivedMsgSubject (TypeOfMessages,MsgCod,Subject,Open,Expanded);
 
-   /***** Write date *****/
-   Msg_WriteMsgDate (CreatTime,
-                     Open ? "MSG_TIT_BG" :
-	                    "MSG_TIT_BG_NEW");
+   /***** Write date-time *****/
+   Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
+	                                 "MSG_TIT_BG_NEW");
+
    fprintf (Gbl.F.Out,"</tr>");
 
    if (Expanded)
@@ -3233,17 +3235,26 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 /*****************************************************************************/
 /******************* Write the date of creation of a message *****************/
 /*****************************************************************************/
+// TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-void Msg_WriteMsgDate (const char *DateTime,const char *ClassBackground)
+void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
   {
-   /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\" style=\"width:106px;\">",
-            ClassBackground);
+   static unsigned UniqueId = 0;
 
-   /***** Write date and time (DateTime holds date and time in YYYYMMDDHHMMSS format) *****/
-   Dat_WriteDate (DateTime);
-   fprintf (Gbl.F.Out,"&nbsp;");
-   Dat_WriteHourMinute (&DateTime[8]);
+   UniqueId++;
+
+   /***** Start cell *****/
+   fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"%s RIGHT_TOP\""
+	              " style=\"width:106px;\">",
+            UniqueId,ClassBackground);
+
+   /***** Write date and time *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
+                      "</script>",
+            UniqueId,(long) TimeUTC);
+
+   /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -3305,20 +3316,6 @@ static long Msg_GetParamMsgCod (void)
    return MsgCod;
   }
 
-/*****************************************************************************/
-/*********************** Write a link to netiquette rules ********************/
-/*****************************************************************************/
-/*
-void Msg_WriteLinkToNetiquette (void)
-  {
-   extern const char *Txt_Mandatory_rules_to_compose_messages;
-   char Title[1024];
-
-   sprintf (Title,"<a href=\"%s\" target=\"_blank\">%s</a>",
-            Cfg_NETTIQUETE,Txt_Mandatory_rules_to_compose_messages);
-   Lay_WriteTitle (Title);
-  }
-*/
 /*****************************************************************************/
 /***************** Put a form to ban the sender of a message *****************/
 /*****************************************************************************/

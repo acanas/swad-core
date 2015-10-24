@@ -241,6 +241,12 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
 
+static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC);
+static unsigned For_GetNumOfReadersOfThr (long ThrCod);
+static unsigned For_GetNumOfWritersInThr (long ThrCod);
+static unsigned For_GetNumPstsInThr (long ThrCod);
+static unsigned For_GetNumMyPstInThr (long ThrCod);
+static time_t For_GetThrReadTime (long ThrCod);
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject);
 static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
@@ -270,8 +276,11 @@ static void For_WriteThrSubject (long ThrCod);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
-static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,bool LastPst,char *LastSubject,bool NewPst,bool ICanModerateForum);
-static void For_GetPstData (long PstCod,long *UsrCod,char *CreatTime,char *Subject, char *Content);
+static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
+                                bool LastPst,char *LastSubject,
+                                bool NewPst,bool ICanModerateForum);
+static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
+                            char *Subject, char *Content);
 static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 
 /*****************************************************************************/
@@ -699,14 +708,14 @@ long For_GetLastPstCod (long ThrCod)
 // have been read and have no new posts for the current user
 // (even if any previous pages have been no read actually)
 
-void For_UpdateThrReadTime (long ThrCod,const char *ReadTime)
+static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Insert or replace pair ThrCod-UsrCod in forum_thr_read *****/
    sprintf (Query,"REPLACE INTO forum_thr_read (ThrCod,UsrCod,ReadTime)"
-                  " VALUES ('%ld','%ld','%s')",
-            ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,ReadTime);
+                  " VALUES ('%ld','%ld',FROM_UNIXTIME('%ld'))",
+            ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,(long) ReadTimeUTC);
    DB_QueryREPLACE (Query,"can not update the status of reading of a thread of a forum");
   }
 
@@ -714,7 +723,7 @@ void For_UpdateThrReadTime (long ThrCod,const char *ReadTime)
 /**************** Get number of users that have read a thread ****************/
 /*****************************************************************************/
 
-unsigned For_GetNumOfReadersOfThr (long ThrCod)
+static unsigned For_GetNumOfReadersOfThr (long ThrCod)
   {
    char Query[512];
 
@@ -728,7 +737,7 @@ unsigned For_GetNumOfReadersOfThr (long ThrCod)
 /********** Get number of users that have write posts in a thread ************/
 /*****************************************************************************/
 
-unsigned For_GetNumOfWritersInThr (long ThrCod)
+static unsigned For_GetNumOfWritersInThr (long ThrCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -757,7 +766,7 @@ unsigned For_GetNumOfWritersInThr (long ThrCod)
 /********************** Get number of posts in a thread **********************/
 /*****************************************************************************/
 
-unsigned For_GetNumPstsInThr (long ThrCod)
+static unsigned For_GetNumPstsInThr (long ThrCod)
   {
    char Query[512];
 
@@ -772,7 +781,7 @@ unsigned For_GetNumPstsInThr (long ThrCod)
 /************** Get whether there are posts of mine in a thread **************/
 /*****************************************************************************/
 
-unsigned For_GetNumMyPstInThr (long ThrCod)
+static unsigned For_GetNumMyPstInThr (long ThrCod)
   {
    char Query[128];
 
@@ -800,35 +809,33 @@ unsigned long For_GetNumPostsUsr (long UsrCod)
 /*****************************************************************************/
 /****************** Get thread read time for the current user ****************/
 /*****************************************************************************/
-// ReadTime is return in YYYYMMDDHHMMSS format
 
-void For_GetThrReadTime (long ThrCod,char *ReadTime)
+static time_t For_GetThrReadTime (long ThrCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   time_t ReadTimeUTC;
 
    /***** Get read time of a thread from database *****/
-   sprintf (Query,"SELECT DATE_FORMAT(ReadTime,'%%Y%%m%%d%%H%%i%%S')"
+   sprintf (Query,"SELECT UNIX_TIMESTAMP(ReadTime)"
                   " FROM forum_thr_read"
                   " WHERE ThrCod='%ld' AND UsrCod='%ld'",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get date of reading of a thread of a forum");
-
-   /***** Check if there is a row with read time *****/
-   if (NumRows)
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get date of reading of a thread of a forum"))
      {
-      /***** There is a row ==> get read time inf format YYYYMMDDHHMMSS *****/
+      /***** There is a row ==> get read time *****/
       row = mysql_fetch_row (mysql_res);
-      strncpy (ReadTime,row[0],4+2+2+2+2+2);
-      ReadTime[4+2+2+2+2+2] = '\0';
+
+      ReadTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
      }
    else
-      strcpy (ReadTime,"00000000000000");	// If there is no row for this thread and current user, then current user has not read this thread
+      ReadTimeUTC = (time_t) 0;	// If there is no row for this thread and current user, then current user has not read this thread
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return ReadTimeUTC;
   }
 
 /*****************************************************************************/
@@ -877,7 +884,8 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    unsigned long NumRow,NumRows;
    unsigned NumPst = 0;		// Initialized to avoid warning
    unsigned NumPsts;
-   char ReadTime[4+2+2+2+2+2+1];	// Read time of thread for the current user in YYYYMMDDHHMMSS format
+   time_t ReadTimeUTC;		// Read time of thread for the current user
+   time_t CreatTimeUTC;		// Creation time of post
    struct Pagination Pagination;
    long PstCod;
    bool NewPst = false;
@@ -897,7 +905,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
       Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
 
    /* Get thread read time for the current user */
-   For_GetThrReadTime (ThrCod,ReadTime);
+   ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /* Table start */
    Lay_StartRoundFrame (NULL,Txt_Thread);
@@ -933,7 +941,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteThrSubject (ThrCod);
 
    /***** Get posts of a thread from database *****/
-   sprintf (Query,"SELECT PstCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S')"
+   sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
 	          " FROM forum_post"
                   " WHERE ThrCod='%ld' ORDER BY PstCod",
             ThrCod);
@@ -999,17 +1007,21 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          if (sscanf (row[0],"%ld",&PstCod) != 1)
             Lay_ShowErrorAndExit ("Wrong code of post.");
 
+         CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+
          NumPst = (unsigned) NumRow;
-         NewPst = (strcmp (row[1],ReadTime) > 0);
+         NewPst = (CreatTimeUTC > ReadTimeUTC);
 
          if (NewPst && NumRow == Pagination.LastItemVisible)
             /* Update forum_thr_read table indicating that this thread page and previous ones
                have been read and have no new posts for the current user
                (even if any previous pages have been no read actually) */
-            For_UpdateThrReadTime (ThrCod,row[1]);
+            For_UpdateThrReadTime (ThrCod,CreatTimeUTC);
 
          /* Show post */
-         For_ShowAForumPost (&Thr,NumPst,PstCod,(NumRow == NumRows),LastSubject,NewPst,ICanModerateForum);
+         For_ShowAForumPost (&Thr,NumPst,PstCod,
+                             (NumRow == NumRows),LastSubject,
+                             NewPst,ICanModerateForum);
 
          /* Mark possible notification as seen */
          switch (Gbl.Forum.ForumType)
@@ -1044,7 +1056,9 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 /**************************** Show a post from forum *************************/
 /*****************************************************************************/
 
-static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,bool LastPst,char *LastSubject,bool NewPst,bool ICanModerateForum)
+static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
+                                bool LastPst,char *LastSubject,
+                                bool NewPst,bool ICanModerateForum)
   {
    extern const char *Txt_unread_MESSAGE;
    extern const char *Txt_MSG_Open;
@@ -1056,7 +1070,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    extern const char *Txt_Post_X_banned_Click_to_unban_it;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
    struct UsrData UsrDat;
-   char CreatTime[4+2+2+2+2+2+1];	// Creation time of a post in YYYYMMDDHHMMSS format
+   time_t CreatTimeUTC;	// Creation time of a post
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
@@ -1069,7 +1083,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    Enabled = For_GetIfPstIsEnabled (PstCod);
 
    /***** Get data of post *****/
-   For_GetPstData (PstCod,&UsrDat.UsrCod,CreatTime,Subject,OriginalContent);
+   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,OriginalContent);
    if (Enabled)
      {
       /* Return this subject as last subject */
@@ -1098,8 +1112,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    Msg_WriteMsgNumber ((unsigned long) PstNum,NewPst);
 
    /***** Write date *****/
-   Msg_WriteMsgDate (CreatTime,NewPst ? "MSG_TIT_BG_NEW" :
-	                                "MSG_TIT_BG");
+   Msg_WriteMsgDate (CreatTimeUTC,NewPst ? "MSG_TIT_BG_NEW" :
+	                                   "MSG_TIT_BG");
 
    /***** Write subject *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
@@ -1221,7 +1235,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 /*************************** Get data of a forum post ************************/
 /*****************************************************************************/
 
-static void For_GetPstData (long PstCod,long *UsrCod,char *CreatTime,char *Subject, char *Content)
+static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
+                            char *Subject, char *Content)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1229,7 +1244,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,char *CreatTime,char *Subje
    unsigned NumRows;
 
    /***** Get data of a post from database *****/
-   sprintf (Query,"SELECT UsrCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i%%S'),Subject,Content"
+   sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),Subject,Content"
                   " FROM forum_post WHERE PstCod='%ld'",PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a post");
 
@@ -1244,7 +1259,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,char *CreatTime,char *Subje
    *UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /****** Get creation time (row[1]) *****/
-   strcpy (CreatTime,row[1]);
+   *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
    /****** Get subject (row[2]) *****/
    strcpy (Subject,row[2]);
@@ -3212,12 +3227,13 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
    extern const char *Txt_Move_thread;
+   static unsigned UniqueId = 0;
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    struct ForumThread Thr;
    struct UsrData UsrDat;
    For_ForumOrderType_t Order;
-   const char *DateTime;
+   time_t TimeUTC;
    struct Pagination PaginationPsts;
    const char *Style;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
@@ -3326,7 +3342,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
                              true);
       fprintf (Gbl.F.Out,"</td>");
 
-      /***** Write the authors and dates of first and last posts *****/
+      /***** Write the authors and date-times of first and last posts *****/
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
 	   Order++)
@@ -3339,13 +3355,15 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             Msg_WriteMsgAuthor (&UsrDat,68,9,Style,Thr.Enabled[Order],BgColor);
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
-                     Style,BgColor);
-            DateTime = Thr.WriteTime[Order];
-            Dat_WriteDate (DateTime);
-            fprintf (Gbl.F.Out,"<br />");
-            Dat_WriteHourMinute (&DateTime[8]);
-            fprintf (Gbl.F.Out,"</td>");
+            TimeUTC = Thr.WriteTime[Order];
+	    UniqueId++;
+            fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"%s LEFT_TOP %s\">"
+                               "<script type=\"text/javascript\">"
+			       "writeLocalDateTimeFromUTC('date_%u',%ld,'<br />');"
+			       "</script>"
+			       "</td>",
+                     UniqueId,Style,BgColor,
+		     UniqueId,(long) TimeUTC);
            }
          else
             for (Column = 1;
@@ -3405,7 +3423,8 @@ void For_GetThrData (struct ForumThread *Thr)
 
    /***** Get data of a thread from database *****/
    sprintf (Query,"SELECT m0.PstCod,m1.PstCod,m0.UsrCod,m1.UsrCod,"
-                  "DATE_FORMAT(m0.CreatTime,'%%Y%%m%%d%%H%%i%%S'),DATE_FORMAT(m1.CreatTime,'%%Y%%m%%d%%H%%i%%S'),"
+                  "UNIX_TIMESTAMP(m0.CreatTime),"
+                  "UNIX_TIMESTAMP(m1.CreatTime),"
                   "m0.Subject"
                   " FROM forum_thread,forum_post AS m0,forum_post AS m1"
                   " WHERE forum_thread.ThrCod='%ld' AND forum_thread.FirstPstCod=m0.PstCod AND forum_thread.LastPstCod=m1.PstCod",
@@ -3432,12 +3451,10 @@ void For_GetThrData (struct ForumThread *Thr)
    Thr->UsrCod[For_LAST_MSG] = Str_ConvertStrCodToLongCod (row[3]);
 
    /***** Get the date of the first message in this thread (row[4]) *****/
-   strncpy (Thr->WriteTime[For_FIRST_MSG],row[4],Cns_MAX_BYTES_DATE);
-   Thr->WriteTime[For_FIRST_MSG][Cns_MAX_BYTES_DATE] = '\0';
+   Thr->WriteTime[For_FIRST_MSG] = Dat_GetUNIXTimeFromStr (row[4]);
 
-   /***** Get the date of the last message in this thread (row[5]) *****/
-   strncpy (Thr->WriteTime[For_LAST_MSG],row[5],Cns_MAX_BYTES_DATE);
-   Thr->WriteTime[For_LAST_MSG][Cns_MAX_BYTES_DATE] = '\0';
+   /***** Get the date of the last  message in this thread (row[5]) *****/
+   Thr->WriteTime[For_LAST_MSG ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
    strncpy (Thr->Subject,row[6],Cns_MAX_BYTES_SUBJECT);
@@ -3839,7 +3856,7 @@ void For_DelPst (void)
    extern const char *Txt_Post_removed;
    long PstCod,ThrCod;
    struct UsrData UsrDat;
-   char CreatTime[4+2+2+2+2+2+1];	// Creation time of a message in YYYYMMDDHHMMSS format
+   time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char OriginalContent[Cns_MAX_BYTES_TEXT+1];
    bool ThreadDeleted = false;
@@ -3860,7 +3877,7 @@ void For_DelPst (void)
       Lay_ShowErrorAndExit ("The post to remove no longer exists.");
 
    /* Check if I am the author of the message */
-   For_GetPstData (PstCod,&UsrDat.UsrCod,CreatTime,Subject,OriginalContent);
+   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,OriginalContent);
    if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)
       Lay_ShowErrorAndExit ("You can not remove post because you aren't the author.");
 

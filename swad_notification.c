@@ -273,7 +273,7 @@ void Ntf_ShowMyNotifications (void)
    struct Course Crs;
    long Cod;
    char ForumName[512];
-   char DateTime[4+2+2+2+2+2+1];	// Time of the event in YYYYMMDDHHMMSS format
+   time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
    Ntf_StatusTxt_t StatusTxt;
    char *SummaryStr;
@@ -292,7 +292,7 @@ void Ntf_ShowMyNotifications (void)
                Ntf_STATUS_BIT_READ |
                Ntf_STATUS_BIT_REMOVED);
    sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,DATE_FORMAT(TimeNotif,'%%Y%%m%%d%%H%%i%%S'),Status"
+	          "Cod,UNIX_TIMESTAMP(TimeNotif),Status"
                   " FROM notif"
                   " WHERE ToUsrCod='%ld'%s"
                   " ORDER BY TimeNotif DESC",
@@ -396,8 +396,7 @@ void Ntf_ShowMyNotifications (void)
            }
 
          /* Get time of the event (row[7]) */
-         strncpy (DateTime,row[7],4+2+2+2+2+2);
-         DateTime[4+2+2+2+2+2] = '\0';
+         DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
 
          /* Get status (row[8]) */
          if (sscanf (row[8],"%u",&Status) != 1)
@@ -533,7 +532,7 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write date and time (DateTime holds date and time in YYYYMMDDHHMMSS format) */
-         Msg_WriteMsgDate (DateTime,ClassBackground);
+         Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"

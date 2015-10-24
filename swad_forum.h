@@ -67,7 +67,7 @@ struct ForumThread
    long ThrCod;
    long PstCod[2];
    long UsrCod[2];
-   char WriteTime[2][Cns_MAX_BYTES_DATE+1];
+   time_t WriteTime[2];
    bool Enabled[2];
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    unsigned NumPosts;
@@ -105,13 +105,7 @@ For_ForumType_t For_GetForumTypeOfAPost (long PstCod);
 void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
 long For_GetLastPstCod (long ThrCod);
-void For_UpdateThrReadTime (long ThrCod,const char *ReadTime);
-unsigned For_GetNumOfReadersOfThr (long ThrCod);
-unsigned For_GetNumOfWritersInThr (long ThrCod);
-unsigned For_GetNumPstsInThr (long ThrCod);
-unsigned For_GetNumMyPstInThr (long ThrCod);
 unsigned long For_GetNumPostsUsr (long UsrCod);
-void For_GetThrReadTime (long ThrCod,char *ReadTime);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 

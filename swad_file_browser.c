@@ -5765,7 +5765,7 @@ void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const ch
 static void Brw_WriteDatesAssignment (void)
   {
    extern const char *Txt_unknown_assignment;
-   static unsigned UniqueId;
+   static unsigned UniqueId = 0;
 
    fprintf (Gbl.F.Out,"<td colspan=\"2\""
 	              " class=\"ASG_LST_DATE_GREEN RIGHT_MIDDLE COLOR%u\">",
@@ -5778,12 +5778,12 @@ static void Brw_WriteDatesAssignment (void)
       /***** Write start date *****/
       fprintf (Gbl.F.Out,"<table>"
 	                 "<tr>"
-                         "<td id=\"asg_start_date%u\" class=\"%s RIGHT_MIDDLE\">",
+                         "<td id=\"asg_start_date_%u\" class=\"%s RIGHT_MIDDLE\">",
                UniqueId,
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_start_date%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('asg_start_date_%u',%ld,'&nbsp;');"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME]);
@@ -5800,12 +5800,12 @@ static void Brw_WriteDatesAssignment (void)
         	                          "red");
 
       /***** Write end date *****/
-      fprintf (Gbl.F.Out,"<td id=\"asg_end_date%u\" class=\"%s RIGHT_MIDDLE\">",
+      fprintf (Gbl.F.Out,"<td id=\"asg_end_date_%u\" class=\"%s RIGHT_MIDDLE\">",
                UniqueId,
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_end_date%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('asg_end_date_%u',%ld,'&nbsp;');"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME]);
