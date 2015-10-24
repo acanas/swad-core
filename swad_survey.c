@@ -1448,8 +1448,6 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Users;
@@ -1458,9 +1456,6 @@ void Svy_RequestCreatOrEditSvy (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
-   Svy_StartOrEndTime_t StartOrEndTime;
-   const char *Id[Att_NUM_DATES] = {"Start","End"};
-   const char *Dates[Svy_NUM_DATES] = {Txt_Start_date,Txt_End_date};
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get parameters *****/
@@ -1552,34 +1547,7 @@ void Svy_RequestCreatOrEditSvy (void)
             Svy_MAX_LENGTH_SURVEY_TITLE,Svy.Title);
 
    /***** Survey start and end dates *****/
-   for (StartOrEndTime = Svy_START_TIME;
-	StartOrEndTime <= Svy_END_TIME;
-	StartOrEndTime++)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<table class=\"CELLS_PAD_2\">"
-                         "<tr>"
-                         "<td class=\"LEFT_MIDDLE\">",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Dates[StartOrEndTime]);
-
-      /* Date-time */
-      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
-	                                Svy.TimeUTC[StartOrEndTime],
-	                                Gbl.Now.Date.Year - 1,
-	                                Gbl.Now.Date.Year + 1,
-                                        false,false);
-
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>"
-	                 "</td>"
-	                 "</tr>");
-     }
+   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC);
 
    /***** Survey text *****/
    fprintf (Gbl.F.Out,"<tr>"

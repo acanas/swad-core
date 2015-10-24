@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.20.1 (2015/10/24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.20.2 (2015/10/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.20.2:  Oct 24, 2015	Code refactoring related to date-times forms. (186294 lines)
         Version 15.20.1:  Oct 24, 2015	Detailed clics are displayed in client local date-time. (186333 lines)
         Version 15.20:    Oct 24, 2015	Date-times in notifications, messages and forums are displayed in client local date-time. (186334 lines)
         Version 15.19:    Oct 23, 2015	Surveys date-times are displayed in client local date-time. (186309 lines)

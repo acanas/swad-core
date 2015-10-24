@@ -63,6 +63,11 @@ const unsigned Dat_NumDaysMonth[1+12] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Dat_WriteFormClientLocalDateTime (const char *Id,
+                                              time_t TimeUTC,
+                                              unsigned FirstYear,unsigned LastYear,
+                                              bool SubmitFormOnChange,bool Disabled);
+
 /*****************************************************************************/
 /***************************** Get current time ******************************/
 /*****************************************************************************/
@@ -268,13 +273,64 @@ void Dat_WriteFormIniEndDates (void)
 
 
 /*****************************************************************************/
+/************* Show forms to enter initial and ending date-times *************/
+/*****************************************************************************/
+
+void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Start_date;
+   extern const char *Txt_End_date;
+   Asg_StartOrEndTime_t StartOrEndTime;
+   const char *Id[Asg_NUM_DATES] =
+     {
+      "Start",
+      "End"
+     };
+   const char *Dates[Asg_NUM_DATES] =
+     {
+      Txt_Start_date,
+      Txt_End_date
+     };
+
+   for (StartOrEndTime = 0;
+	StartOrEndTime <= 1;
+	StartOrEndTime++)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"%s RIGHT_MIDDLE\">"
+	                 "%s:"
+	                 "</td>"
+                         "<td class=\"LEFT_MIDDLE\">"
+                         "<table class=\"CELLS_PAD_2\">"
+                         "<tr>"
+                         "<td class=\"LEFT_TOP\">",
+               The_ClassForm[Gbl.Prefs.Theme],
+               Dates[StartOrEndTime]);
+
+      /* Date-time */
+      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
+	                                TimeUTC[StartOrEndTime],
+	                                Gbl.Now.Date.Year - 1,
+	                                Gbl.Now.Date.Year + 1,
+                                        false,false);
+
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>"
+	                 "</table>"
+	                 "</td>"
+	                 "</tr>");
+     }
+  }
+
+/*****************************************************************************/
 /************************* Show a form to enter a date ***********************/
 /*****************************************************************************/
 
-void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                       time_t TimeUTC,
-                                       unsigned FirstYear,unsigned LastYear,
-                                       bool SubmitFormOnChange,bool Disabled)
+static void Dat_WriteFormClientLocalDateTime (const char *Id,
+                                              time_t TimeUTC,
+                                              unsigned FirstYear,unsigned LastYear,
+                                              bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;

@@ -1038,7 +1038,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
-         sprintf (Query,"SELECT SQL_NO_CACHE DATE_FORMAT(ClickTime,'%%Y%%m%%d') AS Day,DATE_FORMAT(ClickTime,'%%H') AS Hour,%s FROM %s",
+         sprintf (Query,"SELECT SQL_NO_CACHE "
+                        "DATE_FORMAT(ClickTime,'%%Y%%m%%d') AS Day,"
+                        "DATE_FORMAT(ClickTime,'%%H') AS Hour,%s FROM %s",
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEKS:
@@ -1668,7 +1670,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
-			 "</script>",
+			 "</script>"
+			 "</td>",
                UniqueId,Gbl.RowEvenOdd,
                UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]));
 

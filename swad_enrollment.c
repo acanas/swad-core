@@ -2162,7 +2162,6 @@ void Enr_ShowEnrollmentRequests (void)
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
    Rol_Role_t DesiredRole;
-   time_t RequestTimeUTC;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Enrollment_requests);
@@ -2641,8 +2640,7 @@ void Enr_ShowEnrollmentRequests (void)
                      Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
 
             /***** Request time (row[4]) *****/
-            RequestTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
-            Msg_WriteMsgDate (RequestTimeUTC,"DAT");
+            Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
 
             /***** Button to confirm the request *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");

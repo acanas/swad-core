@@ -1005,8 +1005,6 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
    extern const char *Txt_Title;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
@@ -1015,9 +1013,6 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Txt_Save;
    struct Assignment Asg;
    bool ItsANewAssignment;
-   Asg_StartOrEndTime_t StartOrEndTime;
-   const char *Id[Asg_NUM_DATES] = {"Start","End"};
-   const char *Dates[Asg_NUM_DATES] = {Txt_Start_date,Txt_End_date};
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get parameters *****/
@@ -1081,34 +1076,7 @@ void Asg_RequestCreatOrEditAsg (void)
             Asg_MAX_LENGTH_ASSIGNMENT_TITLE,Asg.Title);
 
    /***** Assignment start and end dates *****/
-   for (StartOrEndTime = Asg_START_TIME;
-	StartOrEndTime <= Asg_END_TIME;
-	StartOrEndTime++)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<table class=\"CELLS_PAD_2\">"
-                         "<tr>"
-                         "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Dates[StartOrEndTime]);
-
-      /* Date-time */
-      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
-	                                Asg.TimeUTC[StartOrEndTime],
-	                                Gbl.Now.Date.Year - 1,
-	                                Gbl.Now.Date.Year + 1,
-                                        false,false);
-
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>"
-	                 "</td>"
-	                 "</tr>");
-     }
+   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC);
 
    /***** Send work? *****/
    fprintf (Gbl.F.Out,"<tr>"

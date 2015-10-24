@@ -78,11 +78,8 @@ void Dat_GetLocalTimeFromClock (const time_t *clock);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_WriteFormIniEndDates (void);
+void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2]);
 
-void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                       time_t TimeUTC,
-                                       unsigned FirstYear,unsigned LastYear,
-                                       bool SubmitFormOnChange,bool Disabled);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,

@@ -35218,123 +35218,123 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #endif
 	 ,
 #if   L==0
-	 "dia"
+	 "dia*"
 #elif L==1
-	 "Tag"
+	 "Tag*"
 #elif L==2
-	 "day"
+	 "day*"
 #elif L==3
-	 "d&iacute;a"
+	 "d&iacute;a*"
 #elif L==4
-	 "jour"
+	 "jour*"
 #elif L==5
-	 "d&iacute;a"	// Okoteve traducción
+	 "d&iacute;a*"	// Okoteve traducción
 #elif L==6
-	 "giorno"
+	 "giorno*"
 #elif L==7
-	 "dzie&nacute;"
+	 "dzie&nacute;*"
 #elif L==8
-	 "dia"
+	 "dia*"
 #endif
 	 ,
 #if   L==0
-	 "dia i hora"
+	 "dia i hora*"
 #elif L==1
-	 "Tag und Stunde"
+	 "Tag und Stunde*"
 #elif L==2
-	 "day and hour"
+	 "day and hour*"
 #elif L==3
-	 "d&iacute;a y hora"
+	 "d&iacute;a y hora*"
 #elif L==4
-	 "jour et heure"
+	 "jour et heure*"
 #elif L==5
-	 "d&iacute;a y hora"	// Okoteve traducción
+	 "d&iacute;a y hora*"	// Okoteve traducción
 #elif L==6
-	 "giorno e ora"
+	 "giorno e ora*"
 #elif L==7
-	 "dzie&nacute; i godzin&eogon;"
+	 "dzie&nacute; i godzin&eogon;*"
 #elif L==8
-	 "dia e hora"
+	 "dia e hora*"
 #endif
 	 ,
 #if   L==0
-	 "setmana"
+	 "setmana*"
 #elif L==1
-	 "Woche"
+	 "Woche*"
 #elif L==2
-	 "week"
+	 "week*"
 #elif L==3
-	 "semana"
+	 "semana*"
 #elif L==4
-	 "semaine"
+	 "semaine*"
 #elif L==5
-	 "arapok&otilde;indy"
+	 "arapok&otilde;indy*"
 #elif L==6
-	 "settimana"
+	 "settimana*"
 #elif L==7
-	 "tydzie&nacute;"
+	 "tydzie&nacute;*"
 #elif L==8
-	 "semana"
+	 "semana*"
 #endif
 	 ,
 #if   L==0
-	 "mes"
+	 "mes*"
 #elif L==1
-	 "Monat"
+	 "Monat*"
 #elif L==2
-	 "month"
+	 "month*"
 #elif L==3
-	 "mes"
+	 "mes*"
 #elif L==4
-	 "mois"
+	 "mois*"
 #elif L==5
-	 "jasy"
+	 "jasy*"
 #elif L==6
-	 "mese"
+	 "mese*"
 #elif L==7
-	 "miesi&aogon;c"
+	 "miesi&aogon;c*"
 #elif L==8
-	 "m&ecirc;s"
+	 "m&ecirc;s*"
 #endif
 	 ,
 #if   L==0
-	 "hora"
+	 "hora*"
 #elif L==1
-	 "Stunde"
+	 "Stunde*"
 #elif L==2
-	 "hour"
+	 "hour*"
 #elif L==3
-	 "hora"
+	 "hora*"
 #elif L==4
-	 "heure"
+	 "heure*"
 #elif L==5
-	 "aravo"
+	 "aravo*"
 #elif L==6
-	 "ora"
+	 "ora*"
 #elif L==7
-	 "godzina"
+	 "godzina*"
 #elif L==8
-	 "hora"
+	 "hora*"
 #endif
 	 ,
 #if   L==0
-	 "minut"
+	 "minut*"
 #elif L==1
-	 "Minute"
+	 "Minute*"
 #elif L==2
-	 "minute"
+	 "minute*"
 #elif L==3
-	 "minuto"
+	 "minuto*"
 #elif L==4
-	 "minute"
+	 "minute*"
 #elif L==5
-	 "aravo'i"
+	 "aravo'i*"
 #elif L==6
-	 "minuto"
+	 "minuto*"
 #elif L==7
-	 "minut&eogon;"
+	 "minut&eogon;*"
 #elif L==8
-	 "minuto"
+	 "minuto*"
 #endif
 	 ,
 #if   L==0
@@ -35358,123 +35358,123 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #endif
 	 ,
 #if   L==0
-	 "dia"
+	 "dia*"
 #elif L==1
-	 "Tag"
+	 "Tag*"
 #elif L==2
-	 "day"
+	 "day*"
 #elif L==3
-	 "d&iacute;a"
+	 "d&iacute;a*"
 #elif L==4
-	 "jour"
+	 "jour*"
 #elif L==5
-	 "d&iacute;a"	// Okoteve traducción
+	 "d&iacute;a*"	// Okoteve traducción
 #elif L==6
-	 "giorno"
+	 "giorno*"
 #elif L==7
-	 "dzie&nacute;"
+	 "dzie&nacute;*"
 #elif L==8
-	 "dia"
+	 "dia*"
 #endif
 	 ,
 #if   L==0
-	 "dia i hora"
+	 "dia i hora*"
 #elif L==1
-	 "Tag und Stunde"
+	 "Tag und Stunde*"
 #elif L==2
-	 "day and hour"
+	 "day and hour*"
 #elif L==3
-	 "d&iacute;a y hora"
+	 "d&iacute;a y hora*"
 #elif L==4
-	 "jour et heure"
+	 "jour et heure*"
 #elif L==5
-	 "d&iacute;a y hora"	// Okoteve traducción
+	 "d&iacute;a y hora*"	// Okoteve traducción
 #elif L==6
-	 "giorno e ora"
+	 "giorno e ora*"
 #elif L==7
-	 "dzie&nacute; i godzin&eogon;"
+	 "dzie&nacute; i godzin&eogon;*"
 #elif L==8
-	 "dia e hora"
+	 "dia e hora*"
 #endif
 	 ,
 #if   L==0
-	 "setmana"
+	 "setmana*"
 #elif L==1
-	 "Woche"
+	 "Woche*"
 #elif L==2
-	 "week"
+	 "week*"
 #elif L==3
-	 "semana"
+	 "semana*"
 #elif L==4
-	 "semaine"
+	 "semaine*"
 #elif L==5
-	 "arapok&otilde;indy"
+	 "arapok&otilde;indy*"
 #elif L==6
-	 "settimana"
+	 "settimana*"
 #elif L==7
-	 "tydzie&nacute;"
+	 "tydzie&nacute;*"
 #elif L==8
-	 "semana"
+	 "semana*"
 #endif
 	 ,
 #if   L==0
-	 "mes"
+	 "mes*"
 #elif L==1
-	 "Monat"
+	 "Monat*"
 #elif L==2
-	 "month"
+	 "month*"
 #elif L==3
-	 "mes"
+	 "mes*"
 #elif L==4
-	 "mois"
+	 "mois*"
 #elif L==5
-	 "jasy"
+	 "jasy*"
 #elif L==6
-	 "mese"
+	 "mese*"
 #elif L==7
-	 "miesi&aogon;c"
+	 "miesi&aogon;c*"
 #elif L==8
-	 "m&ecirc;s"
+	 "m&ecirc;s*"
 #endif
 	 ,
 #if   L==0
-	 "hora"
+	 "hora*"
 #elif L==1
-	 "Stunde"
+	 "Stunde*"
 #elif L==2
-	 "hour"
+	 "hour*"
 #elif L==3
-	 "hora"
+	 "hora*"
 #elif L==4
-	 "heure"
+	 "heure*"
 #elif L==5
-	 "aravo"
+	 "aravo*"
 #elif L==6
-	 "ora"
+	 "ora*"
 #elif L==7
-	 "godzina"
+	 "godzina*"
 #elif L==8
-	 "hora"
+	 "hora*"
 #endif
 	 ,
 #if   L==0
-	 "minut"
+	 "minut*"
 #elif L==1
-	 "Minute"
+	 "Minute*"
 #elif L==2
-	 "minute"
+	 "minute*"
 #elif L==3
-	 "minuto"
+	 "minuto*"
 #elif L==4
-	 "minute"
+	 "minute*"
 #elif L==5
-	 "aravo'i"
+	 "aravo'i*"
 #elif L==6
-	 "minuto"
+	 "minuto*"
 #elif L==7
-	 "minut&eogon;"
+	 "minut&eogon;*"
 #elif L==8
-	 "minuto"
+	 "minuto*"
 #endif
 	 ,
 #if   L==0
