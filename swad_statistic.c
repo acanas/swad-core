@@ -1023,7 +1023,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    switch (Gbl.Stat.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
-   	 sprintf (Query,"SELECT SQL_NO_CACHE LogCod,UsrCod,Role,DATE_FORMAT(ClickTime,'%%Y%%m%%d%%H%%i%%S') AS F,ActCod FROM %s",
+   	 sprintf (Query,"SELECT SQL_NO_CACHE LogCod,UsrCod,Role,"
+   	                "UNIX_TIMESTAMP(ClickTime) AS F,ActCod FROM %s",
                   LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
@@ -1476,6 +1477,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    MYSQL_ROW row;
    long LogCod;
    Rol_Role_t RoleFromLog;
+   unsigned UniqueId;
    long ActCod;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
@@ -1617,9 +1619,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
             Txt_LOG_More_info);
 
    /***** Write rows back *****/
-   for (NumRow = LastRow, Gbl.RowEvenOdd = 0;
+   for (NumRow = LastRow, UniqueId = 1, Gbl.RowEvenOdd = 0;
 	NumRow >= FirstRow;
-	NumRow--, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	NumRow--, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       mysql_data_seek (mysql_res, (my_ulonglong) (NumRow-1));
       row = mysql_fetch_row (mysql_res);
@@ -1662,14 +1664,13 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	       RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 		                             "?");
 
-      /* Write the date (in row[3] is the date in YYYYMMDDHHMMSS format) */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      Dat_WriteDate (row[3]);
-      fprintf (Gbl.F.Out,"&nbsp;");
-      Dat_WriteHourMinute (&row[3][8]);
-      fprintf (Gbl.F.Out,":%c%c&nbsp;</td>",
-               row[3][12],row[3][13]);
+      /* Write the date-time (row[3]) */
+      fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
+			 "</script>",
+               UniqueId,Gbl.RowEvenOdd,
+               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]));
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)

@@ -3227,9 +3227,9 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
    extern const char *Txt_Move_thread;
-   static unsigned UniqueId = 0;
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
+   unsigned UniqueId;
    struct ForumThread Thr;
    struct UsrData UsrDat;
    For_ForumOrderType_t Order;
@@ -3248,7 +3248,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   for (NumThr = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, Gbl.RowEvenOdd = 0;
+   for (NumThr = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0, Gbl.RowEvenOdd = 0;
         NumThr <= PaginationThrs->LastItemVisible;
         NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {

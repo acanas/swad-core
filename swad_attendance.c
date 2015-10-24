@@ -2821,7 +2821,7 @@ static void Att_ListEventsToSelect (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance_according_to_selected_events;
    extern const char *Txt_Update_attendance;
-   static unsigned UniqueId = 0;
+   unsigned UniqueId;
    unsigned NumAttEvent;
 
    /***** Start form to update the attendance
@@ -2849,12 +2849,10 @@ static void Att_ListEventsToSelect (void)
 	    Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** List the events *****/
-   for (NumAttEvent = 0, Gbl.RowEvenOdd = 0;
+   for (NumAttEvent = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
-	NumAttEvent++)
+	NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
-      UniqueId++;
-
       /* Get data of the attendance event from database */
       Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
       Att_GetNumStdsTotalWhoAreInAttEvent (&Gbl.AttEvents.Lst[NumAttEvent]);
@@ -2890,8 +2888,6 @@ static void Att_ListEventsToSelect (void)
                UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 	       Gbl.RowEvenOdd,
 	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
-
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
    /***** Put button to refresh *****/
@@ -3176,10 +3172,10 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   static unsigned UniqueId = 0;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    unsigned NumAttEvent;
+   unsigned UniqueId;
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT+1];
    char CommentTch[Cns_MAX_BYTES_TEXT+1];
@@ -3230,9 +3226,9 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	    UsrDat->FirstName);
 
    /***** List the events with students *****/
-   for (NumAttEvent = 0;
+   for (NumAttEvent = 0, UniqueId = 1;
 	NumAttEvent < Gbl.AttEvents.Num;
-	NumAttEvent++)
+	NumAttEvent++, UniqueId++)
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	{
 	 /***** Get data of the attendance event from database *****/
@@ -3243,7 +3239,6 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Gbl.AttEvents.Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
 
 	 /***** Write a row for this event *****/
-	 UniqueId++;
 	 fprintf (Gbl.F.Out,"<tr>"
 		            "<td class=\"COLOR%u\"></td>"
 			    "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
