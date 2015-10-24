@@ -642,8 +642,9 @@ struct Globals
      } Test;
    struct
      {
-      struct Date DateIni;
-      struct Date DateEnd;
+      struct Date DateIni;	// TODO: Remove in future versions
+      struct Date DateEnd;	// TODO: Remove in future versions
+      time_t TimeUTC[2];
      } DateRange;
    struct
      {

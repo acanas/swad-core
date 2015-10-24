@@ -78,6 +78,7 @@ void Dat_GetLocalTimeFromClock (const time_t *clock);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_WriteFormIniEndDates (void);
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void);
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2]);
 
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);

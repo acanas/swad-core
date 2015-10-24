@@ -63,10 +63,14 @@ const unsigned Dat_NumDaysMonth[1+12] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                              time_t TimeUTC,
-                                              unsigned FirstYear,unsigned LastYear,
-                                              bool SubmitFormOnChange,bool Disabled);
+static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
+                                                         time_t TimeUTC,
+                                                         unsigned FirstYear,unsigned LastYear,
+                                                         bool SubmitFormOnChange,bool Disabled);
+static void Dat_WriteFormClientLocalDateTimeFromYMDhms (const char *Id,
+		                                        struct Date *DateSelected,
+                                                        unsigned FirstYear,unsigned LastYear,
+                                                        bool SubmitFormOnChange,bool Disabled);
 
 /*****************************************************************************/
 /***************************** Get current time ******************************/
@@ -271,6 +275,69 @@ void Dat_WriteFormIniEndDates (void)
                       "</tr>");
   }
 
+/*****************************************************************************/
+/*************** Show forms to enter initial and ending dates ****************/
+/*****************************************************************************/
+
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Start_date;
+   extern const char *Txt_End_date;
+   extern const char *Txt_Yesterday;
+   extern const char *Txt_Today;
+
+   /***** Start date-time *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Start_date);
+   /* Date-time */
+   Dat_WriteFormClientLocalDateTimeFromYMDhms ("Start",
+				               &Gbl.DateRange.DateIni,
+				               Cfg_LOG_START_YEAR,
+				               Gbl.Now.Date.Year,
+				               false,false);
+
+   /***** "Yesterday" and "Today" buttons *****/
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td rowspan=\"2\" class=\"LEFT_MIDDLE\">"
+	              "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
+                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
+	              "<input type=\"button\" name=\"Today\" value=\"%s\""
+                      " onclick=\"setDateTo(this,%u,%u,%u)\" />"
+                      "</td>"
+                      "</tr>",
+            Txt_Yesterday,
+	    Gbl.Yesterday.Day,
+	    Gbl.Yesterday.Month,
+	    Gbl.Yesterday.Year - Cfg_LOG_START_YEAR + 1,
+            Txt_Today,
+            Gbl.Now.Date.Day,
+            Gbl.Now.Date.Month,
+            Gbl.Now.Date.Year - Cfg_LOG_START_YEAR + 1);
+
+   /***** End date-time *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_End_date);
+   /* Date-time */
+   Dat_WriteFormClientLocalDateTimeFromYMDhms ("End",
+				               &Gbl.DateRange.DateEnd,
+				               Cfg_LOG_START_YEAR,
+				               Gbl.Now.Date.Year,
+				               false,false);
+
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+  }
 
 /*****************************************************************************/
 /************* Show forms to enter initial and ending date-times *************/
@@ -309,11 +376,11 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
                Dates[StartOrEndTime]);
 
       /* Date-time */
-      Dat_WriteFormClientLocalDateTime (Id[StartOrEndTime],
-	                                TimeUTC[StartOrEndTime],
-	                                Gbl.Now.Date.Year - 1,
-	                                Gbl.Now.Date.Year + 1,
-                                        false,false);
+      Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartOrEndTime],
+	                                           TimeUTC[StartOrEndTime],
+	                                           Gbl.Now.Date.Year - 1,
+	                                           Gbl.Now.Date.Year + 1,
+                                                   false,false);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
@@ -327,10 +394,10 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 /************************* Show a form to enter a date ***********************/
 /*****************************************************************************/
 
-static void Dat_WriteFormClientLocalDateTime (const char *Id,
-                                              time_t TimeUTC,
-                                              unsigned FirstYear,unsigned LastYear,
-                                              bool SubmitFormOnChange,bool Disabled)
+static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
+                                                         time_t TimeUTC,
+                                                         unsigned FirstYear,unsigned LastYear,
+                                                         bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;
@@ -384,7 +451,7 @@ static void Dat_WriteFormClientLocalDateTime (const char *Id,
 	Month <= 12;
 	Month++)
       fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
-               Month,Txt_MONTHS_SMALL[Month-1]);
+               Month,Txt_MONTHS_SMALL[Month - 1]);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -479,10 +546,204 @@ static void Dat_WriteFormClientLocalDateTime (const char *Id,
 
    /***** Script to set selectors to local date and time from UTC time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		      "setLocalDateTimeFormFromUTC('%s',%ld);"
-		      "adjustDateForm('%s');"
+                      "setLocalDateTimeFormFromUTC('%s',%ld);"
+	              "adjustDateForm('%s');"
 		      "</script>",
 	    Id,(long) TimeUTC,Id);
+  }
+
+
+/*****************************************************************************/
+/************************* Show a form to enter a date ***********************/
+/*****************************************************************************/
+
+static void Dat_WriteFormClientLocalDateTimeFromYMDhms (const char *Id,
+		                                        struct Date *DateSelected,
+                                                        unsigned FirstYear,unsigned LastYear,
+                                                        bool SubmitFormOnChange,bool Disabled)
+  {
+   extern const char *Txt_MONTHS_SMALL[12];
+   unsigned Day;
+   unsigned Month;
+   unsigned Year;
+   unsigned Hour;
+   unsigned Minute;
+   unsigned Second;
+   unsigned NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+	                                                        ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+	                                        	                                      Dat_NumDaysMonth[DateSelected->Month]);
+   struct Time TimeSelected;	// Put hour, minute and second in struct Date
+   TimeSelected.Hour   = 0;
+   TimeSelected.Minute = 0;
+   TimeSelected.Second = 0;
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table>"
+	              "<tr>");
+
+   /***** Year *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%sYear\" name=\"%sYear\""
+                      " onchange=\""
+                      "adjustDateForm('%s');"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Year = FirstYear;
+	Year <= LastYear;
+	Year++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Year);
+      if (Year == DateSelected->Year)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%u</option>",Year);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Month *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%sMonth\" name=\"%sMonth\""
+                      " onchange=\""
+                      "adjustDateForm('%s');"
+                      "setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Month = 1;
+	Month <= 12;
+	Month++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Month);
+      if (Month == DateSelected->Month)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Day *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+	              "<select id=\"%sDay\" name=\"%sDay\""
+	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+            Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">"
+	              "<option value=\"0\">-</option>");
+   for (Day = 1;
+	Day <= NumDaysSelectedMonth;
+	Day++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Day);
+      if (Day == DateSelected->Day)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%u</option>",Day);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Hour *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">,&nbsp;"
+                      "<select id=\"%sHour\" name=\"%sHour\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+            Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Hour = 0;
+	Hour <= 23;
+	Hour++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
+      if (Hour == TimeSelected.Hour)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%02u h</option>",Hour);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Minute *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select id=\"%sMinute\" name=\"%sMinute\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Minute = 0;
+	Minute <= 59;
+	Minute++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
+      if (Minute == TimeSelected.Minute)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Second *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select id=\"%sSecond\" name=\"%sSecond\""
+                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	    Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,">");
+   for (Second = 0;
+	Second <= 59;
+	Second++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Second);
+      if (Second == TimeSelected.Second)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%02u &quot;</option>",Second);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+
+   /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"0\" />",
+            Id,Id);
+
+   /***** Script to set UTC time from selectors with local date and time *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                      "setUTCFromLocalDateTimeForm('%s');"
+                      "adjustDateForm('%s');"
+		      "</script>",
+	    Id,Id);
   }
 
 /*****************************************************************************/
@@ -569,7 +830,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       fprintf (Gbl.F.Out,"<option value=\"%u\"",Month);
       if (Month == DateSelected->Month)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month-1]);
+      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
      }
 
    /***** Year *****/
@@ -717,6 +978,7 @@ void Dat_GetIniEndDatesFromForm (void)
                         &Gbl.DateRange.DateIni.Day,
                         &Gbl.DateRange.DateIni.Month,
                         &Gbl.DateRange.DateIni.Year);
+   // TODO: Get hour, minute and second
    if (Gbl.DateRange.DateIni.Day   == 0 ||
        Gbl.DateRange.DateIni.Month == 0 ||
        Gbl.DateRange.DateIni.Year  == 0)
@@ -725,12 +987,14 @@ void Dat_GetIniEndDatesFromForm (void)
       Gbl.DateRange.DateIni.Month = Cfg_LOG_START_MONTH;
       Gbl.DateRange.DateIni.Year  = Cfg_LOG_START_YEAR;
      }
+   Gbl.DateRange.TimeUTC[0] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
 
    /***** Get end date *****/
    Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
                         &Gbl.DateRange.DateEnd.Day,
                         &Gbl.DateRange.DateEnd.Month,
                         &Gbl.DateRange.DateEnd.Year);
+   // TODO: Get hour, minute and second
    if (Gbl.DateRange.DateEnd.Day   == 0 ||
        Gbl.DateRange.DateEnd.Month == 0 ||
        Gbl.DateRange.DateEnd.Year  == 0)
@@ -739,6 +1003,7 @@ void Dat_GetIniEndDatesFromForm (void)
       Gbl.DateRange.DateEnd.Month = Gbl.Now.Date.Month;
       Gbl.DateRange.DateEnd.Year  = Gbl.Now.Date.Year;
      }
+   Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
   }
 
 /*****************************************************************************/

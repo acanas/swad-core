@@ -506,7 +506,8 @@ void Sta_AskShowCrsHits (void)
                             "</tr>");
 
          /***** Initial and final dates of the search *****/
-         Dat_WriteFormIniEndDates ();
+         // Dat_WriteFormIniEndDates ();
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
          /***** Selection of action *****/
          Sta_WriteSelectorAction ();
@@ -643,7 +644,8 @@ void Sta_AskShowGblHits (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_all_visits);
 
    /***** Start and end dates for the search *****/
-   Dat_WriteFormIniEndDates ();
+   // Dat_WriteFormIniEndDates ();
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"

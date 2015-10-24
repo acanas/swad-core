@@ -1120,7 +1120,8 @@ void Tst_ShowFormAskEditTsts (void)
       /***** Starting and ending dates in the search *****/
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
 	                 " style=\"margin:0 auto;\">");
-      Dat_WriteFormIniEndDates ();
+      // Dat_WriteFormIniEndDates ();
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
       fprintf (Gbl.F.Out,"</table>"
 	                 "</div>");
 
@@ -5948,7 +5949,8 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
                             "</tr>");
 
          /***** Starting and ending dates in the search *****/
-	 Dat_WriteFormIniEndDates ();
+	 // Dat_WriteFormIniEndDates ();
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
          fprintf (Gbl.F.Out,"</table>");
 
@@ -5990,7 +5992,8 @@ void Tst_SelDatesToSeeMyTstExams (void)
 
    /***** Starting and ending dates in the search *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
-   Dat_WriteFormIniEndDates ();
+   // Dat_WriteFormIniEndDates ();
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_See_exams);
