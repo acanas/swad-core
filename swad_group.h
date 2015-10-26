@@ -80,7 +80,7 @@ struct GroupType
    bool MandatoryEnrollment;				// Enrollment is mandatory?
    bool MultipleEnrollment;				// Enrollment is multiple?
    bool MustBeOpened;					// Groups must be opened?
-   struct DateTime OpenTime;				// Open groups automatically in this date-time. If == 0, don't open.
+   time_t OpenTimeUTC;					// Open groups automatically in this date-time. If == 0, don't open.
    unsigned NumGrps;					// Number of groups of this type
    struct Group *LstGrps;				// List of groups of this type
   };

@@ -327,12 +327,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = true;
    Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = false;
    Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = false;
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Year   =
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Month  =
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Day    =
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Hour   =
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Minute =
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Second = 0;
+   Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.CurrentCrs.Grps.GrpCod = -1L; // -1L stands for the whole course
    Gbl.CurrentCrs.Grps.GrpName[0] = '\0';
    Gbl.CurrentCrs.Grps.MaxStudents = INT_MAX;

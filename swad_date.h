@@ -70,7 +70,6 @@ void Dat_GetAndConvertCurrentDateTime (void);
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str);
 bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
-bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YYYYMMDDHHMMSS);
 
 void Dat_ShowClientLocalTime (void);
 
@@ -80,6 +79,11 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void);
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2]);
 
+void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
+                                                  const char *ParamName,
+                                                  time_t TimeUTC,
+                                                  unsigned FirstYear,unsigned LastYear,
+                                                  bool SubmitFormOnChange,bool Disabled);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
@@ -115,8 +119,5 @@ unsigned Dat_GetDayOfWeek (unsigned Year,unsigned Month,unsigned Day);
 unsigned Dat_GetDayOfYear (struct Date *Date);
 void Dat_CalculateWeekOfYear (struct Date *Date);
 void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc);
-
-int Dat_CompareDates (struct Date *Date1,struct Date *Date2);
-int Dat_CompareDateTimes (struct DateTime *DateTime1,struct DateTime *DateTime2);
 
 #endif

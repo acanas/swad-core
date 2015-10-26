@@ -63,11 +63,6 @@ const unsigned Dat_NumDaysMonth[1+12] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
-                                                         time_t TimeUTC,
-                                                         unsigned FirstYear,unsigned LastYear,
-                                                         bool SubmitFormOnChange,bool Disabled);
-
 /*****************************************************************************/
 /***************************** Get current time ******************************/
 /*****************************************************************************/
@@ -146,36 +141,6 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
   }
 
 /*****************************************************************************/
-/******* Get a struct DateTime from a string in YYYYMMDDHHMMSS format ********/
-/*****************************************************************************/
-
-bool Dat_GetDateTimeFromYYYYMMDDHHMMSS (struct DateTime *DateTime,const char *YYYYMMDDHHMMSS)
-  {
-   if (sscanf (YYYYMMDDHHMMSS,"%04u%02u%02u%02u%02u%02u",
-               &(DateTime->Date.Year),&(DateTime->Date.Month),&(DateTime->Date.Day),
-               &(DateTime->Time.Hour),&(DateTime->Time.Minute),&(DateTime->Time.Second)) == 6)
-     {
-      strncpy (DateTime->Date.YYYYMMDD,YYYYMMDDHHMMSS,4+2+2);
-      DateTime->YYYYMMDDHHMMSS[4+2+2] = '\0';
-
-      strncpy (DateTime->YYYYMMDDHHMMSS,YYYYMMDDHHMMSS,4+2+2+2+2+2);
-      DateTime->YYYYMMDDHHMMSS[4+2+2+2+2+2] = '\0';
-
-      return true;
-     }
-   else
-     {
-      DateTime->Date.Year = DateTime->Date.Month = DateTime->Date.Day = 0;
-      DateTime->Date.YYYYMMDD[0] = '\0';
-
-      DateTime->Time.Hour = DateTime->Time.Minute = DateTime->Time.Second = 0;
-      DateTime->YYYYMMDDHHMMSS[0] = '\0';
-
-      return false;
-     }
-  }
-
-/*****************************************************************************/
 /******************** Write div for client local time ************************/
 /*****************************************************************************/
 
@@ -241,6 +206,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
             Txt_Start_date);
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
+                                                "Start",
                                                 Gbl.DateRange.TimeUTC[0],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
@@ -274,6 +240,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
             Txt_End_date);
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
+                                                "End",
                                                 Gbl.DateRange.TimeUTC[1],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
@@ -321,6 +288,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 
       /* Date-time */
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartOrEndTime],
+                                                   Id[StartOrEndTime],
 	                                           TimeUTC[StartOrEndTime],
 	                                           Gbl.Now.Date.Year - 1,
 	                                           Gbl.Now.Date.Year + 1,
@@ -338,10 +306,11 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 /************************* Show a form to enter a date ***********************/
 /*****************************************************************************/
 
-static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
-                                                         time_t TimeUTC,
-                                                         unsigned FirstYear,unsigned LastYear,
-                                                         bool SubmitFormOnChange,bool Disabled)
+void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
+                                                  const char *ParamName,
+                                                  time_t TimeUTC,
+                                                  unsigned FirstYear,unsigned LastYear,
+                                                  bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;
@@ -356,12 +325,12 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "<tr>");
 
    /***** Year *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<select id=\"%sYear\" name=\"%sYear\""
                       " onchange=\""
                       "adjustDateForm('%s');"
                       "setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id,Id);
+	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -383,14 +352,14 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                       " onchange=\""
                       "adjustDateForm('%s');"
                       "setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id,Id);
+	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   fprintf (Gbl.F.Out,"><option value=\"0\" disabled=\"disabled\">-</option>");
    for (Month = 1;
 	Month <= 12;
 	Month++)
@@ -400,10 +369,10 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "</td>");
 
    /***** Day *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<select id=\"%sDay\" name=\"%sDay\""
 	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-            Id,Id,Id);
+            Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -411,7 +380,7 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,">"
-	              "<option value=\"0\">-</option>");
+	              "<option value=\"0\" disabled=\"disabled\">-</option>");
    for (Day = 1;
 	Day <= 31;
 	Day++)
@@ -421,10 +390,10 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "</td>");
 
    /***** Hour *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">,&nbsp;"
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<select id=\"%sHour\" name=\"%sHour\""
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-            Id,Id,Id);
+            Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -441,10 +410,10 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "</td>");
 
    /***** Minute *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select id=\"%sMinute\" name=\"%sMinute\""
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id);
+	    Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -464,7 +433,7 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select id=\"%sSecond\" name=\"%sSecond\""
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-	    Id,Id,Id);
+	    Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
@@ -486,7 +455,7 @@ static void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
-            Id,Id,(long) TimeUTC);
+            Id,ParamName,(long) TimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
@@ -1136,55 +1105,4 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Month = DateSrc->Month;
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
-  }
-
-/*****************************************************************************/
-/****************************** Compare dates ********************************/
-/*****************************************************************************/
-// Return <0 if Date1<Date2
-// Return >0 if Date1>Date2
-// Return  0 if Date1==Date2
-
-int Dat_CompareDates (struct Date *Date1,struct Date *Date2)
-  {
-   if (Date1->Year  < Date2->Year ) return -1;
-   if (Date1->Year  > Date2->Year ) return 1;
-
-   if (Date1->Month < Date2->Month) return -1;
-   if (Date1->Month > Date2->Month) return 1;
-
-   if (Date1->Day   < Date2->Day  ) return -1;
-   if (Date1->Day   > Date2->Day  ) return 1;
-
-   return 0;
-  }
-
-/*****************************************************************************/
-/************************** Compare datetimes ********************************/
-/*****************************************************************************/
-// Return <0 if DateTime1<DateTime2
-// Return >0 if DateTime1>DateTime2
-// Return  0 if DateTime1==DateTime2
-
-int Dat_CompareDateTimes (struct DateTime *DateTime1,struct DateTime *DateTime2)
-  {
-   if (DateTime1->Date.Year   < DateTime2->Date.Year  ) return -1;
-   if (DateTime1->Date.Year   > DateTime2->Date.Year  ) return 1;
-
-   if (DateTime1->Date.Month  < DateTime2->Date.Month ) return -1;
-   if (DateTime1->Date.Month  > DateTime2->Date.Month ) return 1;
-
-   if (DateTime1->Date.Day    < DateTime2->Date.Day   ) return -1;
-   if (DateTime1->Date.Day    > DateTime2->Date.Day   ) return 1;
-
-   if (DateTime1->Time.Hour   < DateTime2->Time.Hour  ) return -1;
-   if (DateTime1->Time.Hour   > DateTime2->Time.Hour  ) return 1;
-
-   if (DateTime1->Time.Minute < DateTime2->Time.Minute) return -1;
-   if (DateTime1->Time.Minute > DateTime2->Time.Minute) return 1;
-
-   if (DateTime1->Time.Second < DateTime2->Time.Second) return -1;
-   if (DateTime1->Time.Second > DateTime2->Time.Second) return 1;
-
-   return 0;
   }

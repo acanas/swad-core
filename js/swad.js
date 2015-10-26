@@ -24,7 +24,7 @@
 // Global variable used in refreshConnected()
 var ActionAJAX;
 
-// Global variables used in writeLocalTime()
+// Global variables used in writeLocalClock()
 var secondsSince1970UTC;
 
 // Global variables used in writeClockConnected()
@@ -88,93 +88,166 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC,separator) {
 
 // Set local date-time form fields from UTC time
 function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
-	var d = new Date;
-	var YearForm = document.getElementById(id+'Year');
+	var FormYea = document.getElementById(id+'Year');
+	var FormMon = document.getElementById(id+'Month');
+	var FormDay = document.getElementById(id+'Day');
+	var FormHou = document.getElementById(id+'Hour');
+	var FormMin = document.getElementById(id+'Minute');
+	var FormSec = document.getElementById(id+'Second');
+	var d;
 	var Year;
+	var YearIsValid = false;
 
-	d.setTime(secsSince1970UTC * 1000);
+	if (secsSince1970UTC) {
+		d = new Date;
+		d.setTime(secsSince1970UTC * 1000);
+		Year = d.getFullYear();
+		for (var i=0; i<FormYea.options.length && !YearIsValid; i++)
+			if (FormYea.options[i].value == Year) {
+				FormYea.options[i].selected = true;
+				YearIsValid = true;
+			}
+		FormMon.disabled = false;
+		FormDay.disabled = false;
+		FormHou.disabled = false;
+		FormMin.disabled = false;
+		FormSec.disabled = false;
+		FormMon.options[d.getMonth()+1].selected = true;
+		FormDay.options[d.getDate()   ].selected = true;
+		FormHou.options[d.getHours()  ].selected = true;
+		FormMin.options[d.getMinutes()].selected = true;
+		FormSec.options[d.getSeconds()].selected = true;
+	}
+	
+	if (!YearIsValid) {
+		FormYea.options[0].selected = true;
+		FormMon.options[0].selected = true;
+		FormDay.options[0].selected = true;
+		FormHou.options[0].selected = true;
+		FormMin.options[0].selected = true;
+		FormSec.options[0].selected = true;
 
-	Year = d.getFullYear()
-	for (var i=0; i<YearForm.options.length ; i++)
-		if (YearForm.options[i].value == Year) {
-			YearForm.options[i].selected = true;
-			break;
-		}
-	document.getElementById(id+'Month' ).options[d.getMonth()+1].selected = true;
-	document.getElementById(id+'Day'   ).options[d.getDate()   ].selected = true;
-	document.getElementById(id+'Hour'  ).options[d.getHours()  ].selected = true;
-	document.getElementById(id+'Minute').options[d.getMinutes()].selected = true;
-	document.getElementById(id+'Second').options[d.getSeconds()].selected = true;
+		FormMon.disabled = true;
+		FormDay.disabled = true;
+		FormHou.disabled = true;
+		FormMin.disabled = true;
+		FormSec.disabled = true;
+	}
 }
 
 // Set UTC time from local date-time form fields 
 function setUTCFromLocalDateTimeForm(id) {
-	var d = new Date;
-	var Year  = document.getElementById(id+'Year'  ).value;
-	var Month = document.getElementById(id+'Month' ).value;
-	var Day   = document.getElementById(id+'Day'   ).value;
+	var FormYea = document.getElementById(id+'Year');
+	var FormMon = document.getElementById(id+'Month');
+	var FormDay = document.getElementById(id+'Day');
+	var FormHou = document.getElementById(id+'Hour');
+	var FormMin = document.getElementById(id+'Minute');
+	var FormSec = document.getElementById(id+'Second');
+	var FormTimeUTC = document.getElementById(id+'TimeUTC');
+	var d;
+	var Yea = FormYea.value;
+	var Mon;
+	var Day;
 	
-	if (Year == 0 || Month == 0 || Day == 0)
-		document.getElementById(id+'TimeUTC').value = 0;
-        else {
+	if (Yea == 0) {
+		FormYea.options[0].selected = true;
+		FormMon.options[0].selected = true;
+		FormDay.options[0].selected = true;
+		FormHou.options[0].selected = true;
+		FormMin.options[0].selected = true;
+		FormSec.options[0].selected = true;
+
+		FormMon.disabled = true;
+		FormDay.disabled = true;
+		FormHou.disabled = true;
+		FormMin.disabled = true;
+		FormSec.disabled = true;
+
+		FormTimeUTC.value = 0;
+	}
+	else {
+		FormMon.disabled = false;
+		FormDay.disabled = false;
+		FormHou.disabled = false;
+		FormMin.disabled = false;
+		FormSec.disabled = false;
+
+		Mon = FormMon.value;
+		if (Mon == 0)
+			Mon = 1;
+		Day = FormDay.value;
+		if (Day == 0)
+			Day = 1;
+
 		// Important: set year first in order to work properly with leap years
-		d.setFullYear(Year);
-		d.setMonth   (Month-1);
+		d = new (Date);
+		d.setFullYear(Yea);
+		d.setMonth   (Mon-1);
 		d.setDate    (Day);
-		d.setHours   (document.getElementById(id+'Hour'  ).value);
-		d.setMinutes (document.getElementById(id+'Minute').value);
-		d.setSeconds (document.getElementById(id+'Second').value);
+		d.setHours   (FormHou.value);
+		d.setMinutes (FormMin.value);
+		d.setSeconds (FormSec.value);
 		d.setMilliseconds(0);
 	
-		document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
+		FormTimeUTC.value = d.getTime() / 1000;
 	}
 }
 
 // Adjust a date form correcting days in the month
 function adjustDateForm (id) {
-	var Days = 31;
-	var YearForm  = document.getElementById(id+'Year' );
-	var MonthForm = document.getElementById(id+'Month');
-	var DayForm   = document.getElementById(id+'Day'  );
-	var Year = YearForm.options[YearForm.selectedIndex].value;
+	var FormYea = document.getElementById(id+'Year' );
+	var FormMon = document.getElementById(id+'Month');
+	var FormDay = document.getElementById(id+'Day'  );
+	var Yea = FormYea.options[FormYea.selectedIndex].value;
+	var Days;
 
-	if (MonthForm.options[2].selected)			// Adjust days of february
-		Days = ((((Year % 4) == 0) && ((Year % 100) != 0)) || ((Year % 400) == 0)) ? 29 : 28;
-	else if (MonthForm.options[ 4].selected ||
-		 MonthForm.options[ 6].selected ||
-		 MonthForm.options[ 9].selected ||
-		 MonthForm.options[11].selected)
-		Days = 30;
-
-	if (DayForm.selectedIndex > Days)
-		DayForm.options[Days].selected = true;
-
-	for (var i=DayForm.options.length; i<=Days ; i++) {	// Create new days
-		var x = String (i);
-		DayForm.options[i] = new Option(x,x);
+	if (FormYea.selectedIndex > 0) {
+		if (FormMon.options[0].selected) {			// No month selected, set to january
+			FormMon.options[1].selected = true;
+			Days = 31;
+		}
+		else if (FormMon.options[2].selected)			// Adjust days of february
+			Days = ((((Yea % 4) == 0) && ((Yea % 100) != 0)) || ((Yea % 400) == 0)) ? 29 : 28;
+		else if (FormMon.options[ 4].selected ||
+			 FormMon.options[ 6].selected ||
+			 FormMon.options[ 9].selected ||
+			 FormMon.options[11].selected)
+			Days = 30;
+		else
+			Days = 31;
+	
+		if (FormDay.options[0].selected)			// No day selected, set to 1
+			FormDay.options[1].selected = true;
+		else if (FormDay.selectedIndex > Days)
+			FormDay.options[Days].selected = true;
+	
+		for (var i=FormDay.options.length; i<=Days ; i++) {	// Create new days
+			var x = String (i);
+			FormDay.options[i] = new Option(x,x);
+		}
+		for (var i=FormDay.options.length-1; i>Days; i--)	// Remove days
+			FormDay.options[i] = null;
 	}
-	for (var i=DayForm.options.length-1; i>Days; i--)	// Remove days
-		DayForm.options[i] = null;
 }
 
 // Set a the date in a date form to a specified date  
-function setDateTo (Day,Month,Year) {
-	document.getElementById('StartYear'  ).options[Year ].selected = true;
-	document.getElementById('StartMonth' ).options[Month].selected = true;
+function setDateTo (Day,Mon,Yea) {
+	document.getElementById('StartYear'  ).options[Yea].selected = true;
+	document.getElementById('StartMonth' ).options[Mon].selected = true;
 	adjustDateForm ('Start')
-	document.getElementById('StartDay'   ).options[Day  ].selected = true;
-	document.getElementById('StartHour'  ).options[0    ].selected = true;
-	document.getElementById('StartMinute').options[0    ].selected = true;
-	document.getElementById('StartSecond').options[0    ].selected = true;
+	document.getElementById('StartDay'   ).options[Day].selected = true;
+	document.getElementById('StartHour'  ).options[0  ].selected = true;
+	document.getElementById('StartMinute').options[0  ].selected = true;
+	document.getElementById('StartSecond').options[0  ].selected = true;
 	setUTCFromLocalDateTimeForm('Start');
 
-	document.getElementById('EndYear'    ).options[Year ].selected = true;
-	document.getElementById('EndMonth'   ).options[Month].selected = true;
+	document.getElementById('EndYear'    ).options[Yea].selected = true;
+	document.getElementById('EndMonth'   ).options[Mon].selected = true;
 	adjustDateForm ('End')
-	document.getElementById('EndDay'     ).options[Day  ].selected = true;
-	document.getElementById('EndHour'    ).options[23   ].selected = true;
-	document.getElementById('EndMinute'  ).options[59   ].selected = true;
-	document.getElementById('EndSecond'  ).options[59   ].selected = true;
+	document.getElementById('EndDay'     ).options[Day].selected = true;
+	document.getElementById('EndHour'    ).options[23 ].selected = true;
+	document.getElementById('EndMinute'  ).options[59 ].selected = true;
+	document.getElementById('EndSecond'  ).options[59 ].selected = true;
 	setUTCFromLocalDateTimeForm('End');
 }
 
@@ -186,7 +259,7 @@ function writeLocalClock() {
 	var StrH;
 	var StrM;
 
-	setTimeout('writeLocalTime()',60000);
+	setTimeout('writeLocalClock()',60000);
 
 	d.setTime(secondsSince1970UTC * 1000);
 	secondsSince1970UTC += 60;	// For next call

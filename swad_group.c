@@ -89,7 +89,7 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
                                          struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
-static bool Grp_CheckIfOpenTimeInTheFuture (struct DateTime *OpenTime);
+static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCod);
 static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod);
 static void Grp_CreateGroupType (void);
@@ -1123,15 +1123,17 @@ static void Grp_ListGroupTypesForEdition (void)
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
    unsigned NumGrpTyp;
+   unsigned UniqueId;
+   char Id[32];
 
    /***** Write heading *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_group);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
-   for (NumGrpTyp = 0;
+   for (NumGrpTyp = 0, UniqueId=1;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
-	NumGrpTyp++)
+	NumGrpTyp++, UniqueId++)
      {
       /* Put icon to remove group type */
       fprintf (Gbl.F.Out,"<tr>"
@@ -1218,14 +1220,13 @@ static void Grp_ListGroupTypesForEdition (void)
         	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open);
-      Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year + 1,"Open",
-                         &(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTime.Date),
-                         true,false);
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td class=\"LEFT_MIDDLE\">");
-      Dat_WriteFormHourMinute ("OpenHour","OpenMinute",
-		               &(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTime.Time),
-                               true,false);
+      sprintf (Id,"open_time_%u",UniqueId);
+      Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id,
+                                                   "Open",
+						   Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
+						   Gbl.Now.Date.Year,
+						   Gbl.Now.Date.Year + 1,
+						   true,false);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>");
@@ -1913,6 +1914,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    extern const char *Txt_Max_BR_students;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Vacants;
+   static unsigned UniqueId = 0;
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1921,10 +1923,15 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 	    GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
      {
-      fprintf (Gbl.F.Out,"<br />%s: ",Txt_Opening_of_groups);
-      Dat_WriteDate (GrpTyp->OpenTime.YYYYMMDDHHMMSS);
-      fprintf (Gbl.F.Out,"&nbsp;");
-      Dat_WriteHourMinute (&(GrpTyp->OpenTime.YYYYMMDDHHMMSS[8]));
+      UniqueId++;
+      fprintf (Gbl.F.Out,"<br />%s: "
+                         "<span id=\"open_time_%u\"></span>"
+                         "<script type=\"text/javascript\">"
+                         "writeLocalDateTimeFromUTC('open_time_%u',%ld,'&nbsp;');"
+                         "</script>",
+               Txt_Opening_of_groups,
+               UniqueId,
+               UniqueId,(long) GrpTyp->OpenTimeUTC);
      }
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -2097,12 +2104,12 @@ static void Grp_PutFormToCreateGroupType (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
-                      "<td class=\"LEFT_MIDDLE\">"
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "</td>"
-	              "<td class=\"LEFT_BOTTOM\" style=\"width:20px;\">",
+	              "<td class=\"LEFT_MIDDLE\">",
             Gbl.Prefs.IconsURL,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? "time" :
         	                                      "time-off",
@@ -2110,14 +2117,12 @@ static void Grp_PutFormToCreateGroupType (void)
         	                                      Txt_The_groups_will_not_automatically_open,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open);
-   Dat_WriteFormDate (Gbl.Now.Date.Year,Gbl.Now.Date.Year + 1,"Open",
-                      &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date),
-                      false,false);
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"LEFT_MIDDLE\">");
-   Dat_WriteFormHourMinute ("OpenHour","OpenMinute",
-                            &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time),
-                            false,false);
+   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
+                                                "Open",
+                                                Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
+                                                Gbl.Now.Date.Year,
+                                                Gbl.Now.Date.Year + 1,
+                                                false,false);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
                       "</table>"
@@ -2244,7 +2249,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 	 sprintf (Query,"SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
 			"crs_grp_types.Mandatory,crs_grp_types.Multiple,"
 			"crs_grp_types.MustBeOpened,"
-			"DATE_FORMAT(crs_grp_types.OpenTime,'%%Y%%m%%d%%H%%i%%S'),"
+			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
 			"COUNT(crs_grp.GrpCod)"
 			" FROM crs_grp_types,crs_grp"
 			" WHERE crs_grp_types.CrsCod='%ld'"
@@ -2257,7 +2262,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 	 sprintf (Query,"(SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName AS GrpTypName,"
 			"crs_grp_types.Mandatory,crs_grp_types.Multiple,"
 			"crs_grp_types.MustBeOpened,"
-			"DATE_FORMAT(crs_grp_types.OpenTime,'%%Y%%m%%d%%H%%i%%S'),"
+			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
 			"COUNT(crs_grp.GrpCod)"
 			" FROM crs_grp_types,crs_grp"
 			" WHERE crs_grp_types.CrsCod='%ld'"
@@ -2266,7 +2271,9 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 			" UNION "
 			"(SELECT GrpTypCod,GrpTypName,"
 			"Mandatory,Multiple,"
-			"MustBeOpened,DATE_FORMAT(OpenTime,'%%Y%%m%%d%%H%%i%%S'),'0'"
+			"MustBeOpened,"
+			"UNIX_TIMESTAMP(OpenTime),"
+			"'0'"
 			" FROM crs_grp_types WHERE CrsCod='%ld'"
 			" AND GrpTypCod NOT IN (SELECT GrpTypCod FROM crs_grp))"
 			" ORDER BY GrpTypName",
@@ -2309,10 +2316,9 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
          /* Groups of this type must be opened? (row[4]) */
          Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
 
-         /* Get open time (row[5] holds the open time in YYYYMMDDHHMMSS format) */
-         if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTime),row[5])))
-	    Lay_ShowErrorAndExit ("Error when reading open time.");
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (&(Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTime));
+         /* Get open time (row[5] holds the open time UTC) */
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTimeUTC);
 
          /* Number of groups of this type (row[6]) */
          if (sscanf (row[6],"%u",&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].NumGrps) != 1)
@@ -2545,7 +2551,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    unsigned long NumRows;
 
    /***** Get data of a type of group from database *****/
-   sprintf (Query,"SELECT GrpTypName,Mandatory,Multiple,MustBeOpened,DATE_FORMAT(OpenTime,'%%Y%%m%%d%%H%%i%%S')"
+   sprintf (Query,"SELECT GrpTypName,Mandatory,Multiple,MustBeOpened,UNIX_TIMESTAMP(OpenTime)"
 	          " FROM crs_grp_types"
                   " WHERE CrsCod='%ld' AND GrpTypCod='%ld'",
             Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod);
@@ -2560,9 +2566,8 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    strcpy (GrpTyp->GrpTypName,row[0]);
    GrpTyp->MandatoryEnrollment = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
    GrpTyp->MultipleEnrollment  = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-   GrpTyp->MustBeOpened          = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
-   if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(GrpTyp->OpenTime),row[4])))
-      Lay_ShowErrorAndExit ("Error when reading open time.");
+   GrpTyp->MustBeOpened        = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+   GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2942,9 +2947,11 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
 
    /***** Get groups which I belong to from database *****/
    sprintf (Query,"SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp,crs_grp_usr"
-                  " WHERE crs_grp_types.CrsCod='%ld' AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.FileZones='Y'"
-                  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod AND crs_grp_usr.UsrCod='%ld'"
+                  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+                  " AND crs_grp_usr.UsrCod='%ld'"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    LstGrps->NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the groups which I belong to");
@@ -3000,8 +3007,11 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 
    /***** Get the names of groups which a user belongs to, from database *****/
    sprintf (Query,"SELECT crs_grp.GrpName FROM crs_grp,crs_grp_usr"
-                  " WHERE crs_grp.GrpTypCod='%ld' AND crs_grp.GrpCod=crs_grp_usr.GrpCod AND crs_grp_usr.UsrCod='%ld'"
-                  " ORDER BY crs_grp.GrpName",GrpTypCod,UsrCod);
+                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
+                  " AND crs_grp_usr.UsrCod='%ld'"
+                  " ORDER BY crs_grp.GrpName",
+            GrpTypCod,UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the names of groups a user belongs to");
 
    /***** Get the groups *****/
@@ -3046,15 +3056,8 @@ void Grp_RecFormNewGrpTyp (void)
    Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /* Get open time */
-   Dat_GetDateFromForm ("OpenDay","OpenMonth","OpenYear",
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Day),
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Month),
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Year));
-   Dat_GetHourMinuteFromForm ("OpenHour","OpenMinute",
-                              &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Hour),
-                              &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Minute));
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Second = 0;
-   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (&(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime));
+   Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
 
    if (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName[0])	// If there's a group type name
      {
@@ -3082,16 +3085,14 @@ void Grp_RecFormNewGrpTyp (void)
 /**************** Check if the open time if in the future ********************/
 /*****************************************************************************/
 
-static bool Grp_CheckIfOpenTimeInTheFuture (struct DateTime *OpenTime)
+static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
   {
-   /***** If any part of the date is 0 ==> groups must no be opened *****/
-   if (OpenTime->Date.Year  == 0 ||
-       OpenTime->Date.Month == 0 ||
-       OpenTime->Date.Day   == 0)
+   /***** If open time is 0 ==> groups must no be opened *****/
+   if (OpenTimeUTC == (time_t) 0)
       return false;
 
    /***** Is open time in the future? *****/
-   return (Dat_CompareDateTimes (OpenTime,&(Gbl.Now)) >= 0);
+   return (OpenTimeUTC > Gbl.TimeStartExecution);
   }
 
 /*****************************************************************************/
@@ -3180,7 +3181,7 @@ static void Grp_CreateGroupType (void)
 
    /***** Create a new group type *****/
    sprintf (Query,"INSERT INTO crs_grp_types (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
-                  " VALUES ('%ld','%s','%c','%c','%c','%04u%02u%02u%02u%02u%02u')",
+                  " VALUES ('%ld','%s','%c','%c','%c',FROM_UNIXTIME('%ld'))",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
             Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment ? 'Y' :
         	                                             'N',
@@ -3188,12 +3189,7 @@ static void Grp_CreateGroupType (void)
         	                                            'N',
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                      'N',
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Year,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Month,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Day,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Hour,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Minute,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Second);
+            (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = DB_QueryINSERTandReturnCode (Query,"can not create type of group");
 
    /***** Write success message *****/
@@ -3769,27 +3765,15 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
 
    /***** Get open time *****/
-   Dat_GetDateFromForm ("OpenDay","OpenMonth","OpenYear",
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Day),
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Month),
-                        &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Year));
-   Dat_GetHourMinuteFromForm ("OpenHour","OpenMinute",
-                              &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Hour),
-                              &(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Minute));
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Second = 0;
-   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (&(Gbl.CurrentCrs.Grps.GrpTyp.OpenTime));
+   Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Update of the table of types of group changing the old open time of enrollment by the new *****/
-   sprintf (Query,"UPDATE crs_grp_types SET MustBeOpened='%c',OpenTime='%04u%02u%02u%02u%02u%02u'"
+   sprintf (Query,"UPDATE crs_grp_types SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME('%ld')"
                   " WHERE GrpTypCod='%ld'",
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                      'N',
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Year,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Month,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Date.Day,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Hour,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Minute,
-            Gbl.CurrentCrs.Grps.GrpTyp.OpenTime.Time.Second,
+            (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryUPDATE (Query,"can not update enrollment type of a type of group");
 
