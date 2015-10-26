@@ -54,12 +54,12 @@
 
 struct UsrFigures
   {
-   struct DateTime FirstClickTime;	//   0 ==> unknown first click time of user never logged
-   int NumDays;				//  -1 ==> not applicable
-   long NumClicks;			// -1L ==> unknown number of clicks
-   long NumFileViews;			// -1L ==> unknown number of file views
-   long NumForPst;			// -1L ==> unknown number of forum posts
-   long NumMsgSnt;			// -1L ==> unknown number of messages sent
+   time_t FirstClickTimeUTC;	//   0 ==> unknown first click time of user never logged
+   int NumDays;			//  -1 ==> not applicable
+   long NumClicks;		// -1L ==> unknown number of clicks
+   long NumFileViews;		// -1L ==> unknown number of file views
+   long NumForPst;		// -1L ==> unknown number of forum posts
+   long NumMsgSnt;		// -1L ==> unknown number of messages sent
   };
 
 /*****************************************************************************/
@@ -421,14 +421,18 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL,
 	    Txt_From_TIME,
 	    Txt_From_TIME);
-   if (UsrFigures.FirstClickTime.Date.Year)
+   if (UsrFigures.FirstClickTimeUTC)
      {
-      Dat_WriteDate (UsrFigures.FirstClickTime.Date.YYYYMMDD);
+      fprintf (Gbl.F.Out,"<span id=\"first_click_time\"></span>");
       if (UsrFigures.NumDays > 0)
 	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
 		  UsrFigures.NumDays,
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                         "writeLocalDateTimeFromUTC('first_click_time',%ld,'&nbsp;');"
+                         "</script>",
+               (long) UsrFigures.FirstClickTimeUTC);
      }
    else	// First click time is unknown or user never logged
      {
@@ -620,7 +624,7 @@ static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
    unsigned NumRows;
 
    /***** Get user's figures from database *****/
-   sprintf (Query,"SELECT DATE_FORMAT(FirstClickTime,'%%Y%%m%%d%%H%%i%%S'),"
+   sprintf (Query,"SELECT UNIX_TIMESTAMP(FirstClickTime),"
 	          "DATEDIFF(NOW(),FirstClickTime)+1,"
 	          "NumClicks,NumFileViews,NumForPst,NumMsgSnt"
 	          " FROM usr_figures WHERE UsrCod='%ld'",
@@ -630,12 +634,11 @@ static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       /***** Get user's figures *****/
       row = mysql_fetch_row (mysql_res);
 
-      /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
-      if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),row[0])))
-	 Lay_ShowErrorAndExit ("Error when reading first click time.");
+      /* Get first click (row[0] holds first click time UTC) */
+      UsrFigures->FirstClickTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
 
       /* Get number of days since first click (row[1]) */
-      if (UsrFigures->FirstClickTime.Date.Year)
+      if (UsrFigures->FirstClickTimeUTC)
 	{
 	 if (sscanf (row[1],"%d",&UsrFigures->NumDays) != 1)
 	    UsrFigures->NumDays = -1;
@@ -794,19 +797,18 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      sprintf (Query,"SELECT DATE_FORMAT("
+      sprintf (Query,"SELECT UNIX_TIMESTAMP("
 	             "(SELECT MIN(ClickTime) FROM log_full WHERE UsrCod='%ld')"
-	             ",'%%Y%%m%%d%%H%%i%%S')",
+	             ")",
 	       UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's first click"))
 	{
 	 /* Get first click */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get first click (row[0] holds the start date in YYYYMMDDHHMMSS format) */
+	 /* Get first click (row[0] holds the start date-time UTC) */
 	 if (row[0])	// It is NULL when user never logged
-	    if (!(Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures.FirstClickTime),row[0])))
-	       Lay_ShowErrorAndExit ("Error when reading first click time.");
+	    UsrFigures.FirstClickTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
 	}
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
@@ -814,9 +816,9 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       /***** Update first click time in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
 	{
-	 sprintf (Query,"UPDATE usr_figures SET FirstClickTime='%s'"
+	 sprintf (Query,"UPDATE usr_figures SET FirstClickTime=FROM_UNIXTIME('%ld')"
 			" WHERE UsrCod='%ld'",
-		  UsrFigures.FirstClickTime.YYYYMMDDHHMMSS,UsrCod);
+		  (long) UsrFigures.FirstClickTimeUTC,UsrCod);
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
@@ -1031,7 +1033,7 @@ void Prf_CreateNewUsrFigures (long UsrCod)
 
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
-   Dat_GetDateTimeFromYYYYMMDDHHMMSS (&(UsrFigures->FirstClickTime),"00000000000000");	//  unknown first click time or user never logged
+   UsrFigures->FirstClickTimeUTC = (time_t) 0;	// unknown first click time or user never logged
    UsrFigures->NumDays      = -1;		// not applicable
    UsrFigures->NumClicks    = -1L;		// unknown number of clicks
    UsrFigures->NumFileViews = -1L;		// unknown number of file views
@@ -1049,10 +1051,10 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 
    /***** Create user's figures *****/
    sprintf (Query,"INSERT INTO usr_figures"
-	          "(UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-		  " VALUES ('%ld','%s','%ld','%ld','%ld','%ld')",
+	          "(UsrCod,FROM_UNIXTIME(FirstClickTime),NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+		  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld')",
 	    UsrCod,
-	    UsrFigures->FirstClickTime.YYYYMMDDHHMMSS,	//   0 ==> unknown first click time or user never logged
+	    (long) UsrFigures->FirstClickTimeUTC,	//   0 ==> unknown first click time or user never logged
 	    UsrFigures->NumClicks,			// -1L ==> unknown number of clicks
 	    UsrFigures->NumFileViews,			// -1L ==> unknown number of file views
 	    UsrFigures->NumForPst,			// -1L ==> unknown number of forum posts
