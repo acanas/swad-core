@@ -2099,16 +2099,16 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG+1];
+   char LongStr[1+10+1];
    char UnsignedStr[10+1];
    Tst_AnswerType_t AnsType;
    char CrsCodStr[1+10+1];
-   char StrDate[16+1];
 
    /***** Select questions *****/
    /* Start query */
    /*
    row[0] QstCod
-   row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+   row[1] UNIX_TIMESTAMP(EditTime)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
@@ -2117,7 +2117,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    row[7] NumHitsNotBlank
    row[8] Score
    */
-   sprintf (Query,"SELECT tst_questions.QstCod,DATE_FORMAT(tst_questions.EditTime,'%%Y%%m%%d%%H%%i%%S') AS F,"
+   sprintf (Query,"SELECT tst_questions.QstCod,UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
                   "tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback,"
                   "tst_questions.NumHits,tst_questions.NumHitsNotBlank,tst_questions.Score"
                  " FROM tst_questions");
@@ -2127,23 +2127,19 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    strcat (Query," WHERE tst_questions.CrsCod='");
    sprintf (CrsCodStr,"%ld",Gbl.CurrentCrs.Crs.CrsCod);
    strcat (Query,CrsCodStr);
-   strcat (Query,"' AND tst_questions.EditTime>=");
-   sprintf (StrDate,"'%04u%02u%02u'",
-            Gbl.DateRange.DateIni.Year,
-            Gbl.DateRange.DateIni.Month,
-            Gbl.DateRange.DateIni.Day);
-   strcat (Query,StrDate);
-   strcat (Query," AND tst_questions.EditTime<=");
-   sprintf (StrDate,"'%04u%02u%02u235959'",
-            Gbl.DateRange.DateEnd.Year,
-            Gbl.DateRange.DateEnd.Month,
-            Gbl.DateRange.DateEnd.Day);
-   strcat (Query,StrDate);
+   strcat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('");
+   sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[0]);
+   strcat (Query,LongStr);
+   strcat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('");
+   sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[1]);
+   strcat (Query,LongStr);
+   strcat (Query,"')");
 
    /* Add the tags selected */
    if (!Gbl.Test.AllTags)
      {
-      strcat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod AND tst_question_tags.TagCod=tst_tags.TagCod"
+      strcat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
+	            " AND tst_question_tags.TagCod=tst_tags.TagCod"
                     " AND tst_tags.CrsCod='");
       strcat (Query,CrsCodStr);
       strcat (Query,"'");
@@ -2411,6 +2407,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    unsigned long NumRow;
    MYSQL_ROW row;
    long QstCod;
+   unsigned UniqueId;
+   time_t TimeUTC;
    unsigned long NumHitsThisQst;
    unsigned long NumHitsNotBlankThisQst;
    double TotalScoreThisQst;
@@ -2479,9 +2477,9 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write rows *****/
-   for (NumRow = 0;
+   for (NumRow = 0, UniqueId = 1;
 	NumRow < NumRows;
-	NumRow++)
+	NumRow++, UniqueId++)
      {
       Gbl.RowEvenOdd = NumRow % 2;
 
@@ -2530,12 +2528,15 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	                 "</td>",
                Gbl.RowEvenOdd,QstCod);
 
-      /* Write the date (row[1] has the date in format YYYYMMDDHHMMSS) */
-      fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
-               Gbl.RowEvenOdd);
-      Dat_WriteDate (row[1]);
-      fprintf (Gbl.F.Out,"<br />");
-      Dat_WriteHourMinute (&row[1][8]);
+      /* Write the date (row[1] has the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      fprintf (Gbl.F.Out,"<td id=\"tst_date_%u\""
+	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
+                         "<script type=\"text/javascript\">"
+                         "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'<br />');"
+                         "</script>",
+               UniqueId,Gbl.RowEvenOdd,
+               UniqueId,TimeUTC);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question tags */
