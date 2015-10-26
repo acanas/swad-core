@@ -445,6 +445,7 @@ void Sta_AskShowCrsHits (void)
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_results_per_page;
+   extern const char *Txt_The_statistics_marked_with_;
    extern const char *Txt_Show_hits;
    extern const char *Txt_No_teachers_or_students_found;
    static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
@@ -578,6 +579,10 @@ void Sta_AskShowCrsHits (void)
                             "</tr>"
                             "</table>");
 
+         /***** Warning *****/
+         fprintf (Gbl.F.Out,"<p class=\"DAT_SMALL\">%s</p>",
+                  Txt_The_statistics_marked_with_);
+
          /***** Send button *****/
 	 Lay_PutConfirmButton (Txt_Show_hits);
 
@@ -616,6 +621,7 @@ void Sta_AskShowGblHits (void)
    extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
+   extern const char *Txt_The_statistics_marked_with_;
    extern const char *Txt_Show_hits;
    Sta_Role_t RoleStat;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
@@ -640,7 +646,9 @@ void Sta_AskShowGblHits (void)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<section id=\"stat_form\">");
-   Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_all_visits);
+   Lay_StartRoundFrame (NULL,Txt_Statistics_of_all_visits);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+                      " style=\"margin:0 auto;\">");
 
    /***** Start and end dates for the search *****/
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
@@ -718,10 +726,18 @@ void Sta_AskShowGblHits (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 		      "</td>"
-		      "</tr>");
+		      "</tr>"
+		      "</table>");
+
+   /***** Warning *****/
+   fprintf (Gbl.F.Out,"<p class=\"DAT_SMALL\">%s</p>",
+	    Txt_The_statistics_marked_with_);
+
+   /***** Send button *****/
+   Lay_PutConfirmButton (Txt_Show_hits);
 
    /***** End frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Show_hits);
+   Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</section>");
 
    /***** End form *****/

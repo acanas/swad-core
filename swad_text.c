@@ -9450,6 +9450,27 @@ const char *Txt_eg_Lectures_Practicals =
 	"ex.: Teoria, Pr&aacute;tica,...";
 #endif
 
+const char *Txt_ELAPSED_TIME =
+#if   L==0
+	"Fa";
+#elif L==1
+	"Vor";
+#elif L==2
+	"Ago";
+#elif L==3
+	"Hace";
+#elif L==4
+	"Y a";
+#elif L==5
+	"Hace";	// Okoteve traducción
+#elif L==6
+	"Fa";
+#elif L==7
+	"Temu";
+#elif L==8
+	"Atr&aacute;s";
+#endif
+
 const char *Txt_Eliminate =
 #if   L==0
 	"Eliminar";
@@ -13269,27 +13290,6 @@ const char *Txt_Home_PAGE =
 	"Dom";
 #elif L==8
 	"Home";
-#endif
-
-const char *Txt_ELAPSED_TIME =
-#if   L==0
-	"Fa";
-#elif L==1
-	"Vor";
-#elif L==2
-	"Ago";
-#elif L==3
-	"Hace";
-#elif L==4
-	"Y a";
-#elif L==5
-	"Hace";	// Okoteve traducción
-#elif L==6
-	"Fa";
-#elif L==7
-	"Temu";
-#elif L==8
-	"Atr&aacute;s";
 #endif
 
 const char *Txt_hour =
@@ -42034,9 +42034,48 @@ const char *Txt_The_session_has_expired_due_to_inactivity =	// Expired due to ti
 #elif L==6
 	"La sessione &egrave; scaduta per inattivit&agrave;.";
 #elif L==7
-	"Sesja wygas&lstrok;a z powodu bezczynno&sacute;ci";
+	"Sesja wygas&lstrok;a z powodu bezczynno&sacute;ci.";
 #elif L==8
 	"A sess&atilde;o expirou devido &agrave; inatividade.";
+#endif
+
+const char *Txt_The_statistics_marked_with_ =
+#if   L==0
+	"Les estadístiques marcades amb *"
+	" es calculen segons l'hora del servidor,"
+	" que pot no coincidir amb la seva hora local.";
+#elif L==1
+	"Die mit * gekennzeichneten Statistiken"
+	" werden nach der Serverzeit,"
+	" die nicht Ihrer lokalen Zeit entsprechen berechnet.";
+#elif L==2
+	"The statistics marked with *"
+	" are calculated according to the server time,"
+	" which may not match your local time.";
+#elif L==3
+	"Las estad&iacute;sticas marcadas con *"
+	" se calculan seg&uacute;n la hora del servidor,"
+	" que puede no coincidir con su hora local.";
+#elif L==4
+	"Les statistiques marqu&eacute;s d'une *"
+	" sont calcul&eacute;s selon l'heure du serveur,"
+	" qui peut ne pas correspondre &agrave; votre heure locale.";
+#elif L==5
+	"Las estad&iacute;sticas marcadas con *"
+	" se calculan seg&uacute;n la hora del servidor,"
+	" que puede no coincidir con su hora local.";	// Okoteve traducción
+#elif L==6
+	"Le statistiche contrassegnati con *"
+	" sono calcolati secondo l'ora del server,"
+	" che non pu&ograve; corrispondere l'ora locale.";
+#elif L==7
+	"Statystyki oznaczone *"
+	" s&aogon; obliczane wed&lstrok;ug czasu serwera,"
+	" kt&oacute;re mog&aogon; nie odpowiada&cacute; czasu lokalnego.";
+#elif L==8
+	"As estat&iacute;sticas marcados com *"
+	" s&atilde;o calculados de acordo com a hora do servidor,"
+	" que pode n&atilde;o coincidir com a hora local.";
 #endif
 
 const char *Txt_The_status_of_the_centre_X_has_changed =	// Warning: it is very important to include %s in the following sentences

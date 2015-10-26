@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.25 (2015/10/26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.25.1 (2015/10/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.25.1:  Oct 26, 2015	Warning about stats computed in server time instead of user's local time. (186263 lines)
         Version 15.25:    Oct 26, 2015	Clicks in real time are displayed as time ago. (186211 lines)
         Version 15.24.2:  Oct 26, 2015	Change in function that write clock. (186219 lines)
         Version 15.24.1:  Oct 26, 2015	Remove unused code related to date-times. (186217 lines)

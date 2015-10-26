@@ -1370,7 +1370,7 @@ void Lay_RefreshNotifsAndConnected (void)
       for (NumUsr = 0;
 	   NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	   NumUsr++)
-         fprintf (Gbl.F.Out,"%u|",Gbl.Usrs.Connected.Lst[NumUsr].Seconds);
+         fprintf (Gbl.F.Out,"%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
