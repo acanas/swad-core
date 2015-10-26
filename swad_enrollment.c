@@ -1977,8 +1977,7 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
    SummaryStr[0] = '\0';        // Return nothing on error
 
    /***** Get user and requested role from database *****/
-   sprintf (Query,"SELECT UsrCod,Role,"
-                  "DATE_FORMAT(RequestTime,'%%Y%%m%%d%%H%%i%%S')"
+   sprintf (Query,"SELECT UsrCod,Role"
                   " FROM crs_usr_requests"
                   " WHERE ReqCod='%ld'",
             ReqCod);
@@ -2006,14 +2005,10 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             if (GetContent)
-               if ((*ContentStr = (char *) malloc (16+1)))
-                  /* Write date (row[2]) into content */
-                  sprintf (*ContentStr,"%c%c/%c%c/%c%c%c%c %c%c:%c%c",
-                           row[2][ 6],row[2][ 7],
-                           row[2][ 4],row[2][ 5],
-                           row[2][ 0],row[2][ 1],row[2][ 2],row[2][ 3],
-                           row[2][ 8],row[2][ 9],
-                           row[2][10],row[2][11]);
+               if ((*ContentStr = (char *) malloc (256)))
+                  /* Write desired role into content */
+                  sprintf (*ContentStr,"%s",	// TODO: Write more info in this content
+                           Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]);
 
             /* Free memory used for user's data */
             Usr_UsrDataDestructor (&UsrDat);

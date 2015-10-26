@@ -1365,8 +1365,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    if (Mai_CheckIfMailDomainIsAllowedForNotifications (MailDomain))
      {
       /***** Get pending notifications of this user from database ******/
-      sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
-	             "Cod,DATE_FORMAT(TimeNotif,'%%Y-%%m-%%d %%H:%%i:%%S')"
+      sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod"
 		     " FROM notif WHERE ToUsrCod='%ld'"
 		     " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0"
 		     " ORDER BY TimeNotif,NotifyEvent",
@@ -1430,9 +1429,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	        NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	       ForumType = For_GetForumTypeOfAPost (Cod);
-
-	    /* Write date and time when the event happened (row[7], in YYYY-MM-DD HH:MM:SS format) */
-	    fprintf (Gbl.Msg.FileMail,"\n%s: ",row[7]);
 
 	    /* Information about the type of this event */
 	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrDat->Prefs.Language],

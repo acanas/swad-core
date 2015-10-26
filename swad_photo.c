@@ -116,7 +116,7 @@ static void Pho_BuildQueryOfDegrees (char *Query);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto,struct Date *DateAvgPhoto);
+static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto);
 static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight);
 
 /*****************************************************************************/
@@ -1895,7 +1895,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   struct Date DateAvgPhoto;
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
@@ -1932,10 +1931,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	 if (NumStds > 0)
 	   {
-	    /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
-	    if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
-	       Lay_ShowErrorAndExit ("Wrong date.");
-
 	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {
 	       fprintf (Gbl.F.Out,"<tr>");
@@ -1944,7 +1939,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	    /***** Show average photo of students belonging to this degree *****/
 	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE\">");
-	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
+	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto);
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
@@ -1989,7 +1984,6 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   struct Date DateAvgPhoto;
    struct Degree Deg;
    Usr_Sex_t Sex;
 
@@ -2041,10 +2035,6 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of degree.");
 
-	 /* Get year, month and day (row[1] holds the date in YYYYMMDD format) */
-	 if (!(Dat_GetDateFromYYYYMMDD (&DateAvgPhoto,row[1])))
-	    Lay_ShowErrorAndExit ("Wrong date.");
-
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);
 
@@ -2078,7 +2068,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
 		     Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
-	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto,&DateAvgPhoto);
+	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
 	    else
 	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
 	    fprintf (Gbl.F.Out,"</td>");
@@ -2107,7 +2097,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
    switch (Gbl.Stat.DegPhotos.HowOrderDegrees)
      {
       case Pho_NUMBER_OF_STUDENTS:
-         sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
+         sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
                         " AND sta_degrees.NumStds>'0'"
@@ -2115,7 +2105,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
                         " ORDER BY sta_degrees.NumStds DESC,sta_degrees.NumStdsWithPhoto DESC,degrees.ShortName");
          break;
       case Pho_NUMBER_OF_PHOTOS:
-         sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
+         sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
                         " AND sta_degrees.NumStds>'0'"
@@ -2123,7 +2113,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
                         " ORDER BY sta_degrees.NumStdsWithPhoto DESC,sta_degrees.NumStds DESC,degrees.ShortName");
          break;
       case Pho_PERCENT:
-         sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
+         sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
                         " AND sta_degrees.NumStds>'0'"
@@ -2131,7 +2121,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
                         " ORDER BY sta_degrees.NumStdsWithPhoto/sta_degrees.NumStds DESC,degrees.ShortName");
          break;
       case Pho_DEGREE_NAME:
-         sprintf (Query,"SELECT degrees.DegCod,DATE_FORMAT(sta_degrees.TimeAvgPhoto,'%%Y%%m%%d')"
+         sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
                         " AND sta_degrees.NumStds>'0'"
@@ -2209,7 +2199,7 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
 /******************* Show the average photo of a degree **********************/
 /*****************************************************************************/
 
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto,struct Date *DateAvgPhoto)
+static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *Txt_students_ABBREVIATION;
@@ -2256,14 +2246,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
            {
             sprintf (PhotoCaption,"%s<br />"
         	                  "%d&nbsp;%s&nbsp;(%s)<br />"
-        	                  "%d&nbsp;%s&nbsp;(%d%%)<br />"
-        	                  "%02u/%02u/%04u",
+        	                  "%d&nbsp;%s&nbsp;(%d%%)",
                      Deg->ShortName,
                      NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
                      NumStdsWithPhoto,Txt_photos,
                      NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-                	           0,
-                     DateAvgPhoto->Day,DateAvgPhoto->Month,DateAvgPhoto->Year);
+                	           0);
             fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom(this);\"",
                      PhotoURL,PhotoCaption);
            }

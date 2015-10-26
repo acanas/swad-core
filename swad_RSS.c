@@ -155,7 +155,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
    char Content[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get active notices in course *****/
-   sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,DATE_FORMAT(CreatTime,'%%d/%%m/%%Y %%H:%%i'),UsrCod,Content"
+   sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
                   " FROM notices WHERE CrsCod='%ld' AND Status='%u' ORDER BY T DESC",
             Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
    NumNotices = DB_QuerySELECT (Query,&mysql_res,"can not get notices from database");
@@ -182,14 +182,14 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
             sscanf (row[1],"%ld",&CreatTimeUTC);
 
          /* Get author */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat); // Get from the database the data of the autor
 
          /***** Write item with notice *****/
          fprintf (FileRSS,"<item>\n");
 
          /* Write title (first characters) of the notice */
-         strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
+         strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
          Content[Cns_MAX_BYTES_TEXT] = '\0';
          Str_LimitLengthHTMLStr (Content,40);
          fprintf (FileRSS,"<title>%s: ",Txt_Notice);
@@ -201,11 +201,11 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
                   Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
-         strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
+         strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
          Content[Cns_MAX_BYTES_TEXT] = '\0';
          Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,40);
-         fprintf (FileRSS,"<description><![CDATA[<p><em>%s, %s %s %s:</em></p><p>%s</p>]]></description>\n",
-                  row[2],UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);
+         fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
+                  UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);
 
          /* Write author */
          if (UsrDat.Email[0])
@@ -252,7 +252,8 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get exam announcements (only future exams) in current course from database *****/
-      sprintf (Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
+      sprintf (Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
+	             "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
 		     " FROM exam_announcements"
 		     " WHERE CrsCod='%ld' AND ExamDate>=NOW() AND Status<>'%u' ORDER BY T",
 	       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
