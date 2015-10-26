@@ -110,17 +110,24 @@ function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
 // Set UTC time from local date-time form fields 
 function setUTCFromLocalDateTimeForm(id) {
 	var d = new Date;
+	var Year  = document.getElementById(id+'Year'  ).value;
+	var Month = document.getElementById(id+'Month' ).value;
+	var Day   = document.getElementById(id+'Day'   ).value;
 	
-	// Important: set year first in order to work properly with leap years
-	d.setFullYear(document.getElementById(id+'Year'  ).value);
-	d.setMonth   (document.getElementById(id+'Month' ).value-1);
-	d.setDate    (document.getElementById(id+'Day'   ).value);
-	d.setHours   (document.getElementById(id+'Hour'  ).value);
-	d.setMinutes (document.getElementById(id+'Minute').value);
-	d.setSeconds (document.getElementById(id+'Second').value);
-	d.setMilliseconds(0);
-
-	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
+	if (Year == 0 || Month == 0 || Day == 0)
+		document.getElementById(id+'TimeUTC').value = 0;
+        else {
+		// Important: set year first in order to work properly with leap years
+		d.setFullYear(Year);
+		d.setMonth   (Month-1);
+		d.setDate    (Day);
+		d.setHours   (document.getElementById(id+'Hour'  ).value);
+		d.setMinutes (document.getElementById(id+'Minute').value);
+		d.setSeconds (document.getElementById(id+'Second').value);
+		d.setMilliseconds(0);
+	
+		document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
+	}
 }
 
 // Adjust a date form correcting days in the month
@@ -151,16 +158,24 @@ function adjustDateForm (id) {
 }
 
 // Set a the date in a date form to a specified date  
-function setDateTo (elem,Day,Month,Year) {
-	document.getElementById('StartYear' ).options[Year ].selected = true;
-	document.getElementById('StartMonth').options[Month].selected = true;
-	adjustDateForm (elem.form.StartDay,elem.form.StartMonth,elem.form.StartYear)
-	document.getElementById('StartDay'  ).options[Day  ].selected = true;
+function setDateTo (Day,Month,Year) {
+	document.getElementById('StartYear'  ).options[Year ].selected = true;
+	document.getElementById('StartMonth' ).options[Month].selected = true;
+	adjustDateForm ('Start')
+	document.getElementById('StartDay'   ).options[Day  ].selected = true;
+	document.getElementById('StartHour'  ).options[0    ].selected = true;
+	document.getElementById('StartMinute').options[0    ].selected = true;
+	document.getElementById('StartSecond').options[0    ].selected = true;
+	setUTCFromLocalDateTimeForm('Start');
 
-	document.getElementById('EndYear' ).options[Year ].selected = true;
-	document.getElementById('EndMonth').options[Month].selected = true;
-	adjustDateForm (elem.form.EndDay,elem.form.EndMonth,elem.form.EndYear)
-	document.getElementById('EndDay'  ).options[Day  ].selected = true;
+	document.getElementById('EndYear'    ).options[Year ].selected = true;
+	document.getElementById('EndMonth'   ).options[Month].selected = true;
+	adjustDateForm ('End')
+	document.getElementById('EndDay'     ).options[Day  ].selected = true;
+	document.getElementById('EndHour'    ).options[23   ].selected = true;
+	document.getElementById('EndMinute'  ).options[59   ].selected = true;
+	document.getElementById('EndSecond'  ).options[59   ].selected = true;
+	setUTCFromLocalDateTimeForm('End');
 }
 
 // Write clock in client local time updated every minute

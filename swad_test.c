@@ -1080,6 +1080,17 @@ static void Tst_UpdateLastAccTst (void)
   }
 
 /*****************************************************************************/
+/************ Set end date to current date                        ************/
+/************ and set initial date to end date minus several days ************/
+/*****************************************************************************/
+
+void Tst_SetIniEndDates (void)
+  {
+   Gbl.DateRange.TimeUTC[0] = (time_t) 0;
+   Gbl.DateRange.TimeUTC[1] = Gbl.TimeStartExecution;
+  }
+
+/*****************************************************************************/
 /******* Select tags and dates for edition of the self-assessment test *******/
 /*****************************************************************************/
 
@@ -1120,7 +1131,6 @@ void Tst_ShowFormAskEditTsts (void)
       /***** Starting and ending dates in the search *****/
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
 	                 " style=\"margin:0 auto;\">");
-      // Dat_WriteFormIniEndDates ();
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
       fprintf (Gbl.F.Out,"</table>"
 	                 "</div>");
@@ -5949,7 +5959,6 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
                             "</tr>");
 
          /***** Starting and ending dates in the search *****/
-	 // Dat_WriteFormIniEndDates ();
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
          fprintf (Gbl.F.Out,"</table>");
@@ -5992,7 +6001,6 @@ void Tst_SelDatesToSeeMyTstExams (void)
 
    /***** Starting and ending dates in the search *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
-   // Dat_WriteFormIniEndDates ();
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/

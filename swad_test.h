@@ -124,6 +124,8 @@ void Tst_ShowNewTestExam (void);
 void Tst_AssessTestExam (void);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
+
+void Tst_SetIniEndDates (void);
 void Tst_ShowFormAskEditTsts (void);
 void Tst_ListQuestionsToEdit (void);
 void Tst_WriteParamEditQst (void);

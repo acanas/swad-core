@@ -506,7 +506,6 @@ void Sta_AskShowCrsHits (void)
                             "</tr>");
 
          /***** Initial and final dates of the search *****/
-         // Dat_WriteFormIniEndDates ();
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
          /***** Selection of action *****/
@@ -644,7 +643,6 @@ void Sta_AskShowGblHits (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_Statistics_of_all_visits);
 
    /***** Start and end dates for the search *****/
-   // Dat_WriteFormIniEndDates ();
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Users' roles whose accesses we want to see *****/
@@ -801,29 +799,8 @@ static void Sta_WriteSelectorAction (void)
 
 void Sta_SetIniEndDates (void)
   {
-   extern const unsigned Dat_NumDaysMonth[1+12];			// Declaration in swad_date.c
-
-   Gbl.DateRange.DateEnd.Day   = Gbl.Now.Date.Day;
-   Gbl.DateRange.DateEnd.Month = Gbl.Now.Date.Month;
-   Gbl.DateRange.DateEnd.Year  = Gbl.Now.Date.Year;
-
-   if (Gbl.DateRange.DateEnd.Day >= Cfg_DAYS_IN_RECENT_LOG)
-     {
-      Gbl.DateRange.DateIni.Year  = Gbl.DateRange.DateEnd.Year;
-      Gbl.DateRange.DateIni.Month = Gbl.DateRange.DateEnd.Month;
-      Gbl.DateRange.DateIni.Day   = Gbl.DateRange.DateEnd.Day - (Cfg_DAYS_IN_RECENT_LOG-1);
-     }
-   else
-     {
-      Gbl.DateRange.DateIni.Year  = (Gbl.DateRange.DateEnd.Month == 1) ? Gbl.DateRange.DateEnd.Year - 1 :
-                                                                         Gbl.DateRange.DateEnd.Year;
-      Gbl.DateRange.DateIni.Month = (Gbl.DateRange.DateEnd.Month == 1) ? 12 :
-                                                                         Gbl.DateRange.DateEnd.Month - 1;
-      Gbl.DateRange.DateIni.Day   = ((Gbl.DateRange.DateIni.Month == 2) ? Dat_GetNumDaysFebruary (Gbl.DateRange.DateIni.Year) :
-	                                                                  Dat_NumDaysMonth[Gbl.DateRange.DateIni.Month]) +
-                                                                          Gbl.DateRange.DateEnd.Day -
-                                                                          (Cfg_DAYS_IN_RECENT_LOG-1);
-     }
+   Gbl.DateRange.TimeUTC[0] = Gbl.TimeStartExecution - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
+   Gbl.DateRange.TimeUTC[1] = Gbl.TimeStartExecution;
   }
 
 /*****************************************************************************/

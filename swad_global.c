@@ -393,13 +393,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
-   Gbl.DateRange.DateIni.Year  = Cfg_LOG_START_YEAR;
-   Gbl.DateRange.DateIni.Month = Cfg_LOG_START_MONTH;
-   Gbl.DateRange.DateIni.Day   = Cfg_LOG_START_DAY;
-   Gbl.DateRange.DateEnd.Year  = Gbl.Now.Date.Year;
-   Gbl.DateRange.DateEnd.Month = Gbl.Now.Date.Month;
-   Gbl.DateRange.DateEnd.Day   = Gbl.Now.Date.Day;
-
    Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
    Gbl.Stat.CountType   = Sta_TOTAL_CLICKS;
    Gbl.Stat.Role        = Sta_IDENTIFIED_USRS;
