@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.21.2 (2015/10/26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.21.3 (2015/10/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.21.3:  Oct 26, 2015	Changes in date-times of test exams. (? lines)
         Version 15.21.2:  Oct 26, 2015	Date-times in tests are displayed in client local date-time. (186315 lines)
         Version 15.21.1:  Oct 26, 2015	New forms to enter range of date-times in statistic and test. (186313 lines)
         Version 15.21:    Oct 25, 2015	New forms to enter range of date-times in statistic and test. Not finished. (186549 lines)
