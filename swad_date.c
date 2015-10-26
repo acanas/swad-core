@@ -150,8 +150,13 @@ void Dat_ShowClientLocalTime (void)
 
    fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\""
 	              " style=\"padding-top:10px;\">"
-                      "</div>",
-            The_ClassCurrentTime[Gbl.Prefs.Theme]);
+                      "</div>"
+                      "<script type=\"text/javascript\">\n"
+		      "secondsSince1970UTC = %ld;\n"
+                      "writeLocalClock();"
+                      "</script>",
+            The_ClassCurrentTime[Gbl.Prefs.Theme],
+            (long) Gbl.TimeStartExecution);
   }
 
 /*****************************************************************************/
@@ -222,13 +227,13 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                       "</td>"
                       "</tr>",
             Txt_Yesterday,
-	    Gbl.Yesterday.Day,
-	    Gbl.Yesterday.Month,
 	    Gbl.Yesterday.Year - Cfg_LOG_START_YEAR + 1,
+	    Gbl.Yesterday.Month,
+	    Gbl.Yesterday.Day,
             Txt_Today,
-            Gbl.Now.Date.Day,
+            Gbl.Now.Date.Year - Cfg_LOG_START_YEAR + 1,
             Gbl.Now.Date.Month,
-            Gbl.Now.Date.Year - Cfg_LOG_START_YEAR + 1);
+            Gbl.Now.Date.Day);
 
    /***** End date-time *****/
    fprintf (Gbl.F.Out,"<tr>"

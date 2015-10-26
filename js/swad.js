@@ -230,8 +230,8 @@ function adjustDateForm (id) {
 	}
 }
 
-// Set a the date in a date form to a specified date  
-function setDateTo (Day,Mon,Yea) {
+// Set a date-time form to a specified date-time
+function setDateTo (Yea,Mon,Day) {
 	document.getElementById('StartYear'  ).options[Yea].selected = true;
 	document.getElementById('StartMonth' ).options[Mon].selected = true;
 	adjustDateForm ('Start')

@@ -538,11 +538,6 @@ static void Lay_WriteScriptInit (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
                       "function init(){\n");
 
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)	// Clock visible
-      fprintf (Gbl.F.Out,"	secondsSince1970UTC = %ld;\n"
-                         "	writeLocalClock();",
-               (long) Gbl.TimeStartExecution);
-
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
       Con_WriteScriptClockConnected ();
