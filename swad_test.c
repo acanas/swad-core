@@ -230,8 +230,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat);
 static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams);
 static void Tst_PutParamTstCod (long TstCod);
 static long Tst_GetParamTstCod (void);
-static void Tst_ShowExamTstResult (const char *TstTime);
-static void Tst_GetExamDataByTstCod (long TstCod,char *TstTime,unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
+static void Tst_ShowExamTstResult (time_t TstTimeUTC);
+static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
+                                     unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
 static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
 static void Tst_GetExamQuestionsFromDB (long TstCod);
 
@@ -857,7 +858,7 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 	 row = mysql_fetch_row (mysql_res);
 	 /*
 	 row[0] QstCod
-	 row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+	 row[1] UNIX_TIMESTAMP(EditTime)
 	 row[2] AnsType
 	 row[3] Shuffle
 	 row[4] Stem
@@ -920,7 +921,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    /*
    row[0] QstCod
-   row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+   row[1] UNIX_TIMESTAMP(EditTime)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
@@ -2240,7 +2241,7 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    /***** Select questions without hidden tags *****/
    /*
    row[0] QstCod
-   row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+   row[1] UNIX_TIMESTAMP(EditTime)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
@@ -2254,7 +2255,7 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
-	          "DATE_FORMAT(tst_questions.EditTime,'%%Y%%m%%d%%H%%i%%S'),"
+	          "UNIX_TIMESTAMP(tst_questions.EditTime),"
 		  "tst_questions.AnsType,tst_questions.Shuffle,"
 		  "tst_questions.Stem,tst_questions.Feedback,"
 		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
@@ -2368,7 +2369,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
    /***** Get data of a question from database *****/
     /*
    row[0] QstCod
-   row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+   row[1] UNIX_TIMESTAMP(EditTime)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
@@ -2377,7 +2378,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
    row[7] NumHitsNotBlank
    row[8] Score
    */
-   sprintf (Query,"SELECT QstCod,DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S'),"
+   sprintf (Query,"SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
 	          "AnsType,Shuffle,Stem,Feedback,"
 	          "NumHits,NumHitsNotBlank,Score"
                   " FROM tst_questions"
@@ -2534,10 +2535,10 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                          "<script type=\"text/javascript\">"
                          "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'<br />');"
-                         "</script>",
+                         "</script>"
+                         "</td>",
                UniqueId,Gbl.RowEvenOdd,
-               UniqueId,TimeUTC);
-      fprintf (Gbl.F.Out,"</td>");
+               UniqueId,(long) TimeUTC);
 
       /* Write the question tags */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -6184,7 +6185,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumExams,NumExam;
+   unsigned NumExams;
+   unsigned NumExam;
+   unsigned UniqueId;
    long TstCod;
    unsigned NumQstsInThisExam;
    unsigned NumQstsNotBlankInThisExam;
@@ -6197,11 +6200,12 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    bool IAmATeacher = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool ICanViewExam;
    bool ICanViewScore;
+   time_t TimeUTC;
    char *ClassDat;
 
    /***** Make database query *****/
    sprintf (Query,"SELECT TstCod,AllowTeachers,"
-	          "DATE_FORMAT(TstTime,'%%Y%%m%%d%%H%%i%%S'),"
+	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'"
@@ -6225,9 +6229,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    /***** Get and print exams results *****/
    if (NumExams)
      {
-      for (NumExam = 0;
+      for (NumExam = 0, UniqueId = 1;
            NumExam < NumExams;
-           NumExam++)
+           NumExam++, UniqueId++)
         {
          row = mysql_fetch_row (mysql_res);
 
@@ -6246,13 +6250,15 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
          if (NumExam)
             fprintf (Gbl.F.Out,"<tr>");
 
-         /* Write date and time (row[2] holds date and time in YYYYMMDDHHMMSS format) */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 Dat_WriteDate (row[2]);
-	 fprintf (Gbl.F.Out,"&nbsp;");
-	 Dat_WriteHourMinute (&row[2][8]);
-	 fprintf (Gbl.F.Out,"</td>");
+         /* Write date and time (row[2] holds UTC date-time) */
+         TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
+			    "<script type=\"text/javascript\">"
+			    "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'&nbsp;');"
+			    "</script>"
+			    "</td>",
+	          UniqueId,ClassDat,Gbl.RowEvenOdd,
+	          UniqueId,(long) TimeUTC);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisExam) == 1)
@@ -6508,7 +6514,7 @@ void Tst_ShowOneTestExam (void)
    extern const char *Txt_out_of_PART_OF_A_SCORE;
    extern const char *Txt_Tags;
    long TstCod;
-   char TstTime[4+2+2+2+2+2+1];	// Test exam time in YYYYMMDDHHMMSS format
+   time_t TstTimeUTC = 0;	// Test exam UTC date-time, initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
@@ -6520,7 +6526,7 @@ void Tst_ShowOneTestExam (void)
       Lay_ShowErrorAndExit ("Code of test exam is missing.");
 
    /***** Get exam data and check if I can view this test exam) *****/
-   Tst_GetExamDataByTstCod (TstCod,TstTime,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
+   Tst_GetExamDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
    Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
    ICanViewScore = true;
    switch (Gbl.CurrentAct)
@@ -6586,13 +6592,13 @@ void Tst_ShowOneTestExam (void)
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-	              "<td class=\"DAT LEFT_TOP\">",
-            Txt_Date);
-   Dat_WriteDate (TstTime);
-   fprintf (Gbl.F.Out,"&nbsp;");
-   Dat_WriteHourMinute (&TstTime[8]);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	              "<td id=\"exam\" class=\"DAT LEFT_TOP\">"
+		      "<script type=\"text/javascript\">"
+		      "writeLocalDateTimeFromUTC('exam',%ld,'&nbsp;');"
+		      "</script>"
+                      "</td>"
+	              "</tr>",
+            Txt_Date,TstTimeUTC);
 
    /* Number of questions */
    fprintf (Gbl.F.Out,"<tr>"
@@ -6639,7 +6645,7 @@ void Tst_ShowOneTestExam (void)
 	              "</tr>");
 
    /***** Write answers and solutions *****/
-   Tst_ShowExamTstResult (TstTime);
+   Tst_ShowExamTstResult (TstTimeUTC);
 
    /***** Write total mark of test *****/
    if (ICanViewScore)
@@ -6653,7 +6659,7 @@ void Tst_ShowOneTestExam (void)
 /********************* Show the result of a test exam ************************/
 /*****************************************************************************/
 
-static void Tst_ShowExamTstResult (const char *TstTime)
+static void Tst_ShowExamTstResult (time_t TstTimeUTC)
   {
    extern const char *Txt_Question_modified;
    extern const char *Txt_Question_removed;
@@ -6664,6 +6670,7 @@ static void Tst_ShowExamTstResult (const char *TstTime)
    double ScoreThisQst;
    bool AnswerIsNotBlank;
    bool ThisQuestionHasBeenEdited;
+   time_t EditTimeUTC;
 
    for (NumQst = 0;
 	NumQst < Gbl.Test.NumQsts;
@@ -6678,7 +6685,7 @@ static void Tst_ShowExamTstResult (const char *TstTime)
 	 row = mysql_fetch_row (mysql_res);
 	 /*
 	 row[0] QstCod
-	 row[1] DATE_FORMAT(EditTime,'%%Y%%m%%d%%H%%i%%S')
+	 row[1] UNIX_TIMESTAMP(EditTime)
 	 row[2] AnsType
 	 row[3] Shuffle
 	 row[4] Stem
@@ -6688,9 +6695,10 @@ static void Tst_ShowExamTstResult (const char *TstTime)
 	 row[8] Score
 	 */
 	 /***** If this question has been edited later than test exam time ==> don't show question ****/
+	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 	 ThisQuestionHasBeenEdited = false;
-	 if (TstTime)
-	    if (strcmp (row[1],TstTime) > 0)	// EditTime > TstTime
+	 // if (TstTimeUTC)
+	    if (EditTimeUTC > TstTimeUTC)
 	       ThisQuestionHasBeenEdited = true;
 
 	 if (ThisQuestionHasBeenEdited)
@@ -6743,7 +6751,8 @@ static void Tst_ShowExamTstResult (const char *TstTime)
 /************ Get data of a test exam using its test exam code ***************/
 /*****************************************************************************/
 
-static void Tst_GetExamDataByTstCod (long TstCod,char *TstTime,unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
+static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
+                                     unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -6751,7 +6760,7 @@ static void Tst_GetExamDataByTstCod (long TstCod,char *TstTime,unsigned *NumQsts
 
    /***** Make database query *****/
    sprintf (Query,"SELECT UsrCod,AllowTeachers,"
-	          "DATE_FORMAT(TstTime,'%%Y%%m%%d%%H%%i%%S'),"
+	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE TstCod='%ld' AND CrsCod='%ld'",
@@ -6767,8 +6776,8 @@ static void Tst_GetExamDataByTstCod (long TstCod,char *TstTime,unsigned *NumQsts
       /* Get if teachers are allowed to see this test exam (row[1]) */
       Gbl.Test.AllowTeachers = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
 
-      /* Get date and time (row[2] holds date and time in YYYYMMDDHHMMSS format) */
-      strcpy (TstTime,row[2]);
+      /* Get date-time (row[2] holds UTC date-time) */
+      *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
       if (sscanf (row[3],"%u",NumQsts) != 1)
