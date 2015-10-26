@@ -63,6 +63,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role);
+static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 
 /*****************************************************************************/
 /************************** Show connected users *****************************/
@@ -171,7 +172,7 @@ void Con_GetAndShowLastClicks (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
    extern const char *Txt_Click;
-   extern const char *Txt_Hour;
+   extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
@@ -186,6 +187,7 @@ void Con_GetAndShowLastClicks (void)
    unsigned NumRows;
    long ActCod;
    const char *ClassRow;
+   time_t TimeDiff;
    struct Country Cty;
    struct Institution Ins;
    struct Centre Ctr;
@@ -194,25 +196,25 @@ void Con_GetAndShowLastClicks (void)
    /***** Get last clicks from database *****/
    /* Important for maximum performance:
       do the LIMIT in the big log table before the JOIN */
-   sprintf (Query,"SELECT last_logs.LogCod,last_logs.ActCod,last_logs.T,last_logs.Role,"
+   sprintf (Query,"SELECT last_logs.LogCod,last_logs.ActCod,last_logs.Dif,last_logs.Role,"
 	          "last_logs.CtyCod,last_logs.InsCod,last_logs.CtrCod,last_logs.DegCod,actions.Txt"
 	          " FROM"
-	          " (SELECT LogCod,ActCod,DATE_FORMAT(ClickTime,'%%H:%%i:%%S') AS T,Role,CtyCod,InsCod,CtrCod,DegCod"
+	          " (SELECT LogCod,ActCod,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,Role,CtyCod,InsCod,CtrCod,DegCod"
                   " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
                   " AS last_logs,actions"
 	          " WHERE last_logs.ActCod=actions.ActCod AND actions.Language='es'");
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
-   fprintf (Gbl.F.Out,"<table class=\"TABLE10\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                       "<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"
                       "%s"				// Click
                       "</th>"
-                      "<th class=\"LEFT_MIDDLE\""
-                      " style=\"width:70px;\">"
-                      "%s"				// Hour
+                      "<th class=\"RIGHT_MIDDLE\""
+                      " style=\"width:50px;\">"
+                      "%s"				// Elapsed time
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:100px;\">"
@@ -240,7 +242,7 @@ void Con_GetAndShowLastClicks (void)
                       "</th>"
                       "</tr>",
                Txt_Click,
-               Txt_Hour,
+               Txt_ELAPSED_TIME,
                Txt_Role,
                Txt_Country,
                Txt_Institution,
@@ -260,10 +262,15 @@ void Con_GetAndShowLastClicks (void)
       /* Use a special color for this row depending on the action */
       ClassRow = (Act_Actions[Act_FromActCodToAction[ActCod]].BrowserWindow == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
 	         (ActCod == Act_Actions[ActAutUsrInt].ActCod ||
-                  ActCod == Act_Actions[ActAutUsrExt].ActCod) ? "DAT_SMALL_GREEN LEFT_MIDDLE" :
-                 (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED LEFT_MIDDLE" :
-                 (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE LEFT_MIDDLE" :
-                                                                "DAT_SMALL_GREY LEFT_MIDDLE";
+                  ActCod == Act_Actions[ActAutUsrExt].ActCod) ? "DAT_SMALL_GREEN" :
+                 (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED" :
+                 (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE" :
+                                                                "DAT_SMALL_GREY";
+
+      /* Compute elapsed time from last access */
+      if (sscanf (row[2],"%ld",&TimeDiff) != 1)
+         TimeDiff = (time_t) 0;
+
       /* Get degree code (row[4]) */
       Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
       Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
@@ -282,33 +289,34 @@ void Con_GetAndShowLastClicks (void)
 
       /* Print table row */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\">"
-                         "%s"			// Click
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Click
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Hour
+                         "<td class=\"%s RIGHT_MIDDLE\">"	// Elapsed time
+                         "",
+               ClassRow,row[0],
+               ClassRow);
+      Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+      fprintf (Gbl.F.Out,"</td>"
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Role
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Role
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Country
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Country
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Institution
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Institution
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Centre
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Centre
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Degree
                          "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Degree
-                         "</td>"
-                         "<td class=\"%s\">"
-                         "%s"			// Action
+                         "<td class=\"%s LEFT_MIDDLE\">"
+                         "%s"					// Action
                          "</td>"
 			 "</tr>",
-               ClassRow,row[0],
-               ClassRow,row[2],
                ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
                ClassRow,Cty.Name[Gbl.Prefs.Language],
                ClassRow,Ins.ShortName,
@@ -982,7 +990,6 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   time_t TimeDiff;
 
    /***** Get connected users who belong to current course from database *****/
    sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
@@ -1011,10 +1018,9 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
       /* Get course code (row[1]) */
       Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
 
-      /* Compute time from last access */
-      Gbl.Usrs.Connected.Lst[NumUsr].Seconds = 0;
-      if (sscanf (row[2],"%ld",&TimeDiff) == 1)
-         Gbl.Usrs.Connected.Lst[NumUsr].Seconds = (unsigned) TimeDiff;
+      /* Compute elapsed time from last access */
+      if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
+         Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff = (time_t) 0;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1047,9 +1053,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
 	                                                                           "CON");
    struct UsrData UsrDat;
-   unsigned Hours;
-   unsigned Minutes;
-   unsigned Seconds;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1097,21 +1100,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
-   Hours   =  Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds / (60*60);
-   Minutes = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds / 60) % 60;
-   Seconds =  Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].Seconds % 60;
-   if (Hours)
-      fprintf (Gbl.F.Out,"%u:%02u'%02u&quot;",
-               Hours,
-               Minutes,
-               Seconds);
-   else if (Minutes)
-      fprintf (Gbl.F.Out,"%u'%02u&quot;",
-               Minutes,
-               Seconds);
-   else
-      fprintf (Gbl.F.Out,"%u&quot;",
-               Seconds);
+   Con_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");					// Used for automatic update, only when displayed on right column
 
    fprintf (Gbl.F.Out,"</td>"
@@ -1140,9 +1129,6 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    char PhotoURL[PATH_MAX+1];
    const char *Font;
    struct UsrData UsrDat;
-   unsigned Hours;
-   unsigned Minutes;
-   unsigned Seconds;
    bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
 	                   Gbl.Scope.Current == Sco_SCOPE_CRS);
 
@@ -1251,9 +1237,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                            "CON");
 
          /* Compute time from last access */
-         Seconds = 0;
-         if (sscanf (row[2],"%ld",&TimeDiff) == 1)
-            Seconds = (unsigned) TimeDiff;
+         if (sscanf (row[2],"%ld",&TimeDiff) != 1)
+            TimeDiff = (time_t) 0;
 
          /***** Show photo *****/
          fprintf (Gbl.F.Out,"<tr>"
@@ -1289,21 +1274,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
                             " style=\"width:48px;\">",
                   Font,Gbl.RowEvenOdd);
-	 Hours   = Seconds / (60 * 60);
-	 Minutes = (Seconds / 60) % 60;
-	 Seconds %= 60;
-	 if (Hours)
-	    fprintf (Gbl.F.Out,"%u:%02u'%02u&quot;",
-		     Hours,
-		     Minutes,
-		     Seconds);
-	 else if (Minutes)
-	    fprintf (Gbl.F.Out,"%u'%02u&quot;",
-		     Minutes,
-		     Seconds);
-	 else
-	    fprintf (Gbl.F.Out,"%u&quot;",
-		     Seconds);
+         Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -1319,6 +1290,31 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
   }
 
 /*****************************************************************************/
+/********* Write time difference in seconds as hours:minutes:seconds *********/
+/*****************************************************************************/
+// TimeDiff must be in seconds
+
+static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
+  {
+   time_t Hours = Seconds / (60*60);
+   time_t Minutes = (Seconds / 60) % 60;
+
+   Seconds %= 60;
+   if (Hours)
+      fprintf (Gbl.F.Out,"%ld:%02ld'%02ld&quot;",
+               (long) Hours,
+               (long) Minutes,
+               (long) Seconds);
+   else if (Minutes)
+      fprintf (Gbl.F.Out,"%ld'%02ld&quot;",
+               (long) Minutes,
+               (long) Seconds);
+   else
+      fprintf (Gbl.F.Out,"%ld&quot;",
+               (long) Seconds);
+  }
+
+/*****************************************************************************/
 /****** Write script to automatically update clocks of connected users *******/
 /*****************************************************************************/
 
@@ -1331,7 +1327,7 @@ void Con_WriteScriptClockConnected (void)
    for (NumUsr = 0;
 	NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	NumUsr++)
-      fprintf (Gbl.F.Out,"	ListSeconds[%u] = %u;\n",
-               NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].Seconds);
+      fprintf (Gbl.F.Out,"	ListSeconds[%u] = %ld;\n",
+               NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"	writeClockConnected();\n");
   }

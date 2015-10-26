@@ -376,7 +376,7 @@ struct Globals
            {
             long UsrCod;
             bool ThisCrs;
-            unsigned Seconds;
+            time_t TimeDiff;
            } Lst[Cfg_MAX_CONNECTED_SHOWN];
         } Connected;
       char FileNamePhoto[NAME_MAX+1];	// File name (with no path and no .jpg) of the temporary file with the selected face

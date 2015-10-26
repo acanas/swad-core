@@ -13271,25 +13271,25 @@ const char *Txt_Home_PAGE =
 	"Home";
 #endif
 
-const char *Txt_Hour =
+const char *Txt_ELAPSED_TIME =
 #if   L==0
-	"Hora";
+	"Fa";
 #elif L==1
-	"Stunde";
+	"Vor";
 #elif L==2
-	"Hour";
+	"Ago";
 #elif L==3
-	"Hora";
+	"Hace";
 #elif L==4
-	"Heure";
+	"Y a";
 #elif L==5
-	"Aravo";
+	"Hace";	// Okoteve traducción
 #elif L==6
-	"Ora";
+	"Fa";
 #elif L==7
-	"Godzina";
+	"Temu";
 #elif L==8
-	"Hora";
+	"Atr&aacute;s";
 #endif
 
 const char *Txt_hour =
