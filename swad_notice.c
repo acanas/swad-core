@@ -68,7 +68,7 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              bool ICanEditNotices,
                              long NotCod,
-                             const char *DateTime,
+                             time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
                              Not_Status_t NoticeStatus);
@@ -293,8 +293,10 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    char StrWidth[10+2+1];
    char PathRelRSSFile[PATH_MAX+1];
    long NotCod;
-   unsigned long NumNot,NumNotices;
+   unsigned long NumNot;
+   unsigned long NumNotices;
    char Content[Cns_MAX_BYTES_TEXT+1];
+   time_t TimeUTC;
    long UsrCod;
    unsigned UnsignedNum;
    Not_Status_t NoticeStatus;
@@ -321,7 +323,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES &&
 	  Gbl.CurrentCrs.Notices.HighlightNotCod > 0)
 	{
-	 sprintf (Query,"SELECT DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i') AS F,UsrCod,Content,Status"
+	 sprintf (Query,"SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			" FROM notices"
 			" WHERE NotCod='%ld' AND CrsCod='%ld'",
 		  Gbl.CurrentCrs.Notices.HighlightNotCod,
@@ -330,24 +332,29 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
            {
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get user code */
+	    /* Get creation time (row[0] holds the UTC date-time) */
+	    TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
+
+	    /* Get user code (row[1]) */
 	    UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
-	    /* Get the content and insert links */
+	    /* Get the content (row[2]) and insert links*/
 	    strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
 	    Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
 		                  Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	       Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 
-	    /* Get status of the notice */
+	    /* Get status of the notice (row[3]) */
 	    NoticeStatus = Not_OBSOLETE_NOTICE;
 	    if (sscanf (row[3],"%u",&UnsignedNum) == 1)
 	       if (UnsignedNum < Not_NUM_STATUS)
 		 NoticeStatus = (Not_Status_t) UnsignedNum;
 
 	    /* Draw the notice */
-	    Not_DrawANotice (TypeNoticesListing,ICanEditNotices,Gbl.CurrentCrs.Notices.HighlightNotCod,row[0],Content,UsrCod,NoticeStatus);
+	    Not_DrawANotice (TypeNoticesListing,ICanEditNotices,
+	                     Gbl.CurrentCrs.Notices.HighlightNotCod,
+	                     TimeUTC,Content,UsrCod,NoticeStatus);
            }
 
 	 /* Free structure that stores the query result */
@@ -358,7 +365,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
       switch (TypeNoticesListing)
 	{
 	 case Not_LIST_BRIEF_NOTICES:
-	    sprintf (Query,"SELECT NotCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i') AS F,UsrCod,Content,Status"
+	    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			   " FROM notices"
 			   " WHERE CrsCod='%ld' AND Status='%u'"
 			   " ORDER BY CreatTime DESC",
@@ -366,7 +373,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 		     (unsigned) Not_ACTIVE_NOTICE);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
-	    sprintf (Query,"SELECT NotCod,DATE_FORMAT(CreatTime,'%%Y%%m%%d%%H%%i') AS F,UsrCod,Content,Status"
+	    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			   " FROM notices"
 			   " WHERE CrsCod='%ld'"
 			   " ORDER BY CreatTime DESC",
@@ -418,28 +425,33 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get notice code */
+	 /* Get notice code (row[0]) */
 	 if (sscanf (row[0],"%ld",&NotCod) != 1)
 	    Lay_ShowErrorAndExit ("Wrong code of notice.");
 
-	 /* Get user code */
+	 /* Get creation time (row[1] holds the UTC date-time) */
+	 TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+
+	 /* Get user code (row[2]) */
 	 UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-	 /* Get the content and insert links */
+	 /* Get the content (row[3]) and insert links */
 	 strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
 	 Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
 	                       Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
             Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 
-	 /* Get status of the notice */
+	 /* Get status of the notice (row[4]) */
 	 NoticeStatus = Not_OBSOLETE_NOTICE;
 	 if (sscanf (row[4],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Not_NUM_STATUS)
 	      NoticeStatus = (Not_Status_t) UnsignedNum;
 
 	 /* Draw the notice */
-	 Not_DrawANotice (TypeNoticesListing,ICanEditNotices,NotCod,row[1],Content,UsrCod,NoticeStatus);
+	 Not_DrawANotice (TypeNoticesListing,ICanEditNotices,
+	                  NotCod,
+	                  TimeUTC,Content,UsrCod,NoticeStatus);
 	}
 
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES && NumNotices)
@@ -466,7 +478,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              bool ICanEditNotices,
                              long NotCod,
-                             const char *DateTime,
+                             time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
                              Not_Status_t NoticeStatus)
@@ -478,6 +490,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
    extern const char *Txt_Remove;
+   static unsigned UniqueId = 0;
    struct UsrData UsrDat;
 
    /***** Start yellow note *****/
@@ -545,6 +558,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
 
    /* Write the date (DateTime is in YYYYMMDDHHMM format) */
+   UniqueId++;
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_DATE\">");
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
@@ -553,15 +567,18 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,"NOTICE_DATE");
      }
-   Dat_WriteDate (DateTime);
-   fprintf (Gbl.F.Out,"&nbsp;");
-   Dat_WriteHourMinute (&DateTime[8]);
+   fprintf (Gbl.F.Out,"<span id=\"notice_date_%u\"></span>",
+            UniqueId);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('notice_date_%u',%ld,'<br />');"
+                      "</script>"
+	              "</div>",
+	    UniqueId,(long) TimeUTC);
 
    /***** Write the content of the notice *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT\">%s",
