@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.24 (2015/10/26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.24.1 (2015/10/26)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.24.1:  Oct 26, 2015	Remove unused code related to date-times. (186217 lines)
         Version 15.24:    Oct 26, 2015	Lot of changes in swad.js related to date-times. (186336 lines)
         Version 15.23:    Oct 26, 2015	Date-times to open groups are displayed in client local date-time. (186259 lines)
         Version 15.22.1:  Oct 26, 2015	Date-times in notices are displayed in client local date-time. (186344 lines)

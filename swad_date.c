@@ -210,7 +210,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Gbl.DateRange.TimeUTC[0],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
-				                false,false);
+				                false);
 
    /***** "Yesterday" and "Today" buttons *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -244,7 +244,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Gbl.DateRange.TimeUTC[1],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
-				                false,false);
+				                false);
 
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -292,7 +292,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 	                                           TimeUTC[StartOrEndTime],
 	                                           Gbl.Now.Date.Year - 1,
 	                                           Gbl.Now.Date.Year + 1,
-                                                   false,false);
+                                                   false);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
@@ -310,7 +310,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   const char *ParamName,
                                                   time_t TimeUTC,
                                                   unsigned FirstYear,unsigned LastYear,
-                                                  bool SubmitFormOnChange,bool Disabled)
+                                                  bool SubmitFormOnChange)
   {
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;
@@ -334,10 +334,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   fprintf (Gbl.F.Out,"\">"
+	              "<option value=\"0\">-</option>");
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
@@ -356,10 +354,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\" disabled=\"disabled\">-</option>");
+   fprintf (Gbl.F.Out,"\">"
+	              "<option value=\"0\" disabled=\"disabled\">-</option>");
    for (Month = 1;
 	Month <= 12;
 	Month++)
@@ -376,10 +372,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">"
+   fprintf (Gbl.F.Out,"\">"
 	              "<option value=\"0\" disabled=\"disabled\">-</option>");
    for (Day = 1;
 	Day <= 31;
@@ -397,10 +390,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"\">");
    for (Hour = 0;
 	Hour <= 23;
 	Hour++)
@@ -417,10 +407,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"\">");
    for (Minute = 0;
 	Minute <= 59;
 	Minute++)
@@ -437,10 +424,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"\">");
    for (Second = 0;
 	Second <= 59;
 	Second++)
@@ -582,66 +566,6 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
   }
 
 /*****************************************************************************/
-/*************** Show a form to enter a hour-minute time *********************/
-/*****************************************************************************/
-
-void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectMinute,
-		              struct Time *TimeSelected,
-                              bool SubmitFormOnChange,bool Disabled)
-  {
-   unsigned Hour;
-   unsigned Minute;
-
-   /***** Hour *****/
-   fprintf (Gbl.F.Out,"<table>"
-                      "<tr>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"%s\"",
-            NameSelectHour);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
-   for (Hour = 0;
-	Hour <= 23;
-	Hour++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
-      if (Hour == TimeSelected->Hour)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%02u h</option>",Hour);
-     }
-
-   /***** Minute *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"%s\"",
-	    NameSelectMinute);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,">");
-   for (Minute = 0;
-	Minute <= 59;
-	Minute++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
-      if (Minute == TimeSelected->Minute)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
-     }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>"
-	              "</table>");
-  }
-
-/*****************************************************************************/
 /*************************** Get a date from a form **************************/
 /*****************************************************************************/
 
@@ -664,26 +588,6 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
    Par_GetParToText (ParamNameYear,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",Year) != 1)
       *Year = 0;
-  }
-
-/*****************************************************************************/
-/***************** Get an hour-minute time from a form ***********************/
-/*****************************************************************************/
-
-void Dat_GetHourMinuteFromForm (const char *ParamNameHour,const char *ParamNameMinute,
-                                unsigned *Hour,unsigned *Minute)
-  {
-   char UnsignedStr[10+1];
-
-   /**** Get hour ****/
-   Par_GetParToText (ParamNameHour,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",Hour) != 1)
-      *Hour = 0;
-
-   /**** Get minute ****/
-   Par_GetParToText (ParamNameMinute,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",Minute) != 1)
-      *Minute = 0;
   }
 
 /*****************************************************************************/
@@ -723,36 +627,6 @@ void Dat_GetIniEndDatesFromForm (void)
       Gbl.DateRange.DateEnd.Year  = Gbl.Now.Date.Year;
      }
    Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
-  }
-
-/*****************************************************************************/
-/******************************** Write a date *******************************/
-/*****************************************************************************/
-// DateTime must be in YYYYMMDD[...] format
-
-void Dat_WriteDate (const char *YYYYMMDD)
-  {
-   extern const char *Txt_Today;
-
-   if (strncmp (YYYYMMDD,Gbl.Now.Date.YYYYMMDD,8))	// If date is not today
-      fprintf (Gbl.F.Out,"%c%c/%c%c/%c%c",
-               YYYYMMDD[6],YYYYMMDD[7],
-               YYYYMMDD[4],YYYYMMDD[5],
-               YYYYMMDD[2],YYYYMMDD[3]);
-   else						// If date is today
-      fprintf (Gbl.F.Out,"%s",Txt_Today);
-  }
-
-/*****************************************************************************/
-/************************* Write hour and minute *****************************/
-/*****************************************************************************/
-// DateTime must be in HHMM[SS] format
-
-void Dat_WriteHourMinute (const char *HHMM)
-  {
-   fprintf (Gbl.F.Out,"%c%c:%c%c",
-            HHMM[0],HHMM[1],
-            HHMM[2],HHMM[3]);
   }
 
 /*****************************************************************************/

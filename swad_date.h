@@ -83,25 +83,18 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   const char *ParamName,
                                                   time_t TimeUTC,
                                                   unsigned FirstYear,unsigned LastYear,
-                                                  bool SubmitFormOnChange,bool Disabled);
+                                                  bool SubmitFormOnChange);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled);
-void Dat_WriteFormHourMinute (const char *NameSelectHour,const char *NameSelectMinute,
-		              struct Time *TimeSelected,
-                              bool SubmitFormOnChange,bool Disabled);
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
-void Dat_GetHourMinuteFromForm (const char *ParamNameHour,const char *ParamNameMinute,
-                                unsigned *Hour,unsigned *Minute);
 
 void Dat_GetIniEndDatesFromForm (void);
 
-void Dat_WriteDate (const char *YYYYMMDD);
-void Dat_WriteHourMinute (const char *HHMM);
 void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm);
 
 void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate);

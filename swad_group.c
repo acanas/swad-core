@@ -1226,7 +1226,7 @@ static void Grp_ListGroupTypesForEdition (void)
 						   Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
 						   Gbl.Now.Date.Year,
 						   Gbl.Now.Date.Year + 1,
-						   true,false);
+						   true);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>");
@@ -2122,7 +2122,7 @@ static void Grp_PutFormToCreateGroupType (void)
                                                 Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
                                                 Gbl.Now.Date.Year,
                                                 Gbl.Now.Date.Year + 1,
-                                                false,false);
+                                                false);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
                       "</table>"
