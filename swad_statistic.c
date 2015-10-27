@@ -815,8 +815,8 @@ static void Sta_WriteSelectorAction (void)
 
 void Sta_SetIniEndDates (void)
   {
-   Gbl.DateRange.TimeUTC[0] = Gbl.TimeStartExecution - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
-   Gbl.DateRange.TimeUTC[1] = Gbl.TimeStartExecution;
+   Gbl.DateRange.TimeUTC[0] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
+   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
   }
 
 /*****************************************************************************/
@@ -871,8 +871,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Set table where to find depending on initial date *****/
    // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
-   LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.Now.Date) <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
-	                                                                                                      "log_full";
+   LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.Now.Date) <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
+	                                                                                                           "log_full";
 
    /***** Get the type of stat of clicks ******/
    Par_GetParToText ("GroupedOrDetailed",UnsignedStr,10);
@@ -981,7 +981,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      }
 
    /***** Check if range of dates is forbidden for me *****/
-   NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd);
+   NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
    if (!(Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
          (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)))
       // TODO: How long can query other admins?
@@ -1099,15 +1099,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                   StrQueryCountType,LogTable);
 	 break;
      }
-   sprintf (QueryAux," WHERE %s.ClickTime >= '%04u%02u%02u' AND %s.ClickTime <= '%04u%02u%02u235959'",
-            LogTable,
-            Gbl.DateRange.DateIni.Year,
-            Gbl.DateRange.DateIni.Month,
-            Gbl.DateRange.DateIni.Day,
-            LogTable,
-            Gbl.DateRange.DateEnd.Year,
-            Gbl.DateRange.DateEnd.Month,
-            Gbl.DateRange.DateEnd.Day);
+   sprintf (QueryAux," WHERE"
+	             " UNIX_TIMESTAMP(%s.ClickTime)>='%ld'"
+	             " AND"
+	             " UNIX_TIMESTAMP(%s.ClickTime)<='%ld'",
+            LogTable,(long) Gbl.DateRange.TimeUTC[0],
+            LogTable,(long) Gbl.DateRange.TimeUTC[1]);
    strcat (Query,QueryAux);
 
    switch (GlobalOrCourse)
@@ -1874,7 +1871,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd));
+   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1948,7 +1945,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
         }
       Dat_AssignDate (&LastDate,&Date);
      }
-   NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&LastDate);
+   NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
 
    /***** Finally NumDaysFromLastDateToCurrDate days are shown with 0 clicks
           (the oldest days from the requested initial day until the first with clicks) *****/
@@ -2061,7 +2058,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,2,1);
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd));
+   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
 
    /***** Reset number of pages generated per hour *****/
    for (Hour = 0;
@@ -2223,7 +2220,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    /***** Finally NumDaysFromLastDateToCurrDate days are shown with 0 clicks
           (the oldest days since the initial day requested by the user until the first with clicks) *****/
    Dat_AssignDate (&LastDate,&Date);
-   NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&LastDate);
+   NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
    for (D = 1;
 	D <= NumDaysFromLastDateToCurrDate;
 	D++)
@@ -2455,8 +2452,8 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
    MYSQL_ROW row;
 
    /***** Initialize LastDate to avoid warning *****/
-   Dat_CalculateWeekOfYear (&Gbl.DateRange.DateEnd);	// Changes Week and Year
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd));
+   Dat_CalculateWeekOfYear (&Gbl.DateRange.DateEnd.Date);	// Changes Week and Year
+   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2514,8 +2511,8 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
      }
 
   /***** Finally, show the old weeks without pages generated *****/
-  Dat_CalculateWeekOfYear (&Gbl.DateRange.DateIni);	// Changes Week and Year
-  NumWeeksBetweenLastDateAndCurrentDate = Dat_GetNumWeeksBetweenDates (&Gbl.DateRange.DateIni,&LastDate);
+  Dat_CalculateWeekOfYear (&Gbl.DateRange.DateIni.Date);	// Changes Week and Year
+  NumWeeksBetweenLastDateAndCurrentDate = Dat_GetNumWeeksBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
   for (W = 1;
        W <= NumWeeksBetweenLastDateAndCurrentDate;
        W++)
@@ -2549,12 +2546,12 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
    struct Date LastDate;
    struct Date Date;
    unsigned M;
-   unsigned NumMesesEntreLastDateYAct;
+   unsigned NumMonthsBetweenLastDateAndCurrentDate;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd));
+   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2587,9 +2584,9 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
-      NumMesesEntreLastDateYAct = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
+      NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
       for (M = 1;
-	   M <= NumMesesEntreLastDateYAct;
+	   M <= NumMonthsBetweenLastDateAndCurrentDate;
 	   M++)
         {
          /* Write the month */
@@ -2601,7 +2598,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
 
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
-                             M == NumMesesEntreLastDateYAct ? Hits.Num :
+                             M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
                         	                              0.0,
                              Hits.Max,Hits.Total,500);
 
@@ -2612,9 +2609,9 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
      }
 
   /***** Finally, show the oldest months without clicks *****/
-  NumMesesEntreLastDateYAct = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni,&LastDate);
+  NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
   for (M = 1;
-       M <= NumMesesEntreLastDateYAct;
+       M <= NumMonthsBetweenLastDateAndCurrentDate;
        M++)
     {
      /* Write the month */
@@ -2651,7 +2648,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
    unsigned ColumnWidth;
    MYSQL_ROW row;
 
-   if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd)))
+   if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date)))
      {
       /***** Compute maximum number of pages generated per hour *****/
       Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,NumDays);
@@ -2756,7 +2753,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
    float IncX;
    char *Format;
 
-   if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni,&Gbl.DateRange.DateEnd)))
+   if ((NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date)))
      {
       /***** Compute number of clicks (and máximo) in every minute *****/
       Hits.Max = 0.0;
@@ -3781,13 +3778,8 @@ static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float Hit
 
 void Sta_WriteParamsDatesSeeAccesses (void)
   {
-   Par_PutHiddenParamUnsigned ("StartDay"  ,Gbl.DateRange.DateIni.Day);
-   Par_PutHiddenParamUnsigned ("StartMonth",Gbl.DateRange.DateIni.Month);
-   Par_PutHiddenParamUnsigned ("StartYear" ,Gbl.DateRange.DateIni.Year);
-
-   Par_PutHiddenParamUnsigned ("EndDay"    ,Gbl.DateRange.DateEnd.Day);
-   Par_PutHiddenParamUnsigned ("EndMonth"  ,Gbl.DateRange.DateEnd.Month);
-   Par_PutHiddenParamUnsigned ("EndYear"   ,Gbl.DateRange.DateEnd.Year);
+   Par_PutHiddenParamUnsigned ("StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
+   Par_PutHiddenParamUnsigned ("EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
   }
 
 /*****************************************************************************/

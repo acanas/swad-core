@@ -1088,7 +1088,7 @@ static void Tst_UpdateLastAccTst (void)
 void Tst_SetIniEndDates (void)
   {
    Gbl.DateRange.TimeUTC[0] = (time_t) 0;
-   Gbl.DateRange.TimeUTC[1] = Gbl.TimeStartExecution;
+   Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
   }
 
 /*****************************************************************************/
@@ -6205,21 +6205,16 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 
    /***** Make database query *****/
    sprintf (Query,"SELECT TstCod,AllowTeachers,"
-	          "UNIX_TIMESTAMP(TstTime),"
+	          "UNIX_TIMESTAMP(TstTime) AS T,"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'"
-                  " AND TstTime>='%04u%02u%02u'"
-                  " AND TstTime<='%04u%02u%02u235959'"
+                  " AND T>='%ld' AND T<='%ld'"
                   " ORDER BY TstCod",
             Gbl.CurrentCrs.Crs.CrsCod,
             UsrDat->UsrCod,
-            Gbl.DateRange.DateIni.Year,
-            Gbl.DateRange.DateIni.Month,
-            Gbl.DateRange.DateIni.Day,
-            Gbl.DateRange.DateEnd.Year,
-            Gbl.DateRange.DateEnd.Month,
-            Gbl.DateRange.DateEnd.Day);
+            (long) Gbl.DateRange.TimeUTC[0],
+            (long) Gbl.DateRange.TimeUTC[1]);
    NumExams = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
 
    /***** Show user's data *****/

@@ -4775,7 +4775,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
    /***** Check if is a recent file or folder *****/
    // If less than a week since last modify ==> indicate the file is recent by writting its name in green
-   if (Gbl.TimeStartExecution < FileMetadata.Time + (7L*24L*60L*60L))
+   if (Gbl.StartExecutionTimeUTC < FileMetadata.Time + (7L*24L*60L*60L))
       IsRecent = true;
 
    /* Style of the text in this row */

@@ -87,7 +87,7 @@ void Gbl_InitializeGlobals (void)
    setlocale (LC_ALL,"es_ES.utf8");
 
    gettimeofday (&Gbl.tvStart, &Gbl.tz);
-   Dat_GetTimeStartExecution ();
+   Dat_GetStartExecutionTimeUTC ();
    Dat_GetAndConvertCurrentDateTime ();
 
    Gbl.Config.DatabasePassword[0] = '\0';
@@ -96,10 +96,10 @@ void Gbl_InitializeGlobals (void)
    Gbl.TimeGenerationInMicroseconds = Gbl.TimeSendInMicroseconds = 0L;
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
-   sprintf (UniqueNamePlain,"%s-%lx-%x",Gbl.IP,Gbl.TimeStartExecution,Gbl.PID);
+   sprintf (UniqueNamePlain,"%s-%lx-%x",Gbl.IP,Gbl.StartExecutionTimeUTC,Gbl.PID);
    Cry_EncryptSHA256Base64 (UniqueNamePlain,Gbl.UniqueNameEncrypted);	// Make difficult to guess a unique name
 
-   srand ((unsigned int) Gbl.TimeStartExecution);	// Initialize seed for rand()
+   srand ((unsigned int) Gbl.StartExecutionTimeUTC);	// Initialize seed for rand()
 
    Gbl.WebService.IsWebService = false;
 

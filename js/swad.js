@@ -253,22 +253,21 @@ function setDateTo (Yea,Mon,Day) {
 
 // Write clock in client local time updated every minute
 function writeLocalClock() {
-	var d = new Date;
+	var d;
         var H;
         var M;
-	var StrH;
 	var StrM;
 
 	setTimeout('writeLocalClock()',60000);
 
+	d = new Date;
 	d.setTime(secondsSince1970UTC * 1000);
 	secondsSince1970UTC += 60;	// For next call
 
 	H = d.getHours();
 	M = d.getMinutes();
-	StrH = ((H < 10) ? '0' : '') + H;
 	StrM = ((M < 10) ? '0' : '') + M;
-	document.getElementById('hm').innerHTML = StrH + ':' + StrM;
+	document.getElementById('hm').innerHTML = H + ':' + StrM;
 }
       
 function writeClockConnected() {

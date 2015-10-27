@@ -1475,8 +1475,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
-      Svy.TimeUTC[Svy_START_TIME] = Gbl.TimeStartExecution;
-      Svy.TimeUTC[Svy_END_TIME  ] = Gbl.TimeStartExecution + (24 * 60 * 60);	// +24 hours
+      Svy.TimeUTC[Svy_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Svy.TimeUTC[Svy_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
       Svy.Title[0] = '\0';
       Svy.Roles = (1 << Rol_STUDENT);
       Svy.NumQsts = 0;
@@ -1767,7 +1767,7 @@ void Svy_RecFormSurvey (void)
 
    /***** Adjust dates *****/
    if (NewSvy.TimeUTC[Svy_START_TIME] == 0)
-      NewSvy.TimeUTC[Svy_START_TIME] = Gbl.TimeStartExecution;
+      NewSvy.TimeUTC[Svy_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewSvy.TimeUTC[Svy_END_TIME] == 0)
       NewSvy.TimeUTC[Svy_END_TIME] = NewSvy.TimeUTC[Svy_START_TIME] + 24*60*60;	// +24 hours
 

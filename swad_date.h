@@ -65,7 +65,7 @@ struct DateTime
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dat_GetTimeStartExecution (void);
+void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str);

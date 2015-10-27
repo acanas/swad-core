@@ -153,7 +153,7 @@ struct Globals
    bool YearOK;
    Act_Tab_t CurrentTab;
    Act_Action_t CurrentAct;
-   time_t TimeStartExecution;
+   time_t StartExecutionTimeUTC;
    struct tm *tblock;
    struct DateTime Now;
    struct Date Yesterday;
@@ -642,8 +642,8 @@ struct Globals
      } Test;
    struct
      {
-      struct Date DateIni;	// TODO: Remove in future versions
-      struct Date DateEnd;	// TODO: Remove in future versions
+      struct DateTime DateIni;	// TODO: Remove in future versions
+      struct DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[2];
      } DateRange;
    struct

@@ -64,12 +64,12 @@ const unsigned Dat_NumDaysMonth[1+12] =
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Get current time ******************************/
+/************************** Get current time UTC *****************************/
 /*****************************************************************************/
 
-void Dat_GetTimeStartExecution (void)
+void Dat_GetStartExecutionTimeUTC (void)
   {
-   Gbl.TimeStartExecution = time (NULL);
+   Gbl.StartExecutionTimeUTC = time (NULL);
   }
 
 /*****************************************************************************/
@@ -79,7 +79,7 @@ void Dat_GetTimeStartExecution (void)
 void Dat_GetAndConvertCurrentDateTime (void)
   {
    /***** Convert current local time to a struct tblock *****/
-   Dat_GetLocalTimeFromClock (&Gbl.TimeStartExecution);
+   Dat_GetLocalTimeFromClock (&Gbl.StartExecutionTimeUTC);
 
    Gbl.Now.Date.Year   = Gbl.tblock->tm_year + 1900;
    Gbl.Now.Date.Month  = Gbl.tblock->tm_mon + 1;
@@ -156,7 +156,7 @@ void Dat_ShowClientLocalTime (void)
                       "writeLocalClock();"
                       "</script>",
             The_ClassCurrentTime[Gbl.Prefs.Theme],
-            (long) Gbl.TimeStartExecution);
+            (long) Gbl.StartExecutionTimeUTC);
   }
 
 /*****************************************************************************/
@@ -602,36 +602,28 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 void Dat_GetIniEndDatesFromForm (void)
   {
    /***** Get initial date *****/
-   Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
-                        &Gbl.DateRange.DateIni.Day,
-                        &Gbl.DateRange.DateIni.Month,
-                        &Gbl.DateRange.DateIni.Year);
-   // TODO: Get hour, minute and second
-   if (Gbl.DateRange.DateIni.Day   == 0 ||
-       Gbl.DateRange.DateIni.Month == 0 ||
-       Gbl.DateRange.DateIni.Year  == 0)
-     {
-      Gbl.DateRange.DateIni.Day   = Cfg_LOG_START_DAY;
-      Gbl.DateRange.DateIni.Month = Cfg_LOG_START_MONTH;
-      Gbl.DateRange.DateIni.Year  = Cfg_LOG_START_YEAR;
-     }
    Gbl.DateRange.TimeUTC[0] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
 
+   /* Convert current time UTC to a local date */
+   Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
+   Gbl.DateRange.DateIni.Date.Year   = Gbl.tblock->tm_year + 1900;
+   Gbl.DateRange.DateIni.Date.Month  = Gbl.tblock->tm_mon + 1;
+   Gbl.DateRange.DateIni.Date.Day    = Gbl.tblock->tm_mday;
+   Gbl.DateRange.DateIni.Time.Hour   = Gbl.tblock->tm_hour;
+   Gbl.DateRange.DateIni.Time.Minute = Gbl.tblock->tm_min;
+   Gbl.DateRange.DateIni.Time.Second = Gbl.tblock->tm_sec;
+
    /***** Get end date *****/
-   Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-                        &Gbl.DateRange.DateEnd.Day,
-                        &Gbl.DateRange.DateEnd.Month,
-                        &Gbl.DateRange.DateEnd.Year);
-   // TODO: Get hour, minute and second
-   if (Gbl.DateRange.DateEnd.Day   == 0 ||
-       Gbl.DateRange.DateEnd.Month == 0 ||
-       Gbl.DateRange.DateEnd.Year  == 0)
-     {
-      Gbl.DateRange.DateEnd.Day   = Gbl.Now.Date.Day;
-      Gbl.DateRange.DateEnd.Month = Gbl.Now.Date.Month;
-      Gbl.DateRange.DateEnd.Year  = Gbl.Now.Date.Year;
-     }
    Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
+
+   /* Convert current time UTC to a local date */
+   Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[1]);
+   Gbl.DateRange.DateEnd.Date.Year   = Gbl.tblock->tm_year + 1900;
+   Gbl.DateRange.DateEnd.Date.Month  = Gbl.tblock->tm_mon + 1;
+   Gbl.DateRange.DateEnd.Date.Day    = Gbl.tblock->tm_mday;
+   Gbl.DateRange.DateEnd.Time.Hour   = Gbl.tblock->tm_hour;
+   Gbl.DateRange.DateEnd.Time.Minute = Gbl.tblock->tm_min;
+   Gbl.DateRange.DateEnd.Time.Second = Gbl.tblock->tm_sec;
   }
 
 /*****************************************************************************/
@@ -798,8 +790,8 @@ unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,struct Date *DateEnd)
 	Year < DateEnd->Year;
 	Year++)
       DiffDays += (int) Dat_GetNumDaysInYear (Year);
-   return (DiffDays >= 0) ? (unsigned) DiffDays :
-	                    0;
+   return (DiffDays > 0) ? (unsigned) DiffDays :
+	                   0;
   }
 
 /*****************************************************************************/
@@ -823,8 +815,8 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,struct Date *DateEnd)
 	Year < DateEnd->Year;
 	Year++)
       DiffWeeks += (int) Dat_GetNumWeeksInYear (Year);
-   return (DiffWeeks >= 0) ? (unsigned) DiffWeeks :
-	                     0;
+   return (DiffWeeks > 0) ? (unsigned) DiffWeeks :
+	                    0;
   }
 
 /*****************************************************************************/
@@ -837,10 +829,10 @@ unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,struct Date *DateEnd
    int DiffMonths;
 
    /***** Compute the difference in months *****/
-   DiffMonths = ((int) DateEnd->Year - (int) DateIni->Year) * 12 +
+   DiffMonths = ((int) DateEnd->Year  - (int) DateIni->Year) * 12 +
 	         (int) DateEnd->Month - (int) DateIni->Month + 1;
-   return (DiffMonths >= 0) ? (unsigned) DiffMonths :
-	                      0;
+   return (DiffMonths > 0) ? (unsigned) DiffMonths :
+	                     0;
   }
 
 /*****************************************************************************/

@@ -3092,7 +3092,7 @@ static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
       return false;
 
    /***** Is open time in the future? *****/
-   return (OpenTimeUTC > Gbl.TimeStartExecution);
+   return (OpenTimeUTC > Gbl.StartExecutionTimeUTC);
   }
 
 /*****************************************************************************/

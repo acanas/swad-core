@@ -108,12 +108,12 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 
    // All date-times in RSS conform to the Date and Time Specification of RFC 822, with the exception that the year may be expressed with two characters or four characters (four preferred)
    fprintf (FileRSS,"<pubDate>");	
-   tm = gmtime (&Gbl.TimeStartExecution);
+   tm = gmtime (&Gbl.StartExecutionTimeUTC);
    Dat_WriteRFC822DateFromTM (FileRSS,tm);
    fprintf (FileRSS,"</pubDate>\n");
 
    fprintf (FileRSS,"<lastBuildDate>");	
-   tm = gmtime (&Gbl.TimeStartExecution);
+   tm = gmtime (&Gbl.StartExecutionTimeUTC);
    Dat_WriteRFC822DateFromTM (FileRSS,tm);
    fprintf (FileRSS,"</lastBuildDate>\n");
 

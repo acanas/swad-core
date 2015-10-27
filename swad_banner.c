@@ -901,7 +901,7 @@ void Ban_WriteMenuWithBanners (void)
 	          " FROM banners"
 	          " WHERE Hidden='N'"
 	          " ORDER BY RAND(%lu) LIMIT %u",
-	    (unsigned long) (Gbl.TimeStartExecution / Cfg_TIME_TO_CHANGE_BANNER),
+	    (unsigned long) (Gbl.StartExecutionTimeUTC / Cfg_TIME_TO_CHANGE_BANNER),
 	    Cfg_NUMBER_OF_BANNERS);	// The banner(s) will change once in a while
    Ban_GetListBanners (Query);
 

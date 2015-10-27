@@ -1163,7 +1163,7 @@ void Pho_CalcPhotoDegree (void)
 
    /***** Prevent the computing of an average photo too recently updated *****/
    if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
-       Gbl.TimeStartExecution - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
+       Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
       Lay_ShowErrorAndExit ("Average photo has been computed recently.");
 
    /***** Get list of students in this degree *****/
@@ -1815,7 +1815,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                   Gbl.Degs.AllDegs.Lst[NumDeg].DegCod,
                   Gbl.Degs.AllDegs.Lst[NumDeg].DegCod == Deg.DegCod ? " selected=\"selected\"" :
                                                                       ((Pho_GetTimeAvgPhotoWasComputed (Gbl.Degs.AllDegs.Lst[NumDeg].DegCod) >=
-                                                                	Gbl.TimeStartExecution - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
+                                                                	Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
                                                                 	                                                                ""),
                   Gbl.Degs.AllDegs.Lst[NumDeg].ShortName,
                   Txt_time,

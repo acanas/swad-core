@@ -1028,8 +1028,8 @@ void Asg_RequestCreatOrEditAsg (void)
      {
       /* Initialize to empty assignment */
       Asg.AsgCod = -1L;
-      Asg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
-      Asg.TimeUTC[Asg_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
+      Asg.TimeUTC[Asg_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Asg.TimeUTC[Asg_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
       Asg.SendWork = false;
@@ -1222,7 +1222,7 @@ void Asg_RecFormAssignment (void)
 
    /***** Adjust dates *****/
    if (NewAsg.TimeUTC[Asg_START_TIME] == 0)
-      NewAsg.TimeUTC[Asg_START_TIME] = Gbl.TimeStartExecution;
+      NewAsg.TimeUTC[Asg_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewAsg.TimeUTC[Asg_END_TIME] == 0)
       NewAsg.TimeUTC[Asg_END_TIME] = NewAsg.TimeUTC[Asg_START_TIME] + 2*60*60;	// +2 hours
 

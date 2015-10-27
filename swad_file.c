@@ -131,7 +131,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
       if (TmpFileSize < Fil_MAX_FILE_SIZE)
         {
          if (!(TmpFileSize % (64ULL*1024ULL)))	// Check timeout from time to time
-            if (time (NULL) - Gbl.TimeStartExecution >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
+            if (time (NULL) - Gbl.StartExecutionTimeUTC >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
                TimeExceeded = true;
          fputc (fgetc (stdin),Gbl.F.Tmp);
         }
@@ -437,11 +437,11 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 	   }
       if (RemoveDirectory)
 	 /* Remove the directory itself */
-	 if (Gbl.TimeStartExecution - FileStatus.st_mtime > TimeToRemove)
+	 if (Gbl.StartExecutionTimeUTC - FileStatus.st_mtime > TimeToRemove)
 	    rmdir (Path);
      }
    else
-      if (Gbl.TimeStartExecution - FileStatus.st_mtime > TimeToRemove)
+      if (Gbl.StartExecutionTimeUTC - FileStatus.st_mtime > TimeToRemove)
 	 unlink (Path);
   }
 

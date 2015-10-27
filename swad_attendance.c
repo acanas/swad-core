@@ -998,8 +998,8 @@ void Att_RequestCreatOrEditAttEvent (void)
      {
       /* Initialize to empty attendance event */
       Att.AttCod = -1L;
-      Att.TimeUTC[Att_START_TIME] = Gbl.TimeStartExecution;
-      Att.TimeUTC[Att_END_TIME  ] = Gbl.TimeStartExecution + (2 * 60 * 60);	// +2 hours
+      Att.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Att.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Att.Open = true;
       Att.Title[0] = '\0';
      }
@@ -1194,7 +1194,7 @@ void Att_RecFormAttEvent (void)
 
    /***** Adjust dates *****/
    if (NewAtt.TimeUTC[Att_START_TIME] == 0)
-      NewAtt.TimeUTC[Att_START_TIME] = Gbl.TimeStartExecution;
+      NewAtt.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewAtt.TimeUTC[Att_END_TIME] == 0)
       NewAtt.TimeUTC[Att_END_TIME] = NewAtt.TimeUTC[Att_START_TIME] + 2*60*60;	// +2 hours
 
