@@ -468,6 +468,50 @@ time_t Dat_GetTimeUTCFromForm (const char *ParamName)
   }
 
 /*****************************************************************************/
+/**************** Put a hidden param with time difference ********************/
+/**************** between UTC time and client local time, ********************/
+/**************** in minutes                              ********************/
+/*****************************************************************************/
+
+void Dat_PutHiddenParClientTZDiff (void)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
+	              " id=\"ClientTZDiff\" name=\"ClientTZDiff\""
+	              " value=\"0\" />"
+                      "<script type=\"text/javascript\">"
+		      "setTZ('ClientTZDiff');"
+		      "</script>");
+  }
+
+/*****************************************************************************/
+/**************** Get string with time difference         ********************/
+/**************** between UTC time and client local time, ********************/
+/**************** in +hh:mm or -hh:mm format              ********************/
+/*****************************************************************************/
+// ClientTZStr must have space for strings in +hh:mm format (6 characters + \0)
+
+void Dat_GetClientTZDiff (char *ClientTZStr)
+  {
+   char IntStr[1+10+1];
+   int ClientTZDiff;	// Time difference between UTC time and client local time, in minutes
+
+   /***** Get client time zone *****/
+   Par_GetParToText ("ClientTZDiff",IntStr,1+10);
+   if (sscanf (IntStr,"%d",&ClientTZDiff) != 1)
+      ClientTZDiff = 0;
+
+   /***** Convert from minutes to +hh:mm or -hh:mm *****/
+   if (ClientTZDiff >= 0)
+      sprintf (ClientTZStr,"+%02u:%02u",
+               (unsigned) ClientTZDiff / 60,
+               (unsigned) ClientTZDiff % 60);
+   else
+      sprintf (ClientTZStr,"-%02u:%02u",
+               (unsigned) (-ClientTZDiff) / 60,
+               (unsigned) (-ClientTZDiff) % 60);
+  }
+
+/*****************************************************************************/
 /************************* Show a form to enter a date ***********************/
 /*****************************************************************************/
 /*

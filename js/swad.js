@@ -193,6 +193,14 @@ function setUTCFromLocalDateTimeForm(id) {
 	}
 }
 
+// Set form param with time difference between UTC time and client local time, in minutes
+function setTZ(id) {
+	var FormTZ = document.getElementById(id);
+	var d = new (Date);
+
+	FormTZ.value = d.getTimezoneOffset();
+}
+
 // Adjust a date form correcting days in the month
 function adjustDateForm (id) {
 	var FormYea = document.getElementById(id+'Year' );

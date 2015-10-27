@@ -86,6 +86,9 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   bool SubmitFormOnChange);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
+void Dat_PutHiddenParClientTZDiff (void);
+void Dat_GetClientTZDiff (char *ClientTZStr);
+
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Date *DateSelected,
