@@ -194,6 +194,7 @@ function setUTCFromLocalDateTimeForm(id) {
 }
 
 // Set form param with time difference between UTC time and client local time, in minutes
+// For example, if your time zone is GMT+2, -120 will be returned
 function setTZ(id) {
 	var FormTZ = document.getElementById(id);
 	var d = new (Date);

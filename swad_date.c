@@ -488,27 +488,29 @@ void Dat_PutHiddenParClientTZDiff (void)
 /**************** between UTC time and client local time, ********************/
 /**************** in +hh:mm or -hh:mm format              ********************/
 /*****************************************************************************/
-// ClientTZStr must have space for strings in +hh:mm format (6 characters + \0)
+// ClientTimeZoneDiffStr must have space for strings in +hh:mm format (6 characters + \0)
 
-void Dat_GetClientTZDiff (char *ClientTZStr)
+void Dat_GetClientTimeZoneDiff (char *ClientTimeZoneDiffStr)
   {
    char IntStr[1+10+1];
-   int ClientTZDiff;	// Time difference between UTC time and client local time, in minutes
+   int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
+   // The getTimezoneOffset() method returns the time difference between UTC time and local time, in minutes.
+   // For example, If your time zone is GMT+2, -120 will be returned.
 
    /***** Get client time zone *****/
    Par_GetParToText ("ClientTZDiff",IntStr,1+10);
-   if (sscanf (IntStr,"%d",&ClientTZDiff) != 1)
-      ClientTZDiff = 0;
+   if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
+      ClientUTCMinusLocal = 0;
 
    /***** Convert from minutes to +hh:mm or -hh:mm *****/
-   if (ClientTZDiff >= 0)
-      sprintf (ClientTZStr,"+%02u:%02u",
-               (unsigned) ClientTZDiff / 60,
-               (unsigned) ClientTZDiff % 60);
-   else
-      sprintf (ClientTZStr,"-%02u:%02u",
-               (unsigned) (-ClientTZDiff) / 60,
-               (unsigned) (-ClientTZDiff) % 60);
+   if (ClientUTCMinusLocal <= 0)
+      sprintf (ClientTimeZoneDiffStr,"+%02u:%02u",
+               (unsigned) (-ClientUTCMinusLocal) / 60,
+               (unsigned) (-ClientUTCMinusLocal) % 60);
+   else	// ClientUTCMinusLocal > 0
+      sprintf (ClientTimeZoneDiffStr,"-%02u:%02u",
+               (unsigned) ClientUTCMinusLocal / 60,
+               (unsigned) ClientUTCMinusLocal % 60);
   }
 
 /*****************************************************************************/

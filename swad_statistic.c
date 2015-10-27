@@ -853,7 +853,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    const char *LogTable;
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    struct UsrData UsrDat;
-   char ClientTZStr[1+2+1+2+1];	// Time difference between UTC time and client local time,
+   char ClientTimeZoneDiffStr[1+2+1+2+1];	// Time difference between UTC time and client local time,
 				// in +hh:mm or -hh:mm format
    unsigned NumUsr = 0;
    const char *Ptr;
@@ -868,7 +868,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Get client time zone *****/
-   Dat_GetClientTZDiff (ClientTZStr);
+   Dat_GetClientTimeZoneDiff (ClientTimeZoneDiffStr);
 
    /***** Set table where to find depending on initial date *****/
    // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
@@ -1032,7 +1032,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "%s FROM %s",
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
@@ -1041,8 +1041,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                         "%s FROM %s",
-                  ClientTZStr,
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEKS:
@@ -1053,7 +1053,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
                         "%s FROM %s",
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTHS:
@@ -1061,7 +1061,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
                         "%s FROM %s",
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
@@ -1069,7 +1069,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                         "%s FROM %s",
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
@@ -1077,7 +1077,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
                         "%s FROM %s",
-                  ClientTZStr,
+                  ClientTimeZoneDiffStr,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
