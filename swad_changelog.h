@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.25.3 (2015/10/27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.25.4 (2015/10/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.25.4:  Oct 27, 2015	Day and month are displayed in clock. (186251 lines)
         Version 15.25.3:  Oct 27, 2015	Statistics computed using time UTC. (186225 lines)
         Version 15.25.2:  Oct 26, 2015	Changes related to date-times. (186247 lines)
         Version 15.25.1:  Oct 26, 2015	Warning about stats computed in server time instead of user's local time. (186263 lines)

@@ -113,4 +113,6 @@ unsigned Dat_GetDayOfYear (struct Date *Date);
 void Dat_CalculateWeekOfYear (struct Date *Date);
 void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc);
 
+void Dat_WriteScriptMonths (void);
+
 #endif

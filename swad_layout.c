@@ -535,8 +535,12 @@ static void Lay_WriteScriptInit (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
 
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-                      "function init(){\n");
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
+
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+      Dat_WriteScriptMonths ();
+
+   fprintf (Gbl.F.Out,"function init(){\n");
 
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible

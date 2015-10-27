@@ -29,7 +29,7 @@ var secondsSince1970UTC;
 
 // Global variables used in writeClockConnected()
 var NumUsrsCon;
-var ListSeconds = new Array();
+var ListSeconds = [];
 var countClockConnected = 0;
 
 // Write a date in client local time
@@ -254,9 +254,11 @@ function setDateTo (Yea,Mon,Day) {
 // Write clock in client local time updated every minute
 function writeLocalClock() {
 	var d;
-        var H;
-        var M;
-	var StrM;
+	var Mon;
+	var Day;
+        var Hou;
+        var Min;
+	var StrMin;
 
 	setTimeout('writeLocalClock()',60000);
 
@@ -264,10 +266,12 @@ function writeLocalClock() {
 	d.setTime(secondsSince1970UTC * 1000);
 	secondsSince1970UTC += 60;	// For next call
 
-	H = d.getHours();
-	M = d.getMinutes();
-	StrM = ((M < 10) ? '0' : '') + M;
-	document.getElementById('hm').innerHTML = H + ':' + StrM;
+	Mon = d.getMonth();
+	Day = d.getDate();
+	Hou = d.getHours();
+	Min = d.getMinutes();
+	StrMin = ((Min < 10) ? '0' : '') + Min;
+	document.getElementById('hm').innerHTML = Day + ' ' + Months[Mon] + ', ' + Hou + ':' + StrMin;
 }
       
 function writeClockConnected() {

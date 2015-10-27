@@ -977,3 +977,24 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
   }
+
+/*****************************************************************************/
+/****** Write script to automatically update clocks of connected users *******/
+/*****************************************************************************/
+
+void Dat_WriteScriptMonths (void)
+  {
+   extern const char *Txt_MONTHS_SMALL_SHORT[12];
+   unsigned NumMonth;
+
+   fprintf (Gbl.F.Out,"var Months = [");
+   for (NumMonth = 0;
+	NumMonth < 12;
+	NumMonth++)
+     {
+      if (NumMonth)
+	 fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
+     }
+   fprintf (Gbl.F.Out,"];\n");
+  }
