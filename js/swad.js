@@ -239,24 +239,52 @@ function adjustDateForm (id) {
 	}
 }
 
-// Set a date-time form to a specified date-time
-function setDateTo (Yea,Mon,Day) {
-	document.getElementById('StartYear'  ).options[Yea].selected = true;
+// Set a date range form to yesterday
+function setDateToYesterday() {
+	var d = new (Date);
+
+	d.setTime(d.getTime() - 24*60*60*1000);	// Today - 1 day
+	setDate(d);
+}
+
+// Set a date range form to today
+function setDateToToday() {
+	var d = new (Date);
+
+	setDate(d);
+}
+
+// Set a date range form to a specific day
+function setDate(d) {
+	var FormYea;
+	var Yea = d.getFullYear();
+	var Mon = d.getMonth()+1;
+	var Day = d.getDate();
+
+	FormYea = document.getElementById('StartYear');
+	for (var i=0; i<FormYea.options.length; i++)
+		if (FormYea.options[i].value == Yea) {
+			FormYea.options[i].selected = true;
+			break;
+		}
 	document.getElementById('StartMonth' ).options[Mon].selected = true;
-	adjustDateForm ('Start')
 	document.getElementById('StartDay'   ).options[Day].selected = true;
 	document.getElementById('StartHour'  ).options[0  ].selected = true;
 	document.getElementById('StartMinute').options[0  ].selected = true;
 	document.getElementById('StartSecond').options[0  ].selected = true;
 	setUTCFromLocalDateTimeForm('Start');
 
-	document.getElementById('EndYear'    ).options[Yea].selected = true;
-	document.getElementById('EndMonth'   ).options[Mon].selected = true;
-	adjustDateForm ('End')
-	document.getElementById('EndDay'     ).options[Day].selected = true;
-	document.getElementById('EndHour'    ).options[23 ].selected = true;
-	document.getElementById('EndMinute'  ).options[59 ].selected = true;
-	document.getElementById('EndSecond'  ).options[59 ].selected = true;
+	FormYea = document.getElementById('EndYear');
+	for (var i=0; i<FormYea.options.length; i++)
+		if (FormYea.options[i].value == Yea) {
+			FormYea.options[i].selected = true;
+			break;
+		}
+	document.getElementById('EndMonth' ).options[Mon].selected = true;
+	document.getElementById('EndDay'   ).options[Day].selected = true;
+	document.getElementById('EndHour'  ).options[23 ].selected = true;
+	document.getElementById('EndMinute').options[59 ].selected = true;
+	document.getElementById('EndSecond').options[59 ].selected = true;
 	setUTCFromLocalDateTimeForm('End');
 }
 

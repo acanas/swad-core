@@ -221,19 +221,13 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
    fprintf (Gbl.F.Out,"</td>"
                       "<td rowspan=\"2\" class=\"LEFT_MIDDLE\">"
 	              "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
-                      " onclick=\"setDateTo(%u,%u,%u);\" />"
+                      " onclick=\"setDateToYesterday();\" />"
 	              "<input type=\"button\" name=\"Today\" value=\"%s\""
-                      " onclick=\"setDateTo(%u,%u,%u);\" />"
+                      " onclick=\"setDateToToday();\" />"
                       "</td>"
                       "</tr>",
             Txt_Yesterday,
-	    Gbl.Yesterday.Year - Cfg_LOG_START_YEAR + 1,
-	    Gbl.Yesterday.Month,
-	    Gbl.Yesterday.Day,
-            Txt_Today,
-            Gbl.Now.Date.Year - Cfg_LOG_START_YEAR + 1,
-            Gbl.Now.Date.Month,
-            Gbl.Now.Date.Day);
+            Txt_Today);
 
    /***** End date-time *****/
    fprintf (Gbl.F.Out,"<tr>"
