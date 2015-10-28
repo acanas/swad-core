@@ -481,42 +481,57 @@ static void Lay_WriteScripts (void)
       Lay_WriteScriptConnectedUsrs ();
      }
 
-   /***** Script for uploading files using Dropzone.js (http://www.dropzonejs.com/) *****/
-   // The public directory dropzone must hold:
-   // dropzone.js
-   // css/dropzone.css
-   // images/spritemap@2x.png
-   // images/spritemap.png
-   if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
-       Gbl.CurrentAct == ActFrmCreComIns ||	// Brw_ADMI_SHARE_INS
-       Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
-       Gbl.CurrentAct == ActFrmCreComCtr ||	// Brw_ADMI_SHARE_CTR
-       Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
-       Gbl.CurrentAct == ActFrmCreComDeg ||	// Brw_ADMI_SHARE_DEG
-       Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
-       Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
-       Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_ADMI_SHARE_CRS
-       Gbl.CurrentAct == ActFrmCreComGrp ||	// Brw_ADMI_SHARE_GRP
-       Gbl.CurrentAct == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
-       Gbl.CurrentAct == ActFrmCreAsgCrs ||	// Brw_ADMI_ASSIG_CRS
-       Gbl.CurrentAct == ActFrmCreWrkUsr ||	// Brw_ADMI_WORKS_USR
-       Gbl.CurrentAct == ActFrmCreWrkCrs ||	// Brw_ADMI_WORKS_CRS
-       Gbl.CurrentAct == ActFrmCreMrkCrs ||	// Brw_ADMI_MARKS_CRS
-       Gbl.CurrentAct == ActFrmCreMrkGrp ||	// Brw_ADMI_MARKS_GRP
-       Gbl.CurrentAct == ActFrmCreBrf)		// Brw_ADMI_BRIEF_USR
+   /***** Scripts depending on action *****/
+   switch (Gbl.CurrentAct)
      {
-      // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	                 " src=\"%s/dropzone/dropzone.js\""
-	                 " charset=\"windows-1252\">"
-			 "</script>\n",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC);
-      Lay_WriteScriptCustomDropzone ();
+      /***** Script to print world map *****/
+      case ActSeeCty:
+         Cty_WriteScriptGoogleGeochart ();
+         break;
+      /***** Script for uploading files using Dropzone.js (http://www.dropzonejs.com/) *****/
+      // The public directory dropzone must hold:
+      // dropzone.js
+      // css/dropzone.css
+      // images/spritemap@2x.png
+      // images/spritemap.png
+      case ActFrmCreDocIns:	// Brw_ADMI_DOCUM_INS
+      case ActFrmCreComIns:	// Brw_ADMI_SHARE_INS
+      case ActFrmCreDocCtr:	// Brw_ADMI_DOCUM_CTR
+      case ActFrmCreComCtr:	// Brw_ADMI_SHARE_CTR
+      case ActFrmCreDocDeg:	// Brw_ADMI_DOCUM_DEG
+      case ActFrmCreComDeg:	// Brw_ADMI_SHARE_DEG
+      case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
+      case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
+      case ActFrmCreComCrs:	// Brw_ADMI_SHARE_CRS
+      case ActFrmCreComGrp:	// Brw_ADMI_SHARE_GRP
+      case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR
+      case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
+      case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
+      case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
+      case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
+      case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
+      case ActFrmCreBrf:	// Brw_ADMI_BRIEF_USR
+	 // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
+	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+			    " src=\"%s/dropzone/dropzone.js\""
+			    " charset=\"windows-1252\">"
+			    "</script>\n",
+		  Cfg_HTTPS_URL_SWAD_PUBLIC);
+	 Lay_WriteScriptCustomDropzone ();
+         break;
+      case ActReqAccGbl:
+      case ActSeeAccGbl:
+      case ActReqAccCrs:
+      case ActSeeAccCrs:
+      case ActSeeAllStaCrs:
+	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+			    " src=\"%s/jstz/jstz.js\">"
+			    "</script>\n",
+		  Cfg_HTTPS_URL_SWAD_PUBLIC);
+	 break;
+      default:
+	 break;
      }
-
-   /***** Script to print world map *****/
-   if (Gbl.CurrentAct == ActSeeCty)
-      Cty_WriteScriptGoogleGeochart ();
 
    /***** Script for Google Analytics *****/
    fprintf (Gbl.F.Out,"%s",Cfg_GOOGLE_ANALYTICS);

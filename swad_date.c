@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_config.h"
+#include "swad_database.h"
 #include "swad_date.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -467,44 +468,77 @@ time_t Dat_GetTimeUTCFromForm (const char *ParamName)
 /**************** in minutes                              ********************/
 /*****************************************************************************/
 
-void Dat_PutHiddenParClientTZDiff (void)
+void Dat_PutHiddenParBrowserTZDiff (void)
   {
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
-	              " id=\"ClientTZDiff\" name=\"ClientTZDiff\""
+	              " id=\"BrowserTZName\" name=\"BrowserTZName\""
+	              " value=\"\" />"
+	              "<input type=\"hidden\""
+	              " id=\"BrowserTZDiff\" name=\"BrowserTZDiff\""
 	              " value=\"0\" />"
                       "<script type=\"text/javascript\">"
-		      "setTZ('ClientTZDiff');"
+		      "setTZname('BrowserTZName');"
+		      "setTZ('BrowserTZDiff');"
 		      "</script>");
   }
 
 /*****************************************************************************/
-/**************** Get string with time difference         ********************/
-/**************** between UTC time and client local time, ********************/
-/**************** in +hh:mm or -hh:mm format              ********************/
+/*************************** Get browser time zone ***************************/
 /*****************************************************************************/
-// ClientTimeZoneDiffStr must have space for strings in +hh:mm format (6 characters + \0)
+// MySQL CONVERT_TZ function may fail around changes related to Daylight Saving Time
+// when a fixed amount (for example +01:00) is used as destination time zone,
+// because this amount may be different before and after the DST change
 
-void Dat_GetClientTimeZoneDiff (char *ClientTimeZoneDiffStr)
+void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
   {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   bool TZNameIsUsable = false;
    char IntStr[1+10+1];
    int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
-   // The getTimezoneOffset() method returns the time difference between UTC time and local time, in minutes.
-   // For example, If your time zone is GMT+2, -120 will be returned.
 
-   /***** Get client time zone *****/
-   Par_GetParToText ("ClientTZDiff",IntStr,1+10);
-   if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
-      ClientUTCMinusLocal = 0;
+   /***** 1. Get client time zone name *****/
+   // We get client time zone using JavaScript jstz script, available in:
+   // - http://pellepim.bitbucket.org/jstz/
+   // - https://bitbucket.org/pellepim/jstimezonedetect/
+   // The return value is an IANA zone info key (aka the Olson time zone database).
+   // For example, if browser is in Madrid(Spain) timezone, "Europe/Berlin" will be returned.
+   Par_GetParToText ("BrowserTZName",BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE);
 
-   /***** Convert from minutes to +hh:mm or -hh:mm *****/
-   if (ClientUTCMinusLocal <= 0)
-      sprintf (ClientTimeZoneDiffStr,"+%02u:%02u",
-               (unsigned) (-ClientUTCMinusLocal) / 60,
-               (unsigned) (-ClientUTCMinusLocal) % 60);
-   else	// ClientUTCMinusLocal > 0
-      sprintf (ClientTimeZoneDiffStr,"-%02u:%02u",
-               (unsigned) ClientUTCMinusLocal / 60,
-               (unsigned) ClientUTCMinusLocal % 60);
+   /* Check if client time zone is usable with CONVERT_TZ */
+   if (BrowserTimeZone[0])
+     {
+      /* Try to convert a date from server time zone to browser time zone */
+      sprintf (Query,"SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
+               BrowserTimeZone);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not check if time zone name is usable"))
+         TZNameIsUsable = true;
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   if (!TZNameIsUsable)
+     {
+      /***** 2. Get client time zone difference *****/
+      // We get client TZ difference using JavaScript getTimezoneOffset() method
+      // getTimezoneOffset() returns UTC-time - browser-local-time, in minutes.
+      // For example, if browser time zone is GMT+2, -120 will be returned.
+      Par_GetParToText ("BrowserTZDiff",IntStr,1+10);
+      if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
+	 ClientUTCMinusLocal = 0;
+
+      /* Convert from minutes to +-hh:mm */
+      // BrowserTimeZone must have space for strings in +hh:mm format (6 chars + \0)
+      if (ClientUTCMinusLocal > 0)
+	 sprintf (BrowserTimeZone,"-%02u:%02u",
+		  (unsigned) ClientUTCMinusLocal / 60,
+		  (unsigned) ClientUTCMinusLocal % 60);
+      else	// ClientUTCMinusLocal <= 0
+	 sprintf (BrowserTimeZone,"+%02u:%02u",
+		  (unsigned) (-ClientUTCMinusLocal) / 60,
+		  (unsigned) (-ClientUTCMinusLocal) % 60);
+     }
   }
 
 /*****************************************************************************/

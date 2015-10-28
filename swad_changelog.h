@@ -108,13 +108,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.27 (2015/10/28)"
+#define Log_PLATFORM_VERSION	"SWAD 15.28 (2015/10/28)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.27:    Oct 28, 2015	Fized bug in dates. (186300 lines)
-        Version 15.26.1:  Oct 27, 2015	Fized bug in statistics. (186282 lines)
+        Version 15.28:    Oct 28, 2015	IANA zone names are used in the calculation of some statistics. (186407 lines)
+					1 script necessary:
+Download JavaScript jstz script, available in:
+        https://bitbucket.org/pellepim/jstimezonedetect/
+        http://pellepim.bitbucket.org/jstz/
+Create new directory jstz in public HTML directory.
+Copy script jstz.js from https://bitbucket.org/pellepim/jstimezonedetect/ > Download repository > pellepim-jstimezonedetect-3a00f59861bd.zip > dist > jstz.js to /var/www/html/swad/jstz/jstz.js
+
+					  (186302 lines)
+        Version 15.27:    Oct 28, 2015	Fixed bug in dates. (186302 lines)
+        Version 15.26.1:  Oct 27, 2015	Fixed bug in statistics. (186282 lines)
         Version 15.26:    Oct 27, 2015	Statistics are computed properly for clients with time-zones different to that of the server. (186278 lines)
         Version 15.25.4:  Oct 27, 2015	Day and month are displayed in clock. (186251 lines)
         Version 15.25.3:  Oct 27, 2015	Statistics computed using time UTC. (186225 lines)

@@ -579,7 +579,7 @@ void Sta_AskShowCrsHits (void)
                             "</table>");
 
 	 /***** Hidden param used to get client time zone *****/
-	 Dat_PutHiddenParClientTZDiff ();
+	 Dat_PutHiddenParBrowserTZDiff ();
 
          /***** Send button *****/
 	 Lay_PutConfirmButton (Txt_Show_hits);
@@ -727,7 +727,7 @@ void Sta_AskShowGblHits (void)
 		      "</table>");
 
    /***** Hidden param used to get client time zone *****/
-   Dat_PutHiddenParClientTZDiff ();
+   Dat_PutHiddenParBrowserTZDiff ();
 
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Show_hits);
@@ -843,6 +843,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_There_are_no_accesses_with_the_selected_search_criteria;
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
    char Query[MAX_LENGTH_QUERY_ACCESS+1];
    char QueryAux[512];
    long LengthQuery;
@@ -853,8 +854,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    const char *LogTable;
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    struct UsrData UsrDat;
-   char ClientTimeZoneDiffStr[1+2+1+2+1];	// Time difference between UTC time and client local time,
-				// in +hh:mm or -hh:mm format
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    unsigned NumUsr = 0;
    const char *Ptr;
    char StrRole[256];
@@ -868,7 +868,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Get client time zone *****/
-   Dat_GetClientTimeZoneDiff (ClientTimeZoneDiffStr);
+   Dat_GetBrowserTimeZone (BrowserTimeZone);
 
    /***** Set table where to find depending on initial date *****/
    // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
@@ -1032,7 +1032,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
@@ -1041,8 +1041,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEKS:
@@ -1053,7 +1053,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTHS:
@@ -1061,7 +1061,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
@@ -1069,7 +1069,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
@@ -1077,7 +1077,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          sprintf (Query,"SELECT SQL_NO_CACHE "
                         "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
                         "%s FROM %s",
-                  ClientTimeZoneDiffStr,
+                  BrowserTimeZone,
                   StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
@@ -1377,9 +1377,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       /* Write start of table frame */
       fprintf (Gbl.F.Out,"<section id=\"stat_results\">");
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Lay_StartRoundFrameTable ("95%",0,Txt_List_of_detailed_clicks);
+	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks);
       else
-	 Lay_StartRoundFrameTable (NULL,0,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+	 Lay_StartRoundFrame (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+      fprintf (Gbl.F.Out,"<table>");
 
       switch (Gbl.Stat.ClicksGroupedBy)
 	{
@@ -1442,9 +1443,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    Sta_ShowNumHitsPerCourse (NumRows,mysql_res);
 	    break;
 	}
+      fprintf (Gbl.F.Out,"</table>");
 
       /* End of frame */
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
       fprintf (Gbl.F.Out,"</section>");
      }
 
@@ -1457,6 +1459,29 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Free memory used by the data of the user *****/
    Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Write time zone used in the calculation of these statistics *****/
+   switch (Gbl.Stat.ClicksGroupedBy)
+     {
+      case Sta_CLICKS_CRS_PER_DAYS:
+      case Sta_CLICKS_GBL_PER_DAYS:
+      case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
+      case Sta_CLICKS_CRS_PER_WEEKS:
+      case Sta_CLICKS_GBL_PER_WEEKS:
+      case Sta_CLICKS_CRS_PER_MONTHS:
+      case Sta_CLICKS_GBL_PER_MONTHS:
+      case Sta_CLICKS_CRS_PER_HOUR:
+      case Sta_CLICKS_GBL_PER_HOUR:
+      case Sta_CLICKS_CRS_PER_MINUTE:
+      case Sta_CLICKS_GBL_PER_MINUTE:
+	 fprintf (Gbl.F.Out,"<p class=\"DAT_SMALL CENTER_MIDDLE\">%s: %s</p>",
+		  Txt_Time_zone_used_in_the_calculation_of_these_statistics,
+		  BrowserTimeZone);
+	 break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/

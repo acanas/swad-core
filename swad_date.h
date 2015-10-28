@@ -37,6 +37,8 @@
 
 #define Dat_SECONDS_IN_ONE_MONTH (30UL*24UL*60UL*60UL)
 
+#define Dat_MAX_BYTES_TIME_ZONE 256
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -86,8 +88,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   bool SubmitFormOnChange);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
-void Dat_PutHiddenParClientTZDiff (void);
-void Dat_GetClientTimeZoneDiff (char *ClientTimeZoneDiffStr);
+void Dat_PutHiddenParBrowserTZDiff (void);
+void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1]);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,

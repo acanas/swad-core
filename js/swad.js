@@ -202,6 +202,14 @@ function setTZ(id) {
 	FormTZ.value = d.getTimezoneOffset();
 }
 
+// Set form param with time difference between UTC time and client local time, in minutes
+// For example, if your time zone is GMT+2, -120 will be returned
+function setTZname(id) {
+	var FormTZname = document.getElementById(id);
+	var tz = jstz.determine();	// Determines the time zone of the browser client
+	FormTZname.value = tz.name();	// Returns the name of the time zone eg "Europe/Berlin"
+}
+
 // Adjust a date form correcting days in the month
 function adjustDateForm (id) {
 	var FormYea = document.getElementById(id+'Year' );
@@ -244,18 +252,18 @@ function setDateToYesterday() {
 	var d = new (Date);
 
 	d.setTime(d.getTime() - 24*60*60*1000);	// Today - 1 day
-	setDate(d);
+	setDateRange(d);
 }
 
 // Set a date range form to today
 function setDateToToday() {
 	var d = new (Date);
 
-	setDate(d);
+	setDateRange(d);
 }
 
 // Set a date range form to a specific day
-function setDate(d) {
+function setDateRange(d) {
 	var FormYea;
 	var Yea = d.getFullYear();
 	var Mon = d.getMonth()+1;
