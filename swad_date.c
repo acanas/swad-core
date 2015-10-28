@@ -493,6 +493,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
    bool TZNameIsUsable = false;
    char IntStr[1+10+1];
    int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
@@ -512,7 +513,11 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
       sprintf (Query,"SELECT CONVERT_TZ(NOW(),@@session.time_zone,'%s')",
                BrowserTimeZone);
       if (DB_QuerySELECT (Query,&mysql_res,"can not check if time zone name is usable"))
-         TZNameIsUsable = true;
+	{
+         row = mysql_fetch_row (mysql_res);
+         if (row[0] != NULL)
+            TZNameIsUsable = true;
+	}
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
