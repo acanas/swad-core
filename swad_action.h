@@ -1381,6 +1381,7 @@ void Act_FormStart (Act_Action_t NextAction);
 void Act_FormGoToStart (Act_Action_t NextAction);
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_FormStartId (Act_Action_t NextAction,const char *Id);
+void Act_SetParamsForm (char *Params,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion);
 void Act_FormEnd (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);

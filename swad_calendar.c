@@ -55,9 +55,11 @@ void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_DAYS_CAPS[7];
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    unsigned Month;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumExamAnnouncement;	// Number of exam announcement
+   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -109,9 +111,13 @@ void Cal_DrawCurrentMonth (void)
                Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
 	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
 	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
-   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld);\n"
+
+   Act_SetParamsForm (Params,ActSeeExaAnn,true);
+   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld,'%s/%s','%s');\n"
 	              "</script>\n",
-	    (long) Gbl.StartExecutionTimeUTC);
+	    (long) Gbl.StartExecutionTimeUTC,
+	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	    Params);
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();
@@ -368,7 +374,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 		                                 "DAY_HLD_LIGHT";
 
          /* Date being drawn is today? */
-	 IsToday = (!PrintView && Month == RealMonth &&
+	 IsToday = (Month      == RealMonth &&
                     Year       == Gbl.Now.Date.Year &&
                     Month      == Gbl.Now.Date.Month &&
                     DayOfMonth == Gbl.Now.Date.Day);
@@ -398,10 +404,10 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
          /***** Write the box with the day *****/
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">",
-                  IsToday ? (ThisDayHasEvent ? "TODAY_EVENT" :
-                	                       "TODAY") :
-                            (ThisDayHasEvent ? "DAY_EVENT" :
-                        	               "DAY"  ));
+                  (IsToday && !PrintView) ? (ThisDayHasEvent ? "TODAY_EVENT" :
+                	                                       "TODAY") :
+                                            (ThisDayHasEvent ? "DAY_EVENT" :
+                        	                               "DAY"  ));
 
          /* If day has an exam announcement */
 	 if (!PrintView && ThisDayHasEvent)

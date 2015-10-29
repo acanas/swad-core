@@ -659,18 +659,18 @@ function disableDetailedClicks () {
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,TimeUTC) {
+function DrawCurrentMonth (id,TimeUTC,CGI,FormEventParams) {
 	var d = new Date;
 
 	d.setTime(TimeUTC * 1000);
-	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false);
+	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false,CGI,FormEventParams);
 }
 
 /*****************************************************************************/
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView)
+function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventParams)
   {
    var NumDaysMonth = [
 	 0,
@@ -703,6 +703,8 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView)
    // var ContinueSearching;
    var ThisDayHasEvent;
    var IsToday;
+   var FormEventIdNum = 0;
+   var FormEventId;
 
    /***** Compute number of day of month for the first box *****/
    /* The initial day of month can be -5, -4, -3, -2, -1, 0, or 1
@@ -811,43 +813,37 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView)
                         '">';
 
          /* If day has an exam announcement */
-	 /* if (!PrintView && ThisDayHasEvent)
+	 if (!PrintView && ThisDayHasEvent)
            {
-            Act_FormStart (ActSeeExaAnn);
-            fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                               "<tr>"
-                               "<td class=\"%s\">",
-                     ClassForDay);
-            Act_LinkFormSubmit (Gbl.Title,ClassForDay);
+            FormEventIdNum++;
+            FormEventId = 'cal_event_' + FormEventIdNum;
+            HTMLContent += '<form method="post" action="' +
+	                   CGI +
+	                   '" id="' +
+	                   FormEventId +
+	                   '">';
+	    HTMLContent += FormEventParams;      
+            HTMLContent += '<div class="' + ClassForDay + '">';
+	    HTMLContent += '<a href="" class="' + ClassForDay + '"' + 
+                           ' onclick="document.getElementById(\'' + FormEventId + '\').submit();return false;">';
            }
          else
            {
-         */
             HTMLContent += '<div class="' + ClassForDay + '"';
             /*
             if (TextForDay)
 	       fprintf (Gbl.F.Out," title=\"%s\"",TextForDay);
 	    */
 	    HTMLContent += '>';
-	 /*
            }
-         */
 
 	 /* Write the day of month */
 	 HTMLContent += Day;
 
          /* If day has an exam announcement */
-         /*
 	 if (!PrintView && ThisDayHasEvent)
-	   {
-            fprintf (Gbl.F.Out,"</a>"
-        	               "</td>"
-        	               "</tr>"
-        	               "</table>");
-	    Act_FormEnd ();
-	   }
+	    HTMLContent += '</a></div></form>';
          else
-         */
             HTMLContent += '</div>';
 
 	 HTMLContent += '</td>';
