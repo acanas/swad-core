@@ -53,6 +53,11 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
 void Cal_DrawCurrentMonth (void)
   {
+   extern const char *Txt_MONTHS_CAPS[12];
+   extern const char *Txt_DAYS_CAPS[7];
+   unsigned Month;
+   unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
      {
@@ -66,11 +71,35 @@ void Cal_DrawCurrentMonth (void)
    /***** Draw the month *****/
    Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,true,false);
 
+   /***** Draw the month in JavaScript *****/
+   /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">"
-	              "</div>"
-	              "<script type=\"text/javascript\">"
-	              "DrawCurrentMonth ('CurrentMonth',%ld);"
-	              "</script>",
+	              "</div>");
+
+   /* Write script to draw the month */
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+	              "	var MONTHS_CAPS = [");
+   for (Month = 0;
+	Month < 12;
+	Month++)
+     {
+      if (Month)
+	 fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_CAPS[Month]);
+     }
+   fprintf (Gbl.F.Out,"];\n"
+	              "	var DAYS_CAPS = [");
+   for (DayOfWeek = 0;
+	DayOfWeek < 7;
+	DayOfWeek++)
+     {
+      if (DayOfWeek)
+	 fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+     }
+   fprintf (Gbl.F.Out,"];\n"
+                      "	DrawCurrentMonth ('CurrentMonth',%ld);\n"
+	              "</script>\n",
 	    (long) Gbl.StartExecutionTimeUTC);
 
    /***** Free list of dates of exam announcements *****/

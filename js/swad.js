@@ -670,31 +670,8 @@ function DrawCurrentMonth (id,TimeUTC) {
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
+function DrawMonth (id,Year,Month,Today)
   {
-   var MONTHS_CAPS = [
-		'ENERO',
-		'FEBRERO',
-		'MARZO',
-		'ABRIL',
-		'MAYO',
-		'JUNIO',
-		'JULIO',
-		'AGOSTO',
-		'SEPTIEMBRE',
-		'OCTUBRE',
-		'NOVIEMBRE',
-		'DICIEMBRE'
-   ];
-   var DAYS_CAPS = [
-		'L',
-		'M',
-		'M',
-		'J',
-		'V',
-		'S',
-		'D'
-   ];
    var NumDaysMonth = [
 	 0,
 	31,	//  1: January
@@ -713,10 +690,10 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
    // var StrExamOfX;
    var Week;
    var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
-   var DayOfMonth;
+   var Day;
    var NumDaysInMonth;
-   var Year  = CurrentYear;
-   var Month = CurrentMonth;
+   var Yea = Year;
+   var Mon = Month;
    // var YYYYMMDD;
    // var NumHld;
    var ClassForDay;		// Class of day depending on type of day
@@ -737,20 +714,20 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
       If it's  0 then write 1 box   of the previous month.
       If it's  1 then write 0 boxes of the previous month. */
 
-   if ((DayOfWeek = GetDayOfWeek (Year,Month,1)) == 0)
-      DayOfMonth = 1;
+   if ((DayOfWeek = GetDayOfWeek (Yea,Mon,1)) == 0)
+      Day = 1;
    else
      {
-      if (Month <= 1)
+      if (Mon <= 1)
 	{
-	 Month = 12;
-	 Year--;
+	 Mon = 12;
+	 Yea--;
 	}
       else
-	 Month--;
-      NumDaysInMonth = (Month == 2) ? GetNumDaysFebruary (Year) :
-	                              NumDaysMonth[Month];
-      DayOfMonth = NumDaysInMonth - DayOfWeek + 1;
+	 Mon--;
+      NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
+	                            NumDaysMonth[Mon];
+      Day = NumDaysInMonth - DayOfWeek + 1;
      }
 
    /***** Start of month *****/
@@ -758,7 +735,7 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
 
    /***** Month name *****/
    HTMLContent += '<div class="MONTH">' +
-                  MONTHS_CAPS[CurrentMonth-1] + ' ' + CurrentYear +
+                  MONTHS_CAPS[Month-1] + ' ' + Year +
                   '</div>';
 
    /***** Month head: first letter for each day of week *****/
@@ -770,7 +747,9 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
       HTMLContent += '<td class="' +
                      ((DayOfWeek == 6) ? 'DAY_NO_WRK_HEAD' :
         	                         'DAY_WRK_HEAD') +
-                     '">' + DAYS_CAPS[DayOfWeek] + '</td>';
+                     '">' +
+                     DAYS_CAPS[DayOfWeek] +
+                     '</td>';
    HTMLContent += '</tr>';
 
    /***** Draw every week of the month *****/
@@ -786,34 +765,34 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
 	   DayOfWeek++)
 	{
          /***** Set class for day being drawn *****/
-         ClassForDay = (Month == CurrentMonth) ? 'DAY_WRK' :
-                                              'DAY_WRK_LIGHT';
+         ClassForDay = (Mon == Month) ? 'DAY_WRK' :
+                                        'DAY_WRK_LIGHT';
          /* Day being drawn is sunday? */
 	 if (DayOfWeek == 6) // All the sundays are holidays
-	    ClassForDay = (Month == CurrentMonth) ? 'DAY_HLD' :
-		                                 'DAY_HLD_LIGHT';
+	    ClassForDay = (Mon == Month) ? 'DAY_HLD' :
+		                           'DAY_HLD_LIGHT';
 
          /* Date being drawn is today? */
          /*
-	 IsToday = (Gbl.CurrentAct != ActPrnCal && Month == CurrentMonth &&
-                    Year       == Gbl.Now.Date.Year &&
-                    Month      == Gbl.Now.Date.Month &&
-                    DayOfMonth == Gbl.Now.Date.Day);
+	 IsToday = (Gbl.CurrentAct != ActPrnCal && Mon == Month &&
+                    Yea == Gbl.Now.Date.Yea &&
+                    Mon == Gbl.Now.Date.Month &&
+                    Day == Gbl.Now.Date.Day);
          */
-         IsToday = (Year       == CurrentYear  &&
-                    Month      == CurrentMonth &&
-                    DayOfMonth == CurrentDay);
+         IsToday = (Yea == Year  &&
+                    Mon == Month &&
+                    Day == Today);
 
          /* Check if day has an exam announcement */
          /*
          ThisDayHasEvent = false;
-	 if (!DrawingCalendar || Month == CurrentMonth)	// If drawing calendar and the month is not the real one, don't draw exam announcements
+	 if (!DrawingCalendar || Mon == Month)	// If drawing calendar and the month is not the real one, don't draw exam announcements
 	    for (NumExamAnnouncement = 0;
 		 NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
 		 NumExamAnnouncement++)
-               if (Year       == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year &&
-                   Month      == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month &&
-                   DayOfMonth == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day)
+               if (Yea == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year &&
+                   Mon == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month &&
+                   Day == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day)
                  {
 		  ThisDayHasEvent = true;
 		  if (PutLinkToEvents)
@@ -823,7 +802,7 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
                               StrExamOfX,
                               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day,
                               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
-                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year);
+                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Yea);
                     }
                   break;
                  }
@@ -861,7 +840,7 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
          */
 
 	 /* Write the day of month */
-	 HTMLContent += DayOfMonth;
+	 HTMLContent += Day;
 
          /* If day has an exam announcement */
          /*
@@ -880,16 +859,16 @@ function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
 	 HTMLContent += '</td>';
 
          /***** Set the next day *****/
-	 NumDaysInMonth = (Month == 2) ? GetNumDaysFebruary (Year) :
-	                                 NumDaysMonth[Month];
-	 if (++DayOfMonth > NumDaysInMonth)
+	 NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
+	                               NumDaysMonth[Mon];
+	 if (++Day > NumDaysInMonth)
 	   {
-	    if (++Month > 12)
+	    if (++Mon > 12)
 	      {
-	       Year++;
-	       Month = 1;
+	       Yea++;
+	       Mon = 1;
 	      }
-	    DayOfMonth = 1;
+	    Day = 1;
 	   }
 	}
       HTMLContent += '</tr>';
