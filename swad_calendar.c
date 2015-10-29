@@ -45,7 +45,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
-                           bool DrawingCalendar,bool PutLinkToEvents,bool PrintView);
+                           bool DrawingCalendar,bool PrintView);
 
 /*****************************************************************************/
 /***************************** Draw current month ****************************/
@@ -57,6 +57,7 @@ void Cal_DrawCurrentMonth (void)
    extern const char *Txt_DAYS_CAPS[7];
    unsigned Month;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+   unsigned NumExamAnnouncement;	// Number of exam announcement
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -69,7 +70,7 @@ void Cal_DrawCurrentMonth (void)
    Exa_CreateListOfExamAnnouncements ();
 
    /***** Draw the month *****/
-   Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,true,false);
+   Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,false);
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
@@ -87,8 +88,9 @@ void Cal_DrawCurrentMonth (void)
 	 fprintf (Gbl.F.Out,",");
       fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_CAPS[Month]);
      }
-   fprintf (Gbl.F.Out,"];\n"
-	              "	var DAYS_CAPS = [");
+   fprintf (Gbl.F.Out,"];\n");
+
+   fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
    for (DayOfWeek = 0;
 	DayOfWeek < 7;
 	DayOfWeek++)
@@ -97,8 +99,17 @@ void Cal_DrawCurrentMonth (void)
 	 fprintf (Gbl.F.Out,",");
       fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
      }
-   fprintf (Gbl.F.Out,"];\n"
-                      "	DrawCurrentMonth ('CurrentMonth',%ld);\n"
+   fprintf (Gbl.F.Out,"];\n");
+
+   fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
+   for (NumExamAnnouncement = 0;
+	NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
+	NumExamAnnouncement++)
+      fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: '%u', Month: '%u', Day: '%u' });\n",
+               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
+	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
+	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
+   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld);\n"
 	              "</script>\n",
 	    (long) Gbl.StartExecutionTimeUTC);
 
@@ -189,7 +200,7 @@ void Cal_DrawCalendar (void)
 	   Col++)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:150px;\">");
-	 Cal_DrawMonth (Year,Month,true,!PrintView,(Gbl.CurrentAct == ActPrnCal));
+	 Cal_DrawMonth (Year,Month,true,(Gbl.CurrentAct == ActPrnCal));
 	 fprintf (Gbl.F.Out,"</td>");
 	 if (++Month == 13)
 	   {
@@ -215,7 +226,7 @@ void Cal_DrawCalendar (void)
 /*****************************************************************************/
 
 static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
-                           bool DrawingCalendar,bool PutLinkToEvents,bool PrintView)
+                           bool DrawingCalendar,bool PrintView)
   {
    extern const unsigned Dat_NumDaysMonth[1+12];
    extern const char *Txt_Show_calendar;
@@ -357,7 +368,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 		                                 "DAY_HLD_LIGHT";
 
          /* Date being drawn is today? */
-	 IsToday = (Gbl.CurrentAct != ActPrnCal && Month == RealMonth &&
+	 IsToday = (!PrintView && Month == RealMonth &&
                     Year       == Gbl.Now.Date.Year &&
                     Month      == Gbl.Now.Date.Month &&
                     DayOfMonth == Gbl.Now.Date.Day);
@@ -373,7 +384,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
                    DayOfMonth == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day)
                  {
 		  ThisDayHasEvent = true;
-		  if (PutLinkToEvents)
+		  if (!PrintView)
                     {
                      sprintf (StrExamOfX,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
    	             sprintf (Gbl.Title,"%s: %02u/%02u/%04u",
@@ -393,7 +404,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
                         	               "DAY"  ));
 
          /* If day has an exam announcement */
-	 if (PutLinkToEvents && ThisDayHasEvent)
+	 if (!PrintView && ThisDayHasEvent)
            {
             Act_FormStart (ActSeeExaAnn);
             fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
@@ -414,7 +425,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 	 fprintf (Gbl.F.Out,"%u",DayOfMonth);
 
          /* If day has an exam announcement */
-	 if (PutLinkToEvents && ThisDayHasEvent)
+	 if (!PrintView && ThisDayHasEvent)
 	   {
             fprintf (Gbl.F.Out,"</a>"
         	               "</td>"

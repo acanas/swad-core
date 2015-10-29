@@ -663,14 +663,14 @@ function DrawCurrentMonth (id,TimeUTC) {
 	var d = new Date;
 
 	d.setTime(TimeUTC * 1000);
-	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate());
+	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false);
 }
 
 /*****************************************************************************/
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,Year,Month,Today)
+function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView)
   {
    var NumDaysMonth = [
 	 0,
@@ -698,10 +698,10 @@ function DrawMonth (id,Year,Month,Today)
    // var NumHld;
    var ClassForDay;		// Class of day depending on type of day
    // var TextForDay;		// Text associated to a day, for example the name of the holiday
-   // var NumExamAnnouncement;	// Number of exam announcement
+   var NumExamAnnouncement;	// Number of exam announcement
    // var ResultOfCmpStartDate;
    // var ContinueSearching;
-   var ThisDayHasEvent = false;
+   var ThisDayHasEvent;
    var IsToday;
 
    /***** Compute number of day of month for the first box *****/
@@ -773,29 +773,23 @@ function DrawMonth (id,Year,Month,Today)
 		                           'DAY_HLD_LIGHT';
 
          /* Date being drawn is today? */
-         /*
-	 IsToday = (Gbl.CurrentAct != ActPrnCal && Mon == Month &&
-                    Yea == Gbl.Now.Date.Yea &&
-                    Mon == Gbl.Now.Date.Month &&
-                    Day == Gbl.Now.Date.Day);
-         */
          IsToday = (Yea == Year  &&
                     Mon == Month &&
                     Day == Today);
 
          /* Check if day has an exam announcement */
-         /*
          ThisDayHasEvent = false;
 	 if (!DrawingCalendar || Mon == Month)	// If drawing calendar and the month is not the real one, don't draw exam announcements
 	    for (NumExamAnnouncement = 0;
-		 NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
+		 NumExamAnnouncement < LstExamAnnouncements.length;
 		 NumExamAnnouncement++)
-               if (Yea == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year &&
-                   Mon == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month &&
-                   Day == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day)
+               if (Yea == LstExamAnnouncements[NumExamAnnouncement].Year  &&
+                   Mon == LstExamAnnouncements[NumExamAnnouncement].Month &&
+                   Day == LstExamAnnouncements[NumExamAnnouncement].Day)
                  {
 		  ThisDayHasEvent = true;
-		  if (PutLinkToEvents)
+		  /*
+		  if (!PrintView)
                     {
                      sprintf (StrExamOfX,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
    	             sprintf (Gbl.Title,"%s: %02u/%02u/%04u",
@@ -804,20 +798,20 @@ function DrawMonth (id,Year,Month,Today)
                               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
                               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Yea);
                     }
+                  */
                   break;
                  }
-         */
 
          /***** Write the box with the day *****/
          HTMLContent += '<td class="' +
-                        (IsToday ? (ThisDayHasEvent ? 'TODAY_EVENT' :
-                	                              'TODAY') :
-                                   (ThisDayHasEvent ? 'DAY_EVENT' :
-                        	                      'DAY'  )) +
+                        ((IsToday && !PrintView) ? (ThisDayHasEvent ? 'TODAY_EVENT' :
+                	                                              'TODAY') :
+                                                   (ThisDayHasEvent ? 'DAY_EVENT' :
+                        	                                      'DAY')) +
                         '">';
 
          /* If day has an exam announcement */
-	 /* if (PutLinkToEvents && ThisDayHasEvent)
+	 /* if (!PrintView && ThisDayHasEvent)
            {
             Act_FormStart (ActSeeExaAnn);
             fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
@@ -844,7 +838,7 @@ function DrawMonth (id,Year,Month,Today)
 
          /* If day has an exam announcement */
          /*
-	 if (PutLinkToEvents && ThisDayHasEvent)
+	 if (!PrintView && ThisDayHasEvent)
 	   {
             fprintf (Gbl.F.Out,"</a>"
         	               "</td>"
@@ -899,11 +893,9 @@ function GetDayOfWeek (Year,Month,Day)
           			(Month*2)+
           			Math.floor(((Month+1)*3)/5)+
           			Year+
-          			(
-          				Math.floor(Year/4)-
-          			 	Math.floor(Year/100)+
-          			 	Math.floor(Year/400)
-          			 )
+          			Math.floor(Year/4)-
+          			Math.floor(Year/100)+
+          			Math.floor(Year/400)
           			+2
           		) % 7
           	) + 5
