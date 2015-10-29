@@ -654,3 +654,285 @@ function disableDetailedClicks () {
 	document.getElementById('GroupedBy').disabled = false;
 	document.getElementById('RowsPage').disabled = true;
 }
+
+/*****************************************************************************/
+/******************************** Draw a month *******************************/
+/*****************************************************************************/
+
+function DrawMonth (id,RealYear,RealMonth)
+  {
+   var MONTHS_CAPS = [
+		'ENERO',
+		'FEBRERO',
+		'MARZO',
+		'ABRIL',
+		'MAYO',
+		'JUNIO',
+		'JULIO',
+		'AGOSTO',
+		'SEPTIEMBRE',
+		'OCTUBRE',
+		'NOVIEMBRE',
+		'DICIEMBRE'
+   ];
+   var DAYS_CAPS = [
+		'L',
+		'M',
+		'M',
+		'J',
+		'V',
+		'S',
+		'D'
+   ];
+   var NumDaysMonth = [
+	 0,
+	31,	//  1: January
+	28,	//  2: February
+	31,	//  3: Mars
+	30,	//  4: April
+	31,	//  5: May
+	30,	//  6: June
+	31,	//  7: July
+	31,	//  8: Agoust
+	30,	//  9: September
+	31,	// 10: October
+	30,	// 11: November
+	31,	// 12: December
+   ];
+   // var StrExamOfX;
+   var Week;
+   var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+   var DayOfMonth;
+   var NumDaysInMonth;
+   var Year  = RealYear;
+   var Month = RealMonth;
+   // var YYYYMMDD;
+   // var NumHld;
+   var ClassForDay;		// Class of day depending on type of day
+   // var TextForDay;		// Text associated to a day, for example the name of the holiday
+   // var NumExamAnnouncement;	// Number of exam announcement
+   // var ResultOfCmpStartDate;
+   // var ContinueSearching;
+   var ThisDayHasEvent = false;
+   var IsToday;
+
+   /***** Compute number of day of month for the first box *****/
+   /* The initial day of month can be -5, -4, -3, -2, -1, 0, or 1
+      If it's -5 then write 6 boxes of the previous month.
+      If it's -4 then write 5 boxes of the previous month.
+      If it's -3 then write 4 boxes of the previous month.
+      If it's -2 then write 3 boxes of the previous month.
+      If it's -1 then write 2 boxes of the previous month.
+      If it's  0 then write 1 box   of the previous month.
+      If it's  1 then write 0 boxes of the previous month. */
+
+   if ((DayOfWeek = GetDayOfWeek (Year,Month,1)) == 0)
+      DayOfMonth = 1;
+   else
+     {
+      if (Month <= 1)
+	{
+	 Month = 12;
+	 Year--;
+	}
+      else
+	 Month--;
+      NumDaysInMonth = (Month == 2) ? GetNumDaysFebruary (Year) :
+	                              NumDaysMonth[Month];
+      DayOfMonth = NumDaysInMonth - DayOfWeek + 1;
+     }
+
+   /***** Start of month *****/
+   HTMLContent = '<div class="MONTH_CONTAINER">';
+
+   /***** Month name *****/
+   HTMLContent += '<div class="MONTH">' +
+                  MONTHS_CAPS[RealMonth-1] + ' ' + RealYear +
+                  '</div>';
+
+   /***** Month head: first letter for each day of week *****/
+   HTMLContent += '<table class="MONTH_TABLE_DAYS">'
+   HTMLContent += '<tr>';
+   for (DayOfWeek = 0;
+	DayOfWeek < 7;
+	DayOfWeek++)
+      HTMLContent += '<td class="' +
+                     ((DayOfWeek == 6) ? 'DAY_NO_WRK_HEAD' :
+        	                         'DAY_WRK_HEAD') +
+                     '">' + DAYS_CAPS[DayOfWeek] + '</td>';
+   HTMLContent += '</tr>';
+
+   /***** Draw every week of the month *****/
+   for (Week = 0;
+	Week < 6;
+	Week++)
+     {
+      HTMLContent += '<tr>';
+
+      /***** Draw every day of the week *****/
+      for (DayOfWeek = 0;
+	   DayOfWeek < 7;
+	   DayOfWeek++)
+	{
+         /***** Set class for day being drawn *****/
+         ClassForDay = (Month == RealMonth) ? 'DAY_WRK' :
+                                              'DAY_WRK_LIGHT';
+         /* Day being drawn is sunday? */
+	 if (DayOfWeek == 6) // All the sundays are holidays
+	    ClassForDay = (Month == RealMonth) ? 'DAY_HLD' :
+		                                 'DAY_HLD_LIGHT';
+
+         /* Date being drawn is today? */
+         /*
+	 IsToday = (Gbl.CurrentAct != ActPrnCal && Month == RealMonth &&
+                    Year       == Gbl.Now.Date.Year &&
+                    Month      == Gbl.Now.Date.Month &&
+                    DayOfMonth == Gbl.Now.Date.Day);
+         */
+         IsToday = false;
+
+         /* Check if day has an exam announcement */
+         /*
+         ThisDayHasEvent = false;
+	 if (!DrawingCalendar || Month == RealMonth)	// If drawing calendar and the month is not the real one, don't draw exam announcements
+	    for (NumExamAnnouncement = 0;
+		 NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
+		 NumExamAnnouncement++)
+               if (Year       == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year &&
+                   Month      == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month &&
+                   DayOfMonth == Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day)
+                 {
+		  ThisDayHasEvent = true;
+		  if (PutLinkToEvents)
+                    {
+                     sprintf (StrExamOfX,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
+   	             sprintf (Gbl.Title,"%s: %02u/%02u/%04u",
+                              StrExamOfX,
+                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day,
+                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
+                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year);
+                    }
+                  break;
+                 }
+         */
+
+         /***** Write the box with the day *****/
+         HTMLContent += '<td class="' +
+                        (IsToday ? (ThisDayHasEvent ? 'TODAY_EVENT' :
+                	                              'TODAY') :
+                                   (ThisDayHasEvent ? 'DAY_EVENT' :
+                        	                      'DAY'  )) +
+                        '">';
+
+         /* If day has an exam announcement */
+	 /* if (PutLinkToEvents && ThisDayHasEvent)
+           {
+            Act_FormStart (ActSeeExaAnn);
+            fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
+                               "<tr>"
+                               "<td class=\"%s\">",
+                     ClassForDay);
+            Act_LinkFormSubmit (Gbl.Title,ClassForDay);
+           }
+         else
+           {
+         */
+            HTMLContent += '<div class="' + ClassForDay + '"';
+            /*
+            if (TextForDay)
+	       fprintf (Gbl.F.Out," title=\"%s\"",TextForDay);
+	    */
+	    HTMLContent += '>';
+	 /*
+           }
+         */
+
+	 /* Write the day of month */
+	 HTMLContent += DayOfMonth;
+
+         /* If day has an exam announcement */
+         /*
+	 if (PutLinkToEvents && ThisDayHasEvent)
+	   {
+            fprintf (Gbl.F.Out,"</a>"
+        	               "</td>"
+        	               "</tr>"
+        	               "</table>");
+	    Act_FormEnd ();
+	   }
+         else
+         */
+            HTMLContent += '</div>';
+
+	 HTMLContent += '</td>';
+
+         /***** Set the next day *****/
+	 NumDaysInMonth = (Month == 2) ? GetNumDaysFebruary (Year) :
+	                                 NumDaysMonth[Month];
+	 if (++DayOfMonth > NumDaysInMonth)
+	   {
+	    if (++Month > 12)
+	      {
+	       Year++;
+	       Month = 1;
+	      }
+	    DayOfMonth = 1;
+	   }
+	}
+      HTMLContent += '</tr>';
+     }
+
+   /***** End of month *****/
+   HTMLContent += '</table></div>';
+   
+   document.getElementById(id).innerHTML = HTMLContent;
+  }
+
+/*****************************************************************************/
+/***************** Compute day of the week from a given date *****************/
+/*****************************************************************************/
+// Return 0 for monday, 1 for tuesday,... 6 for sunday
+
+function GetDayOfWeek (Year,Month,Day)
+  {
+   if (Month <= 2)
+     {
+      Month += 12;
+      Year--;
+     }
+   return (
+          	(
+          		(
+          			Day+
+          			(Month*2)+
+          			Math.floor(((Month+1)*3)/5)+
+          			Year+
+          			(
+          				Math.floor(Year/4)-
+          			 	Math.floor(Year/100)+
+          			 	Math.floor(Year/400)
+          			 )
+          			+2
+          		) % 7
+          	) + 5
+          ) % 7;
+  }
+  
+/*****************************************************************************/
+/****************** Return the number of days of february ********************/
+/*****************************************************************************/
+
+function GetNumDaysFebruary (Year)
+  {
+   return (GetIfLeapYear (Year) ? 29 :
+	                          28);
+  }
+
+/*****************************************************************************/
+/************************* Return true if year is leap ***********************/
+/*****************************************************************************/
+
+function GetIfLeapYear (Year)
+  {
+   return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
+  }

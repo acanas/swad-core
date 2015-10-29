@@ -503,6 +503,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
    // - http://pellepim.bitbucket.org/jstz/
    // - https://bitbucket.org/pellepim/jstimezonedetect/
    // The return value is an IANA zone info key (aka the Olson time zone database).
+   // https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
    // For example, if browser is in Madrid(Spain) timezone, "Europe/Berlin" will be returned.
    Par_GetParToText ("BrowserTZName",BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE);
 

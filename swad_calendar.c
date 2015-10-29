@@ -66,6 +66,14 @@ void Cal_DrawCurrentMonth (void)
    /***** Draw the month *****/
    Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,true,false);
 
+   fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">"
+	              "</div>"
+	              "<script type=\"text/javascript\">"
+	              "DrawMonth ('CurrentMonth',%u,%u);"
+	              "</script>",
+	    Gbl.Now.Date.Year,
+	    Gbl.Now.Date.Month);
+
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();
   }
@@ -188,7 +196,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
    extern const char *Txt_Exam_of_X;
    char StrExamOfX[512+Crs_MAX_LENGTH_COURSE_FULL_NAME];
    unsigned Week;
-   unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5 ó 6 */
+   unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned DayOfMonth;
    unsigned NumDaysInMonth;
    unsigned Year = RealYear;
