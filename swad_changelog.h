@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.29 (2015/10/29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.29.1 (2015/10/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.29.1:  Oct 29, 2015	Writing JavaScript function to draw a month in browser. Not finished. (186694 lines)
         Version 15.29:    Oct 29, 2015	Writing JavaScript function to draw a month in browser. Not finished. (186684 lines)
         Version 15.28.1:  Oct 28, 2015	Fixed bug in the calculation of some statistics. (186416 lines)
         Version 15.28:    Oct 28, 2015	IANA zone names are used in the calculation of some statistics. (186407 lines)

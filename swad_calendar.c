@@ -69,10 +69,9 @@ void Cal_DrawCurrentMonth (void)
    fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">"
 	              "</div>"
 	              "<script type=\"text/javascript\">"
-	              "DrawMonth ('CurrentMonth',%u,%u);"
+	              "DrawCurrentMonth ('CurrentMonth',%ld);"
 	              "</script>",
-	    Gbl.Now.Date.Year,
-	    Gbl.Now.Date.Month);
+	    (long) Gbl.StartExecutionTimeUTC);
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();

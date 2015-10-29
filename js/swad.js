@@ -33,7 +33,7 @@ var ListSeconds = [];
 var countClockConnected = 0;
 
 // Write a date in client local time
-function writeLocalDateFromUTC(id,secsSince1970UTC) {
+function writeLocalDateFromUTC(id,TimeUTC) {
 	var d = new Date;
         var Yea;
         var Mon;
@@ -41,7 +41,7 @@ function writeLocalDateFromUTC(id,secsSince1970UTC) {
 	var StrMon;
 	var StrDay;
 
-	d.setTime(secsSince1970UTC * 1000);
+	d.setTime(TimeUTC * 1000);
 	Yea = d.getFullYear();
 	Mon = d.getMonth() + 1;
 	Day = d.getDate();
@@ -52,10 +52,10 @@ function writeLocalDateFromUTC(id,secsSince1970UTC) {
 
 /*************** Write a date-time in client local time **********************/
 // - id is the id of the HTML element in which date-time will be written
-// - secsSince1970UTC is the date-time to write in UTC UNIX time format
+// - TimeUTC is the date-time to write in UTC UNIX time format
 // - separator is HTML code to write between date and time
 
-function writeLocalDateTimeFromUTC(id,secsSince1970UTC,separator) {
+function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
 	var d = new Date;
         var Yea;
         var Mon;
@@ -69,7 +69,7 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC,separator) {
 	var StrMin;
 	var StrSec;
 
-	d.setTime(secsSince1970UTC * 1000);
+	d.setTime(TimeUTC * 1000);
 	Yea = d.getFullYear();
 	Mon = d.getMonth() + 1;
 	Day = d.getDate();
@@ -87,7 +87,7 @@ function writeLocalDateTimeFromUTC(id,secsSince1970UTC,separator) {
 }
 
 // Set local date-time form fields from UTC time
-function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
+function setLocalDateTimeFormFromUTC(id,TimeUTC) {
 	var FormYea = document.getElementById(id+'Year');
 	var FormMon = document.getElementById(id+'Month');
 	var FormDay = document.getElementById(id+'Day');
@@ -98,9 +98,9 @@ function setLocalDateTimeFormFromUTC(id,secsSince1970UTC) {
 	var Year;
 	var YearIsValid = false;
 
-	if (secsSince1970UTC) {
+	if (TimeUTC) {
 		d = new Date;
-		d.setTime(secsSince1970UTC * 1000);
+		d.setTime(TimeUTC * 1000);
 		Year = d.getFullYear();
 		for (var i=0; i<FormYea.options.length && !YearIsValid; i++)
 			if (FormYea.options[i].value == Year) {
@@ -659,7 +659,18 @@ function disableDetailedClicks () {
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,RealYear,RealMonth)
+function DrawCurrentMonth (id,TimeUTC) {
+	var d = new Date;
+
+	d.setTime(TimeUTC * 1000);
+	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate());
+}
+
+/*****************************************************************************/
+/******************************** Draw a month *******************************/
+/*****************************************************************************/
+
+function DrawMonth (id,CurrentYear,CurrentMonth,CurrentDay)
   {
    var MONTHS_CAPS = [
 		'ENERO',
@@ -704,8 +715,8 @@ function DrawMonth (id,RealYear,RealMonth)
    var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    var DayOfMonth;
    var NumDaysInMonth;
-   var Year  = RealYear;
-   var Month = RealMonth;
+   var Year  = CurrentYear;
+   var Month = CurrentMonth;
    // var YYYYMMDD;
    // var NumHld;
    var ClassForDay;		// Class of day depending on type of day
@@ -747,7 +758,7 @@ function DrawMonth (id,RealYear,RealMonth)
 
    /***** Month name *****/
    HTMLContent += '<div class="MONTH">' +
-                  MONTHS_CAPS[RealMonth-1] + ' ' + RealYear +
+                  MONTHS_CAPS[CurrentMonth-1] + ' ' + CurrentYear +
                   '</div>';
 
    /***** Month head: first letter for each day of week *****/
@@ -775,26 +786,28 @@ function DrawMonth (id,RealYear,RealMonth)
 	   DayOfWeek++)
 	{
          /***** Set class for day being drawn *****/
-         ClassForDay = (Month == RealMonth) ? 'DAY_WRK' :
+         ClassForDay = (Month == CurrentMonth) ? 'DAY_WRK' :
                                               'DAY_WRK_LIGHT';
          /* Day being drawn is sunday? */
 	 if (DayOfWeek == 6) // All the sundays are holidays
-	    ClassForDay = (Month == RealMonth) ? 'DAY_HLD' :
+	    ClassForDay = (Month == CurrentMonth) ? 'DAY_HLD' :
 		                                 'DAY_HLD_LIGHT';
 
          /* Date being drawn is today? */
          /*
-	 IsToday = (Gbl.CurrentAct != ActPrnCal && Month == RealMonth &&
+	 IsToday = (Gbl.CurrentAct != ActPrnCal && Month == CurrentMonth &&
                     Year       == Gbl.Now.Date.Year &&
                     Month      == Gbl.Now.Date.Month &&
                     DayOfMonth == Gbl.Now.Date.Day);
          */
-         IsToday = false;
+         IsToday = (Year       == CurrentYear  &&
+                    Month      == CurrentMonth &&
+                    DayOfMonth == CurrentDay);
 
          /* Check if day has an exam announcement */
          /*
          ThisDayHasEvent = false;
-	 if (!DrawingCalendar || Month == RealMonth)	// If drawing calendar and the month is not the real one, don't draw exam announcements
+	 if (!DrawingCalendar || Month == CurrentMonth)	// If drawing calendar and the month is not the real one, don't draw exam announcements
 	    for (NumExamAnnouncement = 0;
 		 NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
 		 NumExamAnnouncement++)
