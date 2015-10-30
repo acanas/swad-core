@@ -659,18 +659,18 @@ function disableDetailedClicks () {
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,TimeUTC,CGI,FormEventParams) {
+function DrawCurrentMonth (id,TimeUTC,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date;
 
 	d.setTime(TimeUTC * 1000);
-	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false,CGI,FormEventParams);
+	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
 }
 
 /*****************************************************************************/
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventParams)
+function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
   {
    var NumDaysMonth = [
 	 0,
@@ -687,24 +687,25 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventP
 	30,	// 11: November
 	31,	// 12: December
    ];
-   // var StrExamOfX;
+   var Hld_HOLIDAY = 0;
+   var Hld_NON_SCHOOL_PERIOD = 1;
    var Week;
    var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    var Day;
    var NumDaysInMonth;
    var Yea = Year;
    var Mon = Month;
-   // var YYYYMMDD;
-   // var NumHld;
+   var YYYYMMDD;
+   var NumHld;
    var ClassForDay;		// Class of day depending on type of day
-   // var TextForDay;		// Text associated to a day, for example the name of the holiday
+   var TextForDay;		// Text associated to a day, for example the name of the holiday
    var NumExamAnnouncement;	// Number of exam announcement
-   // var ResultOfCmpStartDate;
-   // var ContinueSearching;
+   var ResultOfCmpStartDate;
+   var ContinueSearching;
    var ThisDayHasEvent;
    var IsToday;
-   var FormEventIdNum = 0;
-   var FormEventId;
+   var FormIdNum = 0;
+   var FormId;
 
    /***** Compute number of day of month for the first box *****/
    /* The initial day of month can be -5, -4, -3, -2, -1, 0, or 1
@@ -736,9 +737,26 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventP
    HTMLContent = '<div class="MONTH_CONTAINER">';
 
    /***** Month name *****/
-   HTMLContent += '<div class="MONTH">' +
-                  MONTHS_CAPS[Month-1] + ' ' + Year +
-                  '</div>';
+   if (DrawingCalendar)
+      HTMLContent += '<div class="MONTH">';
+   else
+     {
+      FormId = 'show_calendar';
+      HTMLContent += '<form method="post" action="' +
+                     CGI +
+                     '" id="' +
+                     FormId +
+                     '">' +
+                     FormGoToCalendarParams +  
+                     '<div class="MONTH">' +
+                     '<a href="" class="MONTH"' + 
+                     ' onclick="document.getElementById(\'' + FormId + '\').submit();return false;">';
+     }
+   HTMLContent += MONTHS_CAPS[Month-1] + ' ' + Year;
+   if (DrawingCalendar)
+      HTMLContent += '</div>';
+   else
+      HTMLContent += '</a></div></form>';
 
    /***** Month head: first letter for each day of week *****/
    HTMLContent += '<table class="MONTH_TABLE_DAYS">'
@@ -767,8 +785,43 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventP
 	   DayOfWeek++)
 	{
          /***** Set class for day being drawn *****/
-         ClassForDay = (Mon == Month) ? 'DAY_WRK' :
-                                        'DAY_WRK_LIGHT';
+         ClassForDay = ((Mon == Month) ? 'DAY_WRK' :
+                                         'DAY_WRK_LIGHT');
+	 TextForDay = '';
+
+         /* Check if day is a holiday or a school day */
+         YYYYMMDD = Yea*10000 + Mon*100 + Day;
+         for (NumHld = 0, ContinueSearching = true;
+              NumHld < Hlds.length && ContinueSearching;
+              NumHld++)
+            if (Hlds[NumHld].PlcCod <= 0 ||
+        	Hlds[NumHld].PlcCod == CurrentPlcCod)
+              {
+               if (Hlds[NumHld].StartDate > YYYYMMDD)	// List is ordered by start date. If start date is greater than date being drawn, don't continue searching
+                  ContinueSearching = false;
+               else	// start date <= date being drawn
+                  switch (Hlds[NumHld].HldTyp)
+                    {
+                     case Hld_HOLIDAY:
+                        if (Hlds[NumHld].StartDate == YYYYMMDD)	// If start date == date being drawn
+                          {
+                           ClassForDay = ((Mon == Month) ? 'DAY_HLD' :
+                        	                           'DAY_HLD_LIGHT');
+                           TextForDay = Hlds[NumHld].Name;
+                           ContinueSearching = false;
+                          }
+                        break;
+                     case Hld_NON_SCHOOL_PERIOD:
+                        if (Hlds[NumHld].EndDate >= YYYYMMDD)	// If start date <= date being drawn <= end date
+                          {
+                           ClassForDay = ((Mon == Month) ? 'DAY_NO_WORK' :
+                        	                           'DAY_NO_WORK_LIGHT');
+                           TextForDay = Hlds[NumHld].Name;
+                          }
+                        break;
+                    }
+              }
+                                        
          /* Day being drawn is sunday? */
 	 if (DayOfWeek == 6) // All the sundays are holidays
 	    ClassForDay = (Mon == Month) ? 'DAY_HLD' :
@@ -790,17 +843,11 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventP
                    Day == LstExamAnnouncements[NumExamAnnouncement].Day)
                  {
 		  ThisDayHasEvent = true;
-		  /*
 		  if (!PrintView)
-                    {
-                     sprintf (StrExamOfX,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
-   	             sprintf (Gbl.Title,"%s: %02u/%02u/%04u",
-                              StrExamOfX,
-                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day,
-                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
-                              Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Yea);
-                    }
-                  */
+   	             TextForDay = STR_EXAM + ': ' +
+   	                          LstExamAnnouncements[NumExamAnnouncement].Year  + '-' +
+   	                          LstExamAnnouncements[NumExamAnnouncement].Month + '-' +
+   	                          LstExamAnnouncements[NumExamAnnouncement].Day;
                   break;
                  }
 
@@ -815,25 +862,26 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,FormEventP
          /* If day has an exam announcement */
 	 if (!PrintView && ThisDayHasEvent)
            {
-            FormEventIdNum++;
-            FormEventId = 'cal_event_' + FormEventIdNum;
+            FormIdNum++;
+            FormId = 'cal_event_' + FormIdNum;
             HTMLContent += '<form method="post" action="' +
 	                   CGI +
 	                   '" id="' +
-	                   FormEventId +
+	                   FormId +
 	                   '">';
 	    HTMLContent += FormEventParams;      
-            HTMLContent += '<div class="' + ClassForDay + '">';
+            HTMLContent += '<div class="' + ClassForDay + '"';
+            if (TextForDay.length)
+	       HTMLContent += ' title="' + TextForDay + '"';
+	    HTMLContent += '>';
 	    HTMLContent += '<a href="" class="' + ClassForDay + '"' + 
-                           ' onclick="document.getElementById(\'' + FormEventId + '\').submit();return false;">';
+                           ' onclick="document.getElementById(\'' + FormId + '\').submit();return false;">';
            }
          else
            {
             HTMLContent += '<div class="' + ClassForDay + '"';
-            /*
-            if (TextForDay)
-	       fprintf (Gbl.F.Out," title=\"%s\"",TextForDay);
-	    */
+            if (TextForDay.length)
+	       HTMLContent += ' title="' + TextForDay + '"';
 	    HTMLContent += '>';
            }
 

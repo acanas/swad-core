@@ -55,9 +55,11 @@ void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_DAYS_CAPS[7];
+   extern const char *Txt_Exam_of_X;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    unsigned Month;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+   unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
@@ -72,7 +74,7 @@ void Cal_DrawCurrentMonth (void)
    Exa_CreateListOfExamAnnouncements ();
 
    /***** Draw the month *****/
-   Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,false);
+   // Cal_DrawMonth (Gbl.Now.Date.Year,Gbl.Now.Date.Month,false,false);
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
@@ -103,21 +105,39 @@ void Cal_DrawCurrentMonth (void)
      }
    fprintf (Gbl.F.Out,"];\n");
 
+   fprintf (Gbl.F.Out,"	var STR_EXAM = '");
+   fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
+   fprintf (Gbl.F.Out,"';");
+
+   fprintf (Gbl.F.Out,"	var Hlds = [];\n");
+   for (NumHld = 0;
+	NumHld < Gbl.Hlds.Num;
+	NumHld++)
+      fprintf (Gbl.F.Out,"	Hlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
+               Gbl.Hlds.Lst[NumHld].PlcCod,
+	       (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
+	       Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
+   	       Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
+   	       Gbl.Hlds.Lst[NumHld].Name);
+
    fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
    for (NumExamAnnouncement = 0;
 	NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
 	NumExamAnnouncement++)
-      fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: '%u', Month: '%u', Day: '%u' });\n",
+      fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: %u, Month: %u, Day: %u });\n",
                Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
 	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
 	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
 
-   Act_SetParamsForm (Params,ActSeeExaAnn,true);
-   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld,'%s/%s','%s');\n"
-	              "</script>\n",
+   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld,'%s/%s',%ld,",
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	    Params);
+	    Gbl.CurrentCtr.Ctr.PlcCod);
+   Act_SetParamsForm (Params,ActSeeCal,true);
+   fprintf (Gbl.F.Out,"'%s',",Params);
+   Act_SetParamsForm (Params,ActSeeExaAnn,true);
+   fprintf (Gbl.F.Out,"'%s');\n"
+	              "</script>\n",Params);
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();
