@@ -53,14 +53,7 @@ static void Cal_DrawMonth (unsigned RealYear,unsigned RealMonth,
 
 void Cal_DrawCurrentMonth (void)
   {
-   extern const char *Txt_MONTHS_CAPS[12];
-   extern const char *Txt_DAYS_CAPS[7];
-   extern const char *Txt_Exam_of_X;
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
-   unsigned Month;
-   unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
-   unsigned NumHld;
-   unsigned NumExamAnnouncement;	// Number of exam announcement
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
    /***** Get list of holidays *****/
@@ -83,53 +76,8 @@ void Cal_DrawCurrentMonth (void)
 
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-	              "	var MONTHS_CAPS = [");
-   for (Month = 0;
-	Month < 12;
-	Month++)
-     {
-      if (Month)
-	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_CAPS[Month]);
-     }
-   fprintf (Gbl.F.Out,"];\n");
-
-   fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
-   for (DayOfWeek = 0;
-	DayOfWeek < 7;
-	DayOfWeek++)
-     {
-      if (DayOfWeek)
-	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
-     }
-   fprintf (Gbl.F.Out,"];\n");
-
-   fprintf (Gbl.F.Out,"	var STR_EXAM = '");
-   fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
-   fprintf (Gbl.F.Out,"';");
-
-   fprintf (Gbl.F.Out,"	var Hlds = [];\n");
-   for (NumHld = 0;
-	NumHld < Gbl.Hlds.Num;
-	NumHld++)
-      fprintf (Gbl.F.Out,"	Hlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
-               Gbl.Hlds.Lst[NumHld].PlcCod,
-	       (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
-	       Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
-   	       Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
-   	       Gbl.Hlds.Lst[NumHld].Name);
-
-   fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
-   for (NumExamAnnouncement = 0;
-	NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
-	NumExamAnnouncement++)
-      fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: %u, Month: %u, Day: %u });\n",
-               Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
-	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
-	       Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
-
-   fprintf (Gbl.F.Out,"	DrawCurrentMonth ('CurrentMonth',%ld,'%s/%s',%ld,",
+                      "	var HTMLContent = '';\n"
+	              "	DrawCurrentMonth ('CurrentMonth',%ld,'%s/%s',%ld,",
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.CurrentCtr.Ctr.PlcCod);
@@ -166,6 +114,7 @@ void Cal_DrawCurrentMonth (void)
 void Cal_DrawCalendar (void)
   {
    extern const char *Txt_Print;
+   /*
    static unsigned StartingMonth[1+12] =	// Calendar starts one row before current month
      {
       0,	// Not used
@@ -176,17 +125,21 @@ void Cal_DrawCalendar (void)
       1,	// May       --> January
       1,	// June      --> January
       1,	// July      --> January
-      1,	// Agoust    --> January
+      1,	// August    --> January
       5,	// September --> May
       5,	// October   --> May
       5,	// November  --> May
       5,	// December  --> May
      };
-   unsigned Row,Col;
-   unsigned Month = StartingMonth[Gbl.Now.Date.Month];
-   unsigned Year = (Month < Gbl.Now.Date.Month) ? Gbl.Now.Date.Year :
-	                                          Gbl.Now.Date.Year - 1;
+   */
+   // unsigned Row,Col;
+   // unsigned Month = StartingMonth[Gbl.Now.Date.Month];
+   // unsigned Year = (Month < Gbl.Now.Date.Month) ? Gbl.Now.Date.Year :
+   //	                                             Gbl.Now.Date.Year - 1;
    bool PrintView = (Gbl.CurrentAct == ActPrnCal);
+
+   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -194,6 +147,9 @@ void Cal_DrawCalendar (void)
       Gbl.Hlds.SelectedOrderType = Hld_ORDER_BY_START_DATE;
       Hld_GetListHolidays ();
      }
+
+   /***** Create list of calls for examination *****/
+   Exa_CreateListOfExamAnnouncements ();
 
    /***** Start of table and title *****/
    if (!PrintView)
@@ -209,13 +165,14 @@ void Cal_DrawCalendar (void)
 			      Gbl.CurrentDeg.Deg.DegCod,
 			      Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Create list of calls for examination *****/
-   Exa_CreateListOfExamAnnouncements ();
-
    /***** Draw several months *****/
+   /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CENTER_TOP\">"
-	              "<table style=\"margin:0 auto; border-spacing:6px;\">");
+	              "<div id=\"calendar\">"
+	              "</div>");
+
+   /*
    for (Row = 0;
 	Row < 4;
 	Row++)
@@ -239,6 +196,22 @@ void Cal_DrawCalendar (void)
    fprintf (Gbl.F.Out,"</table>"
 	              "</td>"
 	              "</tr>");
+   */
+   /* Write script to draw the month */
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+                      "	var HTMLContent = '';\n"
+	              "	Cal_DrawCalendar('calendar',%ld,%s,'%s/%s',%ld,",
+	    (long) Gbl.StartExecutionTimeUTC,
+	    (Gbl.CurrentAct == ActPrnCal) ? "true" : "false",
+	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.CurrentCtr.Ctr.PlcCod);
+   Act_SetParamsForm (Params,ActSeeCal,true);
+   fprintf (Gbl.F.Out,"'%s',",Params);
+   Act_SetParamsForm (Params,ActSeeExaAnn,true);
+   fprintf (Gbl.F.Out,"'%s');\n"
+	              "</script>\n",Params);
+
+   fprintf (Gbl.F.Out,"</td></tr>");
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();

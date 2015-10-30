@@ -444,6 +444,15 @@ static void Lay_WriteRedirectionToMyLanguage (void)
 
 static void Lay_WriteScripts (void)
   {
+   extern const char *Txt_MONTHS_CAPS[12];
+   extern const char *Txt_DAYS_CAPS[7];
+   extern const char *Txt_Exam_of_X;
+   unsigned Month;
+   unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+   unsigned NumHld;
+   unsigned NumExamAnnouncement;	// Number of exam announcement
+   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
+
    /***** General scripts for swad *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/swad.js\">"
                       "</script>\n",
@@ -479,6 +488,74 @@ static void Lay_WriteScripts (void)
      {
       Lay_WriteScriptInit ();
       Lay_WriteScriptConnectedUsrs ();
+     }
+
+   /***** Prepare script to draw months *****/
+   if ((Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
+        (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)) ||		// Left column visible
+       Gbl.CurrentAct == ActSeeCal ||
+       Gbl.CurrentAct == ActPrnCal)
+     {
+      /***** Get list of holidays *****/
+      if (!Gbl.Hlds.LstIsRead)
+	{
+	 Gbl.Hlds.SelectedOrderType = Hld_ORDER_BY_START_DATE;
+	 Hld_GetListHolidays ();
+	}
+
+      /***** Create list of calls for examination *****/
+      Exa_CreateListOfExamAnnouncements ();
+
+      /***** Write script to initialize variables used to draw months *****/
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+			 "	var MONTHS_CAPS = [");
+      for (Month = 0;
+	   Month < 12;
+	   Month++)
+	{
+	 if (Month)
+	    fprintf (Gbl.F.Out,",");
+	 fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_CAPS[Month]);
+	}
+      fprintf (Gbl.F.Out,"];\n");
+
+      fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
+      for (DayOfWeek = 0;
+	   DayOfWeek < 7;
+	   DayOfWeek++)
+	{
+	 if (DayOfWeek)
+	    fprintf (Gbl.F.Out,",");
+	 fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+	}
+      fprintf (Gbl.F.Out,"];\n");
+
+      fprintf (Gbl.F.Out,"	var STR_EXAM = '");
+      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
+      fprintf (Gbl.F.Out,"';");
+
+      fprintf (Gbl.F.Out,"	var Hlds = [];\n");
+      for (NumHld = 0;
+	   NumHld < Gbl.Hlds.Num;
+	   NumHld++)
+	 fprintf (Gbl.F.Out,"	Hlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
+		  Gbl.Hlds.Lst[NumHld].PlcCod,
+		  (unsigned) Gbl.Hlds.Lst[NumHld].HldTyp,
+		  Gbl.Hlds.Lst[NumHld].StartDate.YYYYMMDD,
+		  Gbl.Hlds.Lst[NumHld].EndDate.YYYYMMDD,
+		  Gbl.Hlds.Lst[NumHld].Name);
+
+      fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
+      for (NumExamAnnouncement = 0;
+	   NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
+	   NumExamAnnouncement++)
+	 fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: %u, Month: %u, Day: %u });\n",
+		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
+		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
+		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
+
+      fprintf (Gbl.F.Out,"	var HTMLContent;"
+			 "</script>\n");
      }
 
    /***** Scripts depending on action *****/

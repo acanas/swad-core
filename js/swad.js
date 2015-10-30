@@ -656,21 +656,89 @@ function disableDetailedClicks () {
 }
 
 /*****************************************************************************/
-/******************************** Draw a month *******************************/
+/************************ Draw an academic calendar **************************/
+/*****************************************************************************/
+
+function Cal_DrawCalendar (id,TimeUTC,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
+  {
+   var StartingMonth = [	// Calendar starts one row before current month
+      9,	// January   --> September
+      9,	// February  --> September
+      9,	// Mars      --> September
+      9,	// April     --> September
+      1,	// May       --> January
+      1,	// June      --> January
+      1,	// July      --> January
+      1,	// August    --> January
+      5,	// September --> May
+      5,	// October   --> May
+      5,	// November  --> May
+      5		// December  --> May
+   ];
+   var d = new Date;
+   d.setTime(TimeUTC * 1000);
+   var CurrentMonth = d.getMonth() + 1;
+   var CurrentYear = d.getFullYear();
+   var CurrentDay = d.getDate();
+   var Month = StartingMonth[CurrentMonth - 1];
+   var Year = (Month < CurrentMonth) ? CurrentYear :
+	                               CurrentYear - 1;
+   var Row;
+   var Col;
+   var MonthIdNum = 0;
+   var MonthId;
+
+   /***** Draw several months *****/
+   HTMLContent += '<table style="margin:0 auto; border-spacing:6px;">';
+
+   for (Row = 0;
+	Row < 4;
+	Row++)
+     {
+      HTMLContent += '<tr>';
+      for (Col = 0;
+	   Col < 4;
+	   Col++)
+	{
+         MonthIdNum++;
+         MonthId = id + '_month_' + MonthIdNum;
+	
+	 HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
+	 DrawMonth (MonthId,Year,Month,CurrentMonth,CurrentDay,true,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
+	 HTMLContent += '</td>';
+	 if (++Month == 13)
+	   {
+	    Month = 1;
+	    Year++;
+	   }
+	}
+      HTMLContent += '</tr>';
+     }
+   HTMLContent += '</table>';
+
+   document.getElementById(id).innerHTML = HTMLContent;
+  }
+
+/*****************************************************************************/
+/***************************** Draw current month ****************************/
 /*****************************************************************************/
 
 function DrawCurrentMonth (id,TimeUTC,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date;
-
 	d.setTime(TimeUTC * 1000);
-	DrawMonth (id,d.getFullYear(),d.getMonth() + 1,d.getDate(),false,false,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
+	var Year = d.getFullYear();
+	var Month = d.getMonth() + 1;
+	var CurrentDay = d.getDate();
+
+	DrawMonth (id,Year,Month,Month,CurrentDay,false,false,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
+	document.getElementById(id).innerHTML = HTMLContent;
 }
 
 /*****************************************************************************/
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
+function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,DrawingCalendar,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
   {
    var NumDaysMonth = [
 	 0,
@@ -693,8 +761,8 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
    var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    var Day;
    var NumDaysInMonth;
-   var Yea = Year;
-   var Mon = Month;
+   var Yea = YearToDraw;
+   var Mon = MonthToDraw;
    var YYYYMMDD;
    var NumHld;
    var ClassForDay;		// Class of day depending on type of day
@@ -734,14 +802,14 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
      }
 
    /***** Start of month *****/
-   HTMLContent = '<div class="MONTH_CONTAINER">';
+   HTMLContent += '<div class="MONTH_CONTAINER">';
 
    /***** Month name *****/
    if (DrawingCalendar)
       HTMLContent += '<div class="MONTH">';
    else
      {
-      FormId = 'show_calendar';
+      FormId = id + '_show_calendar';
       HTMLContent += '<form method="post" action="' +
                      CGI +
                      '" id="' +
@@ -752,7 +820,7 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
                      '<a href="" class="MONTH"' + 
                      ' onclick="document.getElementById(\'' + FormId + '\').submit();return false;">';
      }
-   HTMLContent += MONTHS_CAPS[Month-1] + ' ' + Year;
+   HTMLContent += MONTHS_CAPS[MonthToDraw-1] + ' ' + YearToDraw;
    if (DrawingCalendar)
       HTMLContent += '</div>';
    else
@@ -785,8 +853,8 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
 	   DayOfWeek++)
 	{
          /***** Set class for day being drawn *****/
-         ClassForDay = ((Mon == Month) ? 'DAY_WRK' :
-                                         'DAY_WRK_LIGHT');
+         ClassForDay = ((Mon == MonthToDraw) ? 'DAY_WRK' :
+                                               'DAY_WRK_LIGHT');
 	 TextForDay = '';
 
          /* Check if day is a holiday or a school day */
@@ -805,8 +873,8 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
                      case Hld_HOLIDAY:
                         if (Hlds[NumHld].StartDate == YYYYMMDD)	// If start date == date being drawn
                           {
-                           ClassForDay = ((Mon == Month) ? 'DAY_HLD' :
-                        	                           'DAY_HLD_LIGHT');
+                           ClassForDay = ((Mon == MonthToDraw) ? 'DAY_HLD' :
+                        	                                 'DAY_HLD_LIGHT');
                            TextForDay = Hlds[NumHld].Name;
                            ContinueSearching = false;
                           }
@@ -814,8 +882,8 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
                      case Hld_NON_SCHOOL_PERIOD:
                         if (Hlds[NumHld].EndDate >= YYYYMMDD)	// If start date <= date being drawn <= end date
                           {
-                           ClassForDay = ((Mon == Month) ? 'DAY_NO_WORK' :
-                        	                           'DAY_NO_WORK_LIGHT');
+                           ClassForDay = ((Mon == MonthToDraw) ? 'DAY_NO_WORK' :
+                        	                                 'DAY_NO_WORK_LIGHT');
                            TextForDay = Hlds[NumHld].Name;
                           }
                         break;
@@ -824,17 +892,18 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
                                         
          /* Day being drawn is sunday? */
 	 if (DayOfWeek == 6) // All the sundays are holidays
-	    ClassForDay = (Mon == Month) ? 'DAY_HLD' :
-		                           'DAY_HLD_LIGHT';
+	    ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
+		                                 'DAY_HLD_LIGHT';
 
          /* Date being drawn is today? */
-         IsToday = (Yea == Year  &&
-                    Mon == Month &&
-                    Day == Today);
+         IsToday = (Yea == YearToDraw  &&
+                    Mon == MonthToDraw &&
+                    Mon == CurrentMonth &&
+                    Day == CurrentDay);
 
          /* Check if day has an exam announcement */
          ThisDayHasEvent = false;
-	 if (!DrawingCalendar || Mon == Month)	// If drawing calendar and the month is not the real one, don't draw exam announcements
+	 if (!DrawingCalendar || Mon == MonthToDraw)	// If drawing calendar and the month is not the real one, don't draw exam announcements
 	    for (NumExamAnnouncement = 0;
 		 NumExamAnnouncement < LstExamAnnouncements.length;
 		 NumExamAnnouncement++)
@@ -863,7 +932,7 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
 	 if (!PrintView && ThisDayHasEvent)
            {
             FormIdNum++;
-            FormId = 'cal_event_' + FormIdNum;
+            FormId = id + '_event_' + FormIdNum;
             HTMLContent += '<form method="post" action="' +
 	                   CGI +
 	                   '" id="' +
@@ -914,8 +983,6 @@ function DrawMonth (id,Year,Month,Today,DrawingCalendar,PrintView,CGI,CurrentPlc
 
    /***** End of month *****/
    HTMLContent += '</table></div>';
-   
-   document.getElementById(id).innerHTML = HTMLContent;
   }
 
 /*****************************************************************************/
