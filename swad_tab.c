@@ -293,9 +293,8 @@ static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab)
 	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&
 	         Gbl.CurrentCrs.Crs.CrsCod <= 0);
       case TabCrs:
-      case TabAss:
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case TabMsg:
+      case TabMsg:	// TODO: Show this tab in any case when Announcements will be available for all
 	 return (Gbl.Usrs.Me.Logged ||
 	         Gbl.CurrentCrs.Crs.CrsCod > 0);
       default:

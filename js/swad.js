@@ -20,6 +20,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+// Global variable (string) used to write HTML
+var Gbl_HTMLContent;
 
 // Global variable used in refreshConnected()
 var ActionAJAX;
@@ -541,87 +543,100 @@ function uncheckChildren(MainCheckbox, GroupCheckboxes) {
 
 // Change text of a test descriptor
 function changeTxtTag(NumTag){
-	var Sel = document.getElementById('SelDesc'+NumTag);
-	document.getElementById('TagTxt'+NumTag).value = Sel.options[Sel.selectedIndex].value;
+	var Sel = document.getElementById('SelDesc' + NumTag);
+
+	document.getElementById('TagTxt' + NumTag).value = Sel.options[Sel.selectedIndex].value;
 }
 
 // Change selectors of test descriptors
-function changeSelTag(NumTag){
+function changeSelTag(NumTag) {
 	var Sel = document.getElementById('SelDesc'+NumTag);
-	var Txt = document.getElementById('TagTxt'+NumTag);
-	for (var i=0; i<Sel.options.length-1 ; i++)
-		if (Sel.options[i].value.toUpperCase() == Txt.value.toUpperCase()){
+	var Txt = document.getElementById('TagTxt' +NumTag);
+
+	for (var i=0; i<Sel.options.length - 1; i++)
+		if (Sel.options[i].value.toUpperCase() == Txt.value.toUpperCase()) {
 			Sel.options[i].selected = true;
 			Txt.value = Sel.options[i].value;
 			break;
 		}
-	if (i == Sel.options.length-1) // End reached without matching
+	if (i == Sel.options.length - 1) // End reached without matching
 		Sel.options[i].selected = true;
 }
 
 // Activate or deactivate answer types of a test question
 function enableDisableAns(Formul) {
-	var Tst_ANS_INT			= 0;
-	var Tst_ANS_FLOAT		= 1;
+	var Tst_ANS_INT				= 0;
+	var Tst_ANS_FLOAT			= 1;
 	var Tst_ANS_TRUE_FALSE		= 2;
 	var Tst_ANS_UNIQUE_CHOICE	= 3;
 	var Tst_ANS_MULTIPLE_CHOICE	= 4;
-	var Tst_ANS_TEXT		= 5;
+	var Tst_ANS_TEXT			= 5;
 
 	if (Formul.AnswerType[Tst_ANS_INT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsInt') Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsMulti' ||
-			         Formul.elements[i].name == 'AnsFloatMin' ||
-			         Formul.elements[i].name == 'AnsFloatMax' ||
-			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsUni' ||
-			         Formul.elements[i].name == 'Shuffle') Formul.elements[i].disabled = true;
+			if (Formul.elements[i].name == 'AnsInt')
+				Formul.elements[i].disabled = false;
+			else if (Formul.elements[i].name == 'AnsMulti'		||
+			         Formul.elements[i].name == 'AnsFloatMin'	||
+			         Formul.elements[i].name == 'AnsFloatMax'	||
+			         Formul.elements[i].name == 'AnsTF'			||
+			         Formul.elements[i].name == 'AnsUni'		||
+			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
 	else if (Formul.AnswerType[Tst_ANS_FLOAT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsFloatMin' ||
-			    Formul.elements[i].name == 'AnsFloatMax') Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsInt' ||
-			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsUni' ||
+			    Formul.elements[i].name == 'AnsFloatMax')
+				Formul.elements[i].disabled = false;
+			else if (Formul.elements[i].name == 'AnsInt'   ||
+			         Formul.elements[i].name == 'AnsTF'    ||
+			         Formul.elements[i].name == 'AnsUni'   ||
 			         Formul.elements[i].name == 'AnsMulti' ||
-			         Formul.elements[i].name == 'Shuffle') Formul.elements[i].disabled = true;
+			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
 	else if (Formul.AnswerType[Tst_ANS_TRUE_FALSE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsTF') Formul.elements[i].disabled = false;
+			if (Formul.elements[i].name == 'AnsTF')
+				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
 			         Formul.elements[i].name == 'AnsFloatMin' ||
 			         Formul.elements[i].name == 'AnsFloatMax' ||
 			         Formul.elements[i].name == 'AnsUni' ||
 			         Formul.elements[i].name == 'AnsMulti' ||
-			         Formul.elements[i].name == 'Shuffle') Formul.elements[i].disabled = true;
+			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
 	else if (Formul.AnswerType[Tst_ANS_UNIQUE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsUni' ||
-			    Formul.elements[i].name == 'Shuffle') Formul.elements[i].disabled = false;
+			    Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
 			         Formul.elements[i].name == 'AnsFloatMin' ||
 			         Formul.elements[i].name == 'AnsFloatMax' ||
 			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsMulti') Formul.elements[i].disabled = true;
+			         Formul.elements[i].name == 'AnsMulti')
+				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],false);
 	}
 	else if (Formul.AnswerType[Tst_ANS_MULTIPLE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsMulti' ||
-			    Formul.elements[i].name == 'Shuffle') Formul.elements[i].disabled = false;
+			    Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
 			         Formul.elements[i].name == 'AnsFloatMin' ||
 			         Formul.elements[i].name == 'AnsFloatMax' ||
 			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsUni') Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],false);
+			         Formul.elements[i].name == 'AnsUni')
+				Formul.elements[i].disabled = true;
+			else
+				enableDisableContAns(Formul.elements[i],false);
 	}
 	else if (Formul.AnswerType[Tst_ANS_TEXT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
@@ -630,26 +645,31 @@ function enableDisableAns(Formul) {
 			    Formul.elements[i].name == 'AnsFloatMax' ||
 			    Formul.elements[i].name == 'AnsTF' ||
 			    Formul.elements[i].name == 'AnsUni' ||
-			    Formul.elements[i].name == 'AnsMulti') Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],false);
+			    Formul.elements[i].name == 'AnsMulti')
+				Formul.elements[i].disabled = true;
+			else
+				enableDisableContAns(Formul.elements[i],false);
 	}
 }
 
 // Activate or deactivate response contents of a test question
-function enableDisableContAns(Elem,IsDisabled) {
+function enableDisableContAns(Elem, IsDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
-	for (var i=0; i<Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (Elem.name == ('AnsStr'+i) || Elem.name == ('FbStr'+i))
+
+	for ( var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
+		if (Elem.name == ('AnsStr' + i) ||
+			Elem.name == ('FbStr'  + i))
 			Elem.disabled = IsDisabled;
 }
 
 // Selection of statistics of current course ****/
-function enableDetailedClicks () {
+function enableDetailedClicks() {
 	document.getElementById('CountType').disabled = true;
 	document.getElementById('GroupedBy').disabled = true;
 	document.getElementById('RowsPage').disabled = false;
 }
-function disableDetailedClicks () {
+
+function disableDetailedClicks() {
 	document.getElementById('CountType').disabled = false;
 	document.getElementById('GroupedBy').disabled = false;
 	document.getElementById('RowsPage').disabled = true;
@@ -659,375 +679,340 @@ function disableDetailedClicks () {
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
 
-function Cal_DrawCalendar (id,TimeUTC,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
-  {
-   var StartingMonth = [	// Calendar starts one row before current month
-      9,	// January   --> September
-      9,	// February  --> September
-      9,	// Mars      --> September
-      9,	// April     --> September
-      1,	// May       --> January
-      1,	// June      --> January
-      1,	// July      --> January
-      1,	// August    --> January
-      5,	// September --> May
-      5,	// October   --> May
-      5,	// November  --> May
-      5		// December  --> May
-   ];
-   var d = new Date;
-   d.setTime(TimeUTC * 1000);
-   var CurrentMonth = d.getMonth() + 1;
-   var CurrentYear = d.getFullYear();
-   var CurrentDay = d.getDate();
-   var Month = StartingMonth[CurrentMonth - 1];
-   var Year = (Month < CurrentMonth) ? CurrentYear :
-	                               CurrentYear - 1;
-   var Row;
-   var Col;
-   var MonthIdNum = 0;
-   var MonthId;
+function Cal_DrawCalendar (id,TimeUTC,CurrentPlcCod,PrintView,
+						   CGI,FormGoToCalendarParams,FormEventParams) {
+	var StartingMonth = [	// Calendar starts one row before current month
+		9,	// January   --> September
+		9,	// February  --> September
+		9,	// Mars      --> September
+		9,	// April     --> September
+		1,	// May       --> January
+		1,	// June      --> January
+		1,	// July      --> January
+		1,	// August    --> January
+		5,	// September --> May
+		5,	// October   --> May
+		5,	// November  --> May
+		5		// December  --> May
+	];
+	var d = new Date;
+	d.setTime(TimeUTC * 1000);
+	var CurrentMonth = d.getMonth() + 1;
+	var CurrentYear = d.getFullYear();
+	var CurrentDay = d.getDate();
+	var Month = StartingMonth[CurrentMonth - 1];
+	var Year = (Month < CurrentMonth) ? CurrentYear :
+										CurrentYear - 1;
+	var Row;
+	var Col;
+	var MonthIdNum = 0;
+	var MonthId;
 
-   /***** Draw several months *****/
-   HTMLContent += '<table style="margin:0 auto; border-spacing:6px;">';
+	/***** Draw several months *****/
+	Gbl_HTMLContent += '<table style="margin:0 auto; border-spacing:6px;">';
 
-   for (Row = 0;
-	Row < 4;
-	Row++)
-     {
-      HTMLContent += '<tr>';
-      for (Col = 0;
-	   Col < 4;
-	   Col++)
-	{
-         MonthIdNum++;
-         MonthId = id + '_month_' + MonthIdNum;
-	
-	 HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
-	 DrawMonth (MonthId,Year,Month,CurrentMonth,CurrentDay,true,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
-	 HTMLContent += '</td>';
-	 if (++Month == 13)
-	   {
-	    Month = 1;
-	    Year++;
-	   }
+	for (Row = 0;
+		 Row < 4;
+		 Row++) {
+		Gbl_HTMLContent += '<tr>';
+		for (Col = 0;
+			 Col < 4;
+			 Col++) {
+			MonthIdNum++;
+			MonthId = id + '_month_' + MonthIdNum;
+
+			Gbl_HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
+			DrawMonth(MonthId, Year, Month, CurrentMonth, CurrentDay,
+					CurrentPlcCod, true, PrintView, CGI,
+					FormGoToCalendarParams, FormEventParams);
+			Gbl_HTMLContent += '</td>';
+			if (++Month == 13) {
+				Month = 1;
+				Year++;
+			}
+		}
+		Gbl_HTMLContent += '</tr>';
 	}
-      HTMLContent += '</tr>';
-     }
-   HTMLContent += '</table>';
+	Gbl_HTMLContent += '</table>';
 
-   document.getElementById(id).innerHTML = HTMLContent;
-  }
+	document.getElementById(id).innerHTML = Gbl_HTMLContent;
+}
 
 /*****************************************************************************/
 /***************************** Draw current month ****************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,TimeUTC,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams) {
+function DrawCurrentMonth (id,TimeUTC,CurrentPlcCod,
+						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
 	var Year = d.getFullYear();
 	var Month = d.getMonth() + 1;
 	var CurrentDay = d.getDate();
 
-	DrawMonth (id,Year,Month,Month,CurrentDay,false,false,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams);
-	document.getElementById(id).innerHTML = HTMLContent;
+	DrawMonth(id,Year,Month,Month,CurrentDay,CurrentPlcCod,false,false,
+			  CGI,FormGoToCalendarParams,FormEventParams);
+	document.getElementById(id).innerHTML = Gbl_HTMLContent;
 }
 
 /*****************************************************************************/
 /******************************** Draw a month *******************************/
 /*****************************************************************************/
 
-function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,DrawingCalendar,PrintView,CGI,CurrentPlcCod,FormGoToCalendarParams,FormEventParams)
-  {
-   var NumDaysMonth = [
-	 0,
-	31,	//  1: January
-	28,	//  2: February
-	31,	//  3: Mars
-	30,	//  4: April
-	31,	//  5: May
-	30,	//  6: June
-	31,	//  7: July
-	31,	//  8: Agoust
-	30,	//  9: September
-	31,	// 10: October
-	30,	// 11: November
-	31,	// 12: December
-   ];
-   var Hld_HOLIDAY = 0;
-   var Hld_NON_SCHOOL_PERIOD = 1;
-   var Week;
-   var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
-   var Day;
-   var NumDaysInMonth;
-   var Yea = YearToDraw;
-   var Mon = MonthToDraw;
-   var YYYYMMDD;
-   var NumHld;
-   var ClassForDay;		// Class of day depending on type of day
-   var TextForDay;		// Text associated to a day, for example the name of the holiday
-   var NumExamAnnouncement;	// Number of exam announcement
-   var ResultOfCmpStartDate;
-   var ContinueSearching;
-   var ThisDayHasEvent;
-   var IsToday;
-   var FormIdNum = 0;
-   var FormId;
+function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlcCod,
+					DrawingCalendar,PrintView,
+					CGI,FormGoToCalendarParams,FormEventParams) {
+	var NumDaysMonth = [
+		  0,
+		 31, //  1: January
+		 28, //  2: February
+		 31, //  3: Mars
+		 30, //  4: April
+		 31, //  5: May
+		 30, //  6: June
+		 31, //  7: July
+		 31, //  8: Agoust
+		 30, //  9: September
+		 31, // 10: October
+		 30, // 11: November
+		 31, // 12: December
+	];
+	var Hld_HOLIDAY = 0;
+	var Hld_NON_SCHOOL_PERIOD = 1;
+	var Week;
+	var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+	var Day;
+	var NumDaysInMonth;
+	var Yea = YearToDraw;
+	var Mon = MonthToDraw;
+	var YYYYMMDD;
+	var NumHld;
+	var ClassForDay; // Class of day depending on type of day
+	var TextForDay; // Text associated to a day, for example the name of the holiday
+	var NumExamAnnouncement; // Number of exam announcement
+	var ResultOfCmpStartDate;
+	var ContinueSearching;
+	var ThisDayHasEvent;
+	var IsToday;
+	var FormIdNum = 0;
+	var FormId;
 
-   /***** Compute number of day of month for the first box *****/
-   /* The initial day of month can be -5, -4, -3, -2, -1, 0, or 1
-      If it's -5 then write 6 boxes of the previous month.
-      If it's -4 then write 5 boxes of the previous month.
-      If it's -3 then write 4 boxes of the previous month.
-      If it's -2 then write 3 boxes of the previous month.
-      If it's -1 then write 2 boxes of the previous month.
-      If it's  0 then write 1 box   of the previous month.
-      If it's  1 then write 0 boxes of the previous month. */
+	/***** Compute number of day of month for the first box *****/
+	/* The initial day of month can be -5, -4, -3, -2, -1, 0, or 1
+	   If it's -5 then write 6 boxes of the previous month.
+	   If it's -4 then write 5 boxes of the previous month.
+	   If it's -3 then write 4 boxes of the previous month.
+	   If it's -2 then write 3 boxes of the previous month.
+	   If it's -1 then write 2 boxes of the previous month.
+	   If it's  0 then write 1 box   of the previous month.
+	   If it's  1 then write 0 boxes of the previous month. */
 
-   if ((DayOfWeek = GetDayOfWeek (Yea,Mon,1)) == 0)
-      Day = 1;
-   else
-     {
-      if (Mon <= 1)
-	{
-	 Mon = 12;
-	 Yea--;
+	if ((DayOfWeek = GetDayOfWeek(Yea, Mon, 1)) == 0)
+		Day = 1;
+	else {
+		if (Mon <= 1) {
+			Mon = 12;
+			Yea--;
+		} else
+			Mon--;
+		NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary(Yea) :
+									  NumDaysMonth[Mon];
+		Day = NumDaysInMonth - DayOfWeek + 1;
 	}
-      else
-	 Mon--;
-      NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
-	                            NumDaysMonth[Mon];
-      Day = NumDaysInMonth - DayOfWeek + 1;
-     }
 
-   /***** Start of month *****/
-   HTMLContent += '<div class="MONTH_CONTAINER">';
+	/***** Start of month *****/
+	Gbl_HTMLContent += '<div class="MONTH_CONTAINER">';
 
-   /***** Month name *****/
-   if (DrawingCalendar)
-      HTMLContent += '<div class="MONTH">';
-   else
-     {
-      FormId = id + '_show_calendar';
-      HTMLContent += '<form method="post" action="' +
-                     CGI +
-                     '" id="' +
-                     FormId +
-                     '">' +
-                     FormGoToCalendarParams +  
-                     '<div class="MONTH">' +
-                     '<a href="" class="MONTH"' + 
-                     ' onclick="document.getElementById(\'' + FormId + '\').submit();return false;">';
-     }
-   HTMLContent += MONTHS_CAPS[MonthToDraw-1] + ' ' + YearToDraw;
-   if (DrawingCalendar)
-      HTMLContent += '</div>';
-   else
-      HTMLContent += '</a></div></form>';
-
-   /***** Month head: first letter for each day of week *****/
-   HTMLContent += '<table class="MONTH_TABLE_DAYS">'
-   HTMLContent += '<tr>';
-   for (DayOfWeek = 0;
-	DayOfWeek < 7;
-	DayOfWeek++)
-      HTMLContent += '<td class="' +
-                     ((DayOfWeek == 6) ? 'DAY_NO_WRK_HEAD' :
-        	                         'DAY_WRK_HEAD') +
-                     '">' +
-                     DAYS_CAPS[DayOfWeek] +
-                     '</td>';
-   HTMLContent += '</tr>';
-
-   /***** Draw every week of the month *****/
-   for (Week = 0;
-	Week < 6;
-	Week++)
-     {
-      HTMLContent += '<tr>';
-
-      /***** Draw every day of the week *****/
-      for (DayOfWeek = 0;
-	   DayOfWeek < 7;
-	   DayOfWeek++)
-	{
-         /***** Set class for day being drawn *****/
-         ClassForDay = ((Mon == MonthToDraw) ? 'DAY_WRK' :
-                                               'DAY_WRK_LIGHT');
-	 TextForDay = '';
-
-         /* Check if day is a holiday or a school day */
-         YYYYMMDD = Yea*10000 + Mon*100 + Day;
-         for (NumHld = 0, ContinueSearching = true;
-              NumHld < Hlds.length && ContinueSearching;
-              NumHld++)
-            if (Hlds[NumHld].PlcCod <= 0 ||
-        	Hlds[NumHld].PlcCod == CurrentPlcCod)
-              {
-               if (Hlds[NumHld].StartDate > YYYYMMDD)	// List is ordered by start date. If start date is greater than date being drawn, don't continue searching
-                  ContinueSearching = false;
-               else	// start date <= date being drawn
-                  switch (Hlds[NumHld].HldTyp)
-                    {
-                     case Hld_HOLIDAY:
-                        if (Hlds[NumHld].StartDate == YYYYMMDD)	// If start date == date being drawn
-                          {
-                           ClassForDay = ((Mon == MonthToDraw) ? 'DAY_HLD' :
-                        	                                 'DAY_HLD_LIGHT');
-                           TextForDay = Hlds[NumHld].Name;
-                           ContinueSearching = false;
-                          }
-                        break;
-                     case Hld_NON_SCHOOL_PERIOD:
-                        if (Hlds[NumHld].EndDate >= YYYYMMDD)	// If start date <= date being drawn <= end date
-                          {
-                           ClassForDay = ((Mon == MonthToDraw) ? 'DAY_NO_WORK' :
-                        	                                 'DAY_NO_WORK_LIGHT');
-                           TextForDay = Hlds[NumHld].Name;
-                          }
-                        break;
-                    }
-              }
-                                        
-         /* Day being drawn is sunday? */
-	 if (DayOfWeek == 6) // All the sundays are holidays
-	    ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
-		                                 'DAY_HLD_LIGHT';
-
-         /* Date being drawn is today? */
-         IsToday = (Yea == YearToDraw  &&
-                    Mon == MonthToDraw &&
-                    Mon == CurrentMonth &&
-                    Day == CurrentDay);
-
-         /* Check if day has an exam announcement */
-         ThisDayHasEvent = false;
-	 if (!DrawingCalendar || Mon == MonthToDraw)	// If drawing calendar and the month is not the real one, don't draw exam announcements
-	    for (NumExamAnnouncement = 0;
-		 NumExamAnnouncement < LstExamAnnouncements.length;
-		 NumExamAnnouncement++)
-               if (Yea == LstExamAnnouncements[NumExamAnnouncement].Year  &&
-                   Mon == LstExamAnnouncements[NumExamAnnouncement].Month &&
-                   Day == LstExamAnnouncements[NumExamAnnouncement].Day)
-                 {
-		  ThisDayHasEvent = true;
-		  if (!PrintView)
-   	             TextForDay = STR_EXAM + ': ' +
-   	                          LstExamAnnouncements[NumExamAnnouncement].Year  + '-' +
-   	                          LstExamAnnouncements[NumExamAnnouncement].Month + '-' +
-   	                          LstExamAnnouncements[NumExamAnnouncement].Day;
-                  break;
-                 }
-
-         /***** Write the box with the day *****/
-         HTMLContent += '<td class="' +
-                        ((IsToday && !PrintView) ? (ThisDayHasEvent ? 'TODAY_EVENT' :
-                	                                              'TODAY') :
-                                                   (ThisDayHasEvent ? 'DAY_EVENT' :
-                        	                                      'DAY')) +
-                        '">';
-
-         /* If day has an exam announcement */
-	 if (!PrintView && ThisDayHasEvent)
-           {
-            FormIdNum++;
-            FormId = id + '_event_' + FormIdNum;
-            HTMLContent += '<form method="post" action="' +
-	                   CGI +
-	                   '" id="' +
-	                   FormId +
-	                   '">';
-	    HTMLContent += FormEventParams;      
-            HTMLContent += '<div class="' + ClassForDay + '"';
-            if (TextForDay.length)
-	       HTMLContent += ' title="' + TextForDay + '"';
-	    HTMLContent += '>';
-	    HTMLContent += '<a href="" class="' + ClassForDay + '"' + 
-                           ' onclick="document.getElementById(\'' + FormId + '\').submit();return false;">';
-           }
-         else
-           {
-            HTMLContent += '<div class="' + ClassForDay + '"';
-            if (TextForDay.length)
-	       HTMLContent += ' title="' + TextForDay + '"';
-	    HTMLContent += '>';
-           }
-
-	 /* Write the day of month */
-	 HTMLContent += Day;
-
-         /* If day has an exam announcement */
-	 if (!PrintView && ThisDayHasEvent)
-	    HTMLContent += '</a></div></form>';
-         else
-            HTMLContent += '</div>';
-
-	 HTMLContent += '</td>';
-
-         /***** Set the next day *****/
-	 NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
-	                               NumDaysMonth[Mon];
-	 if (++Day > NumDaysInMonth)
-	   {
-	    if (++Mon > 12)
-	      {
-	       Yea++;
-	       Mon = 1;
-	      }
-	    Day = 1;
-	   }
+	/***** Month name *****/
+	if (DrawingCalendar)
+		Gbl_HTMLContent += '<div class="MONTH">';
+	else {
+		FormId = id + '_show_calendar';
+		Gbl_HTMLContent += '<form method="post" action="' + CGI + '" id="' + FormId + '">' +
+							FormGoToCalendarParams +
+							'<div class="MONTH">' +
+							'<a href="" class="MONTH" onclick="document.getElementById(\'' + FormId +
+							'\').submit();return false;">';
 	}
-      HTMLContent += '</tr>';
-     }
+	Gbl_HTMLContent += MONTHS_CAPS[MonthToDraw - 1] + ' ' + YearToDraw;
+	if (DrawingCalendar)
+		Gbl_HTMLContent += '</div>';
+	else
+		Gbl_HTMLContent += '</a></div></form>';
 
-   /***** End of month *****/
-   HTMLContent += '</table></div>';
-  }
+	/***** Month head: first letter for each day of week *****/
+	Gbl_HTMLContent += '<table class="MONTH_TABLE_DAYS">' + '<tr>';
+	for (DayOfWeek = 0; DayOfWeek < 7; DayOfWeek++)
+		Gbl_HTMLContent += '<td class="' +
+						   ((DayOfWeek == 6) ? 'DAY_NO_WRK_HEAD' :
+							   				   'DAY_WRK_HEAD') +
+						   '">' +
+						   DAYS_CAPS[DayOfWeek] +
+						   '</td>';
+	Gbl_HTMLContent += '</tr>';
+
+	/***** Draw every week of the month *****/
+	for (Week = 0;
+		 Week < 6;
+		 Week++) {
+		Gbl_HTMLContent += '<tr>';
+
+		/***** Draw every day of the week *****/
+		for (DayOfWeek = 0;
+			 DayOfWeek < 7;
+			 DayOfWeek++) {
+			/***** Set class for day being drawn *****/
+			ClassForDay = ((Mon == MonthToDraw) ? 'DAY_WRK' :
+												  'DAY_WRK_LIGHT');
+			TextForDay = '';
+
+			/* Check if day is a holiday or a school day */
+			YYYYMMDD = Yea * 10000 + Mon * 100 + Day;
+			for (NumHld = 0, ContinueSearching = true;
+				 NumHld < Hlds.length && ContinueSearching;
+				 NumHld++)
+				if (Hlds[NumHld].PlcCod <= 0 ||
+					Hlds[NumHld].PlcCod == CurrentPlcCod) {
+					if (Hlds[NumHld].StartDate > YYYYMMDD) // List is ordered by start date. If start date is greater than date being drawn, don't continue searching
+						ContinueSearching = false;
+					else
+						// start date <= date being drawn
+						switch (Hlds[NumHld].HldTyp) {
+							case Hld_HOLIDAY:
+								if (Hlds[NumHld].StartDate == YYYYMMDD) {	// If start date == date being drawn
+									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_HLD' :
+																		  'DAY_HLD_LIGHT');
+									TextForDay = Hlds[NumHld].Name;
+									ContinueSearching = false;
+								}
+								break;
+							case Hld_NON_SCHOOL_PERIOD:
+								if (Hlds[NumHld].EndDate >= YYYYMMDD) {	// If start date <= date being drawn <= end date
+									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_NO_WORK' :
+																		  'DAY_NO_WORK_LIGHT');
+									TextForDay = Hlds[NumHld].Name;
+								}
+								break;
+						}
+				}
+
+			/* Day being drawn is sunday? */
+			if (DayOfWeek == 6) // All the sundays are holidays
+				ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
+													 'DAY_HLD_LIGHT';
+
+			/* Date being drawn is today? */
+			IsToday = (Yea == YearToDraw   &&
+					   Mon == MonthToDraw  &&
+					   Mon == CurrentMonth &&
+					   Day == CurrentDay);
+
+			/* Check if day has an exam announcement */
+			ThisDayHasEvent = false;
+			if (!DrawingCalendar || Mon == MonthToDraw) // If drawing calendar and the month is not the real one, don't draw exam announcements
+				for (NumExamAnnouncement = 0;
+					NumExamAnnouncement < LstExamAnnouncements.length;
+					NumExamAnnouncement++)
+					if (Yea == LstExamAnnouncements[NumExamAnnouncement].Year  &&
+						Mon == LstExamAnnouncements[NumExamAnnouncement].Month &&
+						Day == LstExamAnnouncements[NumExamAnnouncement].Day) {
+						ThisDayHasEvent = true;
+						if (!PrintView)
+							TextForDay = STR_EXAM + ': ' +
+										 LstExamAnnouncements[NumExamAnnouncement].Year  + '-' +
+										 LstExamAnnouncements[NumExamAnnouncement].Month + '-' +
+										 LstExamAnnouncements[NumExamAnnouncement].Day;
+						break;
+					}
+
+			/***** Write the box with the day *****/
+			Gbl_HTMLContent += '<td class="' +
+							   ((IsToday && !PrintView) ? (ThisDayHasEvent ? 'TODAY_EVENT' :
+																			 'TODAY') :
+														  (ThisDayHasEvent ? 'DAY_EVENT' :
+																			 'DAY')) +
+							   '">';
+
+			/* If day has an exam announcement */
+			if (!PrintView && ThisDayHasEvent) {
+				FormIdNum++;
+				FormId = id + '_event_' + FormIdNum;
+				Gbl_HTMLContent +=	'<form method="post" action="' + CGI + '" id="' + FormId + '">' +
+									FormEventParams +
+									'<div class="' + ClassForDay + '"';
+				if (TextForDay.length)
+					Gbl_HTMLContent += ' title="' + TextForDay + '"';
+				Gbl_HTMLContent +=	'><a href="" class="' + ClassForDay + '"' +
+									' onclick="document.getElementById(\'' + FormId +
+									'\').submit();return false;">';
+			} else {
+				Gbl_HTMLContent += '<div class="' + ClassForDay + '"';
+				if (TextForDay.length)
+					Gbl_HTMLContent += ' title="' + TextForDay + '"';
+				Gbl_HTMLContent += '>';
+			}
+
+			/* Write the day of month */
+			Gbl_HTMLContent += Day;
+
+			/* If day has an exam announcement */
+			if (!PrintView && ThisDayHasEvent)
+				Gbl_HTMLContent += '</a></div></form>';
+			else
+				Gbl_HTMLContent += '</div>';
+
+			Gbl_HTMLContent += '</td>';
+
+			/***** Set the next day *****/
+			NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
+										  NumDaysMonth[Mon];
+			if (++Day > NumDaysInMonth) {
+				if (++Mon > 12) {
+					Yea++;
+					Mon = 1;
+				}
+				Day = 1;
+			}
+		}
+		Gbl_HTMLContent += '</tr>';
+	}
+
+	/***** End of month *****/
+	Gbl_HTMLContent += '</table></div>';
+}
 
 /*****************************************************************************/
 /***************** Compute day of the week from a given date *****************/
 /*****************************************************************************/
 // Return 0 for monday, 1 for tuesday,... 6 for sunday
 
-function GetDayOfWeek (Year,Month,Day)
-  {
-   if (Month <= 2)
-     {
+function GetDayOfWeek (Year,Month,Day) {
+   if (Month <= 2) {
       Month += 12;
       Year--;
-     }
-   return (
-          	(
-          		(
-          			Day+
-          			(Month*2)+
-          			Math.floor(((Month+1)*3)/5)+
-          			Year+
-          			Math.floor(Year/4)-
-          			Math.floor(Year/100)+
-          			Math.floor(Year/400)
-          			+2
-          		) % 7
-          	) + 5
-          ) % 7;
-  }
+   }
+   return (((Day +
+             (Month * 2) +
+             Math.floor (((Month + 1) * 3) / 5) +
+             Year +
+             Math.floor (Year / 4) -
+             Math.floor (Year/100) +
+             Math.floor (Year/400) +
+             2) % 7) + 5) % 7;
+}
   
 /*****************************************************************************/
 /****************** Return the number of days of february ********************/
 /*****************************************************************************/
 
-function GetNumDaysFebruary (Year)
-  {
-   return (GetIfLeapYear (Year) ? 29 :
-	                          28);
-  }
+function GetNumDaysFebruary (Year) {
+   return (GetIfLeapYear (Year) ? 29 : 28);
+}
 
 /*****************************************************************************/
 /************************* Return true if year is leap ***********************/
 /*****************************************************************************/
 
-function GetIfLeapYear (Year)
-  {
+function GetIfLeapYear (Year) {
    return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
-  }
+}

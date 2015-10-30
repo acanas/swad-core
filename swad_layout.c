@@ -35,6 +35,7 @@
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
+#include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_logo.h"
 #include "swad_notice.h"
@@ -451,7 +452,6 @@ static void Lay_WriteScripts (void)
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
-   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
    /***** General scripts for swad *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/swad.js\">"
@@ -532,7 +532,7 @@ static void Lay_WriteScripts (void)
 
       fprintf (Gbl.F.Out,"	var STR_EXAM = '");
       fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
-      fprintf (Gbl.F.Out,"';");
+      fprintf (Gbl.F.Out,"';\n");
 
       fprintf (Gbl.F.Out,"	var Hlds = [];\n");
       for (NumHld = 0;
@@ -554,8 +554,7 @@ static void Lay_WriteScripts (void)
 		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
 		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
 
-      fprintf (Gbl.F.Out,"	var HTMLContent;"
-			 "</script>\n");
+      fprintf (Gbl.F.Out,"</script>\n");
      }
 
    /***** Scripts depending on action *****/
