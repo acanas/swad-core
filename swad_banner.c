@@ -916,14 +916,11 @@ void Ban_WriteMenuWithBanners (void)
       Act_FormStart (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
-      fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\""
-	                 " onclick=\"document.getElementById('%s').submit();\">"
-                         "<img src=\"%s/%s/%s\""
+      Act_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER");
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>",
-	       Gbl.Banners.Lst[NumBan].FullName,
-	       Gbl.FormId,
                Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShortName,

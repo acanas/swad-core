@@ -607,7 +607,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
                   Gbl.CurrentCrs.Crs.FullName,Hour,Minute,Second);
       else
          sprintf (Gbl.Message,Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y_on_DATE_Z,
-                  Gbl.CurrentCrs.Crs.FullName,Hour,Minute,Second,Day,Month,Year);
+                  Gbl.CurrentCrs.Crs.FullName,Hour,Minute,Second,Year,Month,Day);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
       return false;
      }

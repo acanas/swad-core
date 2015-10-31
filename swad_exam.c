@@ -983,10 +983,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_
       fprintf (Gbl.F.Out,"</select>");
      }
    else if (Gbl.ExamAnnouncement.StartTime.Hour)
-      fprintf (Gbl.F.Out,"%2u:%02u %s",
+      fprintf (Gbl.F.Out,"%2u:%02u",
                Gbl.ExamAnnouncement.StartTime.Hour,
-               Gbl.ExamAnnouncement.StartTime.Minute,
-               Txt_hours_ABBREVIATION);
+               Gbl.ExamAnnouncement.StartTime.Minute);
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
@@ -1242,14 +1241,13 @@ void Exa_GetNotifExamAnnouncement (char *SummaryStr,char **ContentStr,long ExaCo
       Str_LimitLengthHTMLStr (Gbl.ExamAnnouncement.CrsFullName,MaxChars-(Cns_MAX_LENGTH_DATE+9));
 
    /* Date of exam */
-   sprintf (SummaryStr,"%s, %02u/%02u/%04u, %2u:%02u %s",
+   sprintf (SummaryStr,"%s, %04u-%02u-%02u %2u:%02u",
             Gbl.ExamAnnouncement.CrsFullName,
-            Gbl.ExamAnnouncement.ExamDate.Day,
-            Gbl.ExamAnnouncement.ExamDate.Month,
             Gbl.ExamAnnouncement.ExamDate.Year,
+            Gbl.ExamAnnouncement.ExamDate.Month,
+            Gbl.ExamAnnouncement.ExamDate.Day,
             Gbl.ExamAnnouncement.StartTime.Hour,
-            Gbl.ExamAnnouncement.StartTime.Minute,
-            Txt_hours_ABBREVIATION);
+            Gbl.ExamAnnouncement.StartTime.Minute);
 
    /***** Free memory of the exam announcement *****/
    Exa_FreeMemExamAnnouncement ();

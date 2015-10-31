@@ -104,17 +104,19 @@
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Global announcements should be available for all users?
-// TODO: Dates in Holidays should be shown in big-endian
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.32 (2015/10/30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.32.2 (2015/10/31)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.32.2:  Oct 31, 2015	Fixed bug in form submit. (186618 lines)
+        Version 15.32.1:  Oct 31, 2015	Dates in holidays are shown in big-endian.
+					All dates are now shown in ISO 8601 format (YYYY-MM-DD). (186627 lines)
         Version 15.32:    Oct 30, 2015	Code refactoring and cleaning related to calendar. (186617 lines)
         Version 15.31:    Oct 30, 2015	Calendar is drawn in browser using JavaScript. (186902 lines)
         Version 15.30:    Oct 30, 2015	Current month is drawn in browser using JavaScript. (186795 lines)

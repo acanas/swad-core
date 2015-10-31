@@ -1964,11 +1964,11 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
          /* Write the date */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"%s RIGHT_TOP\">"
-                            "%02u/%02u/%02u&nbsp;"
+                            "%04u-%02u-%02u&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
 	        	            "LOG",
-	          Date.Day,Date.Month,Date.Year % 100);
+	          Date.Year,Date.Month,Date.Day);
 
          /* Write the day of the week */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2002,11 +2002,11 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%02u/%02u/%02u&nbsp;"
+	                 "%04u-%02u-%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Day,Date.Month,Date.Year % 100);
+               Date.Year,Date.Month,Date.Day);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2186,11 +2186,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
             /* Write the date */
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"%s RIGHT_TOP\">"
-        	               "%02u/%02u/%02u&nbsp;"
+        	               "%04u-%02u-%02u&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :
 	        	               "LOG",
-	             Date.Day,Date.Month,Date.Year % 100);
+	             Date.Year,Date.Month,Date.Day);
 
             /* Write the day of the week */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2236,11 +2236,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%02u/%02u/%02u&nbsp;"
+	                 "%04u-%02u-%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Day,Date.Month,Date.Year % 100);
+               Date.Year,Date.Month,Date.Day);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2274,11 +2274,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       /* Write the date */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%02u/%02u/%02u&nbsp;"
+	                 "%04u-%02u-%02u&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Day,Date.Month,Date.Year % 100);
+               Date.Year,Date.Month,Date.Day);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2538,9 +2538,9 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
          /* Write week */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LOG RIGHT_TOP\">"
-                            "%02u/%02u&nbsp;"
+                            "%04u-%02u&nbsp;"
                             "</td>",
-	          Date.Week,Date.Year % 100);
+	          Date.Year,Date.Week);
 
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
@@ -2564,9 +2564,9 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
      /* Write week */
      fprintf (Gbl.F.Out,"<tr>"
 	                "<td class=\"LOG RIGHT_TOP\">"
-	                "%02u/%02u&nbsp;"
+	                "%04u-%02u&nbsp;"
 	                "</td>",
-              Date.Week,Date.Year % 100);
+              Date.Year,Date.Week);
 
      /* Draw bar proportional to number of pages generated */
      Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
@@ -2636,9 +2636,9 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
          /* Write the month */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LOG RIGHT_TOP\">"
-                            "%02u/%02u&nbsp;"
+                            "%04u-%02u&nbsp;"
                             "</td>",
-	          Date.Month,Date.Year % 100);
+	          Date.Year,Date.Month);
 
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
@@ -2661,9 +2661,9 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
      /* Write the month */
      fprintf (Gbl.F.Out,"<tr>"
 	                "<td class=\"LOG RIGHT_TOP\">"
-	                "%02u/%02u&nbsp;"
+	                "%04u-%02u&nbsp;"
 	                "</td>",
-              Date.Month,Date.Year % 100);
+              Date.Year,Date.Month);
 
      /* Draw bar proportional to number of pages generated */
      Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);

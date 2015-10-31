@@ -49,7 +49,7 @@ function writeLocalDateFromUTC(id,TimeUTC) {
 	Day = d.getDate();
 	StrMon = ((Mon < 10) ? '0' : '') + Mon;
 	StrDay = ((Day < 10) ? '0' : '') + Day;
-	document.getElementById(id).innerHTML = Yea + '/' + StrMon + '/' + StrDay;
+	document.getElementById(id).innerHTML = Yea + '-' + StrMon + '-' + StrDay;
 }
 
 /*************** Write a date-time in client local time **********************/
@@ -83,9 +83,9 @@ function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
 	StrHou = ((Hou < 10) ? '0' : '') + Hou;
 	StrMin = ((Min < 10) ? '0' : '') + Min;
 	StrSec = ((Sec < 10) ? '0' : '') + Sec;
-	document.getElementById(id).innerHTML = Yea    + '/' + StrMon + '/' + StrDay +
-						separator +
-						StrHou + ':' + StrMin + ':' + StrSec;
+	document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
+											separator +
+											StrHou + ':' + StrMin + ':' + StrSec;
 }
 
 // Set local date-time form fields from UTC time
@@ -318,7 +318,7 @@ function writeLocalClock() {
 	Hou = d.getHours();
 	Min = d.getMinutes();
 	StrMin = ((Min < 10) ? '0' : '') + Min;
-	document.getElementById('hm').innerHTML = Day + ' ' + Months[Mon] + ', ' + Hou + ':' + StrMin;
+	document.getElementById('hm').innerHTML = Months[Mon] + ' ' + Day + ', ' + Hou + ':' + StrMin;
 }
       
 function writeClockConnected() {

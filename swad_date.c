@@ -187,7 +187,8 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr)
        Date->Year  == 0)
       DateStr[0] = '\0';
    else
-      sprintf (DateStr,"%02u/%02u/%04u",Date->Day,Date->Month,Date->Year);
+      sprintf (DateStr,"%04u-%02u-%02u",
+               Date->Year,Date->Month,Date->Day);
   }
 
 /*****************************************************************************/
@@ -567,64 +568,17 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
                         bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
-   unsigned Day;
-   unsigned Month;
    unsigned Year;
+   unsigned Month;
+   unsigned Day;
    unsigned NumDaysSelectedMonth;
 
-   /***** Day *****/
+   /***** Start table *****/
    fprintf (Gbl.F.Out,"<table>"
-	              "<tr>"
-	              "<td class=\"CENTER_MIDDLE\">"
-	              "<select id=\"%sDay\" name=\"%sDay\"",
-            Id,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
-   NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-	                                               ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-	                                        	                             Dat_NumDaysMonth[DateSelected->Month]);
-   for (Day = 1;
-	Day <= NumDaysSelectedMonth;
-	Day++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Day);
-      if (Day == DateSelected->Day)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Day);
-     }
-
-   /***** Month *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "<td class=\"CENTER_MIDDLE\">"
-                      "<select id=\"%sMonth\" name=\"%sMonth\""
-                      " onchange=\"adjustDateForm('%s');",
-	    Id,Id,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
-   fprintf (Gbl.F.Out,"\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
-   for (Month = 1;
-	Month <= 12;
-	Month++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",Month);
-      if (Month == DateSelected->Month)
-	 fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
-     }
+	              "<tr>");
 
    /***** Year *****/
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select id=\"%sYear\" name=\"%sYear\""
                       " onchange=\"adjustDateForm('%s');",
 	    Id,Id,Id);
@@ -645,8 +599,59 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       fprintf (Gbl.F.Out,">%u</option>",Year);
      }
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>"
+                      "</td>");
+
+   /***** Month *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<select id=\"%sMonth\" name=\"%sMonth\""
+                      " onchange=\"adjustDateForm('%s');",
+	    Id,Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+               Gbl.FormId);
+   fprintf (Gbl.F.Out,"\"");
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   for (Month = 1;
+	Month <= 12;
+	Month++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Month);
+      if (Month == DateSelected->Month)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** Day *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+	              "<select id=\"%sDay\" name=\"%sDay\"",
+            Id,Id);
+   if (SubmitFormOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+               Gbl.FormId);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+	                                               ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+	                                        	                             Dat_NumDaysMonth[DateSelected->Month]);
+   for (Day = 1;
+	Day <= NumDaysSelectedMonth;
+	Day++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",Day);
+      if (Day == DateSelected->Day)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%u</option>",Day);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+	              "</td>");
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
   }
 

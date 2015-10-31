@@ -103,7 +103,7 @@ void Hld_SeeHolidays (void)
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeeHld);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL");
@@ -116,10 +116,10 @@ void Hld_SeeHolidays (void)
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 	                 "&nbsp;%s&nbsp;"
 	                 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
@@ -138,13 +138,13 @@ void Hld_SeeHolidays (void)
 			    "</td>",
 		  Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 						     Gbl.Hlds.Lst[NumHld].PlaceFullName);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-	                    "&nbsp;%02u/%02u/%04u"
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+	                    "&nbsp;%04u-%02u-%02u"
 	                    "</td>",
-		  Gbl.Hlds.Lst[NumHld].StartDate.Day,
+		  Gbl.Hlds.Lst[NumHld].StartDate.Year,
 		  Gbl.Hlds.Lst[NumHld].StartDate.Month,
-		  Gbl.Hlds.Lst[NumHld].StartDate.Year);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+		  Gbl.Hlds.Lst[NumHld].StartDate.Day);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 	                    "&nbsp;");
 	 switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	   {
@@ -152,14 +152,14 @@ void Hld_SeeHolidays (void)
 	       fprintf (Gbl.F.Out,"-");
 	       break;
 	    case Hld_NON_SCHOOL_PERIOD:
-	       fprintf (Gbl.F.Out,"%02u/%02u/%04u",
-			Gbl.Hlds.Lst[NumHld].EndDate.Day,
+	       fprintf (Gbl.F.Out,"%04u-%02u-%02u",
+			Gbl.Hlds.Lst[NumHld].EndDate.Year,
 			Gbl.Hlds.Lst[NumHld].EndDate.Month,
-			Gbl.Hlds.Lst[NumHld].EndDate.Year);
+			Gbl.Hlds.Lst[NumHld].EndDate.Day);
 	       break;
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"DAT CENTER_MIDDLE\">"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "&nbsp;%s"
 			    "</td>"
 			    "</tr>",
@@ -808,12 +808,16 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 
    /***** Update the date in database *****/
    sprintf (Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod='%ld'",
-            StrStartOrEndDate,NewDate.Year,NewDate.Month,NewDate.Day,Hld->HldCod);
+            StrStartOrEndDate,
+            NewDate.Year,
+            NewDate.Month,
+            NewDate.Day,
+            Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the date of a holiday");
 
    /***** Write message to show the change made *****/
-   sprintf (StrDate,"%02u/%02u/%04u",
-            NewDate.Day,NewDate.Month,NewDate.Year);	// Change format depending on location
+   sprintf (StrDate,"%04u-%02u-%02u",
+            NewDate.Year,NewDate.Month,NewDate.Day);	// Change format depending on location
    sprintf (Gbl.Message,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,StrDate);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -1121,8 +1125,12 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
    sprintf (Query,"INSERT INTO holidays (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 	          " VALUES ('%ld','%ld','%u','%04u%02u%02u','%04u%02u%02u','%s')",
             Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
-            Hld->StartDate.Year,Hld->StartDate.Month,Hld->StartDate.Day,
-            Hld->EndDate.Year,Hld->EndDate.Month,Hld->EndDate.Day,
+            Hld->StartDate.Year,
+            Hld->StartDate.Month,
+            Hld->StartDate.Day,
+            Hld->EndDate.Year,
+            Hld->EndDate.Month,
+            Hld->EndDate.Day,
             Hld->Name);
    DB_QueryINSERT (Query,"can not create holiday");
 

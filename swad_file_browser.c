@@ -5513,10 +5513,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,Brw_FileType_t 
 	    FileNameToShow);
 
    /* Link to the form and to the file */
-   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
-	              " onclick=\"document.getElementById('%s').submit();\">",
-	    Gbl.Title,Gbl.FileBrowser.TxtStyle,
-	    Gbl.FormId);
+   Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileType,FileName);
@@ -5672,14 +5669,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       /* Link to the form and to the file */
       sprintf (Gbl.Title,(Gbl.FileBrowser.Type == Brw_SHOW_MARKS_CRS ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP) ? Txt_Check_marks_in_file_X :
-	                	                                                Txt_Download_FILE_OR_LINK_X,
+	                	                                        Txt_Download_FILE_OR_LINK_X,
 	       FileNameToShow);
-      fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
-	                 " onclick=\"document.getElementById('%s').submit();\">"
-			 "%s"
-			 "</a>",
-	       Gbl.Title,Gbl.FileBrowser.TxtStyle,
-	       Gbl.FormId,
+      Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle);
+      fprintf (Gbl.F.Out,"%s</a>",
 	       FileNameToShow);
       Act_FormEnd ();
 

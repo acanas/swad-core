@@ -49808,31 +49808,31 @@ const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y =	// Wa
 const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y_on_DATE_Z =	// Warning: it is very important to include %s, five %02u and %04u in the following sentences
 #if   L==0
 	"No puede hacer un nuevo test en la asignatura <strong>%s</strong>"
-	" hasta las %02uh%02u'%02u&quot; del %02u/%02u/%04u";		// Necessita traduccio
+	" hasta las %02u:%02u:%02u del %04u-%02u-%02u";		// Necessita traduccio
 #elif L==1
 	"You can not make a new test in the course <strong>%s</strong>"
-	" until %02uh%02u'%02u&quot; on %02u/%02u/%04u";		// Need Übersetzung
+	" until %02u:%02u:%02u on %04u-%02u-%02u";		// Need Übersetzung
 #elif L==2
 	"You can not make a new test in the course <strong>%s</strong>"
-	" until %02uh%02u'%02u&quot; on %02u/%02u/%04u";
+	" until %02u:%02u:%02u on %04u-%02u-%02u";
 #elif L==3
 	"No puede hacer un nuevo test en la asignatura <strong>%s</strong>"
-	" hasta las %02uh%02u'%02u&quot; del %02u/%02u/%04u";
+	" hasta las %02u:%02u:%02u del %04u-%02u-%02u";
 #elif L==4
 	"You can not make a new test in the course <strong>%s</strong>"
-	" until %02uh%02u'%02u&quot; on %02u/%02u/%04u";		// Besoin de traduction
+	" until %02u:%02u:%02u on %04u-%02u-%02u";		// Besoin de traduction
 #elif L==5
 	"No puede hacer un nuevo test en la asignatura <strong>%s</strong>"
-	" hasta las %02uh%02u'%02u&quot; del %02u/%02u/%04u";		// Okoteve traducción
+	" hasta las %02u:%02u:%02u del %04u-%02u-%02u";		// Okoteve traducción
 #elif L==6
 	"Non puoi fare un nuovo test nel corso <strong>%s</strong>"
-	" fino al %02uh%02u'%02u&quot; del %02u/%02u/%04u";
+	" fino al %02u:%02u:%02u del %04u-%02u-%02u";
 #elif L==7
 	"You can not make a new test in the course <strong>%s</strong>"
-	" until %02uh%02u'%02u&quot; on %02u/%02u/%04u";		// Potrzebujesz tlumaczenie
+	" until %02u:%02u:%02u on %04u-%02u-%02u";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"You can not make a new test in the course <strong>%s</strong>"
-	" until %02uh%02u'%02u&quot; on %02u/%02u/%04u";		// Necessita de tradução
+	" until %02u:%02u:%02u on %04u-%02u-%02u";		// Necessita de tradução
 #endif
 
 const char *Txt_You_can_not_paste_file_or_folder_here =
