@@ -89,10 +89,10 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Start frame *****/
    /* Current time */
-   sprintf (Gbl.Title,"%s<br />%u %s, %u:%02u",
+   sprintf (Gbl.Title,"%s<br />%s %u, %u:%02u",
 	    Txt_Connected_users,
-            Gbl.Now.Date.Day,
             Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
+            Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
    Lay_StartRoundFrameTable (NULL,0,Gbl.Title);
@@ -206,7 +206,7 @@ void Con_GetAndShowLastClicks (void)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
                       "<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"
