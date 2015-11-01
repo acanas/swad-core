@@ -48,7 +48,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-// extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /************************* Internal global variables *************************/
@@ -208,15 +207,15 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
    bool RolesSelected;
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\""
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER_ACTIVE\""
 	              " style=\"width:500px;\">");
 
    /***** Write the content of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_SUBJECT\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_SUBJECT_ACTIVE\">%s</div>",
             Subject);
 
    /***** Write the content of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_ACTIVE\">%s</div>",
             Content);
 
    /***** Write form *****/

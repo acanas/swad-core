@@ -257,42 +257,77 @@ form			{margin:0; display:inline;}
 	}
 
 /********************************** Notice ***********************************/
-.NOTICE_CONTAINER
+.NOTICE_CONTAINER_ACTIVE
 	{
 	margin:10px auto;
 	padding:10px;
-	background-image:linear-gradient(#EED86C 0%,#FEED95 15%,#FAF098 100%);
+	background-image:linear-gradient(rgba(238,216,108,0.8) 0%,rgba(248,237,149,0.8) 15%,rgba(250,240,152,0.8) 100%);	
 	box-shadow:0 8px 10px -5px rgba(125,113,0,0.8);
-	text-align:center;
+	text-align:left;
 	overflow:hidden;
 	}
-.NOTICE_DATE
+.NOTICE_CONTAINER_OBSOLETE
+	{
+	margin:10px auto;
+	padding:10px;
+	background-image:linear-gradient(rgba(238,216,108,0.4) 0%,rgba(248,237,149,0.4) 15%,rgba(250,240,152,0.4) 100%);	
+	box-shadow:0 8px 10px -5px rgba(125,113,0,0.4);
+	text-align:left;
+	overflow:hidden;
+	}
+.NOTICE_DATE_ACTIVE
 	{
 	float:right;
 	font-size:12pt;
 	color:#404040;
+	text-align:right;
 	overflow:hidden;
+	display:inline-block;
 	}
-.NOTICE_SUBJECT
+.NOTICE_DATE_OBSOLETE
 	{
+	float:right;
+	font-size:12pt;
+	color:#808080;
+	text-align:right;
+	overflow:hidden;
+	display:inline-block;
+	}
+.NOTICE_SUBJECT_ACTIVE
+	{
+	margin:12px auto;
 	font-size:15pt;
 	font-weight:bold;
 	color:#404040;
 	text-align:center;
 	overflow:hidden;
-	display:inline-block;
 	}
-.NOTICE_TEXT
+.NOTICE_TEXT_ACTIVE
 	{
 	clear:both;
 	font-size:12pt;
-	color:#000080;
+	color:#204080;
 	overflow:hidden;
 	}
-.NOTICE_AUTHOR
+.NOTICE_TEXT_OBSOLETE
+	{
+	clear:both;
+	font-size:12pt;
+	color:#4070A0;
+	overflow:hidden;
+	}
+.NOTICE_AUTHOR_ACTIVE
 	{
 	color:#404040;
 	font-size:12pt;
+	text-align:right;
+	overflow:hidden;
+	}
+.NOTICE_AUTHOR_OBSOLETE
+	{
+	color:#808080;
+	font-size:12pt;
+	text-align:right;
 	overflow:hidden;
 	}
 
@@ -390,8 +425,8 @@ form			{margin:0; display:inline;}
 .CONTEXT_OPT
 	{
 	display:inline;
-	margin-left:9px;
-	margin-right:9px;
+	margin-left:6px;
+	margin-right:6px;
 	}
 
 /********************************* Frame 10 **********************************/

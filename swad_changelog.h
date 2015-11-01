@@ -109,11 +109,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.32.2 (2015/10/31)"
+#define Log_PLATFORM_VERSION	"SWAD 15.33 (2015/11/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.33:    Nov 01, 2015	New layout of notices. (186708 lines)
         Version 15.32.2:  Oct 31, 2015	Fixed bug in form submit. (186618 lines)
         Version 15.32.1:  Oct 31, 2015	Dates in holidays are shown in big-endian.
 					All dates are now shown in ISO 8601 format (YYYY-MM-DD). (186627 lines)
@@ -138,7 +139,6 @@ Download JavaScript jstz script, available in:
 Create new directory jstz in public HTML directory.
 Copy script jstz.js from https://bitbucket.org/pellepim/jstimezonedetect/ > Download repository > pellepim-jstimezonedetect-3a00f59861bd.zip > dist > jstz.js to /var/www/html/swad/jstz/jstz.js
 
-					  (186302 lines)
         Version 15.27:    Oct 28, 2015	Fixed bug in dates. (186302 lines)
         Version 15.26.1:  Oct 27, 2015	Fixed bug in statistics. (186282 lines)
         Version 15.26:    Oct 27, 2015	Statistics are computed properly for clients with time-zones different to that of the server. (186278 lines)

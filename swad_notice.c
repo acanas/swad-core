@@ -490,46 +490,88 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
    extern const char *Txt_Remove;
+   static const char *ContainerClass[Not_NUM_STATUS] =
+     {
+      "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
+      "NOTICE_CONTAINER_OBSOLETE",	// Not_OBSOLETE_NOTICE
+     };
+   static const char *DateClass[Not_NUM_STATUS] =
+     {
+      "NOTICE_DATE_ACTIVE",		// Not_ACTIVE_NOTICE
+      "NOTICE_DATE_OBSOLETE",		// Not_OBSOLETE_NOTICE
+     };
+   static const char *TextClass[Not_NUM_STATUS] =
+     {
+      "NOTICE_TEXT_ACTIVE",		// Not_ACTIVE_NOTICE
+      "NOTICE_TEXT_OBSOLETE",		// Not_OBSOLETE_NOTICE
+     };
+   static const char *AuthorClass[Not_NUM_STATUS] =
+     {
+      "NOTICE_AUTHOR_ACTIVE",		// Not_ACTIVE_NOTICE
+      "NOTICE_AUTHOR_OBSOLETE",		// Not_OBSOLETE_NOTICE
+     };
    static unsigned UniqueId = 0;
    struct UsrData UsrDat;
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER\" style=\"width:%upx;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:%upx;\">",
+	    ContainerClass[NoticeStatus],
 	    Not_ContainerWidth[TypeNoticesListing]);
 
    /***** Write the date in the top part of the yellow note *****/
    /* Write symbol to indicate if notice is obsolete or active */
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
-      if (ICanEditNotices)	// Put form to change the state of the notice
+      if (ICanEditNotices)
+	{
+	 /* Form to delete notice */
+	 Act_FormStart (ActRemNot);
+	 Not_PutHiddenParamNotCod (NotCod);
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+        	            "<input type=\"image\""
+	                    " src=\"%s/delon16x16.gif\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON16x16\" />"
+        	            "</div>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Remove,
+		  Txt_Remove);
+	 Act_FormEnd ();
+
+	 /* Put form to change the state of the notice */
          switch (NoticeStatus)
            {
             case Not_ACTIVE_NOTICE:
                Act_FormStart (ActHidNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\""
+               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+        	                  "<input type=\"image\""
         	                  " src=\"%s/visible_on16x16.gif\""
         	                  " alt=%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />",
+        	                  " class=\"ICON16x16\" />"
+        	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
                         Txt_NOTICE_Active_Mark_as_obsolete);
-               Act_FormEnd ();
                break;
             case Not_OBSOLETE_NOTICE:
                Act_FormStart (ActRevNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<input type=\"image\""
+               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+        	                  "<input type=\"image\""
         	                  " src=\"%s/hidden_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />",
+        	                  " class=\"ICON16x16\" />"
+        	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,
                         Txt_NOTICE_Obsolete_Mark_as_active);
-               Act_FormEnd ();
                break;
            }
-      else			// Don't put form to change the state of the notice
+         Act_FormEnd ();
+   	}
+      else	// Don't put forms
+	 /* Status of the notice */
          switch (NoticeStatus)
            {
             case Not_ACTIVE_NOTICE:
@@ -557,15 +599,16 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
            }
      }
 
-   /* Write the date (DateTime is in YYYYMMDDHHMM format) */
+   /* Write the date */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_DATE\">");
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+            DateClass[NoticeStatus]);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,"NOTICE_DATE");
+      Act_LinkFormSubmit (Txt_See_full_notice,DateClass[NoticeStatus]);
      }
    fprintf (Gbl.F.Out,"<span id=\"notice_date_%u\"></span>",
             UniqueId);
@@ -581,8 +624,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    UniqueId,(long) TimeUTC);
 
    /***** Write the content of the notice *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT\">%s",
-            Content);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s",
+            TextClass[NoticeStatus],Content);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -603,35 +646,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write the author *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_AUTHOR\">");
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+            AuthorClass[NoticeStatus]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat)) // Get from the database the data of the autor
       Usr_RestrictLengthAndWriteName (&UsrDat,18);
    Usr_UsrDataDestructor (&UsrDat);
    fprintf (Gbl.F.Out,"</div>");
-
-   /***** Write form to delete this notice *****/
-   if (ICanEditNotices)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-
-      /* Form to delete notice */
-      Act_FormStart (ActRemNot);
-      Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_Remove,The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON16x16\" />"
-                         " %s</a>",
-               Gbl.Prefs.IconsURL,
-               Txt_Remove,
-               Txt_Remove,
-               Txt_Remove);
-      Act_FormEnd ();
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
 
    fprintf (Gbl.F.Out,"</div>");
   }
