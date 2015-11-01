@@ -64,7 +64,7 @@ void Not_DeleteNotice (void);
 void Not_ShowANotice (void);
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing);
 void Not_GetNotifNotice (char *SummaryStr,char **ContentStr,long NotCod,unsigned MaxChars,bool GetContent);
-unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned *NumNotif);
+unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif);
 
 #endif

@@ -350,6 +350,15 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	overflow:hidden;
 	}
+.NOTICE_SUBJECT_OBSOLETE
+	{
+	margin:12px auto;
+	font-size:15pt;
+	font-weight:bold;
+	color:#808080;
+	text-align:center;
+	overflow:hidden;
+	}
 .NOTICE_TEXT_ACTIVE
 	{
 	clear:both;

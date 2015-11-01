@@ -206,22 +206,24 @@ mysql> DESCRIBE ann_seen;
    /***** Table announcements *****/
 /*
 mysql> DESCRIBE announcements;
-+---------+---------+------+-----+---------+----------------+
-| Field   | Type    | Null | Key | Default | Extra          |
-+---------+---------+------+-----+---------+----------------+
-| AnnCod  | int(11) | NO   | PRI | NULL    | auto_increment |
-| Roles   | int(11) | NO   |     | 0       |                |
-| Subject | text    | NO   |     | NULL    |                |
-| Content | text    | NO   |     | NULL    |                |
-+---------+---------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| AnnCod  | int(11)    | NO   | PRI | NULL    | auto_increment |
+| Status  | tinyint(4) | NO   | MUL | 0       |                |
+| Roles   | int(11)    | NO   |     | 0       |                |
+| Subject | text       | NO   |     | NULL    |                |
+| Content | text       | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS announcements ("
                    "AnnCod INT NOT NULL AUTO_INCREMENT,"
+                   "Status TINYINT NOT NULL DEFAULT 0,"
                    "Roles INT NOT NULL DEFAULT 0,"
                    "Subject TEXT NOT NULL,"
                    "Content TEXT NOT NULL,"
-                   "UNIQUE INDEX(AnnCod))");
+                   "UNIQUE INDEX(AnnCod),INDEX(Status))");
 
    /***** Table asg_grp *****/
 /*

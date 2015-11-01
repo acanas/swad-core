@@ -63,10 +63,12 @@ CREATE TABLE IF NOT EXISTS ann_seen (
 --
 CREATE TABLE IF NOT EXISTS announcements (
 	AnnCod INT NOT NULL AUTO_INCREMENT,
+	Status TINYINT NOT NULL DEFAULT 0,
 	Roles INT NOT NULL DEFAULT 0,
 	Subject TEXT NOT NULL,
 	Content TEXT NOT NULL,
-	UNIQUE INDEX(AnnCod));
+	UNIQUE INDEX(AnnCod),
+	INDEX(Status));
 --
 -- Table asg_grp: stores the groups associated to assigments
 --

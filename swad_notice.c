@@ -70,7 +70,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
-                             Not_Status_t NoticeStatus,
+                             Not_Status_t Status,
                              bool ICanEditNotices);
 static long Not_InsertNoticeInDB (const char *Content);
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
@@ -220,22 +220,22 @@ void Not_RevealHiddenNotice (void)
    char Query[256];
    long NotCod;
 
-   /***** Get the code of the notice to show *****/
+   /***** Get the code of the notice to reveal *****/
    NotCod = Not_GetParamNotCod ();
 
-   /***** Set notice as shown *****/
+   /***** Set notice as active *****/
    sprintf (Query,"UPDATE notices SET Status='%u'"
                   " WHERE NotCod='%ld' AND CrsCod='%ld'",
             (unsigned) Not_ACTIVE_NOTICE,
             NotCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not show notice");
+   DB_QueryUPDATE (Query,"can not reveal notice");
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
   }
 
 /*****************************************************************************/
-/******************************* Delete a notice *****************************/
+/******************************* Remove a notice *****************************/
 /*****************************************************************************/
 
 void Not_DeleteNotice (void)
@@ -299,7 +299,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    time_t TimeUTC;
    long UsrCod;
    unsigned UnsignedNum;
-   Not_Status_t NoticeStatus;
+   Not_Status_t Status;
    bool ICanEditNotices;
 
    /***** A course must be selected (Gbl.CurrentCrs.Crs.CrsCod > 0) *****/
@@ -343,15 +343,15 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	       Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 
 	    /* Get status of the notice (row[3]) */
-	    NoticeStatus = Not_OBSOLETE_NOTICE;
+	    Status = Not_OBSOLETE_NOTICE;
 	    if (sscanf (row[3],"%u",&UnsignedNum) == 1)
 	       if (UnsignedNum < Not_NUM_STATUS)
-		 NoticeStatus = (Not_Status_t) UnsignedNum;
+		 Status = (Not_Status_t) UnsignedNum;
 
 	    /* Draw the notice */
 	    Not_DrawANotice (TypeNoticesListing,
 	                     Gbl.CurrentCrs.Notices.HighlightNotCod,
-	                     TimeUTC,Content,UsrCod,NoticeStatus,
+	                     TimeUTC,Content,UsrCod,Status,
 	                     ICanEditNotices);
            }
 
@@ -440,15 +440,15 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
             Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 
 	 /* Get status of the notice (row[4]) */
-	 NoticeStatus = Not_OBSOLETE_NOTICE;
+	 Status = Not_OBSOLETE_NOTICE;
 	 if (sscanf (row[4],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Not_NUM_STATUS)
-	      NoticeStatus = (Not_Status_t) UnsignedNum;
+	      Status = (Not_Status_t) UnsignedNum;
 
 	 /* Draw the notice */
 	 Not_DrawANotice (TypeNoticesListing,
 	                  NotCod,
-	                  TimeUTC,Content,UsrCod,NoticeStatus,
+	                  TimeUTC,Content,UsrCod,Status,
 	                  ICanEditNotices);
 	}
 
@@ -475,7 +475,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
-                             Not_Status_t NoticeStatus,
+                             Not_Status_t Status,
                              bool ICanEditNotices)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -510,7 +510,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:%upx;\">",
-	    ContainerClass[NoticeStatus],
+	    ContainerClass[Status],
 	    Not_ContainerWidth[TypeNoticesListing]);
 
    /***** Write the date in the top part of the yellow note *****/
@@ -533,8 +533,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 		  Txt_Remove);
 	 Act_FormEnd ();
 
-	 /* Put form to change the state of the notice */
-         switch (NoticeStatus)
+	 /* Put form to change the status of the notice */
+         switch (Status)
            {
             case Not_ACTIVE_NOTICE:
                Act_FormStart (ActHidNot);
@@ -567,7 +567,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    	}
       else	// Don't put forms
 	 /* Status of the notice */
-         switch (NoticeStatus)
+         switch (Status)
            {
             case Not_ACTIVE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
@@ -597,13 +597,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /* Write the date */
    UniqueId++;
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            DateClass[NoticeStatus]);
+            DateClass[Status]);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,DateClass[NoticeStatus]);
+      Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status]);
      }
    fprintf (Gbl.F.Out,"<span id=\"notice_date_%u\"></span>",
             UniqueId);
@@ -620,7 +620,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** Write the content of the notice *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s",
-            TextClass[NoticeStatus],Content);
+            TextClass[Status],Content);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -642,7 +642,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** Write the author *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            AuthorClass[NoticeStatus]);
+            AuthorClass[Status]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat)) // Get from the database the data of the autor
@@ -701,7 +701,7 @@ void Not_GetNotifNotice (char *SummaryStr,char **ContentStr,long NotCod,unsigned
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned *NumNotif)
+unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -715,7 +715,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices"
                         " WHERE Status='%u'",
-                        NoticeStatus);
+                        Status);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
@@ -727,7 +727,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " AND courses.CrsCod=notices.CrsCod"
                         " AND notices.Status='%u'",
                   Gbl.CurrentCty.Cty.CtyCod,
-                  NoticeStatus);
+                  Status);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
@@ -738,7 +738,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " AND courses.CrsCod=notices.CrsCod"
                         " AND notices.Status='%u'",
                   Gbl.CurrentIns.Ins.InsCod,
-                  NoticeStatus);
+                  Status);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
@@ -748,7 +748,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " AND courses.CrsCod=notices.CrsCod"
                         " AND notices.Status='%u'",
                   Gbl.CurrentCtr.Ctr.CtrCod,
-                  NoticeStatus);
+                  Status);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
@@ -757,7 +757,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " AND courses.CrsCod=notices.CrsCod"
                         " AND notices.Status='%u'",
                   Gbl.CurrentDeg.Deg.DegCod,
-                  NoticeStatus);
+                  Status);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
@@ -765,7 +765,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t NoticeStatus,unsigned
                         " WHERE CrsCod='%ld'"
                         " AND Status='%u'",
                   Gbl.CurrentCrs.Crs.CrsCod,
-                  NoticeStatus);
+                  Status);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");

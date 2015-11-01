@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1107 actions in one CGI:
+1109 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -1012,281 +1012,283 @@ Messages:
 	842. ActMaiStd			Send an e-mail to students
 	843. ActWriAnn			Show form to create a new global announcement
 	844. ActRcvAnn			Receive and create a new global announcement
-	845. ActRemAnn			Remove global announcement
-	846. ActShoNot			Show (expand) a notice
-	847. ActWriNot			Write a new notice
-	848. ActRcvNot			Receive and create a new notice
-	849. ActHidNot			Hide a notice that was active
-	850. ActRevNot			Reveal a notice that was hidden
-	851. ActRemNot			Remove a notice
-	852. ActSeeNewNtf		Show my recent notifications (link in top heading)
-        853. ActMrkNtfSee		Mark all my notifications as seen
-	854. ActSeeForCrsUsr		Show top level of forum of users of the course
-	855. ActSeeForCrsTch		Show top level of forum of teachers of the course
-	856. ActSeeForDegUsr		Show top level of forum of users of the degree
-	857. ActSeeForDegTch		Show top level of forum of teachers of the degree
-	858. ActSeeForCtrUsr		Show top level of forum of users of the centre
-	859. ActSeeForCtrTch		Show top level of forum of teachers of the centre
-	860. ActSeeForInsUsr		Show top level of forum of users of the institution
-	861. ActSeeForInsTch		Show top level of forum of teachers of the institution
-	862. ActSeeForGenUsr		Show top level of forum of users general
-	863. ActSeeForGenTch		Show top level of forum of teachers general
-	864. ActSeeForSWAUsr		Show top level of forum of users of the platform
-	865. ActSeeForSWATch		Show top level of forum of teachers of the platform
-	866. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
-	867. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
-	868. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
-	869. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
-	870. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
-	871. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
-	872. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
-	873. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
-	874. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
-	875. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
-	876. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
-	877. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
-	878. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
-	879. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
-	880. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
-	881. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
-	882. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
-	883. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
-	884. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
-	885. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
-	886. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
-	887. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
-	888. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
-	889. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
-	890. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
-	891. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
-	892. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
-	893. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
-	894. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
-	895. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
-	896. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
-	897. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
-	898. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
-	899. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
-	900. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
-	901. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
-	902. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
-	903. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
-	904. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
-	905. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
-	906. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
-	907. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
-	908. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
-	909. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
-	910. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
-	911. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
-	912. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
-	913. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
-	914. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
-	915. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
-	916. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
-	917. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
-	918. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
-	919. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
-	920. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
-	921. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
-	922. ActDelThrForGenUsr		Remove a thread of forum of users general
-	923. ActDelThrForGenTch		Remove a thread of forum of teachers general
-	924. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
-	925. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
-	926. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
-	927. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
-	928. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
-	929. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
-	930. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
-	931. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
-	932. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
-	933. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
-	934. ActCutThrForGenUsr		Cut a thread of forum of users general
-	935. ActCutThrForGenTch		Cut a thread of forum of teachers general
-	936. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-	937. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-	938. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-	939. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-	940. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-	941. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-	942. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-	943. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-	944. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
-	945. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
-	946. ActPasThrForGenUsr		Paste a thread of forum of users general
-	947. ActPasThrForGenTch		Paste a thread of forum of teachers general
-	948. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
-	949. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
-	950. ActDelPstForCrsUsr		Remove a message of forum of users of the course
-	951. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
-	952. ActDelPstForDegUsr		Remove a message of forum of users of the degree
-	953. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
-	954. ActDelPstForCtrUsr		Remove a message of forum of users of centre
-	955. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
-	956. ActDelPstForInsUsr		Remove a message of forum of users of the institution
-	957. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
-	958. ActDelPstForGenUsr		Remove a message of forum of users general
-	959. ActDelPstForGenTch		Remove a message of forum of teachers general
-	960. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
-	961. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
-	962. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
-	963. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
-	964. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
-	965. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
-	966. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
-	967. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
-	968. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
-	969. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
-	970. ActEnbPstForGenUsr		Enable a message of forum of users general
-	971. ActEnbPstForGenTch		Enable a message of forum of teachers general
-	972. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
-	973. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
-	974. ActDisPstForCrsUsr		Disable a message of forum of users of the course
-	975. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
-	976. ActDisPstForDegUsr		Disable a message of forum of users of the degree
-	977. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
-	978. ActDisPstForCtrUsr		Disable a message of forum of users of centre
-	979. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
-	980. ActDisPstForInsUsr		Disable a message of forum of users of the institution
-	981. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
-	982. ActDisPstForGenUsr		Disable a message of forum of users general
-	983. ActDisPstForGenTch		Disable a message of forum of teachers general
-	984. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
-	985. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
-	986. ActRcvMsgUsr		Sent/Receive a message of a user
-	987. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
-	988. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
-	989. ActDelAllSntMsg		Remove todos the messages sent to other users
-	990. ActDelAllRcvMsg		Remove todos the messages received from other users
-	991. ActDelSntMsg		Remove a message sent to other users
-	992. ActDelRcvMsg		Remove a message received from other user
-	993. ActExpSntMsg		See (expand) sent message
-	994. ActExpRcvMsg		See (expand) received message
-	995. ActConSntMsg		Hide (contract) sent message
-	996. ActConRcvMsg		Hide (contract) received message
-	997. ActLstBanUsr		List banned users
-	998. ActBanUsrMsg		Ban the sender of a message when showing received messages
-	999. ActUnbUsrMsg		Unban the sender of a message when showing received messages
-       1000. ActUnbUsrLst		Unban a user when listing banned users
-       1001. ActCht			Enter in a chat room to chat
+	845. ActHidAnn			Hide a global announcement that was active
+	846. ActRevAnn			Reveal a global announcement that was hidden
+	847. ActRemAnn			Remove global announcement
+	848. ActShoNot			Show (expand) a notice
+	849. ActWriNot			Write a new notice
+	850. ActRcvNot			Receive and create a new notice
+	851. ActHidNot			Hide a notice that was active
+	852. ActRevNot			Reveal a notice that was hidden
+	853. ActRemNot			Remove a notice
+	854. ActSeeNewNtf		Show my recent notifications (link in top heading)
+        855. ActMrkNtfSee		Mark all my notifications as seen
+	856. ActSeeForCrsUsr		Show top level of forum of users of the course
+	857. ActSeeForCrsTch		Show top level of forum of teachers of the course
+	858. ActSeeForDegUsr		Show top level of forum of users of the degree
+	859. ActSeeForDegTch		Show top level of forum of teachers of the degree
+	860. ActSeeForCtrUsr		Show top level of forum of users of the centre
+	861. ActSeeForCtrTch		Show top level of forum of teachers of the centre
+	862. ActSeeForInsUsr		Show top level of forum of users of the institution
+	863. ActSeeForInsTch		Show top level of forum of teachers of the institution
+	864. ActSeeForGenUsr		Show top level of forum of users general
+	865. ActSeeForGenTch		Show top level of forum of teachers general
+	866. ActSeeForSWAUsr		Show top level of forum of users of the platform
+	867. ActSeeForSWATch		Show top level of forum of teachers of the platform
+	868. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
+	869. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
+	870. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
+	871. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
+	872. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
+	873. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
+	874. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
+	875. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
+	876. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
+	877. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
+	878. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
+	879. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
+	880. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
+	881. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
+	882. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
+	883. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
+	884. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
+	885. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
+	886. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
+	887. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
+	888. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
+	889. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
+	890. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
+	891. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
+	892. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
+	893. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
+	894. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
+	895. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
+	896. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
+	897. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
+	898. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
+	899. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
+	900. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
+	901. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
+	902. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
+	903. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
+	904. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
+	905. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
+	906. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
+	907. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
+	908. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
+	909. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
+	910. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
+	911. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
+	912. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
+	913. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
+	914. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
+	915. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
+	916. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
+	917. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
+	918. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
+	919. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
+	920. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
+	921. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
+	922. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
+	923. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
+	924. ActDelThrForGenUsr		Remove a thread of forum of users general
+	925. ActDelThrForGenTch		Remove a thread of forum of teachers general
+	926. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
+	927. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
+	928. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
+	929. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
+	930. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
+	931. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
+	932. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
+	933. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
+	934. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
+	935. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
+	936. ActCutThrForGenUsr		Cut a thread of forum of users general
+	937. ActCutThrForGenTch		Cut a thread of forum of teachers general
+	938. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+	939. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+	940. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+	941. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+	942. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+	943. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+	944. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+	945. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+	946. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+	947. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
+	948. ActPasThrForGenUsr		Paste a thread of forum of users general
+	949. ActPasThrForGenTch		Paste a thread of forum of teachers general
+	950. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
+	951. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
+	952. ActDelPstForCrsUsr		Remove a message of forum of users of the course
+	953. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
+	954. ActDelPstForDegUsr		Remove a message of forum of users of the degree
+	955. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
+	956. ActDelPstForCtrUsr		Remove a message of forum of users of centre
+	957. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
+	958. ActDelPstForInsUsr		Remove a message of forum of users of the institution
+	959. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
+	960. ActDelPstForGenUsr		Remove a message of forum of users general
+	961. ActDelPstForGenTch		Remove a message of forum of teachers general
+	962. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
+	963. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
+	964. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
+	965. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
+	966. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
+	967. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
+	968. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
+	969. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
+	970. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
+	971. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
+	972. ActEnbPstForGenUsr		Enable a message of forum of users general
+	973. ActEnbPstForGenTch		Enable a message of forum of teachers general
+	974. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
+	975. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
+	976. ActDisPstForCrsUsr		Disable a message of forum of users of the course
+	977. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
+	978. ActDisPstForDegUsr		Disable a message of forum of users of the degree
+	979. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
+	980. ActDisPstForCtrUsr		Disable a message of forum of users of centre
+	981. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
+	982. ActDisPstForInsUsr		Disable a message of forum of users of the institution
+	983. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
+	984. ActDisPstForGenUsr		Disable a message of forum of users general
+	985. ActDisPstForGenTch		Disable a message of forum of teachers general
+	986. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
+	987. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
+	988. ActRcvMsgUsr		Sent/Receive a message of a user
+	989. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
+	990. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
+	991. ActDelAllSntMsg		Remove todos the messages sent to other users
+	992. ActDelAllRcvMsg		Remove todos the messages received from other users
+	993. ActDelSntMsg		Remove a message sent to other users
+	994. ActDelRcvMsg		Remove a message received from other user
+	995. ActExpSntMsg		See (expand) sent message
+	996. ActExpRcvMsg		See (expand) received message
+	997. ActConSntMsg		Hide (contract) sent message
+	998. ActConRcvMsg		Hide (contract) received message
+	999. ActLstBanUsr		List banned users
+       1000. ActBanUsrMsg		Ban the sender of a message when showing received messages
+       1001. ActUnbUsrMsg		Unban the sender of a message when showing received messages
+       1002. ActUnbUsrLst		Unban a user when listing banned users
+       1003. ActCht			Enter in a chat room to chat
 Statistics:
-       1002. ActSeeAllSvy		List all surveys in pages
-       1003. ActReqUseGbl		Request showing use of the platform
-       1004. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
-       1005. ActReqStaCrs		Request statistics of courses
-       1006. ActReqAccGbl		Request query of clicks to the complete platform
+       1004. ActSeeAllSvy		List all surveys in pages
+       1005. ActReqUseGbl		Request showing use of the platform
+       1006. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
+       1007. ActReqStaCrs		Request statistics of courses
+       1008. ActReqAccGbl		Request query of clicks to the complete platform
 
-       1007. ActSeeOneSvy		Show one survey
-       1008. ActAnsSvy			Answer a survey
-       1009. ActFrmNewSvy		Form to create a new survey
-       1010. ActEdiOneSvy		Edit one survey
-       1011. ActNewSvy			Create new survey
-       1012. ActChgSvy			Modify data of an existing survey
-       1013. ActReqRemSvy		Request the removal of a survey
-       1014. ActRemSvy			Remove survey
-       1015. ActReqRstSvy		Request the reset of answers of a survey
-       1016. ActRstSvy			Reset answers of survey
-       1017. ActHidSvy			Hide survey
-       1018. ActShoSvy			Show survey
-       1019. ActEdiOneSvyQst		Edit a new question for a survey
-       1020. ActRcvSvyQst		Receive a question of a survey
-       1021. ActRemSvyQst		Remove a question of a survey
-       1022. ActSeeUseGbl		Show use of the platform
-       1023. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1024. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1025. ActSeeAccGbl		Query clicks to the complete platform
-       1026. ActReqAccCrs		Request query of clicks in the course
-       1027. ActSeeAccCrs		Query clicks to current course
-       1028. ActSeeAllStaCrs		Show statistics of courses
+       1009. ActSeeOneSvy		Show one survey
+       1010. ActAnsSvy			Answer a survey
+       1011. ActFrmNewSvy		Form to create a new survey
+       1012. ActEdiOneSvy		Edit one survey
+       1013. ActNewSvy			Create new survey
+       1014. ActChgSvy			Modify data of an existing survey
+       1015. ActReqRemSvy		Request the removal of a survey
+       1016. ActRemSvy			Remove survey
+       1017. ActReqRstSvy		Request the reset of answers of a survey
+       1018. ActRstSvy			Reset answers of survey
+       1019. ActHidSvy			Hide survey
+       1020. ActShoSvy			Show survey
+       1021. ActEdiOneSvyQst		Edit a new question for a survey
+       1022. ActRcvSvyQst		Receive a question of a survey
+       1023. ActRemSvyQst		Remove a question of a survey
+       1024. ActSeeUseGbl		Show use of the platform
+       1025. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1026. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1027. ActSeeAccGbl		Query clicks to the complete platform
+       1028. ActReqAccCrs		Request query of clicks in the course
+       1029. ActSeeAccCrs		Query clicks to current course
+       1030. ActSeeAllStaCrs		Show statistics of courses
 Profile:
-       1029. ActFrmLogIn		Show form to log in
-       1030. ActMyCrs			Select one of my courses
-       1031. ActSeeMyTimTbl		Show the timetable of all courses of the logged user
-       1032. ActFrmUsrAcc		Show form to the creation or change of user's account
-       1033. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1034. ActEdiPrf			Show forms to edit preferences
-       1035. ActAdmBrf			Show the briefcase of private archives
-       1036. ActMFUAct			Show most frequently used actions
+       1031. ActFrmLogIn		Show form to log in
+       1032. ActMyCrs			Select one of my courses
+       1033. ActSeeMyTimTbl		Show the timetable of all courses of the logged user
+       1034. ActFrmUsrAcc		Show form to the creation or change of user's account
+       1035. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1036. ActEdiPrf			Show forms to edit preferences
+       1037. ActAdmBrf			Show the briefcase of private archives
+       1038. ActMFUAct			Show most frequently used actions
 
-       1037. ActAutUsrInt		Authentify user internally (directly from the platform)
-       1038. ActAutUsrExt		Authentify user externally (remotely from an external site)
-       1039. ActAutUsrChgLan		Change language to my language just after authentication
-       1040. ActLogOut			Close session
-       1041. ActAnnSee			Mark announcement as seen
+       1039. ActAutUsrInt		Authentify user internally (directly from the platform)
+       1040. ActAutUsrExt		Authentify user externally (remotely from an external site)
+       1041. ActAutUsrChgLan		Change language to my language just after authentication
+       1042. ActLogOut			Close session
+       1043. ActAnnSee			Mark announcement as seen
 
-       1042. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1043. ActSndNewPwd		Send a new password via e-mail
-       1044. ActChgMyRol		Change type of logged user
+       1044. ActReqSndNewPwd		Show form to send a new password via e-mail
+       1045. ActSndNewPwd		Send a new password via e-mail
+       1046. ActChgMyRol		Change type of logged user
 
-       1045. ActCreUsrAcc		Create new user account
-       1046. ActRemIDMe			Remove one of my user's IDs
-       1047. ActNewIDMe			Create a new user's ID for me
-       1048. ActRemOldNic		Remove one of my old nicknames
-       1049. ActChgNic			Change my nickname
-       1050. ActRemOldMai		Remove one of my old e-mails
-       1051. ActChgMai			Change my e-mail address
-       1052. ActCnfMai			Confirm e-mail address
-       1053. ActFrmChgMyPwd		Show form to the change of the password
-       1054. ActChgPwd			Change the password
-       1055. ActReqRemMyAcc		Request the removal of my account
-       1056. ActRemMyAcc		Remove my account
+       1047. ActCreUsrAcc		Create new user account
+       1048. ActRemIDMe			Remove one of my user's IDs
+       1049. ActNewIDMe			Create a new user's ID for me
+       1050. ActRemOldNic		Remove one of my old nicknames
+       1051. ActChgNic			Change my nickname
+       1052. ActRemOldMai		Remove one of my old e-mails
+       1053. ActChgMai			Change my e-mail address
+       1054. ActCnfMai			Confirm e-mail address
+       1055. ActFrmChgMyPwd		Show form to the change of the password
+       1056. ActChgPwd			Change the password
+       1057. ActReqRemMyAcc		Request the removal of my account
+       1058. ActRemMyAcc		Remove my account
 
-       1057. ActChgMyData		Update my personal data
+       1059. ActChgMyData		Update my personal data
 
-       1058. ActReqMyPho		Show form to send my photo
-       1059. ActDetMyPho		Receive my photo and detect faces on it
-       1060. ActUpdMyPho		Update my photo
-       1061. ActRemMyPho		Remove my photo
+       1060. ActReqMyPho		Show form to send my photo
+       1061. ActDetMyPho		Receive my photo and detect faces on it
+       1062. ActUpdMyPho		Update my photo
+       1063. ActRemMyPho		Remove my photo
 
-       1062. ActEdiPri			Edit my privacy
-       1063. ActChgPriPho		Change privacy of my photo
-       1064. ActChgPriPrf		Change privacy of my public profile
+       1064. ActEdiPri			Edit my privacy
+       1065. ActChgPriPho		Change privacy of my photo
+       1066. ActChgPriPrf		Change privacy of my public profile
 
-       1065. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1066. ActChgCtyMyIns		Change the country of my institution
-       1067. ActChgMyIns		Change my institution
-       1068. ActChgMyCtr		Change my centre
-       1069. ActChgMyDpt		Change my department
-       1070. ActChgMyOff		Change my office
-       1071. ActChgMyOffPho		Change my office phone
+       1067. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1068. ActChgCtyMyIns		Change the country of my institution
+       1069. ActChgMyIns		Change my institution
+       1070. ActChgMyCtr		Change my centre
+       1071. ActChgMyDpt		Change my department
+       1072. ActChgMyOff		Change my office
+       1073. ActChgMyOffPho		Change my office phone
 
-       1072. ActReqEdiMyNet		Request the edition of my social networks
-       1073. ActChgMyNet		Change my web and social networks
+       1074. ActReqEdiMyNet		Request the edition of my social networks
+       1075. ActChgMyNet		Change my web and social networks
 
-       1074. ActChgLay			Change layout
-       1075. ActChgThe			Change theme
-       1076. ActReqChgLan		Ask if change language
-       1077. ActChgLan			Change language
-       1078. ActChgCol			Change side columns
-       1079. ActHidLftCol		Hide left side column
-       1080. ActHidRgtCol		Hide right side column
-       1081. ActShoLftCol		Show left side column
-       1082. ActShoRgtCol		Show right side column
-       1083. ActChgIco			Change icon set
-       1084. ActChgMnu			Change menu
-       1085. ActChgNtfPrf		Change whether to notify by e-mail new messages
-       1086. ActPrnUsrQR		Show my QR code ready to print
-       1087. ActPrnMyTimTbl		Show the timetable listo to impresión of all my courses
-       1088. ActEdiTut			Edit the timetable of tutorías
-       1089. ActChgTut			Modify the timetable of tutorías
-       1090. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1091. ActRemFilBrf		Remove a file of the briefcase
-       1092. ActRemFolBrf		Remove a folder empty of the briefcase
-       1093. ActCopBrf			Set source of copy in the briefcase
-       1094. ActPasBrf			Paste a folder or file in the briefcase
-       1095. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1096. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1097. ActCreFolBrf		Create a new folder in the briefcase
-       1098. ActCreLnkBrf		Create a new link in the briefcase
-       1099. ActRenFolBrf		Rename a folder of the briefcase
-       1100. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1101. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1102. ActExpBrf			Expand a folder in briefcase
-       1103. ActConBrf			Contract a folder in briefcase
-       1104. ActZIPBrf			Compress a folder in briefcase
-       1105. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1106. ActChgDatBrf		Change metadata of a file in the briefcase
-       1107. ActDowBrf			Download a file in the briefcase
+       1076. ActChgLay			Change layout
+       1077. ActChgThe			Change theme
+       1078. ActReqChgLan		Ask if change language
+       1079. ActChgLan			Change language
+       1080. ActChgCol			Change side columns
+       1081. ActHidLftCol		Hide left side column
+       1082. ActHidRgtCol		Hide right side column
+       1083. ActShoLftCol		Show left side column
+       1084. ActShoRgtCol		Show right side column
+       1085. ActChgIco			Change icon set
+       1086. ActChgMnu			Change menu
+       1087. ActChgNtfPrf		Change whether to notify by e-mail new messages
+       1088. ActPrnUsrQR		Show my QR code ready to print
+       1089. ActPrnMyTimTbl		Show the timetable listo to impresión of all my courses
+       1090. ActEdiTut			Edit the timetable of tutorías
+       1091. ActChgTut			Modify the timetable of tutorías
+       1092. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1093. ActRemFilBrf		Remove a file of the briefcase
+       1094. ActRemFolBrf		Remove a folder empty of the briefcase
+       1095. ActCopBrf			Set source of copy in the briefcase
+       1096. ActPasBrf			Paste a folder or file in the briefcase
+       1097. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1098. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1099. ActCreFolBrf		Create a new folder in the briefcase
+       1100. ActCreLnkBrf		Create a new link in the briefcase
+       1101. ActRenFolBrf		Rename a folder of the briefcase
+       1102. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1103. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1104. ActExpBrf			Expand a folder in briefcase
+       1105. ActConBrf			Contract a folder in briefcase
+       1106. ActZIPBrf			Compress a folder in briefcase
+       1107. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1108. ActChgDatBrf		Change metadata of a file in the briefcase
+       1109. ActDowBrf			Download a file in the briefcase
 */
 
 const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
@@ -2450,6 +2452,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions not in menu:
    /* ActWriAnn		*/{1237,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowFormAnnouncement	,NULL},
    /* ActRcvAnn		*/{1238,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ReceiveAnnouncement	,NULL},
+   /* ActHidAnn		*/{1470,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_HideActiveAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
+   /* ActRevAnn		*/{1471,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_RevealHiddenAnnouncement,Ann_ShowAllAnnouncements	,NULL},
    /* ActRemAnn		*/{1236,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_RemoveAnnouncement		,NULL},
 
    /* ActShoNot		*/{1164,-1,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_ShowANotice		,Not_ListNotices		,NULL},
@@ -4235,6 +4239,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgPwdOth,		// #1467
 	ActChgPwdStd,		// #1468
 	ActChgPwdTch,		// #1469
+	ActHidAnn,		// #1470
+	ActRevAnn,		// #1471
 	};
 
 /*****************************************************************************/

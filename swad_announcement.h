@@ -35,6 +35,13 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Ann_NUM_STATUS 2
+typedef enum
+  {
+   Ann_ACTIVE_ANNOUNCEMENT   = 0,
+   Ann_OBSOLETE_ANNOUNCEMENT = 1,
+  } Ann_Status_t;	// Don't change these numbers because they are used in database
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -44,6 +51,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void);
 
 void Ann_ShowFormAnnouncement (void);
 void Ann_ReceiveAnnouncement (void);
+void Ann_HideActiveAnnouncement (void);
+void Ann_RevealHiddenAnnouncement (void);
 void Ann_RemoveAnnouncement (void);
 void Ann_MarkAnnouncementAsSeen (void);
 void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod);

@@ -109,12 +109,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.33.1 (2015/11/01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.34 (2015/11/01)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.33.1:  Nov 01, 2015	New layout of announcements. (186755 lines)
+        Version 15.34:    Nov 01, 2015	Global announcements can be hidden. (186896 lines)
+					3 changes necessary in database:
+ALTER TABLE announcements ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER AnnCod,ADD INDEX (Status);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1470','es','N','Ocultar anuncio global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1471','es','N','Mostrar anuncio global');
+
+        Version 15.33.1:  Nov 01, 2015	New layout of global announcements. (186755 lines)
         Version 15.33:    Nov 01, 2015	New layout of notices. (186708 lines)
         Version 15.32.2:  Oct 31, 2015	Fixed bug in form submit. (186618 lines)
         Version 15.32.1:  Oct 31, 2015	Dates in holidays are shown in big-endian.
