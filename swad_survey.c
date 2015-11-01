@@ -1572,7 +1572,9 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_WriteSelectorRoles (Svy.Roles);
+   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
+                           1 << Rol_TEACHER,
+                           Svy.Roles);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

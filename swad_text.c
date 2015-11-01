@@ -2002,27 +2002,6 @@ const char *Txt_All =
 	"Tudo";
 #endif
 
-const char *Txt_All_announcements =
-#if   L==0
-	"Tots els anuncis";
-#elif L==1
-	"Alle Bekanntmachungen";
-#elif L==2
-	"All announcements";
-#elif L==3
-	"Todos los anuncios";
-#elif L==4
-	"Tous les annonces";
-#elif L==5
-	"Todos los anuncios";	// Okoteve traducción
-#elif L==6
-	"Tutti i annunci";
-#elif L==7
-	"Wszystkie og&lstrok;oszenia";
-#elif L==8
-	"Todos os an&uacute;ncios";
-#endif
-
 const char *Txt_all_degrees =
 #if   L==0
 	"Totes les titulacions";
@@ -2336,6 +2315,27 @@ const char *Txt_and_X_other_recipients =	// Warning: it is very important to inc
 	"...i %u innych odbiorc&oacute;w";
 #elif L==8
 	"...e %u outros destinat&aacute;rios";
+#endif
+
+const char *Txt_Announcements =
+#if   L==0
+	"Anuncis";
+#elif L==1
+	"Bekanntmachungen";
+#elif L==2
+	"Announcements";
+#elif L==3
+	"Anuncios";
+#elif L==4
+	"Annonces";
+#elif L==5
+	"Anuncios";	// Okoteve traducción
+#elif L==6
+	"Annunci";
+#elif L==7
+	"Og&lstrok;oszenia";
+#elif L==8
+	"An&uacute;ncios";
 #endif
 
 const char *Txt_Announcement_of_exam_removed =

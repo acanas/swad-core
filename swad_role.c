@@ -348,22 +348,24 @@ void Rol_ChangeMyRole (void)
 /********************* Write selector of users' roles ************************/
 /*****************************************************************************/
 
-void Rol_WriteSelectorRoles (unsigned Roles)
+void Rol_WriteSelectorRoles (unsigned RolesAllowed,
+                             unsigned RolesSelected)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
-   for (Role = Rol_STUDENT;
-        Role <= Rol_TEACHER;
+   for (Role = Rol_UNKNOWN;
+        Role <= Rol_SYS_ADM;
         Role++)
-     {
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
-               (unsigned) Role);
-      if ((Roles & (1 << Role)))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s<br />",
-               Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
-     }
+      if ((RolesAllowed & (1 << Role)))
+	{
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
+		  (unsigned) Role);
+	 if ((RolesSelected & (1 << Role)))
+	    fprintf (Gbl.F.Out," checked=\"checked\"");
+	 fprintf (Gbl.F.Out," />%s<br />",
+		  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+        }
   }
 
 /*****************************************************************************/

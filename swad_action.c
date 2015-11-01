@@ -2440,7 +2440,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabMsg ******************************************************************
    // Actions in menu:
    /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,"bell"			},
-   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note"			},
+   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note"			},
    /* ActSeeNot		*/{ 762, 2,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListNotices		,"note"			},
    /* ActSeeFor		*/{  95, 3,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum"		},
    /* ActSeeChtRms	*/{  51, 4,TabMsg,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat"			},

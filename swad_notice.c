@@ -619,12 +619,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    UniqueId,(long) TimeUTC);
 
    /***** Write the content of the notice *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s",
-            TextClass[Status],Content);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">%s</div>",
+	       Content);
+
       /* Form to view full notice */
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActShoNot);
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme]);
@@ -638,7 +639,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   else
+      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+	       TextClass[Status],Content);
 
    /***** Write the author *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",

@@ -359,8 +359,16 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	overflow:hidden;
 	}
+.NOTICE_TEXT_BRIEF
+	{
+	clear:both;
+	font-size:12pt;
+	color:#204080;
+	overflow:hidden;
+	}
 .NOTICE_TEXT_ACTIVE
 	{
+	padding:10px 20px;
 	clear:both;
 	font-size:12pt;
 	color:#204080;
@@ -368,6 +376,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	}
 .NOTICE_TEXT_OBSOLETE
 	{
+	padding:10px 20px;
 	clear:both;
 	font-size:12pt;
 	color:#4070A0;

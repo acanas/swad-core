@@ -73,7 +73,7 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 void Ann_ShowAllAnnouncements (void)
   {
    extern const char *Txt_New_announcement;
-   extern const char *Txt_All_announcements;
+   extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -97,14 +97,32 @@ void Ann_ShowAllAnnouncements (void)
      }
 
    /***** Get announcements from database *****/
-   sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
-	          " FROM announcements"
-                  " ORDER BY AnnCod DESC");
+   if (ICanEditAnnouncements)
+      /* Select all announcements */
+      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+		     " ORDER BY AnnCod DESC");
+   else if (Gbl.Usrs.Me.Logged)
+      /* Select only active announcements I can see */
+      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+                     " WHERE Status='%u' AND (Roles&%u)<>0 "
+		     " ORDER BY AnnCod DESC",
+            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+            Gbl.Usrs.Me.UsrDat.Roles);	// All my roles in different courses
+   else // No user logged
+      /* Select only active announcements for unknown users */
+      sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
+		     " FROM announcements"
+                     " WHERE Status='%u' AND (Roles&%u)<>0 "
+		     " ORDER BY AnnCod DESC",
+            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
+            (unsigned) (1 << Rol_UNKNOWN));
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
    if (NumAnnouncements)
       /***** Start frame *****/
-      Lay_StartRoundFrame ("550px",Txt_All_announcements);
+      Lay_StartRoundFrame ("550px",Txt_Announcements);
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
 
@@ -170,7 +188,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Select announcements not seen *****/
    // Roles == 24 ==> Teachers and students
    sprintf (Query,"SELECT AnnCod,Subject,Content FROM announcements"
-                  " WHERE (Roles&%u)<>0 AND Status='%u'"
+                  " WHERE Status='%u' AND (Roles&%u)<>0 "
                   " AND AnnCod NOT IN"
                   " (SELECT AnnCod FROM ann_seen WHERE UsrCod='%ld')"
                   " ORDER BY AnnCod DESC",	// Newest first
@@ -249,7 +267,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       "NOTICE_AUTHOR_OBSOLETE",		// Ann_OBSOLETE_ANNOUNCEMENT
      };
    Rol_Role_t Role;
-   bool RolesSelected;
+   bool SomeRolesAreSelected;
 
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:500px;\">",
@@ -320,15 +338,14 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /* Users' roles who can view this announcement */
       fprintf (Gbl.F.Out,"<p class=\"%s\">%s:",
 	       UsersClass[Status],Txt_Users);
-      for (Role = Rol_STUDENT, RolesSelected = false;
+      for (Role = Rol_UNKNOWN, SomeRolesAreSelected = false;
 	   Role <= Rol_TEACHER;
 	   Role++)
 	 if (Roles & (1 << Role))
 	   {
-	    if (RolesSelected)
+	    if (SomeRolesAreSelected)
 	       fprintf (Gbl.F.Out,",");
-	    else
-	       RolesSelected = true;
+	    SomeRolesAreSelected = true;
 	    fprintf (Gbl.F.Out," %s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	   }
       fprintf (Gbl.F.Out,"</p>");
@@ -433,7 +450,13 @@ void Ann_ShowFormAnnouncement (void)
                       "<td class=\"DAT LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
+   Rol_WriteSelectorRoles (1 << Rol_UNKNOWN |
+                           1 << Rol__GUEST_ |
+                           1 << Rol_STUDENT |
+                           1 << Rol_TEACHER,
+	                   1 << Rol_UNKNOWN |
+                           1 << Rol__GUEST_ |
+                           1 << Rol_STUDENT |
                            1 << Rol_TEACHER);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

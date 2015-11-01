@@ -294,9 +294,6 @@ static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab)
 	         Gbl.CurrentCrs.Crs.CrsCod <= 0);
       case TabCrs:
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case TabMsg:	// TODO: Show this tab in any case when Announcements will be available for all
-	 return (Gbl.Usrs.Me.Logged ||
-	         Gbl.CurrentCrs.Crs.CrsCod > 0);
       default:
 	 return true;
      }
