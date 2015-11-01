@@ -57,9 +57,9 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Ann_ListAnnouncements (void);
-static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Content,
-                                  unsigned Roles,bool ShowAllAnnouncements);
+static void Ann_DrawAnAnnouncement (long AnnCod,const char *Subject,const char *Content,
+                                    unsigned Roles,bool ShowAllAnnouncements,
+                                    bool ICanEditAnnouncements);
 static void Ann_PutHiddenParamAnnCod (long AnnCod);
 static long Ann_GetParamAnnCod (void);
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content);
@@ -71,25 +71,8 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 void Ann_ShowAllAnnouncements (void)
   {
    extern const char *Txt_New_announcement;
-
-   /***** Put link (form) to create a new announcement *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_PutContextualLink (ActWriAnn,NULL,"new",Txt_New_announcement);
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   /***** List announcements *****/
-   Ann_ListAnnouncements ();
-  }
-
-/*****************************************************************************/
-/************************** Show global announcements ************************/
-/*****************************************************************************/
-
-static void Ann_ListAnnouncements (void)
-  {
+   extern const char *Txt_All_announcements;
+   extern const char *Txt_No_announcements;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -99,11 +82,26 @@ static void Ann_ListAnnouncements (void)
    unsigned Roles;
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char Content[Cns_MAX_BYTES_TEXT+1];
+   bool ICanEditAnnouncements = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   /***** Select announcements *****/
+   /***** Put link (form) to create a new announcement *****/
+   if (ICanEditAnnouncements)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Act_PutContextualLink (ActWriAnn,NULL,"new",Txt_New_announcement);
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
+   /***** Get announcements from database *****/
    sprintf (Query,"SELECT AnnCod,Roles,Subject,Content FROM announcements"
                   " ORDER BY AnnCod DESC");
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
+
+   if (NumAnnouncements)
+      /***** Start frame *****/
+      Lay_StartRoundFrame ("550px",Txt_All_announcements);
+   else
+      Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
 
    /***** Show the announcements *****/
    for (NumAnn = 0;
@@ -130,8 +128,16 @@ static void Ann_ListAnnouncements (void)
       Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,50);
 
       /* Show the announcement */
-      Ann_ShowAnnouncement (AnnCod,Subject,Content,Roles,true);
+      Ann_DrawAnAnnouncement (AnnCod,Subject,Content,Roles,true,
+                              ICanEditAnnouncements);
      }
+
+   /***** End frame *****/
+   if (NumAnnouncements)
+      Lay_EndRoundFrame ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -184,7 +190,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	 Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */
-	 Ann_ShowAnnouncement (AnnCod,Subject,Content,0,false);
+	 Ann_DrawAnAnnouncement (AnnCod,Subject,Content,0,false,false);
 	}
 
       fprintf (Gbl.F.Out,"</div>");
@@ -195,8 +201,9 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 /****************** Draw an announcement as a yellow note ********************/
 /*****************************************************************************/
 
-static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Content,
-                                  unsigned Roles,bool ShowAllAnnouncements)
+static void Ann_DrawAnAnnouncement (long AnnCod,const char *Subject,const char *Content,
+                                    unsigned Roles,bool ShowAllAnnouncements,
+                                    bool ICanEditAnnouncements)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Users;
@@ -209,6 +216,23 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_CONTAINER_ACTIVE\""
 	              " style=\"width:500px;\">");
+
+   if (ICanEditAnnouncements)
+     {
+      /* Form to remove announcement */
+      Act_FormStart (ActRemAnn);
+      Ann_PutHiddenParamAnnCod (AnnCod);
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+        	         "<input type=\"image\""
+	                 " src=\"%s/delon16x16.gif\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON16x16\" />"
+			 "</div>",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Remove,
+	       Txt_Remove);
+      Act_FormEnd ();
+     }
 
    /***** Write the content of the announcement *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_SUBJECT_ACTIVE\">%s</div>",
@@ -238,20 +262,6 @@ static void Ann_ShowAnnouncement (long AnnCod,const char *Subject,const char *Co
 	    fprintf (Gbl.F.Out," %s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	   }
       fprintf (Gbl.F.Out,"</p>");
-
-      /* Form to remove announcement */
-      Act_FormStart (ActRemAnn);
-      Ann_PutHiddenParamAnnCod (AnnCod);
-      Act_LinkFormSubmit (Txt_Remove,The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON16x16\" />"
-			 " %s</a>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Remove,
-	       Txt_Remove,
-	       Txt_Remove);
-      Act_FormEnd ();
      }
    else
      {

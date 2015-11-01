@@ -2002,6 +2002,27 @@ const char *Txt_All =
 	"Tudo";
 #endif
 
+const char *Txt_All_announcements =
+#if   L==0
+	"Tots els anuncis";
+#elif L==1
+	"Alle Bekanntmachungen";
+#elif L==2
+	"All announcements";
+#elif L==3
+	"Todos los anuncios";
+#elif L==4
+	"Tous les annonces";
+#elif L==5
+	"Todos los anuncios";	// Okoteve traducción
+#elif L==6
+	"Tutti i annunci";
+#elif L==7
+	"Wszystkie og&lstrok;oszenia";
+#elif L==8
+	"Todos os an&uacute;ncios";
+#endif
+
 const char *Txt_all_degrees =
 #if   L==0
 	"Totes les titulacions";
@@ -22923,6 +22944,27 @@ const char *Txt_No =
 	"No";
 #elif L==8
 	"N&atilde;o";
+#endif
+
+const char *Txt_No_announcements =
+#if   L==0
+	"No hay anuncis";
+#elif L==1
+	"Keine Bekanntmachungen";
+#elif L==2
+	"No announcements";
+#elif L==3
+	"No hay anuncios";
+#elif L==4
+	"Il n'y a pas d'annonces";
+#elif L==5
+	"No hay anuncios";	// Okoteve traducción
+#elif L==6
+	"Non ci sono annunci";
+#elif L==7
+	"Brak og&lstrok;oszenia";
+#elif L==8
+	"N&atilde;o h&aacute; an&uacute;ncios";
 #endif
 
 const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very important to include %s in the following sentences
