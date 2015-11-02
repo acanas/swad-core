@@ -335,8 +335,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\">"
-	              "<option value=\"0\">-</option>");
+   fprintf (Gbl.F.Out,"\">");
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)
@@ -355,8 +354,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\">"
-	              "<option value=\"0\" disabled=\"disabled\">-</option>");
+   fprintf (Gbl.F.Out,"\">");
    for (Month = 1;
 	Month <= 12;
 	Month++)
@@ -373,8 +371,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.FormId);
-   fprintf (Gbl.F.Out,"\">"
-	              "<option value=\"0\" disabled=\"disabled\">-</option>");
+   fprintf (Gbl.F.Out,"\">");
    for (Day = 1;
 	Day <= 31;
 	Day++)

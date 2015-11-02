@@ -37,9 +37,9 @@ var countClockConnected = 0;
 // Write a date in client local time
 function writeLocalDateFromUTC(id,TimeUTC) {
 	var d = new Date;
-        var Yea;
-        var Mon;
-        var Day;
+	var Yea;
+	var Mon;
+	var Day;
 	var StrMon;
 	var StrDay;
 
@@ -59,12 +59,12 @@ function writeLocalDateFromUTC(id,TimeUTC) {
 
 function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
 	var d = new Date;
-        var Yea;
-        var Mon;
-        var Day;
-        var Hou;
-        var Min;
-        var Sec;
+	var Yea;
+	var Mon;
+	var Day;
+	var Hou;
+	var Min;
+	var Sec;
 	var StrMon;
 	var StrDay;
 	var StrHou;
@@ -90,10 +90,10 @@ function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
 
 // Set local date-time form fields from UTC time
 function setLocalDateTimeFormFromUTC(id,TimeUTC) {
-	var FormYea = document.getElementById(id+'Year');
-	var FormMon = document.getElementById(id+'Month');
-	var FormDay = document.getElementById(id+'Day');
-	var FormHou = document.getElementById(id+'Hour');
+	var FormYea = document.getElementById(id+'Year'  );
+	var FormMon = document.getElementById(id+'Month' );
+	var FormDay = document.getElementById(id+'Day'   );
+	var FormHou = document.getElementById(id+'Hour'  );
 	var FormMin = document.getElementById(id+'Minute');
 	var FormSec = document.getElementById(id+'Second');
 	var d;
@@ -109,16 +109,13 @@ function setLocalDateTimeFormFromUTC(id,TimeUTC) {
 				FormYea.options[i].selected = true;
 				YearIsValid = true;
 			}
-		FormMon.disabled = false;
-		FormDay.disabled = false;
-		FormHou.disabled = false;
-		FormMin.disabled = false;
-		FormSec.disabled = false;
-		FormMon.options[d.getMonth()+1].selected = true;
-		FormDay.options[d.getDate()   ].selected = true;
-		FormHou.options[d.getHours()  ].selected = true;
-		FormMin.options[d.getMinutes()].selected = true;
-		FormSec.options[d.getSeconds()].selected = true;
+		if (YearIsValid) {
+			FormMon.options[d.getMonth()  ].selected = true;
+			FormDay.options[d.getDate()-1 ].selected = true;
+			FormHou.options[d.getHours()  ].selected = true;
+			FormMin.options[d.getMinutes()].selected = true;
+			FormSec.options[d.getSeconds()].selected = true;
+		}
 	}
 	
 	if (!YearIsValid) {
@@ -128,71 +125,23 @@ function setLocalDateTimeFormFromUTC(id,TimeUTC) {
 		FormHou.options[0].selected = true;
 		FormMin.options[0].selected = true;
 		FormSec.options[0].selected = true;
-
-		FormMon.disabled = true;
-		FormDay.disabled = true;
-		FormHou.disabled = true;
-		FormMin.disabled = true;
-		FormSec.disabled = true;
 	}
 }
 
 // Set UTC time from local date-time form fields 
 function setUTCFromLocalDateTimeForm(id) {
-	var FormYea = document.getElementById(id+'Year');
-	var FormMon = document.getElementById(id+'Month');
-	var FormDay = document.getElementById(id+'Day');
-	var FormHou = document.getElementById(id+'Hour');
-	var FormMin = document.getElementById(id+'Minute');
-	var FormSec = document.getElementById(id+'Second');
-	var FormTimeUTC = document.getElementById(id+'TimeUTC');
-	var d;
-	var Yea = FormYea.value;
-	var Mon;
-	var Day;
-	
-	if (Yea == 0) {
-		FormYea.options[0].selected = true;
-		FormMon.options[0].selected = true;
-		FormDay.options[0].selected = true;
-		FormHou.options[0].selected = true;
-		FormMin.options[0].selected = true;
-		FormSec.options[0].selected = true;
+	var d = new (Date);
 
-		FormMon.disabled = true;
-		FormDay.disabled = true;
-		FormHou.disabled = true;
-		FormMin.disabled = true;
-		FormSec.disabled = true;
+	// Important: set year first in order to work properly with leap years
+	d.setFullYear(document.getElementById(id+'Year'  ).value);
+	d.setMonth   (document.getElementById(id+'Month' ).value-1);
+	d.setDate    (document.getElementById(id+'Day'   ).value);
+	d.setHours   (document.getElementById(id+'Hour'  ).value);
+	d.setMinutes (document.getElementById(id+'Minute').value);
+	d.setSeconds (document.getElementById(id+'Second').value);
+	d.setMilliseconds(0);
 
-		FormTimeUTC.value = 0;
-	}
-	else {
-		FormMon.disabled = false;
-		FormDay.disabled = false;
-		FormHou.disabled = false;
-		FormMin.disabled = false;
-		FormSec.disabled = false;
-
-		Mon = FormMon.value;
-		if (Mon == 0)
-			Mon = 1;
-		Day = FormDay.value;
-		if (Day == 0)
-			Day = 1;
-
-		// Important: set year first in order to work properly with leap years
-		d = new (Date);
-		d.setFullYear(Yea);
-		d.setMonth   (Mon-1);
-		d.setDate    (Day);
-		d.setHours   (FormHou.value);
-		d.setMinutes (FormMin.value);
-		d.setSeconds (FormSec.value);
-		d.setMilliseconds(0);
-	
-		FormTimeUTC.value = d.getTime() / 1000;
-	}
+	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
 }
 
 // Set form param with time difference between UTC time and client local time, in minutes
@@ -220,33 +169,24 @@ function adjustDateForm (id) {
 	var Yea = FormYea.options[FormYea.selectedIndex].value;
 	var Days;
 
-	if (FormYea.selectedIndex > 0) {
-		if (FormMon.options[0].selected) {			// No month selected, set to january
-			FormMon.options[1].selected = true;
-			Days = 31;
-		}
-		else if (FormMon.options[2].selected)			// Adjust days of february
-			Days = ((((Yea % 4) == 0) && ((Yea % 100) != 0)) || ((Yea % 400) == 0)) ? 29 : 28;
-		else if (FormMon.options[ 4].selected ||
-			 FormMon.options[ 6].selected ||
-			 FormMon.options[ 9].selected ||
-			 FormMon.options[11].selected)
-			Days = 30;
-		else
-			Days = 31;
-	
-		if (FormDay.options[0].selected)			// No day selected, set to 1
-			FormDay.options[1].selected = true;
-		else if (FormDay.selectedIndex > Days)
-			FormDay.options[Days].selected = true;
-	
-		for (var i=FormDay.options.length; i<=Days ; i++) {	// Create new days
-			var x = String (i);
-			FormDay.options[i] = new Option(x,x);
-		}
-		for (var i=FormDay.options.length-1; i>Days; i--)	// Remove days
-			FormDay.options[i] = null;
+	if (FormMon.options[1].selected)			// February
+		Days = ((((Yea % 4) == 0) && ((Yea % 100) != 0)) || ((Yea % 400) == 0)) ? 29 : 28;
+	else if (FormMon.options[ 3].selected ||	// April
+			 FormMon.options[ 5].selected ||	// June
+			 FormMon.options[ 8].selected ||	// September
+			 FormMon.options[10].selected)		// November
+		Days = 30;
+	else
+		Days = 31;
+
+	if (FormDay.selectedIndex >= Days)
+		FormDay.options[Days-1].selected = true;			// Select last day in month
+
+	for (var i=FormDay.options.length; i<Days; i++) {		// Create new days at the end
+		FormDay.options[i] = new Option(String(i+1),i+1);
 	}
+	for (var i=FormDay.options.length-1; i>=Days; i--)		// Remove days from the end
+		FormDay.options[i] = null;
 }
 
 // Set a date range form to yesterday
@@ -277,11 +217,11 @@ function setDateRange(d) {
 			FormYea.options[i].selected = true;
 			break;
 		}
-	document.getElementById('StartMonth' ).options[Mon].selected = true;
-	document.getElementById('StartDay'   ).options[Day].selected = true;
-	document.getElementById('StartHour'  ).options[0  ].selected = true;
-	document.getElementById('StartMinute').options[0  ].selected = true;
-	document.getElementById('StartSecond').options[0  ].selected = true;
+	document.getElementById('StartMonth' ).options[Mon-1].selected = true;
+	document.getElementById('StartDay'   ).options[Day-1].selected = true;
+	document.getElementById('StartHour'  ).options[0    ].selected = true;
+	document.getElementById('StartMinute').options[0    ].selected = true;
+	document.getElementById('StartSecond').options[0    ].selected = true;
 	setUTCFromLocalDateTimeForm('Start');
 
 	FormYea = document.getElementById('EndYear');
@@ -290,11 +230,11 @@ function setDateRange(d) {
 			FormYea.options[i].selected = true;
 			break;
 		}
-	document.getElementById('EndMonth' ).options[Mon].selected = true;
-	document.getElementById('EndDay'   ).options[Day].selected = true;
-	document.getElementById('EndHour'  ).options[23 ].selected = true;
-	document.getElementById('EndMinute').options[59 ].selected = true;
-	document.getElementById('EndSecond').options[59 ].selected = true;
+	document.getElementById('EndMonth' ).options[Mon-1].selected = true;
+	document.getElementById('EndDay'   ).options[Day-1].selected = true;
+	document.getElementById('EndHour'  ).options[23   ].selected = true;
+	document.getElementById('EndMinute').options[59   ].selected = true;
+	document.getElementById('EndSecond').options[59   ].selected = true;
 	setUTCFromLocalDateTimeForm('End');
 }
 

@@ -540,7 +540,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
                                     const char *EncryptedPassword,
                                     long UsrCod)
   {
-   extern const char *Txt_The_new_password_is_too_trivial_;
+   extern const char *Txt_The_password_is_too_trivial_;
 
    /***** Check if password seems good by making fast checks *****/
    if (!Pwd_FastCheckIfPasswordSeemsGood (PlainPassword))
@@ -549,7 +549,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      strcpy (Gbl.Message,Txt_The_new_password_is_too_trivial_);
+      strcpy (Gbl.Message,Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -557,7 +557,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      strcpy (Gbl.Message,Txt_The_new_password_is_too_trivial_);
+      strcpy (Gbl.Message,Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -617,16 +617,16 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
 
 bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
   {
-   extern const char *Txt_The_new_password_must_be_at_least_X_characters;
-   extern const char *Txt_The_new_password_can_not_contain_spaces;
-   extern const char *Txt_The_new_password_can_not_consist_only_of_digits;
+   extern const char *Txt_The_password_must_be_at_least_X_characters;
+   extern const char *Txt_The_password_can_not_contain_spaces;
+   extern const char *Txt_The_password_can_not_consist_only_of_digits;
    unsigned LengthPassword = strlen (PlainPassword),i;
    bool ItsANumber;
 
    /***** Check length of password *****/
    if (LengthPassword < Pwd_MIN_LENGTH_PLAIN_PASSWORD)	// PlainPassword too short
      {
-      sprintf (Gbl.Message,Txt_The_new_password_must_be_at_least_X_characters,
+      sprintf (Gbl.Message,Txt_The_password_must_be_at_least_X_characters,
                Pwd_MIN_LENGTH_PLAIN_PASSWORD);
       return false;
      }
@@ -634,7 +634,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      strcpy (Gbl.Message,Txt_The_new_password_can_not_contain_spaces);
+      strcpy (Gbl.Message,Txt_The_password_can_not_contain_spaces);
       return false;
      }
 
@@ -646,7 +646,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      strcpy (Gbl.Message,Txt_The_new_password_can_not_consist_only_of_digits);
+      strcpy (Gbl.Message,Txt_The_password_can_not_consist_only_of_digits);
       return false;
      }
 

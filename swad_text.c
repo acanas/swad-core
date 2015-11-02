@@ -41439,108 +41439,6 @@ const char *Txt_The_new_image_is_X =	// Warning: it is very important to include
 	"The new image is <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_new_password_can_not_consist_only_of_digits =
-#if   L==0
-	"La contrase&ntilde;a nueva no puede estar formada"
-	" solo por d&iacute;gitos.";		// Necessita traduccio
-#elif L==1
-	"The new password can not consist"
-	" only of digits.";				// Need Übersetzung
-#elif L==2
-	"The new password can not consist"
-	" only of digits.";
-#elif L==3
-	"La contrase&ntilde;a nueva no puede estar formada"
-	" solo por d&iacute;gitos.";
-#elif L==4
-	"The new password can not consist"
-	" only of digits.";				// Besoin de traduction
-#elif L==5
-	"La contrase&ntilde;a nueva no puede estar formada"
-	" solo por d&iacute;gitos.";		// Okoteve traducción
-#elif L==6
-	"La nuova password non pu&ograve; consistere"
-	" solo di numeri.";
-#elif L==7
-	"The new password can not consist"
-	" only of digits.";				// Potrzebujesz tlumaczenie
-#elif L==8
-	"The new password can not consist"
-	" only of digits.";				// Necessita de tradução
-#endif
-
-const char *Txt_The_new_password_can_not_contain_spaces =
-#if   L==0
-	"La contrase&ntilde;a nueva no puede tener espacios.";	// Necessita traduccio
-#elif L==1
-	"The new password can not contain spaces.";		// Need Übersetzung
-#elif L==2
-	"The new password can not contain spaces.";
-#elif L==3
-	"La contrase&ntilde;a nueva no puede tener espacios.";
-#elif L==4
-	"The new password can not contain spaces.";		// Besoin de traduction
-#elif L==5
-	"La contrase&ntilde;a nueva no puede tener espacios.";	// Okoteve traducción
-#elif L==6
-	"La nuova password non pu&ograve; contenere spazi.";
-#elif L==7
-	"The new password can not contain spaces.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"The new password can not contain spaces.";		// Necessita de tradução
-#endif
-
-const char *Txt_The_new_password_is_too_trivial_ =
-#if   L==0
-	"La contrase&ntilde;a nueva es demasiado f&aacute;cil."
-	" Use otra m&aacute;s dif&iacute;cil de averiguar.";	// Necessita traduccio
-#elif L==1
-	"The new password is too trivial."
-	" Use other harder to guess.";				// Need Übersetzung
-#elif L==2
-	"The new password is too trivial."
-	" Use other harder to guess.";
-#elif L==3
-	"La contrase&ntilde;a nueva es demasiado f&aacute;cil."
-	" Use otra m&aacute;s dif&iacute;cil de averiguar.";
-#elif L==4
-	"The new password is too trivial."
-	" Use other harder to guess.";				// Besoin de traduction
-#elif L==5
-	"La contrase&ntilde;a nueva es demasiado f&aacute;cil."
-	" Use otra m&aacute;s dif&iacute;cil de averiguar.";	// Okoteve traducción
-#elif L==6
-	"La nuova password &egrave; troppo semplice."
-	" Utilizza un'altra pi&ugrave; difficile da individuare.";
-#elif L==7
-	"The new password is too trivial."
-	" Use other harder to guess.";				// Potrzebujesz tlumaczenie
-#elif L==8
-	"The new password is too trivial."
-	" Use other harder to guess.";				// Necessita de tradução
-#endif
-
-const char *Txt_The_new_password_must_be_at_least_X_characters =	// Warning: it is very important to include %u in the following sentences
-#if   L==0
-	"La contrase&ntilde;a nueva ha de tener al menos %u caracteres.";	// Necessita traduccio
-#elif L==1
-	"The new password must be at least %u characters.";			// Need Übersetzung
-#elif L==2
-	"The new password must be at least %u characters.";
-#elif L==3
-	"La contrase&ntilde;a nueva ha de tener al menos %u caracteres.";
-#elif L==4
-	"The new password must be at least %u characters.";			// Besoin de traduction
-#elif L==5
-	"La contrase&ntilde;a nueva ha de tener al menos %u caracteres.";	// Okoteve traducción
-#elif L==6
-	"La nuova password dovrebbe essere di almeno %u caratteri.";
-#elif L==7
-	"The new password must be at least %u characters.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"The new password must be at least %u characters.";			// Necessita de tradução
-#endif
-
 const char *Txt_The_new_URL_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"El nuevo URL es <strong>%s</strong>.";		// Necessita traduccio
@@ -41704,6 +41602,109 @@ const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very imp
 	"The ISO 3166-1 numerical code %03ld already exists.";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"The ISO 3166-1 numerical code %03ld already exists.";		// Necessita de tradução
+#endif
+
+
+const char *Txt_The_password_can_not_consist_only_of_digits =
+#if   L==0
+	"La contrase&ntilde;a no puede estar formada"
+	" solo por d&iacute;gitos.";		// Necessita traduccio
+#elif L==1
+	"The password can not consist"
+	" only of digits.";			// Need Übersetzung
+#elif L==2
+	"The password can not consist"
+	" only of digits.";
+#elif L==3
+	"La contrase&ntilde;a no puede estar formada"
+	" solo por d&iacute;gitos.";
+#elif L==4
+	"The password can not consist"
+	" only of digits.";			// Besoin de traduction
+#elif L==5
+	"La contrase&ntilde;a no puede estar formada"
+	" solo por d&iacute;gitos.";		// Okoteve traducción
+#elif L==6
+	"La password non pu&ograve; consistere"
+	" solo di numeri.";
+#elif L==7
+	"The password can not consist"
+	" only of digits.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The password can not consist"
+	" only of digits.";			// Necessita de tradução
+#endif
+
+const char *Txt_The_password_can_not_contain_spaces =
+#if   L==0
+	"La contrase&ntilde;a no puede tener espacios.";	// Necessita traduccio
+#elif L==1
+	"The password can not contain spaces.";			// Need Übersetzung
+#elif L==2
+	"The password can not contain spaces.";
+#elif L==3
+	"La contrase&ntilde;a no puede tener espacios.";
+#elif L==4
+	"The password can not contain spaces.";			// Besoin de traduction
+#elif L==5
+	"La contrase&ntilde;a no puede tener espacios.";	// Okoteve traducción
+#elif L==6
+	"La password non pu&ograve; contenere spazi.";
+#elif L==7
+	"The password can not contain spaces.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The password can not contain spaces.";			// Necessita de tradução
+#endif
+
+const char *Txt_The_password_is_too_trivial_ =
+#if   L==0
+	"La contrase&ntilde;a es demasiado f&aacute;cil."
+	" Use otra m&aacute;s dif&iacute;cil de averiguar.";	// Necessita traduccio
+#elif L==1
+	"The password is too trivial."
+	" Use other harder to guess.";				// Need Übersetzung
+#elif L==2
+	"The password is too trivial."
+	" Use other harder to guess.";
+#elif L==3
+	"La contrase&ntilde;a es demasiado f&aacute;cil."
+	" Use otra m&aacute;s dif&iacute;cil de averiguar.";
+#elif L==4
+	"The password is too trivial."
+	" Use other harder to guess.";				// Besoin de traduction
+#elif L==5
+	"La contrase&ntilde;a es demasiado f&aacute;cil."
+	" Use otra m&aacute;s dif&iacute;cil de averiguar.";	// Okoteve traducción
+#elif L==6
+	"La password &egrave; troppo semplice."
+	" Utilizza un'altra pi&ugrave; difficile da individuare.";
+#elif L==7
+	"The password is too trivial."
+	" Use other harder to guess.";				// Potrzebujesz tlumaczenie
+#elif L==8
+	"The password is too trivial."
+	" Use other harder to guess.";				// Necessita de tradução
+#endif
+
+const char *Txt_The_password_must_be_at_least_X_characters =	// Warning: it is very important to include %u in the following sentences
+#if   L==0
+	"La contrase&ntilde;a ha de tener al menos %u caracteres.";	// Necessita traduccio
+#elif L==1
+	"The password must be at least %u characters.";			// Need Übersetzung
+#elif L==2
+	"The password must be at least %u characters.";
+#elif L==3
+	"La contrase&ntilde;a ha de tener al menos %u caracteres.";
+#elif L==4
+	"The password must be at least %u characters.";			// Besoin de traduction
+#elif L==5
+	"La contrase&ntilde;a ha de tener al menos %u caracteres.";	// Okoteve traducción
+#elif L==6
+	"La password dovrebbe essere di almeno %u caratteri.";
+#elif L==7
+	"The password must be at least %u characters.";			// Potrzebujesz tlumaczenie
+#elif L==8
+	"The password must be at least %u characters.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_X_password_has_been_changed_successfully =	// Warning: it is very important to include %s in the following sentences

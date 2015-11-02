@@ -60,7 +60,8 @@ extern struct Globals Gbl;
 
 static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
-                                    unsigned Roles,bool ShowAllAnnouncements,
+                                    unsigned Roles,
+                                    bool ShowAllAnnouncements,
                                     bool ICanEditAnnouncements);
 static void Ann_PutHiddenParamAnnCod (long AnnCod);
 static long Ann_GetParamAnnCod (void);
@@ -158,8 +159,7 @@ void Ann_ShowAllAnnouncements (void)
 
       /* Show the announcement */
       Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
-                              Roles,true,
-                              ICanEditAnnouncements);
+                              Roles,true,ICanEditAnnouncements);
      }
 
    /***** End frame *****/
@@ -236,7 +236,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
 static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
-                                    unsigned Roles,bool ShowAllAnnouncements,
+                                    unsigned Roles,
+                                    bool ShowAllAnnouncements,
                                     bool ICanEditAnnouncements)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
