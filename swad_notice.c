@@ -186,10 +186,25 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
   }
 
 /*****************************************************************************/
+/******************* List notices after removing one of them *****************/
+/*****************************************************************************/
+
+void Not_ListNoticesAfterRemoval (void)
+  {
+   extern const char *Txt_Notice_removed;
+
+   /***** Message of success *****/
+   Lay_ShowAlert (Lay_SUCCESS,Txt_Notice_removed);
+
+   /***** List remaining notices *****/
+   Not_ListFullNotices ();
+  }
+
+/*****************************************************************************/
 /******************************* List notices ********************************/
 /*****************************************************************************/
 
-void Not_ListNotices (void)
+void Not_ListFullNotices (void)
   {
    extern const char *Txt_New_notice;
    bool ICanEditNotices = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||

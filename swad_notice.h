@@ -57,7 +57,8 @@ typedef enum
 
 void Not_ShowFormNotice (void);
 void Not_ReceiveNotice (void);
-void Not_ListNotices (void);
+void Not_ListNoticesAfterRemoval (void);
+void Not_ListFullNotices (void);
 
 void Not_HideActiveNotice (void);
 void Not_RevealHiddenNotice (void);

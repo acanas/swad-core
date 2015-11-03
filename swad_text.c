@@ -24416,6 +24416,27 @@ const char *Txt_Notice_created =
 	"Aviso criado.";
 #endif
 
+const char *Txt_Notice_removed =
+#if   L==0
+	"Av&iacute;s eliminat.";
+#elif L==1
+	"Ank&uuml;ndigung entfernt.";
+#elif L==2
+	"Notice removed.";
+#elif L==3
+	"Aviso eliminado";
+#elif L==4
+	"Avis supprim&eacute;.";
+#elif L==5
+	"Aviso eliminado.";	// Okoteve traducción
+#elif L==6
+	"Avviso rimosso.";
+#elif L==7
+	"Informacja usuniete.";
+#elif L==8
+	"Aviso removido.";
+#endif
+
 const char *Txt_NOTIF_new_SINGULAR =
 #if   L==0
 	"nueva";	// Necessita traduccio
