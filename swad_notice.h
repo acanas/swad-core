@@ -58,11 +58,15 @@ typedef enum
 void Not_ShowFormNotice (void);
 void Not_ReceiveNotice (void);
 void Not_ListNotices (void);
+
 void Not_HideActiveNotice (void);
 void Not_RevealHiddenNotice (void);
-void Not_DeleteNotice (void);
-void Not_ShowANotice (void);
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing);
+
+void Not_RequestRemNotice (void);
+void Not_RemoveNotice (void);
+
+void Not_GetNotToShowHighlighted (void);
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices);
 void Not_GetNotifNotice (char *SummaryStr,char **ContentStr,long NotCod,unsigned MaxChars,bool GetContent);
 unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif);

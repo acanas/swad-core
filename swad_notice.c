@@ -65,6 +65,7 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Not_GetDataAndShowNotice (long NotCod,bool ICanEditNotices);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long NotCod,
                              time_t TimeUTC,
@@ -89,6 +90,7 @@ void Not_ShowFormNotice (void)
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Create_notice;
 
+   /***** Help message *****/
    sprintf (Gbl.Message,Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_,
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
@@ -117,6 +119,10 @@ void Not_ShowFormNotice (void)
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** Show all notices *****/
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,
+                    true);	// I can create a new notice ==> I can edit notices
   }
 
 /*****************************************************************************/
@@ -185,7 +191,23 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
 
 void Not_ListNotices (void)
   {
-   Not_ShowNotices (Not_LIST_FULL_NOTICES);
+   extern const char *Txt_New_notice;
+   bool ICanEditNotices = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+		           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+
+   if (ICanEditNotices)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Act_PutContextualLink (ActWriNot,NULL,"new",Txt_New_notice);
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
+   /***** Show highlighted notice *****/
+   if (Gbl.CurrentCrs.Notices.HighlightNotCod > 0)
+      Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.HighlightNotCod,ICanEditNotices);
+
+   /***** Show all notices *****/
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,ICanEditNotices);
   }
 
 /*****************************************************************************/
@@ -235,15 +257,42 @@ void Not_RevealHiddenNotice (void)
   }
 
 /*****************************************************************************/
+/********************* Request the removal of a notice ***********************/
+/*****************************************************************************/
+
+void Not_RequestRemNotice (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_notice;
+   extern const char *Txt_Remove;
+   long NotCod;
+
+   /***** Get the code of the notice to remove *****/
+   NotCod = Not_GetParamNotCod ();
+
+   /***** Form to ask for confirmation to remove this notice *****/
+   Act_FormStart (ActRemNot);
+   Not_PutHiddenParamNotCod (NotCod);
+   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_notice);
+   Not_GetDataAndShowNotice (NotCod,
+                             false);	// Do not edit this notice
+   Lay_PutRemoveButton (Txt_Remove);
+   Act_FormEnd ();
+
+   /***** Show all notices *****/
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,
+                    true);	// I can remove notices ==> I can edit notices
+  }
+
+/*****************************************************************************/
 /******************************* Remove a notice *****************************/
 /*****************************************************************************/
 
-void Not_DeleteNotice (void)
+void Not_RemoveNotice (void)
   {
    char Query[512];
    long NotCod;
 
-   /***** Get the code of the notice to delete *****/
+   /***** Get the code of the notice to remove *****/
    NotCod = Not_GetParamNotCod ();
 
    /***** Remove notice *****/
@@ -269,10 +318,10 @@ void Not_DeleteNotice (void)
   }
 
 /*****************************************************************************/
-/**************************** Show (expand) a notice *************************/
+/********************* Get notice to show highlighted ************************/
 /*****************************************************************************/
 
-void Not_ShowANotice (void)
+void Not_GetNotToShowHighlighted (void)
   {
    /***** Get the code of the notice to highlight *****/
    Gbl.CurrentCrs.Notices.HighlightNotCod = Not_GetParamNotCod ();
@@ -282,9 +331,8 @@ void Not_ShowANotice (void)
 /***************************** Show the notices ******************************/
 /*****************************************************************************/
 
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
   {
-   extern const char *Txt_New_notice;
    extern const char *Txt_All_notices;
    extern const char *Txt_No_notices;
    char Query[512];
@@ -300,65 +348,10 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    long UsrCod;
    unsigned UnsignedNum;
    Not_Status_t Status;
-   bool ICanEditNotices;
 
    /***** A course must be selected (Gbl.CurrentCrs.Crs.CrsCod > 0) *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
-      ICanEditNotices = (TypeNoticesListing == Not_LIST_FULL_NOTICES &&
-                         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                          Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
-
-      if (ICanEditNotices)
-	{
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-         Act_PutContextualLink (ActWriNot,NULL,"new",Txt_New_notice);
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
-      /***** Show highlighted notice *****/
-      if (TypeNoticesListing == Not_LIST_FULL_NOTICES &&
-	  Gbl.CurrentCrs.Notices.HighlightNotCod > 0)
-	{
-	 sprintf (Query,"SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
-			" FROM notices"
-			" WHERE NotCod='%ld' AND CrsCod='%ld'",
-		  Gbl.CurrentCrs.Notices.HighlightNotCod,
-		  Gbl.CurrentCrs.Crs.CrsCod);
-         if (DB_QuerySELECT (Query,&mysql_res,"can not get notice from database"))
-           {
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get creation time (row[0] holds the UTC date-time) */
-	    TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
-
-	    /* Get user code (row[1]) */
-	    UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	    /* Get the content (row[2]) and insert links*/
-	    strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
-	    Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
-		                  Not_MaxCharsURLOnScreen[TypeNoticesListing]);
-	    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-	       Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
-
-	    /* Get status of the notice (row[3]) */
-	    Status = Not_OBSOLETE_NOTICE;
-	    if (sscanf (row[3],"%u",&UnsignedNum) == 1)
-	       if (UnsignedNum < Not_NUM_STATUS)
-		 Status = (Not_Status_t) UnsignedNum;
-
-	    /* Draw the notice */
-	    Not_DrawANotice (TypeNoticesListing,
-	                     Gbl.CurrentCrs.Notices.HighlightNotCod,
-	                     TimeUTC,Content,UsrCod,Status,
-	                     ICanEditNotices);
-           }
-
-	 /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-	}
-
       /***** Get notices from database *****/
       switch (TypeNoticesListing)
 	{
@@ -467,6 +460,59 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   }
 
 /*****************************************************************************/
+/******************** Get data of a notice and show it ***********************/
+/*****************************************************************************/
+
+static void Not_GetDataAndShowNotice (long NotCod,bool ICanEditNotices)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   char Content[Cns_MAX_BYTES_TEXT+1];
+   time_t TimeUTC;
+   long UsrCod;
+   unsigned UnsignedNum;
+   Not_Status_t Status;
+
+   /***** Get notice data from database *****/
+   sprintf (Query,"SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
+		  " FROM notices"
+		  " WHERE NotCod='%ld' AND CrsCod='%ld'",
+	    NotCod,
+	    Gbl.CurrentCrs.Crs.CrsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get notice from database"))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get creation time (row[0] holds the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
+
+      /* Get user code (row[1]) */
+      UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /* Get the content (row[2]) and insert links*/
+      strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
+      Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
+			    Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
+
+      /* Get status of the notice (row[3]) */
+      Status = Not_OBSOLETE_NOTICE;
+      if (sscanf (row[3],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Not_NUM_STATUS)
+	   Status = (Not_Status_t) UnsignedNum;
+
+      /***** Draw the notice *****/
+      Not_DrawANotice (Not_LIST_FULL_NOTICES,
+		       NotCod,
+		       TimeUTC,Content,UsrCod,Status,
+		       ICanEditNotices);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /********************* Draw a notice as a yellow note ************************/
 /*****************************************************************************/
 
@@ -520,7 +566,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       if (ICanEditNotices)
 	{
 	 /* Form to remove notice */
-	 Act_FormStart (ActRemNot);
+	 Act_FormStart (ActReqRemNot);
 	 Not_PutHiddenParamNotCod (NotCod);
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
         	            "<input type=\"image\""

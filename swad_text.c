@@ -8538,6 +8538,27 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	" o diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_following_notice =
+#if   L==0
+	"&iquest;Realmente desea eliminar el siguiente aviso?";		// Necessita traduccio
+#elif L==1
+	"Do you really want to remove the following notice?";		// Need Übersetzung
+#elif L==2
+	"Do you really want to remove the following notice?";
+#elif L==3
+	"&iquest;Realmente desea eliminar el siguiente aviso?";
+#elif L==4
+	"Do you really want to remove the following notice?";		// Besoin de traduction
+#elif L==5
+	"&iquest;Realmente desea eliminar el siguiente aviso?";		// Okoteve traducción
+#elif L==6
+	"Vuoi realmente rimuovere il seguente avviso?";
+#elif L==7
+	"Czy na pewno chcesz usunac nastepujace obwieszczenie?";
+#elif L==8
+	"Do you really want to remove the following notice>?";		// Necessita de tradução
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"&iquest;Realmente desea eliminar el siguiente usuario"

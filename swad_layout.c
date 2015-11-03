@@ -947,7 +947,8 @@ static void Lay_ShowLeftColumn (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"CENTER_TOP\">");
-      Not_ShowNotices (Not_LIST_BRIEF_NOTICES);
+      Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
+                       false);	// Nobody can not edit notices here
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
