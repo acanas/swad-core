@@ -103,16 +103,18 @@
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
+// TODO: Ask for notice removal
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.34.3 (2015/11/03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.34.4 (2015/11/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.34.4:  Nov 03, 2015	Fixed bug in account creation, reported by Héctor García Marcos. (186881 lines)
         Version 15.34.3:  Nov 03, 2015	Fixed bug in photo uploading, reported by Fernando Rojas Ruiz. (186879 lines)
         Version 15.34.2:  Nov 02, 2015	Fixed bugs in date forms. (186878 lines)
         Version 15.34.1:  Nov 01, 2015	Global announcements can be seen by all. (186938 lines)

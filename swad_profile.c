@@ -1051,8 +1051,8 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 
    /***** Create user's figures *****/
    sprintf (Query,"INSERT INTO usr_figures"
-	          "(UsrCod,FROM_UNIXTIME(FirstClickTime),NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-		  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld')",
+	          "(UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
+		  " VALUES ('%ld',FROM_UNIXTIME('%ld'),'%ld','%ld','%ld','%ld')",
 	    UsrCod,
 	    (long) UsrFigures->FirstClickTimeUTC,	//   0 ==> unknown first click time or user never logged
 	    UsrFigures->NumClicks,			// -1L ==> unknown number of clicks
