@@ -646,7 +646,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
             NumFace++;
             sprintf (FormId,"form_%d",NumLastForm + NumFace);
             fprintf (Gbl.F.Out,"<area shape=\"circle\""
-                               " href=\"document.getElementById('%s').submit();\""
+                               " href=\"javascript:document.getElementById('%s').submit();\""
                                " coords=\"%u,%u,%u\">\n",
                      FormId,X,Y,Radius);
            }

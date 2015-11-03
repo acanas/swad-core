@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.34.2 (2015/11/02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.34.3 (2015/11/03)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.34.3:  Nov 03, 2015	Fixed bug in photo uploading, reported by Fernando Rojas Ruiz. (186879 lines)
         Version 15.34.2:  Nov 02, 2015	Fixed bugs in date forms. (186878 lines)
         Version 15.34.1:  Nov 01, 2015	Global announcements can be seen by all. (186938 lines)
         Version 15.34:    Nov 01, 2015	Global announcements can be hidden. (186896 lines)
