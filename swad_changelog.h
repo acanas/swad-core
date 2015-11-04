@@ -113,7 +113,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.35.2:  Nov 04, 2015	Fixed bug in edition of degrees. (186979 lines)
+        Version 15.35.2:  Nov 04, 2015	Fixed bug in edition of degrees. (186963 lines)
         Version 15.35.1:  Nov 03, 2015	Confirmation message after removing a notice. (186979 lines)
         Version 15.35:    Nov 03, 2015	Request confirmation on notice removal. (186944 lines)
 					1 change necessary in database:

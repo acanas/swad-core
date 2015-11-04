@@ -3495,7 +3495,6 @@ void Deg_ChangeDegTypeLogIn (void)
 
 void Deg_ChangeDegreeType (void)
   {
-   extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    struct Degree *Deg;
    long NewDegTypCod;
@@ -3514,31 +3513,15 @@ void Deg_ChangeDegreeType (void)
    /* Get from the database the type and the name of the editing degree */
    Deg_GetDataOfDegreeByCod (Deg);
 
-   /***** If degree was in database... *****/
-   if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"ShortName",Deg->ShortName,-1L))
-     {
-      sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
-               Deg->ShortName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
-   else if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"FullName",Deg->FullName,-1L))
-     {
-      sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
-               Deg->FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
-   else
-     {
-      /* Update the table of degrees changing old type by new type */
-      sprintf (Query,"UPDATE degrees SET DegTypCod='%ld' WHERE DegCod='%ld'",
-               NewDegTypCod,Deg->DegCod);
-      DB_QueryUPDATE (Query,"can not update the type of a degree");
+   /***** Update the table of degrees changing old type by new type *****/
+   sprintf (Query,"UPDATE degrees SET DegTypCod='%ld' WHERE DegCod='%ld'",
+	    NewDegTypCod,Deg->DegCod);
+   DB_QueryUPDATE (Query,"can not update the type of a degree");
 
-      /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_type_of_degree_of_the_degree_X_has_changed,
-               Deg->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-     }
+   /***** Write message to show the change made *****/
+   sprintf (Gbl.Message,Txt_The_type_of_degree_of_the_degree_X_has_changed,
+	    Deg->FullName);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
    Gbl.Degs.EditingDegTyp.DegTypCod = NewDegTypCod;
