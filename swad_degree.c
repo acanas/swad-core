@@ -119,7 +119,7 @@ static void Deg_RemoveDegreeTypeCompletely (long DegTypCod);
 static void Deg_RemoveDegreeCompletely (long DegCod);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
-static bool Deg_CheckIfDegreeNameExists (long DegTypCod,const char *FieldName,const char *Name,long DegCod);
+static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod);
 static void Deg_ChangeDegYear (struct Degree *Deg,Deg_FirstOrLastYear_t FirstOrLastYear);
 
 /*****************************************************************************/
@@ -2644,13 +2644,13 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
       if (Deg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 if (Deg_CheckIfDegreeNameExists (Deg->DegTypCod,"ShortName",Deg->ShortName,-1L))
+	 if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"ShortName",Deg->ShortName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
 		     Deg->ShortName);
 	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	   }
-	 else if (Deg_CheckIfDegreeNameExists (Deg->DegTypCod,"FullName",Deg->FullName,-1L))
+	 else if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"FullName",Deg->FullName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
 		     Deg->FullName);
@@ -3381,7 +3381,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
       if (strcmp (CurrentDegName,NewDegName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_CheckIfDegreeNameExists (Deg->DegTypCod,ParamName,NewDegName,Deg->DegCod))
+         if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,ParamName,NewDegName,Deg->DegCod))
            {
             sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
                      NewDegName);
@@ -3432,14 +3432,14 @@ static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypC
 /********************* Check if the name of degree exists ********************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfDegreeNameExists (long DegTypCod,const char *FieldName,const char *Name,long DegCod)
+static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod)
   {
    char Query[512];
 
    /***** Get number of degrees with a type and a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees"
-                  " WHERE DegTypCod='%ld' AND %s='%s' AND DegCod<>'%ld'",
-            DegTypCod,FieldName,Name,DegCod);
+                  " WHERE CtrCod='%ld' AND %s='%s' AND DegCod<>'%ld'",
+            CtrCod,FieldName,Name,DegCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a degree already existed") != 0);
   }
 
@@ -3515,13 +3515,13 @@ void Deg_ChangeDegreeType (void)
    Deg_GetDataOfDegreeByCod (Deg);
 
    /***** If degree was in database... *****/
-   if (Deg_CheckIfDegreeNameExists (NewDegTypCod,"ShortName",Deg->ShortName,-1L))
+   if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"ShortName",Deg->ShortName,-1L))
      {
       sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
                Deg->ShortName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
-   else if (Deg_CheckIfDegreeNameExists (NewDegTypCod,"FullName",Deg->FullName,-1L))
+   else if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"FullName",Deg->FullName,-1L))
      {
       sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
                Deg->FullName);

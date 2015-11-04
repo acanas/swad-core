@@ -108,11 +108,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.35.1 (2015/11/03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.35.2 (2015/11/04)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.35.2:  Nov 04, 2015	Fixed bug in edition of degrees. (186979 lines)
         Version 15.35.1:  Nov 03, 2015	Confirmation message after removing a notice. (186979 lines)
         Version 15.35:    Nov 03, 2015	Request confirmation on notice removal. (186944 lines)
 					1 change necessary in database:
