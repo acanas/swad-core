@@ -103,16 +103,25 @@
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
+// TODO: Remove columns "first year, last year, optional, status" when listing degrees?
+// TODO: The image of a country (the Earth) in listing of pending countries should link to the country inside SWAD
+// TODO: Row with total of users in figures
+// TODO: Remove total rows in listing of places
+// TODO: Teachers should edit students' assignment folders and files
+// TODO: Show message indicating that mail could be in SPAM folder
+// TODO: Fix problem with gmail. They think we are SPAM. See https://support.google.com/a/answer/178723
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.35.2 (2015/11/04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.35.3 (2015/11/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.35.3:  Nov 09, 2015	Fixed bug in test exams, reported by Antonio Arcos Cebrián.
+					Fixed bug in marks, reported by Javier Fernández Baldomero. (186973 lines)
         Version 15.35.2:  Nov 04, 2015	Fixed bug in edition of degrees. (186963 lines)
         Version 15.35.1:  Nov 03, 2015	Confirmation message after removing a notice. (186979 lines)
         Version 15.35:    Nov 03, 2015	Request confirmation on notice removal. (186944 lines)

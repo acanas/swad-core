@@ -108,7 +108,7 @@
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"		// Main responsible for the platform
 #define Cfg_HELP_WEB				"http://openswad.org/SWAD-sheet.pdf"	// Web to solve questions and problems
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"localhost"				// SMTP server for sending automatic e-mails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"mail.openswad.org"			// SMTP server for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// E-mail address from where automatic e-mails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
@@ -122,7 +122,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_DEFAULT_COLUMNS			Lay_HIDE_BOTH_COLUMNS
+#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 #define Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED	ActFrmUsrAcc
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI

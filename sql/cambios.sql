@@ -11155,4 +11155,6 @@ OPTIMIZE TABLE usr_webs;
 OPTIMIZE TABLE ws_keys;    
 
 
+-----
 
+SELECT TstCod,AllowTeachers,UNIX_TIMESTAMP(TstTime) AS T,NumQsts,NumQstsNotBlank,Score FROM tst_exams WHERE T>='0' AND T<='2000000000' ORDER BY TstCod;

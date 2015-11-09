@@ -165,7 +165,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"%s COLOR%u\""
-                         " onchange=\"jdocument.getElementById('%s').submit();\" />",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Txt_TABLE_Footer,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.FileBrowser.InputStyle,

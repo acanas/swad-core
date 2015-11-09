@@ -6205,11 +6205,12 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 
    /***** Make database query *****/
    sprintf (Query,"SELECT TstCod,AllowTeachers,"
-	          "UNIX_TIMESTAMP(TstTime) AS T,"
+	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'"
-                  " AND T>='%ld' AND T<='%ld'"
+                  " AND UNIX_TIMESTAMP(TstTime)>='%ld'"
+                  " AND UNIX_TIMESTAMP(TstTime)<='%ld'"
                   " ORDER BY TstCod",
             Gbl.CurrentCrs.Crs.CrsCod,
             UsrDat->UsrCod,
