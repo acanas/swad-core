@@ -6187,7 +6187,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    MYSQL_ROW row;
    unsigned NumExams;
    unsigned NumExam;
-   unsigned UniqueId;
+   static unsigned UniqueId = 0;
    long TstCod;
    unsigned NumQstsInThisExam;
    unsigned NumQstsNotBlankInThisExam;
@@ -6225,9 +6225,9 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
    /***** Get and print exams results *****/
    if (NumExams)
      {
-      for (NumExam = 0, UniqueId = 1;
+      for (NumExam = 0;
            NumExam < NumExams;
-           NumExam++, UniqueId++)
+           NumExam++)
         {
          row = mysql_fetch_row (mysql_res);
 
@@ -6248,6 +6248,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 
          /* Write date and time (row[2] holds UTC date-time) */
          TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+         UniqueId++;
 	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'&nbsp;');"
