@@ -115,11 +115,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.35.4 (2015/11/09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.35.5 (2015/11/09)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.35.5:  Nov 09, 2015	Fixed bug in swad.sql, reported by Florent H. Carré.
+					Fixed bug in groups, reported by Francisco Ocaña Lara. (186977 lines)
         Version 15.35.4:  Nov 09, 2015	Fixed bug in test exams. (186975 lines)
         Version 15.35.3:  Nov 09, 2015	Fixed bug in test exams, reported by Antonio Arcos Cebrián.
 					Fixed bug in marks, reported by Javier Fernández Baldomero. (186973 lines)

@@ -466,11 +466,11 @@ CREATE TABLE IF NOT EXISTS expanded_folders (
 -- Table file_browser_last: stores the last click of every user in each file browser zone
 --
 CREATE TABLE IF NOT EXISTS file_browser_last (
-                   "UsrCod INT NOT NULL,
-                   "FileBrowser TINYINT NOT NULL,
-                   "Cod INT NOT NULL DEFAULT -1,
-	           "LastClick DATETIME NOT NULL,
-                   "UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+	UsrCod INT NOT NULL,
+	FileBrowser TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
+	LastClick DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod,FileBrowser,Cod));
 --
 -- Table file_browser_size: stores the sizes of the file zones
 --

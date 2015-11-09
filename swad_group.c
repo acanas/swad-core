@@ -1392,7 +1392,7 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\":document.getElementById('%s').submit();\" />",
+                            " onchange=\"document.getElementById('%s').submit();\" />",
                   MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.FormId);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
