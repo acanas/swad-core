@@ -62,7 +62,10 @@ struct Assignment
    char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE+1];
    Asg_SendWork_t SendWork;
    char Folder[Asg_MAX_LENGTH_FOLDER+1];
-   bool ICanDo;	// I can do this assignment (it is associated to no groups or (if associated to groups) I belong to any of the groups
+   bool IBelongToCrsOrGrps;	// I can do this assignment
+				// (it is associated to no groups
+				// or, if associated to groups,
+				// I belong to any of the groups)
   };
 
 typedef enum

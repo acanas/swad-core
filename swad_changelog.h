@@ -107,19 +107,19 @@
 // TODO: The image of a country (the Earth) in listing of pending countries should link to the country inside SWAD
 // TODO: Row with total of users in figures
 // TODO: Remove total rows in listing of places
-// TODO: Teachers should edit students' assignment folders and files
 // TODO: Show message indicating that mail could be in SPAM folder
-// TODO: Fix problem with gmail. They think we are SPAM. See https://support.google.com/a/answer/178723
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.35.5 (2015/11/09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.36 (2015/11/10)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.36:    Nov 10, 2015	Fixed bug in assignments, reported by Javier Fernández Baldomero.
+					Changes in automatic creation of assignment folders. (186985 lines)
         Version 15.35.5:  Nov 09, 2015	Fixed bug in swad.sql, reported by Florent H. Carré.
 					Fixed bug in groups, reported by Francisco Ocaña Lara. (186977 lines)
         Version 15.35.4:  Nov 09, 2015	Fixed bug in test exams. (186975 lines)

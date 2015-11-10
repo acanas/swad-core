@@ -1314,7 +1314,7 @@ static long Brw_GetGrpSettings (void);
 static void Brw_GetDataCurrentGrp (void);
 static void Brw_GetParamsPathInTreeAndFileName (void);
 static void Brw_SetPathFileBrowser (void);
-static void Brw_CreateFoldersAssignmentsIfNotExist (void);
+static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
 static void Brw_SetAndCheckQuota (void);
 static void Brw_SetMaxQuota (void);
 static bool Brw_CheckIfQuotaExceded (void);
@@ -2442,9 +2442,10 @@ static void Brw_SetPathFileBrowser (void)
 
       /***** If file browser is for assignments,
              create folders of assignments if not exist *****/
-      if (Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_USR ||
-	  Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_CRS)
-	 Brw_CreateFoldersAssignmentsIfNotExist ();
+      if (Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_USR)
+	 Brw_CreateFoldersAssignmentsIfNotExist (Gbl.Usrs.Me.UsrDat.UsrCod);
+      else if (Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_CRS)
+	 Brw_CreateFoldersAssignmentsIfNotExist (Gbl.Usrs.Other.UsrDat.UsrCod);
      }
   }
 
@@ -2498,13 +2499,12 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 /********* Create folders of assignments if not exist for one user ***********/
 /*****************************************************************************/
 // Folders are created in level 1, just under root folder
-// Create a folder of and assignment when:
+// Create a folder of an assignment when:
 // 1. The assignment is visible (not hidden)
 // 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
-// 3. ...and the assignment is open (StartTime <= now <= EndTime)
-// 4. ...the assignment is not restricted to groups or (if restricted to groups) I belong to any of the groups
+// 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
 
-static void Brw_CreateFoldersAssignmentsIfNotExist (void)
+static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -2513,12 +2513,13 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (void)
    char PathFolderAsg[PATH_MAX+1];
 
    /***** Get assignment folders from database *****/
+   // Old behaviour (only create assignment folder if assignment is open) is obsolete since 2015-11-10
    sprintf (Query,"SELECT Folder FROM assignments"
-                  " WHERE CrsCod='%ld' AND Hidden='N' AND Folder<>'' AND StartTime<=NOW() AND EndTime>=NOW()"
+                  " WHERE CrsCod='%ld' AND Hidden='N' AND Folder<>''"
                   " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
                   " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
                   " WHERE crs_grp_usr.UsrCod='%ld' AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get folders of assignments");
 
    /***** Create one folder for each assignment *****/
@@ -10561,10 +10562,10 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_ASSIG_CRS:
          return (Level != 0 &&
                  (Gbl.FileBrowser.Asg.AsgCod < 0 ||	// If folder does not correspond to any assignment
-                  (Level > 1 &&
-                   !Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
-                   Gbl.FileBrowser.Asg.ICanDo &&	// If I can do this assignment
-                   (Gbl.FileBrowser.Asg.Open || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
+                  (!Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
+                    Gbl.FileBrowser.Asg.IBelongToCrsOrGrps &&	// If I can do this assignment
+                   ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Gbl.FileBrowser.Asg.Open) ||
+                     Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
       default:
          return (Level != 0 &&
                  Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type]);
@@ -10593,9 +10594,9 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
          return (Level != 0 &&
                  (Gbl.FileBrowser.Asg.AsgCod < 0 ||	// If folder does not correspond to any assignment
                   (!Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
-                   Gbl.FileBrowser.Asg.ICanDo &&	// If I can do this assignment
-                   (Gbl.FileBrowser.Asg.Open ||
-                    Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
+                    Gbl.FileBrowser.Asg.IBelongToCrsOrGrps &&	// If I can do this assignment
+                   ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Gbl.FileBrowser.Asg.Open) ||
+                     Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER))));
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
      }

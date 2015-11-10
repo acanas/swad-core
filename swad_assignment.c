@@ -85,7 +85,7 @@ static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod);
 static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod);
 static void Asg_CreateGrps (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg);
-static bool Asg_CheckIfICanDoThisAssignment (long AsgCod);
+static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
 
 /*****************************************************************************/
 /************************ List all the assignments ***************************/
@@ -406,8 +406,9 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
    if (Asg->SendWork == Asg_SEND_WORK)
      {
       /***** Folder icon *****/
-      if (Asg->Open &&
-	  Asg->ICanDo)	// I can send files to this assignment folder
+      if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+	  Asg->Open &&
+	  Asg->IBelongToCrsOrGrps)	// I can send files to this assignment folder
         {
          /* Form to create a new file or folder */
          Act_FormStart (ActFrmCreAsgUsr);
@@ -422,7 +423,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
                   Gbl.Title);
          Act_FormEnd ();
         }
-      else			// I can't send files to this assignment folder
+      else				// I can't send files to this assignment folder
          fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
                             " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
@@ -702,7 +703,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
-      Asg->ICanDo = Asg_CheckIfICanDoThisAssignment (Asg->AsgCod);
+      Asg->IBelongToCrsOrGrps = Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (Asg->AsgCod);
      }
    else
      {
@@ -713,7 +714,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->Title[0] = '\0';
       Asg->SendWork = false;
       Asg->Folder[0] = '\0';
-      Asg->ICanDo = false;
+      Asg->IBelongToCrsOrGrps = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1034,7 +1035,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg.Title[0] = '\0';
       Asg.SendWork = false;
       Asg.Folder[0] = '\0';
-      Asg.ICanDo = false;
+      Asg.IBelongToCrsOrGrps = false;
      }
    else
      {
@@ -1573,19 +1574,22 @@ void Asg_RemoveCrsAssignments (long CrsCod)
 /********* Check if I belong to any of the groups of an assignment ***********/
 /*****************************************************************************/
 
-static bool Asg_CheckIfICanDoThisAssignment (long AsgCod)
+static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
+       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
      {
-      /***** Get if I can do an assignment from database *****/
+      // Students and teachers can edit assignments depending on groups
+      /***** Get if I can edit an assignment from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM assignments"
 		     " WHERE AsgCod='%ld'"
-		     " AND ("
-		     "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"
+		     " AND "
+		     "("
+		     "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
 		     " OR "
-		     "AsgCod IN"
+		     "AsgCod IN"					// Assignment is for specific groups
 		     " (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
 		     " WHERE crs_grp_usr.UsrCod='%ld'"
 		     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
@@ -1594,7 +1598,7 @@ static bool Asg_CheckIfICanDoThisAssignment (long AsgCod)
       return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
      }
    else
-      return false;
+      return (Gbl.Usrs.Me.LoggedRole > Rol_TEACHER);	// Admins can edit assignments
   }
 
 /*****************************************************************************/
