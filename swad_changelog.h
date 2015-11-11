@@ -114,11 +114,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.37 (2015/11/11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.37.1 (2015/11/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.37.1:  Nov 11, 2015	Minor changes in sessions. (186912 lines)
         Version 15.37:    Nov 11, 2015	Changes to speed up queries related to time.
 					Time to next test printed in user's local time.
 					Table table IP_last removed. (186909 lines)
