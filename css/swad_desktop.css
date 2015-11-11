@@ -551,13 +551,19 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	margin-right:10px;
 	vertical-align:top;
 	}
+.COUNTRY_MAP_TINY
+	{
+	width:20px; height:20px;
+	vertical-align:middle;
+	}
 .COUNTRY_MAP_SMALL
 	{
-	width:62px; height:62px;
+	width:64px; height:64px;
+	vertical-align:middle;
 	}
 .COUNTRY_MAP_SHOW
 	{
-	width:312px; height:312px;
+	width:320px; height:320px;
 	margin:10px;
 	}
 .COUNTRY_MAP_PRINT

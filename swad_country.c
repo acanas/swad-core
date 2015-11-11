@@ -87,7 +87,6 @@ void Cty_SeeCtyWithPendingInss (void)
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Institutions_ABBREVIATION;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -119,7 +118,6 @@ void Cty_SeeCtyWithPendingInss (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Countries_with_pending_institutions);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th></th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -148,27 +146,10 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Country map */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"CENTER_MIDDLE %s\">",
+	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
-         if (Cty_CheckIfCountryMapExists (&Cty))
-           {
-            fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
-                     Cty.WWW[Gbl.Prefs.Language]);
-            Cty_DrawCountryMap (&Cty,"COUNTRY_MAP_SMALL");
-            fprintf (Gbl.F.Out,"</a>");
-           }
-         fprintf (Gbl.F.Out,"</td>");
-
-         /* Country name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
-                  BgColor);
-         Act_FormGoToStart (ActSeeIns);
-         Cty_PutParamCtyCod (Cty.CtyCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,Cty.Name[Gbl.Prefs.Language]);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s</a>",
-	          Cty.Name[Gbl.Prefs.Language]);
-         Act_FormEnd ();
+         Cty_DrawCountryMapWithLinkToSeeCtyInf (&Cty,ActSeeIns,
+                                                "DAT_NOBR","COUNTRY_MAP_SMALL");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
@@ -475,7 +456,6 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Institutions_ABBREVIATION;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    Cty_CtysOrderType_t Order;
@@ -497,8 +477,7 @@ void Cty_ListCountries2 (void)
 
    /***** Table head *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Countries);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"COUNTRY_MAP_SMALL\"></th>");
+   fprintf (Gbl.F.Out,"<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
@@ -540,34 +519,10 @@ void Cty_ListCountries2 (void)
 
       /***** Country map (and link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"COUNTRY_MAP_SMALL CENTER_MIDDLE %s\">",
+			 "<td class=\"LEFT_MIDDLE %s\">",
 	       BgColor);
-      if (Cty_CheckIfCountryMapExists (&Gbl.Ctys.Lst[NumCty]))
-	{
-	 /* Map image */
-	 Act_FormGoToStart (ActSeeCtyInf);
-	 Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
-	 sprintf (Gbl.Title,Txt_Go_to_X,
-		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	 Act_LinkFormSubmit (Gbl.Title,NULL);
-	 Cty_DrawCountryMap (&Gbl.Ctys.Lst[NumCty],"COUNTRY_MAP_SMALL");
-         fprintf (Gbl.F.Out,"</a>");
-         Act_FormEnd ();
-	}
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Name and link to go to this country */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
-	       BgColor);
-      Act_FormGoToStart (ActSeeCtyInf);
-      Cty_PutParamCtyCod (Gbl.Ctys.Lst[NumCty].CtyCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,
-	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-      Act_LinkFormSubmit (Gbl.Title,"DAT");
-      fprintf (Gbl.F.Out,"%s (%s)</a>",
-	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language],
-	       Gbl.Ctys.Lst[NumCty].Alpha2);
-      Act_FormEnd ();
+      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Gbl.Ctys.Lst[NumCty],ActSeeCtyInf,
+                                             "DAT_NOBR","COUNTRY_MAP_SMALL");
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write stats of this country */
@@ -682,6 +637,57 @@ void Cty_ListCountries2 (void)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
+void Cty_DrawCountryMapWithLinkToSeeCtyInf (struct Country *Cty,Act_Action_t Action,
+                                            const char *ClassLink,const char *ClassMap)
+  {
+   extern const char *Txt_Go_to_X;
+
+   /***** Start form *****/
+   Act_FormGoToStart (Action);
+   Cty_PutParamCtyCod (Cty->CtyCod);
+
+   /***** Link to action *****/
+   sprintf (Gbl.Title,Txt_Go_to_X,Cty->Name[Gbl.Prefs.Language]);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+
+   /***** Draw country map *****/
+   Cty_DrawCountryMap (Cty,ClassMap);
+
+   /***** End link *****/
+   fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>",
+	    Cty->Name[Gbl.Prefs.Language],
+	    Cty->Alpha2);
+
+   /***** End form *****/
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/***************************** Draw country map ******************************/
+/*****************************************************************************/
+
+void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
+  {
+   /***** Draw country map *****/
+   fprintf (Gbl.F.Out,"<img src=\"");
+   if (Cty_CheckIfCountryMapExists (Cty))
+      fprintf (Gbl.F.Out,"%s/%s/%s/%s.png",
+	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
+	       Cty->Alpha2,
+	       Cty->Alpha2);
+   else
+      fprintf (Gbl.F.Out,"%s/tr16x16.gif",	// TODO: Change for a 1x1 image or a generic image
+	       Gbl.Prefs.IconsURL);
+   fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\" class=\"%s\" />",
+	    Cty->Alpha2,
+	    Cty->Name[Gbl.Prefs.Language],
+	    Class);
+  }
+
+/*****************************************************************************/
+/*********************** Check if country map exists *************************/
+/*****************************************************************************/
+
 bool Cty_CheckIfCountryMapExists (struct Country *Cty)
   {
    char PathMap[PATH_MAX+1];
@@ -693,24 +699,6 @@ bool Cty_CheckIfCountryMapExists (struct Country *Cty)
 	    Cty->Alpha2,
 	    Cty->Alpha2);
    return Fil_CheckIfPathExists (PathMap);
-  }
-
-/*****************************************************************************/
-/***************************** Draw country map ******************************/
-/*****************************************************************************/
-
-void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
-  {
-   /***** Draw country map *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
-	              " alt=\"%s\" title=\"%s\""
-		      " class=\"%s\" />",
-	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
-	    Cty->Alpha2,
-	    Cty->Alpha2,
-	    Cty->Alpha2,
-	    Cty->Name[Gbl.Prefs.Language],
-	    Class);
   }
 
 /*****************************************************************************/

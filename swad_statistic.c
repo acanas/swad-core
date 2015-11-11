@@ -3234,11 +3234,10 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
 
 static void Sta_WriteCountry (long CtyCod)
   {
-   extern const char *Txt_Go_to_X;
    struct Country Cty;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
 
    if (CtyCod > 0)	// Hit with a country selected
      {
@@ -3246,24 +3245,13 @@ static void Sta_WriteCountry (long CtyCod)
       Cty.CtyCod = CtyCod;
       Cty_GetDataOfCountryByCod (&Cty);
 
-      /***** Title in cell *****/
-      fprintf (Gbl.F.Out,"title=\"%s\">",
-               Cty.Name[Gbl.Prefs.Language]);
-
       /***** Form to go to country *****/
-      Act_FormGoToStart (ActSeeCtyInf);
-      Cty_PutParamCtyCod (CtyCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Cty.Name[Gbl.Prefs.Language]);
-      Act_LinkFormSubmit (Gbl.Title,"LOG");
-      Log_DrawLogo (Sco_SCOPE_CTY,Cty.CtyCod,Cty.Name[Gbl.Prefs.Language],
-		    16,"CENTER_TOP",true);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
-               Cty.Name[Gbl.Prefs.Language]);
-      Act_FormEnd ();
+      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Cty,ActSeeCtyInf,
+                                             "LOG","COUNTRY_MAP_TINY");
      }
    else			// Hit with no country selected
       /***** No country selected *****/
-      fprintf (Gbl.F.Out,">&nbsp;-&nbsp;");
+      fprintf (Gbl.F.Out,"&nbsp;-&nbsp;");
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");

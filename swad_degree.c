@@ -763,8 +763,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	    Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
 	                  Gbl.CurrentIns.Ins.ShortName,32,"TOP_LOGO",false);
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-            if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
-	       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
+            Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 	}
       fprintf (Gbl.F.Out,"%s"
 	                 "</div>",

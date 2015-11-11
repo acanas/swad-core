@@ -104,7 +104,6 @@
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Remove columns "first year, last year, optional, status" when listing degrees?
-// TODO: The image of a country (the Earth) in listing of pending countries should link to the country inside SWAD
 // TODO: Row with total of users in figures
 // TODO: Remove total rows in listing of places
 // TODO: Show message indicating that mail could be in SPAM folder
@@ -114,11 +113,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.37.1 (2015/11/11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.37.3 (2015/11/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.37.3:  Nov 11, 2015	Changes in country map images. (186898 lines)
         Version 15.37.2:  Nov 11, 2015	Change in layout (background). (186912 lines)
         Version 15.37.1:  Nov 11, 2015	Minor changes in sessions. (186912 lines)
         Version 15.37:    Nov 11, 2015	Changes to speed up queries related to time.
