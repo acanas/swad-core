@@ -141,7 +141,6 @@ void Ctr_SeeCtrWithPendingDegs (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Centres_with_pending_degrees);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th></th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -168,24 +167,17 @@ void Ctr_SeeCtrWithPendingDegs (void)
          /* Get data of centre */
          Ctr_GetDataOfCentreByCod (&Ctr);
 
-         /* Centre logo */
+         /* Centre logo and full name */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT CENTER_MIDDLE %s\">"
-                            "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-                  BgColor,Ctr.WWW,Ctr.FullName);
-         Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</td>");
-
-         /* Centre full name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
+                            "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeDeg);
          Ctr_PutParamCtrCod (Ctr.CtrCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Ctr.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s"
+         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
+         Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
+                       16,"CENTER_MIDDLE",true);
+         fprintf (Gbl.F.Out,"&nbsp;%s"
                             "</a>",
 	          Ctr.FullName);
          Act_FormEnd ();

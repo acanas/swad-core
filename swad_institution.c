@@ -159,7 +159,8 @@ void Ins_SeeInsWithPendingCtrs (void)
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
 
          /* Institution logo and full name */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCtr);
          Ins_PutParamInsCod (Ins.InsCod);
