@@ -456,7 +456,7 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+
 
    /***** Remove expired pending passwords from database *****/
    sprintf (Query,"DELETE FROM pending_passwd"
-                  " WHERE (UNIX_TIMESTAMP() > UNIX_TIMESTAMP(DateAndTime)+'%ld')",
+                  " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
    DB_QueryDELETE (Query,"can not remove expired pending passwords");
 

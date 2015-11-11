@@ -108,16 +108,23 @@
 // TODO: Row with total of users in figures
 // TODO: Remove total rows in listing of places
 // TODO: Show message indicating that mail could be in SPAM folder
+// TODO: Remove email address for recipients rejected (mailbox unavailable)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.36 (2015/11/10)"
+#define Log_PLATFORM_VERSION	"SWAD 15.37 (2015/11/11)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.37:    Nov 11, 2015	Changes to speed up queries related to time.
+					Time to next test printed in user's local time.
+					Table table IP_last removed. (186909 lines)
+					1 change necessary in database:
+DROP TABLE IF EXISTS IP_last;
+
         Version 15.36:    Nov 10, 2015	Fixed bug in assignments, reported by Javier Fernández Baldomero.
 					Changes in automatic creation of assignment folders. (186985 lines)
         Version 15.35.5:  Nov 09, 2015	Fixed bug in swad.sql, reported by Florent H. Carré.

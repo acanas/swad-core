@@ -2418,14 +2418,16 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
    /***** Get data of message from table msg_snt *****/
    *Deleted = false;
    sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-                  " FROM msg_snt WHERE MsgCod='%ld'",MsgCod);
+                  " FROM msg_snt WHERE MsgCod='%ld'",
+            MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
    if (NumRows == 0)   // If not result ==> sent message is deleted
      {
       /***** Get data of message from table msg_snt_deleted *****/
       sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-                     " FROM msg_snt_deleted WHERE MsgCod='%ld'",MsgCod);
+                     " FROM msg_snt_deleted WHERE MsgCod='%ld'",
+               MsgCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
       *Deleted = true;

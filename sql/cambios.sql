@@ -11158,3 +11158,10 @@ OPTIMIZE TABLE ws_keys;
 -----
 
 SELECT TstCod,AllowTeachers,UNIX_TIMESTAMP(TstTime) AS T,NumQsts,NumQstsNotBlank,Score FROM tst_exams WHERE T>='0' AND T<='2000000000' ORDER BY TstCod;
+
+-----
+
+SELECT * FROM expanded_folders WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+'1000';
+SELECT * FROM expanded_folders WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'1000');
+
+

@@ -85,22 +85,6 @@ void DB_CreateTablesIfNotExist (void)
    Lay_ShowAlert (Lay_INFO,Txt_Creating_database_tables_if_they_do_not_exist);
    fprintf (Gbl.F.Out,"<ol>");
 
-   /***** Table IP_last *****/
-/*
-mysql> DESCRIBE IP_last;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| IP        | char(15) | NO   | PRI | NULL    |       |
-| LastClick | datetime | NO   | MUL | NULL    |       |
-+-----------+----------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_last ("
-                   "IP CHAR(15) NOT NULL,"
-                   "LastClick DATETIME NOT NULL,"
-                   "PRIMARY KEY(IP),INDEX(LastClick))");
-
    /***** Table IP_prefs *****/
 /*
 mysql> DESCRIBE IP_prefs;

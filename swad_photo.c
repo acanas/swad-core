@@ -1237,7 +1237,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       /***** 2. If all the degrees are in table, choose the least recently updated *****/
       /* Get degrees from database */
       sprintf (Query,"SELECT DegCod FROM sta_degrees"
-	             " WHERE UNIX_TIMESTAMP(TimeAvgPhoto)<UNIX_TIMESTAMP()-%ld"
+                     " WHERE TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
 	             " ORDER BY TimeAvgPhoto LIMIT 1",
                Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
@@ -1287,7 +1287,8 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
 
    /***** Get last time an average photo was computed from database *****/
    sprintf (Query,"SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"
-                  " FROM sta_degrees WHERE DegCod='%ld'",DegCod);
+                  " FROM sta_degrees WHERE DegCod='%ld'",
+            DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last time an average photo was computed");
 
    if (NumRows == 1)

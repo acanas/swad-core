@@ -744,7 +744,7 @@ void Enr_RemoveOldUsrs (void)
    sprintf (Query,"SELECT UsrCod FROM"
                   "("
                   "SELECT UsrCod FROM usr_last WHERE"
-                  " UNIX_TIMESTAMP(LastTime) < UNIX_TIMESTAMP()-%lu"
+                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
                   " UNION "
                   "SELECT UsrCod FROM usr_data WHERE"
                   " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"

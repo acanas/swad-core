@@ -1,14 +1,6 @@
 CREATE DATABASE IF NOT EXISTS swad DEFAULT CHARACTER SET=latin1 DEFAULT COLLATE latin1_spanish_ci;
 USE swad;
 --
--- Table IP_last: stores the last click from each IP address
---
-CREATE TABLE IF NOT EXISTS IP_last (
-	IP CHAR(15) NOT NULL,
-	LastClick DATETIME NOT NULL,
-	PRIMARY KEY(IP),
-	INDEX(LastClick));
---
 -- Table IP_prefs: stores user's preferences for each IP address
 --
 CREATE TABLE IF NOT EXISTS IP_prefs (

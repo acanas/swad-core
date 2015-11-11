@@ -236,9 +236,11 @@ void Ses_RemoveExpiredSessions (void)
    /* A session expire when last click (LastTime) is too old,
       or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
    sprintf (Query,"DELETE LOW_PRIORITY FROM sessions WHERE"
-                  " (UNIX_TIMESTAMP() > UNIX_TIMESTAMP(LastTime)+%ld) OR"
-                  " ((UNIX_TIMESTAMP(LastRefresh) > UNIX_TIMESTAMP(LastTime)+1) AND"
-                  " (UNIX_TIMESTAMP() > UNIX_TIMESTAMP(LastRefresh)+%ld))",
+                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu') OR"
+                  " LastRefresh BETWEEN "
+                  "(LastTime+INTERVAL 1 SECOND)"
+                  " AND "
+                  "FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
             Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
    DB_QueryDELETE (Query,"can not remove expired sessions");

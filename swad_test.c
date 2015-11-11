@@ -561,13 +561,13 @@ static void Tst_ShowTstTotalMark (double TotalScore)
 
 static bool Tst_CheckIfNextTstAllowed (void)
   {
-   extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y;
-   extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y_on_DATE_Z;
+   extern const char *Txt_Test;
+   extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long NumSecondsFromNowToNextAccTst = -1L;	// Access allowed when this number <= 0
-   unsigned Year,Month,Day,Hour,Minute,Second;
+   time_t TimeNextTestUTC = (time_t) 0;
 
    /***** Superusers are allowed to do all test they want *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -575,7 +575,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
 
    /***** Get date of next allowed access to test from database *****/
    sprintf (Query,"SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-UNIX_TIMESTAMP(),"
-	          "LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND"
+	          "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"
                   " FROM crs_usr"
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'",
             Gbl.Test.Config.MinTimeNxtTstPerQst,
@@ -587,9 +587,8 @@ static bool Tst_CheckIfNextTstAllowed (void)
       row = mysql_fetch_row (mysql_res);
       if (row[0])
          if (sscanf (row[0],"%ld",&NumSecondsFromNowToNextAccTst) == 1)
-            /* Datetime of next access allowed (row[1]) */
-            if (sscanf (row[1],"%04u-%02u-%02u %02u:%02u:%02u",&Year,&Month,&Day,&Hour,&Minute,&Second) != 6)
-               Lay_ShowErrorAndExit ("Wrong date of next allowed access to test.");
+            /* Time UTC of next access allowed (row[1]) */
+            TimeNextTestUTC = Dat_GetUNIXTimeFromStr (row[1]);
      }
    else
       Lay_ShowErrorAndExit ("Error when reading date of next allowed access to test.");
@@ -600,15 +599,31 @@ static bool Tst_CheckIfNextTstAllowed (void)
    /***** Check if access is allowed *****/
    if (NumSecondsFromNowToNextAccTst > 0)
      {
-      if (Year  == Gbl.Now.Date.Year &&
-          Month == Gbl.Now.Date.Month &&
-          Day   == Gbl.Now.Date.Day)		// Next access allowed is today
-         sprintf (Gbl.Message,Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y,
-                  Gbl.CurrentCrs.Crs.FullName,Hour,Minute,Second);
-      else
-         sprintf (Gbl.Message,Txt_You_can_not_make_a_new_test_in_the_course_X_until_TIME_Y_on_DATE_Z,
-                  Gbl.CurrentCrs.Crs.FullName,Hour,Minute,Second,Year,Month,Day);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      /***** Start frame *****/
+      Lay_StartRoundFrameTable (NULL,2,Txt_Test);
+      Lay_WriteHeaderClassPhoto (1,false,false,
+				 Gbl.CurrentIns.Ins.InsCod,
+				 Gbl.CurrentDeg.Deg.DegCod,
+				 Gbl.CurrentCrs.Crs.CrsCod);
+
+      /***** Write warning *****/
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"DAT CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,Txt_You_can_not_make_a_new_test_in_the_course_X_until,
+               Gbl.CurrentCrs.Crs.FullName);
+      fprintf (Gbl.F.Out,": "
+	                 "<span id=\"date_next_test\">"
+	                 "</span>"
+                         "<script type=\"text/javascript\">"
+			 "writeLocalDateTimeFromUTC('date_next_test',%ld,'&nbsp;');"
+			 "</script>"
+			 "</td>"
+			 "</tr>",
+	       (long) TimeNextTestUTC);
+
+      /***** End frame *****/
+      Lay_EndRoundFrameTable ();
+
       return false;
      }
    return true;
@@ -6209,8 +6224,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'"
-                  " AND UNIX_TIMESTAMP(TstTime)>='%ld'"
-                  " AND UNIX_TIMESTAMP(TstTime)<='%ld'"
+                  " AND TstTime>=FROM_UNIXTIME('%ld')"
+                  " AND TstTime<=FROM_UNIXTIME('%ld')"
                   " ORDER BY TstCod",
             Gbl.CurrentCrs.Crs.CrsCod,
             UsrDat->UsrCod,

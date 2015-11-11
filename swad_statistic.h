@@ -138,7 +138,6 @@ typedef enum
 /*****************************************************************************/
 
 void Sta_GetRemoteAddr (void);
-void Sta_ExitIfTooFast (void);
 void Sta_LogAccess (const char *Comments);
 void Sta_RemoveOldEntriesRecentLog (void);
 void Sta_AskShowCrsHits (void);

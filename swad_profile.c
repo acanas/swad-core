@@ -717,13 +717,13 @@ static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
                   " AS NumClicksPerDay"
                   " FROM usr_figures"
                   " WHERE UsrCod<>'%ld'"	// Necessary because the following comparison is not exact in floating point
-                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0')"
+                  " AND NumClicks>='0' AND FirstClickTime>FROM_UNIXTIME('0'))"
                   " AS TableNumClicksPerDay"
                   " WHERE NumClicksPerDay>"
                   "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
                   " FROM usr_figures"
                   " WHERE UsrCod='%ld'"
-                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0')",
+                  " AND NumClicks>='0' AND FirstClickTime>FROM_UNIXTIME('0'))",
 	    UsrCod,UsrCod);
    return DB_QueryCOUNT (Query,"can not get ranking using number of clicks per day");
   }
@@ -738,7 +738,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
    /***** Select number of rows with values already calculated *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
-	          " WHERE NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0'");
+	          " WHERE NumClicks>='0' AND FirstClickTime>FROM_UNIXTIME('0')");
    return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
   }
 

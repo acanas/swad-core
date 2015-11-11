@@ -156,7 +156,9 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
 
    /***** Get active notices in course *****/
    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
-                  " FROM notices WHERE CrsCod='%ld' AND Status='%u' ORDER BY T DESC",
+                  " FROM notices"
+                  " WHERE CrsCod='%ld' AND Status='%u'"
+                  " ORDER BY T DESC",
             Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
    NumNotices = DB_QuerySELECT (Query,&mysql_res,"can not get notices from database");
 

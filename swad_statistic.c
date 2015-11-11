@@ -236,70 +236,6 @@ void Sta_GetRemoteAddr (void)
   }
 
 /*****************************************************************************/
-/********* If this click is made from the same IP too fast, abort ************/
-/*****************************************************************************/
-/*
-void Sta_ExitIfTooFast (void)
-  {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Too_fast;
-   extern const char *Txt_Go_back;
-   char Query[512];
-   unsigned NumClicks;	// Very recent clicks from this IP (0 or 1)
-
-   ***** Some actions can be made fast *****
-   if (Gbl.CurrentAct == ActRefCon    ||	// Refresh connected
-       Gbl.CurrentAct == ActRefLstClk ||	// Refresh last clicks
-       Gbl.CurrentAct == ActAutUsrChgLan)	// Change my language automatically just after log in
-      return;
-
-   ***** Get if a click/refresh is made from the same IP very recently *****
-   sprintf (Query,"SELECT COUNT(*) FROM IP_last"
-                  " WHERE IP='%s' AND UNIX_TIMESTAMP(LastClick)>UNIX_TIMESTAMP()-%u",
-            Gbl.IP,Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);
-   NumClicks = (unsigned) DB_QueryCOUNT (Query,"can not get the number of very recent clicks");
-
-   ***** Remove old clicks/refreshes *****
-   sprintf (Query,"DELETE FROM IP_last"
-                  " WHERE UNIX_TIMESTAMP(LastClick)<=UNIX_TIMESTAMP()-%u",
-                  Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);
-   DB_QueryDELETE (Query,"can not remove old last IP");
-
-   ***** Replace last click/refresh from this IP *****
-   sprintf (Query,"REPLACE INTO IP_last"
-                  " (IP,LastClick)"
-                  " VALUES ('%s',NOW())",
-	    Gbl.IP);
-   DB_QueryREPLACE (Query,"can not update last IP");
-
-   ***** If too fast, write warning and exit *****
-   if (NumClicks)	// Too fast
-     {
-      ***** Write header to standard output to avoid timeout *****
-      // Two \r\n are necessary
-      fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n\r\n"
-                      "<!DOCTYPE html>\n"
-                      "<html lang=\"%s\">\n"
-		      "<head>"
-		      "<title>%s</title>"
-		      "</head>"
-		      "<body>"
-		      "<h1 style=\"text-align:center;\">%s</h1>"
-		      "<h2 style=\"text-align:center;\">"
-		      "<a href=\"\" onclick=\"window.history.back();\">&larr; %s</a>"
-		      "</h2>"
-		      "</body>"
-		      "</html>",
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	       Cfg_PLATFORM_FULL_NAME,
-	       Txt_Too_fast,
-	       Txt_Go_back);
-      exit (0);
-      // sleep (Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP);	// Sleep those seconds
-     }
-  }
-*/
-/*****************************************************************************/
 /**************************** Log access in database *************************/
 /*****************************************************************************/
 
@@ -412,7 +348,7 @@ void Sta_RemoveOldEntriesRecentLog (void)
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM log_recent"
-                  " WHERE UNIX_TIMESTAMP(ClickTime)<UNIX_TIMESTAMP()-%ld",
+                  " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Sta_SECONDS_IN_RECENT_LOG);
    DB_QueryDELETE (Query,"can not remove old entries from recent log");
   }
@@ -1118,12 +1054,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                   StrQueryCountType,LogTable);
 	 break;
      }
-   sprintf (QueryAux," WHERE"
-	             " UNIX_TIMESTAMP(%s.ClickTime)>='%ld'"
-	             " AND"
-	             " UNIX_TIMESTAMP(%s.ClickTime)<='%ld'",
-            LogTable,(long) Gbl.DateRange.TimeUTC[0],
-            LogTable,(long) Gbl.DateRange.TimeUTC[1]);
+   sprintf (QueryAux," WHERE %s.ClickTime"
+	             " BETWEEN FROM_UNIXTIME('%ld') AND FROM_UNIXTIME('%ld')",
+            LogTable,
+            (long) Gbl.DateRange.TimeUTC[0],
+            (long) Gbl.DateRange.TimeUTC[1]);
    strcat (Query,QueryAux);
 
    switch (GlobalOrCourse)
@@ -2168,12 +2103,12 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       if (NumRow == 1)
          Dat_AssignDate (&PreviousReadDate,&CurrentReadDate);
 
-      /* Update number of pages generated per hour */
+      /* Update number of hits per hour */
       if (PreviousReadDate.Year  != CurrentReadDate.Year  ||
           PreviousReadDate.Month != CurrentReadDate.Month ||
           PreviousReadDate.Day   != CurrentReadDate.Day)	// Current read date (CurrentReadDate) is older than previous read date (PreviousReadDate) */
         {
-         /* In the next loop we show (NumDaysFromLastDateToCurrDate-1) days (the menos antiguos) with 0 clicks
+         /* In the next loop we show (NumDaysFromLastDateToCurrDate-1) days with 0 clicks
             and a last day (older) with Hits.Num */
          Dat_AssignDate (&Date,&LastDate);
          NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&PreviousReadDate,&LastDate);

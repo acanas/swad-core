@@ -1245,7 +1245,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 
    /***** Get data of a post from database *****/
    sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),Subject,Content"
-                  " FROM forum_post WHERE PstCod='%ld'",PstCod);
+                  " FROM forum_post WHERE PstCod='%ld'",
+            PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a post");
 
    /***** Result should have a unique row *****/
@@ -3427,7 +3428,9 @@ void For_GetThrData (struct ForumThread *Thr)
                   "UNIX_TIMESTAMP(m1.CreatTime),"
                   "m0.Subject"
                   " FROM forum_thread,forum_post AS m0,forum_post AS m1"
-                  " WHERE forum_thread.ThrCod='%ld' AND forum_thread.FirstPstCod=m0.PstCod AND forum_thread.LastPstCod=m1.PstCod",
+                  " WHERE forum_thread.ThrCod='%ld'"
+                  " AND forum_thread.FirstPstCod=m0.PstCod"
+                  " AND forum_thread.LastPstCod=m1.PstCod",
             Thr->ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a thread of a forum");
 
@@ -4208,7 +4211,7 @@ void For_RemoveExpiredThrsClipboards (void)
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM forum_thr_clip"
-                  " WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(TimeInsert)+%ld",
+                  " WHERE TimeInsert<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD);
    DB_QueryDELETE (Query,"can not remove old threads from clipboards");
   }

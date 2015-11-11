@@ -1279,7 +1279,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    /***** Get users who must be notified from database ******/
    // (Status & Ntf_STATUS_BIT_EMAIL) && !(Status & Ntf_STATUS_BIT_SENT) && !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
    sprintf (Query,"SELECT DISTINCT ToUsrCod FROM notif"
-                  " WHERE UNIX_TIMESTAMP(TimeNotif) < UNIX_TIMESTAMP()-%lu"
+                  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
                   " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0",
             Cfg_TIME_TO_SEND_PENDING_NOTIF,
             (unsigned) Ntf_STATUS_BIT_EMAIL,
@@ -1320,7 +1320,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
    /***** Delete old notifications ******/
    sprintf (Query,"DELETE LOW_PRIORITY FROM notif"
-	          " WHERE UNIX_TIMESTAMP(TimeNotif) < UNIX_TIMESTAMP()-%lu",
+                  " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_OLD_NOTIF);
    DB_QueryDELETE (Query,"can not remove old notifications");
   }
@@ -1877,7 +1877,7 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
    /***** Get number of places with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM notif"
                   " WHERE ToUsrCod='%ld' AND (Status & %u)=0"
-                  " AND UNIX_TIMESTAMP(TimeNotif)>'%ld'",
+                  " AND TimeNotif>FROM_UNIXTIME('%ld')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
             Gbl.Usrs.Me.UsrLast.LastAccNotif);

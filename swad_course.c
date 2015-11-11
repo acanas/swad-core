@@ -3490,7 +3490,7 @@ void Crs_RemoveOldCrss (void)
 
    /***** Get old courses from database *****/
    sprintf (Query,"SELECT CrsCod FROM crs_last WHERE"
-                  " UNIX_TIMESTAMP(LastTime) < UNIX_TIMESTAMP()-%lu"
+                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
                   " AND CrsCod NOT IN (SELECT DISTINCT CrsCod FROM crs_usr)",
             SecondsWithoutAccess);
    if ((NumCrss = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))

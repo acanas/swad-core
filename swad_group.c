@@ -2353,7 +2353,7 @@ void Grp_OpenGroupsAutomatically (void)
    /***** Find group types to be opened *****/
    sprintf (Query,"SELECT GrpTypCod FROM crs_grp_types"
 	          " WHERE CrsCod='%ld' AND MustBeOpened='Y'"
-	          " AND UNIX_TIMESTAMP(OpenTime)<=UNIX_TIMESTAMP()",
+	          " AND OpenTime<=NOW()",
 	    Gbl.CurrentCrs.Crs.CrsCod);
    NumGrpTypes = (unsigned) DB_QuerySELECT (Query,&mysql_res,
 	                                    "can not get the types of group to be opened");

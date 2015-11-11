@@ -7058,7 +7058,7 @@ void Brw_RemoveExpiredExpandedFolders (void)
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-                  " WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+%ld",
+                  " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
    DB_QueryDELETE (Query,"can not remove old expanded folders");
   }
@@ -7073,7 +7073,7 @@ static void Brw_RemoveExpiredClipboards (void)
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM clipboard"
-                  " WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(CopyTime)+%ld",
+                  " WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD);
    DB_QueryDELETE (Query,"can not remove old paths from clipboard");
   }

@@ -474,7 +474,7 @@ static int Svc_RemoveOldWSKeys (void)
    /* A session expire when last click (LastTime) is too old,
       or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
    sprintf (Query,"DELETE LOW_PRIORITY FROM ws_keys WHERE"
-                  " UNIX_TIMESTAMP() > UNIX_TIMESTAMP(LastTime)+%ld",
+                  " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_Svc_KEY);
    if (mysql_query (&Gbl.mysql,Query))
       return soap_receiver_fault (Gbl.soap,
@@ -2545,7 +2545,8 @@ int swad__getNotifications (struct soap *soap,
    /***** Get my notifications from database *****/
    sprintf (Query,"SELECT NtfCod,NotifyEvent,UNIX_TIMESTAMP(TimeNotif),"
 	          "FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod,Status"
-                  " FROM notif WHERE ToUsrCod=%ld AND UNIX_TIMESTAMP(TimeNotif)>=%ld"
+                  " FROM notif"
+                  " WHERE ToUsrCod='%ld' AND TimeNotif>=FROM_UNIXTIME('%ld')"
                   " ORDER BY TimeNotif DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's notifications");
@@ -3413,11 +3414,16 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		  " AND tst_tags.CrsCod='%ld'"
-		  " AND (UNIX_TIMESTAMP(tst_questions.EditTime)>='%ld'"
-                  " OR UNIX_TIMESTAMP(tst_tags.ChangeTime)>='%ld')"
+		  " AND "
+		  "("
+		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+                  " OR "
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  ")"
                   " ORDER BY QstCod",
             CrsCod,CrsCod,CrsCod,
-            BeginTime,BeginTime);
+            BeginTime,
+            BeginTime);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test questions");
 
    getTestsOut->questionsArray.__size = (int) NumRows;
@@ -3492,11 +3498,17 @@ static int Svc_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		  " AND tst_tags.CrsCod='%ld'"
-		  " AND (UNIX_TIMESTAMP(tst_questions.EditTime)>='%ld'"
-                  " OR UNIX_TIMESTAMP(tst_tags.ChangeTime)>='%ld'))"
+		  " AND "
+		  "("
+		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+                  " OR "
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  ")"
+                  ")"
                   " ORDER BY QstCod,AnsInd",
             CrsCod,CrsCod,CrsCod,
-            BeginTime,BeginTime);
+            BeginTime,
+            BeginTime);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test answers");
 
    getTestsOut->answersArray.__size = (int) NumRows;
@@ -3571,11 +3583,17 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
 		  " AND tst_tags.CrsCod='%ld'"
-		  " AND (UNIX_TIMESTAMP(tst_questions.EditTime)>='%ld'"
-                  " OR UNIX_TIMESTAMP(tst_tags.ChangeTime)>='%ld'))"
+		  " AND "
+		  "("
+		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+                  " OR "
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  ")"
+                  ")"
                   " ORDER BY QstCod,TagInd",
             CrsCod,CrsCod,CrsCod,
-            BeginTime,BeginTime);
+            BeginTime,
+            BeginTime);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test question tags");
 
    getTestsOut->questionTagsArray.__size = (int) NumRows;
