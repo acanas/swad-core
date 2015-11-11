@@ -239,7 +239,7 @@ void Lay_WriteStartOfPage (void)
 
    /***** HTML body *****/
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
-      fprintf (Gbl.F.Out,"<body class=\"%s\" onload=\"init()\">\n"
+      fprintf (Gbl.F.Out,"<body onload=\"init()\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/_.gif\""
                          " alt=\"\" title=\"\""
@@ -247,7 +247,6 @@ void Lay_WriteStartOfPage (void)
                          "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
                          "</div>"
                          "</div>",
-               ClassBackground[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL);
    else
      {
@@ -269,7 +268,8 @@ void Lay_WriteStartOfPage (void)
 	       Gbl.Prefs.IconsURL);
 
    /***** Header of layout *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+   fprintf (Gbl.F.Out,"<table class=\"%s\" style=\"width:100%%;\">",
+            ClassBackground[Gbl.Prefs.Theme]);
 
    Lay_WritePageTopHeading ();
 
