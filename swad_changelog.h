@@ -113,12 +113,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.37.3 (2015/11/11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.37.4 (2015/11/12)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.37.3:  Nov 11, 2015	Changes in country map images. (186898 lines)
+        Version 15.37.4:  Nov 12, 2015	Changes in institution logo. (186891 lines)
+        Version 15.37.3:  Nov 11, 2015	Changes in country map image. (186898 lines)
         Version 15.37.2:  Nov 11, 2015	Change in layout (background). (186912 lines)
         Version 15.37.1:  Nov 11, 2015	Minor changes in sessions. (186912 lines)
         Version 15.37:    Nov 11, 2015	Changes to speed up queries related to time.

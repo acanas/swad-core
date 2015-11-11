@@ -132,7 +132,6 @@ void Ins_SeeInsWithPendingCtrs (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Institutions_with_pending_centres);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th></th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -159,24 +158,16 @@ void Ins_SeeInsWithPendingCtrs (void)
          /* Get data of institution */
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
 
-         /* Institution logo */
-         fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"CENTER_MIDDLE %s\">"
-                            "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-                  BgColor,Ins.WWW,Ins.FullName);
-         Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</td>");
-
-         /* Institution full name */
+         /* Institution logo and full name */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCtr);
          Ins_PutParamInsCod (Ins.InsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Ins.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s</a>",
+         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
+         Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
+                       16,"CENTER_MIDDLE",true);
+         fprintf (Gbl.F.Out,"&nbsp;%s</a>",
 	          Ins.FullName);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
