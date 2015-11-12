@@ -191,7 +191,6 @@ void Deg_SeeDegWithPendingCrss (void)
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Degrees_with_pending_courses);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th></th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -218,26 +217,17 @@ void Deg_SeeDegWithPendingCrss (void)
          /* Get data of degree */
          Deg_GetDataOfDegreeByCod (&Deg);
 
-         /* Degree logo */
+         /* Degree logo and full name */
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT CENTER_MIDDLE %s\">"
-                            "<a href=\"%s\" title=\"%s\" class=\"DAT\""
-                            " target=\"_blank\">",
-                  BgColor,Deg.WWW,Deg.FullName);
-         Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</td>");
-
-         /* Degree full name */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">",
+	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Act_FormGoToStart (ActSeeCrs);
          Deg_PutParamDegCod (Deg.DegCod);
          sprintf (Gbl.Title,Txt_Go_to_X,Deg.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
-         fprintf (Gbl.F.Out,"%s"
-                            "</a>",
+         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
+         Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
+                       16,"CENTER_MIDDLE",true);
+         fprintf (Gbl.F.Out,"&nbsp;%s</a>",
 	          Deg.FullName);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");

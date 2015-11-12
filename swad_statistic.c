@@ -65,6 +65,36 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 #define Sta_SECONDS_IN_RECENT_LOG ((time_t)(Cfg_DAYS_IN_RECENT_LOG*24UL*60UL*60UL))	// Remove entries in recent log oldest than this time
 
+const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
+  {
+   1,	// Sta_CLICKS_CRS_DETAILED_LIST
+
+   1,	// Sta_CLICKS_CRS_PER_USR
+   1,	// Sta_CLICKS_CRS_PER_DAYS
+   0,	// Sta_CLICKS_CRS_PER_DAYS_AND_HOUR
+   1,	// Sta_CLICKS_CRS_PER_WEEKS
+   1,	// Sta_CLICKS_CRS_PER_MONTHS
+   1,	// Sta_CLICKS_CRS_PER_HOUR
+   0,	// Sta_CLICKS_CRS_PER_MINUTE
+   1,	// Sta_CLICKS_CRS_PER_ACTION
+
+   1,	// Sta_CLICKS_GBL_PER_DAYS
+   0,	// Sta_CLICKS_GBL_PER_DAYS_AND_HOUR
+   1,	// Sta_CLICKS_GBL_PER_WEEKS
+   1,	// Sta_CLICKS_GBL_PER_MONTHS
+   1,	// Sta_CLICKS_GBL_PER_HOUR
+   0,	// Sta_CLICKS_GBL_PER_MINUTE
+   1,	// Sta_CLICKS_GBL_PER_ACTION
+   1,	// Sta_CLICKS_GBL_PER_PLUGIN
+   1,	// Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION
+   1,	// Sta_CLICKS_GBL_PER_BANNER
+   1,	// Sta_CLICKS_GBL_PER_COUNTRY
+   1,	// Sta_CLICKS_GBL_PER_INSTITUTION
+   1,	// Sta_CLICKS_GBL_PER_CENTRE
+   1,	// Sta_CLICKS_GBL_PER_DEGREE
+   1,	// Sta_CLICKS_GBL_PER_COURSE
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -1315,7 +1345,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks);
       else
 	 Lay_StartRoundFrame (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-      fprintf (Gbl.F.Out,"<table>");
+
+      fprintf (Gbl.F.Out,"<table");
+      if (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy])
+         fprintf (Gbl.F.Out," class=\"CELLS_PAD_%u\"",
+                  Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);
+      fprintf (Gbl.F.Out,">");
 
       switch (Gbl.Stat.ClicksGroupedBy)
 	{
@@ -1854,11 +1889,11 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -1898,7 +1933,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
 
          /* Write the date */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s RIGHT_TOP\">"
+                            "<td class=\"%s LEFT_TOP\">"
                             "%04u-%02u-%02u&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
@@ -2047,11 +2082,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th rowspan=\"3\" class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th rowspan=\"3\" class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
-                      "<th rowspan=\"3\" class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th rowspan=\"3\" class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
                       "<th colspan=\"24\" class=\"LEFT_TOP\""
                       " style=\"width:%upx;\">"
@@ -2120,7 +2155,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
             /* Write the date */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"%s RIGHT_TOP\">"
+        	               "<td class=\"%s LEFT_TOP\">"
         	               "%04u-%02u-%02u&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :
@@ -2436,8 +2471,8 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -2472,7 +2507,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
         {
          /* Write week */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG RIGHT_TOP\">"
+                            "<td class=\"LOG LEFT_TOP\">"
                             "%04u-%02u&nbsp;"
                             "</td>",
 	          Date.Year,Date.Week);
@@ -2498,7 +2533,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
     {
      /* Write week */
      fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG RIGHT_TOP\">"
+	                "<td class=\"LOG LEFT_TOP\">"
 	                "%04u-%02u&nbsp;"
 	                "</td>",
               Date.Year,Date.Week);
@@ -2534,8 +2569,8 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -2570,7 +2605,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
         {
          /* Write the month */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG RIGHT_TOP\">"
+                            "<td class=\"LOG LEFT_TOP\">"
                             "%04u-%02u&nbsp;"
                             "</td>",
 	          Date.Year,Date.Month);
@@ -2595,7 +2630,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
     {
      /* Write the month */
      fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG RIGHT_TOP\">"
+	                "<td class=\"LOG LEFT_TOP\">"
 	                "%04u-%02u&nbsp;"
 	                "</td>",
               Date.Year,Date.Month);
@@ -2944,7 +2979,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"RIGHT_TOP\">"
-                      "%s&nbsp;"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -3002,7 +3037,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"RIGHT_TOP\">"
-                      "%s&nbsp;"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -3056,7 +3091,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_TOP\">"
-                      "%s&nbsp;"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -3110,7 +3145,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"CENTER_TOP\">"
-                      "%s&nbsp;"
+                      "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -3484,7 +3519,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3592,13 +3627,13 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
