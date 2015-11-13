@@ -2948,7 +2948,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
+		      "<th colspan=\"3\" class=\"LEFT_MIDDLE\">"
 		      "%s"
 		      "</th>"
 		      "<th class=\"RIGHT_MIDDLE\">"
