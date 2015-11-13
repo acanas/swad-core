@@ -113,11 +113,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.37.6 (2015/11/12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.38 (2015/11/13)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.38:    Nov 13, 2015	New option for students: list of my attendance. (187063 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1473','es','N','Listar mi asistencia a varios eventos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1474','es','N','Imprimir mi asistencia a varios eventos');
+
         Version 15.37.6:  Nov 12, 2015	Changes in degree logo.
 					Changes in layout of hits stats. (186910 lines)
         Version 15.37.5:  Nov 12, 2015	Changes in centre logo. (186886 lines)

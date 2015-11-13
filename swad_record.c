@@ -2304,7 +2304,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 // TODO: A student should see her/his attendance
 	 if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
 	   {
-	    Act_FormStart (ActSeeLstAttStd);
+	    Act_FormStart (ActSeeLstStdAtt);
 	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
 	    Grp_PutParamAllGroups ();
 	    Act_LinkFormSubmit (Txt_Attendance,ClassData);

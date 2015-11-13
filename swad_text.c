@@ -3078,23 +3078,23 @@ const char *Txt_Attendance =	// Number of times a students has attended to face-
 
 const char *Txt_Attendance_list =
 #if   L==0
-	"Llista assistents";
+	"Llista assistencia";
 #elif L==1
 	"Anwesenheitsliste";
 #elif L==2
 	"Attendance list";
 #elif L==3
-	"Lista asistentes";
+	"Lista asistencia";
 #elif L==4
-	"Liste participants";
+	"Liste fr&eacute;quentation";
 #elif L==5
-	"Lista asistentes";	// Okoteve traducción
+	"Lista asistencia";	// Okoteve traducción
 #elif L==6
 	"Elenco presenze";
 #elif L==7
 	"Lista obecno&sacute;ci";
 #elif L==8
-	"Lista presen&ccedil;as";
+	"Lista assiduidade";
 #endif
 
 const char *Txt_Availability =
@@ -23154,6 +23154,27 @@ const char *Txt_No_enrollment_requests =
 	"No enrollment requests.";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"No enrollment requests.";			// Necessita de tradução
+#endif
+
+const char *Txt_No_events =
+#if   L==0
+	"No hay esdeveniments.";
+#elif L==1
+	"Keine Ereignisse.";
+#elif L==2
+	"No events.";
+#elif L==3
+	"No hay eventos.";
+#elif L==4
+	"Il n'y a pas d'&eacute;v&eacute;nements.";
+#elif L==5
+	"No hay eventos.";	// Okoteve traducción
+#elif L==6
+	"Non ci sono eventi.";
+#elif L==7
+	"Brak wydarzen.";
+#elif L==8
+	"N&atilde;o h&aacute; eventos.";
 #endif
 
 const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file =

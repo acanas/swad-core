@@ -113,7 +113,10 @@ void Att_RegisterStudentsInAttEvent (void);
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod);
 void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 
-void Usr_ReqListAttendanceStdsCrs (void);
-void Usr_ListAttendanceStdsCrs (void);
+void Usr_ReqListStdsAttendanceCrs (void);
+void Usr_ListMyAttendanceCrs (void);
+void Usr_PrintMyAttendanceCrs (void);
+void Usr_ListStdsAttendanceCrs (void);
+void Usr_PrintStdsAttendanceCrs (void);
 
 #endif

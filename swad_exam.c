@@ -72,11 +72,11 @@ static long Exa_GetParamsExamAnnouncement (void);
 static void Exa_AllocMemExamAnnouncement (void);
 static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Exa_ListExamAnnouncementsEdit (void);
-static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
 static long Exa_AddExamAnnouncementToDB (void);
 static void Exa_ModifyExamAnnouncementInDB (long ExaCod);
 static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
-static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
 
 /*****************************************************************************/
@@ -413,7 +413,7 @@ static void Exa_ListExamAnnouncementsEdit (void)
 /******************** List all the exam announcements ************************/
 /*****************************************************************************/
 
-static void Exa_ListExamAnnouncements (Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement)
+static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
    extern const char *Txt_No_announcements_of_exams_of_X;
    extern const char *Txt_New_announcement_OF_EXAM;
@@ -709,7 +709,7 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod)
 /************ Show a form with the data of an exam announcement **************/
 /*****************************************************************************/
 
-static void Exa_ShowExamAnnouncement (long ExaCod,Exa_tTypeViewExamAnnouncement_t TypeViewExamAnnouncement)
+static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *The_ClassForm[The_NUM_THEMES];

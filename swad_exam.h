@@ -37,8 +37,8 @@ typedef enum
   {
    Exa_NORMAL_VIEW,
    Exa_PRINT_VIEW,
-   Exa_FORM_VIEW
-  } Exa_tTypeViewExamAnnouncement_t;
+   Exa_FORM_VIEW,
+  } Exa_TypeViewExamAnnouncement_t;
 
 typedef enum
   {

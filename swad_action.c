@@ -902,9 +902,11 @@ Users:
 	744. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
 	745. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
 
-	746. ActReqLstAttStd		Request listing of attendance of several students to several events
-	747. ActSeeLstAttStd		List attendance of several students to several events
-	748. ActPrnLstAttStd		Print attendance of several students to several events
+	746. ActReqLstStdAtt		Request listing of attendance of several students to several events
+------>	746. ActSeeLstMyAtt		List my attendance as student to several events
+------>	746. ActPrnLstMyAtt		Print my attendance as student to several events
+	747. ActSeeLstStdAtt		List attendance of several students to several events
+	748. ActPrnLstStdAtt		Print attendance of several students to several events
 	749. ActFrmNewAtt		Form to create a new attendance event
 	750. ActEdiOneAtt		Edit one attendance event
 	751. ActNewAtt			Create new attendance event
@@ -2324,9 +2326,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqEnrSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminStds		,NULL},
    /* ActReqEnrSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminTchs		,NULL},
 
-   /* ActReqLstAttStd	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListAttendanceStdsCrs	,NULL},
-   /* ActSeeLstAttStd	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListAttendanceStdsCrs	,NULL},
-   /* ActPrnLstAttStd	*/{1075,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAttendanceStdsCrs	,NULL},
+   /* ActReqLstStdAtt	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListStdsAttendanceCrs	,NULL},
+   /* ActSeeLstMyAtt	*/{1473,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListMyAttendanceCrs	,NULL},
+   /* ActPrnLstMyAtt	*/{1474,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_PrintMyAttendanceCrs	,NULL},
+   /* ActSeeLstStdAtt	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListStdsAttendanceCrs	,NULL},
+   /* ActPrnLstStdAtt	*/{1075,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_PrintStdsAttendanceCrs	,NULL},
    /* ActFrmNewAtt	*/{1063,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RequestCreatOrEditAttEvent	,NULL},
    /* ActEdiOneAtt	*/{1064,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RequestCreatOrEditAttEvent	,NULL},
    /* ActNewAtt		*/{1065,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RecFormAttEvent		,NULL},
@@ -3841,9 +3845,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActShoAtt,		// #1070
 	ActSeeOneAtt,		// #1071
 	ActRecAttStd,		// #1072
-	ActReqLstAttStd,	// #1073
-	ActSeeLstAttStd,	// #1074
-	ActPrnLstAttStd,	// #1075
+	ActReqLstStdAtt,	// #1073
+	ActSeeLstStdAtt,	// #1074
+	ActPrnLstStdAtt,	// #1075
 	ActRecAttMe,		// #1076
 	ActAutUsrChgLan,	// #1077
 	ActSeeDocCrs,		// #1078
@@ -4244,6 +4248,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActHidAnn,		// #1470
 	ActRevAnn,		// #1471
 	ActReqRemNot,		// #1472
+	ActSeeLstMyAtt,		// #1473
+	ActPrnLstMyAtt,		// #1474
 	};
 
 /*****************************************************************************/
