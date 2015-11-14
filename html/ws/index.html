@@ -170,7 +170,7 @@
 	The SWAD web service provides the following operations:
 	</p>
 	<ul>
-		<li><a href="#createAccount" class="not_implemented"><code>createAccount</code></a></li>
+		<li><a href="#createAccount"><code>createAccount</code></a></li>
 		<li><a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a></li>
 		<li><a href="#loginBySessionKey"><code>loginBySessionKey</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#getNewPassword"><code>getNewPassword</code></a></li>
@@ -187,7 +187,8 @@
 		<li style="margin-bottom:1em;"><a href="#getMarks"><code>getMarks</code></a></li>
 
 		<li><a href="#getTestConfig"><code>getTestConfig</code></a></li>
-		<li style="margin-bottom:1em;"><a href="#getTests"><code>getTests</code></a></li>
+		<li><a href="#getTests"><code>getTests</code></a></li>
+		<li style="margin-bottom:1em;"><a href="#getTrivialQuestion"><code>getTrivialQuestion</code></a></li>
 
 		<li style="margin-bottom:1em;"><a href="#getUsers"><code>getUsers</code></a></li>
 
@@ -205,17 +206,16 @@
 
 	<hr />
 
-	<a name="createAccount" class="not_implemented"><h3 class="WS_FUNCTION"><code>createAccount</code></h3></a>
-	<p align="justify" class="not_implemented">
+	<a name="createAccount"><h3 class="WS_FUNCTION"><code>createAccount</code></h3></a>
+	<p align="justify">
 	Create a new user account.
-	<strong>FUTURE, NOT YET IMPLEMENTED!</strong>
 	</p>
-		<ul class="not_implemented">
+		<ul>
 			<li>Call parameters:
 				<ul>
 					<li><strong>userNickname</strong>: string starting by @ (@nickname of the user).</li>
 					<li><strong>userEmail</strong>: string (email of the user).</li>
-					<li><strong>userID</strong>: string (DNI/passport of the user).</li>
+					<!-- <li><strong>userID</strong>: string (DNI/passport of the user).</li> -->
 					<li><strong>userPassword</strong>: string, plain password.</li>
 					<li><strong>appKey</strong>: string, key used by the application.</li>
 				</ul>
@@ -224,7 +224,15 @@
 				<ul>
 					<li><strong>userCode</strong>: integer, unique identifier of the user.
 						<ul>
-							<li>If &lt;= 0, an error has happened, the account has not been created.</li>
+							<li>If &lt;= 0, an error has happened, the account has not been created.
+								<ul>
+									<li>-1 &rarr; nickname not valid</li>
+									<li>-2 &rarr; nickname registered by another user</li>
+									<li>-3 &rarr; e-mail not valid</li>
+									<li>-4 &rarr; e-mail registered by another user</li>
+									<li>-5 &rarr; password not valid (too short, too trivial...)</li>
+								</ul>
+							</li>
 							<li>If &gt; 0, the account has been successfully created
 							and this unique identifier has been assigned to the new user.</li>
 						</ul>
@@ -840,6 +848,50 @@
 			</li>
 		</ul>
 
+	<a name="getTrivialQuestion"><h3 class="WS_FUNCTION"><code>getTrivialQuestion</code></h3></a>
+	<p align="justify">
+	Returns a random test question, selected from the "uniqueChoice" questions
+	in the courses of a given list of degrees,
+	and with a score in the interval [<code>lowerScore</code>, <code>upperScore</code>].
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+				        <li><strong>wsKey</strong>: string, identifier returned by loginByUserPasswordKey or loginBySessionKey.</li>
+				        <li><strong>degrees</strong>: string. It can contain one or more degree codes, separated by commas.</li>
+				        <li><strong>lowerScore</strong>: float. lower limit of the question score between -1.0 and 1.0</li>
+				        <li><strong>upperScore</strong>: float. upper limit of the question score between -1.0 and 1.0</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>question</strong>: data structure with the following fields:
+						<ul>
+							<li><strong>questionCode</strong>: integer, unique identifier for the question, > 0.
+								If no question found &rArr; a questionCode value <= 0 will be returned.</li>
+							<li><strong>answerType</strong>: string,
+								currently only the following value is returned:
+								<ul>
+									<li>&quot;uniqueChoice&quot;: choice of a unique answer between several options.</li>
+								</ul>
+							<li><strong>shuffle</strong>: integer. If not 0 &rArr; the answers can be shuffled.</li>
+							<li><strong>stem</strong>: string with the stem of the question.</li>
+							<li><strong>feedback</strong>: string with the feedback of the question.</li>
+						</ul>
+					</li>
+					<li><strong>answers</strong>: list of answers of the returned question, where each answer is a data structure with the following fields:
+						<ul>
+							<li><strong>questionCode</strong>: integer.</li>
+							<li><strong>answerIndex</strong>: integer, index or position (0, 1, 2,...) of the answer inside the question.</li>
+							<li><strong>correct</strong>: integer. If not 0 &rArr; the answer is correct.</li>
+							<li><strong>answerText</strong>: string with the text of the answer.</li>
+							<li><strong>answerFeedback</strong>: string with the feedback for this answer.
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
 	<hr />
 
 	<a name="getUsers" ><h3 class="WS_FUNCTION"><code>getUsers</code></h3></a>
@@ -1099,14 +1151,15 @@
 								When a user opens this notification,
 								you should call <a href="#markNotificationsAsRead"><code>markNotificationsAsRead</code></a> with this value.</li>
 							<li><strong>eventType</strong>: string,
-								with one of the following 12 values:
+								with one of the following 13 values:
 								<ul>
 									<li>&quot;documentFile&quot;: document.</li>
 									<li>&quot;sharedFile&quot;: shared file.</li>
 									<li>&quot;assignment&quot;: assignment.</li>
 									<li>&quot;examAnnouncement&quot;: exam announcement.</li>
 									<li>&quot;marksFile&quot;: marks/grades file.</li>
-									<li>&quot;enrollment&quot;: enrollment in a course.</li>
+									<li>&quot;enrollmentStudent&quot;: enrollment in a course as a student.</li>
+									<li>&quot;enrollmentTeacher&quot;: enrollment in a course as a teacher.</li>
 									<li>&quot;enrollmentRequest&quot;: enrollment request.</li>
 									<li>&quot;notice&quot;: notice (yellow note).</li>
 									<li>&quot;forumPostCourse&quot;: new message in a forum of a course.</li>

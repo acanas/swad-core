@@ -98,7 +98,6 @@
 // TODO: Change link to Degree in Statistics > Visits > By degree to internal Degree
 // TODO: Link to user's country in public profile
 // TODO: Show guests in connected users.
-// TODO: Hide global announcements without removing them
 // TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
@@ -113,11 +112,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.38 (2015/11/13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.38.1 (2015/11/14)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.38.1:  Nov 14, 2015	Changes in permission to query the whole range of dates in stats, suggested by Francisco Ocaña Lara. (187073 lines)
         Version 15.38:    Nov 13, 2015	New option for students: list of my attendance. (187063 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1473','es','N','Listar mi asistencia a varios eventos');

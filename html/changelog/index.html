@@ -58,13 +58,953 @@
 
 	<tr>
 	<td align="center">
-		Last update: April 04, 2015
+		Last update: October 20, 2015
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.15:    Oct 19, 2015</dt>
+							<dd>
+							Statistic figure about institutions can be displayed as a class photo or as a list. (186251 lines)
+							</dd>
+		<dt>Version 15.14.2:  Oct 16, 2015</dt>
+							<dd>
+							Minor changes in layout. (186166 lines)
+							</dd>
+		<dt>Version 15.14.1:  Oct 16, 2015</dt>
+							<dd>
+							Fixed minor bug in edition of degrees. (186170 lines)
+							</dd>
+		<dt>Version 15.14:    Oct 15, 2015</dt>
+							<dd>
+							Table log (historical log) renamed as log_full. (186169 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+RENAME TABLE log TO log_full;<br />
+							</code></small>
+							</dd>
+		<dt>Version 15.13.3:  Oct 14, 2015</dt>
+							<dd>
+							swad_bool.h replaced by stdbool.h. (? lines)
+							</dd>
+		<dt>Version 15.13.2:  Oct 11, 2015</dt>
+							<dd>
+							Refactoring and bug fixing in statistics. (186183 lines)
+							</dd>
+		<dt>Version 15.13.1:  Oct 11, 2015</dt>
+							<dd>
+							Refactoring and bug fixing in statistics related to scopes. (186300 lines)<br />
+							6 optional slow changes in database (may spend many minutes or even hours depending on the size of log tables):<br />
+							<small><code>
+UPDATE log_recent,degrees SET log_recent.CtrCod=degrees.CtrCod WHERE log_recent.DegCod=degrees.DegCod;<br />
+UPDATE log_recent,centres SET log_recent.InsCod=centres.InsCod WHERE log_recent.CtrCod=centres.CtrCod;<br />
+UPDATE log_recent,institutions SET log_recent.CtyCod=institutions.CtyCod WHERE log_recent.InsCod=institutions.InsCod;<br />
+UPDATE log,degrees SET log.CtrCod=degrees.CtrCod WHERE log.DegCod=degrees.DegCod;<br />
+UPDATE log,centres SET log.InsCod=centres.InsCod WHERE log.CtrCod=centres.CtrCod;<br />
+UPDATE log,institutions SET log.CtyCod=institutions.CtyCod WHERE log.InsCod=institutions.InsCod;<br />
+							</code></small>
+							</dd>
+		<dt>Version 15.13:    Oct 11, 2015</dt>
+							<dd>
+							Code refactoring in module swad_statistic.<br />
+							New statistics distributed by country, institution and centre. (186282 lines)
+							</dd>
+		<dt>Version 15.12:    Oct 10, 2015</dt>
+							<dd>
+							Country, institution and centre are now stored in log. (185817 lines)<br />
+							2 slow changes necessary in database (may spend many minutes or even hours depending on the size of log tables):<br />
+							<small><code>
+ALTER TABLE log_recent ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);<br />
+ALTER TABLE log ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX (CtyCod),ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER CtyCod,ADD INDEX (InsCod),ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod,ADD INDEX (CtrCod);<br />
+							</code></small>
+							</dd>
+		<dt>Version 15.11:    Oct 08, 2015</dt>
+							<dd>
+							Changes in layout of sent / received messages. (185680 lines)
+							</dd>
+		<dt>Version 15.10.5:  Oct 07, 2015</dt>
+							<dd>
+							Change in layout of removal of old users. (185669 lines)
+							</dd>
+		<dt>Version 15.10.4:  Oct 07, 2015</dt>
+							<dd>
+							Change in layout of removal of old courses. (185665 lines)
+							</dd>
+		<dt>Version 15.10.3:  Oct 07, 2015</dt>
+							<dd>
+							New contextual link in visits to last clicks. (185641 lines)
+							</dd>
+		<dt>Version 15.10.2:  Oct 07, 2015</dt>
+							<dd>
+							Fixed bug in nicknames, reported by Javier Fdez. Baldomero.<br />
+							New MIME type, suggested by Javier Fdez. Baldomero.<br />
+							Some code refactoring related to nicknames. (185639 lines)
+							</dd>
+		<dt>Version 15.10.1:  Oct 06, 2015</dt>
+							<dd>
+							New row in contextual help to upload photo. (185581 lines)
+							</dd>
+		<dt>Version 15.10:    Oct 06, 2015</dt>
+							<dd>
+							New module swad_help for contextual help to enhance usability. (185561 lines)<br />
+							1 change necessary in Makefile:<br />
+							<small><code>
+Add swad_help.o to list of object files<br />
+							</code></small>
+							</dd>
+		<dt>Version 15.9.1:   Oct 06, 2015</dt>
+							<dd>
+							Minor change in contextual help. (185514 lines)
+							</dd>
+		<dt>Version 15.9:     Oct 05, 2015</dt>
+							<dd>
+							Contextual help to encourage enrollment. (185512 lines)
+							</dd>
+		<dt>Version 15.8:     Oct 04, 2015</dt>
+							<dd>
+							Changes in file browser layout.<br />
+							Folder owners are not displayed. (185022 lines)
+							</dd>
+		<dt>Version 15.7.2:   Oct 04, 2015</dt>
+							<dd>
+							New layout in enrollment requests. (185018 lines)
+							</dd>
+		<dt>Version 15.7.1:   Oct 03, 2015</dt>
+							<dd>
+							Message translated. (184984 lines)
+							</dd>
+		<dt>Version 15.7:     Oct 03, 2015</dt>
+							<dd>
+							Height of tabs reduced.<br />
+							Changes in layout of students record cards in course. (184962 lines)
+							</dd>
+		<dt>Version 15.6.3:   Oct 03, 2015</dt>
+							<dd>
+							Radius of rounded corners is reduced. (184966 lines)
+							</dd>
+		<dt>Version 15.6.2:   Oct 03, 2015</dt>
+							<dd>
+							Changes in layout of file browsers. (184963 lines)
+							</dd>
+		<dt>Version 15.6.1:   Oct 03, 2015</dt>
+							<dd>
+							Changes in layout of file browsers. (184956 lines)
+							</dd>
+		<dt>Version 15.6  :   Oct 02, 2015</dt>
+							<dd>
+							Now a click in a form may go to a part of the destination page. (184959 lines)
+							</dd>
+		<dt>Version 15.5.2:   Oct 02, 2015</dt>
+							<dd>
+							Changes in layout of tests exams. (184934 lines)
+							</dd>
+		<dt>Version 15.5.1:   Oct 02, 2015</dt>
+							<dd>
+							Changes in layout of forms with initial and final dates. (184938 lines)
+							</dd>
+		<dt>Version 15.5:     Oct 01, 2015</dt>
+							<dd>
+							Changes in layout of selectors classphoto/list. (184909 lines)
+							</dd>
+		<dt>Version 15.4.2:   Oct 01, 2015</dt>
+							<dd>
+							Institution admins can edit holidays. (184863 lines)
+							</dd>
+		<dt>Version 15.4.1:   Sep 30, 2015</dt>
+							<dd>
+							Code refactoring in global/course statistics. (184861 lines)
+							</dd>
+		<dt>Version 15.4:     Sep 30, 2015</dt>
+							<dd>
+							Changes in global/course statistics forms. (184877 lines)
+							</dd>
+		<dt>Version 15.3.3:   Sep 30, 2015</dt>
+							<dd>
+							Changes in layout of form to selected initial and final dates. (185152 lines)
+							</dd>
+		<dt>Version 15.3.2:   Sep 30, 2015</dt>
+							<dd>
+							Changes in layout of statistical figures. (185156 lines)
+							</dd>
+		<dt>Version 15.3.1:   Sep 29, 2015</dt>
+							<dd>
+							Changes in background and fonts. (185156 lines)
+							</dd>
+		<dt>Version 15.3:     Sep 28, 2015</dt>
+							<dd>
+							All sizes are multiplied by 0.8333 (25% bigger than those previous to version 15.0). (185148 lines)
+							</dd>
+		<dt>Version 15.2.2:   Sep 27, 2015</dt>
+							<dd>
+							Fixed minor problem in CSS. (185172 lines)
+							</dd>
+		<dt>Version 15.2.1:   Sep 27, 2015</dt>
+							<dd>
+							Change in layout. Background images are changed to CSS linear gradients. (185171 lines)
+							</dd>
+		<dt>Version 15.2:     Sep 27, 2015</dt>
+							<dd>
+							Change in layout. Background images are changed to CSS linear gradients. (185185 lines)
+							</dd>
+		<dt>Version 15.1.3:   Sep 27, 2015</dt>
+							<dd>
+							Change in CSS. (185173 lines)
+							</dd>
+		<dt>Version 15.1.2:   Sep 27, 2015</dt>
+							<dd>
+							Fixed bug in requests for registration. (185170 lines)
+							</dd>
+		<dt>Version 15.1.1:   Sep 26, 2015</dt>
+							<dd>
+							Fixed bug in statistics. (185084 lines)
+							</dd>
+		<dt>Version 15.1:     Sep 25, 2015</dt>
+							<dd>
+							Changes in layout of statistics of clicks. (185058 lines)
+							</dd>
+		<dt>Version 15.0.3:   Sep 24, 2015</dt>
+							<dd>
+							Fixed bug when printing country information. (185013 lines)
+							</dd>
+		<dt>Version 15.0.2:   Sep 24, 2015</dt>
+							<dd>
+							New layout in preferences. (185011 lines)
+							</dd>
+		<dt>Version 15.0.1:   Sep 23, 2015</dt>
+							<dd>
+							Fix bugs in size of background images. (185006 lines)
+							</dd>
+		<dt>Version 15.0:     Sep 23, 2015</dt>
+							<dd>
+							All sizes are multiplied by 1.5 (50% bigger). (184885 lines)
+							</dd>
+		<dt>Version 14.135:   Sep 23, 2015</dt>
+							<dd>
+							Option to show last clicks in real time is moved inside &quot;Users - Connected&quot;. (184883 lines)
+							</dd>
+		<dt>Version 14.134.9: Sep 22, 2015</dt>
+							<dd>
+							Link in connected users to clicks in real time. (184923 lines)
+							</dd>
+		<dt>Version 14.134.8: Sep 20, 2015</dt>
+							<dd>
+							Fixed bug in list of guests.<br />
+                                       			Changes in listing of connected users. (184885 lines)
+							</dd>
+		<dt>Version 14.134.7: Sep 18, 2015</dt>
+							<dd>
+							Fixed bug in list of guests. (184879 lines)
+							</dd>
+		<dt>Version 14.134.6: Sep 18, 2015</dt>
+							<dd>
+							Fixed bug in user enrollment. (184878 lines)
+							</dd>
+		<dt>Version 14.134.5: Sep 18, 2015</dt>
+							<dd>
+							Change in order of options in user menu.<br />
+							Change in styles and layout related to users. (184877 lines)
+							</dd>
+		<dt>Version 14.134.4: Sep 18, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184876 lines)
+							</dd>
+		<dt>Version 14.134.3: Sep 18, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184875 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='82';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1467','es','N','Cambiar contrase&ntilde;a otro usuario');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1468','es','N','Cambiar contrase&ntilde;a estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Cambiar contrase&ntilde;a profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.134.2: Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184852 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='598';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1464','es','N','Solicitar cambio contrase&ntilde;a otro usuario');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1465','es','N','Solicitar cambio contrase&ntilde;a estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1466','es','N','Solicitar cambio contrase&ntilde;a profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.134.1: Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184834 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='58';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1462','es','N','Eliminar estudiante asignatura');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1463','es','N','Eliminar profesor asignatura');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.134:   Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment.<br />
+							Changes in notifications about enrollment. (184823 lines)<br />
+							25 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='592';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1456','es','N','Solicitar acept. inscrip. estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1457','es','N','Solicitar acept. inscrip. profesor');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='558';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1458','es','N','Aceptar inscrip. como estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1459','es','N','Aceptar inscrip. como profesor');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='559';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1460','es','N','Rechazar inscrip. como estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1461','es','N','Rechazar inscrip. como profesor');<br />
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;<br />
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;<br />
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;<br />
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;<br />
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;<br />
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;<br />
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;<br />
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;<br />
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;<br />
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;<br />
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;<br />
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;<br />
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;<br />
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;<br />
+UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0x7F) << 1) | (NotifNtfEvents & 0x7F) | 0x80);<br />
+UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfEvents & 0x7F));<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.133.1: Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184669 lines)
+							</dd>
+		<dt>Version 14.133:   Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184665 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1417','1421','1425');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.7: Sep 17, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184706 lines)
+							</dd>
+		<dt>Version 14.132.6: Sep 17, 2015</dt>
+							<dd>
+							Changes in users' IDs. (184640 lines)<br />
+							12 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1239';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1447','es','N','Solicitar edici&oacute;n ID invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1448','es','N','Solicitar edici&oacute;n ID estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1449','es','N','Solicitar edici&oacute;n ID profesor');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1240';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1450','es','N','Eliminar ID invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1451','es','N','Eliminar ID estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1452','es','N','Eliminar ID profesor');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1241';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1453','es','N','Crear ID invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1454','es','N','Crear ID estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1455','es','N','Crear ID profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.5: Sep 16, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184592 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='440';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1444','es','N','Crear invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1445','es','N','Crear usuario como estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1446','es','N','Crear usuario como profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.4: Sep 16, 2015</dt>
+							<dd>
+							Changes in users' photos. (184536 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='429';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1441','es','N','Eliminar foto otro usr.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1442','es','N','Eliminar foto estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1443','es','N','Eliminar foto profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.3: Sep 16, 2015</dt>
+							<dd>
+							Changes in users' photos. (184518 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='374';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1438','es','N','Cambiar foto otro usr.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1439','es','N','Cambiar foto estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1440','es','N','Cambiar foto profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.2: Sep 16, 2015</dt>
+							<dd>
+							Changes in users' photos. (184501 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='695';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1435','es','N','Detectar rostros foto otro usr.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1436','es','N','Detectar rostros foto estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1437','es','N','Detectar rostros foto profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.132.1: Sep 16, 2015</dt>
+							<dd>
+							Changes in users' photos. (184458 lines)
+							</dd>
+		<dt>Version 14.132:   Sep 16, 2015</dt>
+							<dd>
+							Changes in users' photos. (184416 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='375';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1432','es','N','Solicitar cambio foto otro usr.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1433','es','N','Solicitar cambio foto estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1434','es','N','Solicitar cambio foto profesor');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.131.1: Sep 16, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184403 lines)
+							</dd>
+		<dt>Version 14.131:   Sep 15, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184408 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1430','es','N','Preguntar si eliminar mi cuenta');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1431','es','N','Eliminar mi cuenta');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.130.3: Sep 14, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184358 lines)
+							</dd>
+		<dt>Version 14.130.2: Sep 14, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184359 lines)
+							</dd>
+		<dt>Version 14.130.1: Sep 14, 2015</dt>
+							<dd>
+							Changes and bug fixing in user enrollment. (184416 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='799';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1428','es','N','Inscribir/eliminar varios estudiantes');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1429','es','N','Inscribir/eliminar varios profesores');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.130:   Sep 13, 2015</dt>
+							<dd>
+							Changes in user enrollment. (184379 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='797';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1426','es','N','Administrar varios estudiantes');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1427','es','N','Administrar varios profesores');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.129:   Sep 12, 2015</dt>
+							<dd>
+							New links to admin a user in list of students.<br />
+							Changes in user enrollment.<br />
+							Fixed bug in user enrollment. (184411 lines)<br />
+							15 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='177';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1414','es','N','Solicitar ID modif. invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1415','es','N','Solicitar ID modif. estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1416','es','N','Solicitar ID modif. profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1417','es','N','Solicitar ID modif. administrador');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='161';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1418','es','N','Confirmar modif. invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1419','es','N','Confirmar modif. estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1420','es','N','Confirmar modif. profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1421','es','N','Confirmar modif. administrador');<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='439';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1422','es','N','Modificar datos invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1423','es','N','Modificar datos estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1424','es','N','Modificar datos profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1425','es','N','Modificar datos administrador');<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.128.1: Sep 11, 2015</dt>
+							<dd>
+							Two new social networks. (184278 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'quitter', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.128:   Sep 09, 2015</dt>
+							<dd>
+							Fixed some bugs in layout.<br />
+				     			Two new social networks. (184269 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'quitter', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.127.7: Sep 09, 2015</dt>
+							<dd>
+							Fixed some bugs in layout.<br />
+							Fixed bug in information about an institution. (184258 lines)
+							</dd>
+		<dt>Version 14.127.6: Sep 06, 2015</dt>
+							<dd>
+							Fixed some bugs in layout. (184253 lines)
+							</dd>
+		<dt>Version 14.127.5: Sep 06, 2015</dt>
+							<dd>
+							Changes in styles. (184252 lines)
+							</dd>
+		<dt>Version 14.127.4: Sep 06, 2015</dt>
+							<dd>
+							Changes in styles. (184245 lines)
+							</dd>
+		<dt>Version 14.127.3: Sep 06, 2015</dt>
+							<dd>
+							Changes in styles. (184219 lines)
+							</dd>
+		<dt>Version 14.127.2: Sep 06, 2015</dt>
+							<dd>
+							Changes in styles. (184244 lines)
+							</dd>
+		<dt>Version 14.127.1: Sep 06, 2015</dt>
+							<dd>
+							Justify alignment is no longer used. (184259 lines)
+							</dd>
+		<dt>Version 14.127:   Sep 05, 2015</dt>
+							<dd>
+							Changes in styles. (184273 lines)
+							</dd>
+		<dt>Version 14.126.2: Sep 05, 2015</dt>
+							<dd>
+							Changes in styles. (184250 lines)
+							</dd>
+		<dt>Version 14.126.1: Sep 05, 2015</dt>
+							<dd>
+							Changes in styles. (184213 lines)
+							</dd>
+		<dt>Version 14.126:   Sep 04, 2015</dt>
+							<dd>
+							Changes in styles. (184213 lines)
+							</dd>
+		<dt>Version 14.125.3: Sep 04, 2015</dt>
+							<dd>
+							Changes in styles. (184263 lines)
+							</dd>
+		<dt>Version 14.125.2: Sep 04, 2015</dt>
+							<dd>
+							Changes in styles. (184344 lines)
+							</dd>
+		<dt>Version 14.125.1: Sep 03, 2015</dt>
+							<dd>
+							Changes in styles. (184399 lines)
+							</dd>
+		<dt>Version 14.125:   Sep 03, 2015</dt>
+							<dd>
+							Changes in styles. (184521 lines)
+							</dd>
+		<dt>Version 14.124.10:Sep 02, 2015</dt>
+							<dd>
+							Changes in styles. (184571 lines)
+							</dd>
+		<dt>Version 14.124.9: Sep 02, 2015</dt>
+							<dd>
+							Changes in styles. (184584 lines)
+							</dd>
+		<dt>Version 14.124.8: Sep 02, 2015</dt>
+							<dd>
+							Changes in styles. (184635 lines)
+							</dd>
+		<dt>Version 14.124.7: Aug 24, 2015</dt>
+							<dd>
+							Changes in styles. (184648 lines)
+							</dd>
+		<dt>Version 14.124.6: Aug 24, 2015</dt>
+							<dd>
+							Changes in styles. (184735 lines)
+							</dd>
+		<dt>Version 14.124.5: Aug 06, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184760 lines)
+							</dd>
+		<dt>Version 14.124.4: Aug 06, 2015</dt>
+							<dd>
+							Fixed bug in function to draw institution / centre / degree logo.<br />
+							Changes in CSS of forms. (184781 lines)
+							</dd>
+		<dt>Version 14.124.3: Aug 06, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+                                       			Changes in function to draw institution / centre / degree logo. (184782 lines)
+							</dd>
+		<dt>Version 14.124.2: Aug 03, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184768 lines)
+							</dd>
+		<dt>Version 14.124.1: Aug 03, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+							Fixed bug in edition of institutions. (184782 lines)
+							</dd>
+		<dt>Version 14.124:   Aug 03, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+                                       			New layout to select source of course info. (184799 lines)
+							</dd>
+		<dt>Version 14.123.8: Aug 03, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184801 lines)
+							</dd>
+		<dt>Version 14.123.7: Aug 01, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184848 lines)
+							</dd>
+		<dt>Version 14.123.6: Aug 01, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184874 lines)
+							</dd>
+		<dt>Version 14.123.5: Jul 31, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184902 lines)
+							</dd>
+		<dt>Version 14.123.4: Jul 31, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184905 lines)
+							</dd>
+		<dt>Version 14.123.3: Jul 28, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184929 lines)
+							</dd>
+		<dt>Version 14.123.2: Jul 28, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184953 lines)
+							</dd>
+		<dt>Version 14.123.1: Jul 28, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184984 lines)
+							</dd>
+		<dt>Version 14.123:   Jul 28, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184877 lines)
+							</dd>
+		<dt>Version 14.122:   Jul 27, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184892 lines)
+							</dd>
+		<dt>Version 14.121:   Jul 27, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184890 lines)
+							</dd>
+		<dt>Version 14.120.9: Jul 27, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184855 lines)
+							</dd>
+		<dt>Version 14.120.8: Jul 26, 2015</dt>
+							<dd>
+							Changes in CSS of assignments. (184881 lines)
+							</dd>
+		<dt>Version 14.120.7: Jul 26, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+                                        		Changes in CSS of surveys. (184877 lines)
+							</dd>
+		<dt>Version 14.120.6: Jul 26, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184889 lines)
+							</dd>
+		<dt>Version 14.120.5: Jul 26, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184924 lines)
+							</dd>
+		<dt>Version 14.120.4: Jul 25, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184937 lines)
+							</dd>
+		<dt>Version 14.120.3: Jul 25, 2015</dt>
+							<dd>
+							Changes in selectors of country, institution, centre, degree and course. (184893 lines)
+							</dd>
+		<dt>Version 14.120.2: Jul 25, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+                                        		Fixed bug in selectors of country, institution, centre and degree. (184819 lines)
+							</dd>
+		<dt>Version 14.120.1: Jul 25, 2015</dt>
+							<dd>
+							Changes in CSS of forms.<br />
+                                        		Update connected users when change scope selection. (184856 lines)
+							</dd>
+		<dt>Version 14.120:   Jul 25, 2015</dt>
+							<dd>
+							Changes in CSS of forms. (184879 lines)
+							</dd>
+		<dt>Version 14.119.5: Jul 24, 2015</dt>
+							<dd>
+							Changes in CSS of lists. (184902 lines)
+							</dd>
+		<dt>Version 14.119.4: Jul 24, 2015</dt>
+							<dd>
+							New layout of institutional links as a list. (184872 lines)
+							</dd>
+		<dt>Version 14.119.3: Jul 24, 2015</dt>
+							<dd>
+							New layout of MFU actions as a list. (184875 lines)
+							</dd>
+		<dt>Version 14.119.2: Jul 22, 2015</dt>
+							<dd>
+							Changes in page title and platform name. (184880 lines)
+							</dd>
+		<dt>Version 14.119.1: Jul 22, 2015</dt>
+							<dd>
+							Undo some changes in file browsers. (184883 lines)
+							</dd>
+		<dt>Version 14.119:   Jul 22, 2015</dt>
+							<dd>
+							Function to put an icon to remove. (184828 lines)
+							</dd>
+		<dt>Version 14.118:   Jul 22, 2015</dt>
+							<dd>
+							Function to put a disabled icon indicating that removal is not allowed. (185361 lines)
+							</dd>
+		<dt>Version 14.117.17:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185437 lines)
+							</dd>
+		<dt>Version 14.117.16:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185368 lines)
+							</dd>
+		<dt>Version 14.117.15:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185279 lines)
+							</dd>
+		<dt>Version 14.117.14:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185203 lines)
+							</dd>
+		<dt>Version 14.117.13:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images.<br />
+                                        		Removed unused function about mail domains. (185153 lines)
+							</dd>
+		<dt>Version 14.117.12:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185213 lines)
+							</dd>
+		<dt>Version 14.117.11:Jul 22, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185187 lines)
+							</dd>
+		<dt>Version 14.117.10:Jul 21, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185157 lines)
+							</dd>
+		<dt>Version 14.117.9: Jul 21, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185157 lines)
+							</dd>
+		<dt>Version 14.117.8: Jul 21, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185027 lines)
+							</dd>
+		<dt>Version 14.117.7: Jul 21, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images. (185008 lines)
+							</dd>
+		<dt>Version 14.117.6: Jul 21, 2015</dt>
+							<dd>
+							Checking &quot;alt&quot; and &quot;title&quot; in all images.<br />
+                                        		Changes in most frequent actions. (184948 lines)
+							</dd>
+		<dt>Version 14.117.5: Jul 21, 2015</dt>
+							<dd>
+							Fixed HTML bug in account form. (184930 lines)
+							</dd>
+		<dt>Version 14.117.4: Jul 17, 2015</dt>
+							<dd>
+							Fixed bug in course record, reported by Antonio Pe&ntilde;a Freire. (184929 lines)
+							</dd>
+		<dt>Version 14.117.3: Jul 17, 2015</dt>
+							<dd>
+							Fixed recent bug in cache control. (184893 lines)
+							</dd>
+		<dt>Version 14.117.2: Jul 16, 2015</dt>
+							<dd>
+							Changes in cache control. (184893 lines)
+							</dd>
+		<dt>Version 14.117.1: Jul 15, 2015</dt>
+							<dd>
+							Fixed minor bug when showing user's photo. (184892 lines)
+							</dd>
+		<dt>Version 14.117:   Jul 15, 2015</dt>
+							<dd>
+							User's ID is no longer mandatory. (184885 lines)
+							</dd>
+		<dt>Version 14.116.1: Jul 14, 2015</dt>
+							<dd>
+							Changes in some messages. (184850 lines)
+							</dd>
+		<dt>Version 14.116:   Jul 13, 2015</dt>
+							<dd>
+							New function createAccount in web service. (184849 lines)
+							</dd>
+		<dt>Version 14.115.2: Jul 07, 2015</dt>
+							<dd>
+							Fixed bug in search of open documents, reported by Javier S&aacute;nchez Lirola. (184769 lines)
+							</dd>
+		<dt>Version 14.115.1: Jun 23, 2015</dt>
+							<dd>
+							Fixed bugs in web service function getTrivialQuestion. (184768 lines)
+							</dd>
+		<dt>Version 14.115:   Jun 16, 2015</dt>
+							<dd>
+							New function getTrivialQuestion in web service. (184747 lines)
+							</dd>
+		<dt>Version 14.114:   Jun 15, 2015</dt>
+							<dd>
+							Fixed bug in tests query (some questions were repeated in exams). (184550 lines)
+							</dd>
+		<dt>Version 14.113.5: Jun 01, 2015</dt>
+							<dd>
+							Changes in sign up form. (184541 lines)
+							</dd>
+		<dt>Version 14.113.4: Apr 25, 2015</dt>
+							<dd>
+							Fixed bug in layout. (184537 lines)
+							</dd>
+		<dt>Version 14.113.3: Apr 15, 2015</dt>
+							<dd>
+							New welcome message after creating an account. (184536 lines)
+							</dd>
+		<dt>Version 14.113.2: Apr 14, 2015</dt>
+							<dd>
+							Fixed bug when compressing users' works. (184486 lines)
+							</dd>
+		<dt>Version 14.113.1: Apr 14, 2015</dt>
+							<dd>
+							Fixed bug when compressing users' works, reported by Jos&eacute; Mart&iacute;nez Aroza. (184484 lines)
+							</dd>
+		<dt>Version 14.113:   Apr 12, 2015</dt>
+							<dd>
+							Refactoring code related to frames. (184462 lines)
+							</dd>
+		<dt>Version 14.112.1: Apr 12, 2015</dt>
+							<dd>
+							Refactoring code related to frames with ending buttons. (184583 lines)
+							</dd>
+		<dt>Version 14.112:   Apr 12, 2015</dt>
+							<dd>
+							Optimization in frames with ending buttons.<br />
+							Changes in form to upload logo.<br />
+							Changes in form to photo of centre.<br />
+							Changes in edition of course timetable. (184572 lines)
+							</dd>
+		<dt>Version 14.111.1: Apr 11, 2015</dt>
+							<dd>
+							Message translated. (184745 lines)
+							</dd>
+		<dt>Version 14.111:   Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of surveys.<br />
+							Fixed bugs in surveys.<br />
+							Changes in layout of edition of test questions.<br />
+							Changes in layout of users' attendance. (184723 lines)
+							</dd>
+		<dt>Version 14.110.13:Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of users' attendance. (184750 lines)
+							</dd>
+		<dt>Version 14.110.12:Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of users' works. (184728 lines)
+							</dd>
+		<dt>Version 14.110.11:Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of selection of class photo / list. (184722 lines)
+							</dd>
+		<dt>Version 14.110.10:Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of selection of groups. (184725 lines)
+							</dd>
+		<dt>Version 14.110.9: Apr 11, 2015</dt>
+							<dd>
+							Changes in layout of edition of a new assignment. (184723 lines)
+							</dd>
+		<dt>Version 14.110.8: Apr 11, 2015</dt>
+							<dd>
+							Help on writing forum posts.<br />
+                                        		Changes in layout of edition of a new forum post. (184718 lines)
+							</dd>
+		<dt>Version 14.110.7: Apr 11, 2015</dt>
+							<dd>
+							Help on writing messages.<br />
+                                        		Changes in layout of edition of a new message. (184719 lines)
+							</dd>
+		<dt>Version 14.110.6: Apr 11, 2015</dt>
+							<dd>
+							Help on edition of test questions.<br />
+							Changes in layout of edition of test questions. (184702 lines)
+							</dd>
+		<dt>Version 14.110.5: Apr 11, 2015</dt>
+							<dd>
+							Fixed bug in tests. (184685 lines)
+							</dd>
+		<dt>Version 14.110.4: Apr 11, 2015</dt>
+							<dd>
+							Changes in MathJax configuration. (184685 lines)
+							</dd>
+		<dt>Version 14.110.3: Apr 09, 2015</dt>
+							<dd>
+							Changes in conversion from Markdown to HTML5 using pandoc. (184599 lines)
+							</dd>
+		<dt>Version 14.110.2: Apr 09, 2015</dt>
+							<dd>
+							Changes in CSS and scripts.<br />
+							MathJax installed in local by default. (184555 lines)<br />
+							1 change in installation:<br />
+							<small><code>
+It's necessary to install a copy of MathJax in the server at directory MathJax inside main html directory followin the instructions in http://docs.mathjax.org/en/latest/start.html<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.110.1: Apr 08, 2015</dt>
+							<dd>
+							Changes in CSS. (184539 lines)
+							</dd>
+		<dt>Version 14.110:   Apr 07, 2015</dt>
+							<dd>
+							Testing rich text editor using Markdown, suggested by Pedro A. Garc&iacute;a S&aacute;nchez. (184508 lines)<br />
+							Fixed bug in file browser, reported by Eva Mart&iacute;nez Ortigosa.<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE crs_info_txt CHANGE COLUMN InfoTxt InfoTxtHTML LONGTEXT NOT NULL;<br />
+ALTER TABLE crs_info_txt ADD COLUMN InfoTxtMD LONGTEXT NOT NULL AFTER InfoTxtHTML;<br />
+							</code></small>
+							1 change in installation:<br />
+							<small><code>
+It's necessary to install pandoc 1.10 or later.<br />
+							</code></small>
+							</dd>
+		<dt>Version 14.109.2: Apr 06, 2015</dt>
+							<dd>
+							Changed text in file browser. (184347 lines)
+							</dd>
+		<dt>Version 14.109.1: Apr 06, 2015</dt>
+							<dd>
+							Changed text of button in course info. (184325 lines)
+							</dd>
+		<dt>Version 14.109:   Apr 06, 2015</dt>
+							<dd>
+							Links in file browsers can be uploaded with a name. (184324 lines)
+							</dd>
 		<dt>Version 14.108.4: Apr 04, 2015</dt>
 							<dd>
 							Changes in statistic about institutions. (184267 lines)
@@ -151,7 +1091,7 @@
 							Removed option in the assessment tab to view course card. (183932 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod='299';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='299';<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.104.6: Mar 30, 2015</dt>
@@ -187,7 +1127,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='299';
 							New table to ban users out of ranking. (184014 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-CREATE TABLE IF NOT EXISTS usr_banned (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod));
+CREATE TABLE IF NOT EXISTS usr_banned (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod));<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.102.12:Mar 28, 2015</dt>
@@ -266,7 +1206,7 @@ CREATE TABLE IF NOT EXISTS usr_banned (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod))
 							Notification when a user gets a new follower. (183723 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000) WHERE NotifNtfEvents<>0;
+UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000) WHERE NotifNtfEvents<>0;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.99.2:  Mar 23, 2015</dt>
@@ -278,7 +1218,7 @@ UPDATE usr_data SET NotifNtfEvents=(NotifNtfEvents | 0x2000) WHERE NotifNtfEvent
 							Change in file_view to accelerate queries. (183521 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-CREATE INDEX UsrCod ON file_view (UsrCod);
+CREATE INDEX UsrCod ON file_view (UsrCod);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.99:    Mar 21, 2015</dt>
@@ -345,7 +1285,7 @@ Add swad_follow.o to list of object files<br />
 							<small><code>
 CREATE TABLE IF NOT EXISTS usr_follow (FollowerCod INT NOT NULL,FollowedCod INT NOT NULL,FollowTime DATETIME NOT NULL,UNIQUE INDEX (FollowerCod,FollowedCod),UNIQUE INDEX (FollowedCod,FollowerCod),INDEX (FollowTime));<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1410','es','N','Seguir a un usuario');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1411','es','N','Dejar de seguir a un usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1411','es','N','Dejar de seguir a un usuario');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.94.4:  Mar 17, 2015</dt>
@@ -401,7 +1341,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1411','es','N','Deja
 							New module swad_profile for public user's profile. (182202 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_profile.o to list of object files
+Add swad_profile.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.91.3:  Mar 14, 2015</dt>
@@ -425,7 +1365,7 @@ Add swad_profile.o to list of object files
 							2 changes necessary in database:<br />
 							<small><code>
 ALTER TABLE usr_figures ADD COLUMN NumFileViews INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1409','es','N','Calcular n&uacute;mero de descargas de archivos');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1409','es','N','Calcular n&uacute;mero de descargas de archivos');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.90.4:  Mar 13, 2015</dt>
@@ -467,7 +1407,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1409','es','N','Calc
 							2 changes necessary in database:<br />
 							<small><code>
 CREATE INDEX FirstClickTime ON usr_figures (FirstClickTime);<br />
-CREATE INDEX NumClicks ON usr_figures (NumClicks);
+CREATE INDEX NumClicks ON usr_figures (NumClicks);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.87.3:  Mar 11, 2015</dt>
@@ -504,7 +1444,7 @@ CREATE INDEX NumClicks ON usr_figures (NumClicks);
 							2 changes necessary in database:<br />
 							<small><code>
 ALTER TABLE usr_figures ADD COLUMN NumForPst INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1408','es','N','Calcular n&uacute;mero de mensajes en foros');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1408','es','N','Calcular n&uacute;mero de mensajes en foros');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.84:    Mar 10, 2015</dt>
@@ -513,7 +1453,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1408','es','N','Calc
 							2 changes necessary in database:<br />
 							<small><code>
 ALTER TABLE usr_figures ADD COLUMN NumMsgSnt INT NOT NULL DEFAULT -1 AFTER NumClicks;<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1407','es','N','Calcular n&uacute;mero de mensajes enviados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1407','es','N','Calcular n&uacute;mero de mensajes enviados');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.83:    Mar 10, 2015</dt>
@@ -523,7 +1463,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1407','es','N','Calc
 							<small><code>
 ALTER TABLE usr_figures CHANGE COLUMN NumClicks NumClicks INT NOT NULL DEFAULT -1;<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1405','es','N','Calcular fecha del primer clic');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1406','es','N','Calcular n&uacute;mero de clics');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1406','es','N','Calcular n&uacute;mero de clics');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.82.1:  Mar 10, 2015</dt>
@@ -531,7 +1471,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1406','es','N','Calc
 							Added new social networks. (181143 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'quitter', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'quitter', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.82:    Mar 10, 2015</dt>
@@ -539,7 +1479,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantar
 							New database table usr_figures. (179898 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATETIME NOT NULL,NumClicks INT NOT NULL DEFAULT 0,PRIMARY KEY(UsrCod));
+CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATETIME NOT NULL,NumClicks INT NOT NULL DEFAULT 0,PRIMARY KEY(UsrCod));<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.81.4:  Mar 09, 2015</dt>
@@ -644,7 +1584,7 @@ CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATET
 							</dd>
 		<dt>Version 14.79.6:  Mar 08, 2015</dt>
 							<dd>
-							Check if file "swad.lock" exists to disable SWAD. (178736 lines)
+							Check if file &quot;swad.lock&quot; exists to disable SWAD. (178736 lines)
 							</dd>
 		<dt>Version 14.79.5:  Mar 08, 2015</dt>
 							<dd>
@@ -652,19 +1592,19 @@ CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATET
 							</dd>
 		<dt>Version 14.79.4:  Mar 07, 2015</dt>
 							<dd>
-							Parameter "CtyCod" is renamed to "cty".<br />
-							Parameter "InsCod" is renamed to "ins".<br />
-							Parameter "CtrCod" is renamed to "ctr".<br />
-							Parameter "DegCod" is renamed to "deg".<br />
-							Parameter "CrsCod" is renamed to "crs", but "CrsCod" is allowed for compatibility with old links.<br />
-							Parameter "Usr" is renamed to "usr".<br />
-							Parameter "Layout" is not allowed with GET method.<br />
-							Parameter "IdSes" is renamed to "ses".<br />
-							Parameter "MailKey" is renamed to "key". (178699 lines)
+							Parameter &quot;CtyCod&quot; is renamed to &quot;cty&quot;.<br />
+							Parameter &quot;InsCod&quot; is renamed to &quot;ins&quot;.<br />
+							Parameter &quot;CtrCod&quot; is renamed to &quot;ctr&quot;.<br />
+							Parameter &quot;DegCod&quot; is renamed to &quot;deg&quot;.<br />
+							Parameter &quot;CrsCod&quot; is renamed to &quot;crs&quot;, but &quot;CrsCod&quot; is allowed for compatibility with old links.<br />
+							Parameter &quot;Usr&quot; is renamed to &quot;usr&quot;.<br />
+							Parameter &quot;Layout&quot; is not allowed with GET method.<br />
+							Parameter &quot;IdSes&quot; is renamed to &quot;ses&quot;.<br />
+							Parameter &quot;MailKey&quot; is renamed to &quot;key&quot;. (178699 lines)
 							</dd>
 		<dt>Version 14.79.3:  Mar 07, 2015</dt>
 							<dd>
-							Parameter "UsrNick" is renamed to "Usr".<br />
+							Parameter &quot;UsrNick&quot; is renamed to &quot;Usr&quot;.<br />
 							URL is shown in public profile.<br />
 							Language in direct URLs. (178677 lines)
 							</dd>
@@ -679,7 +1619,7 @@ CREATE TABLE IF NOT EXISTS usr_figures (UsrCod INT NOT NULL,FirstClickTime DATET
 							<small><code>
 ALTER TABLE usr_data ADD COLUMN ProfileVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PhotoVisibility;<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1403','es','N','Editar privacidad');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1404','es','N','Cambiar privacidad perfil p&uacute;blico');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1404','es','N','Cambiar privacidad perfil p&uacute;blico');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.79:    Mar 06, 2015</dt>
@@ -687,7 +1627,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1404','es','N','Camb
 							New module swad_privacy. (178678 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_privacy.o to list of object files
+Add swad_privacy.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.78.3:  Mar 06, 2015</dt>
@@ -711,7 +1651,7 @@ Add swad_privacy.o to list of object files
 ALTER TABLE usr_data ADD COLUMN PhotoVisibility ENUM('user','course','system','world') NOT NULL DEFAULT 'user' AFTER PublicPhoto;<br />
 UPDATE usr_data SET PhotoVisibility='user' WHERE PublicPhoto='N';<br />
 UPDATE usr_data SET PhotoVisibility='system' WHERE PublicPhoto='Y';<br />
-ALTER TABLE usr_data DROP COLUMN PublicPhoto;
+ALTER TABLE usr_data DROP COLUMN PublicPhoto;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.77.3:  Mar 05, 2015</dt>
@@ -728,19 +1668,19 @@ ALTER TABLE usr_data DROP COLUMN PublicPhoto;
 							2 changes necessary in database:<br />
 							<small><code>
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1401','es','N','Solicitar perfil de usuario');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver perfil de usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver perfil de usuario');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.77:    Mar 04, 2015</dt>
 							<dd>
-							New parameter "UsrNick" to go to a public user's profile. (178406 lines)
+							New parameter &quot;UsrNick&quot; to go to a public user's profile. (178406 lines)
 							</dd>
 		<dt>Version 14.76.5:  Mar 03, 2015</dt>
 							<dd>
 							Added new social networks, suggested by Marta Gómez Macías. (178293 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.76.4:  Mar 03, 2015	Nickname is always visible on record. (178270 lines)
@@ -858,7 +1798,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantar
 							<small><code>
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1341','es','N','Eliminar logo de instituci&oacute;n');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1342','es','N','Eliminar logo de centro');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1343','es','N','Eliminar logo de titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1343','es','N','Eliminar logo de titulaci&oacute;n');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.72.6:  Feb 03, 2015</dt>
@@ -891,7 +1831,7 @@ UPDATE actions SET Txt='Eliminar administrador de titulaci&oacute;n' WHERE ActCo
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1337','es','N','A&ntilde;adir administrador de instituci&oacute;n');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1338','es','N','Eliminar administrador de instituci&oacute;n');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1339','es','N','A&ntilde;adir administrador de centro');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1340','es','N','Eliminar administrador de centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1340','es','N','Eliminar administrador de centro');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.72:    Jan 31, 2015</dt>
@@ -906,7 +1846,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1340','es','N','Elim
 CREATE TABLE IF NOT EXISTS admin (UsrCod INT NOT NULL,Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,Cod INT NOT NULL,UNIQUE INDEX(UsrCod,Scope,Cod));<br />
 INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Deg',DegCod FROM deg_admin WHERE DegCod>'0';<br />
 INSERT INTO admin (UsrCod,Scope,Cod) SELECT UsrCod,'Sys',DegCod FROM deg_admin WHERE DegCod='-2';<br />
-DROP TABLE IF EXISTS deg_admin;
+DROP TABLE IF EXISTS deg_admin;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.70.6:  Jan 28, 2015</dt>
@@ -968,7 +1908,7 @@ UPDATE expanded_folders SET FileBrowser='11' WHERE FileBrowser='10';<br />
 UPDATE expanded_folders SET FileBrowser='13' WHERE FileBrowser='12';<br />
 UPDATE expanded_folders SET FileBrowser='17' WHERE FileBrowser='16';<br />
 UPDATE expanded_folders SET FileBrowser='19' WHERE FileBrowser='18';<br />
-UPDATE expanded_folders SET FileBrowser='21' WHERE FileBrowser='20';
+UPDATE expanded_folders SET FileBrowser='21' WHERE FileBrowser='20';<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.68:    Jan 25, 2015</dt>
@@ -984,7 +1924,7 @@ UPDATE file_browser_size SET Cod=CrsCod WHERE CrsCod>'0' AND GrpCod<='0';<br />
 UPDATE file_browser_size SET Cod=GrpCod WHERE GrpCod>'0';<br />
 ALTER TABLE file_browser_size DROP COLUMN CrsCod;<br />
 ALTER TABLE file_browser_size DROP COLUMN GrpCod;<br />
-CREATE UNIQUE INDEX FileBrowser ON file_browser_size (FileBrowser,Cod,ZoneUsrCod);
+CREATE UNIQUE INDEX FileBrowser ON file_browser_size (FileBrowser,Cod,ZoneUsrCod);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.67.1:  Jan 25, 2015</dt>
@@ -1012,7 +1952,7 @@ ALTER TABLE files DROP COLUMN CtrCod;<br />
 ALTER TABLE files DROP COLUMN DegCod;<br />
 ALTER TABLE files DROP COLUMN CrsCod;<br />
 ALTER TABLE files DROP COLUMN GrpCod;<br />
-DROP INDEX Location ON files;
+DROP INDEX Location ON files;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.66.1:  Jan 24, 2015</dt>
@@ -1036,7 +1976,7 @@ ALTER TABLE clipboard DROP COLUMN InsCod;<br />
 ALTER TABLE clipboard DROP COLUMN CtrCod;<br />
 ALTER TABLE clipboard DROP COLUMN DegCod;<br />
 ALTER TABLE clipboard DROP COLUMN CrsCod;<br />
-ALTER TABLE clipboard DROP COLUMN GrpCod;
+ALTER TABLE clipboard DROP COLUMN GrpCod;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.65:    Jan 24, 2015</dt>
@@ -1056,7 +1996,7 @@ ALTER TABLE expanded_folders DROP COLUMN InsCod;<br />
 ALTER TABLE expanded_folders DROP COLUMN CtrCod;<br />
 ALTER TABLE expanded_folders DROP COLUMN DegCod;<br />
 ALTER TABLE expanded_folders DROP COLUMN CrsCod;<br />
-ALTER TABLE expanded_folders DROP COLUMN GrpCod;
+ALTER TABLE expanded_folders DROP COLUMN GrpCod;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.64:    Jan 22, 2015</dt>
@@ -1069,7 +2009,7 @@ REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,
 REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'13',GrpCod,LastAccCommonGrp FROM crs_grp_usr WHERE LastAccMarksGrp>0;<br />
 ALTER TABLE crs_grp_usr DROP COLUMN LastAccDownloadGrp;<br />
 ALTER TABLE crs_grp_usr DROP COLUMN LastAccCommonGrp;<br />
-ALTER TABLE crs_grp_usr DROP COLUMN LastAccMarksGrp;
+ALTER TABLE crs_grp_usr DROP COLUMN LastAccMarksGrp;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.63.6:  Jan 22, 2015</dt>
@@ -1086,7 +2026,7 @@ ALTER TABLE crs_usr DROP COLUMN LastAccDownloadCrs;<br />
 ALTER TABLE crs_usr DROP COLUMN LastAccCommonCrs;<br />
 ALTER TABLE crs_usr DROP COLUMN LastAccMarksCrs;<br />
 ALTER TABLE crs_usr DROP COLUMN LastAccMyWorks;<br />
-ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;
+ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.63.5:  Jan 22, 2015</dt>
@@ -1095,7 +2035,7 @@ ALTER TABLE crs_usr DROP COLUMN LastAccCrsWorks;
 							2 changes necessary in database:<br />
 							<small><code>
 REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick) SELECT UsrCod,'9','-1',LastAccBriefcase FROM usr_last WHERE LastAccBriefcase>0;<br />
-ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
+ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.63.4:  Jan 21, 2015</dt>
@@ -1119,7 +2059,7 @@ ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;
 							See/admin documents of degree, centre and institution. (175512 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,LastClick DATETIME NOT NULL,UNIQUE INDEX(UsrCod,FileBrowser,Cod));
+CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,LastClick DATETIME NOT NULL,UNIQUE INDEX(UsrCod,FileBrowser,Cod));<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.62.4:  Jan 20, 2015</dt>
@@ -1145,7 +2085,7 @@ CREATE TABLE IF NOT EXISTS file_browser_last (UsrCod INT NOT NULL,FileBrowser TI
 							<small><code>
 ALTER TABLE expanded_folders ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);<br />
 ALTER TABLE expanded_folders ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);<br />
-ALTER TABLE expanded_folders ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+ALTER TABLE expanded_folders ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.61:    Jan 20, 2015</dt>
@@ -1158,7 +2098,7 @@ ALTER TABLE files ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod;<br />
 ALTER TABLE files ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod;<br />
 DROP INDEX CrsCod ON files;<br />
 DROP INDEX CrsCod_GrpCod_ZoneUsrCod_FileBrowser ON files;<br />
-CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
+CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.60:    Jan 20, 2015</dt>
@@ -1168,7 +2108,7 @@ CREATE INDEX Location ON files (InsCod,CtrCod,DegCod,CrsCod,GrpCod,FileBrowser);
 							<small><code>
 ALTER TABLE clipboard ADD COLUMN InsCod INT NOT NULL DEFAULT -1 AFTER FileBrowser, ADD INDEX (InsCod);<br />
 ALTER TABLE clipboard ADD COLUMN CtrCod INT NOT NULL DEFAULT -1 AFTER InsCod, ADD INDEX (CtrCod);<br />
-ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);
+ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, ADD INDEX (DegCod);<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.59.3:  Jan 20, 2015</dt>
@@ -1214,7 +2154,7 @@ ALTER TABLE clipboard ADD COLUMN DegCod INT NOT NULL DEFAULT -1 AFTER CtrCod, AD
 							<small><code>
 UPDATE actions SET Txt='Cambiar logo de titulaci&oacute;n' WHERE ActCod='553' AND Language='es';<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1246','es','N','Solicitar env&iacute;o de logo de titulaci&oacute;n');<br />
-ALTER TABLE degrees DROP COLUMN Logo;
+ALTER TABLE degrees DROP COLUMN Logo;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.56:    Jan 17, 2015</dt>
@@ -1229,7 +2169,7 @@ Add swad_logo.o to list of object files<br />
 							<small><code>
 UPDATE actions SET Txt='Cambiar logo de instituci&oacute;n' WHERE ActCod='699' AND Language='es';<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1245','es','N','Solicitar env&iacute;o de logo de instituci&oacute;n');<br />
-ALTER TABLE institutions DROP COLUMN Logo;
+ALTER TABLE institutions DROP COLUMN Logo;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.55.5:  Jan 16, 2015</dt>
@@ -1261,7 +2201,7 @@ ALTER TABLE institutions DROP COLUMN Logo;
 							<small><code>
 UPDATE actions SET Txt='Cambiar logo de centro' WHERE ActCod='1051' AND Language='es';<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1244','es','N','Solicitar env&iacute;o de logo de centro');<br />
-ALTER TABLE centres DROP COLUMN Logo;
+ALTER TABLE centres DROP COLUMN Logo;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.54.7:  Jan 13, 2015</dt>
@@ -1293,7 +2233,7 @@ ALTER TABLE centres DROP COLUMN Logo;
 							Removed unused fields in user's data. (173338 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
+ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.54:    Jan 04, 2015</dt>
@@ -1301,7 +2241,7 @@ ALTER TABLE usr_data DROP COLUMN WWW,DROP COLUMN Twitter,DROP COLUMN Skype;
 							New module swad_tab for drawing tabs. (173341 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_tab.o to list of object files
+Add swad_tab.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.53.1:  Jan 04, 2015</dt>
@@ -1313,7 +2253,7 @@ Add swad_tab.o to list of object files
 							New module swad_calendar for drawing months and calendar. (173254 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_calendar.o to list of object files
+Add swad_calendar.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.52.6:  Jan 04, 2015</dt>
@@ -1366,7 +2306,7 @@ ALTER TABLE usr_data ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER Comments;<
 ALTER TABLE usr_data ADD INDEX (Menu);<br />
 UPDATE usr_data SET Menu=1;<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1243','es','N','Cambiar men&uacute;');<br />
-ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
+ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.50.4:  Jan 01, 2015</dt>
@@ -1484,7 +2424,7 @@ ALTER TABLE IP_prefs ADD COLUMN Menu TINYINT NOT NULL DEFAULT 0 AFTER IconSet;
 							Course syllabus are shown in one unique option. (174340 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver programa');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver programa');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.45:    Dec 27, 2014</dt>
@@ -1613,7 +2553,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver 
 							</dd>
 		<dt>Version 14.38.9:  Dec 20, 2014</dt>
 							<dd>
-							The words "Course" and "Group" are removed from selection of course and groups in Documents and Shared files. (? lines)
+							The words &quot;Course&quot; and &quot;Group&quot; are removed from selection of course and groups in Documents and Shared files. (? lines)
 							</dd>
 		<dt>Version 14.38.8:  Dec 18, 2014</dt>
 							<dd>
@@ -1655,7 +2595,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver 
 							</dd>
 		<dt>Version 14.38:    Dic 13, 2014</dt>
 							<dd>
-							Link in "my courses" to courses, degrees, centres, institutions or countries. (171083 lines)
+							Link in &quot;my courses&quot; to courses, degrees, centres, institutions or countries. (171083 lines)
 							</dd>
 		<dt>Version 14.37.3:  Dic 13, 2014</dt>
 							<dd>
@@ -1663,12 +2603,12 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver 
 							</dd>
 		<dt>Version 14.37.2:  Dic 13, 2014</dt>
 							<dd>
-							Changes in search of courses link in "my courses". (170874 lines)
+							Changes in search of courses link in &quot;my courses&quot;. (170874 lines)
 							</dd>
 		<dt>Version 14.37.1:  Dic 13, 2014</dt>
 							<dd>
 							Fixed bug in HTML entities in swad_text.c (translation).<br />
-							Guests can view option "my courses" on profile tab.<br />
+							Guests can view option &quot;my courses&quot; on profile tab.<br />
 							Reordering of options in profile tab. (170866 lines)
 							</dd>
 		<dt>Version 14.37:    Dic 12, 2014</dt>
@@ -1676,7 +2616,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1242','es','N','Ver 
 							New module swad_account for user's account. (170863 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_account.o to list of object files
+Add swad_account.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.36:    Dic 12, 2014</dt>
@@ -1684,7 +2624,7 @@ Add swad_account.o to list of object files
 							New module swad_role for user's roles. (170764 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_role.o to list of object files
+Add swad_role.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.35:    Dic 12, 2014</dt>
@@ -1693,7 +2633,7 @@ Add swad_role.o to list of object files
 							New module swad_enrollment for enrollment (registration) or removing of users. (170725 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_enrollment.o to list of object files
+Add swad_enrollment.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.34.4:  Dic 08, 2014</dt>
@@ -1725,7 +2665,7 @@ Add swad_enrollment.o to list of object files
 							Added new social network. (170518 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.32:    Dic 06, 2014</dt>
@@ -1753,7 +2693,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook
 							Database password and email password are moved from executable files to configuration files. (170248 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_config.o to list of object files
+Add swad_config.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.29:    Nov 29, 2014</dt>
@@ -1778,7 +2718,7 @@ UPDATE actions SET Txt='Solicitar la creaci&oacute;n de un anuncio global' WHERE
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1238','es','N','Crear anuncio global');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1239','es','N','Solicitar edici&oacute;n ID otro usuario');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1240','es','N','Eliminar ID de otro usuario');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1241','es','N','Crear ID de otro usuario');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1241','es','N','Crear ID de otro usuario');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.27:    Nov 25, 2014</dt>
@@ -1804,7 +2744,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1241','es','N','Crea
 							2 changes necessary in database:<br />
 							<small><code>
 UPDATE actions SET Txt='Solicitar la creaci&oacute;n de una cuenta' WHERE ActCod='36' AND Language='es';<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1237','es','N','Crear anuncio global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1237','es','N','Crear anuncio global');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.25.1:  Nov 21, 2014</dt>
@@ -1812,7 +2752,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1237','es','N','Crea
 							Superusers can remove a global announcement. (169976 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1236','es','N','Eliminar anuncio global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1236','es','N','Eliminar anuncio global');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.25:    Nov 20, 2014</dt>
@@ -1820,7 +2760,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1236','es','N','Elim
 							Superusers can view all the global announcements. (169948 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1235','es','N','Ver anuncios globales');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1235','es','N','Ver anuncios globales');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.24.5:  Nov 19, 2014</dt>
@@ -1844,7 +2784,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1235','es','N','Ver 
 							Changes in global announcements. (169803 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE announcements ADD COLUMN Subject TEXT NOT NULL AFTER Roles;
+ALTER TABLE announcements ADD COLUMN Subject TEXT NOT NULL AFTER Roles;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.24:    Nov 19, 2014</dt>
@@ -1858,7 +2798,7 @@ Add swad_announcement.o to list of object files<br />
 							<small><code>
 CREATE TABLE IF NOT EXISTS announcements (AnnCod INT NOT NULL AUTO_INCREMENT,Roles INT NOT NULL DEFAULT 0,Content TEXT NOT NULL,UNIQUE INDEX(AnnCod));<br />
 CREATE TABLE IF NOT EXISTS ann_seen (AnnCod INT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(AnnCod,UsrCod));<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1234','es','N','Marcar anuncio global como visto');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1234','es','N','Marcar anuncio global como visto');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.23.5:  Nov 18, 2014</dt>
@@ -2019,7 +2959,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1234','es','N','Marc
 							Information about type of file is stores in database (table files). (168350 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE files ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER PublisherUsrCod;
+ALTER TABLE files ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER PublisherUsrCod;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.11.2:  Oct 28, 2014</dt>
@@ -2027,7 +2967,7 @@ ALTER TABLE files ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER Publisher
 							Lot of code refactoring in file browsers (not finished). (168298 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE clipboard ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER WorksUsrCod;
+ALTER TABLE clipboard ADD COLUMN FileType TINYINT NOT NULL DEFAULT 0 AFTER WorksUsrCod;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.11.1:  Oct 28, 2014</dt>
@@ -2052,14 +2992,14 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1229','es','N','Crea
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1230','es','N','Crear enlace en malet&iacute;n');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1231','es','N','Crear enlace documentos grp.');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1232','es','N','Crear enlace mis actividades');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1233','es','N','Crear enlace activid. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1233','es','N','Crear enlace activid. asg.');<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.9.2:   Oct 24, 2014	Some code cleaning. (167569 lines)
 							</dd>
 		<dt>Version 14.9.1:   Oct 22, 2014</dt>
 							<dd>
-							Google Analytics without cookies for openswad.org (code from <a href="http://stackoverflow.com/a/19995629">http://stackoverflow.com/a/19995629</a>). (167555 lines)
+							Google Analytics without cookies for openswad.org (code from <a href=&quot;http://stackoverflow.com/a/19995629&quot;>http://stackoverflow.com/a/19995629</a>). (167555 lines)
 							</dd>
 		<dt>Version 14.9:     Oct 21, 2014</dt>
 							<dd>
@@ -2068,7 +3008,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1233','es','N','Crea
 							1 change necessary in database:<br />
 							<small><code>
 UPDATE actions SET Obsolete='Y' WHERE ActCod='760';<br />
-ALTER TABLE usr_data DROP COLUMN SecureIcons;
+ALTER TABLE usr_data DROP COLUMN SecureIcons;<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.8.3:   Oct 20, 2014</dt>
@@ -2080,7 +3020,7 @@ ALTER TABLE usr_data DROP COLUMN SecureIcons;
 							Fixed bug in tests importing. (167630 lines)<br />
 							1 change necessary in database:
 							<small><code>
-UPDATE tst_questions SET Feedback='' WHERE Feedback='(null)';
+UPDATE tst_questions SET Feedback='' WHERE Feedback='(null)';<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.8.1:   Oct 19, 2014</dt>
@@ -2092,7 +3032,7 @@ UPDATE tst_questions SET Feedback='' WHERE Feedback='(null)';
 							New module swad_test_import for export and import tests. (167594 lines)<br />
 							1 change necessary in Makefile:
 							<small><code>
-Add swad_test_import.o to list of object files
+Add swad_test_import.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.7:     Oct 16, 2014</dt>
@@ -2101,7 +3041,7 @@ Add swad_test_import.o to list of object files
 				     			Now automatic mails are sent in secure way. (167494 lines)<br />
 							1 change necessary:<br />
 							<small><code>
-Copy the new swad_smtp.py into swad cgi directory
+Copy the new swad_smtp.py into swad cgi directory<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.6.2:   Oct 15, 2014</dt>
@@ -2168,7 +3108,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1220','es','N','Subi
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1221','es','N','Subir archivo trabajos asg.'    );<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1222','es','N','Subir archivo calif. asg.'      );<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1223','es','N','Subir archivo calif. grp.'      );<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1224','es','N','Subir archivo a malet&iacute;n' );
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1224','es','N','Subir archivo a malet&iacute;n' );<br />
 							</code></small>
 							</dd>
 		<dt>Version 14.3:     Oct 06, 2014</dt>
@@ -2200,7 +3140,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1224','es','N','Subi
 							2 changes necessary in database:<br />
 							<small><code>
 UPDATE sessions SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;<br />
-UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.85.5:  Sep 20, 2014</dt>
@@ -2233,7 +3173,7 @@ UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=7;
 ALTER TABLE banners ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER BanCod;<br />
 CREATE INDEX Hidden ON banners (Hidden);<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1212','es','N','Mostrar banner');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1213','es','N','Ocultar banner');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1213','es','N','Ocultar banner');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.84.2:  Jul 29, 2014</dt>
@@ -2254,7 +3194,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1213','es','N','Ocul
 							2 changes necessary in database:
 							<small><code>
 UPDATE sessions SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;<br />
-UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.82.3:  Jul 23, 2014</dt>
@@ -2294,7 +3234,7 @@ UPDATE usr_last SET WhatToSearch=WhatToSearch+1 WHERE WhatToSearch>=6;
 							2 changes necessary in database:
 							<small><code>
 UPDATE sessions SET WhatToSearch=WhatToSearch+3 WHERE WhatToSearch>0;<br />
-UPDATE usr_last SET WhatToSearch=WhatToSearch+3 WHERE WhatToSearch>0;
+UPDATE usr_last SET WhatToSearch=WhatToSearch+3 WHERE WhatToSearch>0;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.79:    Jul 18, 2014</dt>
@@ -2371,7 +3311,7 @@ ALTER TABLE institutions ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER CtyC
 ALTER TABLE institutions ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;<br />
 CREATE INDEX Status ON institutions (Status);<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1210','es','N','Solicitar instituci&oacute;n');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1211','es','N','Cambiar estado instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1211','es','N','Cambiar estado instituci&oacute;n');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.75.2:  Jul 08, 2014</dt>
@@ -2391,7 +3331,7 @@ ALTER TABLE centres ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER PlcCod;<b
 ALTER TABLE centres ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;<br />
 CREATE INDEX Status ON centres (Status);<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1208','es','N','Solicitar centro');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1209','es','N','Cambiar estado centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1209','es','N','Cambiar estado centro');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.74.5:  Jul 06, 2014</dt>
@@ -2411,7 +3351,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1209','es','N','Camb
 							List centres with pending degrees. (163770 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-UPDATE actions SET Txt='Ver instit., centros, titul. y asig. pendientes' WHERE ActCod='1060';
+UPDATE actions SET Txt='Ver instit., centros, titul. y asig. pendientes' WHERE ActCod='1060';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.74.1:  Jul 05, 2014</dt>
@@ -2427,7 +3367,7 @@ ALTER TABLE degrees ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER DegTypCod
 ALTER TABLE degrees ADD COLUMN RequesterUsrCod INT NOT NULL DEFAULT -1 AFTER Status;<br />
 CREATE INDEX Status ON degrees (Status);<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1206','es','N','Solicitar titulaci&oacute;n');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1207','es','N','Cambiar estado titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1207','es','N','Cambiar estado titulaci&oacute;n');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.73.3:  Jul 04, 2014</dt>
@@ -2463,7 +3403,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1203','es','N','Admi
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1079','es','N','Ver calificaciones asignatura');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1204','es','N','Ver calificaciones grupo');<br />
 UPDATE actions SET Txt='Administrar calificaciones asignatura' WHERE ActCod='284';<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1205','es','N','Administrar calificaciones grupo');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1205','es','N','Administrar calificaciones grupo');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.72.4:  Jul 01, 2014</dt>
@@ -2491,7 +3431,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1205','es','N','Admi
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1191','es','N','Habilitar arch/carp calif. grp.');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1192','es','N','Inhabilitar arch/carp calif. grp.');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1193','es','N','Habilitar arch/carp calif. asig.');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1194','es','N','Inhabilitar arch/carp calif. asig.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1194','es','N','Inhabilitar arch/carp calif. asig.');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.71:    Jun 25, 2014</dt>
@@ -2499,7 +3439,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1194','es','N','Inha
 							Refactoring file browser. (163583 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('267','268','463','466','467','475','499','500','525','526');
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('267','268','463','466','467','475','499','500','525','526');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.70:    Jun 24, 2014</dt>
@@ -2535,7 +3475,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1186','es','N','Ver 
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1187','es','N','Ver fichas invitados');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1188','es','N','Imprimir fichas invitados');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1189','es','N','Ver lista invitados');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1190','es','N','Imprimir orla ionvitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1190','es','N','Imprimir orla ionvitados');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.68:    Jun 07, 2014</dt>
@@ -2548,7 +3488,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1190','es','N','Impr
 							Institution fullname length changes from 127 to 1024. (163975 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE institutions CHANGE COLUMN FullName FullName TEXT NOT NULL;
+ALTER TABLE institutions CHANGE COLUMN FullName FullName TEXT NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.66.1:  Jun 02, 2014</dt>
@@ -2573,7 +3513,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1181','es','N','Busc
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1182','es','N','Buscar desde instituci&oacute;n');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1183','es','N','Buscar desde centro');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1184','es','N','Buscar desde titulaci&oacute;n');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1185','es','N','Buscar desde asignatura');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1185','es','N','Buscar desde asignatura');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.65:    May 31, 2014</dt>
@@ -2585,7 +3525,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1185','es','N','Busc
 							Changes in edition of institutions. (163002 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE institutions CHANGE Logo Logo VARCHAR(32) NOT NULL;
+ALTER TABLE institutions CHANGE Logo Logo VARCHAR(32) NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.64.8:  May 27, 2014</dt>
@@ -2597,7 +3537,7 @@ ALTER TABLE institutions CHANGE Logo Logo VARCHAR(32) NOT NULL;
 							Added new social networks. (? lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook', 'flickr', 'foursquare', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook', 'flickr', 'foursquare', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.64.6:  May 26, 2014</dt>
@@ -2609,7 +3549,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'delicious', 'edmodo', 'facebook
 							Added new social networks. (162908 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.64.4:  May 15, 2014</dt>
@@ -2631,7 +3571,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 
 							Icons for countries are moved to icons directory. (162825 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-mv /var/www/html/swad/cty /var/www/html/swad/icon/country
+mv /var/www/html/swad/cty /var/www/html/swad/icon/country<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.64:    May 05, 2014</dt>
@@ -2687,7 +3627,7 @@ DELETE FROM usr_webs WHERE UsrCod NOT IN (SELECT UsrCod FROM usr_data);
 							Added new social network. (163051 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'tumblr', 'twitter', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'tumblr', 'twitter', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.61:    Apr 21, 2014</dt>
@@ -2697,7 +3637,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'edmodo', 'facebook', 'flickr', 
 							2 changes necessary in database:<br />
 							<small><code>
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1174','es','N','Ver ficha estudiante');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1175','es','N','Ver ficha profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1175','es','N','Ver ficha profesor');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.60.1:  Apr 21, 2014</dt>
@@ -2732,7 +3672,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1175','es','N','Ver 
 							Added new social network. (162963 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'tumblr', 'twitter', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'tumblr', 'twitter', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.59.1:  Apr 17, 2014</dt>
@@ -2746,7 +3686,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplu
 							2 changes necessary in database:<br />
 							<small><code>
 REPLACE INTO usr_webs SELECT UsrCod,'www',WWW FROM usr_data WHERE WWW LIKE 'http%';<br />
-REPLACE INTO usr_webs SELECT UsrCod,'twitter',CONCAT('https://twitter.com/',Twitter) FROM usr_data WHERE Twitter<>'' AND Twitter NOT LIKE 'http%';
+REPLACE INTO usr_webs SELECT UsrCod,'twitter',CONCAT('https://twitter.com/',Twitter) FROM usr_data WHERE Twitter<>'' AND Twitter NOT LIKE 'http%';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58.10: Apr 16, 2014</dt>
@@ -2762,7 +3702,7 @@ REPLACE INTO usr_webs SELECT UsrCod,'twitter',CONCAT('https://twitter.com/',Twit
 							Added new social networks. (163375 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'twitter', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'instagram', 'linkedin', 'pinterest', 'slideshare', 'twitter', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58.7:  Apr 14, 2014</dt>
@@ -2771,7 +3711,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplu
 							2 changes necessary in database:<br />
 							<small><code>
 DELETE FROM usr_webs WHERE Web='skype';<br />
-ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'linkedin', 'twitter', 'youtube') NOT NULL;
+ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'linkedin', 'twitter', 'youtube') NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58.6:  Apr 14, 2014</dt>
@@ -2787,7 +3727,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', 'facebook', 'flickr', 'googleplu
 							Editing social networks. (163337 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-CREATE TABLE IF NOT EXISTS usr_webs (UsrCod INT NOT NULL,Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'linkedin', 'skype', 'twitter', 'youtube') NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(UsrCod,Web));
+CREATE TABLE IF NOT EXISTS usr_webs (UsrCod INT NOT NULL,Web ENUM('www', 'facebook', 'flickr', 'googleplus', 'linkedin', 'skype', 'twitter', 'youtube') NOT NULL,URL VARCHAR(255) NOT NULL,UNIQUE INDEX(UsrCod,Web));<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58.3:  Apr 11, 2014</dt>
@@ -2795,7 +3735,7 @@ CREATE TABLE IF NOT EXISTS usr_webs (UsrCod INT NOT NULL,Web ENUM('www', 'facebo
 							New module swad_network for user' web and social networks. (163286 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_network.o to list of object files
+Add swad_network.o to list of object files<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58.2:  Apr 10, 2014</dt>
@@ -2807,7 +3747,7 @@ Add swad_network.o to list of object files
 							Editing social networks. (163222 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1173','es','N','Cambiar redes sociales');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1173','es','N','Cambiar redes sociales');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.58:    Apr 08, 2014</dt>
@@ -2815,7 +3755,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1173','es','N','Camb
 							New action to edit social networks. (163144 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1172','es','N','Editar redes sociales');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1172','es','N','Editar redes sociales');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.57.6:  Apr 08, 2014</dt>
@@ -2836,7 +3776,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1167','es','N','Camb
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1168','es','N','Cambiar centro');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1169','es','N','Cambiar departamento');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1170','es','N','Cambiar despacho');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1171','es','N','Cambiar tel&eacute;fono despacho');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1171','es','N','Cambiar tel&eacute;fono despacho');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.57.4:  Apr 06, 2014</dt>
@@ -2873,7 +3813,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1171','es','N','Camb
 							Notices in the left side of the screen are limited to a number of charecters. (162516 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Mostrar aviso completo');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Mostrar aviso completo');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.55.8:  Mar 25, 2014</dt>
@@ -2910,7 +3850,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Most
 							Changes in tests. (162210 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-UPDATE tst_questions SET Feedback='' WHERE (Feedback='(null)' OR Feedback='&#40;null&#41;');
+UPDATE tst_questions SET Feedback='' WHERE (Feedback='(null)' OR Feedback='&#40;null&#41;');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.55:    Mar 19, 2014</dt>
@@ -2940,7 +3880,7 @@ UPDATE tst_questions SET Feedback='' WHERE (Feedback='(null)' OR Feedback='&#40;
 							New module swad_ID for users' IDs management. (161730 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_ID.o to list of object files in Makefile
+Add swad_ID.o to list of object files in Makefile<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.51.1:  Mar 04, 2014</dt>
@@ -2952,7 +3892,7 @@ Add swad_ID.o to list of object files in Makefile
 							New module swad_nickname for nicknames management. (161632 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_nickname.o to list of object files in Makefile
+Add swad_nickname.o to list of object files in Makefile<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.50:    Mar 04, 2014</dt>
@@ -2960,7 +3900,7 @@ Add swad_nickname.o to list of object files in Makefile
 							New module swad_password for passwords management. (161551 lines)<br />
 							1 change necessary in Makefile:<br />
 							<small><code>
-Add swad_password.o to list of object files in Makefile
+Add swad_password.o to list of object files in Makefile<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.49.7:  Mar 03, 2014</dt>
@@ -2986,7 +3926,7 @@ Add swad_password.o to list of object files in Makefile
 							</dd>
 		<dt>Version 13.49.2:  Feb 16, 2014</dt>
 							<dd>
-							"Without courses" is replaced by "guests" in connected and statistics. (161331 lines)
+							&quot;Without courses&quot; is replaced by &quot;guests&quot; in connected and statistics. (161331 lines)
 							</dd>
 		<dt>Version 13.49.1:  Feb 15, 2014</dt>
 							<dd>
@@ -2998,7 +3938,7 @@ Add swad_password.o to list of object files in Makefile
 							Changes in size of some database fields. (161301 lines)<br />
 							1 change necessary at University of Granada:<br />
 							<small><code>
-Compile and install version 1.1.13 of PRADO (includes changes in role codes for student and teacher)
+Compile and install version 1.1.13 of PRADO (includes changes in role codes for student and teacher)<br />
 							</code></small><br />
 							35 changes necessary in database:<br />
 							<small><code>
@@ -3042,7 +3982,7 @@ ALTER TABLE plugins CHANGE Name Name VARCHAR(127) NOT NULL;<br />
 ALTER TABLE timetable_crs CHANGE Place Place VARCHAR(127) NOT NULL;<br />
 ALTER TABLE timetable_tut CHANGE Place Place VARCHAR(127) NOT NULL;<br />
 ALTER TABLE banners CHANGE FullName FullName VARCHAR(127) NOT NULL;<br />
-ALTER TABLE holidays CHANGE Name Name VARCHAR(127) NOT NULL;
+ALTER TABLE holidays CHANGE Name Name VARCHAR(127) NOT NULL;<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.48.3:  Feb 09, 2014</dt>
@@ -3063,11 +4003,11 @@ ALTER TABLE holidays CHANGE Name Name VARCHAR(127) NOT NULL;
 							</dd>
 		<dt>Version 13.48:    Feb 09, 2014</dt>
 							<dd>
-							Role "invited" is renamed as "visitor", and new role "invited" is created for users without courses.<br />
+							Role &quot;invited&quot; is renamed as &quot;visitor&quot;, and new role &quot;invited&quot; is created for users without courses.<br />
 							Not finished! Changes in action permissions required! (161240 lines)<br />
 							1 change necessary at University of Granada:<br />
 							<small><code>
-Compile and install version 1.1.12 of PRADO (includes changes in role codes for student and teacher)
+Compile and install version 1.1.12 of PRADO (includes changes in role codes for student and teacher)<br />
 							</code></small><br />
 							15 changes necessary in database:<br />
 							<small><code>
@@ -3092,7 +4032,7 @@ UPDATE log_recent SET Role='8' WHERE Role='5';<br />
 UPDATE log_recent SET Role=Role+1 WHERE Role>='1' AND Role<='4';<br />
 <br />
 UPDATE log SET Role='8' WHERE Role='5';<br />
-UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';
+UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.47:    Feb 06, 2014</dt>
@@ -3126,7 +4066,7 @@ UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';
 							</dd>
 		<dt>Version 13.46.1:  Feb 04, 2014</dt>
 							<dd>
-							If the maximum role of a user is "invited", he/she can not upload documents. (160079 lines)
+							If the maximum role of a user is &quot;invited&quot;, he/she can not upload documents. (160079 lines)
 							</dd>
 		<dt>Version 13.46:    Feb 03, 2014</dt>
 							<dd>
@@ -3176,7 +4116,7 @@ UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';
 							2 changes necessary in database:<br />
 							<small><code>
 DELETE FROM actions WHERE ActCod='1164';<br />
-UPDATE actions SET Obsolete='Y' WHERE ActCod='1162';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1162';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.43:    Jan 29, 2014</dt>
@@ -3200,7 +4140,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='1162';
 							New option to sign in. (161251 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Confirmar creaci&oacute;n de nueva cuenta');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Confirmar creaci&oacute;n de nueva cuenta');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.41:    Jan 23, 2014</dt>
@@ -3209,7 +4149,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Conf
 							2 changes necessary in database:<br />
 							<small><code>
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1162','es','N','Solicitar la creaci&oacute;n de una cuenta');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1163','es','N','Crear una nueva cuenta');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1163','es','N','Crear una nueva cuenta');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.40.1:  Jan 22, 2014</dt>
@@ -3222,7 +4162,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1163','es','N','Crea
 							Removed options to go to country, institution, centre, etc. (160965 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('842','1027','1026','1050','1012','988','1010');
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('842','1027','1026','1050','1012','988','1010');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.39.3:  Jan 20, 2014</dt>
@@ -3244,7 +4184,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('842','1027','1026','1050','101
 							New module swad_photo for photo management. (160876 lines)<br />
 							1 change necessary in Makefile:<br />
 					     		<small><code>
-Add swad_photo.o to list of object files in Makefile
+Add swad_photo.o to list of object files in Makefile<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.38.1:  Jan 15, 2014</dt>
@@ -3358,7 +4298,7 @@ Add swad_photo.o to list of object files in Makefile
 							Teachers' records are integrated into teachers' list. (161057 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod='306';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='306';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.31:    Dec 31, 2013</dt>
@@ -3375,7 +4315,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='306';
 							Options to edit group types is integrated in option to edit groups. (161244 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod='1004';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1004';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.30.1:  Dec 31, 2013</dt>
@@ -3392,7 +4332,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='1004';
 							Register / removing an administrator is integrated in register a user. (161391 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('57','61','229','231','580','581','582','585');
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('57','61','229','231','580','581','582','585');<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.28:    Dec 29, 2013</dt>
@@ -3400,7 +4340,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('57','61','229','231','580','58
 							Teachers's office hours are integrated in listing of teachers' records. (161581 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
-UPDATE actions SET Obsolete='Y' WHERE ActCod='21';
+UPDATE actions SET Obsolete='Y' WHERE ActCod='21';<br />
 							</code></small>
 							</dd>
 		<dt>Version 13.27.4:  Dec 28, 2013</dt>
@@ -4309,7 +5249,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1088','es','N','Camb
 							</dd>
 		<dt>Version 12.63:   May 21, 2013</dt>
 							<dd>
-							Option "Nickname" is changed to option "User's account". (151396 lines)<br />
+							Option &quot;Nickname&quot; is changed to option &quot;User's account&quot;. (151396 lines)<br />
 							1 change necessary in database:<br />
 					     		<small><code>
 RENAME TABLE nicknames TO usr_nicknames;<br />
@@ -4572,7 +5512,7 @@ RENAME TABLE notif_copy TO notif;<br />
 		<dt>Version 12.49.4: Mar 31, 2013</dt>
 							<dd>
 							Changes in notifications when uploading or pasting files.<br />
-							"Common zone" now is called "Shared files area". (149227 lines)
+							&quot;Common zone&quot; now is called &quot;Shared files area&quot;. (149227 lines)
 							</dd>
 		<dt>Version 12.49.3: Mar 28, 2013</dt>
 							<dd>
@@ -5576,7 +6516,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1060','es','Y','Titu
 							</dd>
 		<dt>Version 11.79.1: Sep 23, 2012</dt>
 							<dd>
-							"Academic year" no longer used.<br />
+							&quot;Academic year&quot; no longer used.<br />
 							Changes in calendar. (135975 lines)
 							</dd>
 		<dt>Version 11.79:   Sep 23, 2012</dt>
@@ -5727,7 +6667,7 @@ CREATE INDEX Status ON courses (Status);<br />
 							</dd>
 		<dt>Version 11.74:   Jul 24, 2012</dt>
 							<dd>
-							Changed "dar de alta/baja" to "inscribir/eliminar" in Spanish and Catala.<br />
+							Changed &quot;dar de alta/baja&quot; to &quot;inscribir/eliminar&quot; in Spanish and Catala.<br />
 							Changed the order of several options in menus.<br />
 							Users' tab is moved after enrollment tab. (134512 lines)
 							</dd>
@@ -5764,7 +6704,7 @@ mv swad_data_protection.html data_protection/index.html<br />
 							</dd>
 		<dt>Version 11.72.6: Jul 11, 2012</dt>
 							<dd>
-							The word "DNI" is changed to "ID (DNI/c&eacute;dula/pasaporte) in Spanish. (134447 lines)
+							The word &quot;DNI&quot; is changed to &quot;ID (DNI/c&eacute;dula/pasaporte) in Spanish. (134447 lines)
 							</dd>
 		<dt>Version 11.72.5: Jul 09, 2012</dt>
 							<dd>
@@ -6089,7 +7029,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 11.53.3: Apr 04, 2012</dt>
 							<dd>
 							Changes in selection of courses.<br />
-							Changes in "About" messages. (132224 lines)
+							Changes in &quot;About&quot; messages. (132224 lines)
 							</dd>
 		<dt>Version 11.53.2: Apr 04, 2012</dt>
 							<dd>
@@ -6199,15 +7139,15 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 11.45:   Mar 15, 2012</dt>
 							<dd>
-							Lot of changes in selections of countries in the "System" tab. (127429 lines)
+							Lot of changes in selections of countries in the &quot;System&quot; tab. (127429 lines)
 							</dd>
 		<dt>Version 11.44:   Mar 14, </dt>
 							<dd>
-							Lot of changes in selections of institutions and degree types in the "System" tab. (127314 lines)
+							Lot of changes in selections of institutions and degree types in the &quot;System&quot; tab. (127314 lines)
 							</dd>
 		<dt>Version 11.43:   Mar 13, 2012</dt>
 							<dd>
-							Changes in order of options in the "System" tab. (127178 lines)
+							Changes in order of options in the &quot;System&quot; tab. (127178 lines)
 							</dd>
 		<dt>Version 11.42.5: Mar 12, 2012</dt>
 							<dd>
@@ -6220,7 +7160,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 11.42.3: Mar 08, 2012</dt>
 							<dd>
-							Changed "alumno/a" to "estudiante" in Spanish and Catal&aacute;. (127155 lines)
+							Changed &quot;alumno/a&quot; to &quot;estudiante&quot; in Spanish and Catal&aacute;. (127155 lines)
 							</dd>
 		<dt>Version 11.42.2: Mar 08, 2012</dt>
 							<dd>
@@ -7235,11 +8175,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.31:   Mar 06, 2011</dt>
 							<dd>
-							A user can be registered as "teacher" in course A and as "student" in course B. (100660 lines)
+							A user can be registered as &quot;teacher&quot; in course A and as &quot;student&quot; in course B. (100660 lines)
 							</dd>
 		<dt>Version 10.30.4: Mar 06, 2011</dt>
 							<dd>
-							Changed "UsrType" to "Role" in log and log_recent database tables. (100587 lines)
+							Changed &quot;UsrType&quot; to &quot;Role&quot; in log and log_recent database tables. (100587 lines)
 							</dd>
 		<dt>Version 10.30.3: Mar 06, 2011</dt>
 							<dd>
@@ -7247,7 +8187,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.30.2: Mar 06, 2011</dt>
 							<dd>
-							Changed "Gender" for "Sex" in database tables. (100580 lines)
+							Changed &quot;Gender&quot; for &quot;Sex&quot; in database tables. (100580 lines)
 							</dd>
 		<dt>Version 10.30.1: Mar 06, 2011</dt>
 							<dd>
@@ -7265,7 +8205,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 10.29:   Mar 05, 2011</dt>
 							<dd>
 							Lot of internal changes related to roles.<br />
-							"Gender" is changed for "Sex". (100520 lines)
+							&quot;Gender&quot; is changed for &quot;Sex&quot;. (100520 lines)
 							</dd>
 		<dt>Version 10.28.1: Mar 03, 2011</dt>
 							<dd>
@@ -7289,7 +8229,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.25.10:Mar 01, 2011</dt>
 							<dd>
-							Text "Class photo" or "List" is shown near icons in selection of type of users' listing. (100183 lines)
+							Text &quot;Class photo&quot; or &quot;List&quot; is shown near icons in selection of type of users' listing. (100183 lines)
 							</dd>
 		<dt>Version 10.25.9: Mar 01, 2011</dt>
 							<dd>
@@ -7358,7 +8298,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.22.7: Feb 11, 2011</dt>
 							<dd>
-							"Sent" and "Seen" are replaced by status in notif table. (? lines)
+							&quot;Sent&quot; and &quot;Seen&quot; are replaced by status in notif table. (? lines)
 							</dd>
 		<dt>Version 10.22.6: Feb 11, 2011</dt>
 							<dd>
@@ -7459,7 +8399,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.16.6: Jan 04, 2011</dt>
 							<dd>
-							Message "0 new messages" is no longer shown when user has not new messages. (98242 lines)
+							Message &quot;0 new messages&quot; is no longer shown when user has not new messages. (98242 lines)
 							</dd>
 		<dt>Version 10.16.5: Jan 04, 2011</dt>
 							<dd>
@@ -7643,7 +8583,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.10.4: Nov 22, 2010</dt>
 							<dd>
-							"Download" is renamed as "Documents". (108477 lines)
+							&quot;Download&quot; is renamed as &quot;Documents&quot;. (108477 lines)
 							</dd>
 		<dt>Version 10.10.3: Nov 22, 2010</dt>
 							<dd>
@@ -7807,7 +8747,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.3.4:  Oct 16, 2010</dt>
 							<dd>
-							Actions like "show print view" are shown in a new blank window, not in a popup. (103722 lines)
+							Actions like &quot;show print view&quot; are shown in a new blank window, not in a popup. (103722 lines)
 							</dd>
 		<dt>Version 10.3.3:  Oct 16, 2010</dt>
 							<dd>
@@ -7860,7 +8800,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version  9.51:   Jul 21, 2010</dt>
 							<dd>
-							Connected users are "refreshed" after a few seconds using Javascript on client side. (102923 lines)
+							Connected users are &quot;refreshed&quot; after a few seconds using Javascript on client side. (102923 lines)
 							</dd>
 		<dt>Version  9.50.1: Jul 20, 2010</dt>
 							<dd>
@@ -8086,7 +9026,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 9.43.10:Mars 21, 2010</dt>
 							<dd>
 							Several messages translated, only to english and spanish (still 457 messages to be translated).<br />
-							The word "hebra" is renamed as "discusi&oacute;n" in Spanish. (93666 lines)
+							The word &quot;hebra&quot; is renamed as &quot;discusi&oacute;n&quot; in Spanish. (93666 lines)
 							</dd>
 		<dt>Version 9.43.9: Mars 20, 2010</dt>
 							<dd>
@@ -8269,7 +9209,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 9.36.6: January 30, 2010</dt>
 							<dd>
 							Changes in layout of header.<br />
-							Deprecated "align" attributes in tags "img" are changed to CSS styles. (87096 lines)
+							Deprecated &quot;align&quot; attributes in tags &quot;img&quot; are changed to CSS styles. (87096 lines)
 							</dd>
 		<dt>Version 9.36.5: January 30, 2010</dt>
 							<dd>
@@ -8845,7 +9785,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 9.12.6: 26/nov/2009</dt>
 						<dd>
 						Cambios internos en la exploraci&oacute;n de archivos.<br />
-						Se muestran tambi&eacute;n las actividades en "Mis trabajos". (83547 l&iacute;neas)
+						Se muestran tambi&eacute;n las actividades en &quot;Mis trabajos&quot;. (83547 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 9.12.5: 25/nov/2009</dt>
 						<dd>
@@ -9009,7 +9949,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 9.1:    01/oct/2009</dt>
 						<dd>
-						Los profesores pueden acceder a "Mis trabajos".<br />
+						Los profesores pueden acceder a &quot;Mis trabajos&quot;.<br />
 						Peque&ntilde;o cambio en las reglas sobre qui&eacute;n puede ver qu&eacute; fotos.<br />
 						A&ntilde;adido nuevo tipo MIME. (79342 l&iacute;neas)
 						</dd>
@@ -9299,7 +10239,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 8.40:   25/may/2009</dt>
 						<dd>
-						A&ntilde;adidas cabeceras de licencia "GNU Affero General Public License, Versi&oacute;n 3". (73566 l&iacute;neas)
+						A&ntilde;adidas cabeceras de licencia &quot;GNU Affero General Public License, Versi&oacute;n 3&quot;. (73566 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.39.8: 24/may/2009</dt>
 						<dd>
@@ -9339,7 +10279,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 8.38.9: 18/may/2009</dt>
 						<dd>
-						El archivo zip con los trabajos de cada alumno ya no contiene una carpeta "trabajos" dentro de la carpeta de cada alumno. (71832 l&iacute;neas)
+						El archivo zip con los trabajos de cada alumno ya no contiene una carpeta &quot;trabajos&quot; dentro de la carpeta de cada alumno. (71832 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.38.8: 18/may/2009</dt>
 						<dd>
@@ -9747,7 +10687,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 8.14.6: 10/dic/2008</dt>
 						<dd>
 						Traducci&oacute;n de algunos mensajes.<br />
-						Eliminada la etiqueta "font" del c&oacute;digo XHTML. (63331 l&iacute;neas)
+						Eliminada la etiqueta &quot;font&quot; del c&oacute;digo XHTML. (63331 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.14.5: 10/dic/2008</dt>
 						<dd>
@@ -10053,7 +10993,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 7.71.1: 16/sep/2008</dt>
 						<dd>
 						Mejoras est&aacute;ticas en la selecci&oacute;n de usuarios.<br />
-						Se disingue el g&eacute;nero en el plural del tipo de usuario (por ejemplo, si hay tres alumnas en una clase y ning&uacute;n alumno, aparecer&aacute; la palabra "Alumnas" en lugar de "Alumnos"). (55295 l&iacute;neas)
+						Se disingue el g&eacute;nero en el plural del tipo de usuario (por ejemplo, si hay tres alumnas en una clase y ning&uacute;n alumno, aparecer&aacute; la palabra &quot;Alumnas&quot; en lugar de &quot;Alumnos&quot;). (55295 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.71:   15/sep/2008</dt>
 						<dd>
@@ -10251,7 +11191,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 7.61.3: 31/may/2008</dt>
 						<dd>
-						En "Estad&iacute;sticas>Uso de SWAD" se muestra el n&uacute;mero de usuarios que han elegido cada uno de los cuatro posibles dise&ntilde;os de Las columnas laterales izquierda y derecha. (53165 l&iacute;neas)
+						En &quot;Estad&iacute;sticas &gt; Uso de SWAD&quot; se muestra el n&uacute;mero de usuarios que han elegido cada uno de los cuatro posibles dise&ntilde;os de Las columnas laterales izquierda y derecha. (53165 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.61.2: 28/may/2008</dt>
 						<dd>
@@ -10667,7 +11607,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 7.34:   02/mar/2008</dt>
 						<dd>
-						Reordenaci&oacute;n de las opciones de la pesta&ntilde;a "Titulaci&oacute;n". (51060 l&iacute;neas)
+						Reordenaci&oacute;n de las opciones de la pesta&ntilde;a &quot;Titulaci&oacute;n&quot;. (51060 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.33.1: 02/mar/2008</dt>
 						<dd>
@@ -10707,11 +11647,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 7.32.3: 16/feb/2008</dt>
 						<dd>
-						En la opci&oacute;n "Estad&iacute;sticas > Uso de SWAD" se muestra el n&uacute;mero total de asignaturas. (50990 l&iacute;neas)
+						En la opci&oacute;n &quot;Estad&iacute;sticas > Uso de SWAD&quot; se muestra el n&uacute;mero total de asignaturas. (50990 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.32.2: 15/feb/2008</dt>
 						<dd>
-						La acci&oacute;n "mostrar mensajes recibidos" se desdobla en una acci&oacute;n para el men&uacute; principal y otra para la cabecera superior.<br />
+						La acci&oacute;n &quot;mostrar mensajes recibidos&quot; se desdobla en una acci&oacute;n para el men&uacute; principal y otra para la cabecera superior.<br />
 						Cambios internos en funciones de rango de usuarios en estad&iacute;sticas. (50963 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.32.1: 10/feb/2008</dt>
@@ -11357,7 +12297,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 7.5.8:  31/oct/2007</dt>
 						<dd>
-						Contin&uacute;a la migraci&oacute;n a XHTML 1.0 Transitional. Los enlaces (a href="...") a archivos en la zona de descargas se escriben sustituyendo "%20" en lugar de cada espacio. (44494 l&iacute;neas)
+						Contin&uacute;a la migraci&oacute;n a XHTML 1.0 Transitional. Los enlaces (a href=&quot;...&quot;) a archivos en la zona de descargas se escriben sustituyendo &quot;%20&quot; en lugar de cada espacio. (44494 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.5.7:  30/oct/2007</dt>
 						<dd>
@@ -11382,7 +12322,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 7.5.2:  26/oct/2007</dt>
 						<dd>
 						Comienza la migraci&oacute;n a XHTML 1.0 Transitional.<br />
-						Se a&ntilde;ade el atributo align="left" a todas las celdas que no ten&iacute;an alineaci&oacute;n para que se vea bien en IE6. (44399 l&iacute;neas)
+						Se a&ntilde;ade el atributo align=&quot;left&quot; a todas las celdas que no ten&iacute;an alineaci&oacute;n para que se vea bien en IE6. (44399 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.5.1:  25/oct/2007</dt>
 						<dd>
@@ -11739,7 +12679,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 6.27.9: 07/mar/2007</dt>
 						<dd>
-						Se cambia el separador ";" de destinatarios de correo por ",", debido a que el Thunderbird no adminte los ";". Detectado por Francisco Pelayo.<br />
+						Se cambia el separador &quot;;&quot; de destinatarios de correo por &quot;,&quot;, debido a que el Thunderbird no adminte los &quot;;&quot;. Detectado por Francisco Pelayo.<br />
 						Cambio interno en la presentaci&oacute;n de usuarios conectados.<br />
 						Renombramiento de variables globales. (40317 l&iacute;neas)
 						</dd>
@@ -12434,7 +13374,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 5.39.6: 06/jul/2006</dt>
 						<dd>
-						Cambios en la escritura de fechas (aparece la cadena "Hoy"). (34511 l&iacute;neas)
+						Cambios en la escritura de fechas (aparece la cadena &quot;Hoy&quot;). (34511 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.39.5: 05/jul/2006</dt>
 						<dd>
@@ -12638,7 +13578,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 5.32.2: 06/may/2006</dt>
 						<dd>
-						Corregido peque&ntilde;o bug en "Mensajes recibidos". (33035 l&iacute;neas)
+						Corregido peque&ntilde;o bug en &quot;Mensajes recibidos&quot;. (33035 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.32.1: 03/may/2006</dt>
 						<dd>
@@ -12772,7 +13712,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 5.24.10:03/abr/2006</dt>
 						<dd>
-						Nuevo grupo de usuarios en estad&iacute;sticas: "usuarios identificados". (30811 l&iacute;neas)
+						Nuevo grupo de usuarios en estad&iacute;sticas: &quot;usuarios identificados&quot;. (30811 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.24.9: 03/abr/2006</dt>
 						<dd>
@@ -13135,11 +14075,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 5.8:    24/nov/2005</dt>
 						<dd>
-						Cuando se conecta un usuario le aparece su pesta&ntilde;a "Personal" antes de seleccionar la asignatura. (26069 l&iacute;neas)
+						Cuando se conecta un usuario le aparece su pesta&ntilde;a &quot;Personal&quot; antes de seleccionar la asignatura. (26069 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.7.5:  24/nov/2005</dt>
 						<dd>
-						Desdoblado el usuario "invitado" en "desconocido" (no identificado) e "invitado" (identificado, pero no perteneciente a la asignatura)<br />
+						Desdoblado el usuario &quot;invitado&quot; en &quot;desconocido&quot; (no identificado) e &quot;invitado&quot; (identificado, pero no perteneciente a la asignatura)<br />
 						La pesta&ntilde;a personal est&aacute; disponible para un invitado a&uacute;n cuando est&aacute; en una asignatura a la que no pertenece. (26061 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.7.4:  22/nov/2005</dt>
@@ -13262,7 +14202,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 5.4.2:  24/oct/2005</dt>
 						<dd>
-						En aquellas opciones de la pesta&ntilde;a "Usuarios" en las que se necesita el DNI de otro usuario,
+						En aquellas opciones de la pesta&ntilde;a &quot;Usuarios&quot; en las que se necesita el DNI de otro usuario,
 						se pasa ahora por una pantalla intermedia para pedirlo. (24871 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.4.1:  21/oct/2005</dt>
@@ -13450,7 +14390,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.95.3: 31/may/2005</dt>
 						<dd>
-						Se a&ntilde;ade bot&oacute;n "Ayer" al formulario de selecci&oacute;n de rango de fechas. (22068 l&iacute;neas)
+						Se a&ntilde;ade bot&oacute;n &quot;Ayer&quot; al formulario de selecci&oacute;n de rango de fechas. (22068 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.95.2: 31/may/2005</dt>
 						<dd>
@@ -13599,7 +14539,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.87.7: 09/mar/2005</dt>
 						<dd>
-						Cambiado icono de foro y chat. Alterado orden de opciones de la pesta&ntilde;a "Mensajes". (20157 l&iacute;neas)
+						Cambiado icono de foro y chat. Alterado orden de opciones de la pesta&ntilde;a &quot;Mensajes&quot;. (20157 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.87.6: 09/mar/2005</dt>
 						<dd>
@@ -13612,7 +14552,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.87.4: 08/mar/2005</dt>
 						<dd>
-						Se impide que se introduzcan direcciones de p&aacute;ginas web personales sin un ".". (20057 l&iacute;neas)
+						Se impide que se introduzcan direcciones de p&aacute;ginas web personales sin un &quot;.&quot;. (20057 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.87.3: 02/mar/2005</dt>
 						<dd>
@@ -13743,7 +14683,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.82.4: 18/feb/2005</dt>
 						<dd>
-						"Mis asignaturas" salen ordenadas por c&oacute;digo.<br />
+						&quot;Mis asignaturas&quot; salen ordenadas por c&oacute;digo.<br />
 						Desdoblados algunos grupos de Licenciado en Econom&iacute;a.<br />
                                         	A&ntilde;adidos 1&ordm; y 2&ordm; de Teleco.<br />
                                         	A&ntilde;adidas optativas de L.A.D.E. (18706 l&iacute;neas)
@@ -14698,7 +15638,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 4.24.2: 17/feb/2004</dt>
 						<dd>
 						Peque&ntilde;o cambio en los men&uacute;s de administraci&oacute;n de asignatura y usuarios.<br />
-						A&ntilde;adido campo "Grupo" a los horarios. (10447 l&iacute;neas)
+						A&ntilde;adido campo &quot;Grupo&quot; a los horarios. (10447 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.24.1: 16/feb/2004</dt>
 						<dd>
@@ -14961,7 +15901,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.3.2:  15/oct/2003</dt>
 						<dd>
-						Todos los iconos se cargan ahora de "/~acanas/iconos/" en lugar de "/iconos/".
+						Todos los iconos se cargan ahora de &quot;/~acanas/iconos/&quot; en lugar de &quot;/iconos/&quot;.
 						</dd>
 		<dt>Versi&oacute;n 4.3.1:  01/oct/2003</dt>
 						<dd>
@@ -14974,11 +15914,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt><a href="/history/swad4.2.1/">Versi&oacute;n 4.2.1: 13/may/2003</a></dt>
 						<dd>
 						Ocultaci&oacute;n con asteriscos de los datos presentados en las versiones de demostraci&oacute;n.<br />
-						Versi&oacute;n con la que se pidi&oacute; el proyecto de innovaci&oacute;n docente "Plataforma SWAD (Sistema Web a Apoyo a la Docencia)".
+						Versi&oacute;n con la que se pidi&oacute; el proyecto de innovaci&oacute;n docente &quot;Plataforma SWAD (Sistema Web a Apoyo a la Docencia)&quot;.
 						</dd>
 		<dt>Versi&oacute;n 4.2:   12/may/2003</dt>
 						<dd>
-						Usuarios "demostraci&oacute;n"..<br />
+						Usuarios &quot;demostraci&oacute;n&quot;..<br />
 						Versiones de demostraci&oacute;n.<br />
 						Recepci&oacute;n de fotograf&iacute;a a trav&eacute;s de un archivo temporal.
 						</dd>

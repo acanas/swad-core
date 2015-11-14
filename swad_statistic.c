@@ -826,6 +826,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    char StrRole[256];
    char StrQueryCountType[256];
    unsigned NumDays;
+   bool ICanQueryWholeRange;
 
    /***** Initialize data structure of the user *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -949,16 +950,25 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
-   if (!(Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)))
-      // TODO: How long can query other admins?
-      if (NumDays > Cfg_DAYS_IN_RECENT_LOG)
-        {
-         sprintf (Gbl.Message,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
-                  Cfg_DAYS_IN_RECENT_LOG);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// ...write warning message and show the form again
-         return;
-        }
+   ICanQueryWholeRange = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			 (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
+			 (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			 (Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			 (Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM && (Gbl.Scope.Current == Sco_SCOPE_INS   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_CTR   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_DEG   ||
+			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+   if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
+     {
+      sprintf (Gbl.Message,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
+	       Cfg_DAYS_IN_RECENT_LOG);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// ...write warning message and show the form again
+      return;
+     }
 
    /***** Query depending on the type of count *****/
    switch (Gbl.Stat.CountType)

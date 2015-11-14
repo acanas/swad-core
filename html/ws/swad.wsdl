@@ -226,7 +226,6 @@
     <sequence>
      <element name="userNickname" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccount::userNickname -->
      <element name="userEmail" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccount::userEmail -->
-     <element name="userID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccount::userID -->
      <element name="userPassword" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccount::userPassword -->
      <element name="appKey" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccount::appKey -->
     </sequence>
@@ -237,7 +236,7 @@
    <complexType>
     <sequence>
      <element name="userCode" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- swad__createAccountOutput::userCode -->
-     <element name="string" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccountOutput::string -->
+     <element name="wsKey" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__createAccountOutput::wsKey -->
     </sequence>
    </complexType>
   </element>
@@ -508,6 +507,26 @@
      <element name="questionsArray" type="swad:questionsArray" minOccurs="1" maxOccurs="1" nillable="true"/><!-- swad__getTestsOutput::questionsArray -->
      <element name="answersArray" type="swad:answersArray" minOccurs="1" maxOccurs="1" nillable="true"/><!-- swad__getTestsOutput::answersArray -->
      <element name="questionTagsArray" type="swad:questionTagsArray" minOccurs="1" maxOccurs="1" nillable="true"/><!-- swad__getTestsOutput::questionTagsArray -->
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getTrivialQuestion">
+   <complexType>
+    <sequence>
+     <element name="wsKey" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__getTrivialQuestion::wsKey -->
+     <element name="degrees" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/><!-- swad__getTrivialQuestion::degrees -->
+     <element name="lowerScore" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- swad__getTrivialQuestion::lowerScore -->
+     <element name="upperScore" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- swad__getTrivialQuestion::upperScore -->
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getTrivialQuestionOutput">
+   <complexType>
+    <sequence>
+     <element name="question" type="swad:question" minOccurs="1" maxOccurs="1"/><!-- swad__getTrivialQuestionOutput::question -->
+     <element name="answersArray" type="swad:answersArray" minOccurs="1" maxOccurs="1" nillable="true"/><!-- swad__getTrivialQuestionOutput::answersArray -->
     </sequence>
    </complexType>
   </element>
@@ -802,6 +821,14 @@
  <part name="Body" element="swad:getTestsOutput"/><!-- swad__getTests::getTestsOut -->
 </message>
 
+<message name="getTrivialQuestion">
+ <part name="Body" element="swad:getTrivialQuestion"/><!-- swad__getTrivialQuestion::swad__getTrivialQuestion -->
+</message>
+
+<message name="getTrivialQuestionOutput">
+ <part name="Body" element="swad:getTrivialQuestionOutput"/><!-- swad__getTrivialQuestion::getTrivialQuestionOut -->
+</message>
+
 <message name="getUsers">
  <part name="Body" element="swad:getUsers"/><!-- swad__getUsers::swad__getUsers -->
 </message>
@@ -944,6 +971,11 @@
   <documentation>Service definition of function swad__getTests</documentation>
   <input message="tns:getTests"/>
   <output message="tns:getTestsOutput"/>
+ </operation>
+ <operation name="getTrivialQuestion">
+  <documentation>Service definition of function swad__getTrivialQuestion</documentation>
+  <input message="tns:getTrivialQuestion"/>
+  <output message="tns:getTrivialQuestionOutput"/>
  </operation>
  <operation name="getUsers">
   <documentation>Service definition of function swad__getUsers</documentation>
@@ -1120,6 +1152,15 @@
      <SOAP:body parts="Body" use="literal"/>
   </output>
  </operation>
+ <operation name="getTrivialQuestion">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="Body" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="Body" use="literal"/>
+  </output>
+ </operation>
  <operation name="getUsers">
   <SOAP:operation soapAction=""/>
   <input>
@@ -1204,9 +1245,9 @@
 </binding>
 
 <service name="swad">
- <documentation>gSOAP 2.8.18 generated service definition</documentation>
+ <documentation>gSOAP 2.8.17r generated service definition</documentation>
  <port name="swad" binding="tns:swad">
-  <SOAP:address location="https://swad.ugr.es/"/>
+  <SOAP:address location="https://openswad.org/"/>
  </port>
 </service>
 

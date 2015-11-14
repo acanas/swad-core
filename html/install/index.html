@@ -56,6 +56,7 @@
 		<li><a href="#swad-database">Creating SWAD database</a></li>
 		<li><a href="#swad-files">Creating SWAD directories and files</a></li>
 		<li><a href="#swad-icons">Installing SWAD icons</a></li>
+		<li><a href="#jstz">Installing jstz and populating Time Zone Tables</a></li>
 		<li><a href="#dropzone">Installing DropzoneJS</a></li>
 		<li><a href="#mathjax">Installing MathJax</a></li>
 		<li><a href="#gsoap">Compiling and installing gSOAP, required to compile SWAD core</a></li>
@@ -65,6 +66,7 @@
 		<li><a href="#chat-server">Installing chat server <code>swad-ircd</code></a></li>
 		<li><a href="#mail">Installing the script to send email <code>swad_smtp.py</code></a></li>
 		<li><a href="#services">Automating startup of services</a></li>
+		<li><a href="#mail-server">Installing mail server (optional)</a></li>
 		</ol>
 	</td>
 	</tr>
@@ -652,6 +654,33 @@
 		</li>
 
 		<li>
+		To cache contents, before the options for the root directory for web pages,
+		usually <code>/var/www/html</code>,
+		insert the lines:<br />
+		<code>
+		#<br />
+		# Cache<br />
+		#<br />
+		ExpiresActive On<br />
+		ExpiresDefault &quot;access plus 1 day&quot;<br />
+		</code>
+		Also, inside the root directory for web pages,
+		usually <code>/var/www/html</code>,
+		insert the lines:<br />
+		<code>
+		#<br />
+		# Cache<br />
+		#<br />
+		    ExpiresByType text/html &quot;access plus 1 day&quot;<br />
+		    ExpiresByType text/css &quot;access plus 1 day&quot;<br />
+		    ExpiresByType text/javascript &quot;access plus 1 day&quot;<br />
+		    ExpiresByType image/gif &quot;access plus 1 year&quot;<br />
+		    ExpiresByType image/jpg &quot;access plus 1 year&quot;<br />
+		    ExpiresByType image/png &quot;access plus 1 year&quot;
+		</code>
+		</li>
+
+		<li>
 		In the section <code>DirectoryIndex</code> search the line:<br />
 		<code>DirectoryIndex index.html index.html.var</code><br />
 		and replace it by:<br />
@@ -692,6 +721,33 @@
 		and replace it by:<br />
 		<code>Options FollowSymLinks</code><br />
 		Remove <code>Indexes</code> to not list files in directories.
+		</li>
+
+		<li>
+		To cache contents, before the options for the root directory for web pages,
+		usually <code>/var/www/html</code>,
+		insert the lines:<br />
+		<code>
+		#<br />
+		# Cache<br />
+		#<br />
+		ExpiresActive On<br />
+		ExpiresDefault &quot;access plus 1 day&quot;<br />
+		</code>
+		Also, inside the root directory for web pages,
+		usually <code>/var/www/html</code>,
+		insert the lines:<br />
+		<code>
+		#<br />
+		# Cache<br />
+		#<br />
+		    ExpiresByType text/html &quot;access plus 1 day&quot;<br />
+		    ExpiresByType text/css &quot;access plus 1 day&quot;<br />
+		    ExpiresByType text/javascript &quot;access plus 1 day&quot;<br />
+		    ExpiresByType image/gif &quot;access plus 1 year&quot;<br />
+		    ExpiresByType image/jpg &quot;access plus 1 year&quot;<br />
+		    ExpiresByType image/png &quot;access plus 1 year&quot;
+		</code>
 		</li>
 
 		<li>
@@ -1310,6 +1366,68 @@
 	</td>
 	</tr>
 	</table>
+	</p>
+
+	</li>
+
+	<li>
+
+	<h2><a name="jstz">Installing jstz and populating Time Zone Tables</a></h2>
+
+	<p>
+	<strong>jstz</strong>,
+	available in <a href="https://bitbucket.org/pellepim/jstimezonedetect/">https://bitbucket.org/pellepim/jstimezonedetect/</a>
+	or <a href="http://pellepim.bitbucket.org/jstz/">http://pellepim.bitbucket.org/jstz/</a>,
+	is a Javascript script used by SWAD to get the user's time zone.
+	For example, if the user's operating system is configured with local time of Madrid (Spain),
+	the script <code>jstz.js</code> running in the user's browser
+	determines a user's time zone &quot;Europe/Berlin&quot;.
+	This user's time zone name is necessary to compute some stats of page hits
+	using user's local time instead of server time.
+	</p>
+
+	<p>
+	The script <code>jstz.js</code> is available in:<br />
+	<a href="https://bitbucket.org/pellepim/jstimezonedetect/">https://bitbucket.org/pellepim/jstimezonedetect/</a> &gt;
+	Downloads &gt;
+	Download repository &gt;
+	pellepim-jstimezonedetect-xxxxxxxxxxxx.zip &gt;
+	dist &gt;
+	jstz.js
+	</p>
+
+	<p>
+	To install it, you must copy the directory <code>jstz</code>,
+	located inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>,
+	to the SWAD public directory:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -R /home/&lt;user_directory&gt;/swad/swad-core/jstz /var/www/html/swad/</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/jstz</code><br />
+		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		it should be necessary to change the permissions of the directory <code>jstz</code> and its contents:<br />
+			<code>ls -lZ /var/www/html/swad/</code><br />
+			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/jstz</code><br />
+			<code>ls -lZ /var/www/html/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -R /home/&lt;user_directory&gt;/swad/swad-core/jstz /var/www/html/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/jstz</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
+	<p>
+	After installation, you must populate the Time Zone Tables
+	in your mysql database by following the instructions in
+	<a href="http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html">http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html</a>:<br />
+	<code>mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql</code>
 	</p>
 
 	</li>
@@ -2175,6 +2293,183 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</table>
 	</p>
 	
+	</li>
+
+	<li>
+
+	<h2><a name="mail-server">Installing mail server (optional)</a></h2>
+
+	<p>
+	If you have no external mail server,
+	you may need to install your own mail server
+	to send automatic emails.
+	In CentOS 6.5 you can install and configure it by following these instructions:
+	</p>
+
+	<h3>Installing and configuring Postfix and Dovecot</h3>
+
+	<p>
+	You can install and configure
+	<a href="http://www.postfix.org/">Postfix</a> and
+	<a href="http://www.dovecot.org/">Dovecot</a>
+	by following the instructions in
+	<a href="http://www.krizna.com/centos/setup-mail-server-in-centos-6/">http://www.krizna.com/centos/setup-mail-server-in-centos-6/</a>.
+	</p>
+
+	<h3>Settings to become a trusted mail server</h3>
+
+	<p>
+	If you want email providers, like GMail, to accept emails coming from your server
+	instead of rejecting them or labeling them as SPAM,
+	it is necessary to perform various settings detailed in this section.
+	</p>
+
+	<h4>Activating reverse DNS</h4>
+
+	<p>
+	We have activated Reverse DNS for our IPv4 address in our server by following the rules from
+	<a href="http://wiki.hetzner.de/index.php/DNS-Reverse-DNS/en">http://wiki.hetzner.de/index.php/DNS-Reverse-DNS/en</a>.
+	Instructions say that the address used for the mail command HELO should be used.
+	Our reverse DNS is <code>mail.openswad.org</code>.
+	</p>
+
+	<p>
+	Finally, we have also activated Reverse DNS from our IPv6 to <code>mail.openswad.org</code>.
+	If we write the command
+	<code>nslookup <em>our-server-IPV6-address</em></code>,
+	the result is <code>mail.openswad.org</code>.
+	</p>
+
+	<h4>Setting SPF</h4>
+	
+	<p>
+	<a href="http://www.openspf.org/">SPF (Sender Policy Framework)</a>
+	is an open standard specifying a technical method to prevent sender address forgery.
+	By following instructions in:<br />
+	<a href="https://support.google.com/mail/answer/9008?hl=es">https://support.google.com/mail/answer/9008?hl=es</a><br />
+	<a href="https://support.google.com/a/answer/183895">https://support.google.com/a/answer/183895</a><br />
+	<a href="http://wiki.hetzner.de/index.php/DNS_SPF/en">http://wiki.hetzner.de/index.php/DNS_SPF/en</a><br />
+	we have added the next TXT record at the end of our DNS configuration page:<br />
+	<code>@                        IN TXT     &quot;v=spf1 a mx ip6:<em>our-server-ipv6-address</em> ~all&quot;</code>
+	</p>
+
+	<h4>Installing and setting DKIM</h4>
+
+	<p>
+	We need to install <a href="http://www.opendkim.org/">OpenDKIM</a> to sign emails.
+	Following the instructions in
+	<a href="https://www.rosehosting.com/blog/how-to-install-and-integrate-opendkim-with-postfix-on-a-centos-6-vps/">https://www.rosehosting.com/blog/how-to-install-and-integrate-opendkim-with-postfix-on-a-centos-6-vps/</a>:<br />
+	<code>yum install opendkim</code><br />
+	Make a copy of configuration file:<br />
+	<code>cd /etc</code><br />
+	<code>cp -a opendkim.conf opendkim.conf.original</code><br />
+	and edit file <code>opendkin.conf</code>:<br />
+	<code>vim /etc/opendkim.conf</code><br />
+	<ul>
+		<li>
+		Change option:<br />
+		<code>Mode                    v</code><br />
+		to:<br />
+		<code>Mode                    sv</code>
+		</li>
+		<li>
+		Comment the line:<br />
+		<code># KeyFile       /etc/opendkim/keys/default.private</code><br />
+		and add this:<br />
+		<code>KeyFile /etc/opendkim/keys/openswad.org/default</code>
+		</li>
+		<li>
+		Uncomment the lines:<br />
+		<code>KeyTable        /etc/opendkim/KeyTable</code><br />
+		<code>SigningTable    refile:/etc/opendkim/SigningTable</code><br />
+		<code>ExternalIgnoreList      refile:/etc/opendkim/TrustedHosts</code><br />
+		<code>InternalHosts   refile:/etc/opendkim/TrustedHosts</code>
+		</li>
+	</ul>
+	</p>
+
+	<p>
+	Generate set of keys for your <em>mydomain.com</em> domain name:<br />
+	<code>mkdir /etc/opendkim/keys/openswad.org</code><br />
+	<code>opendkim-genkey -D /etc/opendkim/keys/openswad.org/ -d openswad.org -s default</code><br />
+	<code>chown -R opendkim: /etc/opendkim/keys/openswad.org</code><br />
+	<code>mv /etc/opendkim/keys/openswad.org/default.private /etc/opendkim/keys/openswad.org/default</code>
+	</p>
+
+	<p>
+	Edit <code>/etc/opendkim/KeyTable</code>:<br />
+	<code>cd /etc/opendkim</code><br />
+	<code>cp -a KeyTable KeyTable.original</code><br />
+	<code>vim /etc/opendkim/KeyTable</code><br />
+	and add the following record to OpenDKIM's key table <code>/etc/opendkim/KeyTable</code>:<br />
+	<code>default._domainkey.openswad.org openswad.org:default:/etc/opendkim/keys/openswad.org/default</code>
+	</p>
+
+	<p>
+	Edit <code>/etc/opendkim/SigningTable</code>:<br />
+	<code>cd /etc/opendkim</code><br />
+	<code>cp -a SigningTable SigningTable.original</code><br />
+	<code>vim /etc/opendkim/SigningTable</code><br />
+	and add the following record to OpenDKIM's signing table <code>/etc/opendkim/SigningTable</code>:<br />
+	<code>*@openswad.org default._domainkey.openswad.org</code>
+	</p>
+
+	<p>
+	Add your domain and your hostname as trusted hosts in <code>/etc/opendkim/TrustedHosts</code>:<br />
+	<code>cd /etc/opendkim</code><br />
+	<code>cp -a TrustedHosts TrustedHosts.original</code><br />
+	<code>vim /etc/opendkim/TrustedHosts</code><br />
+	We add the following lines:<br />
+	<code>openswad.org</code><br />
+	<code>mail.openswad.org</code>
+	</p>
+
+	<p>
+	Edit your DNS zone and add the TXT record from
+	<code>/etc/opendkim/keys/mydomain.com/default.txt</code>:<br />
+	<code>cat /etc/opendkim/keys/openswad.org/default.txt</code><br />
+	We add something like this:<br />
+	<code>default._domainkey	IN	TXT	( &quot;v=DKIM1; k=rsa; &quot;
+		&quot;p=<em>our-DKIM-key</em>&quot; )  ; ----- DKIM key default for openswad.org</code>
+	</p>
+
+	<p>
+	In order to integrate OpenDKIM with Postfix
+	we need to edit <code>/etc/postfix/main.cf</code>:<br />
+	<code>vim /etc/postfix/main.cf</code><br />
+	and add the following few lines:<br />
+	<code>smtpd_milters           = inet:127.0.0.1:8891</code><br />
+	<code>non_smtpd_milters       = $smtpd_milters</code><br />
+	<code>milter_default_action   = accept</code><br />
+	<code>milter_protocol         = 2</code>
+	</p>
+
+	<p>
+	Finally, add OpenDKIM to your system's start-up
+	and start opendkim and restart postfix using the following commands:<br />
+	<code>service opendkim start</code><br />
+	<code>chkconfig opendkim on</code><br />
+	<code>service postfix restart</code>
+	</p>
+
+	<h4>Setting DMARC</h4>
+
+	<p>
+	Finally, we add a <a href="https://dmarc.org/">DMARC</a> record to our DNS
+	by following the recommendations of
+	<a href="https://support.google.com/a/answer/2466563?hl=es">https://support.google.com/a/answer/2466563?hl=es</a>:<br />
+	<code>_dmarc       IN TXT     &quot;v=DMARC1; p=none; rua=mailto:postmaster@<em>our-domain</em>&quot;</code><br />
+	following the instructions from
+	<a href="https://support.google.com/a/answer/2466563?hl=es&ref_topic=2759254">https://support.google.com/a/answer/2466563?hl=es&ref_topic=2759254</a>
+	</p>
+
+	<h4>Final test</h4>
+
+	<p>
+	After the settings, we can check the health of our mail domain using web tests like this:<br />
+	<a href="http://mxtoolbox.com/domain/openswad.org/">http://mxtoolbox.com/domain/openswad.org/</a>
+	</p>
+
 	</li>
 
 	</ol>
