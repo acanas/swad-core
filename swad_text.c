@@ -26787,7 +26787,7 @@ const char *Txt_Places =
 #elif L==2
 	"Places";
 #elif L==3
-	"Lugares";
+	"Lugares / sedes";
 #elif L==4
 	"Emplacements";
 #elif L==5

@@ -2363,17 +2363,17 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
   }
 
 /*****************************************************************************/
-/******************** Get number of centres in a place ***********************/
+/******* Get number of centres (of the current institution) in a place *******/
 /*****************************************************************************/
 
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
   {
    char Query[256];
 
-   /***** Get number of degrees in a place from database *****/
+   /***** Get number of centres (of the current institution) in a place *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE PlcCod='%ld'",
-	    PlcCod);
+	          " WHERE InsCod='%ld' AND PlcCod='%ld'",
+	    Gbl.CurrentIns.Ins.InsCod,PlcCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of centres in a place");
   }
 

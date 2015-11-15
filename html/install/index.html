@@ -81,7 +81,7 @@
 	<h2><a name="server">Renting a server from an external provider (optional)</a></h2>
 
 	<p>
-	This section is not aplicable if you have your own server.
+	This section is not aplicable if we have our own server.
 	For example, <a href="http://swad.ugr.es/">swad.ugr.es</a> is hosted
 	in a <a href="http://swad.ugr.es/server/">server at the University of Granada</a>.
 	</p>
@@ -128,7 +128,7 @@
 	and it also has a starting cost of setup of &euro;149 (19% VAT included).
 	Application is made online through web forms and the payment is conducted through credit card.
 	In response they email the assigned IP and the root password to access the server,
-	that you should change as you have access.
+	that we should change.
 	Chosen server features included:
 	</p>
 
@@ -185,7 +185,7 @@
 	<h2><a name="domain">Domain registration (optional)</a></h2>
 
 	<p>
-	This section is not aplicable if you have a domain or subdomain asociated to the server.
+	This section is not aplicable if we have a domain or subdomain asociated to the server.
 	</p>
 
 	<p>
@@ -196,7 +196,7 @@
 	but we decided adquire <a href="http://openswad.com/">openswad.com</a> and
 	<a href="http://openswad.net/">openswad.net</a> also.
 	Each of these three domains has a yearly cost of &euro;7,90 (19% VAT included)
-	if you make a initial payment of &euro;29 (19% VAT included).
+	if we make a initial payment of &euro;29 (19% VAT included).
 	In our case we were exempt from this initial payment having previously engaged
 	the dedicated hosting service.
 	In order to obtain a user and a password required in the domain registration,
@@ -276,7 +276,7 @@
 	
 	<li>
 	Install <code>wget</code>, <code>gmake</code>, <code>automake</code> and <code>make</code>
-	if your distribution is so minimal that they are not already installed:
+	if our distribution is so minimal that they are not already installed:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -328,7 +328,7 @@
 	<ul>
 
 	<li>
-	To install <a href="http://git-scm.com/">Git</a>, you can use:
+	To install <a href="http://git-scm.com/">Git</a>, we can use:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -344,7 +344,7 @@
 	</tr>
 	</table>
 	If this method does not work, because <code>git</code> is not in the repositories,
-	you can try the following:<br />
+	we can try the following:<br />
 		<code>yum -y install zlib-devel openssl-devel cpio expat-devel gettext-devel</code><br />
 		<code>wget http://git-core.googlecode.com/files/git-1.7.9.3.tar.gz</code> (or later version)<br />
 		<code>tar -xzvf ./git-1.7.9.3.tar.gz</code> (or later version)<br />
@@ -374,7 +374,7 @@
 
 	<li>
 	To install <a href="http://opencv.org/">OpenCV</a>,
-	may be that you need having installed previously version 2.6 or later of
+	may be that we need having installed previously version 2.6 or later of
 	<a href="http://www.cmake.org/">CMake</a>:
 	<table width="100%">
 	<tr>
@@ -476,12 +476,12 @@
 	<tr>
 	<td width="50%" valign="top">
 		<p>
-		You probably need to install the latest epel-release rpm from
+		We probably need to install the latest epel-release rpm from
 		<a href="http://dl.fedoraproject.org/pub/epel/6/x86_64/">http://dl.fedoraproject.org/pub/epel/6/x86_64/</a>:<br />
 		<code>wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</code><br />
 		<code>rpm -Uvh epel-release*rpm</code><br />
 		
-		Then you can download pandoc rpm from <a href="http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html">http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html</a>:<br />
+		Then we can download pandoc rpm from <a href="http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html">http://pkgs.org/centos-6/epel-x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm.html</a>:<br />
 		<code>wget http://dl.fedoraproject.org/pub/epel/6/x86_64/pandoc-1.9.4.1-1.1.el6.x86_64.rpm</code><br />
 		and install it:<br /> 
 		<code>yum install pandoc</code><br />
@@ -490,7 +490,7 @@
 		</p>
 
 		<p>
-		If you do not find a valid pandoc binary package, try to install the Haskell platform by following the instructions in
+		If we do not find a valid pandoc binary package, try to install the Haskell platform by following the instructions in
 		<a href="https://medium.com/@jtpaasch/install-haskell-on-centos-5be42b76c7a4">https://medium.com/@jtpaasch/install-haskell-on-centos-5be42b76c7a4</a>:<br />
 		<code>yum install haskell-platform</code><br />
 
@@ -530,7 +530,7 @@
 	<h2><a name="apache">Installing and configuring Apache web server</a></h2>
 
 	<p>
-	If Apache is not installed, you can install it with:
+	If Apache is not installed, we can install it with:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -549,7 +549,7 @@
 			<code>sudo service apache2 restart</code><br />
 		</p>
 		<p>
-		Optionally, if you want to rewrite some URIs,
+		Optionally, if we want to rewrite some URIs,
 		activate the rewrite module:<br />
 			<code>sudo a2enmod rewrite</code><br />
 			<code>sudo service apache2 restart</code><br />
@@ -567,7 +567,7 @@
 	</p>
 
 	<p>
-	Once Apache is installed, you have to configure it.
+	Once Apache is installed, we have to configure it.
 	The configuration is in the directories:
 	<table width="100%">
 	<tr>
@@ -639,8 +639,8 @@
 		In <code>Section 2: 'Main' server configuration</code>, search the commented line:<br />
 		<code>#ServerName www.example.com:80</code><br />
 		and add the line:<br />
-		<code>ServerName your-URL</code><br />
-		after it. <code>your-URL</code> is the server address, for example <code>openswad.org</code>.
+		<code>ServerName <em>our-URL</em></code><br />
+		after it. <code><em>our-URL</em></code> is the server address, for example <code>openswad.org</code>.
 		</li>
 
 		<li>
@@ -688,13 +688,13 @@
 		</li>
 
 		<li>
-		Optionally, if you want to redirect from http://... to https://...
-		you should add the following lines at the end of the
+		Optionally, if we want to redirect from http://... to https://...
+		we should add the following lines at the end of the
 		<code>Section 3: Virtual Hosts</code>:<br />
 		<code>&lt;VirtualHost _default_:*&gt;<br />
 		Redirect permanent / https://openswad.org/<br />
 		&lt;/VirtualHost&gt;</code><br />
-		(replace https://openswad.org/ by your https address).
+		(replace https://openswad.org/ by our https address).
 		</li>
 
 		</ul>
@@ -751,7 +751,7 @@
 		</li>
 
 		<li>
-		Optionally, if you want to rewrite some URIs,
+		Optionally, if we want to rewrite some URIs,
 		inside the options for the directory <code>/var/www/</code>,
 		add lines like the following before <code>&lt;/Directory&gt;</code>:<br />
 		<code>RewriteEngine On</code><br />
@@ -943,9 +943,9 @@
 
 	<p>
 	Edit inside the file <code>my.cnf</code> all the optimizations
-	that you consider neccesary for MySQL,
-	in function of the configuration of your server.
-	Probably you should increase <code>query_cache_size</code> and <code>key_buffer</code> / <code>key_buffer_size</code>.
+	that we consider neccesary for MySQL,
+	in function of the configuration of our server.
+	Probably we should increase <code>query_cache_size</code> and <code>key_buffer</code> / <code>key_buffer_size</code>.
 	</p>
 
 	<p>
@@ -979,10 +979,10 @@
 
 	<code>/usr/bin/mysqladmin -u root password 'new-password'</code><br />
 	
-	Alternatively you can run:<br />
+	Alternatively we can run:<br />
 	<code>/usr/bin/mysql_secure_installation</code><br />
 	
-	which will also give you the option of removing the test
+	which will also give us the option of removing the test
 	databases and anonymous user created by default.  This is
 	strongly recommended for production servers.
 	</td>
@@ -993,7 +993,7 @@
 	</p>
 
 	<p>
-	Alternativelly, you can <a href="https://kb.askmonty.org/en/installing-mariadb-with-yum/">install the database manager MariaDB</a>.<br />
+	Alternativelly, we can <a href="https://kb.askmonty.org/en/installing-mariadb-with-yum/">install the database manager MariaDB</a>.<br />
 	</p>
 
 	</li>
@@ -1008,7 +1008,7 @@
 	</p>
 
 	<p>
-	You can work in the <em>home</em> directory of a user: <code>/home/&lt;user_directory&gt;</code>
+	We can work in the <em>home</em> directory of a user: <code>/home/&lt;user_directory&gt;</code>
 	</p>
 
 	<p>
@@ -1026,7 +1026,7 @@
 	<p>
 	A directory <code>swad-core</code> should have been created 
 	inside <code>/home/&lt;user_directory&gt;/swad</code>.
-	You already have the source code and other directories of SWAD core
+	We already have the source code and other directories of SWAD core
 	in the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>
 	</p>
 
@@ -1042,10 +1042,10 @@
 	</p>
 
 	<p>
-	If you have not set a password for the MySQL user <code>root</code> in the installation process,
-	you must do it now:<br />
+	If we have not set a password for the MySQL user <code>root</code> in the installation process,
+	we must do it now:<br />
 		<code>mysql&gt; SET PASSWORD FOR 'root'@'localhost'=PASSWORD('mypass');</code>
-		(instead of <code>mypass</code> you should a personal password)<br />
+		(instead of <code>mypass</code> we should a personal password)<br />
 	and enter again in <code>mysql</code> command with the MySQL root user:<br />
 		<code>mysql&gt; quit</code><br />
 		<code>mysql -u root -p mysql</code><br />
@@ -1061,7 +1061,7 @@
 	Create a new MySQL user called <code>swad</code> with all the permissions
 	over the <code>swad</code> database just created:<br />
 		<code>mysql&gt; CREATE USER 'swad'@'localhost' IDENTIFIED BY 'some_pass';</code>
-			(instead of <code>some_pass</code> you should use your own password)<br />
+			(instead of <code>some_pass</code> we should use our own password)<br />
 		<code>mysql&gt; GRANT ALL PRIVILEGES ON swad.* TO 'swad'@'localhost' WITH GRANT OPTION;</code><br />
 		<code>mysql&gt; SHOW GRANTS FOR 'swad'@'localhost';</code><br />
 		<code>mysql&gt; quit</code><br />
@@ -1073,7 +1073,7 @@
 	At the script start, a new database is created
 	and the type of character comparison (<em>collation</em>) by default is stored.
 	Comparisons when searching users or courses depend on the default collation.
-	You can change by another if you want,
+	We can change by another if we want,
 	preferably case insensitive (ending in <code>_ci</code>).<br />
 	Move to that directory and create the database tables <code>swad</code>
 	using the file <code>swad.sql</code>:<br />
@@ -1136,10 +1136,10 @@
 	Create a superuser:<br />
 		<code>mysql -u swad -p swad</code><br />
 		<code>mysql&gt; SET @MyID:='my_id';</code><br />
-			Instead of <code>my_id</code> you should use your ID number (DNI / c&eacute;dula / passport...).<br />
+			Instead of <code>my_id</code> we should use our ID number (DNI / c&eacute;dula / passport...).<br />
 		<code>mysql&gt; SET @EncryptedUsrCod:='base64url_string_43_chars';</code><br />
 			Instead of <code>base64url_string_43_chars</code>
-			you will use a random 43 characters string where every character
+			we will use a random 43 characters string where every character
 			can be one of the following 64 ones (they can be repeated):<br />
   			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',<br />
 			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',<br />
@@ -1163,7 +1163,7 @@
 	<ul>
 		<li>The directory for SWAD <strong>executable programs</strong>.
 			It is either the <code>cgi-bin</code> main directory or a child of it.
-			Usually you will create a directory <code>swad</code>
+			Usually we will create a directory <code>swad</code>
 			inside the directory <code>cgi-bin</code>,
 			so that the directory for SWAD executable programs will be:
 			<table width="100%">
@@ -1311,7 +1311,7 @@
 	</p>
 
 	<p>
-	To show the icon in the address bar of browser, you can put a file <code>favicon.ico</code> in the main web directory:
+	To show the icon in the address bar of browser, we can put a file <code>favicon.ico</code> in the main web directory:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -1397,7 +1397,7 @@
 	</p>
 
 	<p>
-	To install it, you must copy the directory <code>jstz</code>,
+	To install it, we must copy the directory <code>jstz</code>,
 	located inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>,
 	to the SWAD public directory:<br />
 	<table width="100%">
@@ -1424,8 +1424,8 @@
 	</p>
 
 	<p>
-	After installation, you must populate the Time Zone Tables
-	in your mysql database by following the instructions in
+	After installation, we must populate the Time Zone Tables
+	in our mysql database by following the instructions in
 	<a href="http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html">http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html</a>:<br />
 	<code>mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql</code>
 	</p>
@@ -1439,7 +1439,7 @@
 	<p>
 	<a href="http://www.dropzonejs.com/">DropzoneJS</a> is a Javascript library required to upload
 	one or more files using drag and drop.
-	To install it, you must copy the directory <code>dropzone</code>,
+	To install it, we must copy the directory <code>dropzone</code>,
 	located inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>,
 	to the SWAD public directory:<br />
 	<table width="100%">
@@ -1476,7 +1476,7 @@
 	In SWAD, it is used in combination with Markdown and Pandoc.
 	To install it, follow the instructions in
 	<a href="http://docs.mathjax.org/en/latest/installation.html">http://docs.mathjax.org/en/latest/installation.html</a>.
-	The directory downloaded and uncompressed must be located inside your main HTML directory
+	The directory downloaded and uncompressed must be located inside our main HTML directory
 	<code>/var/www/html/swad/</code>:<br />
 	<table width="100%">
 	<tr>
@@ -1485,7 +1485,7 @@
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
-		<code>mv your-downloaded-copy-of-mathjax /var/www/html/swad/MathJax</code><br />
+		<code>mv <em>our-downloaded-copy-of-mathjax</em> /var/www/html/swad/MathJax</code><br />
 		<code>chown -R apache:apache /var/www/html/swad/MathJax</code><br />
 		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
 		it should be necessary to change the permissions of the directory <code>dropzone</code> and its contents:<br />
@@ -1494,7 +1494,7 @@
 			<code>ls -lZ /var/www/html/swad/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo mv your-downloaded-copy-of-mathjax /var/www/html/swad/MathJax</code><br />
+		<code>sudo mv <em>our-downloaded-copy-of-mathjax</em> /var/www/html/swad/MathJax</code><br />
 		<code>sudo chown -R www-data:www-data /var/www/html/swad/MathJax</code>
 	</td>
 	</tr>
@@ -1579,7 +1579,7 @@
 	</p>
 
 	<p>
-	You need to install the <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a> <em>toolkit</em>,
+	We need to install the <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a> <em>toolkit</em>,
 	that can be downloaded from:<br />
 	<a href="http://www.cs.fsu.edu/~engelen/soap.html">http://www.cs.fsu.edu/~engelen/soap.html</a><br />
 	<a href="http://sourceforge.net/projects/gsoap2/files/">http://sourceforge.net/projects/gsoap2/files/</a><br />
@@ -1645,7 +1645,7 @@
 	Edit the file <code>swad_web_service.h</code>. Search the line:<br />
 		<code>//gsoap swad service location: URL</code><br />
 	Replace <code>URL</code> (everything after the two points)
-	by your SWAD address,
+	by our SWAD address,
 	for example <code>https://swad.ugr.es/</code> or <code>https://cevuna.una.py/swad/</code>,
 	and save the file.
 	</p>
@@ -1705,7 +1705,7 @@
 	making the necessary modifications and save it.
 	If the directories or other constants 
 	indicated in the file <code>swad_config.h</code> change,
-	you must modify <code>swad_config.h</code> and recompile the SWAD core.
+	we must modify <code>swad_config.h</code> and recompile the SWAD core.
 	</p>
 
 	<p>
@@ -1755,10 +1755,10 @@
 		<code>
 #!/bin/bash<br />
 <br />
-CGI=/usr/lib/cgi-bin/swad<br />
+CGI=/var/www/cgi-bin/swad<br />
 PUBLIC_HTML=/var/www/html/swad<br />
-APACHE_USER=www-data<br />
-APACHE_GROUP=www-data<br />
+APACHE_USER=apache<br />
+APACHE_GROUP=apache<br />
 USER=&lt;user&gt;<br />
 CORE=/home/$USER/swad/swad-core<br />
 <br />
@@ -1786,10 +1786,10 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 		<code>
 #!/bin/bash<br />
 <br />
-CGI=/var/www/cgi-bin/swad<br />
+CGI=/usr/lib/cgi-bin/swad<br />
 PUBLIC_HTML=/var/www/html/swad<br />
-APACHE_USER=apache<br />
-APACHE_GROUP=apache<br />
+APACHE_USER=www-data<br />
+APACHE_GROUP=www-data<br />
 USER=&lt;user&gt;<br />
 CORE=/home/$USER/swad/swad-core<br />
 <br />
@@ -1841,7 +1841,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 
 	<p>
 	Run the script <code>swad_copy.sh</code>
-	now and every time you compile SWAD if you want to update the executables:
+	now and every time we compile SWAD if we want to update the executables:
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -1871,7 +1871,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<h2><a name="fotomaton">Installing photo processing program <code>fotomaton</code></a></h2>
 
 	<p>
-	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, you must do this:<br />
+	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, we must do this:<br />
 		<code>PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}</code><br />
 		<code>export PKG_CONFIG_PATH</code><br />
 	</p>
@@ -1883,7 +1883,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	You can compile this program in the local directory:<br />
+	We can compile this program in the local directory:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
 	</p>
 
@@ -1943,13 +1943,13 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	To make <code>fotomaton</code> work, the correct call is:<br />
 	<code>fotomaton &lt;classifier&gt; &lt;input_file&gt; &lt;width&gt;</code><br />
 	The first parameter is a data file that is needed by face recognizer,
-	and that you must place in the same directory where you have copied the program <code>fotomaton</code>.
+	and that we must place in the same directory where we have copied the program <code>fotomaton</code>.
 	In the package downloaded from GitHub or in the directory
 	<code>/home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data</code>
-	you should find a file <code>options</code> that holds these data
+	we should find a file <code>options</code> that holds these data
 	necessary for the face recognizer.
 	Copy it in the same directory of SWAD executable programs
-	where you have copied the executable <code>fotomaton</code>:
+	where we have copied the executable <code>fotomaton</code>:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
@@ -1981,7 +1981,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<code>foto_mediana</code> and <code>foto_promedio</code></a></h2>
 
 	<p>
-	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, you must do this:<br />
+	Before compiling a program that uses <a href="http://opencv.org/">OpenCV</a>, we must do this:<br />
 		<code>PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}</code><br />
 		<code>export PKG_CONFIG_PATH</code><br />
 	</p>
@@ -1994,7 +1994,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 	
 	<p>
-	You can compile these two programs in the local directory:<br />
+	We can compile these two programs in the local directory:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
 	</p>
 
@@ -2056,7 +2056,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	You can make the compilation of this program in the local directory:<br />
+	We can make the compilation of this program in the local directory:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
 	</p>
 
@@ -2157,7 +2157,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 
 	<p>
 	Edit the file <code>chat.html</code>, change all the paths and URLs in order to reflect
-	the particular configuration of your server, and save it.
+	the particular configuration of our server, and save it.
 	Copy the modified file <code>chat.html</code> in the directory of SWAD executables:
 	<table width="100%">
 	<tr>
@@ -2191,7 +2191,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<tr>
 	<td width="50%" valign="top">
 	To activate permanently the port 5000,
-	in CentOS you can edit the file <code>/etc/sysconfig/iptables</code>
+	in CentOS we can edit the file <code>/etc/sysconfig/iptables</code>
 	and add a line like the following:<br />
 		<code>-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 5000 -j ACCEPT</code><br />
 	It will be necessary to restart the <code>iptables</code> service:<br />
@@ -2199,7 +2199,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</td>
 	<td width="50%" valign="top">
 	To activate permanently the port 5000,
-	in Ubuntu you can execute the following commands:<br />
+	in Ubuntu we can execute the following commands:<br />
 		<code>sudo iptables -A INPUT -p tcp --dport 5000 -j ACCEPT</code><br />
 		<code>sudo iptables-save</code>
 	</td>
@@ -2234,7 +2234,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
 		This script connects to the network to send emails.
 		As stated in the manual of <a href="http://linux.die.net/man/8/httpd_selinux">httpd_selinux</a>,
-		if you want the script can connect to the network when SELinux is working,
+		if we want the script can connect to the network when SELinux is working,
 		it is necessary to activate <code>httpd_can_network_connect</code>:<br />
 			<code>setsebool -P httpd_can_network_connect 1</code>
 	</td>
@@ -2249,17 +2249,6 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<p>
 	The script <code>swad_smtp.py</code> has been tested to work properly
 	with Python 2.6.6 and Python 2.7.1. If it does not work, try to upgrade Python.
-	</p>
-
-	<p>
-	If the server used to send e-mail is our server,
-	we need to check that an SMTP mail server is installed,
-	and if not, install and start it.
-	For example, we can install the server <code>postfix</code>
-	following the instructions in
-	<a href="http://wiki.centos.org/HowTos/postfix">http://wiki.centos.org/HowTos/postfix</a>,
-	<a href="http://ostechnix.wordpress.com/2013/02/08/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/">http://ostechnix.wordpress.com/2013/02/08/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/</a>, or
-	<a href="http://www.server-world.info/en/note?os=CentOS_5&p=mail">http://www.server-world.info/en/note?os=CentOS_5&p=mail</a>.
 	</p>
 
 	</li>
@@ -2280,13 +2269,13 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 		<code>chkconfig httpd on</code><br />
 		<code>chkconfig mysqld on</code><br />
 		<code>chkconfig --list</code><br />
-		And you can add to file <code>/etc/rc.d/rc.local</code> the following line:<br />
+		And we can add to file <code>/etc/rc.d/rc.local</code> the following line:<br />
 		<code>/var/www/cgi-bin/swad/swad_ircd &</code>
 	</td>
 	<td width="50%" valign="top">
 		<code>sudo update-rc.d mysql defaults</code><br />
 		<code>sudo update-rc.d apache2 defaults</code><br />
-		You can add to file <code>/etc/rc.local</code> the following line before <code>exit 0</code>:<br />
+		We can add to file <code>/etc/rc.local</code> the following line before <code>exit 0</code>:<br />
 		<code>/usr/lib/cgi-bin/swad/swad_ircd &</code>
 	</td>
 	</tr>
@@ -2300,26 +2289,29 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<h2><a name="mail-server">Installing mail server (optional)</a></h2>
 
 	<p>
-	If you have no external mail server,
-	you may need to install your own mail server
-	to send automatic emails.
-	In CentOS 6.5 you can install and configure it by following these instructions:
+	If the server used to send e-mail is our server,
+	we need to check that an SMTP mail server is installed,
+	and if not, install and start it.
+	In CentOS 6.5 we can install and configure it by following these instructions:
 	</p>
 
 	<h3>Installing and configuring Postfix and Dovecot</h3>
 
 	<p>
-	You can install and configure
+	We can install and configure
 	<a href="http://www.postfix.org/">Postfix</a> and
 	<a href="http://www.dovecot.org/">Dovecot</a>
 	by following the instructions in
-	<a href="http://www.krizna.com/centos/setup-mail-server-in-centos-6/">http://www.krizna.com/centos/setup-mail-server-in-centos-6/</a>.
+	<a href="http://www.krizna.com/centos/setup-mail-server-in-centos-6/">http://www.krizna.com/centos/setup-mail-server-in-centos-6/</a>,
+	<a href="http://wiki.centos.org/HowTos/postfix">http://wiki.centos.org/HowTos/postfix</a>,
+	<a href="http://www.ostechnix.com/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/">http://www.ostechnix.com/setup-mail-server-using-postfixdovecotsquirrelmail-in-centosrhelscientific-linux-6-3-step-by-step/</a>, or
+	<a href="http://www.server-world.info/en/note?os=CentOS_5&p=mail">http://www.server-world.info/en/note?os=CentOS_5&p=mail</a>.
 	</p>
 
 	<h3>Settings to become a trusted mail server</h3>
 
 	<p>
-	If you want email providers, like GMail, to accept emails coming from your server
+	If we want email providers, like GMail, to accept emails coming from our server
 	instead of rejecting them or labeling them as SPAM,
 	it is necessary to perform various settings detailed in this section.
 	</p>
@@ -2346,10 +2338,10 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<a href="http://www.openspf.org/">SPF (Sender Policy Framework)</a>
 	is an open standard specifying a technical method to prevent sender address forgery.
 	By following instructions in:<br />
-	<a href="https://support.google.com/mail/answer/9008?hl=es">https://support.google.com/mail/answer/9008?hl=es</a><br />
+	<a href="https://support.google.com/mail/answer/9008">https://support.google.com/mail/answer/9008</a><br />
 	<a href="https://support.google.com/a/answer/183895">https://support.google.com/a/answer/183895</a><br />
 	<a href="http://wiki.hetzner.de/index.php/DNS_SPF/en">http://wiki.hetzner.de/index.php/DNS_SPF/en</a><br />
-	we have added the next TXT record at the end of our DNS configuration page:<br />
+	we have added the following TXT record at the end of our DNS configuration page:<br />
 	<code>@                        IN TXT     &quot;v=spf1 a mx ip6:<em>our-server-ipv6-address</em> ~all&quot;</code>
 	</p>
 
@@ -2389,7 +2381,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	Generate set of keys for your <em>mydomain.com</em> domain name:<br />
+	Generate set of keys for our <em>mydomain.com</em> domain name:<br />
 	<code>mkdir /etc/opendkim/keys/openswad.org</code><br />
 	<code>opendkim-genkey -D /etc/opendkim/keys/openswad.org/ -d openswad.org -s default</code><br />
 	<code>chown -R opendkim: /etc/opendkim/keys/openswad.org</code><br />
@@ -2415,7 +2407,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	Add your domain and your hostname as trusted hosts in <code>/etc/opendkim/TrustedHosts</code>:<br />
+	Add our domain and our hostname as trusted hosts in <code>/etc/opendkim/TrustedHosts</code>:<br />
 	<code>cd /etc/opendkim</code><br />
 	<code>cp -a TrustedHosts TrustedHosts.original</code><br />
 	<code>vim /etc/opendkim/TrustedHosts</code><br />
@@ -2425,7 +2417,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	Edit your DNS zone and add the TXT record from
+	Edit our DNS zone and add the TXT record from
 	<code>/etc/opendkim/keys/mydomain.com/default.txt</code>:<br />
 	<code>cat /etc/opendkim/keys/openswad.org/default.txt</code><br />
 	We add something like this:<br />
@@ -2445,7 +2437,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</p>
 
 	<p>
-	Finally, add OpenDKIM to your system's start-up
+	Finally, add OpenDKIM to our system's start-up
 	and start opendkim and restart postfix using the following commands:<br />
 	<code>service opendkim start</code><br />
 	<code>chkconfig opendkim on</code><br />
@@ -2457,10 +2449,8 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<p>
 	Finally, we add a <a href="https://dmarc.org/">DMARC</a> record to our DNS
 	by following the recommendations of
-	<a href="https://support.google.com/a/answer/2466563?hl=es">https://support.google.com/a/answer/2466563?hl=es</a>:<br />
-	<code>_dmarc       IN TXT     &quot;v=DMARC1; p=none; rua=mailto:postmaster@<em>our-domain</em>&quot;</code><br />
-	following the instructions from
-	<a href="https://support.google.com/a/answer/2466563?hl=es&ref_topic=2759254">https://support.google.com/a/answer/2466563?hl=es&ref_topic=2759254</a>
+	<a href="https://support.google.com/a/answer/2466563">https://support.google.com/a/answer/2466563</a>:<br />
+	<code>_dmarc       IN TXT     &quot;v=DMARC1; p=none; rua=mailto:postmaster@<em>our-domain</em>&quot;</code>
 	</p>
 
 	<h4>Final test</h4>

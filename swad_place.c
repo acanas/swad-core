@@ -93,7 +93,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Put link (form) to edit places *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admins and system admins can edit places
 	 Plc_PutFormToEditPlcs ();
 
       /***** Table head *****/
@@ -118,7 +118,7 @@ void Plc_SeePlaces (void)
 	}
       fprintf (Gbl.F.Out,"</tr>");
 
-      /***** Write all the places and their nuber of centres *****/
+      /***** Write all places and their nuber of centres *****/
       for (NumPlc = 0;
 	   NumPlc < Gbl.Plcs.Num;
 	   NumPlc++)
@@ -127,12 +127,12 @@ void Plc_SeePlaces (void)
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
-			    "</td>",
-		  Gbl.Plcs.Lst[NumPlc].FullName);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			    "</td>"
+	                    "<td class=\"DAT RIGHT_MIDDLE\">"
 	                    "%u"
 	                    "</td>"
 			    "</tr>",
+		  Gbl.Plcs.Lst[NumPlc].FullName,
 		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
 	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
 	}
@@ -144,7 +144,7 @@ void Plc_SeePlaces (void)
 			 "</td>"
 			 "</tr>");
 
-      /***** Write centres with other place *****/
+      /***** Write centres (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
@@ -157,7 +157,7 @@ void Plc_SeePlaces (void)
 	       Txt_Other_places,NumCtrsInOtherPlcs);
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
-      /***** Write centres with no place *****/
+      /***** Write centres (of the current institution) with no place *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
@@ -167,7 +167,8 @@ void Plc_SeePlaces (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Place_unspecified,
-	       Ctr_GetNumCtrsTotal () - NumCtrsWithPlc);
+	       Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod) -
+	       NumCtrsWithPlc);
 
       /***** Table end *****/
       Lay_EndRoundFrameTable ();
