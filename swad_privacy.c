@@ -189,28 +189,25 @@ bool Pri_GetParamVisibility (void)
 
 bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod)
   {
-   bool ICanSee = false;
+   /***** System admins always can see others' profiles *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      return true;
 
    /***** Check if I can see the other's photo *****/
    switch (Visibility)
      {
       case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
-         if (Gbl.Usrs.Me.UsrDat.UsrCod == OtherUsrCod ||		// It's me, I always can see my things
-             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// A system admin always can see any user's things
-            ICanSee = true;
+         if (Gbl.Usrs.Me.UsrDat.UsrCod == OtherUsrCod)		// It's me, I always can see my things
+            return true;
          else
-            ICanSee = Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (OtherUsrCod);	// Both users share the same course but whit different role
-	 break;
+            return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (OtherUsrCod);	// Both users share the same course but whit different role
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
-         ICanSee = Usr_CheckIfUsrSharesAnyOfMyCrs (OtherUsrCod);	// Both users share the same course
-	 break;
+         return Usr_CheckIfUsrSharesAnyOfMyCrs (OtherUsrCod);	// Both users share the same course
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
-         ICanSee = Gbl.Usrs.Me.Logged;
-	 break;
+         return Gbl.Usrs.Me.Logged;
       case Pri_VISIBILITY_WORLD:	// Public, visible by everyone, even unlogged visitors
-         ICanSee = true;
-	 break;
+         return true;
      }
 
-   return ICanSee;
+   return false;	// Never reached. To avoid warning
   }
