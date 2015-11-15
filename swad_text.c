@@ -26866,23 +26866,23 @@ const char *Txt_PLACES_ORDER[2] =
 #endif
 	 ,
 #if   L==0
-	 "Titulacions"
+	"Centres"
 #elif L==1
-	 "Studieng&auml;nge"
+	"Lehrinstitute"
 #elif L==2
-	 "Degrees"
+	"Centres"
 #elif L==3
-	 "Titulaciones"
+	"Centros"
 #elif L==4
-	 "&Eacute;tudes"
+	"Centres"
 #elif L==5
-	 "Titulaciones"	// Okoteve traducción
+	"Mbo'ehao"
 #elif L==6
-	 "Lauree"
+	"Centri"
 #elif L==7
-	 "Stopni"
+	"Centra"
 #elif L==8
-	 "Titula&ccedil;oes"
+	"Centros"
 #endif
 	};
 
