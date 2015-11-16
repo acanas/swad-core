@@ -555,10 +555,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Get nickname *****/
+   /***** Get nickname and e-mail *****/
    Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
-
-   /***** Get e-mail *****/
    Mai_GetEmailFromUsrCod (UsrDat);
   }
 

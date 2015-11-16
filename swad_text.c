@@ -49161,27 +49161,6 @@ const char *Txt_You_can_not_create_links_here =
 	"You can not create links here.";	// Necessita de tradução
 #endif
 
-const char *Txt_You_can_not_delete_the_current_email =
-#if   L==0
-	"No puede eliminar el correo actual.";		// Necessita traduccio
-#elif L==1
-	"You can not delete the current e-mail.";	// Need Übersetzung
-#elif L==2
-	"You can not delete the current e-mail.";
-#elif L==3
-	"No puede eliminar el correo actual.";
-#elif L==4
-	"You can not delete the current e-mail.";	// Besoin de traduction
-#elif L==5
-	"No puede eliminar el correo actual.";		// Okoteve traducción
-#elif L==6
-	"Non puoi cancellare il e-mail attuale.";
-#elif L==7
-	"You can not delete the current e-mail.";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"You can not delete the current e-mail.";	// Necessita de tradução
-#endif
-
 const char *Txt_You_can_not_delete_your_current_nickname =
 #if   L==0
 	"No puede eliminar su apodo actual.";		// Necessita traduccio
