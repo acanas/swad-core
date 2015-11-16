@@ -75,7 +75,9 @@ static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
 
-static void Mai_RemoveEmailFromDB (const char *Email);
+static void Mai_RemoveEmail (const struct UsrData *UsrDat);
+static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email);
+static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1]);
 
 /*****************************************************************************/
@@ -825,7 +827,7 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
 /********** Get e-mail address of a user from his/her user's code ************/
 /*****************************************************************************/
 
-bool Mai_GetEmailFromUsrCod (long UsrCod,char *Email,bool *Confirmed)
+bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -836,13 +838,13 @@ bool Mai_GetEmailFromUsrCod (long UsrCod,char *Email,bool *Confirmed)
    /***** Get current (last updated) user's nickname from database *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
 	          " WHERE UsrCod='%ld' ORDER BY CreatTime DESC LIMIT 1",
-	    UsrCod);
+	    UsrDat->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get e-mail address");
 
    if (NumRows == 0)
      {
-      *Email = '\0';
-      *Confirmed = false;
+      UsrDat->Email[0] = '\0';
+      UsrDat->EmailConfirmed = false;
       Found = false;
      }
    else
@@ -850,9 +852,9 @@ bool Mai_GetEmailFromUsrCod (long UsrCod,char *Email,bool *Confirmed)
       row = mysql_fetch_row (mysql_res);
 
       /* Get e-mail */
-      strcpy (Email,row[0]);
+      strcpy (UsrDat->Email,row[0]);
 
-      *Confirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      UsrDat->EmailConfirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
 
       Found = true;
      }
@@ -908,10 +910,66 @@ long Mai_GetUsrCodFromEmail (const char *Email)
   }
 
 /*****************************************************************************/
+/********** Put a link to the action used to change user's e-mail ************/
+/*****************************************************************************/
+
+void Mai_PutLinkToChangeOtherUsrEmail (void)
+  {
+   extern const char *Txt_Change_email;
+
+   /***** Link for changing the password *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Act_PutContextualLink (ActFrmUsrAcc,NULL,
+			     "msg",Txt_Change_email);
+   else									// Not me
+      Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmMaiStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmMaiTch :
+	                	                                                        ActFrmMaiOth),
+                             Usr_PutParamOtherUsrCodEncrypted,
+                             "msg",Txt_Change_email);
+  }
+
+/*****************************************************************************/
+/*********** Show form to the change the e-mail of another user **************/
+/*****************************************************************************/
+
+void Mai_ShowFormOthEmail (void)
+  {
+   extern const char *Txt_Email;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user whose password must be changed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+	{
+	 /***** Start frame *****/
+         Lay_StartRoundFrame (NULL,Txt_Email);
+
+	 /***** Show user's record *****/
+	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+
+	 /***** Form with the user's e-mail *****/
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
+                                     (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+	 fprintf (Gbl.F.Out,"</table>");
+
+         /***** End frame *****/
+         Lay_EndRoundFrame ();
+	}
+      else
+	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else		// User not found
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
 /*********************** Show form to change my e-mail ***********************/
 /*****************************************************************************/
 
-void Mai_ShowFormChangeUsrEmail (void)
+void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Current_email;
@@ -934,7 +992,7 @@ void Mai_ShowFormChangeUsrEmail (void)
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
                   " WHERE UsrCod='%ld'"
                   " ORDER BY CreatTime DESC",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
+            UsrDat->UsrCod);
    NumEmails = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get old e-mail addresses of a user");
 
    /***** List my e-mails *****/
@@ -968,8 +1026,16 @@ void Mai_ShowFormChangeUsrEmail (void)
 			    "<td class=\"LEFT_TOP\">"
 			    "<div class=\"FORM_ACCOUNT\">");
 
-	 /* Form to remove old e-mail */
-	 Act_FormStart (ActRemOldMai);
+	 /* Form to remove e-mail */
+	 if (ItsMe)
+	    Act_FormStart (ActRemMaiMe);
+	 else
+	   {
+	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMaiStd :
+			   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemMaiTch :
+									ActRemMaiOth));	// Guest, visitor or admin
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />",
 		  row[0]);
 	 Lay_PutIconRemove ();
@@ -993,20 +1059,24 @@ void Mai_ShowFormChangeUsrEmail (void)
 		  Gbl.Title,Gbl.Title);
 	}
 
-      /* Link to QR code */
-      // if (NumEmail == 1 && Gbl.Usrs.Me.UsrDat.Email[0] && Confirmed)
-      //    QR_PutLinkToPrintMyQRCode (QR_EMAIL);
-
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Form to change the email */
-      if (NumEmail > 1 || !Confirmed)
+      /* Form to change user's e-mail */
+      if (NumEmail > 1 || (ItsMe && !Confirmed))
 	{
-	 Act_FormStart (ActChgMai);
+	 if (ItsMe)
+	    Act_FormStart (ActNewMaiMe);
+	 else
+	   {
+	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewMaiStd :
+			   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewMaiTch :
+									ActNewMaiOth));	// Guest, visitor or admin
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
 		  row[0]);	// E-mail
-         Lay_PutConfirmButtonInline (NumEmail == 1 ? Txt_Confirm_email :
-			                             Txt_Use_this_email);
+         Lay_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
+			                                        Txt_Use_this_email);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1024,127 +1094,223 @@ void Mai_ShowFormChangeUsrEmail (void)
             The_ClassForm[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new e-mail
         	        Txt_Email);	// The first e-mail
-   Act_FormStart (ActChgMai);
+   if (ItsMe)
+      Act_FormStart (ActNewMaiMe);
+   else
+     {
+      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewMaiStd :
+		     (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewMaiTch :
+								  ActNewMaiOth));	// Guest, visitor or admin
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+     }
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
 	              "<input type=\"text\" name=\"NewEmail\""
 	              " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
-   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// I already have an e-mail address
-        	                          Txt_Save);		// I have no e-mail address yet);
+   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an e-mail address
+        	                          Txt_Save);		// User has no e-mail address yet
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
 /*****************************************************************************/
-/************************** Remove e-mail address ****************************/
+/******************* Remove one of my user's e-mails *************************/
 /*****************************************************************************/
 
-void Mai_RemoveEmail (void)
+void Mai_RemoveMyUsrEmail (void)
   {
-   extern const char *Txt_Email_X_removed;
-   extern const char *Txt_You_can_not_delete_your_current_email;
-   char Email[Usr_MAX_BYTES_USR_EMAIL+1];
+   /***** Remove user's e-mail *****/
+   Mai_RemoveEmail (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Get new e-mail from form *****/
-   Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
-
-   if (strcasecmp (Email,Gbl.Usrs.Me.UsrDat.Email))	// Only if not my current e-mail
-     {
-      /***** Remove one of my old e-mail addresses *****/
-      Mai_RemoveEmailFromDB (Email);
-
-      /***** Show message *****/
-      sprintf (Gbl.Message,Txt_Email_X_removed,Email);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-     }
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_your_current_email);
+   /***** Update list of e-mails *****/
+   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
    Acc_ShowFormChangeMyAccount ();
+  }
+
+/*****************************************************************************/
+/**************** Remove one of the user's IDs of another user ***************/
+/*****************************************************************************/
+
+void Mai_RemoveOtherUsrEmail (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get other user's code from form and get user's data *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Remove user's e-mail *****/
+      Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
+
+      /***** Update list of e-mails *****/
+      Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+      /***** Show user's record *****/
+      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+     }
+   else		// User not found
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/************************** Remove e-mail address ****************************/
+/*****************************************************************************/
+
+static void Mai_RemoveEmail (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Email_X_removed;
+   extern const char *Txt_You_can_not_delete_the_current_email;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char Email[Usr_MAX_BYTES_USR_EMAIL+1];
+
+   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
+     {
+      /***** Get new e-mail from form *****/
+      Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
+
+      if (strcasecmp (Email,UsrDat->Email))	// Only if not user's current e-mail
+	{
+	 /***** Remove one of user's old e-mail addresses *****/
+	 Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
+
+	 /***** Show message *****/
+	 sprintf (Gbl.Message,Txt_Email_X_removed,Email);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	}
+      else
+	 Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_the_current_email);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
 /*************** Remove an old e-mail address from database ******************/
 /*****************************************************************************/
 
-static void Mai_RemoveEmailFromDB (const char *Email)
+static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email)
   {
    char Query[1024];
 
    /***** Remove an old e-mail address *****/
    sprintf (Query,"DELETE FROM usr_emails"
                   " WHERE UsrCod='%ld' AND E_mail='%s'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Email);
+            UsrCod,Email);
    DB_QueryREPLACE (Query,"can not remove an old e-mail address");
+  }
+
+/*****************************************************************************/
+/************************* New user's e-mail for me **************************/
+/*****************************************************************************/
+
+void May_NewMyUsrEmail (void)
+  {
+   /***** Remove user's e-mail *****/
+   Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,true);	// It's me
+
+   /***** Update list of e-mails *****/
+   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show my account again *****/
+   Acc_ShowFormChangeMyAccount ();
+  }
+
+/*****************************************************************************/
+/******************** New user's e-mail for another user *********************/
+/*****************************************************************************/
+
+void Mai_NewOtherUsrEmail (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get other user's code from form and get user's data *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** New user's ID *****/
+      Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,
+		       (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
+
+      /***** Update list of e-mails *****/
+      Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+      /***** Show user's record *****/
+      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+     }
+   else		// User not found
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
 /************************* Update my e-mail address **************************/
 /*****************************************************************************/
 
-void Mai_UpdateEmail (void)
+static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
   {
-   extern const char *Txt_The_email_address_X_matches_the_one_you_had_previously_registered;
-   extern const char *Txt_Your_email_address_X_has_been_registered_successfully;
+   extern const char *Txt_The_email_address_X_matches_one_previously_registered;
+   extern const char *Txt_The_email_address_X_has_been_registered_successfully;
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   /***** Get new e-mail from form *****/
-   Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
-
-   if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
+   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
      {
-      /***** Check if new e-mail exists in database *****/
-      if (Gbl.Usrs.Me.UsrDat.EmailConfirmed &&
-	  !strcmp (Gbl.Usrs.Me.UsrDat.Email,NewEmail)) // My current confirmed email match exactly the new email
-        {
-	 sprintf (Gbl.Message,Txt_The_email_address_X_matches_the_one_you_had_previously_registered,
-		  NewEmail);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-        }
-      else
+      /***** Get new e-mail from form *****/
+      Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
+
+      if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
 	{
-	 if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
+	 /***** Check if new e-mail exists in database *****/
+	 if (UsrDat->EmailConfirmed &&
+	     !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 	   {
-	    /* E-mail updated sucessfully */
-	    strcpy (Gbl.Usrs.Me.UsrDat.Email,NewEmail);
-	    Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
-
-            sprintf (Gbl.Message,Txt_Your_email_address_X_has_been_registered_successfully,
+	    sprintf (Gbl.Message,Txt_The_email_address_X_matches_one_previously_registered,
 		     NewEmail);
-	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-            /* Send message via email to confirm the new email address */
-            if (Mai_SendMailMsgToConfirmEmail ())
-              {
-	       sprintf (Gbl.Message,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
-			Gbl.Usrs.Me.UsrDat.Email);
-	       Lay_ShowAlert (Lay_INFO,Gbl.Message);
-              }
-	   }
-	 else
-           {
-	    sprintf (Gbl.Message,Txt_The_email_address_X_had_been_registered_by_another_user,
-	             NewEmail);
 	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	   }
-        }
-     }
-   else	// New e-mail is not valid
-     {
-      sprintf (Gbl.Message,Txt_The_email_address_entered_X_is_not_valid,
-               NewEmail);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
+	 else
+	   {
+	    if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
+	      {
+	       /* E-mail updated sucessfully */
+	       strcpy (UsrDat->Email,NewEmail);
+	       UsrDat->EmailConfirmed = false;
 
-   /***** Show my account again *****/
-   Acc_ShowFormChangeMyAccount ();
+	       sprintf (Gbl.Message,Txt_The_email_address_X_has_been_registered_successfully,
+			NewEmail);
+	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+	       if (ItsMe)
+		  /* Send message via email to confirm the new email address */
+		  if (Mai_SendMailMsgToConfirmEmail ())
+		    {
+		     sprintf (Gbl.Message,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
+			      Gbl.Usrs.Me.UsrDat.Email);
+		     Lay_ShowAlert (Lay_INFO,Gbl.Message);
+		    }
+	      }
+	    else
+	      {
+	       sprintf (Gbl.Message,Txt_The_email_address_X_had_been_registered_by_another_user,
+			NewEmail);
+	       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	      }
+	   }
+	}
+      else	// New e-mail is not valid
+	{
+	 sprintf (Gbl.Message,Txt_The_email_address_entered_X_is_not_valid,
+		  NewEmail);
+	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	}
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1153,7 +1319,7 @@ void Mai_UpdateEmail (void)
 // Return true if e-mail is successfully updated
 // Return false if e-mail can not be updated beacuse it is registered by another user
 
-bool Mai_UpdateEmailInDB (struct UsrData *UsrDat,const char *NewEmail)
+bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
   {
    char Query[1024];
 
@@ -1161,20 +1327,20 @@ bool Mai_UpdateEmailInDB (struct UsrData *UsrDat,const char *NewEmail)
    sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='Y'"
 		  " AND UsrCod<>'%ld'",
-	    NewEmail,Gbl.Usrs.Me.UsrDat.UsrCod);
+	    NewEmail,UsrDat->UsrCod);
    if (DB_QueryCOUNT (Query,"can not check if e-mail already existed"))	// An e-mail of another user is the same that my e-mail
       return false;	// Don't update
 
    /***** Delete e-mail (not confirmed) for other users *****/
    sprintf (Query,"DELETE FROM pending_emails"
                   " WHERE E_mail='%s' AND UsrCod<>'%ld'",
-	    NewEmail,Gbl.Usrs.Me.UsrDat.UsrCod);
+	    NewEmail,UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove pending e-mail for other users");
 
    sprintf (Query,"DELETE FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='N'"
 		  " AND UsrCod<>'%ld'",
-	    NewEmail,Gbl.Usrs.Me.UsrDat.UsrCod);
+	    NewEmail,UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove not confirmed e-mail for other users");
 
    /***** Update e-mail in database *****/

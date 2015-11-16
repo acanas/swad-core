@@ -70,9 +70,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+145+171+27+79)
+#define Act_NUM_ACTIONS	(7+52+15+90+73+68+204+182+154+171+27+79)
 
-#define Act_MAX_ACTION_COD 1474
+#define Act_MAX_ACTION_COD 1483
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1009,29 +1009,39 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActChgPwdOth		(ActChgNumRowFooGrp+125)
 #define ActChgPwdStd		(ActChgNumRowFooGrp+126)
 #define ActChgPwdTch		(ActChgNumRowFooGrp+127)
-#define ActRemStdCrs		(ActChgNumRowFooGrp+128)
-#define ActRemTchCrs		(ActChgNumRowFooGrp+129)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp+130)
+#define ActFrmMaiOth		(ActChgNumRowFooGrp+128)
+#define ActFrmMaiStd		(ActChgNumRowFooGrp+129)
+#define ActFrmMaiTch		(ActChgNumRowFooGrp+130)
+#define ActRemMaiOth		(ActChgNumRowFooGrp+131)
+#define ActRemMaiStd		(ActChgNumRowFooGrp+132)
+#define ActRemMaiTch		(ActChgNumRowFooGrp+133)
+#define ActNewMaiOth		(ActChgNumRowFooGrp+134)
+#define ActNewMaiStd		(ActChgNumRowFooGrp+135)
+#define ActNewMaiTch		(ActChgNumRowFooGrp+136)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+131)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp+132)
+#define ActRemStdCrs		(ActChgNumRowFooGrp+137)
+#define ActRemTchCrs		(ActChgNumRowFooGrp+138)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp+139)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp+133)
-#define ActRemOldUsr		(ActChgNumRowFooGrp+134)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+140)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp+141)
 
-#define ActLstClk		(ActChgNumRowFooGrp+135)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp+142)
+#define ActRemOldUsr		(ActChgNumRowFooGrp+143)
 
-#define ActSeePubPrf		(ActChgNumRowFooGrp+136)
-#define ActCal1stClkTim		(ActChgNumRowFooGrp+137)
-#define ActCalNumClk		(ActChgNumRowFooGrp+138)
-#define ActCalNumFilVie		(ActChgNumRowFooGrp+139)
-#define ActCalNumForPst		(ActChgNumRowFooGrp+140)
-#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+141)
+#define ActLstClk		(ActChgNumRowFooGrp+144)
 
-#define ActFolUsr		(ActChgNumRowFooGrp+142)
-#define ActUnfUsr		(ActChgNumRowFooGrp+143)
-#define ActSeeFlg		(ActChgNumRowFooGrp+144)
-#define ActSeeFlr		(ActChgNumRowFooGrp+145)
+#define ActSeePubPrf		(ActChgNumRowFooGrp+145)
+#define ActCal1stClkTim		(ActChgNumRowFooGrp+146)
+#define ActCalNumClk		(ActChgNumRowFooGrp+147)
+#define ActCalNumFilVie		(ActChgNumRowFooGrp+148)
+#define ActCalNumForPst		(ActChgNumRowFooGrp+149)
+#define ActCalNumMsgSnt		(ActChgNumRowFooGrp+150)
+
+#define ActFolUsr		(ActChgNumRowFooGrp+151)
+#define ActUnfUsr		(ActChgNumRowFooGrp+152)
+#define ActSeeFlg		(ActChgNumRowFooGrp+153)
+#define ActSeeFlr		(ActChgNumRowFooGrp+154)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/
@@ -1266,12 +1276,12 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSndNewPwd		(ActSeeAllStaCrs+15)
 #define ActChgMyRol		(ActSeeAllStaCrs+16)
 #define ActCreUsrAcc		(ActSeeAllStaCrs+17)
-#define ActRemIDMe		(ActSeeAllStaCrs+18)
+#define ActRemID_Me		(ActSeeAllStaCrs+18)
 #define ActNewIDMe		(ActSeeAllStaCrs+19)
 #define ActRemOldNic		(ActSeeAllStaCrs+20)
 #define ActChgNic		(ActSeeAllStaCrs+21)
-#define ActRemOldMai		(ActSeeAllStaCrs+22)
-#define ActChgMai		(ActSeeAllStaCrs+23)
+#define ActRemMaiMe		(ActSeeAllStaCrs+22)
+#define ActNewMaiMe		(ActSeeAllStaCrs+23)
 #define ActCnfMai		(ActSeeAllStaCrs+24)
 #define ActFrmChgMyPwd		(ActSeeAllStaCrs+25)
 #define ActChgPwd		(ActSeeAllStaCrs+26)

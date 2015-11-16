@@ -4100,17 +4100,17 @@ const char *Txt_Change_email =
 
 const char *Txt_Change_IDs =
 #if   L==0
-	"Canviar IDs (DNI/c&egrave;dulas)";
+	"Canviar IDs";
 #elif L==1
 	"Ausweis-Nr. &auml;ndern";
 #elif L==2
 	"Change IDs";
 #elif L==3
-	"Cambiar ID (DNI/c&eacute;dulas)";
+	"Cambiar ID";
 #elif L==4
 	"Changer IDs";
 #elif L==5
-	"Cambiar ID (DNI/c&eacute;dulas)";		// Okoteve traducción
+	"Cambiar ID";		// Okoteve traducción
 #elif L==6
 	"Cambiare ID";
 #elif L==7
@@ -39618,6 +39618,36 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	" had been registered by another user.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"El correo <strong>%s</strong>"
+	" se ha registrado correctamente.";		// Necessita traduccio
+#elif L==1
+	"The e-mail address <strong>%s</strong>"
+	" has been registered successfully.";		// Need Übersetzung
+#elif L==2
+	"The e-mail address <strong>%s</strong>"
+	" has been registered successfully.";
+#elif L==3
+	"El correo <strong>%s</strong>"
+	" se ha registrado correctamente.";
+#elif L==4
+	"The e-mail address <strong>%s</strong>"
+	" has been registered successfully.";		// Besoin de traduction
+#elif L==5
+	"El correo <strong>%s</strong>"
+	" se ha registrado correctamente.";		// Okoteve traducción
+#elif L==6
+	"Il e-mail <strong>%s</strong>"
+	" &egrave; stato registrato con successo.";
+#elif L==7
+	"The e-mail address <strong>%s</strong>"
+	" has been registered successfully.";		// Potrzebujesz tlumaczenie
+#elif L==8
+	"The e-mail address <strong>%s</strong>"
+	" has been registered successfully.";		// Necessita de tradução
+#endif
+
 const char *Txt_The_email_address_has_not_been_confirmed =
 #if   L==0
 	"La direcci&oacute;n de correo"
@@ -39642,34 +39672,34 @@ const char *Txt_The_email_address_has_not_been_confirmed =
 	"The email address has not been confirmed.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_email_address_X_matches_the_one_you_had_previously_registered =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" coincide con la que ya ten&iacute;a registrada previamente.";	// Necessita traduccio
+	" coincide con una registrada previamente.";	// Necessita traduccio
 #elif L==1
 	"The e-mail address <strong>%s</strong>"
-	" matches the one you had previously registered.";		// Need Übersetzung
+	" matches one previously registered.";		// Need Übersetzung
 #elif L==2
 	"The e-mail address <strong>%s</strong>"
-	" matches the one you had previously registered.";
+	" matches one previously registered.";
 #elif L==3
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" coincide con la que ya ten&iacute;a registrada previamente.";
+	" coincide con una registrada previamente.";
 #elif L==4
 	"The e-mail address <strong>%s</strong>"
-	" matches the one you had previously registered.";		// Besoin de traduction
+	" matches one previously registered.";		// Besoin de traduction
 #elif L==5
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" coincide con la que ya ten&iacute;a registrada previamente.";	// Okoteve traducción
+	" coincide con una registrada previamente.";	// Okoteve traducción
 #elif L==6
 	"Il e-mail <strong>%s</strong>"
-	" coincide con quellao che hai precedentemente registrato.";
+	" coincide con uno precedentemente registrato.";
 #elif L==7
 	"The e-mail address <strong>%s</strong>"
-	" matches the one you had previously registered.";		// Potrzebujesz tlumaczenie
+	" matches one previously registered.";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"The e-mail address <strong>%s</strong>"
-	" matches the one you had previously registered.";		// Necessita de tradução
+	" matches one previously registered.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
@@ -49131,25 +49161,25 @@ const char *Txt_You_can_not_create_links_here =
 	"You can not create links here.";	// Necessita de tradução
 #endif
 
-const char *Txt_You_can_not_delete_your_current_email =
+const char *Txt_You_can_not_delete_the_current_email =
 #if   L==0
-	"No puede eliminar su correo actual.";		// Necessita traduccio
+	"No puede eliminar el correo actual.";		// Necessita traduccio
 #elif L==1
-	"You can not delete your current e-mail.";	// Need Übersetzung
+	"You can not delete the current e-mail.";	// Need Übersetzung
 #elif L==2
-	"You can not delete your current e-mail.";
+	"You can not delete the current e-mail.";
 #elif L==3
-	"No puede eliminar su correo actual.";
+	"No puede eliminar el correo actual.";
 #elif L==4
-	"You can not delete your current e-mail.";	// Besoin de traduction
+	"You can not delete the current e-mail.";	// Besoin de traduction
 #elif L==5
-	"No puede eliminar su correo actual.";		// Okoteve traducción
+	"No puede eliminar el correo actual.";		// Okoteve traducción
 #elif L==6
-	"Non puoi cancellare il tuo e-mail attuale.";
+	"Non puoi cancellare il e-mail attuale.";
 #elif L==7
-	"You can not delete your current e-mail.";	// Potrzebujesz tlumaczenie
+	"You can not delete the current e-mail.";	// Potrzebujesz tlumaczenie
 #elif L==8
-	"You can not delete your current e-mail.";	// Necessita de tradução
+	"You can not delete the current e-mail.";	// Necessita de tradução
 #endif
 
 const char *Txt_You_can_not_delete_your_current_nickname =
@@ -51947,36 +51977,6 @@ const char *Txt_Your_comment_has_been_updated =
 	"Komentarz zosta&lstrok; zaktualizowany.";
 #elif L==8
 	"O seu coment&aacute;rio foi atualizado.";
-#endif
-
-const char *Txt_Your_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"Su correo <strong>%s</strong>"
-	" se ha registrado correctamente.";		// Necessita traduccio
-#elif L==1
-	"Your e-mail address <strong>%s</strong>"
-	" has been registered successfully.";		// Need Übersetzung
-#elif L==2
-	"Your e-mail address <strong>%s</strong>"
-	" has been registered successfully.";
-#elif L==3
-	"Su correo <strong>%s</strong>"
-	" se ha registrado correctamente.";
-#elif L==4
-	"Your e-mail address <strong>%s</strong>"
-	" has been registered successfully.";		// Besoin de traduction
-#elif L==5
-	"Su correo <strong>%s</strong>"
-	" se ha registrado correctamente.";		// Okoteve traducción
-#elif L==6
-	"Il tuo e-mail <strong>%s</strong>"
-	" &egrave; stato registrato con successo.";
-#elif L==7
-	"Your e-mail address <strong>%s</strong>"
-	" has been registered successfully.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Your e-mail address <strong>%s</strong>"
-	" has been registered successfully.";		// Necessita de tradução
 #endif
 
 const char *Txt_Your_language_has_changed_to_LANGUAGE =

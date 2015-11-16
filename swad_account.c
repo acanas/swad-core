@@ -194,7 +194,7 @@ void Acc_ShowFormChangeMyAccount (void)
    /***** Get current user's nickname and e-mail address
           It's necessary because current nickname or e-mail could be just updated *****/
    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
-   Mai_GetEmailFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Email,&(Gbl.Usrs.Me.UsrDat.EmailConfirmed));
+   Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check nickname and e-mail *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
@@ -221,7 +221,7 @@ void Acc_ShowFormChangeMyAccount (void)
    Acc_PrintAccountSeparator ();
 
    /***** E-mail *****/
-   Mai_ShowFormChangeUsrEmail ();
+   Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** Separator *****/
    Acc_PrintAccountSeparator ();

@@ -408,7 +408,7 @@ void ID_ShowFormOthIDs (void)
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form with the user's ID *****/
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 	 fprintf (Gbl.F.Out,"</table>");
@@ -462,7 +462,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    /* Form to remove user's ID */
 	    if (ItsMe)
-	       Act_FormStart (ActRemIDMe);
+	       Act_FormStart (ActRemID_Me);
 	    else
 	      {
 	       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemID_Std :
@@ -684,7 +684,7 @@ void ID_NewOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Remove user's ID *****/
+      /***** New user's ID *****/
       ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,
                    (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 

@@ -980,6 +980,17 @@ Users:
 	813. ActChgPwdOth		Change the password of another user
 	814. ActChgPwdStd		Change the password of another user
 	815. ActChgPwdTch		Change the password of another user
+
+------>	801. ActFrmMaiOth		Show form to the change of the e-mail of another user
+------>	802. ActFrmMaiStd		Show form to the change of the e-mail of another user
+------>	803. ActFrmMaiTch		Show form to the change of the e-mail of another user
+------>	804. ActRemMaiOth		Remove one of the e-mail of another user
+------>	805. ActRemMaiStd		Remove one of the e-mail of another user
+------>	806. ActRemMaiTch		Remove one of the e-mail of another user
+------>	807. ActNewMaiOth		Create a new user's e-mail for another user
+------>	808. ActNewMaiStd		Create a new user's e-mail for another user
+------>	809. ActNewMaiTch		Create a new user's e-mail for another user
+
 	816. ActRemStdCrs		Remove a student from the current course
 	817. ActRemTchCrs		Remove a teacher from the current course
 	818. ActRemUsrGbl		Eliminate completely a user from the platform
@@ -1224,12 +1235,12 @@ Profile:
        1047. ActChgMyRol		Change type of logged user
 
        1048. ActCreUsrAcc		Create new user account
-       1049. ActRemIDMe			Remove one of my user's IDs
+       1049. ActRemID_Me			Remove one of my user's IDs
        1050. ActNewIDMe			Create a new user's ID for me
        1051. ActRemOldNic		Remove one of my old nicknames
        1052. ActChgNic			Change my nickname
-       1053. ActRemOldMai		Remove one of my old e-mails
-       1054. ActChgMai			Change my e-mail address
+       1053. ActRemMaiMe		Remove one of my old e-mails
+       1054. ActNewMaiMe			Change my e-mail address
        1055. ActCnfMai			Confirm e-mail address
        1056. ActFrmChgMyPwd		Show form to the change of the password
        1057. ActChgPwd			Change the password
@@ -2401,11 +2412,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmIDsOth	*/{1447,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsTch	*/{1449,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-
    /* ActRemID_Oth	*/{1450,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
    /* ActRemID_Std	*/{1451,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
    /* ActRemID_Tch	*/{1452,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-
    /* ActNewID_Oth	*/{1453,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
    /* ActNewID_Std	*/{1454,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
    /* ActNewID_Tch	*/{1455,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
@@ -2416,6 +2425,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPwdOth	*/{1467,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
    /* ActChgPwdStd	*/{1468,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
    /* ActChgPwdTch	*/{1469,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+
+   /* ActFrmMaiOth	*/{1475,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
+   /* ActFrmMaiStd	*/{1476,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
+   /* ActFrmMaiTch	*/{1477,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
+   /* ActRemMaiOth	*/{1478,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActRemMaiStd	*/{1479,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActRemMaiTch	*/{1480,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActNewMaiOth	*/{1481,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
+   /* ActNewMaiStd	*/{1482,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
+   /* ActNewMaiTch	*/{1483,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
 
    /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
    /* ActRemTchCrs	*/{1463,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
@@ -2693,14 +2712,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
 
-   /* ActRemIDMe	*/{1147,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
+   /* ActRemID_Me	*/{1147,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
    /* ActNewIDMe	*/{1148,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewMyUsrID			,NULL},
 
    /* ActRemOldNic	*/{1089,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_RemoveNick			,NULL},
    /* ActChgNic		*/{  37,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_UpdateNick			,NULL},
 
-   /* ActRemOldMai	*/{1090,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveEmail		,NULL},
-   /* ActChgMai		*/{1088,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_UpdateEmail		,NULL},
+   /* ActRemMaiMe	*/{1090,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveMyUsrEmail		,NULL},
+   /* ActNewMaiMe	*/{1088,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,May_NewMyUsrEmail		,NULL},
    /* ActCnfMai		*/{1091,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ConfirmEmail		,NULL},
 
    /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
@@ -3860,9 +3879,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeOneTstExaMe,	// #1085
 	ActReqDatSeeMrkCrs,	// #1086
 	ActReqDatSeeMrkGrp,	// #1087
-	ActChgMai,		// #1088
+	ActNewMaiMe,		// #1088
 	ActRemOldNic,		// #1089
-	ActRemOldMai,		// #1090
+	ActRemMaiMe,		// #1090
 	ActCnfMai,		// #1091
 	ActChgIco,		// #1092
 	ActRchTxtEdiCrsInf,	// #1093
@@ -3919,7 +3938,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgBanImg,		// #1144
 	ActClkBan,		// #1145
 	ActMrkNtfSee,		// #1146
-	ActRemIDMe,		// #1147
+	ActRemID_Me,		// #1147
 	ActNewIDMe,		// #1148
 	ActSeeDegInf,		// #1149
 	ActPrnDegInf,		// #1150
@@ -4250,6 +4269,15 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemNot,		// #1472
 	ActSeeLstMyAtt,		// #1473
 	ActPrnLstMyAtt,		// #1474
+	ActFrmMaiOth,		// #1475
+	ActFrmMaiStd,		// #1476
+	ActFrmMaiTch,		// #1477
+	ActRemMaiOth,		// #1478
+	ActRemMaiStd,		// #1479
+	ActRemMaiTch,		// #1480
+	ActNewMaiOth,		// #1481
+	ActNewMaiStd,		// #1482
+	ActNewMaiTch,		// #1483
 	};
 
 /*****************************************************************************/

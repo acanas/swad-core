@@ -3000,8 +3000,9 @@ static void Enr_ShowFormToEditOtherUsr (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
+      Mai_PutLinkToChangeOtherUsrEmail ();	// Put link (form) to change user's e-mail
+      ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
      }
    Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
    fprintf (Gbl.F.Out,"</div>");

@@ -107,16 +107,29 @@
 // TODO: Show message indicating that mail could be in SPAM folder
 // TODO: Remove email address for recipients rejected (mailbox unavailable)
 // TODO: List institution and centre admins
+// TODO: List of degrees administrated by a degree admin should be ordered by name
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.38.3 (2015/11/15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.39 (2015/11/16)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.39:    Nov 16, 2015	Administrators can edit another user' e-mails. (187268 lines)
+					9 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1475','es','N','Solicitar edici&oacute;n dir. correo invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1476','es','N','Solicitar edici&oacute;n dir. correo estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1477','es','N','Solicitar edici&oacute;n dir. correo profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1478','es','N','Eliminar dir. correo invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1479','es','N','Eliminar dir. correo estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1480','es','N','Eliminar dir. correo profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1481','es','N','Cambiar dir. correo invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1482','es','N','Cambiar dir. correo estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1483','es','N','Cambiar dir. correo profesor');
+
         Version 15.38.3:  Nov 15, 2015	Changes in listing of places. (187073 lines)
         Version 15.38.2:  Nov 15, 2015	Fixed bug in user's privacy preferences. (187071 lines)
         Version 15.38.1:  Nov 14, 2015	Changes in permission to query the whole range of dates in stats, suggested by Francisco Ocaña Lara. (187073 lines)

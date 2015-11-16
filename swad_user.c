@@ -559,7 +559,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
 
    /***** Get e-mail *****/
-   Mai_GetEmailFromUsrCod (UsrDat->UsrCod,UsrDat->Email,&(UsrDat->EmailConfirmed));
+   Mai_GetEmailFromUsrCod (UsrDat);
   }
 
 /*****************************************************************************/

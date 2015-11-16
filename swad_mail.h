@@ -67,12 +67,17 @@ void Mai_RenameMailDomainFull (void);
 void Mai_RecFormNewMailDomain (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
-bool Mai_GetEmailFromUsrCod (long UsrCod,char *Email,bool *Confirmed);
+bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
 long Mai_GetUsrCodFromEmail (const char *Email);
-void Mai_ShowFormChangeUsrEmail (void);
-void Mai_RemoveEmail (void);
-void Mai_UpdateEmail (void);
-bool Mai_UpdateEmailInDB (struct UsrData *UsrDat,const char *NewEmail);
+
+void Mai_PutLinkToChangeOtherUsrEmail (void);
+void Mai_ShowFormOthEmail (void);
+void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe);
+void Mai_RemoveMyUsrEmail (void);
+void Mai_RemoveOtherUsrEmail (void);
+void May_NewMyUsrEmail (void);
+void Mai_NewOtherUsrEmail (void);
+bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail);
 bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 
